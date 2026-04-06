@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "description": "Skills and plugins for AI-assisted software engineering workflows, developed by the opendatahub-io team.\n"
+  },
+  "name": "opendatahub-skills",
+  "owner": {
+    "name": "opendatahub-io"
+  },
+  "plugins": [
+    {
+      "author": {
+        "name": "jwforres"
+      },
+      "category": "planning",
+      "description": "Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.\n",
+      "homepage": "https://github.com/jwforres/rfe-creator",
+      "keywords": [
+        "rfe",
+        "jira",
+        "review",
+        "strategy",
+        "pipeline"
+      ],
+      "name": "rfe-creator",
+      "repository": "https://github.com/jwforres/rfe-creator",
+      "skills": ".claude/skills",
+      "source": {
+        "ref": "main",
+        "repo": "jwforres/rfe-creator",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "Jason Greene"
+      },
+      "category": "evaluation",
+      "description": "Assess RFEs against quality criteria using a structured rubric.\n",
+      "homepage": "https://github.com/n1hility/assess-rfe",
+      "keywords": [
+        "rfe",
+        "rubric",
+        "quality",
+        "assessment"
+      ],
+      "name": "assess-rfe",
+      "repository": "https://github.com/n1hility/assess-rfe",
+      "source": {
+        "ref": "main",
+        "repo": "n1hility/assess-rfe",
+        "source": "github"
+      },
+      "version": "1.0.0"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+# opendatahub-io Skills Registry
+# Source of truth for all skills and plugins across the org.
+# marketplace.json is generated from this file — do not edit it directly.
+
+name: opendatahub-skills
+description: >
+  Skills and plugins for AI-assisted software engineering workflows,
+  developed by the opendatahub-io team.
+owner:
+  name: opendatahub-io
+
+categories:
+  evaluation:
+    name: Evaluation & Testing
+    description: Skills for evaluating and testing AI agent skills
+  code-quality:
+    name: Code Quality
+    description: Code review, linting, and quality enforcement
+  documentation:
+    name: Documentation
+    description: Skills for generating and maintaining documentation
+  devops:
+    name: DevOps & CI/CD
+    description: Skills for deployment, CI/CD, and infrastructure
+  planning:
+    name: Product Planning
+    description: Skills for requirements, RFEs, and product strategy
+
+plugins:
+
+  - name: rfe-creator
+    description: >
+      Claude Code skills for creating, reviewing, and submitting RFEs
+      to the RHAIRFE Jira project. Provides an automated pipeline from
+      initial creation through review, splitting, and submission, plus
+      strategy refinement skills.
+    version: "0.1.0"
+    category: planning
+    tags: [rfe, jira, review, strategy, pipeline]
+    author:
+      name: jwforres
+    source:
+      type: github
+      repo: jwforres/rfe-creator
+      ref: main
+    strict: false
+    skills_dir: .claude/skills
+    homepage: https://github.com/jwforres/rfe-creator
+    repository: https://github.com/jwforres/rfe-creator
+    skills:
+      - name: rfe.create
+        description: Generate new RFEs from problem statements
+        user-invocable: true
+      - name: rfe.review
+        description: Score and improve RFEs with auto-revision
+        user-invocable: true
+      - name: rfe.split
+        description: Decompose oversized RFEs into appropriately-scoped pieces
+        user-invocable: true
+      - name: rfe.submit
+        description: Push RFEs to Jira
+        user-invocable: true
+      - name: rfe.speedrun
+        description: Execute the full RFE pipeline end-to-end
+        user-invocable: true
+      - name: rfe.auto-fix
+        description: Batch review, revise, and split operations
+        user-invocable: true
+      - name: strat.create
+        description: Create strategy documents
+        user-invocable: true
+      - name: strat.refine
+        description: Refine strategy documents
+        user-invocable: true
+      - name: strat.review
+        description: Review strategy documents
+        user-invocable: true
+      - name: strat.prioritize
+        description: Prioritize strategy items
+        user-invocable: true
+      - name: rfe-creator.update-deps
+        description: Update vendored dependencies
+        user-invocable: true
+      - name: architecture-review
+        description: Architecture review skill
+        user-invocable: true
+      - name: feasibility-review
+        description: Feasibility review skill
+        user-invocable: true
+      - name: rfe-feasibility-review
+        description: RFE feasibility review
+        user-invocable: true
+      - name: scope-review
+        description: Scope review skill
+        user-invocable: true
+      - name: testability-review
+        description: Testability review skill
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install rfe-creator@opendatahub-skills"
+    python:
+      package: rfe-creator
+      requires_python: ">=3.11"
+    depends_on: [assess-rfe]
+
+  - name: assess-rfe
+    description: >
+      Assess RFEs against quality criteria using a structured rubric.
+    version: "1.0.0"
+    category: evaluation
+    tags: [rfe, rubric, quality, assessment]
+    author:
+      name: Jason Greene
+    source:
+      type: github
+      repo: n1hility/assess-rfe
+      ref: main
+    homepage: https://github.com/n1hility/assess-rfe
+    repository: https://github.com/n1hility/assess-rfe
+    skills:
+      - name: assess-rfe
+        description: Assess RFEs against quality criteria using a structured rubric
+        user-invocable: true
+      - name: export-rubric
+        description: Export the assessment rubric
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install assess-rfe@opendatahub-skills"
+    depends_on: []
