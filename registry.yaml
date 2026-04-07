@@ -129,3 +129,44 @@ plugins:
       claude-code:
         install: "/plugin install assess-rfe@opendatahub-skills"
     depends_on: []
+
+  - name: test-plan
+    description: >
+      Generate test plans and test cases from RHOAI strategies
+      using parallel sub-agent analysis and automated review.
+    version: "0.1.0"
+    category: evaluation
+    tags: [test-plan, test-cases, quality, strategy]
+    author:
+      name: Federico Mosca
+    source:
+      type: github
+      repo: fege/test-plan
+      ref: main
+    strict: false
+    skills_dir: .claude/skills
+    homepage: https://github.com/fege/test-plan
+    repository: https://github.com/fege/test-plan
+    skills:
+      - name: test-plan.create
+        description: Generate a test plan from a strategy
+        user-invocable: true
+      - name: test-cases.create
+        description: Generate test case files from a test plan
+        user-invocable: true
+      - name: test-plan.analyze.endpoints
+        description: Extract scope and API endpoints
+        user-invocable: false
+      - name: test-plan.analyze.risks
+        description: Determine test levels, priorities, and risks
+        user-invocable: false
+      - name: test-plan.analyze.infra
+        description: Identify environment and infrastructure needs
+        user-invocable: false
+      - name: test-plan.review
+        description: Review test plan for completeness
+        user-invocable: false
+    harnesses:
+      claude-code:
+        install: "/plugin install test-plan@opendatahub-skills"
+    depends_on: []

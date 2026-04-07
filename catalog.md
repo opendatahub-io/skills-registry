@@ -34,6 +34,23 @@ Tags: rfe, rubric, quality, assessment
 /plugin install assess-rfe@opendatahub-skills
 ```
 
+### test-plan
+
+Generate test plans and test cases from RHOAI strategies using parallel sub-agent analysis and automated review.
+
+v0.1.0 | [fege/test-plan](https://github.com/fege/test-plan)
+
+Tags: test-plan, test-cases, quality, strategy
+
+| Skill | Description |
+|-------|-------------|
+| `/test-plan.create` | Generate a test plan from a strategy |
+| `/test-cases.create` | Generate test case files from a test plan |
+
+```bash
+/plugin install test-plan@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy
