@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Skills Registry",
+  "description": "Schema for the opendatahub-io skills registry (registry.yaml)",
+  "type": "object",
+  "required": ["name", "owner", "plugins"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Registry identifier"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the registry"
+    },
+    "owner": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" }
+      },
+      "additionalProperties": false
+    },
+    "categories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/plugin"
+      }
+    }
+  },
+  "$defs": {
+    "plugin": {
+      "type": "object",
+      "required": ["name", "description", "version", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Plugin identifier (lowercase, hyphens allowed)"
+        },
+        "description": {
+          "type": "string",
+          "description": "What this plugin does"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+          "description": "Semantic version"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category key from the categories map"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "author": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          },
+          "additionalProperties": false
+        },
+        "license": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "strict": {
+          "type": "boolean",
+          "default": true,
+          "description": "If false, marketplace defines the plugin (no plugin.json required in repo)"
+        },
+        "skills_dir": {
+          "type": "string",
+          "description": "Path to skills directory in the repo (used when strict: false)"
+        },
+        "homepage": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri"
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/skill"
+          }
+        },
+        "harnesses": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "python": {
+          "type": "object",
+          "properties": {
+            "package": { "type": "string" },
+            "requires_python": { "type": "string" },
+            "dependencies": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "depends_on": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Names of other plugins in this registry that this plugin depends on"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["type", "repo"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["github", "git-subdir", "npm", "local"],
+          "description": "Source type"
+        },
+        "repo": {
+          "type": "string",
+          "description": "Repository identifier (e.g., owner/repo)"
+        },
+        "ref": {
+          "type": "string",
+          "description": "Git branch, tag, or ref"
+        },
+        "sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "Exact commit SHA"
+        },
+        "path": {
+          "type": "string",
+          "description": "Subdirectory path (for git-subdir type)"
+        }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "required": ["name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Skill name (matches directory name)"
+        },
+        "description": {
+          "type": "string",
+          "description": "What this skill does"
+        },
+        "user-invocable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}
