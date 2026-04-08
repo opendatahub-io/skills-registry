@@ -106,6 +106,7 @@ def main():
     else:
         print(f"WARNING: failed to regenerate marketplace.json: {result.stderr}",
               file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

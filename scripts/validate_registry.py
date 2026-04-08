@@ -36,8 +36,8 @@ def load_schema(path: str = "schema/registry.schema.json") -> dict:
 def validate_schema(registry: dict, schema: dict) -> list[str]:
     """Validate registry against JSON Schema. Returns list of errors."""
     if jsonschema is None:
-        print("WARNING: jsonschema not installed, skipping schema validation", file=sys.stderr)
-        return []
+        print("ERROR: jsonschema not installed, cannot validate schema", file=sys.stderr)
+        sys.exit(1)
 
     errors = []
     validator = jsonschema.Draft202012Validator(schema)
@@ -74,10 +74,12 @@ def check_sources(registry: dict) -> list[str]:
     """Check that GitHub repos are accessible via the GitHub API."""
     errors = []
     for plugin in registry.get("plugins", []):
-        source = plugin["source"]
-        if source["type"] != "github":
+        source = plugin.get("source")
+        if not source or source.get("type") != "github":
             continue
-        repo = source["repo"]
+        repo = source.get("repo")
+        if not repo:
+            continue
         result = subprocess.run(
             ["gh", "api", f"repos/{repo}", "--silent"],
             capture_output=True, text=True,
@@ -110,8 +112,8 @@ def diff_plugins(registry: dict, base_ref: str) -> list[str]:
 def validate_remote_plugin(plugin: dict) -> list[str]:
     """Clone a plugin repo and validate its structure."""
     errors = []
-    source = plugin["source"]
-    if source["type"] != "github":
+    source = plugin.get("source")
+    if not source or source.get("type") != "github":
         return errors
 
     repo = source["repo"]
@@ -121,7 +123,7 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
     with tempfile.TemporaryDirectory() as tmpdir:
         clone_url = f"https://github.com/{repo}.git"
         result = subprocess.run(
-            ["git", "clone", "--depth", "1", "--branch", ref, clone_url, tmpdir],
+            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, tmpdir],
             capture_output=True, text=True,
         )
         if result.returncode != 0:
@@ -220,6 +222,7 @@ def main():
             print("  OK")
 
     # Diff
+    new_plugins = []
     if args.diff:
         new_plugins = diff_plugins(registry, args.diff)
         if new_plugins:
@@ -231,7 +234,7 @@ def main():
     if args.validate_remote_plugins:
         plugins_to_check = registry.get("plugins", [])
         if args.diff:
-            new_names = set(diff_plugins(registry, args.diff))
+            new_names = set(new_plugins)
             plugins_to_check = [p for p in plugins_to_check if p["name"] in new_names]
 
         print(f"Validating {len(plugins_to_check)} remote plugin(s)...")
