@@ -55,6 +55,35 @@
         "source": "github"
       },
       "version": "1.0.0"
+    },
+    {
+      "author": {
+        "name": "jctanner"
+      },
+      "category": "security",
+      "description": "Consensus-based security review for RHOAI strategy documents (STRATs). An orchestrator spawns three independent reviewers to identify security risks, then synthesizes findings with confidence tagging based on cross-reviewer agreement. Covers 39 catalog patterns across auth, data protection, cryptographic compliance, network security, supply chain, and infrastructure.\n",
+      "homepage": "https://github.com/jctanner/ai-first-pipeline",
+      "keywords": [
+        "security",
+        "review",
+        "strat",
+        "threat-modeling",
+        "fips",
+        "compliance",
+        "consensus"
+      ],
+      "name": "rhoai-security-reviewer",
+      "repository": "https://github.com/jctanner/ai-first-pipeline",
+      "skills": [
+        "./.claude/skills"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "jctanner/ai-first-pipeline",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }
