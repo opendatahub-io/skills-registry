@@ -7,7 +7,7 @@
 Your plugin repo needs at minimum:
 
 **Option A — Full plugin (recommended):**
-```
+```text
 your-repo/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
