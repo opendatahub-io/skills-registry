@@ -55,6 +55,29 @@ Tags: test-plan, test-cases, quality, strategy
 /plugin install test-plan@opendatahub-skills
 ```
 
+## Security Review
+
+Security analysis, threat modeling, and compliance review
+
+### rhoai-security-reviewer
+
+Consensus-based security review for RHOAI strategy documents (STRATs). An orchestrator spawns three independent reviewers to identify security risks, then synthesizes findings with confidence tagging based on cross-reviewer agreement. Covers 39 catalog patterns across auth, data protection, cryptographic compliance, network security, supply chain, and infrastructure.
+
+v0.1.0 | [jctanner/ai-first-pipeline](https://github.com/jctanner/ai-first-pipeline)
+
+Tags: security, review, strat, threat-modeling, fips, compliance, consensus
+
+| Skill | Description |
+|-------|-------------|
+| `/strat-security-review` | Multi-reviewer consensus orchestrator for security review of STRAT documents. Extracts threat surfaces, spawns three independent security-reviewer instances, synthesizes findings with confidence levels, and produces a final verdict (PASS/CONCERNS/FAIL).
+ |
+| `/security-reviewer` | Individual security reviewer that assesses RHOAI strategy documents against 39 catalog patterns covering authentication, data protection, cryptographic compliance, network security, supply chain, and infrastructure. Uses a two-phase discovery-then-filter approach with severity classification.
+ |
+
+```bash
+/plugin install rhoai-security-reviewer@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy

@@ -22,6 +22,9 @@ categories:
   devops:
     name: DevOps & CI/CD
     description: Skills for deployment, CI/CD, and infrastructure
+  security:
+    name: Security Review
+    description: Security analysis, threat modeling, and compliance review
   planning:
     name: Product Planning
     description: Skills for requirements, RFEs, and product strategy
@@ -128,6 +131,48 @@ plugins:
     harnesses:
       claude-code:
         install: "/plugin install assess-rfe@opendatahub-skills"
+    depends_on: []
+
+  - name: rhoai-security-reviewer
+    description: >
+      Consensus-based security review for RHOAI strategy documents (STRATs).
+      An orchestrator spawns three independent reviewers to identify security
+      risks, then synthesizes findings with confidence tagging based on
+      cross-reviewer agreement. Covers 39 catalog patterns across auth,
+      data protection, cryptographic compliance, network security, supply
+      chain, and infrastructure.
+    version: "0.1.0"
+    category: security
+    tags: [security, review, strat, threat-modeling, fips, compliance, consensus]
+    author:
+      name: jctanner
+    source:
+      type: github
+      repo: jctanner/ai-first-pipeline
+      ref: main
+    strict: false
+    skills_dir: .claude/skills
+    homepage: https://github.com/jctanner/ai-first-pipeline
+    repository: https://github.com/jctanner/ai-first-pipeline
+    skills:
+      - name: strat-security-review
+        description: >
+          Multi-reviewer consensus orchestrator for security review of STRAT
+          documents. Extracts threat surfaces, spawns three independent
+          security-reviewer instances, synthesizes findings with confidence
+          levels, and produces a final verdict (PASS/CONCERNS/FAIL).
+        user-invocable: true
+      - name: security-reviewer
+        description: >
+          Individual security reviewer that assesses RHOAI strategy documents
+          against 39 catalog patterns covering authentication, data protection,
+          cryptographic compliance, network security, supply chain, and
+          infrastructure. Uses a two-phase discovery-then-filter approach with
+          severity classification.
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install rhoai-security-reviewer@opendatahub-skills"
     depends_on: []
 
   - name: test-plan
