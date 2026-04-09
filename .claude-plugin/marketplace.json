@@ -121,7 +121,7 @@
         "build-validation",
         "analysis"
       ],
-      "name": "quality-tiger-team",
+      "name": "quality-tooling",
       "repository": "https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team",
       "source": {
         "ref": "main",

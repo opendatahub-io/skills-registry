@@ -55,7 +55,7 @@ Tags: test-plan, test-cases, quality, strategy
 /plugin install test-plan@opendatahub-skills
 ```
 
-### quality-tiger-team
+### quality-tooling
 
 Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validation, and test pattern extraction.
 
@@ -70,7 +70,7 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 | `/test-rules-generator` | Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency |
 
 ```bash
-/plugin install quality-tiger-team@opendatahub-skills
+/plugin install quality-tooling@opendatahub-skills
 ```
 
 ## Security Review

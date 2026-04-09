@@ -215,7 +215,7 @@ plugins:
         install: "/plugin install test-plan@opendatahub-skills"
     depends_on: []
 
-  - name: quality-tiger-team
+  - name: quality-tooling
     description: >
       Quality tooling and automation for RHOAI component development.
       Includes automated repository analysis, build validation, and test pattern extraction.
@@ -228,7 +228,6 @@ plugins:
       type: github
       repo: antowaddle/Red-Hat-Quality-Tiger-Team
       ref: main
-    skills_dir: .claude/skills
     homepage: https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team
     repository: https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team
     skills:
@@ -241,7 +240,3 @@ plugins:
       - name: test-rules-generator
         description: Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency
         user-invocable: true
-    harnesses:
-      claude-code:
-        install: "/plugin install quality-tiger-team@opendatahub-skills"
-    depends_on: []
