@@ -55,6 +55,24 @@ Tags: test-plan, test-cases, quality, strategy
 /plugin install test-plan@opendatahub-skills
 ```
 
+### quality-tooling
+
+Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validation, and test pattern extraction.
+
+v1.0.0 | [antowaddle/Red-Hat-Quality-Tiger-Team](https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team)
+
+Tags: quality, testing, ci-cd, build-validation, analysis
+
+| Skill | Description |
+|-------|-------------|
+| `/quality-repo-analysis` | Automated analysis tool that evaluates CI/CD, testing, security, and best practices against gold standards |
+| `/konflux-build-simulator` | Generate GitHub Actions workflows that simulate Konflux builds at PR time to catch failures before merge |
+| `/test-rules-generator` | Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency |
+
+```bash
+/plugin install quality-tooling@opendatahub-skills
+```
+
 ## Security Review
 
 Security analysis, threat modeling, and compliance review

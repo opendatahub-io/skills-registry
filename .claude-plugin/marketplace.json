@@ -106,6 +106,29 @@
         "source": "github"
       },
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "Anthony Coughlin"
+      },
+      "category": "evaluation",
+      "description": "Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validation, and test pattern extraction.\n",
+      "homepage": "https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team",
+      "keywords": [
+        "quality",
+        "testing",
+        "ci-cd",
+        "build-validation",
+        "analysis"
+      ],
+      "name": "quality-tooling",
+      "repository": "https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team",
+      "source": {
+        "ref": "main",
+        "repo": "antowaddle/Red-Hat-Quality-Tiger-Team",
+        "source": "github"
+      },
+      "version": "1.0.0"
     }
   ]
 }

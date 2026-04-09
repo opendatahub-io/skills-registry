@@ -214,3 +214,29 @@ plugins:
       claude-code:
         install: "/plugin install test-plan@opendatahub-skills"
     depends_on: []
+
+  - name: quality-tooling
+    description: >
+      Quality tooling and automation for RHOAI component development.
+      Includes automated repository analysis, build validation, and test pattern extraction.
+    version: "1.0.0"
+    category: evaluation
+    tags: [quality, testing, ci-cd, build-validation, analysis]
+    author:
+      name: Anthony Coughlin
+    source:
+      type: github
+      repo: antowaddle/Red-Hat-Quality-Tiger-Team
+      ref: main
+    homepage: https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team
+    repository: https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team
+    skills:
+      - name: quality-repo-analysis
+        description: Automated analysis tool that evaluates CI/CD, testing, security, and best practices against gold standards
+        user-invocable: true
+      - name: konflux-build-simulator
+        description: Generate GitHub Actions workflows that simulate Konflux builds at PR time to catch failures before merge
+        user-invocable: true
+      - name: test-rules-generator
+        description: Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency
+        user-invocable: true
