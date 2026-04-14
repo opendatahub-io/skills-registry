@@ -96,6 +96,40 @@ Tags: security, review, strat, threat-modeling, fips, compliance, consensus
 /plugin install rhoai-security-reviewer@opendatahub-skills
 ```
 
+## Development Tools
+
+Developer productivity tools for packaging, CI/CD debugging, and workflow automation
+
+### odh-ai-helpers
+
+Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
+
+Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/adr-review` | Review an Architectural Decision Record (ADR) using a team of specialist reviewer subagents and produce a consolidated report |
+| `/gitlab-pipeline-debugger` | Debug and monitor GitLab CI/CD pipelines for merge requests, check pipeline status, view job logs, and troubleshoot CI failures |
+| `/git-shallow-clone` | Perform a shallow clone of a Git repository to a temporary location |
+| `/jira-upload-chat-log` | Export and upload the current chat conversation as a markdown file attachment to a Jira ticket |
+| `/python-full-deps` | Resolve the full install-time dependency tree for a Python package with environment markers |
+| `/python-packaging-bug-finder` | Find known packaging bugs, fixes, and workarounds for Python projects by searching GitHub issues |
+| `/python-packaging-complexity` | Analyze Python package build complexity by inspecting PyPI metadata, compilation requirements, and distribution types |
+| `/python-packaging-env-finder` | Investigate environment variables that can be set when building Python wheels for a given project |
+| `/python-packaging-license-checker` | Check whether a Python package license is compatible with redistribution in Red Hat products |
+| `/python-packaging-license-finder` | Deterministically find license information for Python packages by checking PyPI metadata and Git repository LICENSE files |
+| `/python-packaging-source-finder` | Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs |
+
+| Agent | Description |
+|-------|-------------|
+| python-packaging-investigator | Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity |
+
+```bash
+/plugin install odh-ai-helpers@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy

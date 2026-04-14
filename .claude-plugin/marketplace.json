@@ -129,6 +129,40 @@
         "source": "github"
       },
       "version": "1.0.0"
+    },
+    {
+      "agents": [
+        "./helpers/agents/python-packaging-investigator.md"
+      ],
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers",
+      "keywords": [
+        "python-packaging",
+        "licensing",
+        "dependencies",
+        "gitlab",
+        "jira",
+        "adr",
+        "git",
+        "automation"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-ai-helpers",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "skills": [
+        "./helpers/skills"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/ai-helpers",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }

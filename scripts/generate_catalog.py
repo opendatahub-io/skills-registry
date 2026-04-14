@@ -125,6 +125,17 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
             lines.append(f"| {prefix} | {sdesc} |")
         lines.append("")
 
+    # Agents table
+    agents = plugin.get("agents", [])
+    if agents:
+        lines.append("| Agent | Description |")
+        lines.append("|-------|-------------|")
+        for agent in agents:
+            aname = agent["name"]
+            adesc = agent.get("description", "")
+            lines.append(f"| {aname} | {adesc} |")
+        lines.append("")
+
     # Install command
     lines.append("```bash")
     lines.append(f"/plugin install {name}@{registry_name}")
