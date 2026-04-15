@@ -23,15 +23,11 @@
       ],
       "name": "rfe-creator",
       "repository": "https://github.com/jwforres/rfe-creator",
-      "skills": [
-        "./.claude/skills"
-      ],
       "source": {
         "ref": "main",
         "repo": "jwforres/rfe-creator",
         "source": "github"
       },
-      "strict": false,
       "version": "0.1.0"
     },
     {
