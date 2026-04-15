@@ -96,14 +96,15 @@ that contains the actual skills:
 
 - **strict: true** (default) — `plugin.json` in the repo is the authority
   for component definitions. The marketplace entry can supplement it with
-  additional components, and both sources are merged. Claude Code
-  auto-discovers skills in default locations (`.claude/skills/`, `skills/`).
-  Most plugins use this mode, even those without a `plugin.json`.
+  additional components, and both sources are merged. Use this for repos
+  that have their own `.claude-plugin/plugin.json`.
 
 - **strict: false** — The marketplace entry is the entire plugin definition.
   If the repo also has a `plugin.json` that declares components, that is a
-  conflict and the plugin fails to load. Use `skills_dir` to point to a
-  non-default skills location. `skills_dir` is only valid with `strict: false`.
+  conflict and the plugin fails to load. Use `skills_dir` to tell Claude
+  Code where to find skills in the repo. **Required for repos without a
+  `plugin.json`** — without it, Claude Code has no way to discover skills
+  when installing via a marketplace.
 
 Note: `skills_dir` must not be specified without `strict: false`. The schema
 and validation scripts enforce this constraint.
