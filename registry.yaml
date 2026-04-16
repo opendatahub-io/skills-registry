@@ -25,6 +25,9 @@ categories:
   security:
     name: Security Review
     description: Security analysis, threat modeling, and compliance review
+  development-tools:
+    name: Development Tools
+    description: Developer productivity tools for packaging, CI/CD debugging, and workflow automation
   planning:
     name: Product Planning
     description: Skills for requirements, RFEs, and product strategy
@@ -243,3 +246,66 @@ plugins:
       - name: test-rules-generator
         description: Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency
         user-invocable: true
+
+  - name: odh-ai-helpers
+    description: >
+      Developer productivity tools for Python packaging, CI/CD debugging,
+      and workflow automation. Includes skills for analyzing package build
+      complexity, resolving dependencies, finding licenses, debugging
+      GitLab pipelines, reviewing ADRs, and more.
+    version: "0.1.0"
+    category: development-tools
+    tags: [python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/ai-helpers
+      ref: main
+    strict: false
+    skills_dir: helpers/skills
+    agents_dir: helpers/agents
+    homepage: https://github.com/opendatahub-io/ai-helpers
+    repository: https://github.com/opendatahub-io/ai-helpers
+    skills:
+      - name: adr-review
+        description: Review an Architectural Decision Record (ADR) using a team of specialist reviewer subagents and produce a consolidated report
+        user-invocable: true
+      - name: gitlab-pipeline-debugger
+        description: Debug and monitor GitLab CI/CD pipelines for merge requests, check pipeline status, view job logs, and troubleshoot CI failures
+        user-invocable: true
+      - name: git-shallow-clone
+        description: Perform a shallow clone of a Git repository to a temporary location
+        user-invocable: true
+      - name: jira-upload-chat-log
+        description: Export and upload the current chat conversation as a markdown file attachment to a Jira ticket
+        user-invocable: true
+      - name: python-full-deps
+        description: Resolve the full install-time dependency tree for a Python package with environment markers
+        user-invocable: true
+      - name: python-packaging-bug-finder
+        description: Find known packaging bugs, fixes, and workarounds for Python projects by searching GitHub issues
+        user-invocable: true
+      - name: python-packaging-complexity
+        description: Analyze Python package build complexity by inspecting PyPI metadata, compilation requirements, and distribution types
+        user-invocable: true
+      - name: python-packaging-env-finder
+        description: Investigate environment variables that can be set when building Python wheels for a given project
+        user-invocable: true
+      - name: python-packaging-license-checker
+        description: Check whether a Python package license is compatible with redistribution in Red Hat products
+        user-invocable: true
+      - name: python-packaging-license-finder
+        description: Deterministically find license information for Python packages by checking PyPI metadata and Git repository LICENSE files
+        user-invocable: true
+      - name: python-packaging-source-finder
+        description: Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs
+        user-invocable: true
+    agents:
+      - name: python-packaging-investigator
+        description: Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity
+    harnesses:
+      claude-code:
+        install: "/plugin install odh-ai-helpers@opendatahub-skills"
+    depends_on: []

@@ -110,6 +110,16 @@
             "$ref": "#/$defs/skill"
           }
         },
+        "agents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/agent"
+          }
+        },
+        "agents_dir": {
+          "type": "string",
+          "description": "Path to agents directory in the repo (used when strict: false)"
+        },
         "harnesses": {
           "type": "object",
           "additionalProperties": {
@@ -181,6 +191,21 @@
         "user-invocable": {
           "type": "boolean",
           "default": true
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "required": ["name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Agent name (matches file name without extension)"
+        },
+        "description": {
+          "type": "string",
+          "description": "What this agent does"
         }
       }
     }
