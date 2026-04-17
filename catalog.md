@@ -46,10 +46,6 @@ Tags: test-plan, test-cases, quality, strategy
 |-------|-------------|
 | `/test-plan.create` | Generate a test plan from a strategy |
 | `/test-plan.create-cases` | Generate test case files from a test plan |
-| test-plan.analyze.endpoints | Extract scope and API endpoints |
-| test-plan.analyze.risks | Determine test levels, priorities, and risks |
-| test-plan.analyze.infra | Identify environment and infrastructure needs |
-| test-plan.review | Review test plan for completeness |
 
 ```bash
 /plugin install test-plan@opendatahub-skills

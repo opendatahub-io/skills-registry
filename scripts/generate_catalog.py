@@ -112,17 +112,15 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         lines.append(f"Tags: {', '.join(tags)}")
         lines.append("")
 
-    # Skills table
-    skills = plugin.get("skills", [])
+    # Skills table (only user-invocable skills; internal ones are hidden)
+    skills = [s for s in plugin.get("skills", []) if s.get("user-invocable", True)]
     if skills:
         lines.append("| Skill | Description |")
         lines.append("|-------|-------------|")
         for skill in skills:
             sname = skill["name"]
             sdesc = skill.get("description", "")
-            invocable = skill.get("user-invocable", True)
-            prefix = f"`/{sname}`" if invocable else sname
-            lines.append(f"| {prefix} | {sdesc} |")
+            lines.append(f"| `/{sname}` | {sdesc} |")
         lines.append("")
 
     # Agents table
