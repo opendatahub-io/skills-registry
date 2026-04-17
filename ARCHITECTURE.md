@@ -7,6 +7,10 @@ from multiple GitHub repositories into a single discoverable marketplace. It act
 as an indirection layer: plugin source code lives in separate repos, while this
 registry provides the metadata and discovery mechanism.
 
+Plugins in this registry conform to the [Agent Skills](https://agentskills.io/specification)
+open standard, extended by Claude Code with features like invocation control
+and subagent execution (see [Claude Code skills](https://code.claude.com/docs/en/skills)).
+
 ```
                         skills-registry
 ┌──────────────────────────────────────────────────────┐
@@ -175,3 +179,10 @@ match the registry. Contributors must run the scripts locally before pushing.
 4. Run `python3 scripts/generate_catalog.py`
 5. Commit all changes and open a PR
 6. CI verifies everything is in sync
+
+## References
+
+- [Agent Skills specification](https://agentskills.io/specification) — open standard for skill definitions
+- [Claude Code skills](https://code.claude.com/docs/en/skills) — SKILL.md frontmatter and invocation semantics
+- [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents) — agent frontmatter and delegation
+- [Claude Code plugins](https://code.claude.com/docs/en/plugins) — plugin manifest and marketplace format
