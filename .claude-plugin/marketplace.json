@@ -90,13 +90,15 @@
         "name": "Federico Mosca"
       },
       "category": "evaluation",
-      "description": "Generate test plans and test cases from RHOAI strategies using parallel sub-agent analysis and automated review.\n",
+      "description": "Generate test plans and test cases from RHOAI strategies using parallel sub-agent analysis and automated review. Publish to GitHub, resolve PR feedback, and score quality with rubric-based evaluation.\n",
       "homepage": "https://github.com/fege/test-plan",
       "keywords": [
         "test-plan",
         "test-cases",
         "quality",
-        "strategy"
+        "strategy",
+        "review",
+        "scoring"
       ],
       "name": "test-plan",
       "repository": "https://github.com/fege/test-plan",
@@ -109,7 +111,7 @@
         "source": "github"
       },
       "strict": false,
-      "version": "0.1.0"
+      "version": "0.2.0"
     },
     {
       "author": {

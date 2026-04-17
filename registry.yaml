@@ -180,11 +180,12 @@ plugins:
 
   - name: test-plan
     description: >
-      Generate test plans and test cases from RHOAI strategies
-      using parallel sub-agent analysis and automated review.
-    version: "0.1.0"
+      Generate test plans and test cases from RHOAI strategies using parallel
+      sub-agent analysis and automated review. Publish to GitHub, resolve PR
+      feedback, and score quality with rubric-based evaluation.
+    version: "0.2.0"
     category: evaluation
-    tags: [test-plan, test-cases, quality, strategy]
+    tags: [test-plan, test-cases, quality, strategy, review, scoring]
     author:
       name: Federico Mosca
     source:
@@ -202,17 +203,26 @@ plugins:
       - name: test-plan.create-cases
         description: Generate test case files from a test plan
         user-invocable: true
+      - name: test-plan.publish
+        description: Publish test plan artifacts to GitHub with PR creation
+        user-invocable: true
+      - name: test-plan.resolve-feedback
+        description: Assess and resolve PR review comments on test plans
+        user-invocable: true
+      - name: test-plan.score
+        description: Score test plan quality using rubric without auto-revision
+        user-invocable: true
       - name: test-plan.analyze.endpoints
         description: Extract scope and API endpoints
         user-invocable: false
       - name: test-plan.analyze.risks
-        description: Determine test levels, priorities, and risks
+        description: Determine test levels, priorities, NFRs, and risks
         user-invocable: false
       - name: test-plan.analyze.infra
         description: Identify environment and infrastructure needs
         user-invocable: false
       - name: test-plan.review
-        description: Review test plan for completeness
+        description: Review test plan with 5-criteria rubric and auto-revision
         user-invocable: false
     harnesses:
       claude-code:
