@@ -190,7 +190,8 @@
         },
         "user-invocable": {
           "type": "boolean",
-          "default": true
+          "default": true,
+          "description": "Whether the skill can be invoked directly by the user via /skill-name. Mirrors the native Claude Code SKILL.md frontmatter field — see https://code.claude.com/docs/en/skills#frontmatter-reference. Set to false for internal skills called only by other skills/agents in the background. Note: the registry value is catalog-only; the actual invocation behavior is governed by the SKILL.md in the source repo."
         }
       }
     },

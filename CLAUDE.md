@@ -73,3 +73,10 @@ To update after already adding:
 claude plugin marketplace remove opendatahub-skills
 claude plugin marketplace add opendatahub-io/skills-registry#branch-name
 ```
+
+## References
+
+- [Claude Code skills](https://code.claude.com/docs/en/skills) — SKILL.md frontmatter spec (`user-invocable`, `disable-model-invocation`, `allowed-tools`, etc.)
+- [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents) — agent frontmatter spec
+- [Claude Code plugins](https://code.claude.com/docs/en/plugins) — plugin manifest and marketplace format
+- [Agent Skills specification](https://agentskills.io/specification) — open standard that Claude Code skills conform to
