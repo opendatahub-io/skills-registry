@@ -70,6 +70,22 @@ def check_categories(registry: dict) -> list[str]:
     return errors
 
 
+def check_strict_consistency(registry: dict) -> list[str]:
+    """Check that skills_dir is only used with strict: false."""
+    errors = []
+    for plugin in registry.get("plugins", []):
+        name = plugin.get("name", "<unknown>")
+        has_skills_dir = "skills_dir" in plugin
+        strict = plugin.get("strict", True)
+
+        if has_skills_dir and strict is not False:
+            errors.append(
+                f"  Plugin '{name}': skills_dir requires strict: false. "
+                f"Remove skills_dir or set strict: false"
+            )
+    return errors
+
+
 def check_sources(registry: dict) -> list[str]:
     """Check that GitHub repos are accessible via the GitHub API."""
     errors = []
@@ -214,6 +230,17 @@ def main():
     all_errors.extend(errors)
     if errors:
         print(f"  FAIL: {len(errors)} category error(s)")
+        for e in errors:
+            print(e)
+    else:
+        print("  OK")
+
+    # Strict/skills_dir consistency
+    print("Checking strict/skills_dir consistency...")
+    errors = check_strict_consistency(registry)
+    all_errors.extend(errors)
+    if errors:
+        print(f"  FAIL: {len(errors)} consistency error(s)")
         for e in errors:
             print(e)
     else:

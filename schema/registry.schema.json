@@ -47,6 +47,9 @@
       "type": "object",
       "required": ["name", "description", "version", "source"],
       "additionalProperties": false,
+      "dependentRequired": {
+        "skills_dir": ["strict"]
+      },
       "properties": {
         "name": {
           "type": "string",
@@ -87,11 +90,11 @@
         "strict": {
           "type": "boolean",
           "default": true,
-          "description": "If false, marketplace defines the plugin (no plugin.json required in repo)"
+          "description": "If false, marketplace is the entire plugin definition. If true (default), plugin.json in the repo is authoritative and marketplace supplements it. Setting strict: false when the repo also has a plugin.json with components causes a conflict"
         },
         "skills_dir": {
           "type": "string",
-          "description": "Path to skills directory in the repo (used when strict: false)"
+          "description": "Path to skills directory in the repo. Only valid when strict: false (marketplace defines the plugin). When strict: true, Claude Code auto-discovers skills in default locations"
         },
         "homepage": {
           "type": "string",
@@ -106,6 +109,16 @@
           "items": {
             "$ref": "#/$defs/skill"
           }
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/agent"
+          }
+        },
+        "agents_dir": {
+          "type": "string",
+          "description": "Path to agents directory in the repo (used when strict: false)"
         },
         "harnesses": {
           "type": "object",
@@ -178,6 +191,21 @@
         "user-invocable": {
           "type": "boolean",
           "default": true
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "required": ["name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Agent name (matches file name without extension)"
+        },
+        "description": {
+          "type": "string",
+          "description": "What this agent does"
         }
       }
     }

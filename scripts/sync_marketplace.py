@@ -62,6 +62,14 @@ def plugin_to_marketplace_entry(plugin: dict) -> dict:
             if not skills_dir.startswith("./"):
                 skills_dir = "./" + skills_dir
             entry["skills"] = [skills_dir]
+        if "agents_dir" in plugin and "agents" in plugin:
+            agents_dir = plugin["agents_dir"]
+            if not agents_dir.startswith("./"):
+                agents_dir = "./" + agents_dir
+            entry["agents"] = [
+                f"{agents_dir}/{a['name']}.md"
+                for a in plugin["agents"]
+            ]
 
     return entry
 

@@ -102,11 +102,15 @@
       ],
       "name": "test-plan",
       "repository": "https://github.com/fege/test-plan",
+      "skills": [
+        "./.claude/skills"
+      ],
       "source": {
         "ref": "main",
         "repo": "fege/test-plan",
         "source": "github"
       },
+      "strict": false,
       "version": "0.2.0"
     },
     {
@@ -125,12 +129,75 @@
       ],
       "name": "quality-tooling",
       "repository": "https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team",
+      "skills": [
+        "./.claude/skills"
+      ],
       "source": {
         "ref": "main",
         "repo": "antowaddle/Red-Hat-Quality-Tiger-Team",
         "source": "github"
       },
+      "strict": false,
       "version": "1.0.0"
+    },
+    {
+      "agents": [
+        "./helpers/agents/python-packaging-investigator.md"
+      ],
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers",
+      "keywords": [
+        "python-packaging",
+        "licensing",
+        "dependencies",
+        "gitlab",
+        "jira",
+        "adr",
+        "git",
+        "automation"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-ai-helpers",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "skills": [
+        "./helpers/skills"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/ai-helpers",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "Antonin Stefanutti"
+      },
+      "category": "evaluation",
+      "description": "Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.\n",
+      "homepage": "https://github.com/opendatahub-io/agent-eval-harness",
+      "keywords": [
+        "evaluation",
+        "testing",
+        "skills",
+        "agents",
+        "mlflow",
+        "optimization",
+        "scoring"
+      ],
+      "name": "agent-eval-harness",
+      "repository": "https://github.com/opendatahub-io/agent-eval-harness",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/agent-eval-harness",
+        "source": "github"
+      },
+      "version": "0.1.0"
     }
   ]
 }

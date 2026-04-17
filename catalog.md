@@ -76,6 +76,28 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 /plugin install quality-tooling@opendatahub-skills
 ```
 
+### agent-eval-harness
+
+Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
+
+v0.1.0 | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
+
+Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
+
+| Skill | Description |
+|-------|-------------|
+| `/eval-setup` | One-time environment setup for evaluation (dependencies, MLflow, API keys) |
+| `/eval-analyze` | Deep-read a target skill and generate eval.yaml configuration with dataset schemas and judges |
+| `/eval-dataset` | Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-traces) |
+| `/eval-run` | Execute skill against test cases, collect artifacts, run judges, and detect regressions |
+| `/eval-review` | Human-in-the-loop review of scores and outputs with qualitative feedback collection |
+| `/eval-mlflow` | Bidirectional MLflow sync for results, datasets, and feedback |
+| `/eval-optimize` | Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks |
+
+```bash
+/plugin install agent-eval-harness@opendatahub-skills
+```
+
 ## Security Review
 
 Security analysis, threat modeling, and compliance review
@@ -97,6 +119,40 @@ Tags: security, review, strat, threat-modeling, fips, compliance, consensus
 
 ```bash
 /plugin install rhoai-security-reviewer@opendatahub-skills
+```
+
+## Development Tools
+
+Developer productivity tools for packaging, CI/CD debugging, and workflow automation
+
+### odh-ai-helpers
+
+Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
+
+Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/adr-review` | Review an Architectural Decision Record (ADR) using a team of specialist reviewer subagents and produce a consolidated report |
+| `/gitlab-pipeline-debugger` | Debug and monitor GitLab CI/CD pipelines for merge requests, check pipeline status, view job logs, and troubleshoot CI failures |
+| `/git-shallow-clone` | Perform a shallow clone of a Git repository to a temporary location |
+| `/jira-upload-chat-log` | Export and upload the current chat conversation as a markdown file attachment to a Jira ticket |
+| `/python-full-deps` | Resolve the full install-time dependency tree for a Python package with environment markers |
+| `/python-packaging-bug-finder` | Find known packaging bugs, fixes, and workarounds for Python projects by searching GitHub issues |
+| `/python-packaging-complexity` | Analyze Python package build complexity by inspecting PyPI metadata, compilation requirements, and distribution types |
+| `/python-packaging-env-finder` | Investigate environment variables that can be set when building Python wheels for a given project |
+| `/python-packaging-license-checker` | Check whether a Python package license is compatible with redistribution in Red Hat products |
+| `/python-packaging-license-finder` | Deterministically find license information for Python packages by checking PyPI metadata and Git repository LICENSE files |
+| `/python-packaging-source-finder` | Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs |
+
+| Agent | Description |
+|-------|-------------|
+| python-packaging-investigator | Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity |
+
+```bash
+/plugin install odh-ai-helpers@opendatahub-skills
 ```
 
 ## Product Planning
