@@ -312,6 +312,30 @@ plugins:
       - name: python-packaging-source-finder
         description: Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs
         user-invocable: true
+      - name: vllm-backport-fetch-prs
+        description: Fetch merged bugfix PRs from upstream vLLM within a configurable date window using GitHub CLI
+        user-invocable: true
+      - name: vllm-backport-classify
+        description: Classify PRs by backport relevance using labels, title patterns, and file-existence heuristics
+        user-invocable: true
+      - name: vllm-backport-check-backported
+        description: Check if PRs are already cherry-picked in a downstream release branch via SHA and title matching
+        user-invocable: true
+      - name: vllm-backport-score-rank
+        description: Score and rank backport candidates by severity, scope, and risk using a deterministic composite score
+        user-invocable: true
+      - name: vllm-backport-push-report
+        description: Push triage report to a GitHub repository with timestamped directory structure
+        user-invocable: true
+      - name: vllm-backport-cherry-pick
+        description: Attempt automatic cherry-pick of clean backport candidates to a downstream release branch
+        user-invocable: true
+      - name: vllm-compare-reqs
+        description: Compare Python requirements between upstream vLLM and a downstream fork to identify version mismatches and missing packages
+        user-invocable: true
+      - name: vllm-slack-summary
+        description: Generate a concise Slack-formatted summary of vLLM backport triage results
+        user-invocable: true
     agents:
       - name: python-packaging-investigator
         description: Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity

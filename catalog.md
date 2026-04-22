@@ -142,6 +142,14 @@ Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automat
 | `/python-packaging-license-checker` | Check whether a Python package license is compatible with redistribution in Red Hat products |
 | `/python-packaging-license-finder` | Deterministically find license information for Python packages by checking PyPI metadata and Git repository LICENSE files |
 | `/python-packaging-source-finder` | Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs |
+| `/vllm-backport-fetch-prs` | Fetch merged bugfix PRs from upstream vLLM within a configurable date window using GitHub CLI |
+| `/vllm-backport-classify` | Classify PRs by backport relevance using labels, title patterns, and file-existence heuristics |
+| `/vllm-backport-check-backported` | Check if PRs are already cherry-picked in a downstream release branch via SHA and title matching |
+| `/vllm-backport-score-rank` | Score and rank backport candidates by severity, scope, and risk using a deterministic composite score |
+| `/vllm-backport-push-report` | Push triage report to a GitHub repository with timestamped directory structure |
+| `/vllm-backport-cherry-pick` | Attempt automatic cherry-pick of clean backport candidates to a downstream release branch |
+| `/vllm-compare-reqs` | Compare Python requirements between upstream vLLM and a downstream fork to identify version mismatches and missing packages |
+| `/vllm-slack-summary` | Generate a concise Slack-formatted summary of vLLM backport triage results |
 
 | Agent | Description |
 |-------|-------------|
