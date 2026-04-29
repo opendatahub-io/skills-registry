@@ -285,6 +285,12 @@ plugins:
       - name: test-rules-generator
         description: Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency
         user-invocable: true
+      - name: historical-bug-coverage
+        description: Analyzes historical blocking and critical bugs from Jira, determines what test coverage exists today with deep test inspection and confidence scoring, and generates standalone HTML reports
+        user-invocable: true
+      - name: risk-assessment
+        description: Analyze PR for risk, test coverage, architecture impact, and cross-repo intelligence
+        user-invocable: true
 
   - name: odh-ai-helpers
     description: >

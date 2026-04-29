@@ -70,6 +70,8 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 | `/quality-repo-analysis` | Automated analysis tool that evaluates CI/CD, testing, security, and best practices against gold standards |
 | `/konflux-build-simulator` | Generate GitHub Actions workflows that simulate Konflux builds at PR time to catch failures before merge |
 | `/test-rules-generator` | Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency |
+| `/historical-bug-coverage` | Analyzes historical blocking and critical bugs from Jira, determines what test coverage exists today with deep test inspection and confidence scoring, and generates standalone HTML reports |
+| `/risk-assessment` | Analyze PR for risk, test coverage, architecture impact, and cross-repo intelligence |
 
 ```bash
 /plugin install quality-tooling@opendatahub-skills
