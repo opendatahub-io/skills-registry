@@ -180,12 +180,14 @@ plugins:
 
   - name: test-plan
     description: >
-      Generate test plans and test cases from RHOAI strategies using parallel
-      sub-agent analysis and automated review. Publish to GitHub, resolve PR
-      feedback, and score quality with rubric-based evaluation.
+      End-to-end test planning workflow for RHOAI: generate test plans from
+      strategies, create test cases, implement executable automation code, verify
+      UI tests against live clusters via Playwright, publish to GitHub with PR
+      creation, resolve review feedback, and score quality with automated rubrics
+      using parallel sub-agent analysis.
     version: "0.2.0"
     category: evaluation
-    tags: [test-plan, test-cases, quality, strategy, review, scoring]
+    tags: [test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing]
     author:
       name: Federico Mosca
     source:
@@ -202,6 +204,15 @@ plugins:
         user-invocable: true
       - name: test-plan.create-cases
         description: Generate test case files from a test plan
+        user-invocable: true
+      - name: test-plan.update
+        description: Update test plan with new docs (ADR, API specs), re-analyze, bump version
+        user-invocable: true
+      - name: test-plan.case-implement
+        description: Generate executable test automation code from TC specifications with intelligent placement
+        user-invocable: true
+      - name: test-plan.ui-verify
+        description: Verify UI test cases from a PR against a live ODH/RHOAI cluster via Playwright; supports upgrade testing workflow
         user-invocable: true
       - name: test-plan.publish
         description: Publish test plan artifacts to GitHub with PR creation
@@ -221,12 +232,30 @@ plugins:
       - name: test-plan.analyze.infra
         description: Identify environment and infrastructure needs
         user-invocable: false
+      - name: test-plan.merge
+        description: Intelligently merge new analyzer findings into existing test plan
+        user-invocable: false
+      - name: test-plan.resolve-gaps
+        description: Cross-reference gaps with new findings to determine what's resolved
+        user-invocable: false
+      - name: test-plan.analyze.placement
+        description: Analyze test cases and recommend placement (component repo vs downstream)
+        user-invocable: false
       - name: test-plan.review
         description: Review test plan with 5-criteria rubric and auto-revision
+        user-invocable: false
+      - name: test-plan.create.test-function
+        description: Generate test function code from TC specification matching repo conventions
+        user-invocable: false
+      - name: test-plan.score.test-function
+        description: Score generated test function code using 5-criteria quality rubric
         user-invocable: false
     harnesses:
       claude-code:
         install: "/plugin install test-plan@opendatahub-skills"
+    python:
+      package: test-plan
+      requires_python: ">=3.10"
     depends_on: []
 
   - name: quality-tooling
