@@ -194,6 +194,7 @@ plugins:
       type: github
       repo: fege/test-plan
       ref: main
+    strict: false
     skills_dir: .claude/skills
     homepage: https://github.com/fege/test-plan
     repository: https://github.com/fege/test-plan

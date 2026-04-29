@@ -105,11 +105,15 @@
       ],
       "name": "test-plan",
       "repository": "https://github.com/fege/test-plan",
+      "skills": [
+        "./.claude/skills"
+      ],
       "source": {
         "ref": "main",
         "repo": "fege/test-plan",
         "source": "github"
       },
+      "strict": false,
       "version": "0.2.0"
     },
     {
