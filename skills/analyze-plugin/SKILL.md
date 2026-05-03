@@ -1,6 +1,11 @@
 ---
 name: analyze-plugin
-description: Analyze a plugin's source repository and generate enriched documentation content with diagrams for the skills-registry documentation site.
+description: >
+  Analyze a plugin's source repository and generate enriched documentation content
+  with presentation-quality SVG diagrams for the skills-registry documentation site.
+  Use when the user wants to document a plugin, generate diagrams for skills, create
+  enriched content for the site, or says things like "analyze the rfe-creator plugin",
+  "generate diagrams for agent-eval-harness", or "update the docs for test-plan".
 user-invocable: true
 allowed-tools:
   - Bash
@@ -35,15 +40,25 @@ If the plugin name is not found, list available plugins and exit.
 
 ### 2. Clone the source repository
 
+Clone into `.tmp/skill-repos/<plugin-name>` inside the project directory (not a system
+temp dir — sub-agents need read access and can't access paths outside the project).
+
 ```bash
-TMPDIR=$(mktemp -d)
-git clone --depth 1 --branch <ref> https://github.com/<repo>.git "$TMPDIR"
+mkdir -p .tmp/skill-repos
+rm -rf .tmp/skill-repos/<plugin-name>
+git clone --depth 1 --branch <ref> https://github.com/<repo>.git .tmp/skill-repos/<plugin-name>
 ```
+
+The `.tmp/` directory is already in `.gitignore`.
 
 ### 3. Read all SKILL.md files
 
 For each skill listed in the plugin's registry entry, read the corresponding SKILL.md file
 from the cloned repo at `<skills_dir>/<skill-name>/SKILL.md`.
+
+If a skill listed in `registry.yaml` is not found in the repo (wrong path, renamed, etc.),
+skip it and add it to the "skipped" list in the report. Do not fail — continue with the
+remaining skills.
 
 Extract from each SKILL.md:
 - **Frontmatter** fields (description, allowed-tools, user-invocable, etc.)
@@ -79,32 +94,58 @@ explain what the plugin does, why, and how. Keep it concise but informative (2-4
 
 ### 5. Generate pipeline diagram
 
-Invoke the diagram-skills plugin to create a pipeline diagram showing all skills in the plugin:
+Invoke `/skill-diagram` to create a pipeline diagram showing all skills in the plugin.
+The `--layout` flag chains to `/diagram-layout` automatically — do not invoke diagram-layout
+separately.
 
 ```
 /skill-diagram --skill <path1> --skill <path2> ... --detail low --layout --output site/docs/plugins/<plugin-name>/pipeline
 ```
 
-This produces a pipeline-mode diagram where each skill is a single node.
-After layout, export to SVG:
-```
-/diagram-layout --input <d2-file> --output site/docs/plugins/<plugin-name>/pipeline.drawio --format svg
-```
+This produces a D2 file and a `.drawio` with SVG export. Rename the exported SVG if needed:
 
-Move or rename the exported SVG to `site/docs/plugins/<plugin-name>/pipeline.svg`.
+```bash
+# If exported as pipeline.drawio.svg, rename to pipeline.svg
+mv site/docs/plugins/<plugin-name>/pipeline.drawio.svg site/docs/plugins/<plugin-name>/pipeline.svg 2>/dev/null || true
+```
 
 ### 6. Generate individual skill diagrams
 
-For each skill that has a non-trivial SKILL.md (more than a few lines of instructions),
-invoke diagram-skills to create a detailed architecture diagram:
+For each skill, invoke `/skill-diagram` to create a detailed architecture diagram.
+Use sub-agents with `run_in_background: true` to generate diagrams **in parallel** —
+sequential execution is too slow for plugins with many skills.
 
 ```
-/skill-diagram --skill <skill-path> --layout --output site/docs/plugins/<plugin-name>/<skill-name>
+Agent({
+  description: "diagram <skill-name>",
+  prompt: "/skill-diagram --skill .tmp/skill-repos/<plugin-name>/<skills_dir>/<skill-name> --output site/docs/plugins/<plugin-name>/<skill-name> --layout",
+  run_in_background: true
+})
 ```
 
-Export to SVG and place at `site/docs/plugins/<plugin-name>/<skill-name>.svg`.
+Launch all skill diagram agents at once (or in batches of 6-8 if there are many).
+Wait for all to complete before proceeding.
 
-Skip diagram generation for simple skills with minimal SKILL.md content (< 20 lines of instructions).
+After all agents complete, rename any `.drawio.svg` files to `.svg`:
+
+```bash
+find site/docs/plugins/<plugin-name> -name "*.drawio.svg" -exec sh -c 'mv "$1" "${1%.drawio.svg}.svg"' _ {} \;
+```
+
+Also clean up any stray files:
+
+```bash
+find site/docs/plugins/<plugin-name> -name "*.drawio.png" -delete
+find site/docs/plugins/<plugin-name> -name "layout-plan.json" -delete
+```
+
+Skip diagram generation for placeholder skills with no real workflow (e.g., "not yet implemented").
+
+#### Draw.io reserved cell IDs
+
+The draw.io CLI silently fails to export when certain cell IDs are used. Known reserved IDs:
+`filter`, `push`, `output`. If diagram export fails with no error message, check for these
+IDs in the drawio XML and rename them (e.g., `filter` → `filter-classify`).
 
 ### 7. Regenerate site pages
 
@@ -121,10 +162,9 @@ Report:
 - Enrichment file path
 - Number of diagrams generated (pipeline + individual)
 - Any skills skipped (not found in repo, too simple for diagrams)
+- Any diagram export failures (with suggested fixes)
 
 ### Cleanup
 
-Remove the temporary clone directory:
-```bash
-rm -rf "$TMPDIR"
-```
+The cloned repo in `.tmp/skill-repos/<plugin-name>` can be left in place for future
+re-runs (it's gitignored). To force a fresh clone, delete it before running.
