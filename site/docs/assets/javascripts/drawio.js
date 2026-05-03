@@ -19,6 +19,9 @@
   };
 
   var imghandler = function (img, imgdata) {
+    if (img.dataset.drawioEnabled) return;
+    img.dataset.drawioEnabled = "true";
+
     var url = "https://embed.diagrams.net/";
     url += "?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json&saveAndEdit=1&noSaveBtn=1";
 
@@ -80,31 +83,66 @@
     });
   };
 
-  document.addEventListener("DOMContentLoaded", function () {
-    for (var i = 0; i < document.images.length; i++) {
-      (function (img) {
-        var src = img.getAttribute("src");
-        if (!src || (!src.endsWith(".svg") && !src.endsWith(".png"))) return;
+  var scanImages = function () {
+    var images = document.querySelectorAll(
+      '.md-content img[src$=".svg"], .md-content img[src$=".png"]'
+    );
 
-        var fullSrc = new URL(src, window.location.href).href;
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = "blob";
-        xhr.open("GET", fullSrc);
-        xhr.addEventListener("load", function () {
-          var fr = new FileReader();
-          fr.addEventListener("load", function () {
-            if (fr.result.indexOf("mxfile") != -1) {
-              var fr2 = new FileReader();
-              fr2.addEventListener("load", function () {
-                imghandler(img, fr2.result);
-              });
-              fr2.readAsDataURL(xhr.response);
-            }
-          });
-          fr.readAsBinaryString(xhr.response);
+    images.forEach(function (img) {
+      if (img.dataset.drawioEnabled) return;
+
+      var src = img.getAttribute("src");
+      if (!src) return;
+
+      var fullSrc = new URL(src, window.location.href).href;
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = "blob";
+      xhr.open("GET", fullSrc);
+      xhr.addEventListener("load", function () {
+        var fr = new FileReader();
+        fr.addEventListener("load", function () {
+          if (fr.result.indexOf("mxfile") != -1) {
+            var fr2 = new FileReader();
+            fr2.addEventListener("load", function () {
+              imghandler(img, fr2.result);
+            });
+            fr2.readAsDataURL(xhr.response);
+          }
         });
-        xhr.send();
-      })(document.images[i]);
+        fr.readAsBinaryString(xhr.response);
+      });
+      xhr.send();
+    });
+  };
+
+  // MkDocs Material uses instant navigation (SPA-like).
+  // Listen for both initial load and page switches.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scanImages);
+  } else {
+    scanImages();
+  }
+
+  // MkDocs Material emits a custom event on navigation
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof document$ !== "undefined") {
+      document$.subscribe(function () {
+        setTimeout(scanImages, 100);
+      });
+    } else {
+      // Fallback: observe DOM mutations for SPA navigation
+      var observer = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          if (mutations[i].addedNodes.length > 0) {
+            scanImages();
+            break;
+          }
+        }
+      });
+      var content = document.querySelector(".md-content");
+      if (content) {
+        observer.observe(content, { childList: true, subtree: true });
+      }
     }
   });
 })();
