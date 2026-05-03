@@ -11,7 +11,7 @@ Generic agentic evaluation for skills and agents. Provides end-to-end skills to 
     - **Author**: Antonin Stefanutti
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
-    - **Tags**: evaluation, testing, skills, agents, mlflow, optimization, scoring
+    - **Tags**: <span class="tag-pill">evaluation</span> <span class="tag-pill">testing</span> <span class="tag-pill">skills</span> <span class="tag-pill">agents</span> <span class="tag-pill">mlflow</span> <span class="tag-pill">optimization</span> <span class="tag-pill">scoring</span>
 
 ## Pipeline
 

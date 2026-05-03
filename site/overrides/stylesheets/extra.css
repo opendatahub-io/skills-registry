@@ -1,4 +1,50 @@
-/* Category badges */
+/* ===== Custom Blue Theme (inspired by Blaxel/Mintlify) ===== */
+
+/* Light mode */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #2563EB;
+  --md-primary-fg-color--light: #3B82F6;
+  --md-primary-fg-color--dark: #1D4ED8;
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: #38BDF8;
+  --md-accent-bg-color: #ffffff;
+}
+
+/* Dark mode */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #3B82F6;
+  --md-primary-fg-color--light: #60A5FA;
+  --md-primary-fg-color--dark: #2563EB;
+  --md-primary-bg-color: #09090B;
+  --md-accent-fg-color: #38BDF8;
+  --md-accent-bg-color: #09090B;
+  --md-default-bg-color: #09090B;
+  --md-default-bg-color--light: #111113;
+  --md-default-bg-color--lighter: #18181B;
+  --md-default-bg-color--lightest: #27272A;
+}
+
+/* ===== Typography ===== */
+
+.md-typeset {
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+}
+
+/* ===== Category badges ===== */
+
 .category-badge {
   display: inline-block;
   padding: 0.15em 0.5em;
@@ -31,15 +77,22 @@
   color: var(--md-default-bg-color);
 }
 
-/* Plugin card enhancements for grid cards */
+/* ===== Plugin cards ===== */
+
 .md-typeset .grid.cards > ul > li {
   border: 1px solid var(--md-default-fg-color--lightest);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .md-typeset .grid.cards > ul > li:hover {
-  border-color: var(--md-accent-fg-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--md-primary-fg-color--light);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
 }
 
 /* Skill count chip */
@@ -52,7 +105,8 @@
   color: var(--md-default-fg-color--light);
 }
 
-/* Diagram container */
+/* ===== Diagram container ===== */
+
 .diagram-container {
   text-align: center;
   margin: 1.5em 0;

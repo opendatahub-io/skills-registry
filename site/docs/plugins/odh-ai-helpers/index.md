@@ -12,7 +12,7 @@ Developer productivity tools for Python packaging, CI/CD debugging, and workflow
     - **License**: Apache-2.0
     - **Category**: [Development Tools](../../categories/development-tools.md)
     - **Repository**: [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
-    - **Tags**: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation
+    - **Tags**: <span class="tag-pill">python-packaging</span> <span class="tag-pill">licensing</span> <span class="tag-pill">dependencies</span> <span class="tag-pill">gitlab</span> <span class="tag-pill">jira</span> <span class="tag-pill">adr</span> <span class="tag-pill">git</span> <span class="tag-pill">automation</span>
 
 ## Pipeline
 

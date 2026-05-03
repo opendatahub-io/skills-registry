@@ -11,7 +11,7 @@ Consensus-based security review for RHOAI strategy documents (STRATs). An orches
     - **Author**: jctanner
     - **Category**: [Security Review](../../categories/security.md)
     - **Repository**: [jctanner/ai-first-pipeline](https://github.com/jctanner/ai-first-pipeline)
-    - **Tags**: security, review, strat, threat-modeling, fips, compliance, consensus
+    - **Tags**: <span class="tag-pill">security</span> <span class="tag-pill">review</span> <span class="tag-pill">strat</span> <span class="tag-pill">threat-modeling</span> <span class="tag-pill">fips</span> <span class="tag-pill">compliance</span> <span class="tag-pill">consensus</span>
 
 ## Pipeline
 

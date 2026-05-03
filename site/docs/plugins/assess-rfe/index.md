@@ -11,7 +11,7 @@ Assess RFEs against quality criteria using a structured rubric.
     - **Author**: Jason Greene
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [n1hility/assess-rfe](https://github.com/n1hility/assess-rfe)
-    - **Tags**: rfe, rubric, quality, assessment
+    - **Tags**: <span class="tag-pill">rfe</span> <span class="tag-pill">rubric</span> <span class="tag-pill">quality</span> <span class="tag-pill">assessment</span>
 
 ## Pipeline
 

@@ -11,7 +11,7 @@ Quality tooling and automation for RHOAI component development. Includes automat
     - **Author**: Anthony Coughlin
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [antowaddle/Red-Hat-Quality-Tiger-Team](https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team)
-    - **Tags**: quality, testing, ci-cd, build-validation, analysis
+    - **Tags**: <span class="tag-pill">quality</span> <span class="tag-pill">testing</span> <span class="tag-pill">ci-cd</span> <span class="tag-pill">build-validation</span> <span class="tag-pill">analysis</span>
 
 ## Pipeline
 

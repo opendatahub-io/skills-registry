@@ -23,18 +23,21 @@ site_url: https://opendatahub-io.github.io/skills-registry
 
 theme:
   name: material
+  font:
+    text: JetBrains Mono
+    code: JetBrains Mono
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: amber
+      primary: blue
+      accent: light blue
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: amber
+      primary: blue
+      accent: light blue
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
@@ -60,7 +63,7 @@ markdown_extensions:
       permalink: true
 
 extra_css:
-  - overrides/stylesheets/extra.css
+  - assets/stylesheets/extra.css
   - assets/stylesheets/drawio.css
 
 extra_javascript:
@@ -225,7 +228,8 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     if repo:
         meta.append(f"    - **Repository**: [{repo}](https://github.com/{repo})")
     if tags:
-        meta.append(f"    - **Tags**: {', '.join(tags)}")
+        pills = " ".join(f'<span class="tag-pill">{t}</span>' for t in tags)
+        meta.append(f"    - **Tags**: {pills}")
     lines.extend(meta)
     lines.append("")
 

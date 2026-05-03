@@ -11,7 +11,7 @@ Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE J
     - **Author**: jwforres
     - **Category**: [Product Planning](../../categories/planning.md)
     - **Repository**: [jwforres/rfe-creator](https://github.com/jwforres/rfe-creator)
-    - **Tags**: rfe, jira, review, strategy, pipeline
+    - **Tags**: <span class="tag-pill">rfe</span> <span class="tag-pill">jira</span> <span class="tag-pill">review</span> <span class="tag-pill">strategy</span> <span class="tag-pill">pipeline</span>
 
 ## Pipeline
 

@@ -11,7 +11,7 @@ Generate test plans and test cases from RHOAI strategies using parallel sub-agen
     - **Author**: Federico Mosca
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [fege/test-plan](https://github.com/fege/test-plan)
-    - **Tags**: test-plan, test-cases, quality, strategy
+    - **Tags**: <span class="tag-pill">test-plan</span> <span class="tag-pill">test-cases</span> <span class="tag-pill">quality</span> <span class="tag-pill">strategy</span>
 
 ## Pipeline
 
