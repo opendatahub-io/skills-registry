@@ -59,6 +59,10 @@ markdown_extensions:
 
 extra_css:
   - overrides/stylesheets/extra.css
+  - overrides/stylesheets/drawio.css
+
+extra_javascript:
+  - overrides/javascripts/drawio.js
 
 """
 

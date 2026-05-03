@@ -1,0 +1,55 @@
+.drawio-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.drawio-edit-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 4px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color--light);
+  font-size: 0.7rem;
+  font-family: var(--md-text-font-family);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  z-index: 1;
+}
+
+.drawio-wrapper:hover .drawio-edit-btn {
+  opacity: 1;
+}
+
+.drawio-edit-btn:hover {
+  background: var(--md-accent-fg-color);
+  color: var(--md-accent-bg-color);
+  border-color: var(--md-accent-fg-color);
+}
+
+.drawio-shade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawio-shade iframe {
+  width: 95vw;
+  height: 95vh;
+  border: none;
+  border-radius: 8px;
+  background: white;
+}
