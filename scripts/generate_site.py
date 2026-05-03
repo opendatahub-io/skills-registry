@@ -104,12 +104,13 @@ def build_category_plugins(registry: dict) -> dict[str, list]:
 def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
     categories = registry.get("categories", {})
     plugins = registry.get("plugins", [])
-    lines = [GENERATED_MARKER]
-    lines.append("---")
+    lines = ["---"]
     lines.append("hide:")
     lines.append("  - navigation")
     lines.append("  - toc")
     lines.append("---")
+    lines.append("")
+    lines.append(GENERATED_MARKER)
     lines.append("")
     lines.append(f"# {registry.get('description', registry['name']).strip()}")
     lines.append("")

@@ -1,11 +1,12 @@
-<!-- Auto-generated from registry.yaml. Do not edit directly. -->
-
-
 ---
 hide:
   - navigation
   - toc
 ---
+
+<!-- Auto-generated from registry.yaml. Do not edit directly. -->
+
+
 
 # Skills and plugins for AI-assisted software engineering workflows, developed by the opendatahub-io team.
 
