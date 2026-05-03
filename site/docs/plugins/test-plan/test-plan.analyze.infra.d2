@@ -1,0 +1,162 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **test-plan.analyze.infra**
+  Fork context · Sonnet
+
+  - Called by test-plan.create
+  - Receives file paths from
+    orchestrator
+  - allowed-tools: Read only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Sources ---
+
+read-sources: |md
+  **Read Source Docs**
+
+  - Strategy files (from args
+    or artifacts/strat-tasks/)
+  - ADR files (if provided)
+  - Additional docs (API spec,
+    design doc, feature ref)
+  - ONLY files specified in args
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Extract Test Environment ---
+
+extract-env: |md
+  **Extract Test Environment**
+  LLM analysis (Section 3)
+
+  - Cluster config: OCP version,
+    RHOAI version, operators,
+    DB, language runtimes
+  - Test data: sample configs,
+    model artifacts, seed data,
+    mock responses, CRDs
+  - Test users: service accounts,
+    admin users, unprivileged,
+    anonymous access
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Extract Infrastructure & Tools ---
+
+extract-infra: |md
+  **Extract Infra & Tools**
+  LLM analysis (Section 9)
+
+  - Infrastructure: cluster reqs,
+    operator deps, external svcs
+  - Configuration: env vars,
+    ConfigMaps, catalog sources,
+    feature gates
+  - Test tools: API tools, DB
+    tools, debugging, perf,
+    K8s tools (oc, kubectl)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Gap Analysis ---
+
+gap-analysis: |md
+  **Gap Analysis**
+  LLM assessment
+
+  - Identify missing info
+  - Mark underspecified
+    items as TBD
+  - Map each gap to
+    resolving doc type
+    (ADR / API spec /
+    feature ref / design doc)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Structured Findings**
+
+  - Test Environment section
+  - Infrastructure & Tools section
+  - Gaps section
+  - Returns to orchestrator
+    (test-plan.create)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: Output Structure ---
+
+output-structure: |md
+  Markdown output
+  ├── Test Environment
+  │   ├── Cluster Configuration
+  │   ├── Test Data Requirements
+  │   └── Test Users
+  ├── Infrastructure and Tools
+  │   ├── Infrastructure
+  │   ├── Configuration
+  │   └── Test Tools
+  └── Gaps
+      └── {gap} — resolved by: {doc}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> read-sources
+read-sources -> extract-env
+extract-env -> extract-infra
+extract-infra -> gap-analysis
+gap-analysis -> output
+
+# Callout connection
+output -> output-structure {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

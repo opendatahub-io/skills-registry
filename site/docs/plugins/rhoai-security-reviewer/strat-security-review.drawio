@@ -1,0 +1,195 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/strat-security-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;RHAISTRAT key&lt;br&gt;--force (optional)&lt;br&gt;Orchestrator only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="115" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira" value="&lt;b&gt;Jira (RHAISTRAT)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Source + destination&lt;br&gt;MCP + REST API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#546E7F;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="15" width="145" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase1" value="&lt;b&gt;Phase 1 &amp;mdash; Threat Surface Extraction&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#9E9E9E;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="230" y="50" width="770" height="195" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch" value="&lt;b&gt;Fetch STRAT&lt;/b&gt;&lt;br&gt;&lt;br&gt;Jira MCP call&lt;br&gt;Read all sections&lt;br&gt;Technical Approach" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="15" y="40" width="135" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="idempotency" value="&lt;b&gt;Idempotency Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;Exists + no --force?&lt;br&gt;&amp;rarr; Stop&lt;br&gt;Else proceed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="170" y="40" width="135" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="tier" value="&lt;b&gt;Determine Tier&lt;/b&gt;&lt;br&gt;&lt;br&gt;Security hints count&lt;br&gt;Deep / Standard&lt;br&gt;/ Light" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="325" y="40" width="130" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="p1_extract" value="&lt;b&gt;Extract Surface&lt;/b&gt;&lt;br&gt;&lt;br&gt;Endpoints, CRDs&lt;br&gt;Data flows, RBAC&lt;br&gt;Agent/MCP surfaces" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="475" y="40" width="130" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="shortcircuit" value="&lt;b&gt;Light Gate&lt;/b&gt;&lt;br&gt;&lt;br&gt;Light + 0 items?&lt;br&gt;&amp;rarr; Skip to PASS&lt;br&gt;Else &amp;rarr; Phase 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="625" y="40" width="125" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="stop_node" value="&lt;b&gt;Stop&lt;/b&gt;&lt;br&gt;Already reviewed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="260" width="120" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase2" value="&lt;b&gt;Phase 2 &amp;mdash; Spawn Independent Reviewers&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#9E9E9E;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="345" width="570" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="r1" value="&lt;b&gt;Reviewer 1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Isolated fork context&lt;br&gt;Independent analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="15" y="40" width="160" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="r2" value="&lt;b&gt;Reviewer 2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Isolated fork context&lt;br&gt;Independent analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="200" y="40" width="160" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="r3" value="&lt;b&gt;Reviewer 3&lt;/b&gt;&lt;br&gt;&lt;br&gt;Isolated fork context&lt;br&gt;Independent analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="385" y="40" width="160" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="secskill" value="&lt;b&gt;/security-reviewer&lt;/b&gt;&lt;br&gt;&lt;br&gt;Catalog pattern matching&lt;br&gt;Creative exploration&lt;br&gt;Per-reviewer output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#546E7F;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="550" width="160" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="artifacts" value="&lt;b&gt;Intermediate Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;threat-surface.md&lt;br&gt;reviewer-{1,2,3}.md&lt;br&gt;Preserved for audit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#BDBDBD;strokeWidth=1;arcSize=10;dashed=1;dashPattern=4 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="550" width="175" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase3" value="&lt;b&gt;Phase 3 &amp;mdash; Consensus Synthesis&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#9E9E9E;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="640" y="345" width="360" height="305" as="geometry"/>
+    </mxCell>
+    <mxCell id="p3_collect" value="&lt;b&gt;Collect Findings&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read 3 reviewer files&lt;br&gt;Extract all risks&lt;br&gt;NFR gaps + violations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase3">
+      <mxGeometry x="15" y="40" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="p3_cluster" value="&lt;b&gt;Cluster Matching&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pattern ID match&lt;br&gt;Surface item match&lt;br&gt;Category + section (2/3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase3">
+      <mxGeometry x="185" y="40" width="155" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="p3_confidence" value="&lt;b&gt;Confidence + Severity&lt;/b&gt;&lt;br&gt;&lt;br&gt;3/3 &amp;rarr; HIGH&lt;br&gt;2/3 &amp;rarr; MEDIUM&lt;br&gt;1/3 &amp;rarr; LOW&lt;br&gt;Majority severity vote" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase3">
+      <mxGeometry x="15" y="140" width="155" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="p3_verdict" value="&lt;b&gt;Resolve Verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;Critical+HIGH &amp;rarr; FAIL&lt;br&gt;Critical+LOW &amp;rarr; CONCERNS&lt;br&gt;High/Med &amp;rarr; CONCERNS&lt;br&gt;5+ NFR &amp;rarr; CONCERNS&lt;br&gt;Else &amp;rarr; PASS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase3">
+      <mxGeometry x="185" y="140" width="155" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase4" value="&lt;b&gt;Phase 4 &amp;mdash; Write Output&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#9E9E9E;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="1040" y="265" width="310" height="385" as="geometry"/>
+    </mxCell>
+    <mxCell id="p4_review" value="&lt;b&gt;Full Review (File A)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Threat surface summary&lt;br&gt;Consensus findings + confidence tags&lt;br&gt;Reviewer agreement breakdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase4">
+      <mxGeometry x="15" y="40" width="280" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="p4_reqs" value="&lt;b&gt;Requirements (File B)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Required amendments (MED/HIGH confidence)&lt;br&gt;Human-review findings (LOW confidence)&lt;br&gt;NFR additions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase4">
+      <mxGeometry x="15" y="140" width="280" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="p4_jira_attach" value="&lt;b&gt;Attach to Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;Requirements file&lt;br&gt;Python script" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=1.5;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase4">
+      <mxGeometry x="15" y="240" width="130" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="p4_label" value="&lt;b&gt;Add Label&lt;/b&gt;&lt;br&gt;&lt;br&gt;strat-security-pass&lt;br&gt;/ concerns / fail" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=1.5;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase4">
+      <mxGeometry x="165" y="240" width="130" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_jira" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="entry" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_entry_fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="fetch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_jira" value="MCP call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=10;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="fetch" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="215" y="120"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_idemp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="fetch" target="idempotency" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_idemp_tier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="idempotency" target="tier" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_tier_extract" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="tier" target="p1_extract" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_extract_sc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="p1_extract" target="shortcircuit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_idemp_stop" value="exists, no --force" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C62828;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="idempotency" target="stop_node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_sc_phase2" value="Standard / Deep" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1565C0;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.6;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="shortcircuit" target="phase2" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="920" y="330"/>
+          <mxPoint x="15" y="330"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_sc_pass" value="Light + 0 items" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2E7D32;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="shortcircuit" target="p4_review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_phase2_collect" value="all complete" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1565C0;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="phase2" target="p3_collect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_cluster" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="p3_collect" target="p3_cluster" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cluster_conf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="p3_cluster" target="p3_confidence" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_conf_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="p3_confidence" target="p3_verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_verdict_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="p3_verdict" target="p4_review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_reqs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="p4_review" target="p4_reqs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_reqs_attach" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="p4_reqs" target="p4_jira_attach" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_reqs_label" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="p4_reqs" target="p4_label" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_jira_out" value="attach" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="p4_jira_attach" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1020" y="570"/>
+          <mxPoint x="1020" y="700"/>
+          <mxPoint x="15" y="700"/>
+          <mxPoint x="15" y="50"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_label_jira" value="label" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="p4_label" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1370" y="570"/>
+          <mxPoint x="1370" y="8"/>
+          <mxPoint x="102" y="8"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_r1_secskill" value="Skill tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=10;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="r1" target="secskill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_r2_secskill" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="r2" target="secskill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_r3_secskill" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#546E7F;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" edge="1" source="r3" target="secskill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_r_artifacts" value="all artifacts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#BDBDBD;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=10;exitX=0.55;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="phase2" target="artifacts" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

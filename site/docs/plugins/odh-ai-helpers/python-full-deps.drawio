@@ -1,0 +1,110 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/python-full-deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;--package (required)&lt;br&gt;--version (latest)&lt;br&gt;--python (3.12)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="100" width="150" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="build_req" value="&lt;b&gt;Build Requirement&lt;/b&gt;&lt;br&gt;&lt;br&gt;Construct req string&lt;br&gt;package==version or bare&lt;br&gt;Normalize for PyPI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="230" y="120" width="155" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="try_uv" value="&lt;b&gt;Try uv Resolver&lt;/b&gt;&lt;br&gt;&lt;br&gt;uv pip compile -&lt;br&gt;--python-version flag&lt;br&gt;Write to temp reqs.txt&lt;br&gt;150s timeout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="435" y="110" width="160" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="uv_available" value="&lt;b&gt;uv Available?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="645" y="140" width="120" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse_compile" value="&lt;b&gt;Parse Compile Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read requirements.txt&lt;br&gt;Regex name==version&lt;br&gt;PEP 503 normalization&lt;br&gt;Collect into set" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="30" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="pip_fallback" value="&lt;b&gt;Pip Fallback&lt;/b&gt;&lt;br&gt;&lt;br&gt;Create temp venv&lt;br&gt;Upgrade pip &gt;= 22.2&lt;br&gt;pip --dry-run --report&lt;br&gt;150s timeout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="310" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="version_warn" value="&lt;b&gt;Version Mismatch?&lt;/b&gt;&lt;br&gt;&lt;br&gt;Warn if req Python&lt;br&gt;!= running Python" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="460" width="165" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse_report" value="&lt;b&gt;Parse Pip Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read JSON report&lt;br&gt;Extract name + version&lt;br&gt;PEP 503 normalization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="580" width="165" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve_ok" value="&lt;b&gt;Resolution OK?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1080" y="200" width="120" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="sort_dedup" value="&lt;b&gt;Sort &amp; Deduplicate&lt;/b&gt;&lt;br&gt;&lt;br&gt;Alphabetical sort&lt;br&gt;Unique entries only&lt;br&gt;name==version per line" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="60" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="output_node" value="&lt;b&gt;Dependency Tree&lt;/b&gt;&lt;br&gt;&lt;br&gt;Sorted name==version&lt;br&gt;Total dep count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="195" width="140" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="error_exit" value="&lt;b&gt;Error&lt;/b&gt;&lt;br&gt;&lt;br&gt;Print error to stderr&lt;br&gt;Exit non-zero" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="380" width="140" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="pypi" value="&lt;b&gt;PyPI&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="620" y="390" width="110" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="entry" target="build_req" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="build_req" target="try_uv" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="try_uv" target="uv_available" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2e7d32;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="uv_available" target="parse_compile" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="No (FileNotFoundError)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c62828;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="uv_available" target="pip_fallback" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="parse_compile" target="resolve_ok" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="pip_fallback" target="version_warn" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="version_warn" target="parse_report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="parse_report" target="resolve_ok" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1140" y="625"/>
+          <mxPoint x="1140" y="250"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e10" value="network" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6a1b9a;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" source="try_uv" target="pypi" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e11" value="network" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6a1b9a;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=11;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pip_fallback" target="pypi" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="780" y="365"/>
+          <mxPoint x="780" y="415"/>
+          <mxPoint x="730" y="415"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e12" value="Success" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2e7d32;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve_ok" target="sort_dedup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e13" value="Failure" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c62828;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve_ok" target="error_exit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="sort_dedup" target="output_node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

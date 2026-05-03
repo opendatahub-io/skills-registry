@@ -1,0 +1,187 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strat.create**
+
+  - Approved RFEs as input
+  - Local artifacts or Jira
+  - Clone → RHAISTRAT
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Find RFE Sources ---
+
+find-sources: |md
+  **Find RFE Sources**
+
+  - Check artifacts/rfe-tasks/
+  - Check Jira MCP / env vars
+  - Detect available sources
+  - Ask user if both exist
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch from Jira ---
+
+fetch-jira: |md
+  **Fetch from Jira**
+
+  - mcp__atlassian__getJiraIssue
+  - REST fallback: fetch_issue.py
+  - Fields: summary, description,
+    priority, labels, status
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Select RFEs ---
+
+select: |md
+  **Select RFEs**
+
+  - Present table to user
+  - Title, priority, source
+  - Pick specific or "all"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Clone in Jira ---
+
+clone-jira: |md
+  **Clone in Jira**
+  LLM + MCP
+
+  - Clone RHAIRFE → RHAISTRAT
+  - Issue type: Feature
+  - Cloners link auto-created
+  - Record new RHAISTRAT keys
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Manual Guide ---
+
+manual-guide: |md
+  **Write Manual Guide**
+
+  - strat-jira-guide.md
+  - Clone instructions
+  - Table for user to fill
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Create Stubs ---
+
+create-stubs: |md
+  **Create Strategy Stubs**
+
+  - artifacts/strat-tasks/
+  - Business Need (from RFE)
+  - Strategy section (empty)
+  - frontmatter.py set metadata
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Write Tickets ---
+
+write-tickets: |md
+  **Write strat-tickets.md**
+
+  - RHAISTRAT key mapping
+  - Source RFE → STRAT key
+  - Priority + Jira URL
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Next Steps ---
+
+next-steps: |md
+  **Next Steps**
+
+  - Stubs in strat-tasks/
+  - Run /strat.refine next
+  - Complete manual clone
+    if Jira skipped
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: Jira ---
+
+jira: |md
+  **Jira**
+  RHAIRFE + RHAISTRAT
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> find-sources
+
+find-sources -> fetch-jira: "Jira only"
+find-sources -> select: "local artifacts"
+
+fetch-jira -> select
+
+select -> clone-jira: "MCP available"
+select -> manual-guide: "no MCP"
+
+clone-jira -> create-stubs
+manual-guide -> create-stubs
+
+clone-jira -> write-tickets
+create-stubs -> next-steps
+
+# External connections
+fetch-jira -> jira: "REST / MCP" {
+  style.stroke-dash: 3
+}
+clone-jira -> jira: "clone API" {
+  style.stroke-dash: 3
+}

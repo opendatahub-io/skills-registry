@@ -1,0 +1,356 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/test-rules-generator**
+
+  - [repository-url]
+  - optional: test type focus
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 1: Repository Discovery ---
+
+clone: |md
+  **Clone & Scan**
+
+  - git clone repo
+  - find test directories
+  - identify primary language
+  - detect frameworks
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+detect-types: |md
+  **Detect Test Types**
+
+  - unit: *_test.go, *.spec.ts
+  - mock: cypress/tests/mocked/
+  - e2e: e2e/, integration/
+  - contract: contract-tests/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+infra: |md
+  **Identify Infrastructure**
+
+  - mock factories, fixtures
+  - page objects
+  - test utilities, helpers
+  - config: jest, cypress, pytest
+  - CI workflows
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- No Tests Decision ---
+
+has-tests: |md
+  **Tests
+  found?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.font-size: 12
+}
+
+no-tests: |md
+  **Recommend Patterns**
+
+  - analyze docs instead
+  - suggest test frameworks
+  - generate starter rules
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# --- Phase 2: Pattern Extraction ---
+
+collect-samples: |md
+  **Collect Samples**
+  LLM analysis
+
+  - 5-10 files per test type
+  - recently modified (active)
+  - varying complexity
+  - passing, well-structured
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+extract-unit: |md
+  **Extract Unit Patterns**
+  LLM analysis
+
+  - file structure & naming
+  - describe/it conventions
+  - mock/stub patterns
+  - assertion styles
+  - component testing (React)
+  - hook testing patterns
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+extract-mock: |md
+  **Extract Mock Patterns**
+  LLM analysis
+
+  - cy.intercept patterns
+  - page object methods
+  - mock data factories
+  - alias naming (.as)
+  - validation patterns
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+extract-e2e: |md
+  **Extract E2E Patterns**
+  LLM analysis
+
+  - test-variables.yml setup
+  - oc/kubectl commands
+  - resource management
+  - cleanup patterns
+  - wait strategies
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+extract-contract: |md
+  **Extract Contract Patterns**
+  LLM analysis
+
+  - API schema validation
+  - BFF startup/lifecycle
+  - JSON Pointer refs
+  - status code testing
+  - error response patterns
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Phase 3: Rule Generation ---
+
+gen-standards: |md
+  **Generate**
+  **testing-standards.md**
+  LLM generation
+
+  - test types overview
+  - when to use each type
+  - general principles
+  - independence & isolation
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+gen-unit: |md
+  **Generate**
+  **unit-tests.md**
+  LLM generation
+
+  - framework + tools table
+  - naming & location
+  - patterns + examples
+  - DO / DON'T checklists
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+gen-conditional: |md
+  **Generate Conditional Rules**
+  LLM generation
+
+  - mock-tests.md (if found)
+  - e2e-tests.md (if found)
+  - contract-tests.md (if found)
+  - same template structure
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Phase 4: Supporting Files ---
+
+gen-support: |md
+  **Generate Support Files**
+
+  - .claude/rules/README.md
+  - TEST-RULES-ANALYSIS.md
+  - summary of findings
+  - gap recommendations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 5: Validation ---
+
+validate: |md
+  **Validate Rules**
+
+  - completeness check
+  - accuracy vs repo code
+  - file paths correct
+  - framework versions match
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+test-apply: |md
+  **Test Application**
+  LLM generation
+
+  - create test from rules
+  - verify pattern match
+  - confirm lint passes
+  - adjust rules if needed
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Output**
+
+  .claude/rules/
+  ├── testing-standards.md
+  ├── unit-tests.md
+  ├── mock-tests.md
+  ├── e2e-tests.md
+  ├── contract-tests.md
+  └── README.md
+  TEST-RULES-ANALYSIS.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+args -> clone
+clone -> detect-types
+detect-types -> infra
+infra -> has-tests
+
+has-tests -> collect-samples: "yes" {
+  style.stroke: "#333333"
+}
+
+has-tests -> no-tests: "no" {
+  style.stroke: "#333333"
+}
+
+collect-samples -> extract-unit
+
+extract-unit -> extract-mock: "mock tests found" {
+  style.stroke: "#333333"
+}
+
+extract-unit -> extract-e2e: "e2e tests found" {
+  style.stroke: "#333333"
+}
+
+extract-unit -> extract-contract: "contract tests found" {
+  style.stroke: "#333333"
+}
+
+extract-unit -> gen-standards: "unit only" {
+  style.stroke: "#333333"
+}
+
+extract-mock -> gen-standards
+extract-e2e -> gen-standards
+extract-contract -> gen-standards
+
+gen-standards -> gen-unit
+gen-unit -> gen-conditional
+gen-conditional -> gen-support
+gen-support -> validate
+validate -> test-apply
+test-apply -> output
+
+test-apply -> validate: "rules need adjustment" {
+  style.stroke-dash: 3
+}
+
+# Callout connection
+gen-conditional -> output {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

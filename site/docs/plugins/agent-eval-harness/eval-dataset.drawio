@@ -1,0 +1,132 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="args" value="&lt;b&gt;/eval-dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;--config &amp;lt;path&amp;gt;&lt;br&gt;--count &amp;lt;N&amp;gt; (default 5)&lt;br&gt;--strategy &amp;lt;type&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="30" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="missing-config" value="&lt;b&gt;eval.yaml?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="230" y="55" width="120" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="invoke-analyze" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;ask user which skill&lt;br&gt;Skill tool invocation&lt;br&gt;wait for completion&lt;br&gt;re-read eval.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="130" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-context" value="&lt;b&gt;Read Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;read eval.yaml config&lt;br&gt;read eval.md analysis&lt;br&gt;extract dataset.schema&lt;br&gt;extract execution.mode&lt;br&gt;parse judges for criteria&lt;br&gt;build judge-driven reqs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="640" y="10" width="180" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse-schema" value="&lt;b&gt;Parse Schema&lt;/b&gt;&lt;br&gt;&lt;br&gt;required files per case&lt;br&gt;required fields per file&lt;br&gt;optional fields (vary)&lt;br&gt;field semantics&lt;br&gt;argument {field} placeholders&lt;br&gt;external-state [EXTERNAL]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="880" y="20" width="180" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess-state" value="&lt;b&gt;Assess Current State&lt;/b&gt;&lt;br&gt;&lt;br&gt;ls dataset_path&lt;br&gt;count existing cases&lt;br&gt;read sample case structure&lt;br&gt;identify coverage gaps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="370" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="strategy" value="&lt;b&gt;Choose&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="280" y="405" width="110" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="bootstrap" value="&lt;b&gt;Bootstrap&lt;/b&gt;&lt;br&gt;&lt;br&gt;1 simple case&lt;br&gt;1 complex case&lt;br&gt;1 edge case&lt;br&gt;remaining map to judges&lt;br&gt;judge criteria coverage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="470" y="320" width="170" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="expand" value="&lt;b&gt;Expand&lt;/b&gt;&lt;br&gt;&lt;br&gt;read all existing cases&lt;br&gt;compare vs judge criteria&lt;br&gt;identify untested scenarios&lt;br&gt;generate gap-filling cases&lt;br&gt;continue numbering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="470" y="490" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="from-traces" value="&lt;b&gt;From Traces&lt;/b&gt;&lt;br&gt;&lt;br&gt;from_traces.py via MLflow&lt;br&gt;extract real prod inputs&lt;br&gt;structure into case dirs&lt;br&gt;fallback: expand strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="470" y="660" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="generate" value="&lt;b&gt;Generate Cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;create case-NNN-slug/ dirs&lt;br&gt;write required files + fields&lt;br&gt;vary optional fields&lt;br&gt;realistic domain content&lt;br&gt;TODO_ for external-state&lt;br&gt;answers.yaml (interactive)&lt;br&gt;annotations.yaml (judges)&lt;br&gt;companion files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="730" y="400" width="200" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate" value="&lt;b&gt;Validate&lt;/b&gt;&lt;br&gt;&lt;br&gt;read back generated case&lt;br&gt;check vs dataset.schema&lt;br&gt;verify {field} placeholders&lt;br&gt;verify companion files&lt;br&gt;check for empty/placeholder" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="990" y="400" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;N cases generated&lt;br&gt;strategy used&lt;br&gt;coverage summary&lt;br&gt;TODO_ placeholders listed&lt;br&gt;next: /eval-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="990" y="600" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_args_config" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="missing-config" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_config_analyze" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="missing-config" target="invoke-analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_config_read" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="missing-config" target="read-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_analyze_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="invoke-analyze" target="read-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_read_parse" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-context" target="parse-schema" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_parse_assess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse-schema" target="assess-state" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1080" y="100"/>
+          <mxPoint x="1080" y="280"/>
+          <mxPoint x="15" y="280"/>
+          <mxPoint x="15" y="430"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assess_strategy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess-state" target="strategy" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_strategy_bootstrap" value="bootstrap
+(default / &lt;5 cases)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="strategy" target="bootstrap" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_strategy_expand" value="expand
+(cases exist)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="strategy" target="expand" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_strategy_traces" value="from-traces
+(MLflow available)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="strategy" target="from-traces" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="335" y="640"/>
+          <mxPoint x="445" y="640"/>
+          <mxPoint x="445" y="696"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_traces_expand" value="no traces found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.85;entryDx=0;entryDy=0;" edge="1" source="from-traces" target="expand" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_bootstrap_generate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_expand_generate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.45;entryDx=0;entryDy=0;" edge="1" source="expand" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_traces_generate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.85;entryDx=0;entryDy=0;" edge="1" source="from-traces" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_generate_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="generate" target="validate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_generate_back" value="schema mismatch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="validate" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1185" y="470"/>
+          <mxPoint x="1185" y="810"/>
+          <mxPoint x="830" y="810"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

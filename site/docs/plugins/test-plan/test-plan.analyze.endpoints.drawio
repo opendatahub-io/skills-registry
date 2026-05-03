@@ -1,0 +1,220 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="orchestrator_in" value="&lt;b&gt;Orchestrating Skill&lt;/b&gt;&lt;br&gt;&lt;br&gt;test-plan.create&lt;br&gt;passes file paths" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#616161;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+      <mxGeometry x="30" y="55" width="140" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="callout_meta" value="context: fork &amp;nbsp;|&amp;nbsp; model: sonnet&lt;br&gt;tools: Read only&lt;br&gt;user-invocable: false" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=middle;fontSize=10;fontFamily=Courier New;fontStyle=2;" vertex="1" parent="1">
+      <mxGeometry x="30" y="150" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;" edge="1" source="orchestrator_in" target="callout_meta" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="c_inputs" value="&lt;b&gt;Input Documents&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="230" y="30" width="465" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="strategy" value="&lt;b&gt;Strategy Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_inputs">
+      <mxGeometry x="15" y="32" width="132" height="82" as="geometry"/>
+    </mxCell>
+    <mxCell id="adr" value="&lt;b&gt;ADR Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;(optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=6 3;" vertex="1" parent="c_inputs">
+      <mxGeometry x="162" y="32" width="132" height="82" as="geometry"/>
+    </mxCell>
+    <mxCell id="additional" value="&lt;b&gt;Additional Docs&lt;/b&gt;&lt;br&gt;&lt;br&gt;API spec, design doc,&lt;br&gt;feature refinement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=6 3;" vertex="1" parent="c_inputs">
+      <mxGeometry x="309" y="32" width="140" height="82" as="geometry"/>
+    </mxCell>
+    <mxCell id="read_files" value="&lt;b&gt;Read Specified Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;ONLY args-specified&lt;br&gt;No repo browsing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="755" y="55" width="160" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="guard" value="&lt;b&gt;Anti-Hallucination&lt;/b&gt;&lt;br&gt;&lt;b&gt;Guard&lt;/b&gt;&lt;br&gt;&lt;br&gt;Only explicit items&lt;br&gt;No inferred paths&lt;br&gt;Flag ambiguities" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="975" y="35" width="185" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_orch_strat" value="file paths" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="orchestrator_in" target="strategy" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_orch_adr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;" edge="1" source="orchestrator_in" target="adr" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_orch_add" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;" edge="1" source="orchestrator_in" target="additional" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_strat_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="strategy" target="read_files" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_adr_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="adr" target="read_files" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_add_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="additional" target="read_files" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_read_guard" value="ground in source" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="read_files" target="guard" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="c_scope" value="&lt;b&gt;Feature Scope (Section 1)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="30" y="240" width="500" height="240" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_purpose" value="&lt;b&gt;Purpose&lt;/b&gt;&lt;br&gt;&lt;br&gt;WHAT / WHY / HOW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_scope">
+      <mxGeometry x="15" y="35" width="110" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_inscope" value="&lt;b&gt;In Scope&lt;/b&gt;&lt;br&gt;&lt;br&gt;From strategy only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_scope">
+      <mxGeometry x="140" y="35" width="100" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_outscope" value="&lt;b&gt;Out of Scope&lt;/b&gt;&lt;br&gt;&lt;br&gt;Explicit excl. only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_scope">
+      <mxGeometry x="255" y="35" width="110" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_objectives" value="&lt;b&gt;Test Objectives&lt;/b&gt;&lt;br&gt;&lt;br&gt;3–7 items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_scope">
+      <mxGeometry x="380" y="35" width="105" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="out_scope_md" value="&lt;b&gt;§ Scope Analysis&lt;/b&gt;&lt;br&gt;&lt;br&gt;Purpose · In/Out Scope&lt;br&gt;Test Objectives" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_scope">
+      <mxGeometry x="140" y="140" width="220" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="c_endpoints" value="&lt;b&gt;Endpoints / Methods (Section 4)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="30" y="520" width="500" height="245" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_rest" value="&lt;b&gt;REST API&lt;/b&gt;&lt;br&gt;&lt;br&gt;path, method, purpose" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_endpoints">
+      <mxGeometry x="15" y="35" width="145" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_grpc" value="&lt;b&gt;gRPC Services&lt;/b&gt;&lt;br&gt;&lt;br&gt;service, RPCs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_endpoints">
+      <mxGeometry x="175" y="35" width="145" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_methods" value="&lt;b&gt;Python/Go Methods&lt;/b&gt;&lt;br&gt;&lt;br&gt;class, method, purpose" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_endpoints">
+      <mxGeometry x="335" y="35" width="150" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_ui" value="&lt;b&gt;UI Components&lt;/b&gt;&lt;br&gt;&lt;br&gt;component, actions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_endpoints">
+      <mxGeometry x="15" y="120" width="145" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_cli" value="&lt;b&gt;CLI Commands&lt;/b&gt;&lt;br&gt;&lt;br&gt;cmd, flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_endpoints">
+      <mxGeometry x="175" y="120" width="145" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract_config" value="&lt;b&gt;Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;CRDs, ConfigMaps, env" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#6A1B9A;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_endpoints">
+      <mxGeometry x="335" y="120" width="150" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="c_priority" value="&lt;b&gt;Priority Assignment&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="590" y="520" width="190" height="245" as="geometry"/>
+    </mxCell>
+    <mxCell id="assign_p0" value="&lt;b&gt;P0 Critical&lt;/b&gt;&lt;br&gt;Must work for feature" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;strokeWidth=1.5;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="c_priority">
+      <mxGeometry x="20" y="35" width="150" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="assign_p1" value="&lt;b&gt;P1 High&lt;/b&gt;&lt;br&gt;Most users rely on" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E65100;strokeWidth=1.5;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="c_priority">
+      <mxGeometry x="20" y="100" width="150" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="assign_p2" value="&lt;b&gt;P2 Medium&lt;/b&gt;&lt;br&gt;Edge cases, advanced" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=1.5;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="c_priority">
+      <mxGeometry x="20" y="165" width="150" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="c_gaps" value="&lt;b&gt;Gap Detection&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="840" y="520" width="200" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect_gaps" value="&lt;b&gt;Gaps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Ambiguities found&lt;br&gt;Needed: ADR / API spec&lt;br&gt;design doc / refinement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_gaps">
+      <mxGeometry x="15" y="35" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect_pending" value="&lt;b&gt;Pending Details&lt;/b&gt;&lt;br&gt;&lt;br&gt;Functionality described&lt;br&gt;No concrete endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_gaps">
+      <mxGeometry x="15" y="130" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_guard_scope" value="extract scope" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6A1B9A;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.35;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.08;entryDx=0;entryDy=0;" edge="1" source="guard" target="c_scope" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1040" y="210"/>
+          <mxPoint x="530" y="210"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_guard_endpoints" value="extract endpoints" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6A1B9A;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.65;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" source="guard" target="c_endpoints" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1100" y="505"/>
+          <mxPoint x="530" y="505"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_guard_gaps" value="ambiguities" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C62828;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" source="guard" target="c_gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1200" y="131"/>
+          <mxPoint x="1200" y="520"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_purpose_scopemd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6A1B9A;strokeWidth=1;html=1;" edge="1" source="extract_purpose" target="out_scope_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_inscope_scopemd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6A1B9A;strokeWidth=1;html=1;" edge="1" source="extract_inscope" target="out_scope_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_outscope_scopemd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6A1B9A;strokeWidth=1;html=1;" edge="1" source="extract_outscope" target="out_scope_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_obj_scopemd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6A1B9A;strokeWidth=1;html=1;" edge="1" source="extract_objectives" target="out_scope_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_endpoints_priority" value="prioritize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="c_endpoints" target="c_priority" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_endpoints_pending" value="unspecified" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#C62828;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="c_endpoints" target="detect_pending" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="c_output" value="&lt;b&gt;Structured Output&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="150" y="840" width="640" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="out_scope_final" value="&lt;b&gt;§ Scope Analysis&lt;/b&gt;&lt;br&gt;&lt;br&gt;Purpose · In/Out Scope&lt;br&gt;Test Objectives" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_output">
+      <mxGeometry x="15" y="35" width="140" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="out_table_md" value="&lt;b&gt;§ Endpoints&lt;/b&gt;&lt;br&gt;&lt;b&gt;Under Test&lt;/b&gt;&lt;br&gt;&lt;br&gt;Table w/ Priority" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_output">
+      <mxGeometry x="170" y="35" width="140" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="out_pending_md" value="&lt;b&gt;§ Pending&lt;/b&gt;&lt;br&gt;&lt;b&gt;Details&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_output">
+      <mxGeometry x="335" y="35" width="130" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="out_gaps_md" value="&lt;b&gt;§ Gaps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Missing + remedy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="c_output">
+      <mxGeometry x="490" y="35" width="130" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="orchestrator_out" value="&lt;b&gt;Orchestrating Skill&lt;/b&gt;&lt;br&gt;&lt;br&gt;test-plan.create&lt;br&gt;Sections 1 &amp;amp; 4 content" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#616161;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+      <mxGeometry x="350" y="1040" width="165" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_scopemd_scopefinal" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2E7D32;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="out_scope_md" target="out_scope_final" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_priority_tablemd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="c_priority" target="out_table_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pending_pendingmd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="detect_pending" target="out_pending_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gaps_gapsmd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="c_gaps" target="out_gaps_md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scopefinal_orch" value="Section 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.2;entryY=0;entryDx=0;entryDy=0;" edge="1" source="out_scope_final" target="orchestrator_out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_tablemd_orch" value="Section 4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;" edge="1" source="out_table_md" target="orchestrator_out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pendingmd_orch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.6;entryY=0;entryDx=0;entryDy=0;" edge="1" source="out_pending_md" target="orchestrator_out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gapsmd_orch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;" edge="1" source="out_gaps_md" target="orchestrator_out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -1,0 +1,245 @@
+direction: right
+
+# --- Global styles ---
+*.style.border-radius: 8
+*.style.font-size: 14
+
+# ===================================================================
+# Nodes
+# ===================================================================
+
+entry: |md
+  ## /python-packaging-complexity
+  - Package name (required)
+  - Version (optional)
+  - Allowed tools: Bash, Read
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 15
+  }
+}
+
+run-script: |md
+  ## Run pypi_inspect.py
+  - `./scripts/pypi_inspect.py <pkg> [ver]`
+  - Optional `--json` for structured output
+  - Optional `--pypi-url` for custom index
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+fetch-metadata: |md
+  ## Fetch PyPI Metadata
+  - HTTP GET `pypi.org/pypi/{pkg}/json`
+  - Or `pypi.org/pypi/{pkg}/{ver}/json`
+  - Handle 404 / network errors
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+pkg-found: |md
+  ## Package Found?
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 13
+  }
+}
+
+dist-analysis: |md
+  ## Distribution Analysis
+  - Check for sdist availability
+  - Check for wheel availability
+  - Detect platform-specific wheels
+  - Catalog wheel ABI/platform tags
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+classifier-scan: |md
+  ## Classifier Scan
+  - C / C++ / Cython / Rust / Fortran
+  - Each match: +2 complexity score
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+  }
+}
+
+keyword-scan: |md
+  ## Keyword & Text Scan
+  - Search keywords, summary, description
+  - cuda, gpu, blas, lapack, mkl, etc.
+  - Each hit: +1 complexity score
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+  }
+}
+
+known-pkg: |md
+  ## Known Complex Package?
+  - torch, tensorflow, numpy, scipy
+  - opencv, pillow, lxml, cryptography
+  - Match: +3 complexity score
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+  }
+}
+
+score-eval: |md
+  ## Evaluate Complexity Score
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 13
+  }
+}
+
+interpret: Interpret & Recommend {
+  style: {
+    fill: "#faf5ff"
+    stroke: "#805ad5"
+    border-radius: 10
+    font-size: 14
+  }
+
+  high: |md
+    ## High (5+)
+    - Needs compilation infrastructure
+    - Build from source recommended
+    - List required build tools
+  | {
+    style: {
+      fill: "#FFEBEE"
+      stroke: "#C62828"
+      font-size: 12
+    }
+  }
+
+  medium: |md
+    ## Medium (2-4)
+    - Some compilation indicators
+    - Platform-specific considerations
+    - Mixed dependency complexity
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#E65100"
+      font-size: 12
+    }
+  }
+
+  low: |md
+    ## Low (0-1)
+    - Pure Python package
+    - Universal wheels available
+    - Simple dependencies
+  | {
+    style: {
+      fill: "#E8F5E9"
+      stroke: "#2E7D32"
+      font-size: 12
+    }
+  }
+}
+
+output: |md
+  ## Analysis Report
+  - Compilation requirements
+  - Complexity score & indicators
+  - Distribution / wheel coverage
+  - Dependency complexity
+  - Actionable recommendations
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 15
+  }
+}
+
+error-exit: |md
+  ## Error
+  - Package not found on PyPI
+  - Suggest name corrections
+  - General guidance for unknowns
+| {
+  style: {
+    fill: "#FFEBEE"
+    stroke: "#C62828"
+  }
+}
+
+# ===================================================================
+# External dependencies
+# ===================================================================
+
+pypi: |md
+  ## PyPI JSON API
+  - `pypi.org/pypi/{pkg}/json`
+  - Public metadata endpoint
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+    stroke-dash: 5
+  }
+}
+
+# ===================================================================
+# Edges
+# ===================================================================
+
+entry -> run-script: package name
+run-script -> fetch-metadata
+fetch-metadata -> pkg-found
+
+pkg-found -> dist-analysis: "Yes" {
+  style.stroke: "#2E7D32"
+}
+pkg-found -> error-exit: "No (404)" {
+  style.stroke: "#C62828"
+  style.stroke-dash: 3
+}
+
+dist-analysis -> classifier-scan
+classifier-scan -> keyword-scan
+keyword-scan -> known-pkg
+known-pkg -> score-eval: total score
+
+score-eval -> interpret.high: ">= 5" {
+  style.stroke: "#C62828"
+}
+score-eval -> interpret.medium: "2 - 4" {
+  style.stroke: "#E65100"
+}
+score-eval -> interpret.low: "0 - 1" {
+  style.stroke: "#2E7D32"
+}
+
+interpret.high -> output
+interpret.medium -> output
+interpret.low -> output
+
+fetch-metadata -> pypi: "HTTP GET" {
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 3
+}

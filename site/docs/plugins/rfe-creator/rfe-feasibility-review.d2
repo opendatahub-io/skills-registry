@@ -1,0 +1,127 @@
+direction: right
+
+# -- Global styles --
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **rfe-feasibility-review**
+
+  RFE ID
+  _(internal skill)_
+| {style.fill: "#dbeafe"; style.stroke: "#2563eb"; style.stroke-width: 2}
+
+# --- Step 1: Read Task File ---
+
+read-task: |md
+  **Read Task File**
+
+  `artifacts/rfe-tasks/{ID}.md`
+  Load RFE content
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Step 2: Read Comments ---
+
+read-comments: |md
+  **Read Comments**
+
+  `{ID}-comments.md`
+  Stakeholder history,
+  prior decisions
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1}
+
+no-comments: |md
+  **skip**
+  _(no file)_
+| {style.fill: "#fef9c3"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+# --- Step 3: Architecture Context ---
+
+arch-check: |md
+  **Architecture Context?**
+
+  `.context/architecture-context/`
+  `architecture/rhoai-*/`
+| {style.fill: "#fef9c3"; style.stroke: "#a16207"; style.stroke-width: 1; shape: diamond}
+
+read-platform: |md
+  **Read PLATFORM.md**
+
+  Identify components
+  Read component docs
+  Ground assessment
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+no-arch: |md
+  **skip**
+  _(no context)_
+| {style.fill: "#fef9c3"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+# --- Step 4: Prior Review ---
+
+prior-review: |md
+  **Prior Review?**
+
+  `rfe-review-report.md`
+| {style.fill: "#fef9c3"; style.stroke: "#a16207"; style.stroke-width: 1; shape: diamond}
+
+read-prior: |md
+  **Read Prior Review**
+
+  What was addressed?
+  What remains?
+  New issues from revisions?
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Step 5: Assess ---
+
+assess: |md
+  **Feasibility Assessment**
+
+  1. Technically feasible?
+  2. Architectural conflicts?
+  3. Aligns with strategy?
+  4. Scope realistic?
+  5. Hidden complexities?
+| {style.fill: "#e0e7ff"; style.stroke: "#4338ca"; style.stroke-width: 2}
+
+# --- Step 6: Write Output ---
+
+write-output: |md
+  **Write Assessment**
+
+  `artifacts/rfe-reviews/`
+  `{ID}-feasibility.md`
+  Verdict + considerations
+| {style.fill: "#dcfce7"; style.stroke: "#16a34a"; style.stroke-width: 2}
+
+verdicts: |md
+  **Verdicts**
+
+  Feasible / Infeasible
+  / Indeterminate
+  + Strategy considerations
+  + Blockers
+  + Scope assessment
+| {style.fill: "#d1fae5"; style.stroke: "#333333"; style.stroke-width: 1}
+
+# --- Edges ---
+
+entry -> read-task
+read-task -> read-comments: "if exists"
+read-task -> no-comments: "missing" {style.stroke-dash: 3}
+no-comments -> arch-check {style.stroke-dash: 3}
+read-comments -> arch-check
+arch-check -> read-platform: "found"
+arch-check -> no-arch: "missing" {style.stroke-dash: 3}
+read-platform -> prior-review
+no-arch -> prior-review {style.stroke-dash: 3}
+prior-review -> read-prior: "exists"
+prior-review -> assess: "none" {style.stroke-dash: 3}
+read-prior -> assess
+assess -> write-output
+write-output -> verdicts

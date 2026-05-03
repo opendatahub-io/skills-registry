@@ -1,0 +1,389 @@
+direction: down
+
+# ── Global styles ──
+*.style.border-radius: 8
+*.style.font-size: 12
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ================================================================
+#  Column 1 – Input & Parse
+# ================================================================
+
+entry: |md
+  **/rfe.review**
+  Jira keys or local artifacts
+  `--headless`, `--caller`
+| {
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 2
+}
+
+step0: |md
+  **Step 0 — Parse & Persist**
+  `state.py init` flags
+  `state.py write-ids`
+  Glob for local task files
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+classify: |md
+  **Classify IDs**
+  Local (file exists)
+  vs Remote (needs fetch)
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+entry -> step0
+step0 -> classify
+
+# ================================================================
+#  Column 2 – Fetch
+# ================================================================
+
+fetch-agents: |md
+  **Step 1 — Fetch Agents**
+  One per remote ID
+  Model: opus
+  `run_in_background: true`
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+fetch-poll: |md
+  **Poll fetch**
+  `check_review_progress.py`
+  `--phase fetch`
+  Sleep NEXT_POLL
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+fetch-verify: |md
+  **Verify task files**
+  Missing → error frontmatter
+  Remove failed IDs
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+classify -> fetch-agents: "remote IDs"
+classify -> setup: "local IDs (skip fetch)" {style.stroke-dash: 3}
+fetch-agents -> fetch-poll
+fetch-poll -> fetch-verify
+
+# ================================================================
+#  Column 3 – Setup
+# ================================================================
+
+setup: |md
+  **Step 1.5 — Setup**
+  `fetch-architecture-context.sh`
+  `bootstrap-assess-rfe.sh`
+  (parallel)
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+fetch-verify -> setup
+
+# ================================================================
+#  Column 4 – Assess + Feasibility (parallel fork)
+# ================================================================
+
+assess-fork: |md
+  **Step 2 — Launch 2N agents**
+| {
+  style.fill: "#e0e7ff"
+  style.stroke: "#4338ca"
+  style.stroke-width: 2
+}
+
+assess-agent: |md
+  **Assess Agent**
+  per ID
+  `prep_assess.py`
+  Model: opus
+  subagent_type: rfe-scorer
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+feasibility-agent: |md
+  **Feasibility Agent**
+  per ID
+  rfe-feasibility-review skill
+  Model: opus
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+assess-poll: |md
+  **Poll assess + feasibility**
+  `check_review_progress.py`
+  `--phase assess / feasibility`
+  Sleep NEXT_POLL
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+assess-verify: |md
+  **Check prerequisites**
+  `.result.md` exists?
+  `-feasibility.md` exists?
+  Missing → error, remove ID
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+setup -> assess-fork
+assess-fork -> assess-agent: "fork"
+assess-fork -> feasibility-agent: "fork"
+assess-agent -> assess-poll
+feasibility-agent -> assess-poll
+assess-poll -> assess-verify
+
+# ================================================================
+#  Column 5 – Review
+# ================================================================
+
+review-agents: |md
+  **Step 3 — Review Agents**
+  One per remaining ID
+  Model: opus
+  Reads assess + feasibility
+  FIRST_PASS=true
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+review-poll: |md
+  **Poll review**
+  `check_review_progress.py`
+  `--phase review`
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+assess-verify -> review-agents
+review-agents -> review-poll
+
+# ================================================================
+#  Column 6 – Revise
+# ================================================================
+
+filter-revise: |md
+  **Step 3.5 — Filter**
+  `filter_for_revision.py`
+  Pass / infeasible / rejected → skip
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+revise-agents: |md
+  **Revise Agents**
+  One per failing ID
+  Model: opus
+  Fix failing criteria
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+revise-poll: |md
+  **Poll revise**
+  `check_review_progress.py`
+  `--phase revise`
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+check-revised: |md
+  **Post-process**
+  `check_revised.py --batch`
+  Fix auto_revised flag
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+review-poll -> filter-revise
+filter-revise -> revise-agents: "needs revision"
+filter-revise -> finalize: "all pass" {style.stroke-dash: 3}
+revise-agents -> revise-poll
+revise-poll -> check-revised
+
+# ================================================================
+#  Column 7 – Reassess Cycle (max 2)
+# ================================================================
+
+reassess-gate: |md
+  **Step 4 — Reassess?**
+  `collect_recommendations.py`
+  auto_revised=true & pass=false
+  cycle < 2?
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+reassess-save: |md
+  **4a. Save state**
+  `preserve_review_state.py save`
+  Remove review + assess files
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+reassess-assess: |md
+  **4b. Re-assess**
+  Same as Step 2
+  Assess agents only
+  (no feasibility re-run)
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+reassess-review: |md
+  **4c. Re-review**
+  Same as Step 3
+  FIRST_PASS=false
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+reassess-restore: |md
+  **4d. Restore state**
+  `preserve_review_state.py restore`
+  before_scores + history
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+reassess-revise: |md
+  **4e. Filter + Revise**
+  `filter_for_revision.py`
+  Catch regressions
+  `check_revised.py --batch`
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+check-revised -> reassess-gate
+reassess-gate -> reassess-save: "needs reassess"
+reassess-gate -> finalize: "pass or max cycles" {style.stroke-dash: 3}
+reassess-save -> reassess-assess
+reassess-assess -> reassess-review
+reassess-review -> reassess-restore
+reassess-restore -> reassess-revise
+reassess-revise -> reassess-gate: "cycle again (max 2)" {
+  style.stroke-dash: 3
+  style.stroke: "#a16207"
+}
+
+# ================================================================
+#  Column 8 – Finalize
+# ================================================================
+
+finalize: |md
+  **Step 5 — Finalize**
+  `frontmatter.py rebuild-index`
+  Re-read flags from disk
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+headless-check: |md
+  **Headless?**
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+headless-return: |md
+  **Headless return**
+  caller=autofix → rfe.auto-fix
+  caller=split → rfe.split
+  Continue execution
+| {
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 1
+}
+
+interactive-summary: |md
+  **Interactive summary**
+  `batch_summary.py`
+  → /rfe.submit (pass)
+  → /rfe.split (oversized)
+  → retry (errors)
+| {
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+  style.stroke-width: 2
+}
+
+finalize -> headless-check
+headless-check -> headless-return: "--headless"
+headless-check -> interactive-summary: "interactive"

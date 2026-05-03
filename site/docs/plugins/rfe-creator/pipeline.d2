@@ -1,0 +1,142 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- RFE Pipeline ---
+
+rfe-pipeline: RFE Pipeline {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  create: |md
+    **/rfe.create**
+
+    - Parse problem statement
+    - Clarifying questions
+    - Generate RFE YAML
+  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  review: |md
+    **/rfe.review**
+
+    - Rubric scoring
+    - Feasibility check
+    - Auto-revision loop
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; }
+
+  split: |md
+    **/rfe.split**
+
+    - Decompose oversized
+    - Generate children
+    - Coverage check
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; }
+
+  submit: |md
+    **/rfe.submit**
+
+    - Jira REST API
+    - Create / update
+    - Rename files
+  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  create -> review
+  review -> split: "oversized"
+  split -> review: "children" {style.stroke-dash: 3}
+  review -> submit: "approved"
+}
+
+# --- Orchestrators ---
+
+speedrun: |md
+  **/rfe.speedrun**
+
+  - End-to-end pipeline
+  - Batch YAML input
+  - Headless mode
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+auto-fix: |md
+  **/rfe.auto-fix**
+
+  - Batch review/revise
+  - JQL queries
+  - Parallel processing
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+speedrun -> rfe-pipeline: "orchestrates"
+auto-fix -> rfe-pipeline.review: "batches"
+auto-fix -> rfe-pipeline.split: "oversized"
+
+# --- Strategy Pipeline ---
+
+strat-pipeline: Strategy Pipeline {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  strat-create: |md
+    **/strat.create**
+
+    - Clone RFEs → RHAISTRAT
+    - Create local artifacts
+  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  strat-refine: |md
+    **/strat.refine**
+
+    - Add HOW section
+    - Dependencies, NFRs
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; }
+
+  strat-review: |md
+    **/strat.review**
+
+    - 4 parallel reviewers
+    - Consolidated report
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; }
+
+  strat-create -> strat-refine
+  strat-refine -> strat-review
+}
+
+# Review sub-skills
+arch-review: |md
+  **architecture-review**
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+feasibility: |md
+  **feasibility-review**
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+scope: |md
+  **scope-review**
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+testability: |md
+  **testability-review**
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+strat-pipeline.strat-review -> arch-review: "fork" {style.stroke-dash: 3}
+strat-pipeline.strat-review -> feasibility: "fork" {style.stroke-dash: 3}
+strat-pipeline.strat-review -> scope: "fork" {style.stroke-dash: 3}
+strat-pipeline.strat-review -> testability: "fork" {style.stroke-dash: 3}
+
+# RFE to Strategy transition
+rfe-pipeline.submit -> strat-pipeline.strat-create: "approved RFEs" {style.stroke-dash: 3}

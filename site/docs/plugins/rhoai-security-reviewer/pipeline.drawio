@@ -1,0 +1,16 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="strat-security-review" value="&lt;b&gt;/strat-security-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;Extract threat surface&lt;br&gt;Spawn 3 reviewers&lt;br&gt;Synthesize consensus&lt;br&gt;PASS / CONCERNS / FAIL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="35" width="195" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="security-reviewer" value="&lt;b&gt;/security-reviewer&lt;/b&gt;&lt;br&gt;&lt;br&gt;39 catalog patterns&lt;br&gt;Creative exploration&lt;br&gt;Severity classification&lt;br&gt;Per-reviewer findings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="35" width="195" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="×3 parallel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="strat-security-review" target="security-reviewer" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

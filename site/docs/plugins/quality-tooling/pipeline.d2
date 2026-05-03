@@ -1,0 +1,52 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+quality-repo-analysis: |md
+  **/quality-repo-analysis**
+
+  - 7-dimension assessment
+  - Scores 0-10 per dimension
+  - Gold standard benchmarks
+  - HTML visualization
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+konflux-build-simulator: |md
+  **/konflux-build-simulator**
+
+  - Hermetic build validation
+  - Docker + runtime checks
+  - FIPS compliance
+  - PR workflow generation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+test-rules-generator: |md
+  **/test-rules-generator**
+
+  - Extract test patterns
+  - Generate .claude/rules/
+  - Framework-specific rules
+  - Anti-pattern checklists
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+quality-repo-analysis -> konflux-build-simulator: "repo context" {style.stroke-dash: 3}
+quality-repo-analysis -> test-rules-generator: "repo context" {style.stroke-dash: 3}

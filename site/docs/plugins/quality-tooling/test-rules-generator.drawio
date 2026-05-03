@@ -1,0 +1,175 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="args" value="&lt;b&gt;/test-rules-generator&lt;/b&gt;&lt;br&gt;&lt;br&gt;[repository-url]&lt;br&gt;optional: test type focus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="clone" value="&lt;b&gt;Clone &amp;amp; Scan&lt;/b&gt;&lt;br&gt;&lt;br&gt;git clone repo&lt;br&gt;find test directories&lt;br&gt;identify primary language&lt;br&gt;detect frameworks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="230" y="50" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect-types" value="&lt;b&gt;Detect Test Types&lt;/b&gt;&lt;br&gt;&lt;br&gt;unit: *_test.go, *.spec.ts&lt;br&gt;mock: cypress/tests/mocked/&lt;br&gt;e2e: e2e/, integration/&lt;br&gt;contract: contract-tests/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="440" y="50" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="infra" value="&lt;b&gt;Identify Infrastructure&lt;/b&gt;&lt;br&gt;&lt;br&gt;mock factories, fixtures&lt;br&gt;page objects&lt;br&gt;test utilities, helpers&lt;br&gt;config: jest, cypress, pytest&lt;br&gt;CI workflows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="660" y="50" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="has-tests" value="&lt;b&gt;Tests&lt;br&gt;found?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="890" y="70" width="100" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="no-tests" value="&lt;b&gt;Recommend Patterns&lt;/b&gt;&lt;br&gt;&lt;br&gt;analyze docs instead&lt;br&gt;suggest test frameworks&lt;br&gt;generate starter rules" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1050" y="55" width="160" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="collect-samples" value="&lt;b&gt;Collect Samples&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;5-10 files per test type&lt;br&gt;recently modified (active)&lt;br&gt;varying complexity&lt;br&gt;passing, well-structured" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="280" width="160" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract-unit" value="&lt;b&gt;Extract Unit Patterns&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;file structure &amp;amp; naming&lt;br&gt;describe/it conventions&lt;br&gt;mock/stub patterns&lt;br&gt;assertion styles&lt;br&gt;component testing (React)&lt;br&gt;hook testing patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="275" width="175" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract-mock" value="&lt;b&gt;Extract Mock Patterns&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;cy.intercept patterns&lt;br&gt;page object methods&lt;br&gt;mock data factories&lt;br&gt;alias naming (.as)&lt;br&gt;validation patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="510" y="230" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract-e2e" value="&lt;b&gt;Extract E2E Patterns&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;test-variables.yml setup&lt;br&gt;oc/kubectl commands&lt;br&gt;resource management&lt;br&gt;cleanup patterns&lt;br&gt;wait strategies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="730" y="230" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract-contract" value="&lt;b&gt;Extract Contract Patterns&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;API schema validation&lt;br&gt;BFF startup/lifecycle&lt;br&gt;JSON Pointer refs&lt;br&gt;status code testing&lt;br&gt;error response patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="950" y="230" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-standards" value="&lt;b&gt;Generate&lt;br&gt;testing-standards.md&lt;/b&gt;&lt;br&gt;LLM generation&lt;br&gt;&lt;br&gt;test types overview&lt;br&gt;when to use each type&lt;br&gt;general principles&lt;br&gt;independence &amp;amp; isolation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="550" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-unit" value="&lt;b&gt;Generate&lt;br&gt;unit-tests.md&lt;/b&gt;&lt;br&gt;LLM generation&lt;br&gt;&lt;br&gt;framework + tools table&lt;br&gt;naming &amp;amp; location&lt;br&gt;patterns + examples&lt;br&gt;DO / DON&#x27;T checklists" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="250" y="550" width="160" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-conditional" value="&lt;b&gt;Generate Conditional&lt;br&gt;Rules&lt;/b&gt;&lt;br&gt;LLM generation&lt;br&gt;&lt;br&gt;mock-tests.md (if found)&lt;br&gt;e2e-tests.md (if found)&lt;br&gt;contract-tests.md (if found)&lt;br&gt;same template structure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="460" y="550" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-support" value="&lt;b&gt;Generate Support Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;.claude/rules/README.md&lt;br&gt;TEST-RULES-ANALYSIS.md&lt;br&gt;summary of findings&lt;br&gt;gap recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="685" y="560" width="160" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate" value="&lt;b&gt;Validate Rules&lt;/b&gt;&lt;br&gt;&lt;br&gt;completeness check&lt;br&gt;accuracy vs repo code&lt;br&gt;file paths correct&lt;br&gt;framework versions match" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="895" y="560" width="150" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-apply" value="&lt;b&gt;Test Application&lt;/b&gt;&lt;br&gt;LLM generation&lt;br&gt;&lt;br&gt;create test from rules&lt;br&gt;verify pattern match&lt;br&gt;confirm lint passes&lt;br&gt;adjust rules if needed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1095" y="550" width="155" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="output" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;.claude/rules/ + analysis report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1095" y="730" width="155" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="callout-output" value=".claude/rules/&lt;br&gt;├── testing-standards.md&lt;br&gt;├── unit-tests.md&lt;br&gt;├── mock-tests.md&lt;br&gt;├── e2e-tests.md&lt;br&gt;├── contract-tests.md&lt;br&gt;└── README.md&lt;br&gt;TEST-RULES-ANALYSIS.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="590" y="730" width="220" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_args_clone" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="args" target="clone" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_clone_detect" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="clone" target="detect-types" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_detect_infra" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="detect-types" target="infra" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_infra_tests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="infra" target="has-tests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_tests_yes" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontStyle=2;fontSize=11;" edge="1" source="has-tests" target="collect-samples" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="940" y="200"/>
+          <mxPoint x="110" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_tests_no" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontStyle=2;fontSize=11;" edge="1" source="has-tests" target="no-tests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_unit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="collect-samples" target="extract-unit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_unit_mock" value="if found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.25;entryX=0;entryY=0.5;fontStyle=2;fontSize=11;" edge="1" source="extract-unit" target="extract-mock" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_unit_e2e" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.5;" edge="1" source="extract-unit" target="extract-e2e" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_unit_contract" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.55;entryX=0;entryY=0.5;" edge="1" source="extract-unit" target="extract-contract" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_unit_genstandards" value="unit only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontStyle=2;fontSize=11;" edge="1" source="extract-unit" target="gen-standards" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="327" y="490"/>
+          <mxPoint x="115" y="490"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mock_genstandards" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="extract-mock" target="gen-standards" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="595" y="480"/>
+          <mxPoint x="115" y="480"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_e2e_genstandards" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="extract-e2e" target="gen-standards" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="815" y="470"/>
+          <mxPoint x="115" y="470"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_contract_genstandards" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="extract-contract" target="gen-standards" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1037" y="460"/>
+          <mxPoint x="115" y="460"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_genstandards_genunit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="gen-standards" target="gen-unit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_genunit_gencond" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="gen-unit" target="gen-conditional" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gencond_gensupport" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="gen-conditional" target="gen-support" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gensupport_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="gen-support" target="validate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_testapply" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="validate" target="test-apply" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_testapply_output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="test-apply" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_back_testapply_validate" value="adjust" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.7;entryX=1;entryY=0.7;fontStyle=2;fontSize=11;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="test-apply" target="validate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1300" y="641"/>
+          <mxPoint x="1300" y="641"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=1;exitY=0.3;entryX=0;entryY=0.5;" edge="1" source="callout-output" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

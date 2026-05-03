@@ -1,0 +1,159 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **architecture-review**
+  _(fork sub-agent)_
+
+  - Strategy artifacts input
+  - Cross-ref source RFEs
+  - Model: opus
+| {
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 2
+}
+
+# --- Read Strategies ---
+
+read-strats: |md
+  **Read Strategies**
+
+  - `artifacts/strat-tasks/`
+  - Cross-ref `artifacts/rfe-tasks/`
+  - Check `artifacts/strat-reviews/`
+    for prior reviews
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Detect Re-review ---
+
+re-review-check: |md
+  **Re-review?**
+  strat-reviews/ exists
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+# --- Check Architecture Context ---
+
+check-context: |md
+  **Check Arch Context**
+
+  `.context/architecture-context/`
+  `architecture/rhoai-*/`
+  Read PLATFORM.md +
+  component docs
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Skip (no context) ---
+
+skip: |md
+  **Skip Review**
+
+  "Architecture review
+  skipped -- no architecture
+  context available."
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  style.stroke-dash: 3
+}
+
+# --- Assess Each Strategy ---
+
+assess: |md
+  **Assess Strategies**
+
+  Per strategy, check:
+  1. Dependencies correct?
+  2. Integration patterns valid?
+  3. Component boundaries?
+  4. Deployment model?
+  5. Architectural conflicts?
+  6. Cross-component coord?
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Re-review Delta ---
+
+re-review-delta: |md
+  **Re-review Delta**
+
+  - Prior concerns addressed?
+  - Concerns remaining?
+  - New issues introduced?
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Output ---
+
+output: |md
+  **Output**
+
+  Per STRAT-NNN:
+  - Architecture assessment
+  - Missing dependencies
+  - Incorrect assumptions
+  - Cross-component risks
+  - Recommendation
+| {
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+  style.stroke-width: 2
+}
+
+# --- External: Architecture Docs ---
+
+arch-docs: |md
+  **Architecture Docs**
+  PLATFORM.md
+  Component docs
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> read-strats
+read-strats -> re-review-check
+re-review-check -> check-context: "first review"
+re-review-check -> check-context: "re-review (load prior)" {style.stroke-dash: 3}
+
+check-context -> skip: "no context" {style.stroke-dash: 3}
+check-context -> assess: "context found"
+
+check-context -> arch-docs: "read" {
+  style.stroke-dash: 3
+}
+
+assess -> re-review-delta: "re-review" {style.stroke-dash: 3}
+assess -> output: "first review"
+re-review-delta -> output

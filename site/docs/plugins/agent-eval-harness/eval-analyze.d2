@@ -1,0 +1,210 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/eval-analyze**
+
+  - --skill \<name\>
+  - --config eval.yaml
+  - --update
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Find Skill ---
+
+find-skill: |md
+  **Find Skill**
+
+  - find_skills.py
+  - reads plugin.json paths
+  - auto-detect if single
+  - ask user if multiple
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Freshness Check ---
+
+freshness: |md
+  **Freshness Check**
+
+  - validate_eval.py config
+  - validate_eval.py memory
+  - FRESH → exit early
+  - STALE → full analysis
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Deep-Read ---
+
+deep-read: |md
+  **Deep-Read Skill**
+  LLM agent (Explore)
+
+  - read SKILL.md fully
+  - follow sub-skill chains
+    (up to 5 levels)
+  - read scripts/, prompts/
+  - identify I/O, pipeline
+  - suggest judges
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Explore Dataset ---
+
+explore-dataset: |md
+  **Explore Dataset**
+
+  - Glob for cases dirs
+  - read sample case files
+  - note field names, formats
+  - input vs reference files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate ---
+
+gen-yaml: |md
+  **Generate eval.yaml**
+  LLM synthesis
+
+  - eval-yaml-template.md
+  - execution mode + args
+  - dataset.schema (observed)
+  - output schemas
+  - 2-4 inline judges
+  - 1-2 LLM judges
+  - models, thresholds
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Validate ---
+
+validate: |md
+  **Validate Config**
+
+  - validate_eval.py config
+  - check paths, references
+  - judge code validity
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- eval.md ---
+
+gen-md: |md
+  **Generate eval.md**
+
+  - skill hash (SHA256)
+  - cached analysis
+  - YAML frontmatter
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - eval.yaml created
+  - N judges configured
+  - next: /eval-dataset
+    or /eval-run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: eval.yaml structure ---
+
+eval-yaml-structure: |md
+  eval.yaml
+  ├── skill: <name>
+  ├── execution:
+  │   ├── mode: case|batch
+  │   └── arguments: "{field}..."
+  ├── dataset:
+  │   ├── path: eval/cases/
+  │   └── schema: "..."
+  ├── outputs:
+  │   └── [{path, schema}]
+  ├── judges:
+  │   └── [{name, type, code|prompt}]
+  └── thresholds:
+      └── {judge: {min_pass_rate}}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+args -> find-skill
+find-skill -> freshness
+
+freshness -> report: "FRESH + COMPLETE" {
+  style.stroke-dash: 3
+}
+
+freshness -> deep-read: "STALE / missing"
+deep-read -> explore-dataset
+explore-dataset -> gen-yaml
+gen-yaml -> validate
+
+validate -> gen-yaml: "errors" {
+  style.stroke-dash: 3
+}
+
+validate -> gen-md
+gen-md -> report
+
+# Callout connection
+gen-yaml -> eval-yaml-structure {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

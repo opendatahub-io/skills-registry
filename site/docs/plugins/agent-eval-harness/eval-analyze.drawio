@@ -1,0 +1,96 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="args" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;--skill &amp;lt;name&amp;gt;&lt;br&gt;--config eval.yaml&lt;br&gt;--update" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="120" width="145" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="find-skill" value="&lt;b&gt;Find Skill&lt;/b&gt;&lt;br&gt;&lt;br&gt;find_skills.py&lt;br&gt;reads plugin.json paths&lt;br&gt;auto-detect if single&lt;br&gt;ask user if multiple" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="220" y="120" width="155" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="freshness" value="&lt;b&gt;Freshness Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_eval.py config&lt;br&gt;validate_eval.py memory&lt;br&gt;FRESH → exit early&lt;br&gt;STALE → full analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="420" y="120" width="160" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="deep-read" value="&lt;b&gt;Deep-Read Skill&lt;/b&gt;&lt;br&gt;LLM agent (Explore)&lt;br&gt;&lt;br&gt;read SKILL.md fully&lt;br&gt;follow sub-skill chains&lt;br&gt;(up to 5 levels)&lt;br&gt;read scripts/, prompts/&lt;br&gt;identify I/O, pipeline&lt;br&gt;suggest judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="625" y="30" width="170" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="explore-dataset" value="&lt;b&gt;Explore Dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;Glob for cases dirs&lt;br&gt;read sample case files&lt;br&gt;note field names, formats&lt;br&gt;input vs reference files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="625" y="235" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-yaml" value="&lt;b&gt;Generate eval.yaml&lt;/b&gt;&lt;br&gt;LLM synthesis&lt;br&gt;&lt;br&gt;eval-yaml-template.md&lt;br&gt;execution mode + args&lt;br&gt;dataset.schema (observed)&lt;br&gt;output schemas&lt;br&gt;2-4 inline judges&lt;br&gt;1-2 LLM judges&lt;br&gt;models, thresholds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="840" y="80" width="175" height="195" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate-node" value="&lt;b&gt;Validate Config&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_eval.py config&lt;br&gt;check paths, references&lt;br&gt;judge code validity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1060" y="110" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-md" value="&lt;b&gt;Generate eval.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;skill hash (SHA256)&lt;br&gt;cached analysis&lt;br&gt;YAML frontmatter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1060" y="280" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;eval.yaml created&lt;br&gt;N judges configured&lt;br&gt;next: /eval-dataset&lt;br&gt;or /eval-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="150" width="125" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-yaml-structure" value="eval.yaml&lt;br&gt;├── skill: &amp;lt;name&amp;gt;&lt;br&gt;├── execution:&lt;br&gt;│   ├── mode: case|batch&lt;br&gt;│   └── arguments: &quot;{field}...&quot;&lt;br&gt;├── dataset:&lt;br&gt;│   ├── path: eval/cases/&lt;br&gt;│   └── schema: &quot;...&quot;&lt;br&gt;├── outputs:&lt;br&gt;│   └── [{path, schema}]&lt;br&gt;├── judges:&lt;br&gt;│   └── [{name, type, ...}]&lt;br&gt;└── thresholds:&lt;br&gt;    └── {judge: {min_pass_rate}}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="830" y="340" width="195" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="find-skill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-skill" target="freshness" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3_early" value="FRESH + COMPLETE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="freshness" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="500" y="15"/>
+          <mxPoint x="1322" y="15"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3_stale" value="STALE / missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="freshness" target="deep-read" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="deep-read" target="explore-dataset" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="freshness" target="explore-dataset" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5a" value="analysis" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="deep-read" target="gen-yaml" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5b" value="schema" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="explore-dataset" target="gen-yaml" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="validate-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7_back" value="errors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate-node" target="gen-yaml" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1137" y="60"/>
+          <mxPoint x="927" y="60"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate-node" target="gen-md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="gen-md" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="eval-yaml-structure" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

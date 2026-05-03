@@ -1,0 +1,164 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe.submit&lt;/b&gt;&lt;br&gt;&lt;br&gt;RFE files or keys&lt;br&gt;--dry-run&lt;br&gt;--artifacts-dir" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="55" width="145" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="creds" value="&lt;b&gt;Check Credentials&lt;/b&gt;&lt;br&gt;&lt;br&gt;JIRA_SERVER&lt;br&gt;JIRA_USER&lt;br&gt;JIRA_TOKEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="220" y="65" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="creds_fail" value="&lt;b&gt;Missing Creds&lt;/b&gt;&lt;br&gt;&lt;br&gt;Print setup guide&lt;br&gt;Abort" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffdddd;strokeColor=#cc3333;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="230" y="200" width="130" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase1" value="&lt;b&gt;Phase 1 — Splits&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="420" y="20" width="640" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="scan_splits" value="&lt;b&gt;Scan Split Parents&lt;/b&gt;&lt;br&gt;&lt;br&gt;Find Archived RHAIRFE&lt;br&gt;with child RFEs&lt;br&gt;Build ancestry map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="20" y="45" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="split_submit" value="&lt;b&gt;split_submit.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;Archive parent&lt;br&gt;Create children&lt;br&gt;Link tickets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="235" y="55" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="split_ok" value="&lt;b&gt;Success&lt;/b&gt;&lt;br&gt;&lt;br&gt;Update snapshot&lt;br&gt;hashes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ddffdd;strokeColor=#339933;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="440" y="45" width="140" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="split_refused" value="&lt;b&gt;Refused&lt;/b&gt;&lt;br&gt;&lt;br&gt;Too many children&lt;br&gt;or Jira conflict&lt;br&gt;Flag needs-attention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffdddd;strokeColor=#cc3333;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase1">
+      <mxGeometry x="440" y="155" width="165" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase2" value="&lt;b&gt;Phase 2 — Regular RFEs&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="320" width="1090" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="rescan" value="&lt;b&gt;Re-scan Tasks&lt;/b&gt;&lt;br&gt;&lt;br&gt;Filter non-archived&lt;br&gt;non-submitted RFEs&lt;br&gt;Exclude split descendants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="20" y="50" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="build_plan" value="&lt;b&gt;Build Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read review frontmatter&lt;br&gt;Conflict detection&lt;br&gt;Label determination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="230" y="50" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="decide" value="&lt;b&gt;Decide Action&lt;/b&gt;&lt;br&gt;&lt;br&gt;Create / Update /&lt;br&gt;Label-only / Skip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="440" y="65" width="145" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="create_ticket" value="&lt;b&gt;Create Ticket&lt;/b&gt;&lt;br&gt;&lt;br&gt;create_issue()&lt;br&gt;RHAIRFE project&lt;br&gt;Feature Request" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="630" y="40" width="150" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="update_ticket" value="&lt;b&gt;Update Ticket&lt;/b&gt;&lt;br&gt;update_issue()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="640" y="150" width="135" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="apply_labels" value="&lt;b&gt;Apply Labels&lt;/b&gt;&lt;br&gt;&lt;br&gt;auto-created&lt;br&gt;auto-revised&lt;br&gt;needs-attention&lt;br&gt;autofix-rubric-pass" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="phase2">
+      <mxGeometry x="830" y="40" width="155" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="post_comments" value="&lt;b&gt;Post Comments&lt;/b&gt;&lt;br&gt;&lt;br&gt;Removed-context&lt;br&gt;Needs-attention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="580" width="150" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="rename_files" value="&lt;b&gt;Rename Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;RFE-NNN.md &amp;rarr;&lt;br&gt;RHAIRFE-NNNN.md&lt;br&gt;Update frontmatter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="235" y="580" width="165" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="update_snapshot" value="&lt;b&gt;Update Snapshot&lt;/b&gt;&lt;br&gt;&lt;br&gt;Content hashes&lt;br&gt;Mark processed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="455" y="590" width="150" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="rebuild_index" value="&lt;b&gt;Rebuild Index&lt;/b&gt;&lt;br&gt;artifacts/rfes.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="660" y="600" width="145" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen_report" value="&lt;b&gt;Generate Reports&lt;/b&gt;&lt;br&gt;&lt;br&gt;YAML run report&lt;br&gt;HTML review report&lt;br&gt;(--generate-report)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="860" y="590" width="170" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_creds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="creds" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_creds_fail" value="missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#cc3333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="creds" target="creds_fail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_creds_scan" value="present" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="creds" target="scan_splits" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scan_submit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="scan_splits" target="split_submit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_submit_ok" value="exit 0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#339933;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="split_submit" target="split_ok" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_submit_refused" value="exit 2/3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#cc3333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="split_submit" target="split_refused" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ok_rescan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="split_ok" target="rescan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1080" y="97"/>
+          <mxPoint x="1080" y="300"/>
+          <mxPoint x="132" y="300"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scan_rescan" value="no splits" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="scan_splits" target="rescan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="522" y="300"/>
+          <mxPoint x="10" y="300"/>
+          <mxPoint x="10" y="425"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rescan_plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rescan" target="build_plan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_plan_decide" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="build_plan" target="decide" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_decide_create" value="new RFE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="decide" target="create_ticket" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_decide_update" value="existing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="decide" target="update_ticket" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_create_labels" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" source="create_ticket" target="apply_labels" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_labels" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="update_ticket" target="apply_labels" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_labels_comments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="apply_labels" target="post_comments" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="937" y="555"/>
+          <mxPoint x="105" y="555"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_comments_rename" value="new RFEs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="post_comments" target="rename_files" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_comments_snapshot" value="existing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="post_comments" target="update_snapshot" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="105" y="710"/>
+          <mxPoint x="530" y="710"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rename_snapshot" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rename_files" target="update_snapshot" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_snapshot_index" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update_snapshot" target="rebuild_index" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_index_report" value="if requested" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rebuild_index" target="gen_report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

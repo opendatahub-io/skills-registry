@@ -1,0 +1,197 @@
+direction: down
+
+# ── Global styles ──
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ================================================================
+#  Entry
+# ================================================================
+
+entry: |md
+  **scope-review**
+  Internal skill (fork)
+  Model: opus
+  Tools: Read, Grep, Glob
+| {
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 2
+}
+
+# ================================================================
+#  Read Inputs
+# ================================================================
+
+read-strats: |md
+  **Read Strategy Artifacts**
+  `artifacts/strat-tasks/`
+  All strategy files
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+read-rfes: |md
+  **Cross-Reference RFEs**
+  `artifacts/rfe-tasks/`
+  Source RFEs for context
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+check-rereviews: |md
+  **Prior Reviews?**
+  `artifacts/strat-reviews/`
+  exists?
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+read-prior: |md
+  **Read Prior Reviews**
+  `artifacts/strat-reviews/`
+  Prior review files for
+  strategies being reviewed
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+entry -> read-strats
+entry -> read-rfes
+read-strats -> check-rereviews
+read-rfes -> check-rereviews
+check-rereviews -> read-prior: "exists (re-review)"
+check-rereviews -> assess: "first review" {style.stroke-dash: 3}
+read-prior -> assess
+
+# ================================================================
+#  Assessment (per strategy)
+# ================================================================
+
+assess: |md
+  **Assess Each Strategy**
+  For each STRAT-NNN:
+| {
+  style.fill: "#e0e7ff"
+  style.stroke: "#4338ca"
+  style.stroke-width: 2
+}
+
+criteria: |md
+  **Scope Criteria**
+
+  1. Right-sized? (feature, not task/bundle)
+  2. Effort matches scope?
+  3. Scope clearly bounded?
+  4. Delivers complete capability?
+  5. Scope risks? (flag traps)
+  6. Strategy vs RFE alignment?
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 1
+}
+
+re-review-delta: |md
+  **Re-Review Delta**
+  (if re-review)
+
+  - Concerns addressed?
+  - Concerns remaining?
+  - New issues introduced?
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  style.stroke-dash: 3
+}
+
+assess -> criteria
+assess -> re-review-delta: "re-review path" {style.stroke-dash: 3}
+
+# ================================================================
+#  Output
+# ================================================================
+
+output: |md
+  **Output per Strategy**
+
+  - Scope assessment
+  - Effort vs scope
+  - RFE coverage
+  - Scope risks
+  - Recommendation
+| {
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+  style.stroke-width: 2
+}
+
+split-suggest: |md
+  **Split Suggestion**
+  Concrete boundaries
+  for each resulting
+  strategy (if split)
+| {
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+  style.stroke-width: 1
+  style.stroke-dash: 3
+}
+
+criteria -> output
+re-review-delta -> output
+output -> split-suggest: "split recommended" {style.stroke-dash: 3}
+
+# ================================================================
+#  Recommendation outcomes
+# ================================================================
+
+approve: |md
+  **Approve**
+| {
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+  style.stroke-width: 1
+}
+
+split: |md
+  **Split into N**
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+}
+
+tighten: |md
+  **Tighten Scope**
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+}
+
+expand: |md
+  **Expand to
+  Deliver RFE**
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+}
+
+output -> approve: "right-sized"
+output -> split: "too large"
+output -> tighten: "unbounded"
+output -> expand: "partial RFE"

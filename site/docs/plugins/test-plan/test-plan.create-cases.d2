@@ -1,0 +1,376 @@
+direction: right
+
+# ── Global styles ──────────────────────────────────────────
+
+style: {
+  border-radius: 8
+  font-size: 14
+  fill: "#FFFFFF"
+  stroke: "#4A4A4A"
+}
+
+# ── Nodes ──────────────────────────────────────────────────
+
+entry: |md
+  ## /test-plan.create-cases
+  - Parse FEATURE_SOURCE argument
+  - Check --output-dir override flag
+  - Detect session context ($TEST_PLAN_OUTPUT_DIR)
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    border-radius: 12
+    font-size: 13
+  }
+}
+
+# ── Step 0: Pre-flight ────────────────────────────────────
+
+preflight: {
+  label: ""
+  style: {
+    fill: "#FAFAFA"
+    stroke: "#BDBDBD"
+    stroke-dash: 0
+    border-radius: 10
+  }
+
+  deps: |md
+    ## Check Python Deps
+    - Run frontmatter.py schema test-case
+    - Fail early if PyYAML missing
+    - Prompt user to install if needed
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#E65100"
+      font-size: 13
+    }
+  }
+
+  source_check: |md
+    ## Resolve Source
+    - Session auto-detect?
+    - Argument provided?
+    - Interactive fallback (AskUser)
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#E65100"
+      font-size: 13
+    }
+  }
+
+  locate: |md
+    ## Locate Feature Dir
+    - repo.py locate-feature-dir
+    - Supports local path, GH branch, GH PR
+    - Parse JSON: feature_dir, source_type
+  | {
+    style: {
+      fill: "#FFF8E1"
+      stroke: "#F9A825"
+      font-size: 13
+    }
+  }
+
+  validate_path: |md
+    ## Validate Local Path
+    - repo.py validate-local-path
+    - Skip if --output-dir forced
+    - Skip if GitHub source
+  | {
+    style: {
+      fill: "#FFF8E1"
+      stroke: "#F9A825"
+      font-size: 13
+    }
+  }
+
+  deps -> source_check
+  source_check -> locate: "no session ctx"
+  locate -> validate_path: "local source"
+}
+
+# ── Step 1: Read Test Plan ─────────────────────────────────
+
+read_plan: |md
+  ## Read Test Plan
+  - Read <feature_dir>/TestPlan.md
+  - Extract source_key from frontmatter
+  - Parse Sections 1.2, 1.3, 2, 3, 4, 5.2
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+    font-size: 13
+  }
+}
+
+# ── Step 1.5: Read Gaps ───────────────────────────────────
+
+read_gaps: |md
+  ## Read Gaps
+  - Check TestPlanGaps.md exists
+  - Parse known limitations
+  - Avoid TCs for pending areas
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+    font-size: 13
+  }
+}
+
+# ── Step 2: Read Template ─────────────────────────────────
+
+read_template: |md
+  ## Read TC Template
+  - Read test-case-template.md
+  - Omit empty optional sections
+  - Leave Automation Status as placeholder
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+    font-size: 13
+  }
+}
+
+# ── Step 2.5: Regeneration Detection ──────────────────────
+
+regen_check: |md
+  ## Detect Regeneration
+  - tc_regeneration.py check
+  - Count existing TC-*.md files
+  - Determine mode: create vs regenerate
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+    font-size: 13
+  }
+}
+
+regen_confirm: |md
+  ## Confirm Overwrite
+  - AskUserQuestion: proceed?
+  - Warn: will overwrite all TCs
+  - User can abort here
+| {
+  style: {
+    fill: "#FCE4EC"
+    stroke: "#C62828"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# ── Step 3: Generate Test Cases (container) ────────────────
+
+generate: {
+  label: ""
+  style: {
+    fill: "#FAFAFA"
+    stroke: "#BDBDBD"
+    border-radius: 10
+  }
+
+  design: |md
+    ## Design Category TCs
+    - Process one category at a time
+    - Cover endpoints from Section 4
+    - Positive, negative, boundary cases
+    - Assign P0/P1/P2 priorities
+    - Check cross-category duplicates
+  | {
+    style: {
+      fill: "#E8EAF6"
+      stroke: "#283593"
+      double-border: true
+      font-size: 13
+    }
+  }
+
+  write_tc: |md
+    ## Write TC Files
+    - Write TC-<CAT>-<NUM>.md
+    - YAML frontmatter (source_key, priority)
+    - Evaluate upgrade_phase per TC
+    - Edit (regen) or Write (create)
+  | {
+    style: {
+      fill: "#E8EAF6"
+      stroke: "#283593"
+      font-size: 13
+    }
+  }
+
+  e2e: |md
+    ## Generate E2E TCs
+    - Every P0 endpoint covered
+    - Complete user journeys
+    - TC-E2E-<NUM> naming
+  | {
+    style: {
+      fill: "#E8EAF6"
+      stroke: "#283593"
+      double-border: true
+      font-size: 13
+    }
+  }
+
+  upgrade: |md
+    ## Generate Upgrade TCs
+    - Conditional on Section 7.2
+    - Assign pre/post/both phase
+    - Feature-intro vs bug-found
+  | {
+    style: {
+      fill: "#E8EAF6"
+      stroke: "#283593"
+      double-border: true
+      font-size: 13
+    }
+  }
+
+  design -> write_tc
+  write_tc -> design: "next category"
+  write_tc -> e2e: "all categories done"
+  e2e -> upgrade: "Section 7.2 non-trivial"
+}
+
+# ── Step 4: Generate Index ─────────────────────────────────
+
+gen_index: |md
+  ## Generate INDEX.md
+  - Quick stats (total, P0/P1/P2)
+  - Tables by category
+  - Links to parent TestPlan.md
+| {
+  style: {
+    fill: "#E0F2F1"
+    stroke: "#00695C"
+    font-size: 13
+  }
+}
+
+# ── Step 5: Update Test Plan ───────────────────────────────
+
+update_plan: |md
+  ## Update TestPlan.md
+  - Section 5: generation note + link
+  - Section 5.1: TC organization table
+  - Section 6.1/6.2: E2E summary + matrix
+  - Section 10.1/10.2: TC summary + mapping
+| {
+  style: {
+    fill: "#E0F2F1"
+    stroke: "#00695C"
+    font-size: 13
+  }
+}
+
+# ── Step 5.5: Update README ───────────────────────────────
+
+update_readme: |md
+  ## Update README.md
+  - Add/update Test Cases section
+  - Link to test_cases/INDEX.md
+  - Include count + priority breakdown
+| {
+  style: {
+    fill: "#E0F2F1"
+    stroke: "#00695C"
+    font-size: 13
+  }
+}
+
+# ── Step 5.6: Coverage Validation ─────────────────────────
+
+coverage: |md
+  ## Coverage Validation
+  - Endpoint coverage check
+  - E2E coverage (all P0 endpoints)
+  - Test objective coverage
+  - Priority distribution check
+  - Gap cross-reference
+  - Append gaps to TestPlanGaps.md
+| {
+  style: {
+    fill: "#FFF9C4"
+    stroke: "#F57F17"
+    font-size: 13
+  }
+}
+
+# ── Step 5.7: Validate Frontmatter ────────────────────────
+
+validate_fm: |md
+  ## Validate Frontmatter
+  - frontmatter.py validate per TC
+  - Fix any validation errors
+  - Re-run until all pass
+| {
+  style: {
+    fill: "#FFF9C4"
+    stroke: "#F57F17"
+    font-size: 13
+  }
+}
+
+# ── Output ─────────────────────────────────────────────────
+
+output: |md
+  ## Test Cases Complete
+  - TC-*.md files in test_cases/
+  - INDEX.md generated
+  - TestPlan.md updated
+  - Coverage validated
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    border-radius: 12
+    font-size: 13
+  }
+}
+
+# ── Edges ──────────────────────────────────────────────────
+
+entry -> preflight.deps
+preflight.source_check -> read_plan: "session auto-detect"
+preflight.validate_path -> read_plan
+locate -> read_plan: "GitHub source"
+
+read_plan -> read_gaps
+read_gaps -> read_template
+read_template -> regen_check
+
+regen_check -> regen_confirm: "existing TCs found"
+regen_check -> generate.design: "no existing TCs"
+regen_confirm -> generate.design: "user confirms"
+
+generate.upgrade -> gen_index
+generate.e2e -> gen_index: "no upgrade needed"
+
+gen_index -> update_plan
+update_plan -> update_readme
+update_readme -> coverage
+
+coverage -> generate.design: "missing E2E coverage" {
+  style: {
+    stroke: "#C62828"
+    stroke-dash: 5
+  }
+}
+
+coverage -> validate_fm: "coverage OK"
+validate_fm -> validate_fm: "fix & retry" {
+  style: {
+    stroke: "#F57F17"
+    stroke-dash: 5
+  }
+}
+validate_fm -> output

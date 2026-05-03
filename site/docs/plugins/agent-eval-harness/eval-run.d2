@@ -1,0 +1,513 @@
+direction: right
+
+# ─── Global Styles ────────────────────────────────────────────
+style: {
+  border-radius: 8
+  font-size: 14
+  fill: "#f8fafc"
+  stroke: "#334155"
+}
+
+# ─── Entry ────────────────────────────────────────────────────
+entry: |md
+  ## /eval-run
+  - Parse CLI arguments
+  - `--config`, `--model`, `--skill`
+  - `--case`, `--baseline`, `--gold`
+  - `--no-judge`, `--effort`
+| {
+  style: {
+    fill: "#dbeafe"
+    stroke: "#2563eb"
+    font-size: 13
+    border-radius: 10
+  }
+}
+
+# ─── Step 0: Load Config ─────────────────────────────────────
+load_config: |md
+  ## Load Config
+  - Read eval.yaml
+  - Verify skill, models, judges
+  - Check tool interception coverage
+  - Persist flags via state.py
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+# ─── Config missing? ─────────────────────────────────────────
+config_check: "Config\nexists?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+bootstrap: |md
+  ## /eval-analyze
+  - Bootstrap eval.yaml
+  - Analyze skill under test
+| {
+  style: {
+    fill: "#ede9fe"
+    stroke: "#7c3aed"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# ─── Step 1: Find Dataset ────────────────────────────────────
+find_dataset: |md
+  ## Find Dataset
+  - Read dataset.path from config
+  - Verify case subdirectories
+  - Apply --case filter
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+no_cases: |md
+  ## No Cases
+  - Suggest /eval-dataset
+  - Or /eval-analyze --update
+| {
+  style: {
+    fill: "#fee2e2"
+    stroke: "#dc2626"
+    font-size: 13
+  }
+}
+
+# ─── Step 2: Preflight Check ─────────────────────────────────
+preflight: |md
+  ## Preflight Check
+  - Run preflight.py
+  - Check tmp/ state files
+  - Check previous run output
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+preflight_decision: "CLEAN?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+dirty_resolve: |md
+  ## Resolve Dirty State
+  - Force clean (--clean --force)
+  - Change run-id (append -v2)
+  - Or abort
+| {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+  }
+}
+
+# ─── Step 3: Prepare Workspace ────────────────────────────────
+workspace: |md
+  ## Prepare Workspace
+  - workspace.py creates isolated dir
+  - Copy/symlink project resources
+  - Create output directories
+  - Build batch.yaml / case workspaces
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+# ─── Step 3b: Tool Interception ───────────────────────────────
+tools_check: "inputs.tools\nconfigured?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+resolve_tools: |md
+  ## Resolve Tool Handlers
+  - Read tool_handlers.yaml
+  - Resolve prompts to runtime checks
+  - Add input_filters, env_checks
+  - Verify Bash handlers have filters
+| {
+  style: {
+    fill: "#ede9fe"
+    stroke: "#7c3aed"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# ─── Step 4: Execute Skill ────────────────────────────────────
+execute: |md
+  ## Execute Skill
+  - execute.py via agent runner
+  - Case mode: once per case
+  - Batch mode: single invocation
+  - Parallel via thread pool
+| {
+  style: {
+    fill: "#dbeafe"
+    stroke: "#2563eb"
+    font-size: 13
+    bold: true
+  }
+}
+
+monitor: |md
+  ## Monitor Progress
+  - Run in background
+  - Poll output file periodically
+  - Check for DONE / ERROR / stuck
+  - Report progress to user
+| {
+  style: {
+    fill: "#f1f5f9"
+    stroke: "#64748b"
+    font-size: 13
+  }
+}
+
+check_result: |md
+  ## Check Result
+  - Read run_result.json
+  - exit_code, duration_s, cost_usd
+  - Per-model token usage
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+exec_fail: |md
+  ## Execution Failed
+  - Report exit code + stderr
+  - Do not continue to scoring
+| {
+  style: {
+    fill: "#fee2e2"
+    stroke: "#dc2626"
+    font-size: 13
+  }
+}
+
+# ─── Step 5: Collect Artifacts ────────────────────────────────
+collect: |md
+  ## Collect Artifacts
+  - collect.py distributes outputs
+  - Per-case directories
+  - Write collection.json
+  - Warn on 0-artifact cases
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+# ─── Step 6: Score ────────────────────────────────────────────
+judge_check: "--no-judge?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+score: |md
+  ## Score with Judges
+  - score.py judges
+  - Inline checks (Python)
+  - LLM judges (Anthropic API)
+  - External code judges
+  - Parallel per case
+| {
+  style: {
+    fill: "#ede9fe"
+    stroke: "#7c3aed"
+    double-border: true
+    font-size: 13
+  }
+}
+
+baseline_check: "--baseline?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+pairwise: |md
+  ## Pairwise Comparison
+  - score.py pairwise
+  - Position-swapped LLM judge
+  - A/B blind evaluation
+  - Wins / Losses / Ties
+| {
+  style: {
+    fill: "#ede9fe"
+    stroke: "#7c3aed"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# ─── Step 7: Analyze & Report ─────────────────────────────────
+analyze: |md
+  ## Analyze Results
+  - Read summary.yaml
+  - Follow analyze-results.md
+  - Recommendation first
+  - Failure patterns, root causes
+  - Cost attribution
+| {
+  style: {
+    fill: "#ede9fe"
+    stroke: "#7c3aed"
+    double-border: true
+    font-size: 13
+  }
+}
+
+write_analysis: |md
+  ## Write analysis.md
+  - YAML frontmatter (agent, model, date)
+  - Recommendation + Summary
+  - Failure Patterns + Root Causes
+  - Regressions + Cost Attribution
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+report: |md
+  ## Generate HTML Report
+  - report.py --open
+  - Scoring summary table
+  - Per-case details + diffs
+  - Baseline comparison
+  - Image compare widgets
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+# ─── Step 7b: Gold save ──────────────────────────────────────
+gold_check: "--gold?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+save_gold: |md
+  ## Save Gold References
+  - Copy artifacts to dataset
+  - As reference files per case
+| {
+  style: {
+    fill: "#f0fdf4"
+    stroke: "#16a34a"
+    font-size: 13
+  }
+}
+
+# ─── Step 8: MLflow ───────────────────────────────────────────
+mlflow_check: "mlflow.experiment\nconfigured?" {
+  style: {
+    fill: "#fef3c7"
+    stroke: "#d97706"
+    font-size: 13
+    border-radius: 99
+  }
+}
+
+mlflow_log: |md
+  ## /eval-mlflow
+  - Log params, metrics, artifacts
+  - Sync dataset to registry
+| {
+  style: {
+    fill: "#ede9fe"
+    stroke: "#7c3aed"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# ─── Output: Next Steps ──────────────────────────────────────
+next_steps: |md
+  ## Suggest Next Steps
+  - /eval-review for human review
+  - /eval-optimize for auto-improve
+  - /eval-mlflow for tracking
+| {
+  style: {
+    fill: "#dbeafe"
+    stroke: "#2563eb"
+    font-size: 13
+    border-radius: 10
+  }
+}
+
+# ─── External Services ───────────────────────────────────────
+anthropic_api: "Anthropic API" {
+  style: {
+    fill: "#fff"
+    stroke: "#64748b"
+    stroke-dash: 5
+    font-size: 12
+  }
+}
+
+claude_code: "Claude Code CLI" {
+  style: {
+    fill: "#fff"
+    stroke: "#64748b"
+    stroke-dash: 5
+    font-size: 12
+  }
+}
+
+# ═══ Edges ════════════════════════════════════════════════════
+
+# Entry → Config
+entry -> config_check
+config_check -> bootstrap: "missing" {
+  style.stroke: "#d97706"
+  style.stroke-dash: 3
+}
+config_check -> load_config: "exists" {
+  style.stroke: "#16a34a"
+}
+bootstrap -> load_config
+
+# Config → Dataset
+load_config -> find_dataset
+
+# Dataset check
+find_dataset -> no_cases: "0 cases" {
+  style.stroke: "#dc2626"
+  style.stroke-dash: 3
+}
+find_dataset -> preflight: "cases found"
+
+# Preflight
+preflight -> preflight_decision
+preflight_decision -> dirty_resolve: "DIRTY" {
+  style.stroke: "#d97706"
+  style.stroke-dash: 3
+}
+preflight_decision -> workspace: "CLEAN" {
+  style.stroke: "#16a34a"
+}
+dirty_resolve -> preflight: "re-check" {
+  style.stroke: "#64748b"
+  style.stroke-dash: 3
+}
+
+# Workspace → Tool interception
+workspace -> tools_check
+tools_check -> resolve_tools: "yes" {
+  style.stroke: "#7c3aed"
+}
+tools_check -> execute: "no"
+resolve_tools -> execute
+
+# Execute → Monitor → Result
+execute -> monitor
+monitor -> check_result: "done"
+execute -> claude_code: "invokes" {
+  style.stroke: "#64748b"
+  style.stroke-dash: 3
+}
+
+# Execution result
+check_result -> exec_fail: "exit != 0" {
+  style.stroke: "#dc2626"
+  style.stroke-dash: 3
+}
+check_result -> collect: "exit 0"
+
+# Collect → Score
+collect -> judge_check
+judge_check -> analyze: "yes (skip)" {
+  style.stroke: "#64748b"
+  style.stroke-dash: 3
+}
+judge_check -> score: "no (score)"
+
+# Score → Baseline
+score -> baseline_check
+score -> anthropic_api: "LLM judges" {
+  style.stroke: "#64748b"
+  style.stroke-dash: 3
+}
+baseline_check -> pairwise: "yes" {
+  style.stroke: "#7c3aed"
+}
+baseline_check -> analyze: "no"
+pairwise -> analyze
+pairwise -> anthropic_api: "comparison" {
+  style.stroke: "#64748b"
+  style.stroke-dash: 3
+}
+
+# Analyze → Report
+analyze -> write_analysis
+write_analysis -> report
+report -> gold_check
+
+# Gold save
+gold_check -> save_gold: "yes" {
+  style.stroke: "#16a34a"
+}
+gold_check -> mlflow_check: "no"
+save_gold -> mlflow_check
+
+# MLflow
+mlflow_check -> mlflow_log: "yes" {
+  style.stroke: "#7c3aed"
+}
+mlflow_check -> next_steps: "no"
+mlflow_log -> next_steps

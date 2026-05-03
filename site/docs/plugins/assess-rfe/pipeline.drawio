@@ -1,0 +1,12 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="assess-rfe" value="&lt;b&gt;/assess-rfe&lt;/b&gt;&lt;br&gt;&lt;br&gt;Single or bulk RFE scoring&lt;br&gt;30 parallel scorer agents&lt;br&gt;Rubric-based evaluation&lt;br&gt;CSV results + run directory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="35" width="190" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="export-rubric" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;Export scoring rubric&lt;br&gt;artifacts/rfe-rubric.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="290" y="50" width="170" height="100" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>

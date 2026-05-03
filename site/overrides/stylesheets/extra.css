@@ -1,0 +1,64 @@
+/* Category badges */
+.category-badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 1em;
+  font-size: 0.75em;
+  font-weight: 600;
+  color: var(--md-primary-bg-color);
+  background-color: var(--md-primary-fg-color);
+  vertical-align: middle;
+}
+
+/* Skill invocability badge */
+.badge-invocable {
+  display: inline-block;
+  padding: 0.1em 0.4em;
+  border-radius: 0.25em;
+  font-size: 0.7em;
+  font-weight: 600;
+  background-color: var(--md-accent-fg-color);
+  color: var(--md-accent-bg-color);
+}
+
+.badge-internal {
+  display: inline-block;
+  padding: 0.1em 0.4em;
+  border-radius: 0.25em;
+  font-size: 0.7em;
+  font-weight: 600;
+  background-color: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
+}
+
+/* Plugin card enhancements for grid cards */
+.md-typeset .grid.cards > ul > li {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Skill count chip */
+.skill-count {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  border-radius: 1em;
+  font-size: 0.75em;
+  background-color: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+}
+
+/* Diagram container */
+.diagram-container {
+  text-align: center;
+  margin: 1.5em 0;
+}
+
+.diagram-container img {
+  max-width: 100%;
+  height: auto;
+}

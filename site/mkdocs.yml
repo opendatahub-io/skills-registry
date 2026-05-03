@@ -1,0 +1,59 @@
+site_name: OpenDataHub Skills Registry
+site_url: https://opendatahub-io.github.io/skills-registry
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - search.suggest
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - toc:
+      permalink: true
+
+extra_css:
+  - overrides/stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Plugins:
+    - plugins/index.md
+    - rfe-creator: plugins/rfe-creator/index.md
+    - assess-rfe: plugins/assess-rfe/index.md
+    - rhoai-security-reviewer: plugins/rhoai-security-reviewer/index.md
+    - test-plan: plugins/test-plan/index.md
+    - quality-tooling: plugins/quality-tooling/index.md
+    - odh-ai-helpers: plugins/odh-ai-helpers/index.md
+    - agent-eval-harness: plugins/agent-eval-harness/index.md
+  - Categories:
+    - Evaluation & Testing: categories/evaluation.md
+    - Security Review: categories/security.md
+    - Development Tools: categories/development-tools.md
+    - Product Planning: categories/planning.md
+  - Getting Started: getting-started.md

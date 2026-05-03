@@ -14,11 +14,14 @@ python3 scripts/sync_marketplace.py
 # Regenerate catalog.md from registry.yaml
 python3 scripts/generate_catalog.py
 
+# Regenerate site content from registry.yaml
+python3 scripts/generate_site.py
+
 # Check plugin repo versions against registry
 python3 scripts/check_versions.py --dry-run
 ```
 
-Always run all three (validate, sync, generate) before committing changes to registry.yaml. CI will fail if generated files are out of sync.
+Always run all four (validate, sync, generate catalog, generate site) before committing changes to registry.yaml. CI will fail if generated files are out of sync.
 
 ## Architecture
 
@@ -26,6 +29,7 @@ Always run all three (validate, sync, generate) before committing changes to reg
 - `.claude-plugin/marketplace.json` — generated, Claude Code reads this
 - `catalog.md` — generated, human-readable listing
 - `schema/registry.schema.json` — JSON Schema for validation
+- `site/` — MkDocs Material documentation site (generated + static)
 - `scripts/` — automation (sync, validate, generate, version check)
 
 See @ARCHITECTURE.md for detailed diagrams and design documentation.

@@ -1,0 +1,185 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strat.prioritize**
+  NOT YET IMPLEMENTED
+
+  - Prioritize new strategies
+  - Against RHAISTRAT backlog
+  - Collaborative with PM
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Strategies ---
+
+read-strats: |md
+  **Read Strategies**
+
+  - `artifacts/strat-tasks/`
+  - `strat-review-report.md`
+  - New strategies + reviews
+  - Frontmatter metadata
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Ask for Scope ---
+
+ask-scope: |md
+  **Ask for Scope**
+
+  - PM specifies product area
+  - Or infer from components
+  - Labels, team, domain
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pull Comparison Set ---
+
+pull-comparison: |md
+  **Pull Comparison Set**
+
+  - JQL query on RHAISTRAT
+  - Filter by product area
+  - 10-30 comparable items
+  - Priority, status, labels
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Present Lists ---
+
+present-lists: |md
+  **Present Both Lists**
+
+  - Existing backlog (filtered)
+  - New strategies side by side
+  - Key, summary, priority
+  - Status, labels per item
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Collaborative Ordering ---
+
+ordering: |md
+  **Collaborative Ordering**
+  LLM + PM
+
+  - Suggest placement
+  - Priority reasoning
+  - Dependencies, urgency
+  - Review feedback context
+  - PM makes final call
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Update Jira ---
+
+update-jira: |md
+  **Update Jira**
+
+  - Update rank/priority
+  - Update labels
+  - RHAISTRAT tickets
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fallback Output ---
+
+fallback: |md
+  **Recommendation Doc**
+
+  - Manual grooming guide
+  - Ordering rationale
+  - For non-Jira fallback
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Document Decisions ---
+
+document: |md
+  **Document Decisions**
+
+  - `strat-prioritization.md`
+  - Ordering rationale
+  - Final placement record
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+}
+
+# --- External: Jira ---
+
+jira: |md
+  **Jira**
+  RHAISTRAT
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> read-strats
+read-strats -> ask-scope
+ask-scope -> pull-comparison
+
+pull-comparison -> present-lists
+present-lists -> ordering
+
+ordering -> update-jira: "MCP available"
+ordering -> fallback: "no MCP"
+
+update-jira -> document
+fallback -> document
+
+# External connections
+pull-comparison -> jira: "JQL query" {
+  style.stroke-dash: 3
+}
+update-jira -> jira: "rank/priority API" {
+  style.stroke-dash: 3
+}

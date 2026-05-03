@@ -1,0 +1,220 @@
+direction: right
+
+# -- Global styles --
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# === Entry ===
+
+entry: |md
+  **/strat.review**
+
+  - Strategy review orchestrator
+  - Reads `strat-tasks/`
+  - YAML frontmatter
+| {
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 2
+}
+
+# === Step 1: Verify artifacts ===
+
+verify: |md
+  **Verify Artifacts**
+
+  - Read `artifacts/strat-tasks/`
+  - Strategy section present?
+  - Check `strat-reviews/`
+  - Detect re-review mode
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# === Gate: artifacts exist? ===
+
+gate: |md
+  **Strategies
+  exist?**
+| {
+  shape: diamond
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+}
+
+# === Stop: no artifacts ===
+
+stop: |md
+  **Stop**
+
+  - No strategies found
+  - Or not yet refined
+  - Tell user: run /strat.refine
+| {
+  style.fill: "#fee2e2"
+  style.stroke: "#dc2626"
+  style.stroke-width: 1
+}
+
+# === Step 2: Architecture context ===
+
+arch-context: |md
+  **Fetch Arch Context**
+
+  - `fetch-architecture-context.sh`
+  - `.context/architecture-context/`
+  - PLATFORM.md + components
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# === Step 3: Parallel forked reviewers ===
+
+fork: |md
+  **Launch 4 Reviewers**
+  parallel fork
+| {
+  style.fill: "#e0e7ff"
+  style.stroke: "#4338ca"
+  style.stroke-width: 2
+}
+
+feasibility: |md
+  **Feasibility Review**
+  forked LLM agent
+
+  - Can we build this?
+  - Effort estimates credible?
+  - Proposed approach viable?
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+testability: |md
+  **Testability Review**
+  forked LLM agent
+
+  - Acceptance criteria testable?
+  - Edge cases identified?
+  - Gaps in test coverage?
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+scope: |md
+  **Scope Review**
+  forked LLM agent
+
+  - Each strategy right-sized?
+  - Effort matches scope?
+  - Over/under-scoped?
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+architecture: |md
+  **Architecture Review**
+  forked LLM agent
+
+  - Dependencies correct?
+  - Integration patterns valid?
+  - Skipped if no context
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+  style.stroke-dash: 3
+}
+
+# === Step 4: Write reviews ===
+
+write-reviews: |md
+  **Write Review Files**
+
+  - `strat-reviews/{id}-review.md`
+  - `frontmatter.py schema strat-review`
+  - `frontmatter.py set` per strategy
+  - Preserve disagreements
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# === Step 5: Advise user ===
+
+advise-approved: |md
+  **All Approved**
+
+  - Ready for /strat.prioritize
+| {
+  style.fill: "#dcfce7"
+  style.stroke: "#16a34a"
+  style.stroke-width: 2
+}
+
+advise-revision: |md
+  **Needs Revision**
+
+  - List specific issues
+  - Edit strategies, re-run
+  - /strat.review again
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+}
+
+advise-reject: |md
+  **Fundamental Problems**
+
+  - Revisit the RFE
+  - Re-run /strat.refine
+  - Different constraints
+| {
+  style.fill: "#fee2e2"
+  style.stroke: "#dc2626"
+  style.stroke-width: 1
+}
+
+# === Edges ===
+
+entry -> verify
+verify -> gate
+
+gate -> stop: "missing / unrefined"
+gate -> arch-context: "strategies exist"
+
+arch-context -> fork
+
+fork -> feasibility: "fork"
+fork -> testability: "fork"
+fork -> scope: "fork"
+fork -> architecture: "fork (if context)" {style.stroke-dash: 3}
+
+feasibility -> write-reviews: "join"
+testability -> write-reviews: "join"
+scope -> write-reviews: "join"
+architecture -> write-reviews: "join" {style.stroke-dash: 3}
+
+write-reviews -> advise-approved: "all pass"
+write-reviews -> advise-revision: "some fail"
+write-reviews -> advise-reject: "fundamental issues"

@@ -1,0 +1,108 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe.create**
+
+  Problem statement
+  `--headless`
+  `--priority`
+  `--labels`
+  `--rfe-id`
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Step 0: Parse Arguments ---
+
+parse: |md
+  **Parse Arguments**
+
+  Extract flags:
+  `--headless`, `--priority`
+  `--labels`, `--rfe-id`
+  Remaining = idea text
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Step 1: Load Rubric ---
+
+rubric: |md
+  **Load Rubric**
+
+  Check `artifacts/rfe-rubric.md`
+  If missing:
+  `bootstrap-assess-rfe.sh`
+  `/export-rubric`
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Step 2: Clarifying Questions ---
+
+clarify: |md
+  **Clarify** _(interactive)_
+
+  Ask PM 2-5 questions:
+  Customers, justification,
+  user problem, scope, success
+  Adapt to rubric criteria
+| {style.fill: "#dbeafe"; style.stroke: "#333333"; style.stroke-width: 2}
+
+headless-skip: |md
+  **skip**
+  _(--headless)_
+| {style.fill: "#fef9c3"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+# --- Step 3: Generate RFEs ---
+
+generate: |md
+  **Generate RFEs**
+
+  Apply `rfe-template.md`
+  Size: S / M / L / XL
+  WHAT + WHY only
+  One RFE per need
+  Acceptance criteria
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Step 4: Write Artifacts ---
+
+assign: |md
+  **Assign IDs**
+
+  `next_rfe_id.py <count>`
+  or use `--rfe-id`
+  Allocate RFE-NNN
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+write: |md
+  **Write Files**
+
+  `artifacts/rfe-tasks/RFE-NNN.md`
+  `frontmatter.py set`
+  `frontmatter.py rebuild-index`
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Output ---
+
+output: |md
+  **Done**
+
+  Edit artifacts
+  `/rfe.review` next
+  or re-run `/rfe.create`
+| {style.fill: "#d1fae5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Edges ---
+
+entry -> parse
+parse -> rubric
+rubric -> clarify
+rubric -> headless-skip: "--headless" {style.stroke-dash: 3}
+headless-skip -> generate {style.stroke-dash: 3}
+clarify -> generate: "answers"
+generate -> assign
+assign -> write
+write -> output

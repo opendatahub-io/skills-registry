@@ -1,0 +1,86 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/adr-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;ADR file path&lt;br&gt;(.md, .docx, or dir)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="145" width="140" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="clarify" value="&lt;b&gt;Step 1 &amp;mdash; Clarify&lt;/b&gt;&lt;br&gt;&lt;br&gt;AskUserQuestion&lt;br&gt;&amp;bull; Audience &amp;amp; stakes&lt;br&gt;&amp;bull; Scope emphasis&lt;br&gt;&amp;bull; Missing context&lt;br&gt;&amp;bull; Decision status&lt;br&gt;&amp;bull; Known concerns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="220" y="105" width="165" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-adr" value="&lt;b&gt;Step 2 &amp;mdash; Read ADR&lt;/b&gt;&lt;br&gt;&lt;br&gt;Parse document&lt;br&gt;Extract sections&lt;br&gt;Note missing parts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="435" y="135" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="panel" value="&lt;b&gt;Step 3 &amp;mdash; Reviewer Panel&lt;/b&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;(6 subagents in parallel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+      <mxGeometry x="730" y="30" width="590" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="r1" value="&lt;b&gt;Context &amp;amp;&lt;br&gt;Problem Framing&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=1;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="panel">
+      <mxGeometry x="15" y="40" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="r2" value="&lt;b&gt;Technical&lt;br&gt;Soundness&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=1;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="panel">
+      <mxGeometry x="205" y="40" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="r3" value="&lt;b&gt;Operational &amp;amp;&lt;br&gt;Reliability&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=1;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="panel">
+      <mxGeometry x="395" y="40" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="r4" value="&lt;b&gt;Security &amp;amp;&lt;br&gt;Compliance&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=1;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="panel">
+      <mxGeometry x="15" y="115" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="r5" value="&lt;b&gt;Cost &amp;amp;&lt;br&gt;Performance&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=1;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="panel">
+      <mxGeometry x="205" y="115" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="r6" value="&lt;b&gt;Consequences &amp;amp;&lt;br&gt;Reversibility&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=1;arcSize=8;verticalAlign=middle;fontSize=11;" vertex="1" parent="panel">
+      <mxGeometry x="395" y="115" width="175" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="human-review" value="&lt;b&gt;Step 3.5 &amp;mdash; Human Review&lt;/b&gt;&lt;br&gt;&lt;br&gt;AskUserQuestion&lt;br&gt;per reviewer findings&lt;br&gt;&amp;bull; Agree&lt;br&gt;&amp;bull; Disagree&lt;br&gt;&amp;bull; Partially agree&lt;br&gt;&amp;bull; Already addressed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="370" width="175" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="synthesize" value="&lt;b&gt;Step 4 &amp;mdash; Synthesize&lt;/b&gt;&lt;br&gt;&lt;br&gt;&amp;bull; Agreements&lt;br&gt;&amp;bull; Tensions&lt;br&gt;&amp;bull; Gaps&lt;br&gt;&amp;bull; Top 3&amp;ndash;5 risks&lt;br&gt;&amp;bull; Overall verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="380" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="reports-container" value="&lt;b&gt;Step 5 &amp;mdash; Generate Reports&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+      <mxGeometry x="485" y="365" width="365" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="pdf-node" value="&lt;b&gt;PDF Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;Full detail&lt;br&gt;What / So what /&lt;br&gt;Suggested fix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;strokeWidth=1;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="reports-container">
+      <mxGeometry x="20" y="40" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="pptx-node" value="&lt;b&gt;PPTX Deck&lt;/b&gt;&lt;br&gt;&lt;br&gt;Short-form bullets&lt;br&gt;10-min meeting&lt;br&gt;Severity colors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;strokeWidth=1;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="reports-container">
+      <mxGeometry x="195" y="40" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="report-back" value="&lt;b&gt;Step 6 &amp;mdash; Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;Summary inline&lt;br&gt;File paths&lt;br&gt;Overall verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="905" y="395" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="clarify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clarify" target="read-adr" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="ADR text + context" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;" edge="1" source="read-adr" target="panel" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_row_transition" value="raw findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="panel" target="human-review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="730" y="315"/>
+          <mxPoint x="117" y="315"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="corrected findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="human-review" target="synthesize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="synthesize" target="reports-container" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="reports-container" target="report-back" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
