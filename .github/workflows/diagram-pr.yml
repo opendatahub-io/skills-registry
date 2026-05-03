@@ -1,0 +1,60 @@
+name: Diagram PR Feedback
+
+on:
+  pull_request:
+    paths:
+      - 'site/docs/plugins/**/*.svg'
+
+jobs:
+  extract-feedback:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Validate diagram SVGs have embedded data
+        run: |
+          changed_svgs=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.svg')
+          if [ -z "$changed_svgs" ]; then
+            echo "No SVG changes detected"
+            exit 0
+          fi
+
+          for svg in $changed_svgs; do
+            if [ -f "$svg" ] && ! grep -q "mxfile" "$svg"; then
+              echo "ERROR: $svg does not contain embedded draw.io data (mxfile)."
+              echo "Re-export with: draw.io --export --format svg --embed-diagram"
+              exit 1
+            fi
+          done
+          echo "All modified SVGs have embedded diagram data"
+
+      - name: Extract before/after pairs for eval dataset
+        run: |
+          changed_svgs=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.svg')
+          if [ -z "$changed_svgs" ]; then
+            echo "No SVG changes to extract"
+            exit 0
+          fi
+
+          python3 scripts/extract_diagram_feedback.py \
+            --base-ref ${{ github.event.pull_request.base.sha }} \
+            --svgs $changed_svgs
+
+      - name: Upload feedback cases
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: diagram-feedback-cases
+          path: eval/diagram-feedback/cases/
+          if-no-files-found: ignore
