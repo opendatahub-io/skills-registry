@@ -8,6 +8,12 @@ Validates that attendees have provided their updates in the shared document.
 
 **Plugin**: [meeting-quality-skills](index.md) | **:material-check: User-invocable**
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![meeting-async-update-check diagram](meeting-async-update-check.svg)
+</div>
+
 ## Arguments
 
 | Argument | Required | Default | Description |

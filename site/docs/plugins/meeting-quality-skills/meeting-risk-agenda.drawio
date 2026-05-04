@@ -1,0 +1,48 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/meeting-risk-agenda&lt;/b&gt;&lt;br&gt;&lt;br&gt;meeting title (optional)&lt;br&gt;update document content&lt;br&gt;optional attendee list" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="145" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse-updates" value="&lt;b&gt;Parse Updates&lt;/b&gt;&lt;br&gt;&lt;br&gt;read all updates in document&lt;br&gt;handle Google Doc or pasted text&lt;br&gt;detect Jira content (issue keys)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="225" y="50" width="160" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="risk-analysis" value="&lt;b&gt;Risk Signal Detection&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;scan for &quot;blocked&quot;, &quot;stuck&quot;,&lt;br&gt;&quot;waiting&quot;, &quot;dependency&quot;&lt;br&gt;detect lack of progress&lt;br&gt;flag unclear ownership&lt;br&gt;extract owner names" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="435" y="40" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="classify" value="&lt;b&gt;Classify Updates&lt;/b&gt;&lt;br&gt;&lt;br&gt;Blocked: hard blockers found&lt;br&gt;At Risk: warning signals&lt;br&gt;No Issues: on track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="660" y="55" width="160" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="generate-agenda" value="&lt;b&gt;Generate Agenda&lt;/b&gt;&lt;br&gt;&lt;br&gt;blocked items first&lt;br&gt;at-risk items second&lt;br&gt;no-issues deprioritized&lt;br&gt;suggest skip if no risks found" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="870" y="50" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-format" value="Meeting Focus&lt;br&gt;─────────────────&lt;br&gt;Blocked&lt;br&gt;&amp;nbsp;&amp;nbsp;- Item (Owner)&lt;br&gt;&lt;br&gt;At Risk&lt;br&gt;&amp;nbsp;&amp;nbsp;- Item (Owner)&lt;br&gt;&lt;br&gt;No Issues (skip)&lt;br&gt;&amp;nbsp;&amp;nbsp;- Summary count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="880" y="210" width="190" height="220" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="entry" target="parse-updates" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="parse-updates" target="risk-analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="risk-analysis" target="classify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="classify" target="generate-agenda" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate-agenda" target="output-format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="955" y="190"/>
+          <mxPoint x="975" y="190"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -17,6 +17,12 @@ could be replaced with async updates.
     - **Repository**: [ahinek/meeting-quality-skills](https://github.com/ahinek/meeting-quality-skills)
     - **Tags**: <span class="tag-pill">meeting</span> <span class="tag-pill">google-workspace</span> <span class="tag-pill">agenda</span> <span class="tag-pill">async-updates</span> <span class="tag-pill">productivity</span>
 
+## Pipeline
+
+<div class="diagram-container" markdown>
+![meeting-quality-skills pipeline](pipeline.svg)
+</div>
+
 ## Skills
 
 | Skill | Description | Invocable |

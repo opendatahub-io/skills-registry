@@ -1,0 +1,146 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/meeting-async-update-check**
+
+  - meeting title & date
+  - attendee list
+  - shared document content
+  - optional format expectation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parse Inputs ---
+
+parse-inputs: |md
+  **Parse Inputs**
+
+  - read attendee list
+  - read shared document
+  - identify document structure
+  - detect Jira exports or dashboards
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Match Updates ---
+
+match-updates: |md
+  **Match Attendee Updates**
+  LLM analysis
+
+  - scan for name/alias headers
+  - find attributed bullet lists
+  - parse Jira assignee fields
+  - best-effort on inconsistent docs
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Classify ---
+
+classify: |md
+  **Classify Attendees**
+
+  - updated: clear match found
+  - missing: no content attributed
+  - uncertain: ambiguous ownership
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Coverage Check (decision) ---
+
+coverage-check: |md
+  **Coverage Assessment**
+
+  - most updated: note success
+  - none updated: flag meeting
+    not ready for status review
+  - partial: list gaps
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Organizer Summary**
+
+  - meeting name & counts
+  - updates found / missing
+  - uncertain matches
+  - suggested reminder message
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: output format ---
+
+output-format: |md
+  Organizer Summary
+  ─────────────────
+  Meeting: [title]
+  Total reviewed: N
+  Updates found: N
+  Missing: N
+  Uncertain: N
+
+  Missing Update List
+  ─────────────────
+  - Name 1
+  - Name 2
+
+  Suggested Reminder
+  ─────────────────
+  "Please add your async
+   updates before the meeting..."
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> parse-inputs
+parse-inputs -> match-updates
+match-updates -> classify
+classify -> coverage-check
+coverage-check -> report
+
+report -> output-format: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
