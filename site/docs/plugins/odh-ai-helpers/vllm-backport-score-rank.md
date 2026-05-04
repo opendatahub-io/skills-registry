@@ -6,3 +6,9 @@
 Score and rank backport candidates by severity, scope, and risk using a deterministic composite score
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![vllm-backport-score-rank diagram](vllm-backport-score-rank.svg)
+</div>

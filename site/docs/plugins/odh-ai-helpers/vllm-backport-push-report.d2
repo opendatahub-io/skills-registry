@@ -1,0 +1,33 @@
+direction: right
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-backport-push-report**
+  - --report report.md
+  - --candidates ranked.json
+  - --version v0.13.0
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+push-node: |md
+  **Push Report**
+  - push-report.sh
+  - Timestamped reports/ dir
+  - git add + commit + push
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+output-node: |md
+  **Output**
+  - REPORT_URL to stdout
+  - GitHub pages URL
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+github: |md
+  **GitHub**
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2; style.stroke-dash: 3 }
+
+entry -> push-node
+push-node -> output-node: "report URL"
+push-node -> github: "git push" { style.stroke-dash: 3 }

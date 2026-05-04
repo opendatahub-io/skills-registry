@@ -1,0 +1,23 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/vllm-backport-score-rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;--input analyzed.json&lt;br&gt;--output ranked.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="150" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Score &amp; Rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;score-and-rank.py&lt;br&gt;Composite formula:&lt;br&gt;verdict, severity, scope,&lt;br&gt;risk, self-containedness&lt;br&gt;Sort descending" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="225" y="30" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;ranked.json&lt;br&gt;Prioritized candidate list&lt;br&gt;Scores + verdicts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="45" width="135" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="analyzed.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="ranked.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

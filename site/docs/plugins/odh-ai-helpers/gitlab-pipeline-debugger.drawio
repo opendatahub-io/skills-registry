@@ -2,86 +2,109 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/gitlab-pipeline-debugger&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pipeline URL, job URL,&lt;br&gt;branch name, or pipeline ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="55" width="170" height="100" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/gitlab-pipeline-debugger&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline URL, job URL&lt;br&gt;branch name, pipeline ID&lt;br&gt;or default (current branch)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="30" width="150" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="prereq" value="&lt;b&gt;Prerequisite Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab CLI installed?&lt;br&gt;glab auth status&lt;br&gt;Git remote configured?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="250" y="60" width="155" height="90" as="geometry"/>
+    <mxCell id="prereq" value="&lt;b&gt;Check Prerequisites&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab CLI installed?&lt;br&gt;glab auth status&lt;br&gt;git remote configured?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="215" y="35" width="140" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="parse" value="&lt;b&gt;Parse Input&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pipeline URL &amp;rarr; -R + -p&lt;br&gt;Job URL &amp;rarr; -R + job-id&lt;br&gt;Branch &amp;rarr; -b flag&lt;br&gt;Pipeline ID &amp;rarr; -p flag&lt;br&gt;Default &amp;rarr; current branch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="455" y="40" width="180" height="130" as="geometry"/>
+    <mxCell id="parse" value="&lt;b&gt;Parse &amp; Validate Input&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline URL &#8594; -R + -p&lt;br&gt;job URL &#8594; -R + job-id&lt;br&gt;branch &#8594; -b flag&lt;br&gt;pipeline ID &#8594; -p flag&lt;br&gt;validate IDs numeric&lt;br&gt;validate project path chars" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="390" y="15" width="165" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="status" value="&lt;b&gt;Check Pipeline Status&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab ci get -d&lt;br&gt;Pipeline metadata&lt;br&gt;Job status table&lt;br&gt;Failure reasons" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="685" y="30" width="165" height="110" as="geometry"/>
+    <mxCell id="status" value="&lt;b&gt;Check Pipeline Status&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab ci get -d&lt;br&gt;pipeline metadata&lt;br&gt;(ID, status, ref, user)&lt;br&gt;job status table&lt;br&gt;failure reasons" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="590" y="22" width="165" height="125" as="geometry"/>
     </mxCell>
-    <mxCell id="mr-lookup" value="&lt;b&gt;Find Merge Request&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab mr list -s branch&lt;br&gt;MR title, URL, reviewers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="685" y="175" width="165" height="80" as="geometry"/>
+    <mxCell id="mr-lookup" value="&lt;b&gt;Find Merge Request&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab mr list -s branch&lt;br&gt;MR title, URL, reviewers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="590" y="187" width="145" height="85" as="geometry"/>
     </mxCell>
-    <mxCell id="identify" value="&lt;b&gt;Identify Failed Jobs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Filter by status&lt;br&gt;Extract job IDs/names" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="350" width="145" height="90" as="geometry"/>
+    <mxCell id="identify" value="&lt;b&gt;Identify Failed Jobs&lt;/b&gt;&lt;br&gt;&lt;br&gt;filter by failed status&lt;br&gt;extract job IDs / names" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="790" y="40" width="140" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="trace" value="&lt;b&gt;Retrieve Job Logs&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab ci trace job-id&lt;br&gt;glab ci trace name -p id&lt;br&gt;Full log output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="225" y="340" width="170" height="110" as="geometry"/>
+    <mxCell id="trace" value="&lt;b&gt;Retrieve Job Logs&lt;/b&gt;&lt;br&gt;&lt;br&gt;glab ci trace job-id&lt;br&gt;glab ci trace name -p id&lt;br&gt;full log output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="965" y="30" width="150" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="analyze" value="&lt;b&gt;Analyze Errors&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;Parse log output&lt;br&gt;Identify root cause&lt;br&gt;Match error patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="445" y="340" width="170" height="110" as="geometry"/>
+    <mxCell id="analyze" value="&lt;b&gt;Analyze Errors&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;parse log output&lt;br&gt;identify root cause&lt;br&gt;match error patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="25" width="155" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="diagnosis" value="&lt;b&gt;Diagnosis&lt;/b&gt;&lt;br&gt;&lt;br&gt;Root cause&lt;br&gt;Fix suggestions&lt;br&gt;Remediation steps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="665" y="350" width="155" height="90" as="geometry"/>
+    <mxCell id="diagnosis" value="&lt;b&gt;Diagnosis &amp; Fix&lt;/b&gt;&lt;br&gt;&lt;br&gt;root cause explanation&lt;br&gt;fix suggestions&lt;br&gt;remediation steps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1340" y="35" width="140" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="gitlab" value="&lt;b&gt;GitLab API&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="900" y="195" width="130" height="50" as="geometry"/>
+    <mxCell id="glab-cli" value="&lt;b&gt;glab CLI&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="790" y="330" width="110" height="45" as="geometry"/>
     </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="prereq" parent="1">
+    <mxCell id="gitlab" value="&lt;b&gt;GitLab API&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="965" y="330" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_prereq" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="prereq" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="prereq" target="parse" parent="1">
+    <mxCell id="e_prereq_parse" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="prereq" target="parse" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse" target="status" parent="1">
+    <mxCell id="e_parse_status" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse" target="status" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4" value="optional" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse" target="mr-lookup" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="status" target="identify" parent="1">
+    <mxCell id="e_parse_mrlookup" value="MR context needed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse" target="mr-lookup" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="685" y="280"/>
-          <mxPoint x="102" y="280"/>
+          <mxPoint x="570" y="155"/>
+          <mxPoint x="570" y="229"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="identify" target="trace" parent="1">
+    <mxCell id="e_status_identify" value="failures found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="status" target="identify" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="trace" target="analyze" parent="1">
+    <mxCell id="e_identify_trace" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="identify" target="trace" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analyze" target="diagnosis" parent="1">
+    <mxCell id="e_trace_analyze" value="job log output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="trace" target="analyze" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e9" value="glab ci get" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="status" target="gitlab" parent="1">
+    <mxCell id="e_analyze_diagnosis" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analyze" target="diagnosis" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e10" value="glab ci trace" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="trace" target="gitlab" parent="1">
+    <mxCell id="e_status_glab" value="glab ci get" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.35;entryY=0;entryDx=0;entryDy=0;" edge="1" source="status" target="glab-cli" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="870" y="340"/>
-          <mxPoint x="870" y="230"/>
+          <mxPoint x="780" y="147"/>
+          <mxPoint x="780" y="300"/>
+          <mxPoint x="825" y="300"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e11" value="glab mr list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mr-lookup" target="gitlab" parent="1">
+    <mxCell id="e_trace_glab" value="glab ci trace" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.65;entryY=0;entryDx=0;entryDy=0;" edge="1" source="trace" target="glab-cli" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1040" y="270"/>
+          <mxPoint x="862" y="270"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mrlookup_glab" value="glab mr list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mr-lookup" target="glab-cli" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="662" y="352"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_glab_gitlab" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="glab-cli" target="gitlab" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_prereq_entry_back" value="glab not found / not authed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="prereq" target="entry" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="285" y="0"/>
+          <mxPoint x="105" y="0"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>

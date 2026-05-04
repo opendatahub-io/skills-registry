@@ -6,3 +6,9 @@
 Generate a concise Slack-formatted summary of vLLM backport triage results
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![vllm-slack-summary diagram](vllm-slack-summary.svg)
+</div>
