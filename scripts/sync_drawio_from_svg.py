@@ -21,6 +21,7 @@ import html
 import re
 import sys
 import urllib.parse
+import xml.dom.minidom
 import zlib
 from pathlib import Path
 
@@ -57,9 +58,25 @@ def extract_mxfile_from_svg(svg_content: str) -> str | None:
         return mxfile
     if "mxGraphModel" in svg_content:
         match = re.search(r"(<mxGraphModel.*?</mxGraphModel>)", svg_content, re.DOTALL)
+
         if match:
             return match.group(1)
     return None
+
+
+def _pretty_print_xml(xml_str: str) -> str:
+    """Format XML with indentation, matching the render_drawio.py output style."""
+    try:
+        dom = xml.dom.minidom.parseString(xml_str)
+        pretty = dom.toprettyxml(indent="  ")
+        # Remove the XML declaration line that minidom adds
+        lines = pretty.split("\n")
+        if lines and lines[0].startswith("<?xml"):
+            lines = lines[1:]
+        # Remove blank lines that minidom inserts
+        return "\n".join(line for line in lines if line.strip()) + "\n"
+    except Exception:
+        return xml_str
 
 
 def main():
@@ -88,16 +105,18 @@ def main():
             skipped += 1
             continue
 
+        formatted = _pretty_print_xml(mxfile)
+
         if drawio_path.exists():
             existing = drawio_path.read_text(encoding="utf-8")
-            if existing.strip() == mxfile.strip():
+            if existing.strip() == formatted.strip():
                 skipped += 1
                 continue
 
         if dry_run:
-            print(f"  ~ {svg_path.name} → {drawio_path.name} (would update)")
+            print(f"  ~ {svg_path.name} -> {drawio_path.name} (would update)")
         else:
-            drawio_path.write_text(mxfile, encoding="utf-8")
+            drawio_path.write_text(formatted, encoding="utf-8")
             print(f"  ✓ {svg_path.name} → {drawio_path.name}")
         updated += 1
 
