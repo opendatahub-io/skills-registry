@@ -54,74 +54,78 @@ preflight: |md
   style.stroke-width: 2
 }
 
-# --- MLflow Config ---
+# --- Configuration Container ---
 
-mlflow-config: |md
-  **Configure MLflow**
-  (skip if --skip-mlflow)
-
-  - --tracking-uri flag
-  - or ask user:
-    1. Local server (:5000)
-    2. SQLite file store
-    3. Remote (Databricks)
-  - per-project pin in
-    eval.yaml mlflow.tracking_uri
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
+config: Configure {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
-}
 
-# --- API Keys ---
+  mlflow-config: |md
+    **MLflow Tracking**
+    (skip if --skip-mlflow)
 
-api-keys: |md
-  **Configure API Keys**
+    - --tracking-uri flag
+    - or ask user:
+      1. Local server (:5000)
+      2. SQLite file store
+      3. Remote (Databricks)
+    - per-project pin in
+      eval.yaml mlflow.tracking_uri
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
 
-  - ANTHROPIC_API_KEY
-  - ANTHROPIC_VERTEX_PROJECT_ID
-  - needed for execution +
-    pairwise judges
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
+  api-keys: |md
+    **API Keys**
 
-# --- Runs Dir ---
+    - ANTHROPIC_API_KEY
+    - ANTHROPIC_VERTEX_PROJECT_ID
+    - needed for execution +
+      pairwise judges
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 
-runs-dir: |md
-  **Configure Runs Dir**
+  runs-dir: |md
+    **Runs Directory**
 
-  - AGENT_EVAL_RUNS_DIR
-  - default: eval/runs
-  - --runs-dir override
-  - auto-created by --fix
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
+    - AGENT_EVAL_RUNS_DIR
+    - default: eval/runs
+    - --runs-dir override
+    - auto-created by --fix
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 
-# --- Env Vars Check ---
+  env-vars: |md
+    **Skill Env Vars**
+    (if eval.yaml exists)
 
-env-vars: |md
-  **Check Skill Env Vars**
-  (if eval.yaml exists)
+    - parse execution.env
+    - check $VAR references
+    - warn if unset
+    - e.g. JIRA_SERVER
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 
-  - parse execution.env
-  - check $VAR references
-  - warn if unset
-  - e.g. JIRA_SERVER
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+  mlflow-config -> api-keys
+  api-keys -> runs-dir
+  runs-dir -> env-vars
 }
 
 # --- MLflow Experiment ---
@@ -174,6 +178,18 @@ report: |md
   style.stroke-width: 2
 }
 
+# --- External: MLflow Server ---
+
+mlflow-server: |md
+  **MLflow Server**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
 # --- Callout: check_env.py checks ---
 
 checks-detail: |md
@@ -196,6 +212,38 @@ checks-detail: |md
   style.font-size: 10
 }
 
+# --- Downstream Skills ---
+
+eval-analyze: |md
+  **/eval-analyze**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-dataset: |md
+  **/eval-dataset**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-run: |md
+  **/eval-run**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
 # --- Flow ---
 
 args -> install-deps
@@ -205,12 +253,18 @@ preflight -> report: "all pass" {
   style.stroke-dash: 3
 }
 
-preflight -> mlflow-config: "fixes needed"
-mlflow-config -> api-keys
-api-keys -> runs-dir
-runs-dir -> env-vars
-env-vars -> mlflow-exp
+preflight -> config: "fixes needed"
+config -> mlflow-exp: "eval.yaml"
 mlflow-exp -> verify
+
+config.mlflow-config -> mlflow-server: "connect" {
+  style.stroke-dash: 3
+}
+
+mlflow-exp -> mlflow-server: "create experiment" {
+  style.stroke-dash: 3
+}
+
 verify -> report
 
 # Callout connection
@@ -218,4 +272,15 @@ preflight -> checks-detail {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
+}
+
+# Downstream suggestions
+report -> eval-analyze: "no eval.yaml" {
+  style.stroke-dash: 3
+}
+report -> eval-dataset: "no dataset" {
+  style.stroke-dash: 3
+}
+report -> eval-run: "ready" {
+  style.stroke-dash: 3
 }

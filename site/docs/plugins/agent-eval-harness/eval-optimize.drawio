@@ -2,92 +2,135 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="args" value="&lt;b&gt;/eval-optimize&lt;/b&gt;&lt;br&gt;&lt;br&gt;--config eval.yaml&lt;br&gt;--model &amp;lt;model&amp;gt;&lt;br&gt;--max-iterations 3&lt;br&gt;--run-id &amp;lt;id&amp;gt;&lt;br&gt;--target-judge &amp;lt;name&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="80" y="55" width="150" height="170" as="geometry"/>
+    <mxCell id="args" value="&lt;b&gt;/eval-optimize&lt;/b&gt;&lt;br&gt;&lt;br&gt;--config eval.yaml&lt;br&gt;--model &lt;model&gt;&lt;br&gt;--max-iterations 3&lt;br&gt;--run-id &lt;id&gt;&lt;br&gt;--target-judge &lt;name&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="200" width="140" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="initial-run" value="&lt;b&gt;Initial Eval Run&lt;/b&gt;&lt;br&gt;&lt;i&gt;invokes /eval-run&lt;/i&gt;&lt;br&gt;&lt;br&gt;skip if recent results&lt;br&gt;read summary.yaml&lt;br&gt;all pass → exit early" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="280" y="60" width="170" height="150" as="geometry"/>
+    <mxCell id="initial-run" value="&lt;b&gt;Initial Eval Run&lt;/b&gt;&lt;br&gt;&lt;i&gt;invokes /eval-run&lt;/i&gt;&lt;br&gt;&lt;br&gt;skip if recent results&lt;br&gt;--run-id &lt;id&gt;-iter-0&lt;br&gt;read summary.yaml&lt;br&gt;all pass → exit early" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="205" width="170" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="identify" value="&lt;b&gt;Identify Failures&lt;/b&gt;&lt;br&gt;&lt;br&gt;which judges failed&lt;br&gt;failure rationale&lt;br&gt;systematic vs input-dep&lt;br&gt;check review.yaml&lt;br&gt;build failure map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="500" y="50" width="170" height="170" as="geometry"/>
+    <mxCell id="eval-run" value="&lt;b&gt;/eval-run&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="700" y="100" width="120" height="45" as="geometry"/>
     </mxCell>
-    <mxCell id="analyze" value="&lt;b&gt;Analyze Root Causes&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM agents (Explore)&lt;/i&gt;&lt;br&gt;&lt;br&gt;read SKILL.md&lt;br&gt;read failing transcripts&lt;br&gt;read failing outputs&lt;br&gt;form hypotheses&lt;br&gt;connect to SKILL.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="720" y="50" width="180" height="170" as="geometry"/>
+    <mxCell id="identify" value="&lt;b&gt;Identify Failures&lt;/b&gt;&lt;br&gt;&lt;br&gt;which judges failed&lt;br&gt;failure rationale per case&lt;br&gt;systematic vs input-dep&lt;br&gt;check review.yaml&lt;br&gt;(human feedback priority)&lt;br&gt;build failure map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="200" width="175" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="edit" value="&lt;b&gt;Edit SKILL.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;surgical, targeted fixes&lt;br&gt;ground in evidence&lt;br&gt;explain why, not just what&lt;br&gt;avoid overfitting&lt;br&gt;respect execution mode" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="950" y="50" width="170" height="170" as="geometry"/>
+    <mxCell id="analyze" value="&lt;b&gt;Analyze Root Causes&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM agents (Explore)&lt;/i&gt;&lt;br&gt;&lt;br&gt;read skill's SKILL.md&lt;br&gt;read failing transcripts&lt;br&gt;examine failing outputs&lt;br&gt;form hypotheses&lt;br&gt;connect to SKILL.md sections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="665" y="200" width="175" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="rules" value="&lt;b&gt;Rules&lt;/b&gt;&lt;br&gt;─────────────────────&lt;br&gt;• never broad generic changes&lt;br&gt;• check regressions after edit&lt;br&gt;• stop after max iterations&lt;br&gt;• don&#x27;t modify test cases&lt;br&gt;• don&#x27;t modify eval.yaml&lt;br&gt;• try different approaches" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
-      <mxGeometry x="1190" y="60" width="200" height="160" as="geometry"/>
+    <mxCell id="edit-skill" value="&lt;b&gt;Edit SKILL.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;surgical, targeted fixes&lt;br&gt;ground in judge evidence&lt;br&gt;explain why, not just rules&lt;br&gt;avoid overfitting to one case&lt;br&gt;respect execution mode" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="890" y="200" width="170" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="rerun" value="&lt;b&gt;Re-Run &amp;amp; Verify&lt;/b&gt;&lt;br&gt;&lt;i&gt;invokes /eval-run&lt;/i&gt;&lt;br&gt;&lt;br&gt;--baseline previous iter&lt;br&gt;check fixed failures&lt;br&gt;check regressions&lt;br&gt;score improvement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="950" y="490" width="170" height="150" as="geometry"/>
+    <mxCell id="rerun" value="&lt;b&gt;Re-Run &amp; Verify&lt;/b&gt;&lt;br&gt;&lt;i&gt;invokes /eval-run&lt;/i&gt;&lt;br&gt;&lt;br&gt;--baseline previous iter&lt;br&gt;check targeted fixes passed&lt;br&gt;detect regressions&lt;br&gt;compare aggregate scores" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1110" y="205" width="170" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="regressions" value="&lt;b&gt;Handle Regressions&lt;/b&gt;&lt;br&gt;&lt;br&gt;assess severity&lt;br&gt;minor → continue&lt;br&gt;major → revert, retry&lt;br&gt;stuck → report to user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="720" y="500" width="170" height="140" as="geometry"/>
+    <mxCell id="regressions" value="&lt;b&gt;Handle Regressions&lt;/b&gt;&lt;br&gt;&lt;br&gt;assess severity&lt;br&gt;minor → net positive, continue&lt;br&gt;major → revert edit, retry&lt;br&gt;stuck → report to user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1330" y="205" width="165" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="decision" value="&lt;b&gt;Iterate?&lt;/b&gt;&lt;br&gt;&lt;br&gt;failures remain?&lt;br&gt;iterations &amp;lt; max?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="510" y="510" width="140" height="110" as="geometry"/>
+    <mxCell id="iterate" value="&lt;b&gt;Iterate?&lt;/b&gt;&lt;br&gt;&lt;br&gt;failures remain?&lt;br&gt;iterations &lt; max?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=40;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1545" y="230" width="130" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;edits + fixes summary&lt;br&gt;iteration count&lt;br&gt;final scores&lt;br&gt;suggest /eval-review&lt;br&gt;suggest /eval-mlflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="280" y="490" width="170" height="150" as="geometry"/>
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;edits applied + fixes summary&lt;br&gt;iteration count&lt;br&gt;final summary.yaml scores&lt;br&gt;persistent failures explained&lt;br&gt;&lt;br&gt;&lt;i&gt;suggest /eval-review&lt;/i&gt;&lt;br&gt;&lt;i&gt;suggest /eval-mlflow&lt;/i&gt;&lt;br&gt;&lt;i&gt;suggest /eval-dataset&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1350" y="460" width="175" height="165" as="geometry"/>
     </mxCell>
-    <mxCell id="e_args_initialrun" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="args" target="initial-run" parent="1">
+    <mxCell id="rules" value="&lt;b&gt;Rules&lt;/b&gt;&lt;br&gt;─────────────────────&lt;br&gt;• never broad generic changes&lt;br&gt;• check regressions after every edit&lt;br&gt;• stop after max iterations&lt;br&gt;• don't modify test cases or judges&lt;br&gt;• don't modify eval.yaml&lt;br&gt;• try different approaches" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="890" y="430" width="200" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="failure-map" value="&lt;b&gt;failure map&lt;/b&gt;&lt;br&gt;─────────────────────&lt;br&gt;judge_name:&lt;br&gt;&amp;nbsp;&amp;nbsp;case-001: rationale&lt;br&gt;&amp;nbsp;&amp;nbsp;case-003: rationale&lt;br&gt;human_review:&lt;br&gt;&amp;nbsp;&amp;nbsp;case-002: user comment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="440" y="430" width="195" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_args_initial" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="initial-run" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_initialrun_identify" value="&lt;i style=&#x27;font-size:11px&#x27;&gt;failures found&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.4;" edge="1" source="initial-run" target="identify" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_initialrun_report" value="&lt;i style=&#x27;font-size:11px&#x27;&gt;all pass&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="initial-run" target="report" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_identify_analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="identify" target="analyze" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_analyze_edit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="analyze" target="edit" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_edit_rerun" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="edit" target="rerun" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_rerun_regressions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="rerun" target="regressions" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_regressions_decision" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="regressions" target="decision" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_decision_report" value="&lt;i style=&#x27;font-size:11px&#x27;&gt;no → done&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="decision" target="report" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_decision_identify" value="&lt;i style=&#x27;font-size:11px&#x27;&gt;yes → next iteration&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;entryX=0;entryY=0.7;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="decision" target="identify" parent="1">
+    <mxCell id="e_initial_evalrun" value="invoke" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="initial-run" target="eval-run" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="580" y="400"/>
-          <mxPoint x="480" y="400"/>
-          <mxPoint x="480" y="169"/>
+          <mxPoint x="350" y="160"/>
+          <mxPoint x="660" y="160"/>
+          <mxPoint x="660" y="122"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_regressions_edit" value="&lt;i style=&#x27;font-size:11px&#x27;&gt;major → revert + retry&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;entryX=1;entryY=0.7;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="regressions" target="edit" parent="1">
+    <mxCell id="e_initial_report" value="all pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.15;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" source="initial-run" target="report" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="805" y="370"/>
-          <mxPoint x="1160" y="370"/>
-          <mxPoint x="1160" y="169"/>
+          <mxPoint x="250" y="395"/>
+          <mxPoint x="1350" y="395"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_edit_rules" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="edit" target="rules" parent="1">
+    <mxCell id="e_initial_identify" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="initial-run" target="identify" parent="1">
       <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_identify_analyze" value="failure map" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="identify" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_analyze_edit" value="hypotheses" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analyze" target="edit-skill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_edit_rerun" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="edit-skill" target="rerun" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rerun_evalrun" value="invoke --baseline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="rerun" target="eval-run" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1195" y="77"/>
+          <mxPoint x="820" y="77"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rerun_regressions" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rerun" target="regressions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_regressions_iterate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="regressions" target="iterate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_regressions_edit_back" value="major: revert + retry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="regressions" target="edit-skill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1412" y="390"/>
+          <mxPoint x="975" y="390"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_iterate_identify_back" value="yes: next iteration" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="iterate" target="identify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1710" y="275"/>
+          <mxPoint x="1710" y="770"/>
+          <mxPoint x="415" y="770"/>
+          <mxPoint x="415" y="277"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_iterate_report" value="no: done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="iterate" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1610" y="390"/>
+          <mxPoint x="1437" y="390"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_edit_rules" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="edit-skill" target="rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="975" y="395"/>
+          <mxPoint x="990" y="395"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_identify_failuremap" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="identify" target="failure-map" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="527" y="395"/>
+          <mxPoint x="537" y="395"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>
