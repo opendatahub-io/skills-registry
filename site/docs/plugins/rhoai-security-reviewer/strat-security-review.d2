@@ -1,461 +1,350 @@
 direction: right
 
-# --- Global styles ---
-style: {
-  border-radius: 8
-  text-transform: none
-  fill: transparent
-}
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
 
-# ──────────────────────────────────────────
-# ENTRY
-# ──────────────────────────────────────────
+# --- Entry ---
 
 entry: |md
-  ### /strat-security-review
-  - Accepts RHAISTRAT Jira key
-  - Optional `--force` flag
-  - Orchestrator — does NOT analyze
+  **/strat-security-review**
+
+  - RHAISTRAT-NNN
+  - --force (overwrite)
 | {
-  style: {
-    fill: "#E8F5E9"
-    stroke: "#2E7D32"
-    border-radius: 8
-    font-size: 14
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ──────────────────────────────────────────
-# PHASE 1: Threat Surface Extraction
-# ──────────────────────────────────────────
+# --- External: Jira ---
 
-phase1: Phase 1 — Threat Surface Extraction {
-  style: {
-    fill: "#FAFAFA"
-    stroke: "#9E9E9E"
-    border-radius: 10
-    font-size: 13
-  }
-
-  fetch: |md
-    ### Fetch STRAT
-    - Call Jira MCP for issue fields
-    - Read summary, description, NFRs
-    - Extract Technical Approach section
-  | {
-    style: {
-      fill: "#E3F2FD"
-      stroke: "#1565C0"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
-  }
-
-  idempotency: |md
-    ### Idempotency Check
-    - Check if review already exists
-    - Stop if exists AND no `--force`
-    - Proceed if `--force` or new
-  | {
-    style: {
-      fill: "#FFF8E1"
-      stroke: "#F9A825"
-      border-radius: 8
-      font-size: 13
-    }
-  }
-
-  tier: |md
-    ### Determine Tier
-    - Count security surface hints
-    - Apply first matching rule
-    - Deep / Standard / Light
-  | {
-    style: {
-      fill: "#FFF8E1"
-      stroke: "#F9A825"
-      border-radius: 8
-      font-size: 13
-    }
-  }
-
-  extract: |md
-    ### Extract Threat Surface
-    - Mechanical inventory of new surfaces
-    - Endpoints, services, data flows
-    - CRDs, RBAC, trust boundaries
-    - Agent/MCP surfaces
-  | {
-    style: {
-      fill: "#F3E5F5"
-      stroke: "#7B1FA2"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
-  }
-
-  shortcircuit: |md
-    ### Light Short-Circuit?
-    - Light tier + zero items?
-    - Skip to PASS verdict
-  | {
-    style: {
-      fill: "#FFF8E1"
-      stroke: "#F9A825"
-      border-radius: 8
-      font-size: 13
-    }
-  }
-
-  fetch -> idempotency
-  idempotency -> tier
-  tier -> extract
-  extract -> shortcircuit
+jira: |md
+  **Jira**
+  (Atlassian MCP)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
-# ──────────────────────────────────────────
-# PHASE 2: Independent Reviewers
-# ──────────────────────────────────────────
+# --- Phase 1: Threat Surface Extraction ---
 
-phase2: Phase 2 — Spawn Reviewers {
-  style: {
-    fill: "#FAFAFA"
-    stroke: "#9E9E9E"
-    border-radius: 10
-    font-size: 13
-  }
+fetch: |md
+  **Fetch STRAT**
+
+  - mcp__atlassian__getJiraIssue
+  - summary, description,
+    priority, labels, comments
+  - technical approach, NFRs,
+    affected components
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+check-existing: |md
+  **Idempotency Check**
+
+  - review already exists?
+  - stop if no --force
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+stop: |md
+  **Stop**
+
+  - review exists
+  - no --force flag
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+tier: |md
+  **Determine Tier**
+
+  - Deep: 3+ surface hints,
+    auth+crypto, agentic/MCP
+  - Standard: 1-2 hints,
+    M effort
+  - Light: none-apparent,
+    S effort, UI/docs only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+extract: |md
+  **Extract Threat Surface**
+  (mechanical inventory)
+
+  - endpoints / APIs
+  - services / containers
+  - data flows, credentials
+  - CRDs, trust boundaries
+  - RBAC, external deps
+  - agent / MCP surfaces
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 2: Spawn Reviewers ---
+
+reviewers: Spawn Reviewers (parallel, isolated) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
   r1: |md
-    ### Reviewer 1
-    - Isolated context (fork)
-    - Reads threat surface
-    - Independent analysis
+    **Reviewer 1**
+    context: fork
+
+    - independent analysis
+    - catalog pattern check
+    - risk + NFR findings
   | {
-    style: {
-      fill: "#E3F2FD"
-      stroke: "#1565C0"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   r2: |md
-    ### Reviewer 2
-    - Isolated context (fork)
-    - Reads threat surface
-    - Independent analysis
+    **Reviewer 2**
+    context: fork
+
+    - independent analysis
+    - catalog pattern check
+    - risk + NFR findings
   | {
-    style: {
-      fill: "#E3F2FD"
-      stroke: "#1565C0"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   r3: |md
-    ### Reviewer 3
-    - Isolated context (fork)
-    - Reads threat surface
-    - Independent analysis
+    **Reviewer 3**
+    context: fork
+
+    - independent analysis
+    - catalog pattern check
+    - risk + NFR findings
   | {
-    style: {
-      fill: "#E3F2FD"
-      stroke: "#1565C0"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 }
 
-# ──────────────────────────────────────────
-# PHASE 3: Consensus Synthesis
-# ──────────────────────────────────────────
+# --- External: /security-reviewer ---
 
-phase3: Phase 3 — Consensus Synthesis {
-  style: {
-    fill: "#FAFAFA"
-    stroke: "#9E9E9E"
-    border-radius: 10
-    font-size: 13
-  }
-
-  collect: |md
-    ### Collect Findings
-    - Read all 3 reviewer files
-    - Extract risks, NFR gaps
-    - Extract constraint violations
-  | {
-    style: {
-      fill: "#F3E5F5"
-      stroke: "#7B1FA2"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
-  }
-
-  cluster: |md
-    ### Cluster Matching
-    - Match on catalog pattern ID
-    - Match on threat surface item
-    - Match on category + STRAT section
-    - 2-of-3 criteria required
-  | {
-    style: {
-      fill: "#F3E5F5"
-      stroke: "#7B1FA2"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
-  }
-
-  confidence: |md
-    ### Confidence & Severity
-    - 3/3 → HIGH confidence
-    - 2/3 → MEDIUM confidence
-    - 1/3 → LOW confidence
-    - Majority vote on severity
-  | {
-    style: {
-      fill: "#F3E5F5"
-      stroke: "#7B1FA2"
-      border-radius: 8
-      font-size: 13
-      double-border: true
-    }
-  }
-
-  verdict: |md
-    ### Resolve Verdict
-    - Critical + HIGH/MED → FAIL
-    - Critical + LOW → CONCERNS
-    - High/Medium any → CONCERNS
-    - 5+ NFR gaps → CONCERNS
-    - Else → PASS
-  | {
-    style: {
-      fill: "#FFF8E1"
-      stroke: "#F9A825"
-      border-radius: 8
-      font-size: 13
-    }
-  }
-
-  collect -> cluster
-  cluster -> confidence
-  confidence -> verdict
-}
-
-# ──────────────────────────────────────────
-# PHASE 4: Output
-# ──────────────────────────────────────────
-
-phase4: Phase 4 — Write Output {
-  style: {
-    fill: "#FAFAFA"
-    stroke: "#9E9E9E"
-    border-radius: 10
-    font-size: 13
-  }
-
-  review: |md
-    ### Full Review (File A)
-    - Threat surface summary
-    - Consensus findings
-    - Confidence tags
-  | {
-    style: {
-      fill: "#E8F5E9"
-      stroke: "#2E7D32"
-      border-radius: 8
-      font-size: 13
-    }
-  }
-
-  reqs: |md
-    ### Requirements (File B)
-    - Required amendments
-    - Human-review findings
-    - NFR additions
-  | {
-    style: {
-      fill: "#E8F5E9"
-      stroke: "#2E7D32"
-      border-radius: 8
-      font-size: 13
-    }
-  }
-
-  review -> reqs
-}
-
-# ──────────────────────────────────────────
-# EXTERNAL: Jira
-# ──────────────────────────────────────────
-
-jira: |md
-  ### Jira (RHAISTRAT)
-  - Attach requirements file
-  - Add verdict label
-  - Idempotency gate
+security-reviewer: |md
+  **/security-reviewer**
+  (invoked 3x, isolated)
 | {
-  style: {
-    fill: "#ECEFF1"
-    stroke: "#546E7F"
-    stroke-dash: 5
-    border-radius: 8
-    font-size: 13
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
-# ──────────────────────────────────────────
-# EXTERNAL: security-reviewer skill
-# ──────────────────────────────────────────
+# --- Phase 3: Consensus Synthesis ---
 
-secskill: |md
-  ### /security-reviewer
-  - Independent sub-skill
-  - Catalog pattern matching
-  - Creative exploration
+collect: |md
+  **Collect Findings**
+
+  - read all 3 reviewer files
+  - extract risks, NFR gaps
+  - catalog pattern IDs
+  - constraint violations
 | {
-  style: {
-    fill: "#ECEFF1"
-    stroke: "#546E7F"
-    stroke-dash: 5
-    border-radius: 8
-    font-size: 13
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ──────────────────────────────────────────
-# ARTIFACTS
-# ──────────────────────────────────────────
+cluster: |md
+  **Cluster & Match**
 
-artifacts: |md
-  ### Intermediate Files
-  - threat-surface.md
-  - reviewer-1.md
-  - reviewer-2.md
-  - reviewer-3.md
-  - Preserved for audit
+  - match on 2-of-3 criteria:
+    pattern ID, threat surface
+    item, category + section
+  - err toward separate findings
 | {
-  style: {
-    fill: "#F5F5F5"
-    stroke: "#BDBDBD"
-    border-radius: 8
-    font-size: 13
-    stroke-dash: 3
-  }
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
 }
 
-# ──────────────────────────────────────────
-# STOP node (idempotency)
-# ──────────────────────────────────────────
+confidence: |md
+  **Assign Confidence**
 
-stop: |md
-  ### Stop
-  - Review already exists
-  - No `--force` flag
+  - 3/3 reviewers: HIGH
+  - 2/3 reviewers: MEDIUM
+  - 1/3 reviewers: LOW
+  - severity: majority vote
+    or median if all differ
 | {
-  style: {
-    fill: "#FFEBEE"
-    stroke: "#C62828"
-    border-radius: 8
-    font-size: 13
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ══════════════════════════════════════════
-# EDGES — main flow
-# ══════════════════════════════════════════
+verdict: |md
+  **Resolve Verdict**
 
-entry -> phase1.fetch
+  - Critical + HIGH/MED: FAIL
+  - Critical + LOW: CONCERNS
+  - High/Medium any: CONCERNS
+  - 5+ NFR gaps: CONCERNS
+  - else: PASS
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-# Idempotency branch
-phase1.idempotency -> stop: exists, no --force {
-  style.stroke: "#C62828"
+# --- Phase 4: Output ---
+
+write-output: |md
+  **Write Artifacts**
+
+  - full review .md
+    (consensus + confidence)
+  - requirements .md
+    (amendments, NFRs)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+attach: |md
+  **Attach & Label**
+
+  - attach requirements
+    to Jira ticket
+  - add verdict label:
+    strat-security-pass /
+    concerns / fail
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Light Tier Short-Circuit ---
+
+light-pass: |md
+  **Light PASS**
+  (short-circuit)
+
+  - compact verdict
+  - no reviewers spawned
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: Intermediate Files ---
+
+artifacts-callout: |md
+  artifacts/security-reviews/
+    STRAT-NNN-threat-surface.md
+    STRAT-NNN-reviewer-1.md
+    STRAT-NNN-reviewer-2.md
+    STRAT-NNN-reviewer-3.md
+  artifacts/security-requirements/
+    STRAT-NNN-security-requirements.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Edges: Phase 1 ---
+
+entry -> fetch
+fetch -> jira: {
+  style.stroke-dash: 3
+}
+fetch -> check-existing: "STRAT content"
+check-existing -> stop: "exists, no --force"
+check-existing -> tier: "new or --force"
+tier -> extract
+extract -> reviewers: "Standard / Deep"
+extract -> light-pass: "Light +\nzero threats"
+
+# --- Edges: Phase 2 ---
+
+reviewers.r1 -> security-reviewer: {
+  style.stroke-dash: 3
+}
+reviewers.r2 -> security-reviewer: {
+  style.stroke-dash: 3
+}
+reviewers.r3 -> security-reviewer: {
   style.stroke-dash: 3
 }
 
-# Light short-circuit
-phase1.shortcircuit -> phase4.review: Light + zero items {
-  style.stroke: "#2E7D32"
+reviewers -> collect: "reviewer-1/2/3.md"
+
+# --- Edges: Phase 3 ---
+
+collect -> cluster
+cluster -> confidence: "finding clusters"
+confidence -> verdict
+
+# --- Edges: Phase 4 ---
+
+verdict -> write-output
+write-output -> attach: "review.md +\nrequirements.md"
+attach -> jira: {
   style.stroke-dash: 3
 }
 
-# Normal flow to Phase 2
-phase1.shortcircuit -> phase2.r1: Standard/Deep {
-  style.stroke: "#1565C0"
-}
-phase1.shortcircuit -> phase2.r2: Standard/Deep {
-  style.stroke: "#1565C0"
-}
-phase1.shortcircuit -> phase2.r3: Standard/Deep {
-  style.stroke: "#1565C0"
-}
+light-pass -> attach
 
-# Reviewers invoke external skill
-phase2.r1 -> secskill: Skill tool {
-  style.stroke: "#546E7F"
-  style.stroke-dash: 3
-}
-phase2.r2 -> secskill: Skill tool {
-  style.stroke: "#546E7F"
-  style.stroke-dash: 3
-}
-phase2.r3 -> secskill: Skill tool {
-  style.stroke: "#546E7F"
-  style.stroke-dash: 3
-}
+# --- Callout edge ---
 
-# Reviewers write intermediate artifacts
-phase2.r1 -> artifacts: writes reviewer-1.md {
-  style.stroke: "#BDBDBD"
-  style.stroke-dash: 3
-}
-phase2.r2 -> artifacts: writes reviewer-2.md {
-  style.stroke: "#BDBDBD"
-  style.stroke-dash: 3
-}
-phase2.r3 -> artifacts: writes reviewer-3.md {
-  style.stroke: "#BDBDBD"
-  style.stroke-dash: 3
-}
-
-# Phase 1 writes threat surface
-phase1.extract -> artifacts: writes threat-surface.md {
-  style.stroke: "#BDBDBD"
-  style.stroke-dash: 3
-}
-
-# Reviewers to synthesis
-phase2.r1 -> phase3.collect: complete {
-  style.stroke: "#1565C0"
-}
-phase2.r2 -> phase3.collect: complete {
-  style.stroke: "#1565C0"
-}
-phase2.r3 -> phase3.collect: complete {
-  style.stroke: "#1565C0"
-}
-
-# Synthesis to output
-phase3.verdict -> phase4.review
-
-# Output to Jira
-phase4.reqs -> jira: attach + label {
-  style.stroke: "#546E7F"
-}
-
-# Jira is also the source
-entry -> jira: fetch STRAT {
-  style.stroke: "#546E7F"
-  style.stroke-dash: 3
+write-output -> artifacts-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

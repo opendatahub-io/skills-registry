@@ -2,116 +2,125 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;Parse Arguments&lt;/b&gt;&lt;br&gt;&lt;br&gt;STRAT key&lt;br&gt;--reviewer N&lt;br&gt;--threat-surface&lt;br&gt;--tier light|std|deep" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="100" width="150" height="130" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;security-reviewer&lt;/b&gt;&lt;br&gt;&lt;br&gt;STRAT key (RHAISTRAT-NNN)&lt;br&gt;--reviewer N (1, 2, or 3)&lt;br&gt;--threat-surface path&lt;br&gt;--tier light/standard/deep" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="195" width="150" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="read-threat" value="&lt;b&gt;Read Threat Surface&lt;/b&gt;&lt;br&gt;&lt;br&gt;Structured inventory file&lt;br&gt;Endpoints, services, data flows&lt;br&gt;Credentials, CRDs, boundaries&lt;br&gt;RBAC, agent/MCP surfaces" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="230" y="100" width="165" height="130" as="geometry"/>
+    <mxCell id="read-threat" value="&lt;b&gt;Read Threat Surface&lt;/b&gt;&lt;br&gt;&lt;br&gt;structured inventory file&lt;br&gt;endpoints, services, data flows&lt;br&gt;credentials, CRDs, trust boundaries&lt;br&gt;RBAC changes, agent/MCP surfaces" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="195" width="175" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="fetch-strat" value="&lt;b&gt;Fetch STRAT&lt;/b&gt;&lt;br&gt;&lt;br&gt;mcp__atlassian__getJiraIssue&lt;br&gt;summary, description, priority&lt;br&gt;labels, status, comment&lt;br&gt;Response in markdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;shadow=1;" vertex="1" parent="1">
-      <mxGeometry x="445" y="100" width="170" height="130" as="geometry"/>
+    <mxCell id="fetch-strat" value="&lt;b&gt;Fetch STRAT from Jira&lt;/b&gt;&lt;br&gt;&lt;i&gt;MCP call&lt;/i&gt;&lt;br&gt;&lt;br&gt;mcp__atlassian__getJiraIssue&lt;br&gt;summary, description, priority&lt;br&gt;labels, status, comments&lt;br&gt;full STRAT content in markdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="455" y="185" width="185" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="485" y="15" width="90" height="45" as="geometry"/>
+    <mxCell id="jira" value="&lt;b&gt;Jira (Atlassian MCP)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="345" y="100" width="130" height="45" as="geometry"/>
     </mxCell>
-    <mxCell id="tier-check" value="&lt;b&gt;Tier Check&lt;/b&gt;" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;strokeWidth=2;verticalAlign=middle;fontSize=11;arcSize=10;" vertex="1" parent="1">
-      <mxGeometry x="665" y="135" width="100" height="60" as="geometry"/>
+    <mxCell id="read-arch" value="&lt;b&gt;Read Architecture Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;PLATFORM.md overview&lt;br&gt;component-specific files&lt;br&gt;existing security controls&lt;br&gt;.context/architecture-context/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="690" y="195" width="175" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="read-arch" value="&lt;b&gt;Read Arch Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;PLATFORM.md overview&lt;br&gt;Component-specific files&lt;br&gt;Existing security controls&lt;br&gt;.context/architecture-context/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="815" y="100" width="170" height="130" as="geometry"/>
+    <mxCell id="phase-a" value="&lt;b&gt;Phase A: Discovery&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="915" y="160" width="385" height="235" as="geometry"/>
     </mxCell>
-    <mxCell id="phase-a" value="&lt;b&gt;Phase A — Discovery&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=13;fontStyle=1;arcSize=8;" vertex="1" parent="1">
-      <mxGeometry x="30" y="310" width="460" height="200" as="geometry"/>
+    <mxCell id="catalog" value="&lt;b&gt;A.1 Risk Pattern Catalog&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;check ALL 39 patterns against&lt;br&gt;threat surface inventory&lt;br&gt;APPLICABLE or NOT-APPLICABLE&lt;br&gt;10 categories: AUTH, DATA,&lt;br&gt;CRYPTO, NET, SUPPLY, INFRA,&lt;br&gt;TENANT, AGENT, MCP, UPSTREAM&lt;br&gt;cite threat surface items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase-a">
+      <mxGeometry x="15" y="35" width="170" height="185" as="geometry"/>
     </mxCell>
-    <mxCell id="catalog" value="&lt;b&gt;A.1 Risk Pattern Catalog&lt;/b&gt;&lt;br&gt;&lt;br&gt;Check ALL 39 patterns&lt;br&gt;APPLICABLE / NOT-APPLICABLE&lt;br&gt;AUTH, DATA, CRYPTO, NET,&lt;br&gt;SUPPLY, INFRA, TENANT,&lt;br&gt;AGENT, MCP, UPSTREAM&lt;br&gt;Cite threat surface + STRAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="phase-a">
-      <mxGeometry x="15" y="40" width="200" height="145" as="geometry"/>
+    <mxCell id="creative" value="&lt;b&gt;A.2 Creative Exploration&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;cross-component attack chains&lt;br&gt;novel attack surfaces&lt;br&gt;emergent combination risks&lt;br&gt;unvalidated assumptions&lt;br&gt;choices blocking future controls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase-a">
+      <mxGeometry x="205" y="35" width="165" height="160" as="geometry"/>
     </mxCell>
-    <mxCell id="creative" value="&lt;b&gt;A.2 Creative Exploration&lt;/b&gt;&lt;br&gt;&lt;br&gt;Cross-component attack chains&lt;br&gt;Novel attack surfaces&lt;br&gt;Emergent combination risks&lt;br&gt;Unvalidated assumptions&lt;br&gt;Choices blocking future controls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="phase-a">
-      <mxGeometry x="245" y="40" width="200" height="145" as="geometry"/>
+    <mxCell id="phase-b" value="&lt;b&gt;Phase B: Filter and Classify&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1350" y="130" width="580" height="295" as="geometry"/>
     </mxCell>
-    <mxCell id="phase-b" value="&lt;b&gt;Phase B — Filter &amp;amp; Classify&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#4527a0;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=13;fontStyle=1;arcSize=8;" vertex="1" parent="1">
-      <mxGeometry x="540" y="310" width="680" height="200" as="geometry"/>
+    <mxCell id="relevance-gate" value="&lt;b&gt;B.1 Relevance Gate&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;what specific STRAT content&lt;br&gt;creates this concern?&lt;br&gt;already addressed by existing&lt;br&gt;security infrastructure?&lt;br&gt;DROP if cannot answer both" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase-b">
+      <mxGeometry x="15" y="35" width="165" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="relevance-gate" value="&lt;b&gt;B.1 Relevance Gate&lt;/b&gt;&lt;br&gt;&lt;br&gt;What STRAT content&lt;br&gt;creates this concern?&lt;br&gt;Already addressed by&lt;br&gt;existing infrastructure?&lt;br&gt;DROP if not specific" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="phase-b">
-      <mxGeometry x="15" y="40" width="165" height="145" as="geometry"/>
+    <mxCell id="severity-tree" value="&lt;b&gt;B.2 Severity Decision Tree&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM classification&lt;/i&gt;&lt;br&gt;&lt;br&gt;Critical: no auth, no isolation,&lt;br&gt;lethal trifecta, irreversible arch&lt;br&gt;High: auth bypass, insecure creds,&lt;br&gt;cluster RBAC, vulnerable upstream&lt;br&gt;Medium: real concern, below High&lt;br&gt;NFR Gap: missing spec, not flaw" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase-b">
+      <mxGeometry x="200" y="35" width="175" height="175" as="geometry"/>
     </mxCell>
-    <mxCell id="gate-decision" value="&lt;b&gt;Pass /&lt;br&gt;Drop&lt;/b&gt;" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;strokeWidth=2;verticalAlign=middle;fontSize=10;" vertex="1" parent="phase-b">
-      <mxGeometry x="210" y="80" width="80" height="55" as="geometry"/>
+    <mxCell id="org-constraints" value="&lt;b&gt;B.3 Org Constraints&lt;/b&gt;&lt;br&gt;&lt;br&gt;FIPS 140-3 compliance&lt;br&gt;TLS profile compliance (ML-KEM)&lt;br&gt;OpenShift Gateway API only&lt;br&gt;approved auth patterns only&lt;br&gt;namespace-scoped RBAC&lt;br&gt;image provenance&lt;br&gt;upstream-first policy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase-b">
+      <mxGeometry x="395" y="35" width="170" height="185" as="geometry"/>
     </mxCell>
-    <mxCell id="severity-tree" value="&lt;b&gt;B.2 Severity Tree&lt;/b&gt;&lt;br&gt;&lt;br&gt;Critical: no auth, no isolation,&lt;br&gt;lethal trifecta, irreversible&lt;br&gt;High: bypass, insecure creds&lt;br&gt;Medium: real concern&lt;br&gt;NFR Gap: missing spec" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;shadow=1;" vertex="1" parent="phase-b">
-      <mxGeometry x="320" y="40" width="160" height="145" as="geometry"/>
+    <mxCell id="dropped" value="&lt;b&gt;Dropped Findings&lt;/b&gt;&lt;br&gt;recorded with reason" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1395" y="470" width="130" height="55" as="geometry"/>
     </mxCell>
-    <mxCell id="org-constraints" value="&lt;b&gt;B.3 Org Constraints&lt;/b&gt;&lt;br&gt;&lt;br&gt;FIPS 140-3 compliance&lt;br&gt;TLS profile compliance&lt;br&gt;OpenShift Gateway API&lt;br&gt;Approved auth patterns&lt;br&gt;Namespace-scoped RBAC&lt;br&gt;Image provenance&lt;br&gt;Upstream-first policy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=1.5;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="phase-b">
-      <mxGeometry x="510" y="40" width="155" height="145" as="geometry"/>
+    <mxCell id="output-node" value="&lt;b&gt;Write Review File&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/security-reviews/&lt;br&gt;catalog check results (39)&lt;br&gt;creative findings&lt;br&gt;relevance gate pass/drop&lt;br&gt;security risks with severity&lt;br&gt;NFR gaps, org violations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1980" y="190" width="175" height="170" as="geometry"/>
     </mxCell>
-    <mxCell id="dropped" value="&lt;b&gt;Dropped Findings&lt;/b&gt;&lt;br&gt;Recorded with reason" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#efebe9;strokeColor=#795548;strokeWidth=1.5;arcSize=8;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="770" y="560" width="130" height="55" as="geometry"/>
+    <mxCell id="catalog-patterns" value="39 Risk Patterns&lt;br&gt;────────────────────&lt;br&gt;AUTH-01..06     (6)&lt;br&gt;DATA-01..04     (4)&lt;br&gt;CRYPTO-01..04   (4)&lt;br&gt;NET-01..03      (3)&lt;br&gt;SUPPLY-01..04   (4)&lt;br&gt;INFRA-01..03    (3)&lt;br&gt;TENANT-01..03   (3)&lt;br&gt;AGENT-01..05    (5)&lt;br&gt;MCP-01..04      (4)&lt;br&gt;UPSTREAM-01..04 (3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="920" y="445" width="195" height="200" as="geometry"/>
     </mxCell>
-    <mxCell id="write-output" value="&lt;b&gt;Write Review File&lt;/b&gt;&lt;br&gt;&lt;br&gt;security-reviews/&lt;br&gt;&amp;lt;STRAT&amp;gt;-reviewer-&amp;lt;N&amp;gt;.md&lt;br&gt;Catalog results (39 patterns)&lt;br&gt;Creative findings&lt;br&gt;Relevance gate pass/drop&lt;br&gt;Security risks + severity&lt;br&gt;NFR gaps + org violations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="1260" y="350" width="170" height="155" as="geometry"/>
+    <mxCell id="output-format" value="STRAT-reviewer-N.md&lt;br&gt;────────────────────&lt;br&gt;strat_key: RHAISTRAT-NNN&lt;br&gt;reviewer: N&lt;br&gt;finding_count:&lt;br&gt;  security_risks: N&lt;br&gt;  nfr_gaps: N&lt;br&gt;  dropped: N&lt;br&gt;────────────────────&lt;br&gt;Catalog Check Results&lt;br&gt;Creative Exploration&lt;br&gt;Relevance Gate Results&lt;br&gt;Security Risks (RISK-001..)&lt;br&gt;NFR Gaps&lt;br&gt;Org Constraint Violations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1965" y="410" width="205" height="260" as="geometry"/>
     </mxCell>
-    <mxCell id="e_entry_readthreat" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-threat" parent="1">
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-threat" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_readthreat_fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-threat" target="fetch-strat" parent="1">
+    <mxCell id="e2" value="threat surface
+inventory" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-threat" target="fetch-strat" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_fetch_jira" value="MCP call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#e65100;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="fetch-strat" target="jira" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_fetch_tier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-strat" target="tier-check" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_tier_readarch" value="standard / deep" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="tier-check" target="read-arch" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_tier_catalog" value="light (skip arch)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="tier-check" target="catalog" parent="1">
+    <mxCell id="e3" value="MCP call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-strat" target="jira" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="715" y="270"/>
-          <mxPoint x="110" y="270"/>
+          <mxPoint x="455" y="122"/>
+          <mxPoint x="475" y="122"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_readarch_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="read-arch" target="catalog" parent="1">
+    <mxCell id="e4" value="standard / deep" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-strat" target="read-arch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="light (skip arch)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" source="fetch-strat" target="phase-a" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="900" y="270"/>
-          <mxPoint x="110" y="270"/>
+          <mxPoint x="547" y="70"/>
+          <mxPoint x="915" y="70"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_catalog_creative" value="after all 39 patterns" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="catalog" target="creative" parent="1">
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-arch" target="phase-a" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="890" y="260"/>
+          <mxPoint x="890" y="277"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="after all 39 patterns" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="catalog" target="creative" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_creative_relevancegate" value="all findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="creative" target="relevance-gate" parent="1">
+    <mxCell id="e8" value="findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="phase-a" target="phase-b" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_relevancegate_gatedecision" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="relevance-gate" target="gate-decision" parent="1">
+    <mxCell id="e9" value="passed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="relevance-gate" target="severity-tree" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_gatedecision_severity" value="passed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gate-decision" target="severity-tree" parent="1">
+    <mxCell id="e10" value="dropped" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="relevance-gate" target="dropped" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_gatedecision_dropped" value="dropped" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#795548;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gate-decision" target="dropped" parent="1">
+    <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="severity-tree" target="org-constraints" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_severity_org" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="severity-tree" target="org-constraints" parent="1">
+    <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="phase-b" target="output-node" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_org_output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="org-constraints" target="write-output" parent="1">
+    <mxCell id="e_callout1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="catalog" target="catalog-patterns" parent="1">
       <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_callout2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output-node" target="output-format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2067" y="390"/>
+          <mxPoint x="2067" y="410"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>

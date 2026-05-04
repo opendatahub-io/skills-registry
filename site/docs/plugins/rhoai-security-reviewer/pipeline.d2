@@ -5,28 +5,34 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
+# --- Entry / Orchestrator ---
+
 strat-security-review: |md
   **/strat-security-review**
 
-  - Extract threat surface
-  - Spawn 3 reviewers
-  - Synthesize consensus
-  - PASS / CONCERNS / FAIL
+  - fetch STRAT from Jira, check idempotency
+  - determine review tier (light/standard/deep)
+  - extract threat surface inventory mechanically
+  - spawn 3 independent reviewers (parallel, isolated)
+  - synthesize consensus with confidence tagging
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
 }
+
+# --- Sub-agent (forked context, x3) ---
 
 security-reviewer: |md
-  **/security-reviewer**
+  **security-reviewer**
+  LLM sub-agent (x3, forked)
 
-  - 39 catalog patterns
-  - Creative exploration
-  - Severity classification
-  - Per-reviewer findings
+  - check 39 risk patterns against threat surface
+  - creative exploration for novel attack surfaces
+  - apply relevance gate (STRAT evidence required)
+  - classify severity via decision tree
+  - check RHOAI organizational constraints
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -35,4 +41,40 @@ security-reviewer: |md
   style.double-border: true
 }
 
-strat-security-review -> security-reviewer: "×3 parallel\n(forked context)"
+# --- External: Jira ---
+
+jira: |md
+  **Jira**
+  (RHAISTRAT)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Output ---
+
+output: |md
+  **Output**
+
+  - security-review.md (full consensus)
+  - security-requirements.md (attached to Jira)
+  - verdict label: pass / concerns / fail
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+jira -> strat-security-review: "STRAT content"
+strat-security-review -> security-reviewer: "threat-surface.md\n+ tier + STRAT key"
+security-reviewer -> strat-security-review: "reviewer-N.md (x3)"
+strat-security-review -> output: "consensus verdict"
+output -> jira: "attach requirements\n+ verdict label" {
+  style.stroke-dash: 3
+}
