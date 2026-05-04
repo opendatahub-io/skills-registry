@@ -1,4 +1,4 @@
-name: Diagram PR Feedback
+name: Diagram PR Sync
 
 on:
   pull_request:
@@ -6,50 +6,75 @@ on:
       - 'site/docs/plugins/**/*.svg'
 
 jobs:
-  extract-feedback:
+  sync-drawio:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
-        run: pip install pyyaml
-
-      - name: Validate diagram SVGs have embedded data
+      - name: Find changed SVGs
+        id: changed
         run: |
-          changed_svgs=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.svg')
-          if [ -z "$changed_svgs" ]; then
-            echo "No SVG changes detected"
+          # If drawio files were also changed, this is a batch update — skip sync
+          changed_drawio=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.drawio')
+          if [ -n "$changed_drawio" ]; then
+            echo "svgs=" >> $GITHUB_OUTPUT
+            echo "Batch update detected (drawio files changed) — skipping sync"
             exit 0
           fi
 
-          for svg in $changed_svgs; do
-            if [ -f "$svg" ] && ! grep -q "mxfile" "$svg"; then
-              echo "ERROR: $svg does not contain embedded draw.io data (mxfile)."
-              echo "Re-export with: draw.io --export --format svg --embed-diagram"
-              exit 1
+          changed_svgs=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.svg')
+          if [ -z "$changed_svgs" ]; then
+            echo "svgs=" >> $GITHUB_OUTPUT
+            echo "No SVG changes detected"
+          else
+            echo "svgs<<EOF" >> $GITHUB_OUTPUT
+            echo "$changed_svgs" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate SVGs have embedded draw.io data
+        if: steps.changed.outputs.svgs != ''
+        run: |
+          while IFS= read -r svg; do
+            if [ -f "$svg" ] && ! grep -q "mxfile\|mxGraphModel" "$svg"; then
+              echo "WARNING: $svg does not contain embedded draw.io data"
             fi
-          done
-          echo "All modified SVGs have embedded diagram data"
+          done <<< "${{ steps.changed.outputs.svgs }}"
+
+      - name: Sync drawio files from SVGs
+        if: steps.changed.outputs.svgs != ''
+        run: |
+          python3 scripts/sync_drawio_from_svg.py ${{ steps.changed.outputs.svgs }}
+
+      - name: Commit updated drawio files
+        if: steps.changed.outputs.svgs != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 'site/docs/plugins/**/*.drawio'
+          if git diff --cached --quiet; then
+            echo "No drawio changes to commit"
+          else
+            git commit -m "Sync drawio files from edited SVGs"
+            git push
+          fi
 
       - name: Extract before/after pairs for eval dataset
+        if: steps.changed.outputs.svgs != ''
         run: |
-          changed_svgs=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.svg')
-          if [ -z "$changed_svgs" ]; then
-            echo "No SVG changes to extract"
-            exit 0
-          fi
-
+          pip install pyyaml
           python3 scripts/extract_diagram_feedback.py \
             --base-ref ${{ github.event.pull_request.base.sha }} \
-            --svgs $changed_svgs
+            --svgs ${{ steps.changed.outputs.svgs }}
 
       - name: Upload feedback cases
         if: always()
