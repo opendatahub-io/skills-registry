@@ -1,0 +1,467 @@
+direction: right
+
+# --- Global styles ---
+*.style.border-radius: 8
+*.style.font-size: 13
+
+# ===================================================================
+# Nodes
+# ===================================================================
+
+entry: |md
+  ## /python-packaging-license-checker
+  - Package name (required)
+  - Source available? (optional)
+  - Upstream org (optional)
+  - Allowed tools: Bash, WebFetch
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 14
+    border-radius: 12
+  }
+}
+
+# -- Step 1: Locate & clone source repo --
+find_source: |md
+  ## Find Source Repo
+  - Invoke **python-packaging-source-finder**
+  - Get upstream repo URL
+  - Confidence scoring
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+clone: |md
+  ## Clone Repo
+  - Invoke **git-shallow-clone**
+  - Shallow clone to /tmp/
+  - Local path for inspection
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+# -- Step 2: Read license from source --
+find_license: |md
+  ## Find License File
+  - Search: LICENSE, COPYING, LICENCE
+  - Extensions: .txt, .md
+  - Read up to 128 KB
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+check_pyproject: |md
+  ## Check pyproject.toml
+  - Read `license` field
+  - Compare with source file
+  - Detect mismatch
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+spdx_map: |md
+  ## Normalise to SPDX
+  - Exact match: "Apache 2" -> Apache-2.0
+  - Fuzzy match: "MIT License" -> MIT
+  - Ambiguous ("BSD", "GPLv3")
+    -> NEEDS-HUMAN-REVIEW
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+compound: |md
+  ## Compound Expression?
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+  }
+}
+
+and_split: |md
+  ## AND
+  - Split into components
+  - All must be allowed
+  - Any not-allowed -> BLOCKED
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 12
+  }
+}
+
+or_split: |md
+  ## OR
+  - Evaluate each component
+  - Use most permissive allowed
+  - None allowed -> best verdict
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 12
+  }
+}
+
+cleanup: |md
+  ## Cleanup Clone
+  - Verify path under /tmp/
+  - `rm -rf` clone dir
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+    font-size: 12
+  }
+}
+
+# -- Step 3: Fedora License Data lookup --
+fedora_lookup: |md
+  ## Fedora License Lookup
+  - Fetch fedora-licenses.json
+  - Match SPDX ID (case-insensitive)
+  - Normalise `status` to array
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+fedora_decision: |md
+  ## Fedora Status?
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+  }
+}
+
+fallback_table: |md
+  ## Fallback Table
+  - Used when JSON fetch fails
+  - Known allowed: MIT, Apache-2.0, BSD-*, ISC...
+  - Known blocked: SSPL-1.0, BUSL-1.1
+  - Append "fallback used" note
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    stroke-dash: 5
+    font-size: 12
+  }
+}
+
+# -- Step 4: Verdict refinement --
+verdict_refine: |md
+  ## Verdict Refinement
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 14
+  }
+}
+
+rule_a: |md
+  ## Rule A: Proprietary
+  - Check Vendor Agreements
+    (NVIDIA, Intel Gaudi, IBM Spyre)
+  - RH/IBM-owned -> ESCALATE-TO-LEGAL
+  - Third-party -> ESCALATE-TO-LEGAL
+| {
+  style: {
+    fill: "#FCE4EC"
+    stroke: "#C62828"
+    font-size: 12
+  }
+}
+
+rule_b: |md
+  ## Rule B: AGPL-3.0
+  - ALLOWED-WITH-CAVEAT
+  - Dual-licensing risk
+  - PM sign-off required
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 12
+  }
+}
+
+rule_c: |md
+  ## Rule C: Other Allowed
+  - ALLOWED
+  - No special caveats
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 12
+  }
+}
+
+rule_d: |md
+  ## Rule D: Not-Allowed
+  - BLOCKED
+  - On Fedora not-allowed list
+| {
+  style: {
+    fill: "#FFEBEE"
+    stroke: "#C62828"
+    font-size: 12
+  }
+}
+
+# -- Step 5: Compliance checks --
+build_check: |md
+  ## Build Compliance
+  - Source available?
+  - Buildable? (setup.py / pyproject.toml)
+  - FLAG if no buildable source
+  - PSX exception option
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+export_check: |md
+  ## Export Compliance
+  - US OFAC SDN List (XML)
+  - EU Consolidated Sanctions
+  - RH geopolitical policy
+  - Record fetch metadata
+  - 2 retries on failure
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+# -- Output --
+output: |md
+  ## Structured Verdict
+  - License: SPDX expression
+  - Source verified: YES / NO / MISMATCH
+  - Verdict: ALLOWED / CAVEAT / REVIEW / ESCALATE / BLOCKED
+  - Build compliance: OK / FLAG
+  - Export compliance: OK / FLAG
+  - Notes: actionable guidance
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 14
+    double-border: true
+  }
+}
+
+# -- Error / review exits --
+needs_review: |md
+  ## NEEDS-HUMAN-REVIEW
+  - No license file found
+  - Ambiguous SPDX mapping
+  - SPDX not in Fedora data
+  - Unrecognised status value
+| {
+  style: {
+    fill: "#FFF9C4"
+    stroke: "#F9A825"
+    font-size: 12
+  }
+}
+
+# ===================================================================
+# External services
+# ===================================================================
+
+fedora_api: |md
+  ## Fedora License Data
+  - GitLab artifacts API
+  - fedora-licenses.json
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+    stroke-dash: 5
+  }
+}
+
+ofac: |md
+  ## OFAC SDN List
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+    stroke-dash: 5
+    font-size: 12
+  }
+}
+
+eu_sanctions: |md
+  ## EU Sanctions
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+    stroke-dash: 5
+    font-size: 12
+  }
+}
+
+# ===================================================================
+# Skill dependencies (external skills)
+# ===================================================================
+
+dep_source_finder: |md
+  ## python-packaging-source-finder
+| {
+  style: {
+    fill: "#E0F2F1"
+    stroke: "#00695C"
+    stroke-dash: 5
+  }
+}
+
+dep_shallow_clone: |md
+  ## git-shallow-clone
+| {
+  style: {
+    fill: "#E0F2F1"
+    stroke: "#00695C"
+    stroke-dash: 5
+  }
+}
+
+# ===================================================================
+# Edges
+# ===================================================================
+
+# Step 1: Locate & clone
+entry -> find_source: package name
+find_source -> clone: repo URL
+
+# Skill dependencies
+dep_source_finder -> find_source: invokes {
+  style.stroke: "#00695C"
+  style.stroke-dash: 3
+}
+dep_shallow_clone -> clone: invokes {
+  style.stroke: "#00695C"
+  style.stroke-dash: 3
+}
+
+# Step 2: Read license
+clone -> find_license: local clone path
+find_license -> check_pyproject
+check_pyproject -> spdx_map: license text
+spdx_map -> compound: SPDX ID
+
+compound -> and_split: AND expression {
+  style.stroke: "#E65100"
+}
+compound -> or_split: OR expression {
+  style.stroke: "#E65100"
+}
+compound -> fedora_lookup: single ID {
+  style.stroke: "#2E7D32"
+}
+and_split -> fedora_lookup: each component
+or_split -> fedora_lookup: each component
+
+# Cleanup after license read
+find_license -> cleanup: after read {
+  style.stroke: "#9E9E9E"
+  style.stroke-dash: 3
+}
+
+# Ambiguous / missing -> review
+spdx_map -> needs_review: ambiguous / missing {
+  style.stroke: "#F9A825"
+  style.stroke-dash: 3
+}
+
+# Step 3: Fedora lookup
+fedora_api -> fedora_lookup: HTTP GET {
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 3
+}
+
+fedora_lookup -> fedora_decision: status
+fedora_lookup -> fallback_table: fetch fails {
+  style.stroke: "#E65100"
+  style.stroke-dash: 3
+}
+fallback_table -> fedora_decision: fallback status
+
+fedora_decision -> verdict_refine: allowed* {
+  style.stroke: "#2E7D32"
+}
+fedora_decision -> needs_review: not found / unknown {
+  style.stroke: "#F9A825"
+  style.stroke-dash: 3
+}
+
+# Step 4: Verdict refinement
+verdict_refine -> rule_a: proprietary / custom {
+  style.stroke: "#C62828"
+}
+verdict_refine -> rule_b: AGPL-3.0 {
+  style.stroke: "#E65100"
+}
+verdict_refine -> rule_c: other allowed {
+  style.stroke: "#2E7D32"
+}
+fedora_decision -> rule_d: not-allowed {
+  style.stroke: "#C62828"
+}
+
+# All rules -> compliance checks
+rule_a -> build_check
+rule_b -> build_check
+rule_c -> build_check
+rule_d -> output: BLOCKED {
+  style.stroke: "#C62828"
+}
+
+# Step 5: Compliance
+build_check -> export_check
+
+ofac -> export_check: HTTP GET {
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 3
+}
+eu_sanctions -> export_check: HTTP GET {
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 3
+}
+
+export_check -> output: six-field block
+
+# Review also reaches output
+needs_review -> output: NEEDS-HUMAN-REVIEW {
+  style.stroke: "#F9A825"
+  style.stroke-dash: 3
+}

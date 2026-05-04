@@ -1,0 +1,258 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/eval-mlflow**
+
+  - --action \<action\>
+  - --config eval.yaml
+  - --run-id \<id\>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verify MLflow ---
+
+verify: |md
+  **Verify MLflow**
+
+  - ensure_server() check
+  - resolve tracking URI
+  - eval.yaml → env → default
+  - suggest /eval-setup if down
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Config ---
+
+read-config: |md
+  **Read Config**
+
+  - mlflow.experiment name
+  - dataset.path + schema
+  - judges (for context)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Action Router ---
+
+router: |md
+  **Action Router**
+
+  - sync-dataset
+  - log-results
+  - push-feedback
+  - pull-feedback
+  - all (runs first three)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Sync Dataset Container ---
+
+sync: {
+  label: "Sync Dataset"
+  style.fill: "#fafafa"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+
+  read-schema: |md
+    **Read Schema**
+
+    - read dataset.schema
+    - browse case directory
+    - sample file structure
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  build-mapping: |md
+    **Build Mapping**
+    LLM interpretation
+
+    - inputs vs expectations
+    - file:field_path pairs
+    - __file__ for whole files
+    - write schema_mapping.json
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  run-sync: |md
+    **Run Sync**
+
+    - sync_dataset.py
+    - validate mapping preview
+    - sync records to MLflow
+    - deduplicates on merge
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  read-schema -> build-mapping
+  build-mapping -> run-sync
+
+  run-sync -> build-mapping: "preview wrong" {
+    style.stroke-dash: 3
+  }
+}
+
+# --- Log Results ---
+
+log-results: |md
+  **Log Results**
+
+  - log_results.py
+  - params: skill, model, runner
+  - metrics: judge scores,
+    cost, tokens, duration
+  - artifacts: summary.yaml
+  - table: per-case results
+  - traces from stdout.log
+  - tags: regressions, judges
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Push Feedback ---
+
+push-feedback: |md
+  **Push Feedback**
+
+  - attach_feedback.py
+  - find execution traces
+  - judge → CODE feedback
+  - human → HUMAN feedback
+  - skips if no traces exist
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pull Feedback ---
+
+pull-feedback: |md
+  **Pull Feedback**
+
+  - attach_feedback.py --pull
+  - search MLflow UI annotations
+  - filter out self-pushed entries
+  - save to review.yaml
+    (mlflow_feedback section)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- MLflow Server (external) ---
+
+mlflow-server: |md
+  **MLflow Server**
+
+  - experiment tracking
+  - dataset registry
+  - trace storage
+  - feedback/assessments
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - N cases synced
+  - run logged to experiment
+  - N feedback entries pushed
+  - N annotations pulled
+  - next: /eval-review
+    or /eval-optimize
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+args -> verify
+verify -> read-config
+read-config -> router
+
+router -> sync: "sync-dataset / all"
+router -> log-results: "log-results / all"
+router -> push-feedback: "push-feedback / all"
+router -> pull-feedback: "pull-feedback"
+
+sync -> log-results: "all" {
+  style.stroke-dash: 3
+}
+log-results -> push-feedback: "all" {
+  style.stroke-dash: 3
+}
+
+sync -> report
+log-results -> report
+push-feedback -> report
+pull-feedback -> report
+
+# External connections
+sync.run-sync -> mlflow-server: "sync records" {
+  style.stroke: "#999999"
+  style.stroke-dash: 3
+}
+log-results -> mlflow-server: "log run" {
+  style.stroke: "#999999"
+  style.stroke-dash: 3
+}
+push-feedback -> mlflow-server: "attach feedback" {
+  style.stroke: "#999999"
+  style.stroke-dash: 3
+}
+pull-feedback -> mlflow-server: "pull annotations" {
+  style.stroke: "#999999"
+  style.stroke-dash: 3
+}

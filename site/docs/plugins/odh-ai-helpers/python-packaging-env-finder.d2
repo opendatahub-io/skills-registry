@@ -1,0 +1,258 @@
+direction: right
+
+# --- Global styles ---
+*.style.border-radius: 8
+*.style.font-size: 14
+
+# ===================================================================
+# Nodes
+# ===================================================================
+
+entry: |md
+  ## /python-packaging-env-finder
+  - Project path input
+  - Allowed tools: Bash, Read, Grep, Glob
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 15
+  }
+}
+
+validate-git: |md
+  ## Validate Git Repo
+  - Check `.git` exists
+  - Must be dir or file (worktree)
+  - Exit 1 if not a repo
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+is-git: |md
+  ## Git Repo?
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 13
+  }
+}
+
+find-build-files: |md
+  ## Find Build Files
+  - setup.py, setup.cfg
+  - pyproject.toml
+  - CMakeLists.txt (recursive)
+  - configure.ac, configure.in
+  - Makefile, *.mk
+  - build.py, conda.yaml
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+files-found: |md
+  ## Files Found?
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+    font-size: 13
+  }
+}
+
+analyze-file: Pattern Matching {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#6A1B9A"
+    border-radius: 10
+    font-size: 14
+  }
+
+  python-env: |md
+    ## Python Patterns
+    - `os.environ.get("VAR")`
+    - `os.environ["VAR"]`
+    - `os.getenv("VAR")`
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#6A1B9A"
+      font-size: 12
+    }
+  }
+
+  cmake-env: |md
+    ## CMake Patterns
+    - `$ENV{VAR}`
+    - CMakeLists.txt context
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#6A1B9A"
+      font-size: 12
+    }
+  }
+
+  shell-env: |md
+    ## Shell/Make Patterns
+    - `${VAR}` references
+    - `export VAR=`
+    - `$VAR` usage
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#6A1B9A"
+      font-size: 12
+    }
+  }
+}
+
+filter: |md
+  ## Filter False Positives
+  - Skip dunder lines (`__var__`)
+  - Skip imports / def / class
+  - Validate ALL_CAPS naming
+  - Check context validity
+  - Exclude known non-env tokens
+    (TRUE, FALSE, GET, POST, ...)
+| {
+  style: {
+    fill: "#FFF3E0"
+    stroke: "#E65100"
+  }
+}
+
+enrich: |md
+  ## Enrich Variables
+  - Match known vars (CC, CXX, ...)
+  - Infer description from name
+  - Infer type (path/bool/number/string)
+  - Extract default values
+  - Deduplicate & merge info
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+categorize: |md
+  ## Categorize
+  - Compiler & Linker
+  - Path Configuration
+  - Feature Control
+  - Python-Specific
+  - Build System
+  - General
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1565C0"
+  }
+}
+
+output: |md
+  ## Structured Report
+  - Variable name & description
+  - Type & default value
+  - Source file & line number
+  - Usage context
+  - Grouped by category
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#2E7D32"
+    font-size: 15
+  }
+}
+
+error-exit: |md
+  ## Error
+  - Not a git repository
+  - Exit non-zero
+| {
+  style: {
+    fill: "#FFEBEE"
+    stroke: "#C62828"
+  }
+}
+
+no-vars: |md
+  ## No Variables Found
+  - "Most packages don't have
+    build configuration"
+  - Report empty result
+| {
+  style: {
+    fill: "#FFEBEE"
+    stroke: "#C62828"
+    stroke-dash: 5
+  }
+}
+
+# ===================================================================
+# External
+# ===================================================================
+
+filesystem: |md
+  ## Project Filesystem
+  - Build config files
+  - Source tree
+| {
+  style: {
+    fill: "#E2E8F0"
+    stroke: "#718096"
+    stroke-dash: 5
+  }
+}
+
+# ===================================================================
+# Edges
+# ===================================================================
+
+entry -> validate-git: project path
+validate-git -> is-git
+
+is-git -> find-build-files: "Yes" {
+  style.stroke: "#2E7D32"
+}
+is-git -> error-exit: "No" {
+  style.stroke: "#C62828"
+  style.stroke-dash: 3
+}
+
+find-build-files -> files-found
+
+files-found -> analyze-file: "Yes - iterate each file" {
+  style.stroke: "#2E7D32"
+}
+files-found -> no-vars: "No files" {
+  style.stroke: "#C62828"
+  style.stroke-dash: 3
+}
+
+analyze-file -> filter: regex matches
+filter -> enrich: valid env vars
+enrich -> categorize: typed variables
+categorize -> output: grouped report
+
+no-vars -> output: empty report {
+  style.stroke: "#C62828"
+  style.stroke-dash: 3
+}
+
+filesystem -> find-build-files: glob patterns {
+  style.stroke: "#718096"
+  style.stroke-dash: 3
+}
+filesystem -> analyze-file: file content {
+  style.stroke: "#718096"
+  style.stroke-dash: 3
+}

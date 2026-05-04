@@ -1,0 +1,210 @@
+direction: right
+
+# --- Global styles ---
+*.style.border-radius: 8
+*.style.font-size: 14
+
+# --- Entry ---
+entry: |md
+  ## Receive Inputs
+  - Orchestrator passes file paths
+  - Strategy files (args or `artifacts/strat-tasks/`)
+  - ADR files (optional)
+  - Additional docs (API spec, design doc)
+| {
+  style: {
+    fill: "#E8F5E9"
+    stroke: "#43A047"
+    font-size: 14
+  }
+}
+
+# --- Read Sources ---
+read: |md
+  ## Read Source Documents
+  - Read strategy files
+  - Read ADR files if provided
+  - Read additional documents
+  - ONLY files specified in arguments
+| {
+  style: {
+    fill: "#E3F2FD"
+    stroke: "#1E88E5"
+    font-size: 14
+  }
+}
+
+# --- LLM Analysis Container ---
+analyze: LLM Analysis {
+  style: {
+    fill: "#FFF8E1"
+    stroke: "#F9A825"
+    font-size: 14
+  }
+
+  # --- Test Strategy ---
+  strategy: |md
+    ## Extract Test Strategy
+    - **Test Levels**: API, Data, Functional,
+      UI, Performance, Security
+    - **Test Types**: Positive, Negative,
+      Boundary, Regression
+    - **Priority Definitions**: P0/P1/P2
+      scoped to this feature
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#FB8C00"
+      double-border: true
+      font-size: 14
+    }
+  }
+
+  # --- NFR Assessment ---
+  nfr: |md
+    ## Assess NFRs
+    - Disconnected / Air-Gapped
+    - Upgrade / Migration
+    - Performance / Scalability
+    - RBAC / Authorization
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#FB8C00"
+      double-border: true
+      font-size: 14
+    }
+  }
+
+  # --- NFR Decision ---
+  nfr_decision: |md
+    ## Per-category Decision
+    - Feature touches this area?
+  | {
+    style: {
+      fill: "#FCE4EC"
+      stroke: "#E53935"
+      font-size: 14
+    }
+    shape: diamond
+  }
+
+  applicable: |md
+    ## Testing Considerations
+    - Concrete test scenarios
+    - Environment requirements
+  | {
+    style: {
+      fill: "#E8F5E9"
+      stroke: "#43A047"
+      font-size: 14
+    }
+  }
+
+  not_applicable: |md
+    ## Not Applicable
+    - Explicit justification
+  | {
+    style: {
+      fill: "#EFEBE9"
+      stroke: "#8D6E63"
+      font-size: 14
+    }
+  }
+
+  # --- Risk Identification ---
+  risks: |md
+    ## Identify Risks
+    - Dependencies on other teams
+    - External service dependencies
+    - Data migration risks
+    - Backwards compatibility
+    - Performance unknowns
+    - Test environment limitations
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#FB8C00"
+      double-border: true
+      font-size: 14
+    }
+  }
+
+  # --- Risk Assessment ---
+  assess: |md
+    ## Assess Each Risk
+    - Impact: High / Medium / Low
+    - Probability: High / Medium / Low
+    - Mitigation strategy
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#FB8C00"
+      double-border: true
+      font-size: 14
+    }
+  }
+
+  # --- Gap Analysis ---
+  gaps: |md
+    ## Gap Analysis
+    - Identify missing information
+    - Map gaps to document types
+      (ADR, API spec, design doc)
+  | {
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#FB8C00"
+      double-border: true
+      font-size: 14
+    }
+  }
+
+  # --- Internal edges ---
+  strategy -> nfr: next
+  nfr -> nfr_decision: per category
+  nfr_decision -> applicable: "yes"
+  nfr_decision -> not_applicable: "no"
+  applicable -> risks
+  not_applicable -> risks
+  risks -> assess: each risk
+  assess -> gaps: complete
+}
+
+# --- Output ---
+output: |md
+  ## Structured Markdown Output
+  - Section 2: Test Strategy
+    (levels, types, priorities)
+  - Section 7: NFR assessments
+  - Section 8: Risk table
+    (risk, impact, probability, mitigation)
+  - Gaps list with resolution paths
+| {
+  style: {
+    fill: "#F3E5F5"
+    stroke: "#8E24AA"
+    font-size: 14
+  }
+}
+
+# --- Orchestrator (external) ---
+orchestrator: |md
+  ## Orchestrating Skill
+  - Invokes this sub-agent
+  - Receives structured output
+| {
+  style: {
+    fill: "#ECEFF1"
+    stroke: "#546E6F"
+    stroke-dash: 5
+    font-size: 14
+  }
+}
+
+# --- Main edges ---
+orchestrator -> entry: "file paths + context"
+entry -> read
+read -> analyze: "documents loaded"
+analyze.gaps -> output: "structured findings"
+output -> orchestrator: "markdown sections 2, 7, 8"

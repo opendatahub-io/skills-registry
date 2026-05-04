@@ -1,0 +1,189 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+
+# ── Column 1: Entry ──────────────────────────────────────
+
+entry: |md
+  **/rfe.split**
+
+  RFE IDs (1+)
+  --headless
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ── Column 2: Parse & Validate ───────────────────────────
+
+parse: |md
+  **Step 0: Parse**
+
+  Persist flags to
+  split-config.yaml
+  Write IDs to disk
+  Verify task files exist
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ── Column 3: Split Agents ───────────────────────────────
+
+agents: Split Agents {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  launch: |md
+    **Step 1: Launch**
+
+    One Opus agent per ID
+    run_in_background
+    Poll until complete
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  agent: |md
+    **split-agent**
+
+    Load RFE + review
+    Check right-sized score
+    Triage delivered items
+    Propose decompositions
+    Generate child RFEs
+    Coverage check
+    Write split-status
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 1
+    style.stroke-dash: 3
+  }
+
+  launch -> agent: "parallel" {style.stroke-dash: 3}
+}
+
+# ── Column 4: Collect & Decide ───────────────────────────
+
+collect: |md
+  **Step 2: Collect**
+
+  Re-read parent IDs
+  Read split-status files
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+no-split: |md
+  **no-split**
+
+  Set recommendation
+  to "revise"
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+}
+
+children: |md
+  **Children found**
+
+  collect_children.py
+  Gather child IDs
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ── Column 5: Review children ────────────────────────────
+
+review: |md
+  **/rfe.review**
+
+  Inline Skill call
+  --headless passthrough
+  --caller split
+  Full review pipeline
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# ── Column 6: Self-correction ────────────────────────────
+
+correct: |md
+  **Step 3: Self-Correct**
+
+  Check right_sized < 2/2
+  Re-split offending child
+  Re-review new children
+  Max 1 cycle
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ── Column 7: Finalize ───────────────────────────────────
+
+finalize: |md
+  **Step 4: Finalize**
+
+  Rebuild index
+  Re-read flags
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+headless-out: |md
+  **Headless exit**
+
+  Return to /rfe.auto-fix
+  batch loop
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+}
+
+interactive-out: |md
+  **Interactive exit**
+
+  Show split summary
+  Suggest /rfe.submit
+| {
+  style.fill: "#f5f5f5"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+}
+
+# ── Edges ─────────────────────────────────────────────────
+
+entry -> parse
+parse -> agents.launch
+agents.launch -> collect: "status files"
+collect -> no-split: "action: no-split"
+collect -> children: "action: split"
+children -> review
+review -> correct
+correct -> agents.launch: "re-split child" {
+  style.stroke-dash: 3
+  style.stroke: "#666666"
+}
+correct -> finalize: "done or max cycles"
+finalize -> headless-out: "--headless"
+finalize -> interactive-out: "interactive"

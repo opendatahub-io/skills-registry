@@ -1,0 +1,80 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+
+# --- Entry ---
+
+entry: |md
+  **/strat.refine**
+
+  - Read `strat-tasks/`
+  - YAML frontmatter
+  - Business need (fixed)
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Check for prior reviews ---
+
+check-reviews: |md
+  **Check Reviews**
+
+  - `strat-reviews/` exist?
+  - Determines mode
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Architecture context (optional) ---
+
+arch-context: |md
+  **Architecture Context**
+
+  - `.context/architecture-context/`
+  - PLATFORM.md + components
+  - Ground in real arch
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+# --- Initial refinement ---
+
+initial: |md
+  **Initial Refinement**
+  forked LLM agent
+
+  - Technical approach
+  - Affected components
+  - Dependencies, NFRs
+  - Effort estimate (S/M/L/XL)
+  - Risks & open questions
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Revision mode ---
+
+revision: |md
+  **Revision Mode**
+  forked LLM agent
+
+  - Read review feedback
+  - Address reviewer concerns
+  - Preserve working parts
+  - Flag disagreements
+  - Document changes
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Output ---
+
+output: |md
+  **Refined Strategy**
+
+  - HOW complete
+  - status → Refined
+  - Ready for strat.review
+| {style.fill: "#f5f5f5"; style.stroke: "#999999"; style.stroke-width: 1}
+
+# --- Edges ---
+
+entry -> check-reviews
+check-reviews -> arch-context: "load context" {style.stroke-dash: 3}
+arch-context -> initial: "no reviews" {style.stroke-dash: 3}
+arch-context -> revision: "reviews exist" {style.stroke-dash: 3}
+check-reviews -> initial: "no reviews"
+check-reviews -> revision: "reviews exist"
+initial -> output
+revision -> output

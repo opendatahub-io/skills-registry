@@ -1,0 +1,188 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/konflux-build-simulator&lt;/b&gt;&lt;br&gt;&lt;br&gt;[repository-url]&lt;br&gt;Simulates Konflux build&lt;br&gt;environment on PRs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;shadow=0;" vertex="1" parent="1">
+      <mxGeometry x="30" y="260" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="clone" value="&lt;b&gt;Clone &amp;amp; Scan&lt;/b&gt;&lt;br&gt;&lt;br&gt;Shallow clone repo&lt;br&gt;Read Dockerfiles&lt;br&gt;Read package.json&lt;br&gt;Detect build args" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="265" y="195" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect" value="&lt;b&gt;Detect Repo Type&lt;/b&gt;&lt;br&gt;&lt;br&gt;Monorepo (turbo.json)&lt;br&gt;Operator (CRDs)&lt;br&gt;Component / Library&lt;br&gt;Module Federation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="265" y="345" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="lockfile" value="&lt;b&gt;Hermetic Lockfile&lt;/b&gt;&lt;br&gt;&lt;br&gt;npm: git+ / github: / file:&lt;br&gt;go.sum existence&lt;br&gt;go mod verify&lt;br&gt;Resolved URL check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="480" y="30" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="workspace" value="&lt;b&gt;Workspace Deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Detect scope &amp;amp; dirs&lt;br&gt;Cross-ref COPY cmds&lt;br&gt;Runtime vs dev deps&lt;br&gt;Missing package warn" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="480" y="180" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="fips" value="&lt;b&gt;FIPS Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;esbuild removal&lt;br&gt;strictfipsruntime tag&lt;br&gt;Go binary flags&lt;br&gt;Release blocker warn" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="480" y="330" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="preflight" value="&lt;b&gt;Hermetic Preflight&lt;/b&gt;&lt;br&gt;&lt;br&gt;docker --network=none&lt;br&gt;npm ci --ignore-scripts&lt;br&gt;Root + module lockfiles&lt;br&gt;&amp;lt;1 min validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="480" y="480" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="docker-build" value="&lt;b&gt;Docker Build&lt;/b&gt;&lt;br&gt;&lt;br&gt;Production BUILD_MODE&lt;br&gt;Multi-stage build&lt;br&gt;COPY path validation&lt;br&gt;Build arg injection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="30" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="runtime" value="&lt;b&gt;Runtime Validation&lt;/b&gt;&lt;br&gt;&lt;br&gt;Container startup&lt;br&gt;Crashloop detection&lt;br&gt;Health check wait&lt;br&gt;Log error scan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="180" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="api-test" value="&lt;b&gt;API Endpoint Tests&lt;/b&gt;&lt;br&gt;&lt;br&gt;merge-patch+json (415)&lt;br&gt;json-patch+json (415)&lt;br&gt;Fastify v5 regression&lt;br&gt;28+ operations check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="330" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="ws-test" value="&lt;b&gt;WebSocket Tests&lt;/b&gt;&lt;br&gt;&lt;br&gt;Connection crash detect&lt;br&gt;@fastify/websocket v11&lt;br&gt;Non-admin user crash&lt;br&gt;SocketStream removal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="480" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="nonroot" value="&lt;b&gt;Non-Root Runtime&lt;/b&gt;&lt;br&gt;&lt;br&gt;UID 1001:0 test&lt;br&gt;Permission issues&lt;br&gt;Delayed crash detect&lt;br&gt;Stability monitor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="720" y="630" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="modfed" value="&lt;b&gt;Module Federation&lt;/b&gt;&lt;br&gt;&lt;br&gt;remoteEntry.js size&lt;br&gt;Chunk completeness&lt;br&gt;ChunkLoadError detect&lt;br&gt;Load performance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+      <mxGeometry x="960" y="180" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="operator" value="&lt;b&gt;Operator Integration&lt;/b&gt;&lt;br&gt;&lt;br&gt;Kind cluster create&lt;br&gt;CRD install &amp;amp; apply&lt;br&gt;Deployment wait&lt;br&gt;Webhook validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+      <mxGeometry x="960" y="405" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="manifests" value="&lt;b&gt;Manifest Validation&lt;/b&gt;&lt;br&gt;&lt;br&gt;Kustomize build&lt;br&gt;ConfigMap generation&lt;br&gt;Overlay testing&lt;br&gt;Resource validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+      <mxGeometry x="960" y="630" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="generate" value="&lt;b&gt;Generate Workflow&lt;/b&gt;&lt;br&gt;&lt;br&gt;pr-build-validation.yml&lt;br&gt;validate-build.sh&lt;br&gt;Test manifests&lt;br&gt;Setup documentation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1205" y="350" width="185" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase0-label" value="&lt;b&gt;Phase 0&lt;/b&gt;&lt;br&gt;Static Checks" style="text;html=1;align=center;verticalAlign=bottom;fontSize=12;fontColor=#666666;spacingBottom=5;" vertex="1" parent="1">
+      <mxGeometry x="510" y="0" width="110" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase12-label" value="&lt;b&gt;Phase 1-2&lt;/b&gt;&lt;br&gt;Build &amp;amp; Runtime" style="text;html=1;align=center;verticalAlign=bottom;fontSize=12;fontColor=#666666;spacingBottom=5;" vertex="1" parent="1">
+      <mxGeometry x="745" y="0" width="120" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase35-label" value="&lt;b&gt;Phase 3-5&lt;/b&gt;&lt;br&gt;Conditional" style="text;html=1;align=center;verticalAlign=bottom;fontSize=12;fontColor=#666666;spacingBottom=5;" vertex="1" parent="1">
+      <mxGeometry x="995" y="0" width="110" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-entry-clone" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="clone" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-clone-detect" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="clone" target="detect" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-detect-lockfile" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect" target="lockfile" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-detect-workspace" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.42;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect" target="workspace" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-detect-fips" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect" target="fips" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-lockfile-preflight" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="lockfile" target="preflight" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="567" y="170"/>
+          <mxPoint x="567" y="170"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-preflight-dockerbuild" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="docker-build" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="690" y="540"/>
+          <mxPoint x="690" y="90"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-workspace-dockerbuild" value="context" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="workspace" target="docker-build" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="680" y="240"/>
+          <mxPoint x="680" y="120"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-fips-dockerbuild" value="flags" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;fontStyle=2;fontSize=10;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" edge="1" source="fips" target="docker-build" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="670" y="366"/>
+          <mxPoint x="670" y="165"/>
+          <mxPoint x="771" y="165"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-dockerbuild-runtime" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="docker-build" target="runtime" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-runtime-apitest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="runtime" target="api-test" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-runtime-wstest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="runtime" target="ws-test" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="910" y="270"/>
+          <mxPoint x="910" y="510"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-runtime-nonroot" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="runtime" target="nonroot" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="920" y="282"/>
+          <mxPoint x="920" y="660"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-apitest-modfed" value="if monorepo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;fontStyle=2;fontSize=10;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="api-test" target="modfed" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-wstest-modfed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="ws-test" target="modfed" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="940" y="516"/>
+          <mxPoint x="940" y="264"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-nonroot-operator" value="if operator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;fontStyle=2;fontSize=10;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="nonroot" target="operator" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="935" y="666"/>
+          <mxPoint x="935" y="465"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-modfed-manifests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="modfed" target="manifests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1047" y="560"/>
+          <mxPoint x="1013" y="560"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-operator-manifests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" edge="1" source="operator" target="manifests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1047" y="570"/>
+          <mxPoint x="1083" y="570"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-manifests-generate" value="results" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="manifests" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-apitest-generate" value="results" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;fontStyle=2;fontSize=10;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="api-test" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="930" y="414"/>
+          <mxPoint x="930" y="380"/>
+          <mxPoint x="1175" y="380"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-nonroot-generate" value="results" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#999999;strokeWidth=1.5;html=1;dashed=1;dashPattern=8 4;fontStyle=2;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="nonroot" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="805" y="780"/>
+          <mxPoint x="1298" y="780"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

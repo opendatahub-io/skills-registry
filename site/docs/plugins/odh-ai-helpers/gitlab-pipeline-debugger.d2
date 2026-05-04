@@ -1,0 +1,131 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ── Column 1: Entry ──────────────────────────────────
+entry: |md
+  **/gitlab-pipeline-debugger**
+
+  Pipeline URL, job URL,
+  branch name, or pipeline ID
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# ── Column 2: Prerequisites & Input Parsing ──────────
+prereq: |md
+  **Prerequisite Check**
+
+  glab CLI installed?
+  glab auth status
+  Git remote configured?
+|
+
+parse: |md
+  **Parse Input**
+
+  Pipeline URL → -R + -p
+  Job URL → -R + job-id
+  Branch → -b flag
+  Pipeline ID → -p flag
+  Default → current branch
+|
+
+# ── Column 3: Pipeline Inspection ───────────────────
+status: |md
+  **Check Pipeline Status**
+
+  glab ci get -d
+  Pipeline metadata
+  Job status table
+  Failure reasons
+|
+
+mr-lookup: |md
+  **Find Merge Request**
+
+  glab mr list -s branch
+  MR title, URL, reviewers
+| {
+  style.stroke-dash: 3
+}
+
+# ── Column 4: Log Retrieval ─────────────────────────
+identify: |md
+  **Identify Failed Jobs**
+
+  Filter by status
+  Extract job IDs/names
+|
+
+trace: |md
+  **Retrieve Job Logs**
+
+  glab ci trace job-id
+  glab ci trace name -p id
+  Full log output
+|
+
+# ── Column 5: Analysis & Output ─────────────────────
+analyze: |md
+  **Analyze Errors**
+  LLM analysis
+
+  Parse log output
+  Identify root cause
+  Match error patterns
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+diagnosis: |md
+  **Diagnosis**
+
+  Root cause
+  Fix suggestions
+  Remediation steps
+|
+
+# ── External ────────────────────────────────────────
+gitlab: |md
+  **GitLab API**
+| {
+  style.stroke-dash: 3
+}
+
+# ── Edges: Column 1 → 2 ────────────────────────────
+entry -> prereq
+prereq -> parse
+
+# ── Edges: Column 2 → 3 ────────────────────────────
+parse -> status
+parse -> mr-lookup: "optional"
+
+# ── Edges: Column 3 → 4 ────────────────────────────
+status -> identify
+identify -> trace
+
+# ── Edges: Column 4 → 5 ────────────────────────────
+trace -> analyze
+analyze -> diagnosis
+
+# ── External edges ──────────────────────────────────
+status -> gitlab: "glab ci get" {
+  style.stroke-dash: 3
+}
+trace -> gitlab: "glab ci trace" {
+  style.stroke-dash: 3
+}
+mr-lookup -> gitlab: "glab mr list" {
+  style.stroke-dash: 3
+}

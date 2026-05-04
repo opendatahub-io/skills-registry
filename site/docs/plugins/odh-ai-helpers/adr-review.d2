@@ -1,0 +1,209 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+
+# --- Entry ---
+entry: |md
+  **/adr-review**
+
+  ADR file path
+  (.md, .docx, or directory)
+| {
+  shape: rectangle
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Prompt & Clarify ---
+clarify: |md
+  **Step 1 -- Clarify**
+
+  AskUserQuestion
+  - Audience & stakes
+  - Scope emphasis
+  - Missing context
+  - Decision status
+  - Known concerns
+| {
+  shape: rectangle
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+  style.stroke-width: 2
+}
+
+# --- Step 2: Read & Normalize ---
+read-adr: |md
+  **Step 2 -- Read ADR**
+
+  Parse document
+  Extract sections
+  Note missing parts
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 3: Reviewer Panel (container) ---
+panel: |md
+  **Step 3 -- Reviewer Panel**
+  6 subagents in parallel
+| {
+  shape: rectangle
+  style.fill: "#f0fdf4"
+  style.stroke: "#16a34a"
+  style.stroke-width: 2
+
+  r1: |md
+    **Context &**
+    **Problem Framing**
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+  }
+
+  r2: |md
+    **Technical**
+    **Soundness**
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+  }
+
+  r3: |md
+    **Operational &**
+    **Reliability**
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+  }
+
+  r4: |md
+    **Security &**
+    **Compliance**
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+  }
+
+  r5: |md
+    **Cost &**
+    **Performance**
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+  }
+
+  r6: |md
+    **Consequences &**
+    **Reversibility**
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+  }
+}
+
+# --- Step 3.5: Human Review ---
+human-review: |md
+  **Step 3.5 -- Human Review**
+
+  AskUserQuestion
+  per reviewer findings
+  - Agree
+  - Disagree
+  - Partially agree
+  - Already addressed
+| {
+  shape: rectangle
+  style.fill: "#fef3c7"
+  style.stroke: "#d97706"
+  style.stroke-width: 2
+}
+
+# --- Step 4: Synthesize ---
+synthesize: |md
+  **Step 4 -- Synthesize**
+
+  Cross-reviewer analysis
+  - Agreements
+  - Tensions
+  - Gaps
+  - Top 3-5 risks
+  - Overall verdict
+| {
+  shape: rectangle
+  style.fill: "#ede9fe"
+  style.stroke: "#7c3aed"
+  style.stroke-width: 2
+}
+
+# --- Step 5: Generate Reports ---
+reports: |md
+  **Step 5 -- Reports**
+| {
+  shape: rectangle
+  style.fill: "#f0fdf4"
+  style.stroke: "#16a34a"
+  style.stroke-width: 2
+
+  pdf: |md
+    **PDF**
+    Full detail
+    What / So what /
+    Suggested fix
+  | {
+    style.fill: "#fee2e2"
+    style.stroke: "#dc2626"
+  }
+
+  pptx: |md
+    **PPTX**
+    Short-form bullets
+    10-min meeting deck
+  | {
+    style.fill: "#fee2e2"
+    style.stroke: "#dc2626"
+  }
+}
+
+# --- Step 6: Report Back ---
+output: |md
+  **Step 6 -- Report**
+
+  Summary inline
+  File paths
+  Overall verdict
+| {
+  shape: rectangle
+  style.fill: "#dbeafe"
+  style.stroke: "#2563eb"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+entry -> clarify
+clarify -> read-adr
+read-adr -> panel: "ADR text + context" {
+  style.stroke: "#333333"
+  style.font-style: italic
+}
+panel -> human-review: "raw findings" {
+  style.stroke: "#333333"
+  style.font-style: italic
+}
+human-review -> synthesize: "corrected findings" {
+  style.stroke: "#333333"
+  style.font-style: italic
+}
+synthesize -> reports
+reports -> output
+
+# --- Edge case back-edge ---
+entry -> read-adr: ".docx via docx skill" {
+  style.stroke: "#999999"
+  style.stroke-dash: 3
+  style.font-style: italic
+}

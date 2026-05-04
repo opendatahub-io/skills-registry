@@ -1,0 +1,58 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe-creator.update-deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Force update vendored&lt;br&gt;dependencies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="80" width="160" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="clean-assess" value="&lt;b&gt;Clean assess-rfe&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font face=&#x27;Courier New&#x27; style=&#x27;font-size:10px&#x27;&gt;rm -rf&lt;/font&gt;&lt;br&gt;.context/assess-rfe&lt;br&gt;.claude/skills/assess-rfe&lt;br&gt;.claude/skills/export-rubric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fde8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="60" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="bootstrap-assess" value="&lt;b&gt;Bootstrap assess-rfe&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap-assess-rfe.sh&lt;br&gt;Clone / pull assess-rfe repo&lt;br&gt;Copy skills + agents&lt;br&gt;Patch PLUGIN_ROOT&lt;br&gt;Export rubric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="450" y="50" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="clean-arch" value="&lt;b&gt;Clean arch context&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font face=&#x27;Courier New&#x27; style=&#x27;font-size:10px&#x27;&gt;rm -rf&lt;/font&gt;&lt;br&gt;.context/architecture-context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fde8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="675" y="75" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-arch" value="&lt;b&gt;Fetch arch context&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch-architecture-context.sh&lt;br&gt;Detect latest RHOAI version&lt;br&gt;Sparse checkout from&lt;br&gt;architecture-context repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="880" y="50" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;List updated deps&lt;br&gt;and fetched versions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1105" y="80" width="145" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess-rfe-repo" value="&lt;b&gt;n1hility/assess-rfe&lt;/b&gt;&lt;br&gt;&lt;i&gt;(GitHub)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="470" y="280" width="140" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="arch-repo" value="&lt;b&gt;opendatahub-io/&lt;/b&gt;&lt;br&gt;&lt;b&gt;architecture-context&lt;/b&gt;&amp;nbsp;&lt;i&gt;(GitHub)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="875" y="280" width="185" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="Step 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="entry" target="clean-assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="clean-assess" target="bootstrap-assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="Step 2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="bootstrap-assess" target="clean-arch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="clean-arch" target="fetch-arch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="Step 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="fetch-arch" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="git clone/pull" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bootstrap-assess" target="assess-rfe-repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="sparse checkout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="fetch-arch" target="arch-repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -1,0 +1,141 @@
+direction: right
+
+# -- Global styles --
+*.style.border-radius: 8
+*.style.font-size: 11
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ===== Column 1: Entry =====
+
+entry: |md
+  **/rfe.speedrun**
+
+  Idea, Jira key, or
+  \-\-input YAML
+  \-\-headless
+  \-\-dry-run
+  \-\-batch-size
+| {
+  style.stroke-width: 2
+}
+
+# ===== Column 2: Parse + Mode Decision =====
+
+parse: |md
+  **Step 0 — Parse**
+
+  state.py clean
+  state.py init
+  Detect mode
+| {
+  style.stroke-width: 2
+  style.fill: "#e8e8e8"
+}
+
+# ===== Column 3: Three modes (stacked vertically) =====
+
+mode-a: |md
+  **Mode A — Batch**
+
+  Read YAML input
+  Pre-allocate IDs
+  Agent per entry
+  /rfe.create ×N
+| {
+  style.stroke-width: 2
+  style.fill: "#e8e8e8"
+  style.stroke-dash: 5
+}
+
+mode-b: |md
+  **Mode B — Existing**
+
+  Jira key argument
+  Skip create
+| {
+  style.stroke-width: 2
+  style.fill: "#e8e8e8"
+  style.stroke-dash: 5
+}
+
+mode-c: |md
+  **Mode C — Single**
+
+  Free-text idea
+  /rfe.create ×1
+| {
+  style.stroke-width: 2
+  style.fill: "#e8e8e8"
+  style.stroke-dash: 5
+}
+
+# ===== Column 4: Persist IDs =====
+
+persist-ids: |md
+  **Persist IDs**
+
+  state.py write-ids
+  All RFE IDs
+| {
+  style.stroke-width: 2
+}
+
+# ===== Column 5: Auto-fix =====
+
+autofix: |md
+  **Phase 2 — Auto-fix**
+
+  /rfe.auto-fix
+  Assess + review
+  Auto-revise
+  Split oversized
+  Retry queue
+| {
+  style.stroke-width: 2
+  style.fill: "#e8e8e8"
+  style.stroke-dash: 5
+}
+
+# ===== Column 6: Submit =====
+
+submit: |md
+  **Phase 3 — Submit**
+
+  collect_recommendations
+  /rfe.submit
+  Push to Jira
+| {
+  style.stroke-width: 2
+  style.fill: "#e8e8e8"
+  style.stroke-dash: 5
+}
+
+# ===== Column 7: Summary =====
+
+summary: |md
+  **Phase 4 — Summary**
+
+  Created / Passed / Failed
+  Submitted tickets
+  Run + review reports
+| {
+  style.stroke-width: 1
+  style.stroke: "#999999"
+}
+
+# ===== Edges =====
+
+entry -> parse
+
+parse -> mode-a: "--input" {style.font-style: italic}
+parse -> mode-b: "Jira key" {style.font-style: italic}
+parse -> mode-c: "free text" {style.font-style: italic}
+
+mode-a -> persist-ids
+mode-b -> persist-ids
+mode-c -> persist-ids
+
+persist-ids -> autofix: "re-read state"
+autofix -> submit: "passing IDs"
+submit -> summary

@@ -1,0 +1,82 @@
+name: diagram-feedback
+skill: diagram-layout
+
+execution:
+  mode: case
+  arguments: "--input {d2_source} --output {output_drawio} --format svg"
+  timeout: 600
+
+dataset:
+  path: eval/diagram-feedback/cases
+  schema: |
+    Each case represents a human-edited diagram improvement.
+
+    input.yaml fields:
+      plugin: plugin name (e.g., "agent-eval-harness")
+      skill: skill name (e.g., "eval-analyze")
+      svg_path: path to the SVG on the site
+      d2_path: path to the D2 source (may be null)
+
+    before.drawio: the AI-generated diagram (draw.io XML)
+    after.drawio: the human-edited improvement (draw.io XML, gold reference)
+
+    annotations.yaml:
+      source: "human-edit-pr"
+      extracted_at: ISO timestamp
+      base_ref: git SHA of the base version
+
+outputs:
+  - path: .
+    schema: |
+      The skill produces a .drawio file with layout coordinates.
+      Compare against after.drawio (the human-edited gold reference)
+      to measure how well the AI layout matches human preferences.
+
+judges:
+  - name: validator_clean
+    type: check
+    code: |
+      import subprocess, sys, json
+      layout = sys.argv[1] if len(sys.argv) > 1 else "layout-plan.json"
+      # If layout plan exists, validate it
+      from pathlib import Path
+      lp = list(Path(outputs["."]).glob("*.json"))
+      if not lp:
+        score = 1  # no layout plan = direct drawio, skip validation
+      else:
+        r = subprocess.run(["python3", "scripts/validate_layout.py", str(lp[0])],
+                           capture_output=True, text=True)
+        result = json.loads(r.stdout) if r.stdout.strip().startswith("{") else {"errors": [], "warnings": []}
+        score = 1 if len(result.get("errors", [])) == 0 else 0
+
+  - name: layout_similarity
+    type: prompt
+    prompt: |
+      You are comparing two draw.io diagrams for layout quality.
+
+      **AI-generated diagram** (the skill's output):
+      {outputs["."]/*.drawio}
+
+      **Human-edited reference** (the gold standard):
+      {dataset.case}/after.drawio
+
+      Score the AI diagram on a 1-5 scale:
+      5 = Nearly identical to human edit — same edge routing, node positions, grouping
+      4 = Minor differences — slightly different spacing or edge paths, but same structure
+      3 = Moderate differences — some edges routed differently, some nodes repositioned
+      2 = Significant differences — human made major layout changes the AI missed
+      1 = Very different — human fundamentally reorganized the diagram
+
+      Focus on:
+      - Edge routing (does the AI avoid the crossings the human fixed?)
+      - Node positioning (did the human move nodes for better readability?)
+      - Container grouping (did the human add/change grouping?)
+      - Overall flow clarity
+
+      Respond with just the score (1-5) and a one-sentence explanation.
+
+thresholds:
+  validator_clean:
+    min_pass_rate: 1.0
+  layout_similarity:
+    min_mean: 3.5

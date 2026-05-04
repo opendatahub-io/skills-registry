@@ -1,0 +1,99 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+create: |md
+  **/test-plan.create**
+
+  - Fetch strategy + ADR
+  - Invoke 3 sub-analyzers
+  - Merge findings
+  - Invoke review
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+endpoints: |md
+  **analyze.endpoints**
+
+  - API endpoints
+  - Test objectives
+  - Priority assignment
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+risks: |md
+  **analyze.risks**
+
+  - Test levels & types
+  - NFR categories
+  - Risk mitigations
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+infra: |md
+  **analyze.infra**
+
+  - Cluster config
+  - Test data & users
+  - Tooling needs
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+review: |md
+  **/test-plan.review**
+
+  - 5-criteria rubric
+  - Score + auto-revise
+  - Max 2 revision cycles
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+create-cases: |md
+  **/test-plan.create-cases**
+
+  - Generate TC-*.md files
+  - Upgrade-aware cases
+  - Coverage validation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# Flow
+create -> endpoints: "parallel" {style.stroke-dash: 3}
+create -> risks: "parallel" {style.stroke-dash: 3}
+create -> infra: "parallel" {style.stroke-dash: 3}
+endpoints -> review: "findings"
+risks -> review: "findings"
+infra -> review: "findings"
+review -> create-cases: "test plan"

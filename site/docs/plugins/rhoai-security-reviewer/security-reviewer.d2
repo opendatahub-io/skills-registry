@@ -1,0 +1,231 @@
+direction: right
+
+# ── Global styles ──
+*.style.border-radius: 8
+*.style.font-size: 14
+
+# ── Entry ──
+entry: |md
+  ## Parse Arguments
+  - STRAT key (e.g. RHAISTRAT-400)
+  - \`--reviewer N\` (1, 2, or 3)
+  - \`--threat-surface <path>\`
+  - \`--tier <light|standard|deep>\`
+| {
+  style.fill: "#e8f5e9"
+  style.stroke: "#2e7d32"
+  style.font-size: 13
+}
+
+# ── Step 1: Read Threat Surface ──
+read-threat: |md
+  ## Read Threat Surface
+  - Read structured inventory file
+  - Endpoints, services, data flows
+  - Credentials, CRDs, trust boundaries
+  - RBAC, agent/MCP surfaces
+| {
+  style.fill: "#e3f2fd"
+  style.stroke: "#1565c0"
+  style.font-size: 13
+}
+
+# ── Step 2: Fetch STRAT ──
+jira: |md
+  ## Jira
+| {
+  style.fill: "#fff3e0"
+  style.stroke: "#e65100"
+  style.stroke-dash: 5
+  style.font-size: 13
+}
+
+fetch-strat: |md
+  ## Fetch STRAT
+  - Call mcp\_\_atlassian\_\_getJiraIssue
+  - Fields: summary, description,
+    priority, labels, status, comment
+  - Response in markdown format
+  - Read full STRAT content
+| {
+  style.fill: "#e3f2fd"
+  style.stroke: "#1565c0"
+  style.double-border: true
+  style.font-size: 13
+}
+
+# ── Step 3: Architecture Context (conditional) ──
+tier-check: |md
+  ## Tier Check
+| {
+  style.fill: "#fff9c4"
+  style.stroke: "#f9a825"
+  style.font-size: 13
+  shape: diamond
+}
+
+read-arch: |md
+  ## Read Architecture Context
+  - PLATFORM.md overview
+  - Component-specific files for
+    each affected component
+  - Identify existing security controls
+  - .context/architecture-context/
+| {
+  style.fill: "#e3f2fd"
+  style.stroke: "#1565c0"
+  style.font-size: 13
+}
+
+# ── Phase A: Discovery (container) ──
+phase-a: Phase A — Discovery {
+  style.fill: "#fce4ec"
+  style.stroke: "#c62828"
+  style.font-size: 16
+  style.border-radius: 12
+
+  catalog: |md
+    ## A.1 Risk Pattern Catalog
+    - Check ALL 39 patterns against
+      threat surface inventory
+    - Record APPLICABLE or
+      NOT-APPLICABLE per pattern
+    - 10 categories: AUTH, DATA,
+      CRYPTO, NET, SUPPLY, INFRA,
+      TENANT, AGENT, MCP, UPSTREAM
+    - Each finding cites threat surface
+      items and STRAT text
+  | {
+    style.fill: "#ffebee"
+    style.stroke: "#c62828"
+    style.font-size: 13
+  }
+
+  creative: |md
+    ## A.2 Creative Exploration
+    - Cross-component attack chains
+    - Novel attack surfaces unique
+      to this STRAT
+    - Emergent risks from combinations
+    - Unvalidated assumptions
+    - Choices that block future controls
+  | {
+    style.fill: "#ffebee"
+    style.stroke: "#c62828"
+    style.font-size: 13
+  }
+
+  catalog -> creative: after all\n39 patterns
+}
+
+# ── Phase B: Filter & Classify (container) ──
+phase-b: Phase B — Filter & Classify {
+  style.fill: "#ede7f6"
+  style.stroke: "#4527a0"
+  style.font-size: 16
+  style.border-radius: 12
+
+  relevance-gate: |md
+    ## B.1 Relevance Gate
+    - What specific STRAT content
+      creates this concern?
+    - Already addressed by existing
+      security infrastructure?
+    - DROP if cannot answer both
+      with specifics
+  | {
+    style.fill: "#f3e5f5"
+    style.stroke: "#6a1b9a"
+    style.font-size: 13
+  }
+
+  gate-decision: |md
+    ## Pass / Drop
+  | {
+    style.fill: "#fff9c4"
+    style.stroke: "#f9a825"
+    style.font-size: 13
+    shape: diamond
+  }
+
+  severity-tree: |md
+    ## B.2 Severity Decision Tree
+    - Critical: no auth, no isolation,
+      lethal trifecta, irreversible arch
+    - High: auth bypass, insecure creds,
+      cluster RBAC, vulnerable upstream
+    - Medium: real concern, not
+      Critical or High
+    - NFR Gap: missing spec, not
+      active flaw
+  | {
+    style.fill: "#f3e5f5"
+    style.stroke: "#6a1b9a"
+    style.double-border: true
+    style.font-size: 13
+  }
+
+  org-constraints: |md
+    ## B.3 Org Constraints
+    - FIPS 140-3 compliance
+    - TLS profile compliance
+    - OpenShift Gateway API
+    - Approved auth patterns only
+    - Namespace-scoped RBAC
+    - Image provenance
+    - Upstream-first policy
+  | {
+    style.fill: "#f3e5f5"
+    style.stroke: "#6a1b9a"
+    style.font-size: 13
+  }
+
+  relevance-gate -> gate-decision
+  gate-decision -> severity-tree: passed
+  severity-tree -> org-constraints
+}
+
+dropped: |md
+  ## Dropped Findings
+  - Recorded with reason
+| {
+  style.fill: "#efebe9"
+  style.stroke: "#795548"
+  style.font-size: 13
+  style.stroke-dash: 5
+}
+
+# ── Output ──
+output: |md
+  ## Write Review File
+  - artifacts/security-reviews/
+    \<STRAT\>-reviewer-\<N\>.md
+  - Full catalog check results (39)
+  - Creative exploration findings
+  - Relevance gate pass/drop
+  - Security risks with severity
+  - NFR gaps
+  - Org constraint violations
+| {
+  style.fill: "#e8f5e9"
+  style.stroke: "#2e7d32"
+  style.font-size: 13
+}
+
+# ── Edges ──
+entry -> read-threat
+read-threat -> fetch-strat
+fetch-strat -> jira: MCP call {
+  style.stroke: "#e65100"
+  style.stroke-dash: 5
+}
+fetch-strat -> tier-check
+tier-check -> read-arch: standard / deep
+tier-check -> phase-a: light\n(skip arch)
+read-arch -> phase-a
+phase-a -> phase-b: all findings
+phase-b.gate-decision -> dropped: dropped {
+  style.stroke: "#795548"
+  style.stroke-dash: 5
+}
+phase-b -> output

@@ -1,0 +1,52 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="create" value="&lt;b&gt;/test-plan.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fetch strategy + ADR&lt;br&gt;Invoke 3 sub-analyzers&lt;br&gt;Merge findings&lt;br&gt;Invoke review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="160" width="180" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="endpoints" value="&lt;b&gt;analyze.endpoints&lt;/b&gt;&lt;br&gt;&lt;br&gt;API endpoints&lt;br&gt;Test objectives&lt;br&gt;Priority assignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="290" y="30" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="risks" value="&lt;b&gt;analyze.risks&lt;/b&gt;&lt;br&gt;&lt;br&gt;Test levels &amp;amp; types&lt;br&gt;NFR categories&lt;br&gt;Risk mitigations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="290" y="170" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="infra" value="&lt;b&gt;analyze.infra&lt;/b&gt;&lt;br&gt;&lt;br&gt;Cluster config&lt;br&gt;Test data &amp;amp; users&lt;br&gt;Tooling needs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="290" y="310" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="review" value="&lt;b&gt;/test-plan.review&lt;/b&gt;&lt;br&gt;&lt;br&gt;5-criteria rubric&lt;br&gt;Score + auto-revise&lt;br&gt;Max 2 revision cycles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="540" y="155" width="185" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="create-cases" value="&lt;b&gt;/test-plan.create-cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;Generate TC-*.md files&lt;br&gt;Upgrade-aware cases&lt;br&gt;INDEX.md + coverage&lt;br&gt;Validate completeness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="810" y="160" width="195" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="parallel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="endpoints" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="risks" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="infra" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="endpoints" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="risks" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="infra" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="test plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="review" target="create-cases" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

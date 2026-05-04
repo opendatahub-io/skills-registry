@@ -1,0 +1,72 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/python-packaging-source-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;package name" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="170" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="pypi-api" value="&lt;b&gt;PyPI JSON API&lt;/b&gt;&lt;br&gt;&lt;br&gt;pypi.org/pypi/{pkg}/json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="245" y="30" width="160" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="pypi-lookup" value="&lt;b&gt;PyPI Metadata Lookup&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fetch pypi.org/pypi/{pkg}/json&lt;br&gt;Extract project_urls map&lt;br&gt;Extract home_page field&lt;br&gt;Handle HTTP 404 / errors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="235" y="150" width="180" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="url-matching" value="&lt;b&gt;Repository URL Matching&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#805ad5;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="465" y="120" width="200" height="290" as="geometry"/>
+    </mxCell>
+    <mxCell id="project-urls" value="&lt;b&gt;Scan project_urls&lt;/b&gt;&lt;br&gt;&lt;br&gt;Iterate all URL entries&lt;br&gt;Pattern-match platforms&lt;br&gt;github, gitlab, bitbucket&lt;br&gt;sr.ht, codeberg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#805ad5;strokeWidth=1;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="url-matching">
+      <mxGeometry x="15" y="35" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="homepage-check" value="&lt;b&gt;Check home_page&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fallback if project_urls&lt;br&gt;empty; same platform&lt;br&gt;pattern check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#805ad5;strokeWidth=1;arcSize=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="url-matching">
+      <mxGeometry x="15" y="160" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="confidence" value="&lt;b&gt;Confidence Scoring&lt;/b&gt;&lt;br&gt;&lt;br&gt;High: repository, source, git&lt;br&gt;Medium: homepage, website&lt;br&gt;Low: other keys or fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#d69e2e;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="715" y="150" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="decision" value="&lt;b&gt;Confidence?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff5f5;strokeColor=#e53e3e;strokeWidth=2;fontSize=11;verticalAlign=middle;" vertex="1" parent="1">
+      <mxGeometry x="935" y="178" width="100" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Structured Result&lt;/b&gt;&lt;br&gt;&lt;br&gt;Repository URL (or null)&lt;br&gt;Confidence: high/medium/low&lt;br&gt;Method used to find URL&lt;br&gt;Context / warnings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#3182ce;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1100" y="135" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="web-search" value="&lt;b&gt;WebSearch Fallback&lt;/b&gt;&lt;br&gt;&lt;br&gt;{package} python github&lt;br&gt;repository search&lt;br&gt;Used when low / null" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1100" y="310" width="170" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="package name" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="pypi-lookup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pypi-lookup" target="url-matching" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="no match" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="project-urls" target="homepage-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="url-matching" target="confidence" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="score" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="confidence" target="decision" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="high / medium" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#38a169;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="decision" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="low / null" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#e53e3e;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="decision" target="web-search" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" value="search results" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="web-search" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" value="HTTP GET" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#718096;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="pypi-api" target="pypi-lookup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

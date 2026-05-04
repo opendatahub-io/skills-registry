@@ -1,0 +1,181 @@
+direction: right
+
+# --- Global styles ---
+*.style.border-radius: 8
+*.style.font-size: 14
+
+# ===================================================================
+# Nodes
+# ===================================================================
+
+entry: |md
+  ## python-full-deps
+  - Package name (required)
+  - Version (optional, default: latest)
+  - Python version (optional, default: 3.12)
+| {
+  style.fill: "#E8F5E9"
+  style.stroke: "#2E7D32"
+  style.font-size: 15
+}
+
+build_req: |md
+  ## Build Requirement
+  - Construct requirement string
+  - package==version or bare name
+  - Normalize for PyPI resolution
+| {
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+try_uv: |md
+  ## Try uv Resolver
+  - Run uv pip compile -
+  - Pass --python-version flag
+  - Write to temp requirements.txt
+  - 150s timeout
+| {
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+uv_available: |md
+  ## uv Available?
+| {
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+  style.font-size: 13
+}
+
+parse_compile: |md
+  ## Parse Compile Output
+  - Read requirements.txt format
+  - Regex match name==version
+  - PEP 503 name normalization
+  - Collect into set
+| {
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+pip_fallback: |md
+  ## Pip Fallback
+  - Create temp venv
+  - Upgrade pip >= 22.2
+  - pip install --dry-run --report
+  - 150s timeout
+| {
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+version_warn: |md
+  ## Version Mismatch?
+  - Warn if requested Python != running Python
+  - Pip cannot cross-resolve
+| {
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+  style.font-size: 13
+}
+
+parse_report: |md
+  ## Parse Pip Report
+  - Read JSON report file
+  - Extract name + version from metadata
+  - PEP 503 normalization
+| {
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+resolve_ok: |md
+  ## Resolution OK?
+| {
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+  style.font-size: 13
+}
+
+sort_dedup: |md
+  ## Sort & Deduplicate
+  - Alphabetical sort
+  - Unique entries only
+  - name==version per line
+| {
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+output: |md
+  ## Dependency Tree
+  - Sorted name==version lines
+  - Total dependency count
+  - Notable packages highlighted
+| {
+  style.fill: "#E8F5E9"
+  style.stroke: "#2E7D32"
+  style.font-size: 15
+}
+
+error_exit: |md
+  ## Error
+  - Print error to stderr
+  - Exit non-zero
+| {
+  style.fill: "#FFEBEE"
+  style.stroke: "#C62828"
+}
+
+# ===================================================================
+# External dependencies
+# ===================================================================
+
+pypi: |md
+  ## PyPI
+| {
+  style.fill: "#F3E5F5"
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 5
+}
+
+# ===================================================================
+# Edges
+# ===================================================================
+
+entry -> build_req
+build_req -> try_uv
+try_uv -> uv_available
+
+uv_available -> parse_compile: "Yes" {
+  style.stroke: "#2E7D32"
+}
+uv_available -> pip_fallback: "No (FileNotFoundError)" {
+  style.stroke: "#C62828"
+  style.stroke-dash: 3
+}
+
+parse_compile -> resolve_ok
+pip_fallback -> version_warn
+version_warn -> parse_report
+parse_report -> resolve_ok
+
+try_uv -> pypi: "network" {
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 3
+}
+pip_fallback -> pypi: "network" {
+  style.stroke: "#6A1B9A"
+  style.stroke-dash: 3
+}
+
+resolve_ok -> sort_dedup: "Success" {
+  style.stroke: "#2E7D32"
+}
+resolve_ok -> error_exit: "Failure" {
+  style.stroke: "#C62828"
+  style.stroke-dash: 3
+}
+
+sort_dedup -> output

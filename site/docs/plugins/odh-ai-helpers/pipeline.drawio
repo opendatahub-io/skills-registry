@@ -1,0 +1,55 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="adr-review" value="&lt;b&gt;/adr-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;6 specialist reviewers&lt;br&gt;Consolidated PDF/PPTX" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="30" width="175" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="gitlab-pipeline-debugger" value="&lt;b&gt;/gitlab-pipeline-debugger&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pipeline status&lt;br&gt;Job logs &amp;amp; debugging" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="150" width="175" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="git-shallow-clone" value="&lt;b&gt;/git-shallow-clone&lt;/b&gt;&lt;br&gt;&lt;br&gt;Shallow clone to tmp&lt;br&gt;Local analysis prep" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="270" width="175" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-upload-chat-log" value="&lt;b&gt;/jira-upload-chat-log&lt;/b&gt;&lt;br&gt;&lt;br&gt;Export chat as markdown&lt;br&gt;Attach to Jira ticket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="390" width="175" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="python-full-deps" value="&lt;b&gt;/python-full-deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Full dependency tree&lt;br&gt;Environment markers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="280" y="30" width="175" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="source-finder" value="&lt;b&gt;/python-packaging-source-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;Locate source repos&lt;br&gt;PyPI + code hosting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="530" y="30" width="220" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="license-finder" value="&lt;b&gt;/python-packaging-license-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;PyPI metadata&lt;br&gt;Git LICENSE fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="530" y="150" width="220" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="license-checker" value="&lt;b&gt;/python-packaging-license-checker&lt;/b&gt;&lt;br&gt;&lt;br&gt;Red Hat redistribution&lt;br&gt;Fedora license policy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="530" y="270" width="220" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="complexity" value="&lt;b&gt;/python-packaging-complexity&lt;/b&gt;&lt;br&gt;&lt;br&gt;Build complexity&lt;br&gt;Compilation needs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="30" width="220" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="env-finder" value="&lt;b&gt;/python-packaging-env-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;Build env vars&lt;br&gt;setup.py / CMake" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="150" width="220" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="bug-finder" value="&lt;b&gt;/python-packaging-bug-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;Known packaging bugs&lt;br&gt;GitHub issue search" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="830" y="270" width="220" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="source-finder" target="license-finder" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="license-finder" target="license-checker" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="source-finder" target="complexity" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="source-finder" target="bug-finder" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

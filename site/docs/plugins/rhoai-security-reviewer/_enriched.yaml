@@ -1,0 +1,42 @@
+description: |
+  Consensus-based security review for RHOAI strategy documents. An orchestrator
+  extracts threat surfaces, spawns three independent reviewers in parallel,
+  synthesizes findings with confidence tagging, and produces a PASS/CONCERNS/FAIL
+  verdict covering 39 catalog patterns.
+skills:
+  strat-security-review:
+    description: |
+      Security review orchestrator for STRAT documents. Extracts threat surface,
+      determines review tier, spawns 3 independent reviewers, synthesizes
+      consensus findings, and produces a final verdict with confidence tagging.
+    arguments:
+      - name: "RHAISTRAT_KEY"
+        required: true
+        description: "RHAISTRAT Jira key (e.g., RHAISTRAT-400)"
+      - name: "--force"
+        required: false
+        description: "Regenerate review even if one already exists"
+    usage_examples:
+      - "/strat-security-review RHAISTRAT-400"
+      - "/strat-security-review RHAISTRAT-400 --force"
+  security-reviewer:
+    description: |
+      Independent security reviewer that assesses RHOAI strategy documents
+      against 39 catalog patterns. Runs in isolated forked context as part
+      of the multi-reviewer consensus process.
+    arguments:
+      - name: "STRAT_KEY"
+        required: true
+        description: "STRAT key (e.g., RHAISTRAT-400)"
+      - name: "--reviewer"
+        type: "N"
+        required: true
+        description: "Reviewer number (1, 2, or 3)"
+      - name: "--threat-surface"
+        type: "<path>"
+        required: true
+        description: "Path to threat surface inventory file"
+      - name: "--tier"
+        type: "light | standard | deep"
+        required: true
+        description: "Review depth tier"

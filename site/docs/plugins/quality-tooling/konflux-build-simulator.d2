@@ -1,0 +1,198 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ── Column 1: Entry ──────────────────────────────────
+entry: |md
+  **/konflux-build-simulator**
+
+  [repository-url]
+  Simulates Konflux build
+  environment on PRs
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# ── Column 2: Repo Analysis ─────────────────────────
+clone: |md
+  **Clone & Scan**
+
+  Shallow clone repo
+  Read Dockerfiles
+  Read package.json
+  Detect build args
+|
+
+detect: |md
+  **Detect Repo Type**
+
+  Monorepo (turbo.json)
+  Operator (CRDs)
+  Component/Library
+  Module Federation
+|
+
+# ── Column 3: Phase 0 Static Checks ─────────────────
+lockfile: |md
+  **Hermetic Lockfile**
+
+  npm: git+/github:/file:
+  go.sum existence
+  go mod verify
+  Resolved URL check
+|
+
+workspace: |md
+  **Workspace Deps**
+
+  Detect scope & dirs
+  Cross-ref COPY cmds
+  Runtime vs dev deps
+  Missing package warn
+|
+
+fips: |md
+  **FIPS Compliance**
+
+  esbuild removal
+  strictfipsruntime tag
+  Go binary flags
+  Release blocker warn
+|
+
+preflight: |md
+  **Hermetic Preflight**
+
+  docker --network=none
+  npm ci --ignore-scripts
+  Root + module lockfiles
+  <1 min validation
+|
+
+# ── Column 4: Phase 1-2 Build & Runtime ──────────────
+docker-build: |md
+  **Docker Build**
+
+  Production BUILD_MODE
+  Multi-stage build
+  COPY path validation
+  Build arg injection
+|
+
+runtime: |md
+  **Runtime Validation**
+
+  Container startup
+  Crashloop detection
+  Health check wait
+  Log error scan
+|
+
+api-test: |md
+  **API Endpoint Tests**
+
+  merge-patch+json (415)
+  json-patch+json (415)
+  Fastify v5 regression
+  28+ operations check
+|
+
+ws-test: |md
+  **WebSocket Tests**
+
+  Connection crash detect
+  @fastify/websocket v11
+  Non-admin user crash
+  SocketStream removal
+|
+
+nonroot: |md
+  **Non-Root Runtime**
+
+  UID 1001:0 test
+  Permission issues
+  Delayed crash detect
+  Stability monitor
+|
+
+# ── Column 5: Phase 3-5 Conditional ─────────────────
+modfed: |md
+  **Module Federation**
+
+  remoteEntry.js size
+  Chunk completeness
+  ChunkLoadError detect
+  Load performance
+| {
+  style.stroke-dash: 3
+}
+
+operator: |md
+  **Operator Integration**
+
+  Kind cluster create
+  CRD install & apply
+  Deployment wait
+  Webhook validation
+| {
+  style.stroke-dash: 3
+}
+
+manifests: |md
+  **Manifest Validation**
+
+  Kustomize build
+  ConfigMap generation
+  Overlay testing
+  Resource validation
+| {
+  style.stroke-dash: 3
+}
+
+# ── Column 6: Output ────────────────────────────────
+generate: |md
+  **Generate Workflow**
+
+  pr-build-validation.yml
+  validate-build.sh
+  Test manifests
+  Setup documentation
+|
+
+# ── Edges: Column 1 -> 2 ────────────────────────────
+entry -> clone
+clone -> detect
+
+# ── Edges: Column 2 -> 3 (Phase 0) ──────────────────
+detect -> lockfile
+detect -> workspace
+detect -> fips
+lockfile -> preflight
+
+# ── Edges: Column 3 -> 4 (Phase 1-2) ────────────────
+preflight -> docker-build
+workspace -> docker-build: context {style.stroke-dash: 3}
+fips -> docker-build: flags {style.stroke-dash: 3}
+docker-build -> runtime
+runtime -> api-test
+runtime -> ws-test
+runtime -> nonroot
+
+# ── Edges: Column 4 -> 5 (conditional phases) ───────
+api-test -> modfed: "if monorepo" {style.stroke-dash: 3}
+ws-test -> modfed: {style.stroke-dash: 3}
+nonroot -> operator: "if operator" {style.stroke-dash: 3}
+modfed -> manifests: {style.stroke-dash: 3}
+operator -> manifests: {style.stroke-dash: 3}
+
+# ── Edges: Column 5 -> 6 (output) ───────────────────
+manifests -> generate: results
+api-test -> generate: results {style.stroke-dash: 3}
+nonroot -> generate: results {style.stroke-dash: 3}

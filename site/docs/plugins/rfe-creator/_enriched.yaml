@@ -1,0 +1,169 @@
+description: |
+  Claude Code skills for creating, reviewing, and submitting RFEs to the
+  RHAIRFE Jira project. Provides an automated pipeline from initial creation
+  through review, splitting, and submission, plus strategy refinement skills.
+skills:
+  rfe.create:
+    description: |
+      Generate new RFEs from problem statements. Asks clarifying questions
+      (unless --headless), then produces well-formed RFEs with YAML frontmatter.
+    arguments:
+      - name: "--headless"
+        required: false
+        description: "Skip clarifying questions, generate directly from input"
+      - name: "--priority"
+        type: "Blocker | Critical | Major | Normal | Minor"
+        required: false
+        default: "Normal"
+        description: "Override default priority"
+      - name: "--labels"
+        type: "<comma-separated>"
+        required: false
+        description: "Labels to apply to created RFEs"
+      - name: "--rfe-id"
+        type: "<ID>"
+        required: false
+        description: "Pre-assigned RFE ID (placeholder file must exist)"
+    usage_examples:
+      - "/rfe.create Users need better error messages"
+      - "/rfe.create --headless --priority Critical Fix dashboard latency"
+  rfe.review:
+    description: |
+      Score and improve RFEs with rubric-based assessment, feasibility check,
+      and auto-revision loop.
+    arguments:
+      - name: "--headless"
+        required: false
+        description: "Suppress end-of-run summary"
+      - name: "--caller"
+        type: "autofix | split | none"
+        required: false
+        default: "none"
+        description: "Identifies calling skill for headless return"
+    usage_examples:
+      - "/rfe.review RHAIRFE-1234"
+      - "/rfe.review --headless RFE-001 RFE-002"
+  rfe.split:
+    description: |
+      Decompose oversized RFEs into appropriately-scoped pieces. Generates
+      child RFEs, reviews them, and validates coverage.
+    arguments:
+      - name: "--headless"
+        required: false
+        description: "Suppress end-of-run summary"
+    usage_examples:
+      - "/rfe.split RHAIRFE-1234"
+  rfe.submit:
+    description: |
+      Push RFEs to Jira via REST API. Creates new RHAIRFE tickets or
+      updates existing ones, renames local files after submission.
+    usage_examples:
+      - "/rfe.submit"
+  rfe.speedrun:
+    description: |
+      Execute the full RFE pipeline end-to-end: create, review, auto-fix,
+      and submit. Supports single ideas, Jira keys, or batch YAML input.
+    arguments:
+      - name: "--input"
+        type: "<path>"
+        required: false
+        description: "Path to YAML file with batch entries"
+      - name: "--headless"
+        required: false
+        description: "Non-interactive mode for CI/eval"
+      - name: "--dry-run"
+        required: false
+        description: "Skip Jira writes in submit phase"
+      - name: "--batch-size"
+        type: "<N>"
+        required: false
+        default: "5"
+        description: "Override batch size for auto-fix"
+      - name: "--announce-complete"
+        required: false
+        description: "Print completion marker when done"
+    usage_examples:
+      - "/rfe.speedrun Better dashboard for ML models"
+      - "/rfe.speedrun --input batch.yaml --headless --dry-run"
+  rfe.auto-fix:
+    description: |
+      Batch review, revise, and split operations across many RFEs.
+      Supports JQL queries for bulk processing.
+    arguments:
+      - name: "--jql"
+        type: "<query>"
+        required: false
+        description: "JQL query to fetch RFE IDs from Jira"
+      - name: "--limit"
+        type: "<N>"
+        required: false
+        description: "Max number of results from JQL"
+      - name: "--batch-size"
+        type: "<N>"
+        required: false
+        default: "50"
+        description: "Process IDs in batches of this size"
+      - name: "--headless"
+        required: false
+        description: "Non-interactive mode"
+      - name: "--reprocess"
+        required: false
+        description: "Reprocess RFEs that had prior runs"
+      - name: "--random"
+        type: "<N>"
+        required: false
+        description: "Process N random RFEs from the batch"
+    usage_examples:
+      - "/rfe.auto-fix RFE-001 RFE-002"
+      - '/rfe.auto-fix --jql "project=RHAIRFE AND status=New" --limit 20'
+  strat.create:
+    description: |
+      Create strategies from approved RFEs by cloning them to RHAISTRAT
+      in Jira and creating local strategy artifacts.
+    usage_examples:
+      - "/strat.create RHAIRFE-1234"
+  strat.refine:
+    description: |
+      Refine strategy documents — add the HOW section, dependencies,
+      impacted teams/components, and non-functional requirements.
+    usage_examples:
+      - "/strat.refine"
+  strat.review:
+    description: |
+      Adversarial review of refined strategies. Spawns 4 independent
+      forked reviewers (architecture, feasibility, scope, testability)
+      and synthesizes a consolidated review.
+    usage_examples:
+      - "/strat.review"
+  strat.prioritize:
+    description: |
+      Prioritize strategies against the existing RHAISTRAT backlog.
+      Not yet implemented.
+    usage_examples:
+      - "/strat.prioritize (not yet implemented)"
+  rfe-creator.update-deps:
+    description: |
+      Force update all vendored dependencies — assess-rfe skills and
+      architecture context.
+    usage_examples:
+      - "/rfe-creator.update-deps"
+  architecture-review:
+    description: |
+      Internal forked reviewer. Checks strategy features for architectural
+      correctness — dependencies, integration patterns, component interactions.
+  feasibility-review:
+    description: |
+      Internal forked reviewer. Assesses technical feasibility, implementation
+      complexity, and effort estimate credibility.
+  rfe-feasibility-review:
+    description: |
+      Internal forked reviewer. Reviews RFEs for technical feasibility,
+      blockers, and alignment with technical strategy.
+  scope-review:
+    description: |
+      Internal forked reviewer. Checks if strategies are right-sized and
+      effort matches scope.
+  testability-review:
+    description: |
+      Internal forked reviewer. Assesses whether acceptance criteria are
+      measurable, edge cases covered, and validation approach defined.

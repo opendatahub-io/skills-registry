@@ -1,0 +1,272 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/eval-run&lt;/b&gt;&lt;br&gt;&lt;br&gt;Parse CLI arguments&lt;br&gt;--config, --model, --skill&lt;br&gt;--case, --baseline, --gold&lt;br&gt;--no-judge, --effort" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="55" width="145" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="config_check" value="&lt;b&gt;Config&lt;br&gt;exists?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="220" y="85" width="90" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="bootstrap" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;Bootstrap eval.yaml&lt;br&gt;Analyze skill under test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="345" y="15" width="130" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="load_config" value="&lt;b&gt;Load Config&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read eval.yaml&lt;br&gt;Verify skill, models, judges&lt;br&gt;Check tool interception&lt;br&gt;Persist flags via state.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="345" y="105" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="find_dataset" value="&lt;b&gt;Find Dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read dataset.path&lt;br&gt;Verify case subdirs&lt;br&gt;Apply --case filter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="545" y="105" width="145" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="no_cases" value="&lt;b&gt;No Cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;Suggest /eval-dataset&lt;br&gt;Or /eval-analyze --update" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="545" y="225" width="130" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="preflight" value="&lt;b&gt;Preflight Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;Run preflight.py&lt;br&gt;Check tmp/ state files&lt;br&gt;Check previous run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="735" y="105" width="135" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="preflight_decision" value="&lt;b&gt;CLEAN?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="915" y="125" width="85" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="dirty_resolve" value="&lt;b&gt;Resolve Dirty State&lt;/b&gt;&lt;br&gt;&lt;br&gt;--clean --force&lt;br&gt;Change run-id (-v2)&lt;br&gt;Or abort" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="895" y="15" width="150" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="workspace" value="&lt;b&gt;Prepare Workspace&lt;/b&gt;&lt;br&gt;&lt;br&gt;workspace.py isolated dir&lt;br&gt;Copy/symlink resources&lt;br&gt;Create output dirs&lt;br&gt;Build batch.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1060" y="100" width="165" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="tools_check" value="&lt;b&gt;inputs.tools&lt;br&gt;configured?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="400" width="100" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve_tools" value="&lt;b&gt;Resolve Tool Handlers&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read tool_handlers.yaml&lt;br&gt;Resolve prompts to checks&lt;br&gt;Add input_filters, env&lt;br&gt;Verify Bash filters" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="490" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="execute" value="&lt;b&gt;Execute Skill&lt;/b&gt;&lt;br&gt;&lt;br&gt;execute.py via agent runner&lt;br&gt;Case mode: once per case&lt;br&gt;Batch mode: single invocation&lt;br&gt;Parallel via thread pool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="240" y="400" width="165" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="claude_code" value="&lt;i&gt;Claude Code CLI&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=1;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="555" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="monitor" value="&lt;b&gt;Monitor Progress&lt;/b&gt;&lt;br&gt;&lt;br&gt;Run in background&lt;br&gt;Poll output periodically&lt;br&gt;Check DONE/ERROR/stuck&lt;br&gt;Report progress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="450" y="400" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="check_result" value="&lt;b&gt;Check Result&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read run_result.json&lt;br&gt;exit_code, duration_s&lt;br&gt;cost_usd, token usage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="650" y="400" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="exec_fail" value="&lt;b&gt;Execution Failed&lt;/b&gt;&lt;br&gt;&lt;br&gt;Report exit code + stderr&lt;br&gt;Do not continue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="660" y="540" width="130" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="collect" value="&lt;b&gt;Collect Artifacts&lt;/b&gt;&lt;br&gt;&lt;br&gt;collect.py distributes&lt;br&gt;Per-case directories&lt;br&gt;Write collection.json&lt;br&gt;Warn on 0-artifact cases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="835" y="400" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="judge_check" value="&lt;b&gt;--no-judge?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1035" y="425" width="100" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Score with Judges&lt;/b&gt;&lt;br&gt;&lt;br&gt;score.py judges&lt;br&gt;Inline checks (Python)&lt;br&gt;LLM judges (Anthropic API)&lt;br&gt;External code judges&lt;br&gt;Parallel per case" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="720" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="anthropic_api" value="&lt;i&gt;Anthropic API&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=1;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="55" y="885" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="baseline_check" value="&lt;b&gt;--baseline?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="245" y="755" width="95" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="pairwise" value="&lt;b&gt;Pairwise Comparison&lt;/b&gt;&lt;br&gt;&lt;br&gt;score.py pairwise&lt;br&gt;Position-swapped judge&lt;br&gt;A/B blind evaluation&lt;br&gt;Wins / Losses / Ties" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="245" y="840" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="analyze" value="&lt;b&gt;Analyze Results&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read summary.yaml&lt;br&gt;Follow analyze-results.md&lt;br&gt;Recommendation first&lt;br&gt;Failure patterns, root causes&lt;br&gt;Cost attribution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="455" y="720" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="write_analysis" value="&lt;b&gt;Write analysis.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;YAML frontmatter&lt;br&gt;Recommendation + Summary&lt;br&gt;Failure Patterns&lt;br&gt;Regressions + Cost" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="670" y="720" width="165" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Generate HTML Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;report.py --open&lt;br&gt;Scoring summary table&lt;br&gt;Per-case details + diffs&lt;br&gt;Baseline comparison&lt;br&gt;Image compare widgets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="880" y="720" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gold_check" value="&lt;b&gt;--gold?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="740" width="80" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="save_gold" value="&lt;b&gt;Save Gold Refs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Copy artifacts to dataset&lt;br&gt;As reference per case" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="820" width="135" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="mlflow_check" value="&lt;b&gt;mlflow&lt;br&gt;configured?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;arcSize=50;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1085" y="930" width="105" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="mlflow_log" value="&lt;b&gt;/eval-mlflow&lt;/b&gt;&lt;br&gt;&lt;br&gt;Log params, metrics&lt;br&gt;Sync dataset to registry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="880" y="920" width="145" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="next_steps" value="&lt;b&gt;Suggest Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;/eval-review for human review&lt;br&gt;/eval-optimize for auto-improve&lt;br&gt;/eval-mlflow for tracking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="880" y="1040" width="175" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_config" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="entry" target="config_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_config_bootstrap" value="missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;entryX=0;entryY=0.5;" edge="1" source="config_check" target="bootstrap" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_config_load" value="exists" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16a34a;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.3;" edge="1" source="config_check" target="load_config" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_bootstrap_load" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="bootstrap" target="load_config" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_load_find" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="load_config" target="find_dataset" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_find_nocases" value="0 cases" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#dc2626;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="find_dataset" target="no_cases" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_find_preflight" value="cases found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="find_dataset" target="preflight" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preflight_decision" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="preflight" target="preflight_decision" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_decision_dirty" value="DIRTY" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" source="preflight_decision" target="dirty_resolve" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_decision_workspace" value="CLEAN" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16a34a;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="preflight_decision" target="workspace" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_dirty_preflight" value="re-check" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#64748b;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" source="dirty_resolve" target="preflight" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="870" y="60"/>
+          <mxPoint x="803" y="60"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_workspace_tools" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="workspace" target="tools_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1142" y="310"/>
+          <mxPoint x="80" y="310"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_tools_resolve" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7c3aed;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="tools_check" target="resolve_tools" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_tools_execute" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.3;" edge="1" source="tools_check" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resolve_execute" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.7;" edge="1" source="resolve_tools" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_execute_monitor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="execute" target="monitor" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_execute_claude" value="invokes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#64748b;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="execute" target="claude_code" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_monitor_result" value="done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="monitor" target="check_result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_result_fail" value="exit != 0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#dc2626;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="check_result" target="exec_fail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_result_collect" value="exit 0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="check_result" target="collect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_judge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="collect" target="judge_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_judge_score" value="no (score)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="judge_check" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1085" y="640"/>
+          <mxPoint x="115" y="640"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_judge_analyze" value="yes (skip)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#64748b;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="judge_check" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1200" y="450"/>
+          <mxPoint x="1200" y="665"/>
+          <mxPoint x="540" y="665"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_score_baseline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="score" target="baseline_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_score_api" value="LLM judges" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#64748b;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="score" target="anthropic_api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_baseline_pairwise" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7c3aed;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="baseline_check" target="pairwise" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_baseline_analyze" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="baseline_check" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pairwise_analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.3;entryX=0;entryY=0.8;" edge="1" source="pairwise" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pairwise_api" value="comparison" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#64748b;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0;exitY=0.7;entryX=1;entryY=0.5;" edge="1" source="pairwise" target="anthropic_api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_analyze_write" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="analyze" target="write_analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_write_report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="write_analysis" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_report_gold" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="report" target="gold_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gold_save" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16a34a;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="gold_check" target="save_gold" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gold_mlflow" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;entryX=1;entryY=0;" edge="1" source="gold_check" target="mlflow_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1260" y="765"/>
+          <mxPoint x="1260" y="930"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_save_mlflow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="save_gold" target="mlflow_check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mlflow_log" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7c3aed;strokeWidth=1.5;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" source="mlflow_check" target="mlflow_log" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mlflow_next" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=1;entryY=0.3;" edge="1" source="mlflow_check" target="next_steps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_log_next" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="mlflow_log" target="next_steps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

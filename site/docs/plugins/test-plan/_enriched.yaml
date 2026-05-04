@@ -1,0 +1,63 @@
+description: |
+  Generate test plans and test cases from RHOAI strategies using parallel
+  sub-agent analysis and automated review with a 5-criteria quality rubric.
+skills:
+  test-plan.create:
+    description: |
+      Generate a complete test plan for a RHOAI feature from a strategy document.
+      Spawns 3 parallel sub-analyzers (endpoints, risks, infra), merges findings,
+      and runs an automated review with scoring and auto-revision.
+    arguments:
+      - name: "JIRA_KEY"
+        required: true
+        description: "Strategy key (RHAISTRAT-*) or issue key (RHOAIENG-*)"
+      - name: "ADR_FILE_PATH"
+        required: false
+        description: "Local path to ADR document (markdown, text, or PDF)"
+      - name: "--output-dir"
+        type: "<path>"
+        required: false
+        description: "Override output directory for test plan artifacts"
+    usage_examples:
+      - "/test-plan.create RHAISTRAT-400"
+      - "/test-plan.create RHOAIENG-48676"
+      - "/test-plan.create RHAISTRAT-400 /path/to/adr.pdf"
+  test-plan.create-cases:
+    description: |
+      Generate individual test case files (TC-*.md) from an existing test plan.
+      Supports upgrade-aware cases and validates endpoint coverage.
+    arguments:
+      - name: "FEATURE_DIR"
+        required: false
+        default: "auto-detected from prior /test-plan.create"
+        description: "Feature directory, GitHub branch URL, or PR URL"
+      - name: "--output-dir"
+        type: "<path>"
+        required: false
+        description: "Force creation in specified directory"
+    usage_examples:
+      - "/test-plan.create-cases"
+      - "/test-plan.create-cases mcp_catalog"
+      - "/test-plan.create-cases /path/to/feature_dir"
+  test-plan.analyze.endpoints:
+    description: |
+      Internal forked sub-analyzer. Extracts feature scope, test objectives,
+      and API endpoints/methods under test from strategy and ADR documents.
+  test-plan.analyze.risks:
+    description: |
+      Internal forked sub-analyzer. Determines test levels, test types,
+      priority definitions, NFR assessments, and risks with mitigations.
+  test-plan.analyze.infra:
+    description: |
+      Internal forked sub-analyzer. Identifies test environment configuration,
+      test data, test users, infrastructure, and tooling requirements.
+  test-plan.review:
+    description: |
+      Internal quality reviewer. Scores test plans against a 5-criteria rubric
+      (specificity, grounding, scope fidelity, actionability, consistency) and
+      auto-revises failing plans up to 2 cycles.
+    arguments:
+      - name: "FEATURE_DIR"
+        required: false
+        default: "auto-detected"
+        description: "Feature directory containing TestPlan.md"

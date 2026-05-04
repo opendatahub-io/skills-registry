@@ -1,0 +1,221 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/eval-setup**
+
+  - --tracking-uri \<uri\>
+  - --skip-mlflow
+  - --runs-dir \<path\>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Install Deps ---
+
+install-deps: |md
+  **Install Dependencies**
+  (fallback for SessionStart)
+
+  - pyyaml >= 6.0
+  - mlflow[genai] >= 3.5
+    (unless --skip-mlflow)
+  - anthropic[vertex] >= 0.40
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Preflight ---
+
+preflight: |md
+  **Preflight Checks**
+
+  - check_env.py --fix
+  - Python >= 3.11
+  - pyyaml, mlflow, anthropic
+  - agent_eval symlink
+  - API keys, directories
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- MLflow Config ---
+
+mlflow-config: |md
+  **Configure MLflow**
+  (skip if --skip-mlflow)
+
+  - --tracking-uri flag
+  - or ask user:
+    1. Local server (:5000)
+    2. SQLite file store
+    3. Remote (Databricks)
+  - per-project pin in
+    eval.yaml mlflow.tracking_uri
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- API Keys ---
+
+api-keys: |md
+  **Configure API Keys**
+
+  - ANTHROPIC_API_KEY
+  - ANTHROPIC_VERTEX_PROJECT_ID
+  - needed for execution +
+    pairwise judges
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Runs Dir ---
+
+runs-dir: |md
+  **Configure Runs Dir**
+
+  - AGENT_EVAL_RUNS_DIR
+  - default: eval/runs
+  - --runs-dir override
+  - auto-created by --fix
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Env Vars Check ---
+
+env-vars: |md
+  **Check Skill Env Vars**
+  (if eval.yaml exists)
+
+  - parse execution.env
+  - check $VAR references
+  - warn if unset
+  - e.g. JIRA_SERVER
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- MLflow Experiment ---
+
+mlflow-exp: |md
+  **Create MLflow Experiment**
+  (skip if --skip-mlflow)
+
+  - read mlflow.experiment
+    from eval.yaml
+  - setup_experiment()
+  - resolve tracking URI
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verify ---
+
+verify: |md
+  **Final Verification**
+
+  - check_env.py (no --fix)
+  - validate eval.yaml
+    (if present)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report + Next Steps**
+
+  - no eval.yaml:
+    run /eval-analyze
+  - no dataset:
+    run /eval-dataset
+  - ready:
+    run /eval-run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: check_env.py checks ---
+
+checks-detail: |md
+  check_env.py
+  [+] python       3.11+
+  [+] mlflow       >= 3.5
+  [+] pyyaml       >= 6.0
+  [+] agent_eval   symlink
+  [+] anthropic    (optional)
+  [+] api_keys     set
+  [+] mlflow_server reachable
+  [+] directories  present
+  [+] eval_config  valid (--config)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+args -> install-deps
+install-deps -> preflight
+
+preflight -> report: "all pass" {
+  style.stroke-dash: 3
+}
+
+preflight -> mlflow-config: "fixes needed"
+mlflow-config -> api-keys
+api-keys -> runs-dir
+runs-dir -> env-vars
+env-vars -> mlflow-exp
+mlflow-exp -> verify
+verify -> report
+
+# Callout connection
+preflight -> checks-detail {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

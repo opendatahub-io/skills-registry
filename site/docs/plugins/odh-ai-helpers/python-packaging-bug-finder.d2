@@ -1,0 +1,159 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ── Column 1: Entry ──────────────────────────────────
+entry: |md
+  **/python-packaging-bug-finder**
+
+  Package name + optional version
+  Allowed tools: WebFetch, WebSearch
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# ── Column 2: Find Repository ───────────────────────
+source-finder: |md
+  **Invoke source-finder**
+
+  Skill: python-packaging-
+  source-finder
+  Locate GitHub repository
+|
+
+confidence-gate: |md
+  **Confidence Gate**
+
+  High / Medium → proceed
+  Low / null → stop with error
+| {
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+}
+
+# ── Column 3: Search Issues ─────────────────────────
+search-issues: |md
+  **Search Packaging Issues**
+
+  WebFetch repo issues page
+  Filter by keywords:
+  build, install, pip, wheel,
+  cmake, gcc, dependency, fail
+|
+
+prioritize: |md
+  **Prioritize Issues**
+
+  Open issues first
+  Then closed issues that
+  may affect target version
+|
+
+# ── Column 4: Analyze Issues ────────────────────────
+fetch-details: |md
+  **Fetch Issue Details**
+
+  Full description + comments
+  Labels and milestones
+  Open / closed status
+|
+
+extract-info: |md
+  **Extract Key Information**
+
+  Problem description
+  Affected versions
+  Resolution status
+  Available fixes / workarounds
+|
+
+resolution: |md
+  **Resolution Indicators**
+
+  Fixed with PR / commit
+  Version mentions
+  Workarounds available
+  Status updates
+|
+
+# ── Column 5: Version Impact & Output ───────────────
+version-impact: |md
+  **Version Impact Assessment**
+  LLM analysis
+
+  Does it affect target version?
+  Fixed and Included
+  Fixed but Pending
+  Open with Workarounds
+  Unresolved
+| {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+output: |md
+  **Structured Report**
+
+  Issues found (count)
+  Per-issue analysis
+  Recommendations
+  Summary statistics
+|
+
+# ── External ────────────────────────────────────────
+github: |md
+  **GitHub Issues**
+| {
+  style.stroke-dash: 3
+}
+
+dep-skill: |md
+  **python-packaging-
+  source-finder**
+| {
+  style.stroke-dash: 3
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+# ── Edges: Column 1 → 2 ────────────────────────────
+entry -> source-finder: package name
+
+# ── Edges: Column 2 ────────────────────────────────
+source-finder -> confidence-gate: repo URL + confidence
+confidence-gate -> search-issues: high / medium {
+  style.stroke: "#2E7D32"
+}
+
+# ── Edges: Column 3 ────────────────────────────────
+search-issues -> prioritize
+prioritize -> fetch-details: relevant issues
+
+# ── Edges: Column 4 ────────────────────────────────
+fetch-details -> extract-info
+extract-info -> resolution
+
+# ── Edges: Column 4 → 5 ────────────────────────────
+resolution -> version-impact: per issue
+version-impact -> output
+
+# ── External edges ──────────────────────────────────
+dep-skill -> source-finder: "skill call" {
+  style.stroke-dash: 3
+  style.stroke: "#1565C0"
+}
+search-issues -> github: "WebFetch" {
+  style.stroke-dash: 3
+}
+fetch-details -> github: "WebFetch" {
+  style.stroke-dash: 3
+}

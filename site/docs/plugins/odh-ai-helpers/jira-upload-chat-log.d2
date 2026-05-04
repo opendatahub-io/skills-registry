@@ -1,0 +1,248 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/jira-upload-chat-log**
+
+  - JIRA ticket key (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Determine Ticket Key ---
+
+ticket-decision: |md
+  **Ticket key
+  provided?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.font-size: 12
+}
+
+scan-context: |md
+  **Scan Context**
+
+  - search conversation for
+    JIRA refs [A-Z]+-\d+
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+context-found: |md
+  **Found in
+  context?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.font-size: 12
+}
+
+ask-user: |md
+  **Ask User**
+  AskUserQuestion
+
+  - "Which JIRA ticket?"
+  - e.g. AIPCC-1234
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# --- Step 2: Format Conversation ---
+
+format: |md
+  **Format Conversation**
+  LLM generation
+
+  - summary (3-5 paragraphs)
+  - key decisions & outcomes
+  - files created/modified
+  - full chat transcript
+  - tool calls & results
+  - timestamps & metadata
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 3: Save Temp File ---
+
+save-temp: |md
+  **Save Temp File**
+
+  - chat-log-{key}-{ts}.md
+  - write to /tmp or mktemp
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 4: Upload to JIRA ---
+
+upload: |md
+  **/jira-workitem-attach**
+  External skill (Skill tool)
+
+  - verify JIRA_API_TOKEN
+  - verify JIRA_EMAIL
+  - verify ticket accessible
+  - upload file attachment
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# --- Step 5: Result ---
+
+upload-ok: |md
+  **Upload
+  succeeded?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.font-size: 12
+}
+
+success: |md
+  **Success**
+
+  - confirm attachment
+  - direct ticket link
+  - delete temp file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+}
+
+failure: |md
+  **Failure**
+
+  - display error
+  - troubleshooting guidance
+  - delete temp file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#999999"
+  style.stroke-width: 1
+}
+
+# --- Callout: Document Structure ---
+
+doc-structure: |md
+  chat-log-AIPCC-1234-20260502.md
+  ├── # Chat Log Export
+  │   ├── Exported: timestamp
+  │   └── Ticket: link
+  ├── ## Summary
+  │   └── 3-5 paragraph overview
+  └── ## Full Chat Transcript
+      └── complete conversation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: Prerequisites ---
+
+prereqs: |md
+  **Prerequisites**
+  - jira-workitem-attach skill
+  - JIRA_API_TOKEN env var
+  - JIRA_EMAIL env var
+  - JIRA write permissions
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font-size: 11
+}
+
+# --- Flow ---
+
+args -> ticket-decision
+
+ticket-decision -> format: "yes" {
+  style.stroke: "#333333"
+}
+
+ticket-decision -> scan-context: "no" {
+  style.stroke: "#333333"
+}
+
+scan-context -> context-found
+
+context-found -> format: "yes" {
+  style.stroke: "#333333"
+}
+
+context-found -> ask-user: "no" {
+  style.stroke: "#333333"
+}
+
+ask-user -> format {
+  style.stroke: "#333333"
+}
+
+format -> save-temp
+save-temp -> upload
+
+upload -> upload-ok
+
+upload-ok -> success: "yes" {
+  style.stroke: "#333333"
+}
+
+upload-ok -> failure: "no" {
+  style.stroke: "#333333"
+}
+
+# Callout connections
+format -> doc-structure {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+upload -> prereqs {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

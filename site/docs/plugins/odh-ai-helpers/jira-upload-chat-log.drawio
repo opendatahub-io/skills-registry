@@ -1,0 +1,121 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="args" value="&lt;b&gt;/jira-upload-chat-log&lt;/b&gt;&lt;br&gt;&lt;br&gt;JIRA ticket key (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="55" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="ticket-decision" value="&lt;b&gt;Ticket key&lt;br&gt;provided?&lt;/b&gt;" style="shape=mxgraph.flowchart.decision;rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=11;verticalAlign=middle;" vertex="1" parent="1">
+      <mxGeometry x="230" y="60" width="120" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="scan-context" value="&lt;b&gt;Scan Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;search conversation for&lt;br&gt;JIRA refs [A-Z]+-\d+" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="410" y="50" width="160" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="context-found" value="&lt;b&gt;Found in&lt;br&gt;context?&lt;/b&gt;" style="shape=mxgraph.flowchart.decision;rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=11;verticalAlign=middle;" vertex="1" parent="1">
+      <mxGeometry x="630" y="60" width="120" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="ask-user" value="&lt;b&gt;Ask User&lt;/b&gt;&lt;br&gt;&lt;i&gt;AskUserQuestion&lt;/i&gt;&lt;br&gt;&lt;br&gt;&amp;quot;Which JIRA ticket?&amp;quot;&lt;br&gt;e.g. AIPCC-1234" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="810" y="45" width="155" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="format" value="&lt;b&gt;Format Conversation&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM generation&lt;/i&gt;&lt;br&gt;&lt;br&gt;summary (3-5 paragraphs)&lt;br&gt;key decisions &amp;amp; outcomes&lt;br&gt;files created/modified&lt;br&gt;full chat transcript&lt;br&gt;tool calls &amp;amp; results&lt;br&gt;timestamps &amp;amp; metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="280" width="190" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="save-temp" value="&lt;b&gt;Save Temp File&lt;/b&gt;&lt;br&gt;&lt;br&gt;chat-log-{key}-{ts}.md&lt;br&gt;write to /tmp or mktemp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="280" y="310" width="165" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="upload" value="&lt;b&gt;/jira-workitem-attach&lt;/b&gt;&lt;br&gt;&lt;i&gt;External skill (Skill tool)&lt;/i&gt;&lt;br&gt;&lt;br&gt;verify JIRA_API_TOKEN&lt;br&gt;verify JIRA_EMAIL&lt;br&gt;verify ticket accessible&lt;br&gt;upload file attachment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="505" y="290" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="upload-ok" value="&lt;b&gt;Upload&lt;br&gt;succeeded?&lt;/b&gt;" style="shape=mxgraph.flowchart.decision;rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=11;verticalAlign=middle;" vertex="1" parent="1">
+      <mxGeometry x="740" y="330" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="success-node" value="&lt;b&gt;Success&lt;/b&gt;&lt;br&gt;&lt;br&gt;confirm attachment&lt;br&gt;direct ticket link&lt;br&gt;delete temp file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="920" y="280" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="failure-node" value="&lt;b&gt;Failure&lt;/b&gt;&lt;br&gt;&lt;br&gt;display error&lt;br&gt;troubleshooting guidance&lt;br&gt;delete temp file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="920" y="410" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="doc-structure" value="chat-log-AIPCC-1234-20260502.md&lt;br&gt;&amp;#9500;&amp;#9472;&amp;#9472; # Chat Log Export&lt;br&gt;&amp;#9474;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9500;&amp;#9472;&amp;#9472; Exported: timestamp&lt;br&gt;&amp;#9474;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9492;&amp;#9472;&amp;#9472; Ticket: link&lt;br&gt;&amp;#9500;&amp;#9472;&amp;#9472; ## Summary&lt;br&gt;&amp;#9474;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9492;&amp;#9472;&amp;#9472; 3-5 paragraph overview&lt;br&gt;&amp;#9492;&amp;#9472;&amp;#9472; ## Full Chat Transcript&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;#9492;&amp;#9472;&amp;#9472; complete conversation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=8;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+      <mxGeometry x="30" y="530" width="230" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="prereqs-box" value="&lt;b&gt;Prerequisites&lt;/b&gt;&lt;br&gt;&lt;br&gt;jira-workitem-attach skill&lt;br&gt;JIRA_API_TOKEN env var&lt;br&gt;JIRA_EMAIL env var&lt;br&gt;JIRA write permissions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="490" y="530" width="200" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_args_ticket" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="ticket-decision" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ticket_scan" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=2;fontSize=11;" edge="1" source="ticket-decision" target="scan-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ticket_format" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontStyle=2;fontSize=11;" edge="1" source="ticket-decision" target="format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="290" y="200"/>
+          <mxPoint x="125" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scan_context" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="scan-context" target="context-found" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_context_format" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;fontStyle=2;fontSize=11;" edge="1" source="context-found" target="format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="690" y="220"/>
+          <mxPoint x="163" y="220"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_context_ask" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=2;fontSize=11;" edge="1" source="context-found" target="ask-user" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ask_format" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.9;entryY=0;entryDx=0;entryDy=0;" edge="1" source="ask-user" target="format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="887" y="240"/>
+          <mxPoint x="201" y="240"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_format_save" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="format" target="save-temp" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_save_upload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="save-temp" target="upload" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_upload_ok" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="upload" target="upload-ok" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ok_success" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=2;fontSize=11;" edge="1" source="upload-ok" target="success-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="890" y="360"/>
+          <mxPoint x="890" y="330"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ok_failure" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=2;fontSize=11;" edge="1" source="upload-ok" target="failure-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="890" y="360"/>
+          <mxPoint x="890" y="460"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_format_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="format" target="doc-structure" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_upload_prereqs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="upload" target="prereqs-box" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -1,0 +1,162 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/assess-rfe**
+
+  - Jira key, file, URL,
+    raw text, or wildcard
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Input Detection ---
+
+detect: |md
+  **Detect Input Type**
+
+  - Jira key → MCP or REST
+  - File path → read file
+  - URL → fetch content
+  - Raw text → use directly
+  - Wildcard → bulk mode
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Single Mode ---
+
+fetch-single: |md
+  **Fetch Single Issue**
+
+  - MCP getJiraIssue
+  - REST fallback (fetch_single.py)
+  - Write to /tmp/rfe-assess/single/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Bulk Mode ---
+
+preflight: |md
+  **Preflight Checks**
+
+  - Verify env vars
+  - Check cache state
+  - Resume detection
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dump-jira: |md
+  **Dump Jira Project**
+
+  - dump_jira.py
+  - All issues → local cache
+  - ADF → markdown
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+setup-run: |md
+  **Setup Run**
+
+  - setup_run.py
+  - Timestamped directory
+  - Queue file + resume
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Scoring ---
+
+score: |md
+  **Spawn Scorer Agents**
+  LLM agents (Opus)
+
+  - 30 concurrent agents
+  - next_batch.py for keys
+  - agent_prompt.md rubric
+  - .result.md per issue
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+results: |md
+  **Results & Summary**
+
+  - parse_results.py → CSV
+  - summarize_run.py
+  - Pass/fail, averages
+  - What-if analysis
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+jira: |md
+  **Jira (RHAIRFE)**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> detect
+
+detect -> fetch-single: "single"
+detect -> preflight: "RHAIRFE-*"
+
+fetch-single -> score
+
+preflight -> dump-jira
+dump-jira -> setup-run
+setup-run -> score: "queue.txt"
+
+score -> results: "*.result.md"
+
+# External
+fetch-single -> jira: "MCP / REST" {
+  style.stroke-dash: 3
+}
+dump-jira -> jira: "REST API" {
+  style.stroke-dash: 3
+}

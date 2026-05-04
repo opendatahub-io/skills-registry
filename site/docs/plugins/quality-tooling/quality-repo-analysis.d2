@@ -1,0 +1,333 @@
+direction: right
+
+# -- Global styles --
+style: {
+  border-radius: 8
+  font-size: 14
+  fill: "#ffffff"
+  stroke: "#4a5568"
+}
+
+# -- Entry --
+entry: |md
+  ## /quality-repo-analysis
+  - Accepts repository URL
+  - Optional branch name
+  - Triggers comprehensive quality audit
+| {
+  style: {
+    fill: "#ebf8ff"
+    stroke: "#3182ce"
+    border-radius: 12
+    font-size: 13
+  }
+}
+
+# -- Step 0: Pre-flight --
+preflight: |md
+  ## Pre-flight Checks
+  - Verify PyYAML availability
+  - Run `uv run --with pyyaml` test
+  - Install deps if missing
+  - Block until confirmed
+| {
+  style: {
+    fill: "#fff5f5"
+    stroke: "#e53e3e"
+    font-size: 13
+  }
+}
+
+# -- Step 1: Repo Discovery --
+discovery: |md
+  ## Repo Discovery
+  - Clone or access target repo
+  - Identify repo type (operator, web app, CLI)
+  - Detect primary language(s)
+  - Identify framework
+| {
+  style: {
+    fill: "#f0fff4"
+    stroke: "#38a169"
+    font-size: 13
+  }
+}
+
+# -- Analysis Container: Steps 2-7 --
+analysis: Multi-Dimension Analysis {
+  style: {
+    fill: "#faf5ff"
+    stroke: "#805ad5"
+    border-radius: 10
+    font-size: 14
+  }
+
+  cicd: |md
+    ## CI/CD Analysis
+    - Inventory all workflows
+    - PR vs periodic triggers
+    - Concurrency & caching
+    - Test automation coverage
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#805ad5"
+      font-size: 12
+    }
+  }
+
+  tests: |md
+    ## Test Coverage
+    - Unit test count & frameworks
+    - Integration test suites
+    - E2E infrastructure
+    - Coverage tracking & enforcement
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#805ad5"
+      font-size: 12
+    }
+  }
+
+  quality: |md
+    ## Code Quality
+    - Linter configs (golangci, ESLint, ruff)
+    - Pre-commit hooks
+    - SAST / static analysis
+    - Secret detection
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#805ad5"
+      font-size: 12
+    }
+  }
+
+  build: |md
+    ## Build Integration
+    - PR build validation
+    - Operator manifest testing
+    - Kustomize overlay checks
+    - Cross-component builds
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#805ad5"
+      font-size: 12
+    }
+  }
+
+  container: |md
+    ## Container Image
+    - Dockerfile analysis
+    - Multi-stage builds
+    - Runtime validation
+    - Trivy / Snyk scanning
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#805ad5"
+      font-size: 12
+    }
+  }
+
+  agents: |md
+    ## Agent Rules
+    - Check .claude/rules/
+    - Evaluate rule completeness
+    - Assess rule quality
+    - Identify missing test rules
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#805ad5"
+      font-size: 12
+    }
+  }
+
+  # Internal edges within the analysis container
+  cicd -> tests
+  tests -> quality
+  quality -> build
+  build -> container
+  container -> agents
+}
+
+# -- Step 8: Gap Analysis --
+gaps: |md
+  ## Gap Analysis
+  - Compare vs odh-dashboard
+  - Compare vs notebooks
+  - Compare vs K8s best practices
+  - Score 0-10 per dimension
+| {
+  style: {
+    fill: "#fffff0"
+    stroke: "#d69e2e"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# -- Step 9: Generate Report (LLM) --
+report: |md
+  ## Generate Report
+  - Executive summary & overall score
+  - Detailed scorecard table
+  - Critical gaps (HIGH/MED/LOW)
+  - Quick wins & recommendations
+  - YAML frontmatter for HTML gen
+| {
+  style: {
+    fill: "#ebf4ff"
+    stroke: "#3182ce"
+    double-border: true
+    font-size: 13
+  }
+}
+
+# -- Step 10: Report Output --
+output: Report Generation {
+  style: {
+    fill: "#f0fff4"
+    stroke: "#38a169"
+    border-radius: 10
+    font-size: 14
+  }
+
+  markdown: |md
+    ## Markdown Report
+    - quality-analysis-{repo}.md
+    - YAML frontmatter + detailed body
+    - Scorecard, gaps, recommendations
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#38a169"
+      font-size: 12
+    }
+  }
+
+  html_gen: |md
+    ## HTML Generator
+    - html_generator.py via uv
+    - Parse YAML frontmatter
+    - Animated score circles
+    - Collapsible sections
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#38a169"
+      font-size: 12
+    }
+  }
+
+  html_out: |md
+    ## HTML Report
+    - quality-report-{repo}.html
+    - Interactive visualization
+    - Color-coded severity
+    - Zero external deps
+  | {
+    style: {
+      fill: "#ffffff"
+      stroke: "#38a169"
+      font-size: 12
+    }
+  }
+
+  browser: |md
+    ## Open in Browser
+    - `open` on macOS
+    - Auto-display results
+  | {
+    style: {
+      fill: "#e6fffa"
+      stroke: "#319795"
+      font-size: 12
+    }
+  }
+
+  markdown -> html_gen: frontmatter
+  html_gen -> html_out: generates
+  html_out -> browser: auto-open
+}
+
+# -- External: Gold Standards --
+gold: |md
+  ## Gold Standards
+  - odh-dashboard
+  - notebooks
+  - kserve
+  - K8s best practices
+| {
+  style: {
+    fill: "#fefcbf"
+    stroke: "#d69e2e"
+    stroke-dash: 5
+    font-size: 13
+  }
+}
+
+# -- External: Target Repo --
+repo: |md
+  ## Target Repository
+  - .github/workflows/
+  - test/, e2e/, integration/
+  - Dockerfile, Makefile
+  - .claude/rules/
+| {
+  style: {
+    fill: "#e2e8f0"
+    stroke: "#718096"
+    stroke-dash: 5
+    font-size: 13
+  }
+}
+
+# -- External: Batch Aggregation (optional) --
+batch: |md
+  ## Batch Aggregation
+  - aggregate_quality_reports.py
+  - Combined dashboard HTML
+  - Cross-repo comparison
+| {
+  style: {
+    fill: "#fed7d7"
+    stroke: "#e53e3e"
+    stroke-dash: 5
+    font-size: 13
+  }
+}
+
+# -- Main flow edges --
+entry -> preflight: invoke
+preflight -> discovery: deps OK
+discovery -> analysis: repo classified
+analysis -> gaps: all dimensions scored
+gaps -> report: scores + comparisons
+report -> output: structured data
+
+# -- External dependency edges --
+repo -> discovery: clone {
+  style.stroke-dash: 5
+  style.stroke: "#718096"
+}
+repo -> analysis: scan files {
+  style.stroke-dash: 5
+  style.stroke: "#718096"
+}
+gold -> gaps: compare {
+  style.stroke-dash: 5
+  style.stroke: "#d69e2e"
+}
+output -> batch: feed reports {
+  style.stroke-dash: 5
+  style.stroke: "#e53e3e"
+}
+
+# -- Decision: PyYAML check --
+preflight -> discovery: PyYAML confirmed {
+  style.stroke: "#38a169"
+}

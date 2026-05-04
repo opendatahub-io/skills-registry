@@ -1,0 +1,303 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/eval-dataset**
+
+  - --config \<path\>
+  - --count \<N\> (default 5)
+  - --strategy \<type\>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Context ---
+
+read-context: |md
+  **Read Context**
+
+  - read eval.yaml config
+  - read eval.md analysis
+  - extract dataset.schema
+  - extract execution.mode
+  - parse judges for criteria
+  - build judge-driven reqs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Missing Config Decision ---
+
+missing-config: |md
+  **eval.yaml
+  exists?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.font-size: 12
+}
+
+# --- Invoke eval-analyze ---
+
+invoke-analyze: |md
+  **/eval-analyze**
+  External skill
+
+  - ask user which skill
+  - Skill tool invocation
+  - wait for completion
+  - re-read eval.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# --- Parse Schema ---
+
+parse-schema: |md
+  **Parse Schema**
+
+  - required files per case
+  - required fields per file
+  - optional fields (vary)
+  - field semantics
+  - argument {field} placeholders
+  - external-state [EXTERNAL]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess State ---
+
+assess-state: |md
+  **Assess Current State**
+
+  - ls dataset_path
+  - count existing cases
+  - read sample case structure
+  - identify coverage gaps
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Strategy Decision ---
+
+strategy: |md
+  **Choose
+  Strategy**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.font-size: 12
+}
+
+# --- Bootstrap ---
+
+bootstrap: |md
+  **Bootstrap**
+  LLM generation
+
+  - 1 simple case
+  - 1 complex case
+  - 1 edge case
+  - remaining map to judges
+  - judge criteria coverage
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Expand ---
+
+expand: |md
+  **Expand**
+  LLM generation
+
+  - read all existing cases
+  - compare vs judge criteria
+  - identify untested scenarios
+  - generate gap-filling cases
+  - continue numbering
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- From Traces ---
+
+from-traces: |md
+  **From Traces**
+
+  - from_traces.py via MLflow
+  - extract real prod inputs
+  - structure into case dirs
+  - fallback: expand strategy
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 5
+}
+
+# --- Generate Cases ---
+
+generate: |md
+  **Generate Cases**
+  LLM generation
+
+  - create case-NNN-slug/ dirs
+  - write required files + fields
+  - vary optional fields
+  - realistic domain content
+  - TODO_ for external-state
+  - answers.yaml (interactive)
+  - annotations.yaml (judges)
+  - companion files
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Validate ---
+
+validate: |md
+  **Validate**
+
+  - read back generated case
+  - check vs dataset.schema
+  - verify {field} placeholders
+  - verify companion files
+  - check for empty/placeholder
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - N cases generated
+  - strategy used
+  - coverage summary
+  - TODO_ placeholders listed
+  - next: /eval-run
+    or /eval-dataset --expand
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: Case Structure ---
+
+case-structure: |md
+  case-001-simple-basic/
+  ├── input.yaml
+  │   ├── required fields
+  │   └── {field} placeholders
+  ├── reference.md (optional)
+  ├── answers.yaml (interactive)
+  ├── annotations.yaml (judges)
+  └── companion files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+args -> missing-config
+
+missing-config -> read-context: "yes" {
+  style.stroke: "#333333"
+}
+
+missing-config -> invoke-analyze: "no" {
+  style.stroke: "#333333"
+}
+
+invoke-analyze -> read-context {
+  style.stroke: "#333333"
+}
+
+read-context -> parse-schema
+parse-schema -> assess-state
+assess-state -> strategy
+
+strategy -> bootstrap: "bootstrap\n(default / <5 cases)" {
+  style.stroke: "#333333"
+}
+
+strategy -> expand: "expand\n(cases exist)" {
+  style.stroke: "#333333"
+}
+
+strategy -> from-traces: "from-traces\n(MLflow available)" {
+  style.stroke: "#333333"
+}
+
+from-traces -> expand: "no traces found" {
+  style.stroke-dash: 3
+}
+
+bootstrap -> generate
+expand -> generate
+from-traces -> generate
+
+generate -> validate
+validate -> report
+
+validate -> generate: "schema mismatch" {
+  style.stroke-dash: 3
+}
+
+# Callout connection
+generate -> case-structure {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
