@@ -3,7 +3,9 @@
 
 # konflux-build-simulator
 
-Generate GitHub Actions workflows that simulate Konflux builds at PR time to catch failures before merge
+Simulates Konflux build environment on PRs to catch build failures before
+production. Generates GitHub Actions workflows for hermetic build validation,
+Docker checks, FIPS compliance, and operator integration testing.
 
 **Plugin**: [quality-tooling](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +14,16 @@ Generate GitHub Actions workflows that simulate Konflux builds at PR time to cat
 <div class="diagram-container" markdown>
 ![konflux-build-simulator diagram](konflux-build-simulator.svg)
 </div>
+
+## Arguments
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `repository-url` | :material-check: | — | GitHub repository URL to simulate builds for |
+
+## Usage
+
+```
+/konflux-build-simulator https://github.com/opendatahub-io/odh-dashboard
+/konflux-build-simulator https://github.com/opendatahub-io/kserve
+```

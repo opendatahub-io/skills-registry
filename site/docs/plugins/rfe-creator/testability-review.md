@@ -3,7 +3,8 @@
 
 # testability-review
 
-Testability review skill
+Internal forked reviewer. Assesses whether acceptance criteria are
+measurable, edge cases covered, and validation approach defined.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

@@ -3,7 +3,8 @@
 
 # rfe-creator.update-deps
 
-Update vendored dependencies
+Force update all vendored dependencies — assess-rfe skills and
+architecture context.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,9 @@ Update vendored dependencies
 <div class="diagram-container" markdown>
 ![rfe-creator.update-deps diagram](rfe-creator.update-deps.svg)
 </div>
+
+## Usage
+
+```
+/rfe-creator.update-deps
+```

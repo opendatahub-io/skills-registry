@@ -3,7 +3,8 @@
 
 # test-plan.analyze.risks
 
-Determine test levels, priorities, and risks
+Internal forked sub-analyzer. Determines test levels, test types,
+priority definitions, NFR assessments, and risks with mitigations.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 

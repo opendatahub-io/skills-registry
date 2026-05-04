@@ -3,8 +3,9 @@
 
 # strat-security-review
 
-Multi-reviewer consensus orchestrator for security review of STRAT documents. Extracts threat surfaces, spawns three independent security-reviewer instances, synthesizes findings with confidence levels, and produces a final verdict (PASS/CONCERNS/FAIL).
-
+Security review orchestrator for STRAT documents. Extracts threat surface,
+determines review tier, spawns 3 independent reviewers, synthesizes
+consensus findings, and produces a final verdict with confidence tagging.
 
 **Plugin**: [rhoai-security-reviewer](index.md) | **:material-check: User-invocable**
 
@@ -13,3 +14,17 @@ Multi-reviewer consensus orchestrator for security review of STRAT documents. Ex
 <div class="diagram-container" markdown>
 ![strat-security-review diagram](strat-security-review.svg)
 </div>
+
+## Arguments
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT_KEY` | :material-check: | — | RHAISTRAT Jira key (e.g., RHAISTRAT-400) |
+| `--force` |  | — | Regenerate review even if one already exists |
+
+## Usage
+
+```
+/strat-security-review RHAISTRAT-400
+/strat-security-review RHAISTRAT-400 --force
+```

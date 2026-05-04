@@ -3,7 +3,8 @@
 
 # strat.prioritize
 
-Prioritize strategy items
+Prioritize strategies against the existing RHAISTRAT backlog.
+Not yet implemented.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,9 @@ Prioritize strategy items
 <div class="diagram-container" markdown>
 ![strat.prioritize diagram](strat.prioritize.svg)
 </div>
+
+## Usage
+
+```
+/strat.prioritize (not yet implemented)
+```

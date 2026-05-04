@@ -3,7 +3,10 @@
 
 # rfe-creator
 
-Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.
+Claude Code skills for creating, reviewing, and submitting RFEs to the
+RHAIRFE Jira project. Provides an automated pipeline from initial creation
+through review, splitting, and submission, plus strategy refinement skills.
+
 
 !!! info "Plugin Details"
 

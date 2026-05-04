@@ -8,9 +8,9 @@ hide:
 
 
 
-# Skills and plugins for AI-assisted software engineering workflows, developed by the opendatahub-io team.
+# Skills and plugins for AI-assisted software engineering workflows
 
-7 plugins | 47 skills | 4 categories
+8 plugins | 70 skills | 4 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -48,9 +48,9 @@ hide:
 
     ---
 
-    Generate test plans and test cases from RHOAI strategies using parallel sub-agent analysis and automated review.
+    End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
 
-    **6 skills** · Evaluation & Testing · v0.1.0
+    **17 skills** · Evaluation & Testing · v0.2.0
 
 -   **[quality-tooling](plugins/quality-tooling/index.md)**
 
@@ -58,7 +58,7 @@ hide:
 
     Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validat...
 
-    **3 skills** · Evaluation & Testing · v1.0.0
+    **5 skills** · Evaluation & Testing · v1.0.0
 
 -   **[odh-ai-helpers](plugins/odh-ai-helpers/index.md)**
 
@@ -66,7 +66,7 @@ hide:
 
     Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
 
-    **11 skills** · Development Tools · v0.1.0
+    **19 skills** · Development Tools · v0.1.0
 
 -   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
 
@@ -76,6 +76,14 @@ hide:
 
     **7 skills** · Evaluation & Testing · v0.1.0
 
+-   **[meeting-quality-skills](plugins/meeting-quality-skills/index.md)**
+
+    ---
+
+    Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, a...
+
+    **2 skills** · Product Planning · v0.1.0
+
 </div>
 
 ## Categories
@@ -83,4 +91,4 @@ hide:
 - [Evaluation & Testing](categories/evaluation.md) — Skills for evaluating and testing AI agent skills (4 plugins)
 - [Security Review](categories/security.md) — Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) — Developer productivity tools for packaging, CI/CD debugging, and workflow automation (1 plugin)
-- [Product Planning](categories/planning.md) — Skills for requirements, RFEs, and product strategy (1 plugin)
+- [Product Planning](categories/planning.md) — Skills for requirements, RFEs, and product strategy (2 plugins)

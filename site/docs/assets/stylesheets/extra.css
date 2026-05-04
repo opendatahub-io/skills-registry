@@ -365,6 +365,11 @@
   color: var(--md-primary-fg-color);
 }
 
+/* Nested nav items (skills under plugins) — smaller only */
+.md-nav__item .md-nav .md-nav__item .md-nav .md-nav__link {
+  font-size: 0.62rem;
+}
+
 .md-sidebar {
   border-right: 1px solid var(--sr-border);
 }

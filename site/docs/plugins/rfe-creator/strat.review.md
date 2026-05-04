@@ -3,7 +3,9 @@
 
 # strat.review
 
-Review strategy documents
+Adversarial review of refined strategies. Spawns 4 independent
+forked reviewers (architecture, feasibility, scope, testability)
+and synthesizes a consolidated review.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +14,9 @@ Review strategy documents
 <div class="diagram-container" markdown>
 ![strat.review diagram](strat.review.svg)
 </div>
+
+## Usage
+
+```
+/strat.review
+```

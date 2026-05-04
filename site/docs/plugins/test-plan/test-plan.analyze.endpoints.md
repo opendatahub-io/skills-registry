@@ -3,7 +3,8 @@
 
 # test-plan.analyze.endpoints
 
-Extract scope and API endpoints
+Internal forked sub-analyzer. Extracts feature scope, test objectives,
+and API endpoints/methods under test from strategy and ADR documents.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 

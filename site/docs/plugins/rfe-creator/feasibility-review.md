@@ -3,7 +3,8 @@
 
 # feasibility-review
 
-Feasibility review skill
+Internal forked reviewer. Assesses technical feasibility, implementation
+complexity, and effort estimate credibility.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

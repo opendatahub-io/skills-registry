@@ -3,7 +3,8 @@
 
 # strat.refine
 
-Refine strategy documents
+Refine strategy documents — add the HOW section, dependencies,
+impacted teams/components, and non-functional requirements.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,9 @@ Refine strategy documents
 <div class="diagram-container" markdown>
 ![strat.refine diagram](strat.refine.svg)
 </div>
+
+## Usage
+
+```
+/strat.refine
+```

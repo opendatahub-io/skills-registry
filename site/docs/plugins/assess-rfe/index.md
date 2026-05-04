@@ -3,7 +3,10 @@
 
 # assess-rfe
 
-Assess RFEs against quality criteria using a structured rubric.
+Assess RFEs against quality criteria using a structured rubric. Supports
+single-input mode (Jira key, file, URL, raw text) and bulk mode with
+30 concurrent scorer agents and CSV results.
+
 
 !!! info "Plugin Details"
 

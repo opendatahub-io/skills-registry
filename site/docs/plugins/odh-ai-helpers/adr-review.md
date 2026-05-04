@@ -3,7 +3,9 @@
 
 # adr-review
 
-Review an Architectural Decision Record (ADR) using a team of specialist reviewer subagents and produce a consolidated report
+Review an Architectural Decision Record using a team of 6 specialist
+reviewer subagents (architecture, security, performance, maintainability,
+testing, documentation). Produces consolidated PDF and PPTX reports.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +14,9 @@ Review an Architectural Decision Record (ADR) using a team of specialist reviewe
 <div class="diagram-container" markdown>
 ![adr-review diagram](adr-review.svg)
 </div>
+
+## Usage
+
+```
+/adr-review /path/to/adr.md
+```

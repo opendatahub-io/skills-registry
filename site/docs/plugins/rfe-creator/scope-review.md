@@ -3,7 +3,8 @@
 
 # scope-review
 
-Scope review skill
+Internal forked reviewer. Checks if strategies are right-sized and
+effort matches scope.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

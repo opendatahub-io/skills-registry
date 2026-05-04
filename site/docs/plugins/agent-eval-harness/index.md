@@ -3,7 +3,11 @@
 
 # agent-eval-harness
 
-Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
+Generic agentic evaluation framework for Claude Code skills. Provides an
+end-to-end pipeline to analyze skills, generate test cases, execute evaluations,
+review results with human feedback, sync with MLflow, and iteratively optimize
+skill quality with regression checks.
+
 
 !!! info "Plugin Details"
 

@@ -3,7 +3,11 @@
 
 # rhoai-security-reviewer
 
-Consensus-based security review for RHOAI strategy documents (STRATs). An orchestrator spawns three independent reviewers to identify security risks, then synthesizes findings with confidence tagging based on cross-reviewer agreement. Covers 39 catalog patterns across auth, data protection, cryptographic compliance, network security, supply chain, and infrastructure.
+Consensus-based security review for RHOAI strategy documents. An orchestrator
+extracts threat surfaces, spawns three independent reviewers in parallel,
+synthesizes findings with confidence tagging, and produces a PASS/CONCERNS/FAIL
+verdict covering 39 catalog patterns.
+
 
 !!! info "Plugin Details"
 

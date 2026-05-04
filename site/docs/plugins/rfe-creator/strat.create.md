@@ -3,7 +3,8 @@
 
 # strat.create
 
-Create strategy documents
+Create strategies from approved RFEs by cloning them to RHAISTRAT
+in Jira and creating local strategy artifacts.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,9 @@ Create strategy documents
 <div class="diagram-container" markdown>
 ![strat.create diagram](strat.create.svg)
 </div>
+
+## Usage
+
+```
+/strat.create RHAIRFE-1234
+```

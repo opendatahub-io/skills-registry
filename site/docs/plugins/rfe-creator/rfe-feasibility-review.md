@@ -3,7 +3,8 @@
 
 # rfe-feasibility-review
 
-RFE feasibility review
+Internal forked reviewer. Reviews RFEs for technical feasibility,
+blockers, and alignment with technical strategy.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

@@ -3,7 +3,8 @@
 
 # eval-review
 
-Human-in-the-loop review of scores and outputs with qualitative feedback collection
+Interactive review of evaluation results. Presents judge scores and skill
+outputs for human feedback, identifies judge gaps, and proposes SKILL.md improvements.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,16 @@ Human-in-the-loop review of scores and outputs with qualitative feedback collect
 <div class="diagram-container" markdown>
 ![eval-review diagram](eval-review.svg)
 </div>
+
+## Arguments
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `--run-id` |  | `latest run` | Which eval run to review |
+
+## Usage
+
+```
+/eval-review
+/eval-review --run-id 2026-05-01-claude-opus-4-6
+```

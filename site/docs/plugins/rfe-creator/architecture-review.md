@@ -3,7 +3,8 @@
 
 # architecture-review
 
-Architecture review skill
+Internal forked reviewer. Checks strategy features for architectural
+correctness — dependencies, integration patterns, component interactions.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

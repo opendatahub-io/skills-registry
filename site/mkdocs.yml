@@ -23,7 +23,6 @@ theme:
         name: Switch to light mode
   features:
     - navigation.tabs
-    - navigation.sections
     - navigation.indexes
     - search.suggest
     - content.code.copy
@@ -53,13 +52,92 @@ nav:
   - Home: index.md
   - Plugins:
     - plugins/index.md
-    - rfe-creator: plugins/rfe-creator/index.md
-    - assess-rfe: plugins/assess-rfe/index.md
-    - rhoai-security-reviewer: plugins/rhoai-security-reviewer/index.md
-    - test-plan: plugins/test-plan/index.md
-    - quality-tooling: plugins/quality-tooling/index.md
-    - odh-ai-helpers: plugins/odh-ai-helpers/index.md
-    - agent-eval-harness: plugins/agent-eval-harness/index.md
+    - rfe-creator:
+      - plugins/rfe-creator/index.md
+      - rfe.create: plugins/rfe-creator/rfe.create.md
+      - rfe.review: plugins/rfe-creator/rfe.review.md
+      - rfe.split: plugins/rfe-creator/rfe.split.md
+      - rfe.submit: plugins/rfe-creator/rfe.submit.md
+      - rfe.speedrun: plugins/rfe-creator/rfe.speedrun.md
+      - rfe.auto-fix: plugins/rfe-creator/rfe.auto-fix.md
+      - strat.create: plugins/rfe-creator/strat.create.md
+      - strat.refine: plugins/rfe-creator/strat.refine.md
+      - strat.review: plugins/rfe-creator/strat.review.md
+      - strat.prioritize: plugins/rfe-creator/strat.prioritize.md
+      - rfe-creator.update-deps: plugins/rfe-creator/rfe-creator.update-deps.md
+      - architecture-review: plugins/rfe-creator/architecture-review.md
+      - feasibility-review: plugins/rfe-creator/feasibility-review.md
+      - rfe-feasibility-review: plugins/rfe-creator/rfe-feasibility-review.md
+      - scope-review: plugins/rfe-creator/scope-review.md
+      - testability-review: plugins/rfe-creator/testability-review.md
+    - assess-rfe:
+      - plugins/assess-rfe/index.md
+      - assess-rfe: plugins/assess-rfe/assess-rfe.md
+      - export-rubric: plugins/assess-rfe/export-rubric.md
+    - rhoai-security-reviewer:
+      - plugins/rhoai-security-reviewer/index.md
+      - strat-security-review: plugins/rhoai-security-reviewer/strat-security-review.md
+      - security-reviewer: plugins/rhoai-security-reviewer/security-reviewer.md
+    - test-plan:
+      - plugins/test-plan/index.md
+      - test-plan.create: plugins/test-plan/test-plan.create.md
+      - test-plan.create-cases: plugins/test-plan/test-plan.create-cases.md
+      - test-plan.update: plugins/test-plan/test-plan.update.md
+      - test-plan.case-implement: plugins/test-plan/test-plan.case-implement.md
+      - test-plan.ui-verify: plugins/test-plan/test-plan.ui-verify.md
+      - test-plan.publish: plugins/test-plan/test-plan.publish.md
+      - test-plan.resolve-feedback: plugins/test-plan/test-plan.resolve-feedback.md
+      - test-plan.score: plugins/test-plan/test-plan.score.md
+      - test-plan.analyze.endpoints: plugins/test-plan/test-plan.analyze.endpoints.md
+      - test-plan.analyze.risks: plugins/test-plan/test-plan.analyze.risks.md
+      - test-plan.analyze.infra: plugins/test-plan/test-plan.analyze.infra.md
+      - test-plan.merge: plugins/test-plan/test-plan.merge.md
+      - test-plan.resolve-gaps: plugins/test-plan/test-plan.resolve-gaps.md
+      - test-plan.analyze.placement: plugins/test-plan/test-plan.analyze.placement.md
+      - test-plan.review: plugins/test-plan/test-plan.review.md
+      - test-plan.create.test-function: plugins/test-plan/test-plan.create.test-function.md
+      - test-plan.score.test-function: plugins/test-plan/test-plan.score.test-function.md
+    - quality-tooling:
+      - plugins/quality-tooling/index.md
+      - quality-repo-analysis: plugins/quality-tooling/quality-repo-analysis.md
+      - konflux-build-simulator: plugins/quality-tooling/konflux-build-simulator.md
+      - test-rules-generator: plugins/quality-tooling/test-rules-generator.md
+      - historical-bug-coverage: plugins/quality-tooling/historical-bug-coverage.md
+      - risk-assessment: plugins/quality-tooling/risk-assessment.md
+    - odh-ai-helpers:
+      - plugins/odh-ai-helpers/index.md
+      - adr-review: plugins/odh-ai-helpers/adr-review.md
+      - gitlab-pipeline-debugger: plugins/odh-ai-helpers/gitlab-pipeline-debugger.md
+      - git-shallow-clone: plugins/odh-ai-helpers/git-shallow-clone.md
+      - jira-upload-chat-log: plugins/odh-ai-helpers/jira-upload-chat-log.md
+      - python-full-deps: plugins/odh-ai-helpers/python-full-deps.md
+      - python-packaging-bug-finder: plugins/odh-ai-helpers/python-packaging-bug-finder.md
+      - python-packaging-complexity: plugins/odh-ai-helpers/python-packaging-complexity.md
+      - python-packaging-env-finder: plugins/odh-ai-helpers/python-packaging-env-finder.md
+      - python-packaging-license-checker: plugins/odh-ai-helpers/python-packaging-license-checker.md
+      - python-packaging-license-finder: plugins/odh-ai-helpers/python-packaging-license-finder.md
+      - python-packaging-source-finder: plugins/odh-ai-helpers/python-packaging-source-finder.md
+      - vllm-backport-fetch-prs: plugins/odh-ai-helpers/vllm-backport-fetch-prs.md
+      - vllm-backport-classify: plugins/odh-ai-helpers/vllm-backport-classify.md
+      - vllm-backport-check-backported: plugins/odh-ai-helpers/vllm-backport-check-backported.md
+      - vllm-backport-score-rank: plugins/odh-ai-helpers/vllm-backport-score-rank.md
+      - vllm-backport-push-report: plugins/odh-ai-helpers/vllm-backport-push-report.md
+      - vllm-backport-cherry-pick: plugins/odh-ai-helpers/vllm-backport-cherry-pick.md
+      - vllm-compare-reqs: plugins/odh-ai-helpers/vllm-compare-reqs.md
+      - vllm-slack-summary: plugins/odh-ai-helpers/vllm-slack-summary.md
+    - agent-eval-harness:
+      - plugins/agent-eval-harness/index.md
+      - eval-setup: plugins/agent-eval-harness/eval-setup.md
+      - eval-analyze: plugins/agent-eval-harness/eval-analyze.md
+      - eval-dataset: plugins/agent-eval-harness/eval-dataset.md
+      - eval-run: plugins/agent-eval-harness/eval-run.md
+      - eval-review: plugins/agent-eval-harness/eval-review.md
+      - eval-mlflow: plugins/agent-eval-harness/eval-mlflow.md
+      - eval-optimize: plugins/agent-eval-harness/eval-optimize.md
+    - meeting-quality-skills:
+      - plugins/meeting-quality-skills/index.md
+      - meeting-async-update-check: plugins/meeting-quality-skills/meeting-async-update-check.md
+      - meeting-risk-agenda: plugins/meeting-quality-skills/meeting-risk-agenda.md
   - Categories:
     - Evaluation & Testing: categories/evaluation.md
     - Security Review: categories/security.md

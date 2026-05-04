@@ -3,7 +3,8 @@
 
 # python-packaging-source-finder
 
-Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs
+Locate source code repositories for Python packages by analyzing
+PyPI metadata and code hosting platforms.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,15 @@ Locate source code repositories for Python packages by analyzing PyPI metadata a
 <div class="diagram-container" markdown>
 ![python-packaging-source-finder diagram](python-packaging-source-finder.svg)
 </div>
+
+## Arguments
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `package_name` | :material-check: | — | Python package name to find repository for |
+
+## Usage
+
+```
+/python-packaging-source-finder requests
+```

@@ -3,7 +3,10 @@
 
 # quality-tooling
 
-Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validation, and test pattern extraction.
+Quality tooling and automation for RHOAI component development. Includes
+automated repository analysis against gold standards, Konflux build simulation
+for PR validation, and test pattern extraction for agent rules.
+
 
 !!! info "Plugin Details"
 
@@ -26,6 +29,8 @@ Quality tooling and automation for RHOAI component development. Includes automat
 | [`/quality-repo-analysis`](quality-repo-analysis.md) | Automated analysis tool that evaluates CI/CD, testing, security, and best practices against gold standards | :material-check: |
 | [`/konflux-build-simulator`](konflux-build-simulator.md) | Generate GitHub Actions workflows that simulate Konflux builds at PR time to catch failures before merge | :material-check: |
 | [`/test-rules-generator`](test-rules-generator.md) | Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency | :material-check: |
+| [`/historical-bug-coverage`](historical-bug-coverage.md) | Analyzes historical blocking and critical bugs from Jira, determines what test coverage exists today with deep test inspection and confidence scoring, and generates standalone HTML reports | :material-check: |
+| [`/risk-assessment`](risk-assessment.md) | Analyze PR for risk, test coverage, architecture impact, and cross-repo intelligence | :material-check: |
 
 ## Installation
 

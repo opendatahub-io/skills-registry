@@ -3,7 +3,8 @@
 
 # test-plan.analyze.infra
 
-Identify environment and infrastructure needs
+Internal forked sub-analyzer. Identifies test environment configuration,
+test data, test users, infrastructure, and tooling requirements.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 

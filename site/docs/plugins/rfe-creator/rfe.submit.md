@@ -3,7 +3,8 @@
 
 # rfe.submit
 
-Push RFEs to Jira
+Push RFEs to Jira via REST API. Creates new RHAIRFE tickets or
+updates existing ones, renames local files after submission.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,9 @@ Push RFEs to Jira
 <div class="diagram-container" markdown>
 ![rfe.submit diagram](rfe.submit.svg)
 </div>
+
+## Usage
+
+```
+/rfe.submit
+```

@@ -3,7 +3,9 @@
 
 # test-plan.review
 
-Review test plan for completeness
+Internal quality reviewer. Scores test plans against a 5-criteria rubric
+(specificity, grounding, scope fidelity, actionability, consistency) and
+auto-revises failing plans up to 2 cycles.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 
@@ -12,3 +14,9 @@ Review test plan for completeness
 <div class="diagram-container" markdown>
 ![test-plan.review diagram](test-plan.review.svg)
 </div>
+
+## Arguments
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `FEATURE_DIR` |  | `auto-detected` | Feature directory containing TestPlan.md |

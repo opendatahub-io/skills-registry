@@ -3,7 +3,8 @@
 
 # eval-dataset
 
-Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-traces)
+Generate realistic test cases from the eval.yaml schema. Supports bootstrap
+(from scratch), expand (fill gaps), and from-traces (extract from MLflow) strategies.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -12,3 +13,19 @@ Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-tra
 <div class="diagram-container" markdown>
 ![eval-dataset diagram](eval-dataset.svg)
 </div>
+
+## Arguments
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `--count` |  | `3` | Number of test cases to generate |
+| `--strategy` |  | `auto` | Generation strategy |
+| `--config` |  | `eval.yaml` | Path to eval config |
+
+## Usage
+
+```
+/eval-dataset
+/eval-dataset --count 5 --strategy expand
+/eval-dataset --strategy from-traces
+```

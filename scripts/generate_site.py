@@ -43,7 +43,6 @@ theme:
         name: Switch to light mode
   features:
     - navigation.tabs
-    - navigation.sections
     - navigation.indexes
     - search.suggest
     - content.code.copy
@@ -407,14 +406,19 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
     nav_lines.append("nav:")
     nav_lines.append("  - Home: index.md")
 
-    # Plugins section
+    # Plugins section — two-level: plugin > skills
     nav_lines.append("  - Plugins:")
     nav_lines.append("    - plugins/index.md")
     for plugin in plugins:
         name = plugin["name"]
-        nav_lines.append(f"    - {name}: plugins/{name}/index.md")
+        skills = plugin.get("skills", [])
+        nav_lines.append(f"    - {name}:")
+        nav_lines.append(f"      - plugins/{name}/index.md")
+        for skill in skills:
+            sname = skill["name"]
+            nav_lines.append(f"      - {sname}: plugins/{name}/{sname}.md")
 
-    # Categories section
+    # Categories section — flat list
     nav_lines.append("  - Categories:")
     for cat_key, cat_meta in categories.items():
         if cat_plugins.get(cat_key):

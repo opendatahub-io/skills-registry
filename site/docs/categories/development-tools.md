@@ -11,4 +11,4 @@ Developer productivity tools for packaging, CI/CD debugging, and workflow automa
 
 Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
 
-**11 skills** · v0.1.0
+**19 skills** · v0.1.0

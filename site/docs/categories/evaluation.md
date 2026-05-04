@@ -15,15 +15,15 @@ Assess RFEs against quality criteria using a structured rubric.
 
 ### [test-plan](../plugins/test-plan/index.md)
 
-Generate test plans and test cases from RHOAI strategies using parallel sub-agent analysis and automated review.
+End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
 
-**6 skills** · v0.1.0
+**17 skills** · v0.2.0
 
 ### [quality-tooling](../plugins/quality-tooling/index.md)
 
 Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validat...
 
-**3 skills** · v1.0.0
+**5 skills** · v1.0.0
 
 ### [agent-eval-harness](../plugins/agent-eval-harness/index.md)
 
