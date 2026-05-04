@@ -3,9 +3,17 @@
 
 # rfe-creator
 
-Claude Code skills for creating, reviewing, and submitting RFEs to the
-RHAIRFE Jira project. Provides an automated pipeline from initial creation
-through review, splitting, and submission, plus strategy refinement skills.
+A comprehensive Claude Code skill suite for the full lifecycle of Requests for
+Enhancement (RFEs) in the RHAIRFE Jira project. Covers creation from problem
+statements, rubric-based review with auto-revision, intelligent splitting of
+oversized RFEs, and submission to Jira. Also provides strategy document skills
+(RHAISTRAT) for refining approved RFEs into implementation strategies with
+adversarial multi-reviewer validation.
+
+The plugin uses a shared artifact convention — all skills read from and write to
+an `artifacts/` directory with YAML frontmatter for structured metadata. Jira
+write operations use deterministic Python scripts rather than LLM tool-calling,
+while read operations support both Atlassian MCP and REST API fallback.
 
 
 !!! info "Plugin Details"
@@ -15,6 +23,18 @@ through review, splitting, and submission, plus strategy refinement skills.
     - **Category**: [Product Planning](../../categories/planning.md)
     - **Repository**: [jwforres/rfe-creator](https://github.com/jwforres/rfe-creator)
     - **Tags**: <span class="tag-pill">rfe</span> <span class="tag-pill">jira</span> <span class="tag-pill">review</span> <span class="tag-pill">strategy</span> <span class="tag-pill">pipeline</span>
+
+## Architecture
+
+Two skill families: RFE skills (rfe.*) for the requirements pipeline and
+Strategy skills (strat.*) for implementation planning. A speedrun skill
+orchestrates the full end-to-end flow by invoking other skills.
+
+Review skills use a forked reviewer pattern — independent sub-agents
+(feasibility, testability, scope, architecture) run in isolated contexts
+and produce separate assessments. State persistence uses scripts/state.py
+for long-running operations, and scripts/frontmatter.py manages YAML
+frontmatter on all artifact files.
 
 ## Pipeline
 
