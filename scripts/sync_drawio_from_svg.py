@@ -16,21 +16,67 @@ Usage:
     python3 scripts/sync_drawio_from_svg.py --dry-run site/docs/plugins/**/*.svg
 """
 
+import base64
 import html
 import re
 import sys
+import urllib.parse
+import xml.dom.minidom
+import zlib
 from pathlib import Path
 
 
+def _decompress_diagram(compressed: str) -> str:
+    """Decompress a base64+deflate+URL-encoded diagram body to XML.
+
+    The draw.io web editor saves diagrams in compressed format:
+    XML → URL-encode → deflate → base64. This reverses that.
+    """
+    try:
+        decoded = base64.b64decode(compressed)
+        inflated = zlib.decompress(decoded, -15)
+        return urllib.parse.unquote(inflated.decode("utf-8"))
+    except Exception:
+        return compressed
+
+
 def extract_mxfile_from_svg(svg_content: str) -> str | None:
+    """Extract embedded mxfile XML from an SVG, decompressing if needed."""
     match = re.search(r'content="([^"]*)"', svg_content)
     if match:
-        return html.unescape(match.group(1))
+        mxfile = html.unescape(match.group(1))
+        # Decompress any base64-encoded diagram bodies to readable XML
+        def _expand(m):
+            body = m.group(1).strip()
+            if not body.startswith("<"):
+                xml = _decompress_diagram(body)
+                return f"{m.group(0)[:m.group(0).index('>')]+1}>{xml}</diagram>"
+            return m.group(0)
+        mxfile = re.sub(r"(<diagram[^>]*>)(.*?)(</diagram>)",
+                        lambda m: f"{m.group(1)}{_decompress_diagram(m.group(2).strip()) if not m.group(2).strip().startswith('<') else m.group(2)}{m.group(3)}",
+                        mxfile, flags=re.DOTALL)
+        return mxfile
     if "mxGraphModel" in svg_content:
         match = re.search(r"(<mxGraphModel.*?</mxGraphModel>)", svg_content, re.DOTALL)
+
         if match:
             return match.group(1)
     return None
+
+
+def _pretty_print_xml(xml_str: str) -> str:
+    """Format XML with indentation, matching the render_drawio.py output style."""
+    try:
+        dom = xml.dom.minidom.parseString(xml_str)
+        pretty = dom.toprettyxml(indent="  ")
+        # Remove the XML declaration line that minidom adds
+        lines = pretty.split("\n")
+        if lines and lines[0].startswith("<?xml"):
+            lines = lines[1:]
+        # Remove blank lines that minidom inserts
+        return "\n".join(line for line in lines if line.strip()) + "\n"
+    except Exception:
+        return xml_str
 
 
 def main():
@@ -59,16 +105,18 @@ def main():
             skipped += 1
             continue
 
+        formatted = _pretty_print_xml(mxfile)
+
         if drawio_path.exists():
             existing = drawio_path.read_text(encoding="utf-8")
-            if existing.strip() == mxfile.strip():
+            if existing.strip() == formatted.strip():
                 skipped += 1
                 continue
 
         if dry_run:
-            print(f"  ~ {svg_path.name} → {drawio_path.name} (would update)")
+            print(f"  ~ {svg_path.name} -> {drawio_path.name} (would update)")
         else:
-            drawio_path.write_text(mxfile, encoding="utf-8")
+            drawio_path.write_text(formatted, encoding="utf-8")
             print(f"  ✓ {svg_path.name} → {drawio_path.name}")
         updated += 1
 
