@@ -2,188 +2,159 @@ direction: right
 
 *.style.border-radius: 8
 *.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
 
-# ── Column 1: Entry ──────────────────────────────────────
+# --- Entry ---
 
 entry: |md
   **/rfe.split**
 
-  RFE IDs (1+)
-  --headless
+  - RFE IDs (1+)
+  - --headless
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# ── Column 2: Parse & Validate ───────────────────────────
+# --- Parse ---
 
 parse: |md
-  **Step 0: Parse**
+  **Parse & Persist**
 
-  Persist flags to
-  split-config.yaml
-  Write IDs to disk
-  Verify task files exist
+  - persist split-config.yaml
+  - write IDs to disk
+  - verify task files exist
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# ── Column 3: Split Agents ───────────────────────────────
+# --- Split Agents ---
 
-agents: Split Agents {
-  style.fill: "#ececec"
+split-agents: |md
+  **Split Agents**
+  LLM (opus, per ID)
+
+  - load RFE + review
+  - decompose to children
+  - coverage check
+  - write split-status
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
-
-  launch: |md
-    **Step 1: Launch**
-
-    One Opus agent per ID
-    run_in_background
-    Poll until complete
-  | {
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  agent: |md
-    **split-agent**
-
-    Load RFE + review
-    Check right-sized score
-    Triage delivered items
-    Propose decompositions
-    Generate child RFEs
-    Coverage check
-    Write split-status
-  | {
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 1
-    style.stroke-dash: 3
-  }
-
-  launch -> agent: "parallel" {style.stroke-dash: 3}
+  style.double-border: true
 }
 
-# ── Column 4: Collect & Decide ───────────────────────────
+# --- Collect ---
 
 collect: |md
-  **Step 2: Collect**
+  **Collect Children**
 
-  Re-read parent IDs
-  Read split-status files
+  - read split-status files
+  - collect_children.py
+  - no-split -> revise
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-no-split: |md
-  **no-split**
+# --- Review ---
 
-  Set recommendation
-  to "revise"
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#999999"
-  style.stroke-width: 1
-}
-
-children: |md
-  **Children found**
-
-  collect_children.py
-  Gather child IDs
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# ── Column 5: Review children ────────────────────────────
-
-review: |md
+rfe-review: |md
   **/rfe.review**
 
-  Inline Skill call
-  --headless passthrough
-  --caller split
-  Full review pipeline
+  - inline Skill call
+  - --headless --caller split
+  - full review pipeline
 | {
-  style.fill: "#e8e8e8"
+  shape: rectangle
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 5
+  style.stroke-dash: 3
 }
 
-# ── Column 6: Self-correction ────────────────────────────
+# --- Self-Correction ---
 
 correct: |md
-  **Step 3: Self-Correct**
+  **Self-Correct**
+  (max 1 cycle)
 
-  Check right_sized < 2/2
-  Re-split offending child
-  Re-review new children
-  Max 1 cycle
+  - check right_sized < 2
+  - re-split offending child
+  - re-review new children
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.double-border: true
 }
 
-# ── Column 7: Finalize ───────────────────────────────────
+# --- Finalize ---
 
 finalize: |md
-  **Step 4: Finalize**
+  **Finalize**
 
-  Rebuild index
-  Re-read flags
+  - rebuild-index
+  - headless or summary
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-headless-out: |md
-  **Headless exit**
+# --- Outputs ---
 
-  Return to /rfe.auto-fix
-  batch loop
+headless-out: |md
+  **Headless Return**
+
+  - return to /rfe.auto-fix
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#999999"
-  style.stroke-width: 1
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
 interactive-out: |md
-  **Interactive exit**
+  **Summary**
 
-  Show split summary
-  Suggest /rfe.submit
+  - suggest /rfe.submit
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#999999"
-  style.stroke-width: 1
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Edges ─────────────────────────────────────────────────
+# --- Flow ---
 
 entry -> parse
-parse -> agents.launch
-agents.launch -> collect: "status files"
-collect -> no-split: "action: no-split"
-collect -> children: "action: split"
-children -> review
-review -> correct
-correct -> agents.launch: "re-split child" {
+
+parse -> split-agents
+
+split-agents -> collect: "split-status"
+
+collect -> rfe-review: "children found"
+
+rfe-review -> correct
+
+correct -> split-agents: "re-split child" {
   style.stroke-dash: 3
-  style.stroke: "#666666"
 }
-correct -> finalize: "done or max cycles"
+
+correct -> finalize: "done / max cycles"
+
 finalize -> headless-out: "--headless"
 finalize -> interactive-out: "interactive"

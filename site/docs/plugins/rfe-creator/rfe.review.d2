@@ -1,389 +1,222 @@
-direction: down
+direction: right
 
-# ── Global styles ──
 *.style.border-radius: 8
-*.style.font-size: 12
+*.style.font-size: 13
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# ================================================================
-#  Column 1 – Input & Parse
-# ================================================================
+# --- Entry ---
 
 entry: |md
   **/rfe.review**
-  Jira keys or local artifacts
-  `--headless`, `--caller`
-| {
-  style.fill: "#dbeafe"
-  style.stroke: "#2563eb"
-  style.stroke-width: 2
-}
 
-step0: |md
-  **Step 0 — Parse & Persist**
-  `state.py init` flags
-  `state.py write-ids`
-  Glob for local task files
+  - RFE IDs (RHAIRFE-NNN)
+  - --headless
+  - --caller \<name\>
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-classify: |md
-  **Classify IDs**
-  Local (file exists)
-  vs Remote (needs fetch)
+# --- Parse & Classify ---
+
+parse: |md
+  **Parse & Persist**
+
+  - state.py init flags
+  - write-ids to disk
+  - classify local vs remote
 | {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-entry -> step0
-step0 -> classify
+# --- Fetch ---
 
-# ================================================================
-#  Column 2 – Fetch
-# ================================================================
+fetch: |md
+  **Fetch Agents**
+  LLM (opus, per ID)
 
-fetch-agents: |md
-  **Step 1 — Fetch Agents**
-  One per remote ID
-  Model: opus
-  `run_in_background: true`
+  - fetch from Jira MCP
+  - poll check_review_progress
+  - verify task files exist
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
 }
 
-fetch-poll: |md
-  **Poll fetch**
-  `check_review_progress.py`
-  `--phase fetch`
-  Sleep NEXT_POLL
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-fetch-verify: |md
-  **Verify task files**
-  Missing → error frontmatter
-  Remove failed IDs
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
-}
-
-classify -> fetch-agents: "remote IDs"
-classify -> setup: "local IDs (skip fetch)" {style.stroke-dash: 3}
-fetch-agents -> fetch-poll
-fetch-poll -> fetch-verify
-
-# ================================================================
-#  Column 3 – Setup
-# ================================================================
+# --- Setup ---
 
 setup: |md
-  **Step 1.5 — Setup**
-  `fetch-architecture-context.sh`
-  `bootstrap-assess-rfe.sh`
-  (parallel)
+  **Setup**
+
+  - fetch-architecture-context.sh
+  - bootstrap-assess-rfe.sh
+  - parallel execution
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-fetch-verify -> setup
+# --- Assess + Feasibility ---
 
-# ================================================================
-#  Column 4 – Assess + Feasibility (parallel fork)
-# ================================================================
+assess: |md
+  **Assess + Feasibility**
+  LLM (opus, 2N agents)
 
-assess-fork: |md
-  **Step 2 — Launch 2N agents**
+  - prep_assess.py per ID
+  - assess agent (rfe-scorer)
+  - feasibility agent per ID
+  - poll both phases
 | {
-  style.fill: "#e0e7ff"
-  style.stroke: "#4338ca"
-  style.stroke-width: 2
-}
-
-assess-agent: |md
-  **Assess Agent**
-  per ID
-  `prep_assess.py`
-  Model: opus
-  subagent_type: rfe-scorer
-| {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
 }
 
-feasibility-agent: |md
-  **Feasibility Agent**
-  per ID
-  rfe-feasibility-review skill
-  Model: opus
+# --- Review ---
+
+review: |md
+  **Review Agents**
+  LLM (opus, per ID)
+
+  - reads assess + feasibility
+  - scores + recommendation
+  - pass / revise / reject
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
 }
 
-assess-poll: |md
-  **Poll assess + feasibility**
-  `check_review_progress.py`
-  `--phase assess / feasibility`
-  Sleep NEXT_POLL
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
+# --- Revise ---
 
-assess-verify: |md
-  **Check prerequisites**
-  `.result.md` exists?
-  `-feasibility.md` exists?
-  Missing → error, remove ID
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
-}
-
-setup -> assess-fork
-assess-fork -> assess-agent: "fork"
-assess-fork -> feasibility-agent: "fork"
-assess-agent -> assess-poll
-feasibility-agent -> assess-poll
-assess-poll -> assess-verify
-
-# ================================================================
-#  Column 5 – Review
-# ================================================================
-
-review-agents: |md
-  **Step 3 — Review Agents**
-  One per remaining ID
-  Model: opus
-  Reads assess + feasibility
-  FIRST_PASS=true
-| {
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-review-poll: |md
-  **Poll review**
-  `check_review_progress.py`
-  `--phase review`
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-assess-verify -> review-agents
-review-agents -> review-poll
-
-# ================================================================
-#  Column 6 – Revise
-# ================================================================
-
-filter-revise: |md
-  **Step 3.5 — Filter**
-  `filter_for_revision.py`
-  Pass / infeasible / rejected → skip
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
-}
-
-revise-agents: |md
+revise: |md
   **Revise Agents**
-  One per failing ID
-  Model: opus
-  Fix failing criteria
+  LLM (opus, per ID)
+
+  - filter_for_revision.py
+  - fix failing criteria
+  - check_revised.py --batch
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
 }
 
-revise-poll: |md
-  **Poll revise**
-  `check_review_progress.py`
-  `--phase revise`
+# --- Reassess ---
+
+reassess: |md
+  **Re-assess Cycle**
+  (max 2 cycles)
+
+  - save + clear state
+  - re-run assess agents
+  - re-run review agents
+  - restore + filter + revise
 | {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-check-revised: |md
-  **Post-process**
-  `check_revised.py --batch`
-  Fix auto_revised flag
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-review-poll -> filter-revise
-filter-revise -> revise-agents: "needs revision"
-filter-revise -> finalize: "all pass" {style.stroke-dash: 3}
-revise-agents -> revise-poll
-revise-poll -> check-revised
-
-# ================================================================
-#  Column 7 – Reassess Cycle (max 2)
-# ================================================================
-
-reassess-gate: |md
-  **Step 4 — Reassess?**
-  `collect_recommendations.py`
-  auto_revised=true & pass=false
-  cycle < 2?
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
-}
-
-reassess-save: |md
-  **4a. Save state**
-  `preserve_review_state.py save`
-  Remove review + assess files
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-reassess-assess: |md
-  **4b. Re-assess**
-  Same as Step 2
-  Assess agents only
-  (no feasibility re-run)
-| {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
 }
 
-reassess-review: |md
-  **4c. Re-review**
-  Same as Step 3
-  FIRST_PASS=false
-| {
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-reassess-restore: |md
-  **4d. Restore state**
-  `preserve_review_state.py restore`
-  before_scores + history
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-reassess-revise: |md
-  **4e. Filter + Revise**
-  `filter_for_revision.py`
-  Catch regressions
-  `check_revised.py --batch`
-| {
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-check-revised -> reassess-gate
-reassess-gate -> reassess-save: "needs reassess"
-reassess-gate -> finalize: "pass or max cycles" {style.stroke-dash: 3}
-reassess-save -> reassess-assess
-reassess-assess -> reassess-review
-reassess-review -> reassess-restore
-reassess-restore -> reassess-revise
-reassess-revise -> reassess-gate: "cycle again (max 2)" {
-  style.stroke-dash: 3
-  style.stroke: "#a16207"
-}
-
-# ================================================================
-#  Column 8 – Finalize
-# ================================================================
+# --- Finalize ---
 
 finalize: |md
-  **Step 5 — Finalize**
-  `frontmatter.py rebuild-index`
-  Re-read flags from disk
+  **Finalize**
+
+  - rebuild-index
+  - batch_summary.py
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-headless-check: |md
-  **Headless?**
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
-}
+# --- Outputs ---
 
 headless-return: |md
-  **Headless return**
-  caller=autofix → rfe.auto-fix
-  caller=split → rfe.split
-  Continue execution
-| {
-  style.fill: "#dbeafe"
-  style.stroke: "#2563eb"
-  style.stroke-width: 1
-}
+  **Headless Return**
 
-interactive-summary: |md
-  **Interactive summary**
-  `batch_summary.py`
-  → /rfe.submit (pass)
-  → /rfe.split (oversized)
-  → retry (errors)
+  - return to /rfe.auto-fix
+  - or return to /rfe.split
 | {
-  style.fill: "#dcfce7"
-  style.stroke: "#16a34a"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-finalize -> headless-check
-headless-check -> headless-return: "--headless"
-headless-check -> interactive-summary: "interactive"
+interactive: |md
+  **Summary**
+
+  - suggest /rfe.submit
+  - suggest /rfe.split
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+jira: |md
+  **Jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> parse
+
+parse -> fetch: "remote IDs"
+parse -> setup: "local IDs"
+
+fetch -> setup
+
+setup -> assess
+
+assess -> review: "assess + feasibility results"
+
+review -> revise: "needs revision"
+review -> finalize: "all pass" {
+  style.stroke-dash: 3
+}
+
+revise -> reassess: "auto_revised"
+
+reassess -> reassess: "cycle again" {
+  style.stroke-dash: 3
+}
+reassess -> finalize: "pass or max cycles"
+
+finalize -> headless-return: "--headless"
+finalize -> interactive: "interactive"
+
+fetch -> jira: {
+  style.stroke-dash: 3
+}

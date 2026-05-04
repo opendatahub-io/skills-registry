@@ -2,71 +2,84 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/rfe.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;Problem statement&lt;br&gt;--headless&lt;br&gt;--priority&lt;br&gt;--labels&lt;br&gt;--rfe-id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="60" width="155" height="130" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;--headless&lt;br&gt;--priority &lt;value&gt;&lt;br&gt;--labels &lt;csv&gt;&lt;br&gt;--rfe-id &lt;ID&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="100" width="130" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="parse-args" value="&lt;b&gt;Parse Arguments&lt;/b&gt;&lt;br&gt;&lt;br&gt;Extract flags:&lt;br&gt;--headless, --priority&lt;br&gt;--labels, --rfe-id&lt;br&gt;Remaining = idea text" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="235" y="65" width="160" height="120" as="geometry"/>
+    <mxCell id="load-rubric" value="&lt;b&gt;Load Rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;check artifacts/rfe-rubric.md&lt;br&gt;bootstrap assess-rfe plugin&lt;br&gt;shape questions from criteria" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="110" width="180" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="rubric" value="&lt;b&gt;Load Rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;Check rfe-rubric.md&lt;br&gt;bootstrap-assess-rfe.sh&lt;br&gt;/export-rubric&lt;br&gt;Proceed without if fails" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="445" y="65" width="165" height="120" as="geometry"/>
+    <mxCell id="export-rubric" value="&lt;b&gt;/export-rubric&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="240" y="290" width="130" height="50" as="geometry"/>
     </mxCell>
-    <mxCell id="clarify" value="&lt;b&gt;Clarify&lt;/b&gt; &lt;i&gt;(interactive)&lt;/i&gt;&lt;br&gt;&lt;br&gt;Ask PM 2–5 questions:&lt;br&gt;Customers, justification&lt;br&gt;User problem, scope&lt;br&gt;Adapt to rubric criteria" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="660" y="30" width="165" height="120" as="geometry"/>
+    <mxCell id="clarify" value="&lt;b&gt;Clarifying Questions&lt;/b&gt;&lt;br&gt;LLM&lt;br&gt;&lt;br&gt;2-5 targeted questions&lt;br&gt;customers, justification&lt;br&gt;user problem, scope&lt;br&gt;success criteria" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="85" width="180" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="headless-skip" value="&lt;b&gt;skip&lt;/b&gt;&lt;br&gt;&lt;i&gt;(--headless)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#333333;strokeWidth=1;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="695" y="185" width="100" height="45" as="geometry"/>
+    <mxCell id="generate" value="&lt;b&gt;Generate RFEs&lt;/b&gt;&lt;br&gt;LLM&lt;br&gt;&lt;br&gt;apply rfe-template.md&lt;br&gt;WHAT/WHY only, no HOW&lt;br&gt;one RFE per business need&lt;br&gt;right-size by S/M/L/XL&lt;br&gt;Jira priority values" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="670" y="75" width="200" height="170" as="geometry"/>
     </mxCell>
-    <mxCell id="generate" value="&lt;b&gt;Generate RFEs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Apply rfe-template.md&lt;br&gt;Size: S / M / L / XL&lt;br&gt;WHAT + WHY only&lt;br&gt;One RFE per need&lt;br&gt;Acceptance criteria" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="880" y="45" width="175" height="140" as="geometry"/>
+    <mxCell id="write" value="&lt;b&gt;Write Artifacts&lt;/b&gt;&lt;br&gt;&lt;br&gt;next_rfe_id.py for IDs&lt;br&gt;frontmatter.py set fields&lt;br&gt;rebuild-index" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="920" y="100" width="170" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="assign-ids" value="&lt;b&gt;Assign IDs&lt;/b&gt;&lt;br&gt;&lt;br&gt;next_rfe_id.py &amp;lt;count&amp;gt;&lt;br&gt;or use --rfe-id&lt;br&gt;Allocate RFE-NNN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="350" width="155" height="110" as="geometry"/>
+    <mxCell id="output" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/rfe-tasks/RFE-NNN.md&lt;br&gt;suggest /rfe.review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1140" y="115" width="170" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="write-files" value="&lt;b&gt;Write Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;rfe-tasks/RFE-NNN.md&lt;br&gt;frontmatter.py set&lt;br&gt;frontmatter.py rebuild-index" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="235" y="345" width="175" height="120" as="geometry"/>
+    <mxCell id="rfe-review" value="&lt;b&gt;/rfe.review&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1360" y="140" width="120" height="50" as="geometry"/>
     </mxCell>
-    <mxCell id="done" value="&lt;b&gt;Done&lt;/b&gt;&lt;br&gt;&lt;br&gt;Edit artifacts&lt;br&gt;/rfe.review next&lt;br&gt;or re-run /rfe.create" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="460" y="360" width="155" height="100" as="geometry"/>
-    </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="parse-args" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse-args" target="rubric" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rubric" target="clarify" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e4" value="--headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rubric" target="headless-skip" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="headless-skip" target="generate" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e6" value="answers" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" source="clarify" target="generate" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e7" value="RFEs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate" target="assign-ids" parent="1">
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="load-rubric" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="880" y="290"/>
-          <mxPoint x="107" y="290"/>
+          <mxPoint x="185" y="170"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assign-ids" target="write-files" parent="1">
+    <mxCell id="e2" value="missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="load-rubric" target="export-rubric" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="write-files" target="done" parent="1">
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.417;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="load-rubric" target="clarify" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="415" y="160"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="--headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" source="load-rubric" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="415" y="206"/>
+          <mxPoint x="415" y="360"/>
+          <mxPoint x="670" y="360"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clarify" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="645" y="160"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="RFE-NNN.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="generate" target="write" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="895" y="160"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="write" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1115" y="160"/>
+          <mxPoint x="1115" y="165"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" value="next step" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="output" target="rfe-review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1335" y="165"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>
