@@ -2,54 +2,80 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/strat.refine&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read strat-tasks/&lt;br&gt;YAML frontmatter&lt;br&gt;Business need (fixed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="170" width="155" height="110" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/strat.refine&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read strat-tasks/&lt;br&gt;YAML frontmatter&lt;br&gt;Business need (fixed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="185" width="135" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="check-reviews" value="&lt;b&gt;Check Reviews&lt;/b&gt;&lt;br&gt;&lt;br&gt;strat-reviews/ exist?&lt;br&gt;Determines mode" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="235" y="180" width="145" height="90" as="geometry"/>
+    <mxCell id="check-reviews" value="&lt;b&gt;Check Reviews&lt;/b&gt;&lt;br&gt;&lt;br&gt;strat-reviews/ exist?&lt;br&gt;Determines mode:&lt;br&gt;initial vs revision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="215" y="195" width="160" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="arch-context" value="&lt;b&gt;Architecture Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;architecture-context/&lt;br&gt;PLATFORM.md&lt;br&gt;Component docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=1;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="450" y="30" width="165" height="100" as="geometry"/>
+    <mxCell id="arch-context" value="&lt;b&gt;Architecture Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;.context/architecture-context/&lt;br&gt;PLATFORM.md + components&lt;br&gt;Ground in real architecture" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="430" y="30" width="200" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="initial" value="&lt;b&gt;Initial Refinement&lt;/b&gt;&lt;br&gt;forked LLM agent&lt;br&gt;&lt;br&gt;Technical approach&lt;br&gt;Affected components&lt;br&gt;Dependencies, NFRs&lt;br&gt;Effort (S/M/L/XL)&lt;br&gt;Risks &amp;amp; open questions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="450" y="160" width="175" height="120" as="geometry"/>
+    <mxCell id="initial" value="&lt;b&gt;Initial Refinement&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Technical approach&lt;br&gt;Affected components&lt;br&gt;Dependencies, NFRs&lt;br&gt;Effort estimate (S/M/L/XL)&lt;br&gt;Risks and open questions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="170" width="180" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="revision" value="&lt;b&gt;Revision Mode&lt;/b&gt;&lt;br&gt;forked LLM agent&lt;br&gt;&lt;br&gt;Read review feedback&lt;br&gt;Address concerns&lt;br&gt;Preserve working parts&lt;br&gt;Flag disagreements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="450" y="320" width="175" height="120" as="geometry"/>
+    <mxCell id="revision" value="&lt;b&gt;Revision Mode&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Read review feedback&lt;br&gt;Address reviewer concerns&lt;br&gt;Preserve working parts&lt;br&gt;Flag disagreements&lt;br&gt;Document changes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="355" width="180" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="output-node" value="&lt;b&gt;Refined Strategy&lt;/b&gt;&lt;br&gt;&lt;br&gt;HOW complete&lt;br&gt;status = Refined&lt;br&gt;Ready for strat.review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="700" y="205" width="160" height="100" as="geometry"/>
+    <mxCell id="output" value="&lt;b&gt;Write Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Update strat-tasks/ files&lt;br&gt;status → Refined&lt;br&gt;Preserve business need" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="680" y="275" width="175" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="check-reviews" parent="1">
+    <mxCell id="strat-review" value="&lt;b&gt;/strat.review&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="910" y="308" width="120" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="check-reviews" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e2a" value="no reviews" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-reviews" target="initial" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e2b" value="reviews exist" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-reviews" target="revision" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e3a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="arch-context" target="initial" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e3b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.2;entryDx=0;entryDy=0;" edge="1" source="arch-context" target="revision" parent="1">
+    <mxCell id="e2" value="no reviews" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-reviews" target="initial" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="640" y="80"/>
-          <mxPoint x="640" y="344"/>
+          <mxPoint x="415" y="240"/>
+          <mxPoint x="415" y="245"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" source="initial" target="output-node" parent="1">
+    <mxCell id="e3" value="reviews exist" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-reviews" target="revision" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="400" y="268"/>
+          <mxPoint x="400" y="430"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="load context" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-reviews" target="arch-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="295" y="195"/>
+          <mxPoint x="295" y="85"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="arch-context" target="initial" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" edge="1" source="revision" target="output-node" parent="1">
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="initial" target="output" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="655" y="245"/>
+          <mxPoint x="655" y="305"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="revision" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="655" y="430"/>
+          <mxPoint x="655" y="352"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" value="downstream" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="output" target="strat-review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="880" y="330"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>

@@ -10,185 +10,82 @@ direction: right
 entry: |md
   **/rfe.submit**
 
-  RFE files or keys
-  --dry-run
-  --artifacts-dir
-| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+  - --dry-run
+  - --artifacts-dir
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-# --- Step 0: Check Credentials ---
+# --- Check Credentials ---
 
 creds: |md
   **Check Credentials**
 
-  JIRA_SERVER
-  JIRA_USER
-  JIRA_TOKEN
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-creds-fail: |md
-  **Missing Creds**
-
-  Print setup guide
-  Abort
-| {style.fill: "#ffdddd"; style.stroke: "#cc3333"; style.stroke-width: 1}
-
-entry -> creds
-creds -> creds-fail: "missing" {style.stroke: "#cc3333"; style.stroke-dash: 3}
-
-# --- Phase 1: Split Submissions ---
-
-phase1: Phase 1 — Splits {
-  style.fill: "#ececec"
+  - JIRA_SERVER
+  - JIRA_USER
+  - JIRA_TOKEN
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-
-  scan-splits: |md
-    **Scan Split Parents**
-
-    Find Archived RHAIRFE
-    with child RFEs
-    Build ancestry map
-  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  split-submit: |md
-    **split_submit.py**
-
-    Archive parent
-    Create children
-    Link tickets
-  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  split-ok: |md
-    **Success**
-
-    Update snapshot
-    hashes
-  | {style.fill: "#ddffdd"; style.stroke: "#339933"; style.stroke-width: 1}
-
-  split-refused: |md
-    **Refused**
-
-    Too many children
-    or Jira conflict
-    Flag needs-attention
-  | {style.fill: "#ffdddd"; style.stroke: "#cc3333"; style.stroke-width: 1}
-
-  scan-splits -> split-submit
-  split-submit -> split-ok: "exit 0"
-  split-submit -> split-refused: "exit 2/3" {style.stroke: "#cc3333"}
 }
 
-creds -> phase1.scan-splits: "present"
+# --- Submit ---
 
-# --- Phase 2: Regular Submissions ---
+submit: |md
+  **Run Submission**
 
-phase2: Phase 2 — Regular RFEs {
-  style.fill: "#ececec"
+  - submit.py script
+  - create or update tickets
+  - apply labels automatically
+  - conflict detection
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-
-  rescan: |md
-    **Re-scan Tasks**
-
-    Filter non-archived
-    non-submitted RFEs
-    Exclude split descendants
-  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  plan: |md
-    **Build Plan**
-
-    Read review frontmatter
-    Conflict detection
-    Label determination
-  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  decide: |md
-    **Decide Action**
-
-    Create / Update /
-    Label-only / Skip
-  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  create-ticket: |md
-    **Create Ticket**
-
-    create_issue()
-    RHAIRFE project
-    Feature Request
-  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  update-ticket: |md
-    **Update Ticket**
-
-    update_issue()
-    Conflict-safe
-  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  labels: |md
-    **Apply Labels**
-
-    auto-created
-    auto-revised
-    needs-attention
-    autofix-rubric-pass
-  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  rescan -> plan
-  plan -> decide
-  decide -> create-ticket: "new RFE"
-  decide -> update-ticket: "existing"
-  create-ticket -> labels
-  update-ticket -> labels
 }
 
-phase1.split-ok -> phase2.rescan
-phase1.scan-splits -> phase2.rescan: "no splits" {style.stroke-dash: 3}
-
-# --- Post-submit ---
-
-comments: |md
-  **Post Comments**
-
-  Removed-context
-  Needs-attention
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-rename: |md
-  **Rename Files**
-
-  RFE-NNN.md ->
-  RHAIRFE-NNNN.md
-  Update frontmatter
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-snapshot: |md
-  **Update Snapshot**
-
-  Content hashes
-  Mark processed
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
-
-index: |md
-  **Rebuild Index**
-
-  artifacts/rfes.md
-| {style.fill: "#f5f5f5"; style.stroke: "#999999"; style.stroke-width: 1}
-
-phase2.labels -> comments
-comments -> rename: "new RFEs"
-rename -> snapshot
-comments -> snapshot: "existing" {style.stroke-dash: 3}
-snapshot -> index
-
-# --- Optional Report ---
+# --- Report ---
 
 report: |md
-  **Generate Reports**
+  **Report Results**
 
-  YAML run report
-  HTML review report
-  (--generate-report)
-| {style.fill: "#f5f5f5"; style.stroke: "#999999"; style.stroke-width: 1; style.stroke-dash: 3}
+  - read artifacts/rfes.md
+  - report created/updated
+  - report errors
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-index -> report: "if requested" {style.stroke-dash: 3}
+# --- External ---
+
+jira: |md
+  **Jira REST API**
+  RHAIRFE project
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> creds
+
+creds -> submit: "credentials present"
+
+submit -> report
+
+submit -> jira: {
+  style.stroke-dash: 3
+}

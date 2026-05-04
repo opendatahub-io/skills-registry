@@ -2,80 +2,146 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/strat.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;Approved RFEs as input&lt;br&gt;Local artifacts or Jira&lt;br&gt;Clone → RHAISTRAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="130" width="150" height="110" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/strat.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;Approved RFEs as input&lt;br&gt;Local artifacts or Jira&lt;br&gt;Clone → RHAISTRAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="175" width="130" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="find-sources" value="&lt;b&gt;Find RFE Sources&lt;/b&gt;&lt;br&gt;&lt;br&gt;Check artifacts/rfe-tasks/&lt;br&gt;Check Jira MCP / env vars&lt;br&gt;Detect available sources&lt;br&gt;Ask user if both exist" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="230" y="75" width="170" height="130" as="geometry"/>
+    <mxCell id="find-sources" value="&lt;b&gt;Find RFE Sources&lt;/b&gt;&lt;br&gt;&lt;br&gt;Check artifacts/rfe-tasks/&lt;br&gt;Check Jira MCP / env vars&lt;br&gt;Detect available sources&lt;br&gt;Ask user if both exist" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="160" width="175" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="fetch-jira" value="&lt;b&gt;Fetch from Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;mcp getJiraIssue&lt;br&gt;REST fallback: fetch_issue.py&lt;br&gt;summary, description,&lt;br&gt;priority, labels, status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="230" y="265" width="170" height="120" as="geometry"/>
+    <mxCell id="fetch-jira" value="&lt;b&gt;Fetch from Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;mcp__atlassian__getJiraIssue&lt;br&gt;REST fallback: fetch_issue.py&lt;br&gt;Fields: summary, description,&lt;br&gt;priority, labels, status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="435" y="60" width="195" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="select" value="&lt;b&gt;Select RFEs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Present table to user&lt;br&gt;Title, priority, source&lt;br&gt;Pick specific or &quot;all&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="460" y="130" width="150" height="100" as="geometry"/>
+    <mxCell id="select" value="&lt;b&gt;Select RFEs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Present table to user&lt;br&gt;Title, priority, source&lt;br&gt;Pick specific or &quot;all&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="680" y="185" width="160" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="clone-jira" value="&lt;b&gt;Clone in Jira&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM + MCP&lt;/i&gt;&lt;br&gt;&lt;br&gt;Clone RHAIRFE → RHAISTRAT&lt;br&gt;Issue type: Feature&lt;br&gt;Cloners link auto-created&lt;br&gt;Record new RHAISTRAT keys&lt;br&gt;Write strat-tickets.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="670" y="40" width="165" height="145" as="geometry"/>
+    <mxCell id="clone-jira" value="&lt;b&gt;Clone in Jira&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM + MCP&lt;/i&gt;&lt;br&gt;&lt;br&gt;Clone RHAIRFE → RHAISTRAT&lt;br&gt;Issue type: Feature&lt;br&gt;Cloners link auto-created&lt;br&gt;Record new RHAISTRAT keys" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="890" y="110" width="195" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="manual-guide" value="&lt;b&gt;Write Manual Guide&lt;/b&gt;&lt;br&gt;&lt;br&gt;strat-jira-guide.md&lt;br&gt;Clone instructions&lt;br&gt;Table for user to fill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="670" y="235" width="165" height="100" as="geometry"/>
+    <mxCell id="manual-guide" value="&lt;b&gt;Write Manual Guide&lt;/b&gt;&lt;br&gt;&lt;br&gt;strat-jira-guide.md&lt;br&gt;Clone instructions&lt;br&gt;Table for user to fill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="890" y="310" width="170" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="create-stubs" value="&lt;b&gt;Create Strategy Stubs&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;Business Need (from RFE)&lt;br&gt;Strategy section (empty)&lt;br&gt;frontmatter.py set metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="895" y="105" width="165" height="130" as="geometry"/>
+    <mxCell id="create-stubs" value="&lt;b&gt;Create Strategy Stubs&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;Business Need (from RFE)&lt;br&gt;Strategy section (empty)&lt;br&gt;frontmatter.py set metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1135" y="200" width="180" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="next-steps" value="&lt;b&gt;Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Stubs in strat-tasks/&lt;br&gt;Run /strat.refine next&lt;br&gt;Manual clone if skipped" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="895" y="285" width="135" height="100" as="geometry"/>
+    <mxCell id="write-tickets" value="&lt;b&gt;Write strat-tickets.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;RHAISTRAT key mapping&lt;br&gt;Source RFE → STRAT key&lt;br&gt;Priority + Jira URL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1135" y="80" width="175" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;&lt;br&gt;RHAIRFE + RHAISTRAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="310" y="470" width="140" height="55" as="geometry"/>
+    <mxCell id="next-steps" value="&lt;b&gt;Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;Stubs in strat-tasks/&lt;br&gt;Run /strat.refine next&lt;br&gt;Complete manual clone&lt;br&gt;if Jira skipped" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1365" y="210" width="175" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="e_entry_find" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="find-sources" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
+    <mxCell id="strat-refine" value="&lt;b&gt;/strat.refine&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1590" y="248" width="120" height="45" as="geometry"/>
     </mxCell>
-    <mxCell id="e_find_fetch" value="Jira only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="find-sources" target="fetch-jira" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
+    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;&lt;br&gt;RHAIRFE + RHAISTRAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="680" y="30" width="145" height="55" as="geometry"/>
     </mxCell>
-    <mxCell id="e_find_select" value="local artifacts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" source="find-sources" target="select" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
+    <mxCell id="stub-detail" value="STRAT-NNN.md&lt;br&gt;---------------------&lt;br&gt;strat_id: STRAT-001&lt;br&gt;source_rfe: RHAIRFE-1234&lt;br&gt;jira_key: RHAISTRAT-400&lt;br&gt;status: Draft&lt;br&gt;---------------------&lt;br&gt;Business Need&lt;br&gt;(verbatim from RFE)&lt;br&gt;Strategy&lt;br&gt;(filled by /strat.refine)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1120" y="385" width="210" height="210" as="geometry"/>
     </mxCell>
-    <mxCell id="e_fetch_select" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" source="fetch-jira" target="select" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_select_clone" value="MCP available" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="select" target="clone-jira" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_select_manual" value="no MCP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="select" target="manual-guide" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_clone_stubs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="clone-jira" target="create-stubs" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_manual_stubs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" source="manual-guide" target="create-stubs" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_stubs_next" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="create-stubs" target="next-steps" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_fetch_jira" value="REST / MCP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-jira" target="jira" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_clone_jira" value="clone API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=0.3;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clone-jira" target="jira" parent="1">
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="find-sources" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="719.5" y="20"/>
-          <mxPoint x="15" y="20"/>
-          <mxPoint x="15" y="497.5"/>
+          <mxPoint x="185" y="230"/>
         </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="Jira only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-sources" target="fetch-jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="410" y="195"/>
+          <mxPoint x="410" y="120"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="local artifacts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-sources" target="select" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="655" y="265"/>
+          <mxPoint x="655" y="240"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="fetch-jira" target="select" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="760" y="120"/>
+          <mxPoint x="760" y="185"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="MCP available" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="select" target="clone-jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="865" y="218"/>
+          <mxPoint x="865" y="185"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="no MCP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="select" target="manual-guide" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="865" y="262"/>
+          <mxPoint x="865" y="365"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="RHAISTRAT keys" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="clone-jira" target="create-stubs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1110" y="215"/>
+          <mxPoint x="1110" y="242"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="manual-guide" target="create-stubs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1110" y="365"/>
+          <mxPoint x="1110" y="298"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clone-jira" target="write-tickets" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1110" y="140"/>
+          <mxPoint x="1110" y="135"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create-stubs" target="next-steps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1340" y="270"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e11" value="downstream" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-steps" target="strat-refine" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1565" y="270"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e12" value="REST / MCP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="fetch-jira" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="532" y="40"/>
+          <mxPoint x="660" y="40"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e13" value="clone API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="clone-jira" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="987" y="95"/>
+          <mxPoint x="987" y="44"/>
+          <mxPoint x="825" y="44"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="create-stubs" target="stub-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
   </root>
