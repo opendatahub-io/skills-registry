@@ -1,0 +1,238 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/risk-assessment**
+
+  - --pr NUMBER
+  - --repo OWNER/REPO
+  - --headless
+  - --dry-run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parse & Extract ---
+
+parse-args: |md
+  **Parse Arguments**
+
+  - verify Python deps
+  - parse CLI flags
+  - init qc-config.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+extract-pr: |md
+  **Extract PR**
+
+  - gh CLI metadata
+  - diff, files, commits
+  - pr-{N}.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Context ---
+
+load-context: |md
+  **Load Context**
+
+  - fetch context repos
+  - enrich with Jira (optional)
+  - slice for analyzers
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External services ---
+
+github-api: |md
+  **GitHub API**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+jira-api: |md
+  **Jira API**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Parallel Analyzers (container) ---
+
+analyzers: "Parallel Analyzer Agents" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  risk: |md
+    **Risk Analyzer**
+
+    - security risks
+    - breaking changes
+    - critical paths
+    - dependency risks
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  test: |md
+    **Test Validator**
+
+    - test coverage gaps
+    - missing test cases
+    - repo test standards
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  impact: |md
+    **Impact Analyzer**
+
+    - blast radius
+    - architecture impact
+    - integration points
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  crossrepo: |md
+    **Cross-Repo Analyzer**
+
+    - affected test repos
+    - breaking tests
+    - ecosystem impact
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+}
+
+# --- Decision & Output ---
+
+verify: |md
+  **Verify Outputs**
+
+  - check 4 artifacts exist
+  - risk-{N}.md
+  - test-{N}.md
+  - impact-{N}.md
+  - crossrepo-{N}.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+decide: |md
+  **Aggregate & Decide**
+
+  - decision engine
+  - risk score (0-100)
+  - APPROVE / FLAG / BLOCK
+  - validate frontmatter
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+publish: |md
+  **Publish to GitHub**
+
+  - PR comment (TODO)
+  - status check (TODO)
+  - dry-run mode
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+report: |md
+  **Report**
+
+  - pr-{N}-analysis.md
+  - decision + risk score
+  - skip if --headless
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> parse-args
+parse-args -> extract-pr: "qc-config.yaml"
+extract-pr -> load-context: "pr-{N}.json"
+
+extract-pr -> github-api
+load-context -> jira-api: "JIRA_TOKEN" {
+  style.stroke-dash: 3
+}
+
+load-context -> analyzers.risk: "tmp/contexts/"
+load-context -> analyzers.test: "tmp/contexts/"
+load-context -> analyzers.impact: "tmp/contexts/"
+load-context -> analyzers.crossrepo: "tmp/contexts/"
+
+analyzers.risk -> verify
+analyzers.test -> verify
+analyzers.impact -> verify
+analyzers.crossrepo -> verify
+
+verify -> decide: "4 finding files"
+decide -> publish: "pr-{N}-analysis.md"
+publish -> report
+
+publish -> github-api: "comment + status" {
+  style.stroke-dash: 3
+}

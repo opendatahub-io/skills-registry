@@ -2,140 +2,171 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b style=&quot;font-size:14px&quot;&gt;/quality-repo-analysis&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;&amp;bull; Accepts repository URL&lt;br&gt;&amp;bull; Optional branch name&lt;br&gt;&amp;bull; Triggers comprehensive quality audit&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#3182ce;strokeWidth=2;arcSize=20;verticalAlign=top;spacingTop=8;spacingLeft=8;spacingRight=8;align=left;" vertex="1" parent="1">
-      <mxGeometry x="20" y="220" width="200" height="120" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/quality-repo-analysis&lt;/b&gt;&lt;br&gt;&lt;br&gt;repository URL&lt;br&gt;branch (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="230" width="130" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="preflight" value="&lt;b style=&quot;font-size:14px&quot;&gt;Pre-flight Checks&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;&amp;bull; Verify PyYAML availability&lt;br&gt;&amp;bull; Run uv run --with pyyaml test&lt;br&gt;&amp;bull; Install deps if missing&lt;br&gt;&amp;bull; Block until confirmed&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;arcSize=14;verticalAlign=top;spacingTop=8;spacingLeft=8;spacingRight=8;align=left;" vertex="1" parent="1">
-      <mxGeometry x="280" y="220" width="200" height="120" as="geometry"/>
+    <mxCell id="preflight" value="&lt;b&gt;Pre-flight Checks&lt;/b&gt;&lt;br&gt;&lt;br&gt;verify PyYAML available&lt;br&gt;uv run --with pyyaml&lt;br&gt;install if missing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="235" width="145" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="discovery" value="&lt;b style=&quot;font-size:14px&quot;&gt;Repo Discovery&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;&amp;bull; Clone or access target repo&lt;br&gt;&amp;bull; Identify repo type (operator, web app, CLI)&lt;br&gt;&amp;bull; Detect primary language(s)&lt;br&gt;&amp;bull; Identify framework&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;arcSize=14;verticalAlign=top;spacingTop=8;spacingLeft=8;spacingRight=8;align=left;" vertex="1" parent="1">
-      <mxGeometry x="540" y="220" width="210" height="120" as="geometry"/>
+    <mxCell id="discover" value="&lt;b&gt;Repo Discovery&lt;/b&gt;&lt;br&gt;&lt;br&gt;clone/access repository&lt;br&gt;detect language (Go, TS, Py)&lt;br&gt;identify framework&lt;br&gt;classify type (operator, app, CLI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="405" y="225" width="155" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="analysis_container" value="Multi-Dimension Analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;arcSize=6;verticalAlign=top;spacingTop=8;container=1;collapsible=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
-      <mxGeometry x="810" y="130" width="720" height="330" as="geometry"/>
+    <mxCell id="target-repo" value="&lt;b&gt;Target Repository&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="430" y="155" width="105" height="40" as="geometry"/>
     </mxCell>
-    <mxCell id="cicd" value="&lt;b style=&quot;font-size:12px&quot;&gt;CI/CD Analysis&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; Inventory all workflows&lt;br&gt;&amp;bull; PR vs periodic triggers&lt;br&gt;&amp;bull; Concurrency &amp;amp; caching&lt;br&gt;&amp;bull; Test automation coverage&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="analysis_container">
-      <mxGeometry x="20" y="45" width="215" height="115" as="geometry"/>
+    <mxCell id="analyze" value="&lt;b&gt;Analysis Dimensions&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="610" y="30" width="355" height="500" as="geometry"/>
     </mxCell>
-    <mxCell id="tests" value="&lt;b style=&quot;font-size:12px&quot;&gt;Test Coverage&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; Unit test count &amp;amp; frameworks&lt;br&gt;&amp;bull; Integration test suites&lt;br&gt;&amp;bull; E2E infrastructure&lt;br&gt;&amp;bull; Coverage tracking &amp;amp; enforcement&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="analysis_container">
-      <mxGeometry x="250" y="45" width="215" height="115" as="geometry"/>
+    <mxCell id="cicd" value="&lt;b&gt;CI/CD Pipeline&lt;/b&gt;&lt;br&gt;&lt;br&gt;workflow inventory + triggers&lt;br&gt;test automation coverage&lt;br&gt;build caching + concurrency" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="analyze">
+      <mxGeometry x="20" y="40" width="145" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="quality_node" value="&lt;b style=&quot;font-size:12px&quot;&gt;Code Quality&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; Linter configs (golangci, ESLint, ruff)&lt;br&gt;&amp;bull; Pre-commit hooks&lt;br&gt;&amp;bull; SAST / static analysis&lt;br&gt;&amp;bull; Secret detection&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="analysis_container">
-      <mxGeometry x="480" y="45" width="220" height="115" as="geometry"/>
+    <mxCell id="tests" value="&lt;b&gt;Test Coverage&lt;/b&gt;&lt;br&gt;&lt;br&gt;unit/integration/E2E suites&lt;br&gt;test-to-code ratio&lt;br&gt;coverage tracking + enforcement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="analyze">
+      <mxGeometry x="185" y="40" width="150" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="build" value="&lt;b style=&quot;font-size:12px&quot;&gt;Build Integration&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; PR build validation&lt;br&gt;&amp;bull; Operator manifest testing&lt;br&gt;&amp;bull; Kustomize overlay checks&lt;br&gt;&amp;bull; Cross-component builds&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="analysis_container">
-      <mxGeometry x="20" y="190" width="215" height="115" as="geometry"/>
+    <mxCell id="quality" value="&lt;b&gt;Code Quality&lt;/b&gt;&lt;br&gt;&lt;br&gt;linting config (golangci, ESLint)&lt;br&gt;pre-commit hooks&lt;br&gt;SAST + secret detection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="analyze">
+      <mxGeometry x="20" y="145" width="145" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="container_node" value="&lt;b style=&quot;font-size:12px&quot;&gt;Container Image&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; Dockerfile analysis&lt;br&gt;&amp;bull; Multi-stage builds&lt;br&gt;&amp;bull; Runtime validation&lt;br&gt;&amp;bull; Trivy / Snyk scanning&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="analysis_container">
-      <mxGeometry x="250" y="190" width="215" height="115" as="geometry"/>
+    <mxCell id="build-integ" value="&lt;b&gt;Build Integration&lt;/b&gt;&lt;br&gt;&lt;br&gt;PR-time image build&lt;br&gt;Kustomize/manifest gen&lt;br&gt;cross-component builds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="analyze">
+      <mxGeometry x="185" y="145" width="150" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="agents" value="&lt;b style=&quot;font-size:12px&quot;&gt;Agent Rules&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; Check .claude/rules/&lt;br&gt;&amp;bull; Evaluate rule completeness&lt;br&gt;&amp;bull; Assess rule quality&lt;br&gt;&amp;bull; Identify missing test rules&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="analysis_container">
-      <mxGeometry x="480" y="190" width="220" height="115" as="geometry"/>
+    <mxCell id="imgtest" value="&lt;b&gt;Container Images&lt;/b&gt;&lt;br&gt;&lt;br&gt;Dockerfile analysis&lt;br&gt;runtime validation&lt;br&gt;Trivy/Snyk scanning + SBOM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="analyze">
+      <mxGeometry x="20" y="250" width="145" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="e_cicd_tests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="cicd" target="tests" parent="analysis_container">
-      <mxGeometry relative="1" as="geometry"/>
+    <mxCell id="rules" value="&lt;b&gt;Agent Rules&lt;/b&gt;&lt;br&gt;&lt;br&gt;.claude/rules/ directory&lt;br&gt;rule completeness + quality&lt;br&gt;missing test type rules" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="analyze">
+      <mxGeometry x="185" y="250" width="150" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="e_tests_quality" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="tests" target="quality_node" parent="analysis_container">
-      <mxGeometry relative="1" as="geometry"/>
+    <mxCell id="gaps" value="&lt;b&gt;Gap Analysis&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;compare vs gold standards&lt;br&gt;odh-dashboard, notebooks, kserve&lt;br&gt;score each dimension (0-10)&lt;br&gt;weighted overall score" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1015" y="195" width="170" height="170" as="geometry"/>
     </mxCell>
-    <mxCell id="e_quality_build" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="quality_node" target="agents" parent="analysis_container">
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1235" y="185" width="505" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="markdown" value="&lt;b&gt;Markdown Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;YAML frontmatter (scorecard)&lt;br&gt;critical gaps + quick wins&lt;br&gt;prioritized recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="report">
+      <mxGeometry x="20" y="40" width="155" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="htmlgen" value="&lt;b&gt;HTML Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;html_generator.py via uv&lt;br&gt;animated score circles&lt;br&gt;collapsible sections&lt;br&gt;color-coded severity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="report">
+      <mxGeometry x="195" y="40" width="150" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="browser" value="&lt;b&gt;Open in Browser&lt;/b&gt;&lt;br&gt;&lt;br&gt;quality-report-{repo}.html" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="report">
+      <mxGeometry x="365" y="55" width="120" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="scorecard-detail" value="quality-analysis-{repo}.md&lt;br&gt;---&lt;br&gt;overall_score: 7.8&lt;br&gt;scorecard:&lt;br&gt;&amp;nbsp;&amp;nbsp;Unit Tests: &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;8/10&lt;br&gt;&amp;nbsp;&amp;nbsp;Integration/E2E: 9/10&lt;br&gt;&amp;nbsp;&amp;nbsp;Build Integr.: &amp;nbsp;4/10&lt;br&gt;&amp;nbsp;&amp;nbsp;Image Testing: &amp;nbsp;6/10&lt;br&gt;&amp;nbsp;&amp;nbsp;Coverage: &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;8/10&lt;br&gt;&amp;nbsp;&amp;nbsp;CI/CD: &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;9/10&lt;br&gt;&amp;nbsp;&amp;nbsp;Agent Rules: &amp;nbsp;&amp;nbsp;2/10&lt;br&gt;critical_gaps: [...]&lt;br&gt;quick_wins: [...]&lt;br&gt;---" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1245" y="405" width="200" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-rules" value="&lt;b&gt;/test-rules-generator&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1780" y="255" width="120" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_preflight" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="preflight" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preflight_discover" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="discover" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_targetrepo_discover" value="clone" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="target-repo" target="discover" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_discover_cicd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="cicd" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="590" y="175"/>
-          <mxPoint x="590" y="175"/>
+          <mxPoint x="590" y="280"/>
+          <mxPoint x="590" y="115"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_build_container" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="build" target="container_node" parent="analysis_container">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_container_agents" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="container_node" target="agents" parent="analysis_container">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_cicd_build" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="cicd" target="build" parent="analysis_container">
+    <mxCell id="e_discover_tests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="tests" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="128" y="175"/>
-          <mxPoint x="128" y="175"/>
+          <mxPoint x="583" y="280"/>
+          <mxPoint x="583" y="115"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_tests_container" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=1.5;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="tests" target="container_node" parent="analysis_container">
+    <mxCell id="e_discover_quality" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="quality" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_discover_buildinteg" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="build-integ" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_discover_imgtest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="imgtest" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="358" y="175"/>
-          <mxPoint x="358" y="175"/>
+          <mxPoint x="583" y="280"/>
+          <mxPoint x="583" y="325"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="gaps" value="&lt;b style=&quot;font-size:14px&quot;&gt;Gap Analysis&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;&amp;bull; Compare vs odh-dashboard&lt;br&gt;&amp;bull; Compare vs notebooks&lt;br&gt;&amp;bull; Compare vs K8s best practices&lt;br&gt;&amp;bull; Score 0-10 per dimension&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;arcSize=14;verticalAlign=top;spacingTop=8;spacingLeft=8;spacingRight=8;align=left;shadow=1;" vertex="1" parent="1">
-      <mxGeometry x="1600" y="220" width="210" height="120" as="geometry"/>
+    <mxCell id="e_discover_rules" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="590" y="280"/>
+          <mxPoint x="590" y="325"/>
+        </Array>
+      </mxGeometry>
     </mxCell>
-    <mxCell id="report" value="&lt;b style=&quot;font-size:14px&quot;&gt;Generate Report&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;&amp;bull; Executive summary &amp;amp; overall score&lt;br&gt;&amp;bull; Detailed scorecard table&lt;br&gt;&amp;bull; Critical gaps (HIGH/MED/LOW)&lt;br&gt;&amp;bull; Quick wins &amp;amp; recommendations&lt;br&gt;&amp;bull; YAML frontmatter for HTML gen&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;arcSize=14;verticalAlign=top;spacingTop=8;spacingLeft=8;spacingRight=8;align=left;shadow=1;" vertex="1" parent="1">
-      <mxGeometry x="1870" y="215" width="220" height="130" as="geometry"/>
+    <mxCell id="e_cicd_gaps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="cicd" target="gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="990" y="115"/>
+          <mxPoint x="990" y="250"/>
+        </Array>
+      </mxGeometry>
     </mxCell>
-    <mxCell id="output_container" value="Report Generation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;arcSize=6;verticalAlign=top;spacingTop=8;container=1;collapsible=0;fontSize=15;fontStyle=1;" vertex="1" parent="1">
-      <mxGeometry x="2150" y="140" width="560" height="310" as="geometry"/>
+    <mxCell id="e_tests_gaps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" source="tests" target="gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="985" y="115"/>
+          <mxPoint x="985" y="260"/>
+        </Array>
+      </mxGeometry>
     </mxCell>
-    <mxCell id="markdown" value="&lt;b style=&quot;font-size:12px&quot;&gt;Markdown Report&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; quality-analysis-{repo}.md&lt;br&gt;&amp;bull; YAML frontmatter + detailed body&lt;br&gt;&amp;bull; Scorecard, gaps, recommendations&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="output_container">
-      <mxGeometry x="20" y="50" width="240" height="100" as="geometry"/>
+    <mxCell id="e_quality_gaps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.45;entryDx=0;entryDy=0;" edge="1" source="quality" target="gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
-    <mxCell id="html_gen" value="&lt;b style=&quot;font-size:12px&quot;&gt;HTML Generator&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; html_generator.py via uv&lt;br&gt;&amp;bull; Parse YAML frontmatter&lt;br&gt;&amp;bull; Animated score circles&lt;br&gt;&amp;bull; Collapsible sections&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="output_container">
-      <mxGeometry x="295" y="50" width="240" height="100" as="geometry"/>
+    <mxCell id="e_buildinteg_gaps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.55;entryDx=0;entryDy=0;" edge="1" source="build-integ" target="gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
-    <mxCell id="html_out" value="&lt;b style=&quot;font-size:12px&quot;&gt;HTML Report&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; quality-report-{repo}.html&lt;br&gt;&amp;bull; Interactive visualization&lt;br&gt;&amp;bull; Color-coded severity&lt;br&gt;&amp;bull; Zero external deps&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="output_container">
-      <mxGeometry x="295" y="185" width="240" height="100" as="geometry"/>
+    <mxCell id="e_imgtest_gaps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" edge="1" source="imgtest" target="gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="985" y="325"/>
+          <mxPoint x="985" y="300"/>
+        </Array>
+      </mxGeometry>
     </mxCell>
-    <mxCell id="browser" value="&lt;b style=&quot;font-size:12px&quot;&gt;Open in Browser&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; open on macOS&lt;br&gt;&amp;bull; Auto-display results&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6fffa;strokeColor=#319795;strokeWidth=1.5;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="output_container">
-      <mxGeometry x="20" y="200" width="240" height="70" as="geometry"/>
+    <mxCell id="e_rules_gaps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="rules" target="gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="990" y="325"/>
+          <mxPoint x="990" y="310"/>
+        </Array>
+      </mxGeometry>
     </mxCell>
-    <mxCell id="e_md_htmlgen" value="frontmatter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=1.5;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="markdown" target="html_gen" parent="output_container">
-      <mxGeometry relative="1" as="geometry"/>
+    <mxCell id="e_gaps_markdown" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gaps" target="markdown" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
-    <mxCell id="e_htmlgen_htmlout" value="generates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=1.5;fontStyle=2;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="html_gen" target="html_out" parent="output_container">
-      <mxGeometry relative="1" as="geometry"/>
+    <mxCell id="e_markdown_htmlgen" value="quality-analysis-{repo}.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="markdown" target="htmlgen" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
-    <mxCell id="e_htmlout_browser" value="auto-open" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#319795;strokeWidth=1.5;fontStyle=2;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="html_out" target="browser" parent="output_container">
-      <mxGeometry relative="1" as="geometry"/>
+    <mxCell id="e_htmlgen_browser" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="htmlgen" target="browser" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
-    <mxCell id="gold" value="&lt;b style=&quot;font-size:12px&quot;&gt;Gold Standards&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; odh-dashboard&lt;br&gt;&amp;bull; notebooks&lt;br&gt;&amp;bull; kserve&lt;br&gt;&amp;bull; K8s best practices&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=1.5;dashed=1;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="1">
-      <mxGeometry x="1600" y="30" width="210" height="120" as="geometry"/>
+    <mxCell id="e_markdown_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="markdown" target="scorecard-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
-    <mxCell id="repo" value="&lt;b style=&quot;font-size:12px&quot;&gt;Target Repository&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; .github/workflows/&lt;br&gt;&amp;bull; test/, e2e/, integration/&lt;br&gt;&amp;bull; Dockerfile, Makefile&lt;br&gt;&amp;bull; .claude/rules/&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1.5;dashed=1;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;fontColor=#333333;" vertex="1" parent="1">
-      <mxGeometry x="540" y="30" width="210" height="120" as="geometry"/>
-    </mxCell>
-    <mxCell id="batch" value="&lt;b style=&quot;font-size:12px&quot;&gt;Batch Aggregation&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&amp;bull; aggregate_quality_reports.py&lt;br&gt;&amp;bull; Combined dashboard HTML&lt;br&gt;&amp;bull; Cross-repo comparison&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=1.5;dashed=1;arcSize=14;verticalAlign=top;spacingTop=6;spacingLeft=6;spacingRight=6;align=left;" vertex="1" parent="1">
-      <mxGeometry x="2300" y="520" width="240" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_entry_preflight" value="invoke" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#3182ce;strokeWidth=2;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="preflight" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_preflight_discovery" value="deps OK" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="discovery" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_discovery_analysis" value="repo classified" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9673a6;strokeWidth=2;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discovery" target="analysis_container" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_analysis_gaps" value="all dimensions scored" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analysis_container" target="gaps" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_gaps_report" value="scores + comparisons" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6c8ebf;strokeWidth=2;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gaps" target="report" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_report_output" value="structured data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#82b366;strokeWidth=2;fontStyle=2;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="output_container" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_repo_discovery" value="clone" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#666666;strokeWidth=1.5;dashed=1;fontSize=10;fontStyle=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="repo" target="discovery" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_repo_analysis" value="scan files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#666666;strokeWidth=1.5;dashed=1;fontSize=10;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" source="repo" target="analysis_container" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_gold_gaps" value="compare" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=1.5;dashed=1;fontSize=10;fontStyle=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gold" target="gaps" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_output_batch" value="feed reports" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#b85450;strokeWidth=1.5;dashed=1;fontSize=10;fontStyle=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output_container" target="batch" parent="1">
-      <mxGeometry relative="1" as="geometry"/>
+    <mxCell id="e_browser_testrules" value="if agent rules gaps found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="browser" target="test-rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
     </mxCell>
   </root>
 </mxGraphModel>

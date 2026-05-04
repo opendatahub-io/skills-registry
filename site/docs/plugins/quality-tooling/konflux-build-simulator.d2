@@ -9,9 +9,9 @@ direction: right
 entry: |md
   **/konflux-build-simulator**
 
-  [repository-url]
-  Simulates Konflux build
-  environment on PRs
+  - [repository-url]
+  - simulates Konflux build
+  - catches failures pre-merge
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -21,178 +21,262 @@ entry: |md
 }
 
 # ── Column 2: Repo Analysis ─────────────────────────
-clone: |md
-  **Clone & Scan**
+analyze: Analyze {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
-  Shallow clone repo
-  Read Dockerfiles
-  Read package.json
-  Detect build args
-|
+  clone: |md
+    **Clone & Scan**
 
-detect: |md
-  **Detect Repo Type**
+    - shallow clone repo
+    - read Dockerfiles
+    - read package.json
+    - detect build args
+  |
 
-  Monorepo (turbo.json)
-  Operator (CRDs)
-  Component/Library
-  Module Federation
-|
+  detect: |md
+    **Detect Repo Type**
+
+    - Monorepo (turbo.json)
+    - Operator (CRDs/manifests)
+    - Component / Library
+    - Module Federation config
+  |
+
+  clone -> detect
+}
 
 # ── Column 3: Phase 0 Static Checks ─────────────────
-lockfile: |md
-  **Hermetic Lockfile**
+static-checks: "Phase 0: Static Checks" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
-  npm: git+/github:/file:
-  go.sum existence
-  go mod verify
-  Resolved URL check
-|
+  lockfile: |md
+    **Hermetic Lockfile**
 
-workspace: |md
-  **Workspace Deps**
+    - git+/github:/file: protocols
+    - resolved URL completeness
+    - go.sum existence check
+    - go mod verify
+  |
 
-  Detect scope & dirs
-  Cross-ref COPY cmds
-  Runtime vs dev deps
-  Missing package warn
-|
+  workspace: |md
+    **Workspace Deps**
 
-fips: |md
-  **FIPS Compliance**
+    - detect scope & dirs
+    - cross-ref COPY commands
+    - runtime vs dev deps
+    - missing package warnings
+  |
 
-  esbuild removal
-  strictfipsruntime tag
-  Go binary flags
-  Release blocker warn
-|
+  fips: |md
+    **FIPS Compliance**
 
-preflight: |md
-  **Hermetic Preflight**
+    - esbuild removal check
+    - strictfipsruntime tag
+    - Go binary flags
+    - release blocker warnings
+  |
 
-  docker --network=none
-  npm ci --ignore-scripts
-  Root + module lockfiles
-  <1 min validation
-|
+  preflight: |md
+    **Hermetic Preflight**
+
+    - docker --network=none
+    - npm ci --ignore-scripts
+    - root + module lockfiles
+    - <1 min fast validation
+  |
+
+  lockfile -> preflight
+}
 
 # ── Column 4: Phase 1-2 Build & Runtime ──────────────
 docker-build: |md
-  **Docker Build**
+  **Phase 1: Docker Build**
 
-  Production BUILD_MODE
-  Multi-stage build
-  COPY path validation
-  Build arg injection
-|
+  - production BUILD_MODE
+  - multi-stage build
+  - COPY path validation
+  - build arg injection
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-runtime: |md
-  **Runtime Validation**
+runtime: "Phase 2: Runtime" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
-  Container startup
-  Crashloop detection
-  Health check wait
-  Log error scan
-|
+  startup: |md
+    **Container Startup**
 
-api-test: |md
-  **API Endpoint Tests**
+    - start container
+    - crashloop detection
+    - health check wait
+    - log error scan
+  |
 
-  merge-patch+json (415)
-  json-patch+json (415)
-  Fastify v5 regression
-  28+ operations check
-|
+  api-test: |md
+    **API Endpoint Tests**
 
-ws-test: |md
-  **WebSocket Tests**
+    - merge-patch+json (415)
+    - json-patch+json (415)
+    - Fastify v5 regression
+    - 28+ operations check
+  |
 
-  Connection crash detect
-  @fastify/websocket v11
-  Non-admin user crash
-  SocketStream removal
-|
+  ws-test: |md
+    **WebSocket Tests**
 
-nonroot: |md
-  **Non-Root Runtime**
+    - connection crash detect
+    - @fastify/websocket v11
+    - non-admin user crash
+    - SocketStream removal
+  |
 
-  UID 1001:0 test
-  Permission issues
-  Delayed crash detect
-  Stability monitor
-|
+  nonroot: |md
+    **Non-Root Runtime**
+
+    - UID 1001:0 test
+    - permission issues
+    - delayed crash detect
+    - stability monitor
+  |
+
+  startup -> api-test
+  startup -> ws-test
+  startup -> nonroot
+}
 
 # ── Column 5: Phase 3-5 Conditional ─────────────────
 modfed: |md
-  **Module Federation**
+  **Phase 3: Module Federation**
 
-  remoteEntry.js size
-  Chunk completeness
-  ChunkLoadError detect
-  Load performance
+  - remoteEntry.js size check
+  - chunk completeness
+  - ChunkLoadError detection
+  - load performance test
 | {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
   style.stroke-dash: 3
 }
 
 operator: |md
-  **Operator Integration**
+  **Phase 4: Operator Integration**
 
-  Kind cluster create
-  CRD install & apply
-  Deployment wait
-  Webhook validation
+  - Kind cluster create
+  - mock secrets + CRDs
+  - deployment + patch
+  - container lifecycle check
 | {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-manifests: |md
-  **Manifest Validation**
+manifest-val: |md
+  **Phase 5: Manifest Validation**
 
-  Kustomize build
-  ConfigMap generation
-  Overlay testing
-  Resource validation
+  - kustomize build
+  - ConfigMap generation
+  - overlay testing
+  - resource validation
 | {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
   style.stroke-dash: 3
 }
 
 # ── Column 6: Output ────────────────────────────────
 generate: |md
-  **Generate Workflow**
+  **Generate Artifacts**
 
-  pr-build-validation.yml
-  validate-build.sh
-  Test manifests
-  Setup documentation
-|
+  - pr-build-validation.yml
+  - validate-build.sh
+  - test manifests
+  - setup documentation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-# ── Edges: Column 1 -> 2 ────────────────────────────
-entry -> clone
-clone -> detect
+# ── Callout: Generated output structure ──────────────
+output-tree: |md
+  .github/workflows/
+    pr-build-validation.yml
+  scripts/
+    validate-build.sh
+  docs/
+    pr-build-validation.md
+  manifests/pr-testing/
+    kustomization.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
 
-# ── Edges: Column 2 -> 3 (Phase 0) ──────────────────
-detect -> lockfile
-detect -> workspace
-detect -> fips
-lockfile -> preflight
+# ── GitHub Actions (external) ────────────────────────
+gha: |md
+  **GitHub Actions**
 
-# ── Edges: Column 3 -> 4 (Phase 1-2) ────────────────
-preflight -> docker-build
-workspace -> docker-build: context {style.stroke-dash: 3}
-fips -> docker-build: flags {style.stroke-dash: 3}
+  - PR trigger
+  - ubuntu-latest runner
+  - [skip konflux-sim]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ── Edges: Entry -> Analysis ────────────────────────
+entry -> analyze
+
+# ── Edges: Analysis -> Phase 0 ──────────────────────
+analyze -> static-checks
+
+# ── Edges: Phase 0 -> Phase 1 ───────────────────────
+static-checks -> docker-build
+
+# ── Edges: Phase 1 -> Phase 2 ───────────────────────
 docker-build -> runtime
-runtime -> api-test
-runtime -> ws-test
-runtime -> nonroot
 
-# ── Edges: Column 4 -> 5 (conditional phases) ───────
-api-test -> modfed: "if monorepo" {style.stroke-dash: 3}
-ws-test -> modfed: {style.stroke-dash: 3}
-nonroot -> operator: "if operator" {style.stroke-dash: 3}
-modfed -> manifests: {style.stroke-dash: 3}
-operator -> manifests: {style.stroke-dash: 3}
+# ── Edges: Phase 2 -> Conditional Phases ─────────────
+runtime -> modfed: "if monorepo" {style.stroke-dash: 3}
+runtime -> operator: "if operator" {style.stroke-dash: 3}
+runtime -> manifest-val: "if manifests" {style.stroke-dash: 3}
 
-# ── Edges: Column 5 -> 6 (output) ───────────────────
-manifests -> generate: results
-api-test -> generate: results {style.stroke-dash: 3}
-nonroot -> generate: results {style.stroke-dash: 3}
+# ── Edges: Conditional -> Output ─────────────────────
+modfed -> generate
+operator -> generate
+manifest-val -> generate
+runtime -> generate: "direct"
+
+# ── Callout edge ─────────────────────────────────────
+generate -> output-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# ── External service edge ────────────────────────────
+generate -> gha: "installed into"
