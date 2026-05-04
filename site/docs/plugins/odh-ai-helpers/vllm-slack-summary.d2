@@ -1,0 +1,97 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-slack-summary**
+
+  - --days N (default: 7)
+  - --output-dir (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+export-slack: |md
+  **Slackdump Export**
+
+  - slackdump CLI
+  - Channel C07R5PAL2L9
+  - Date range filtering
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+convert: |md
+  **Convert to Transcript**
+
+  - generate_transcript.py
+  - Raw export → markdown
+  - Thread grouping
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+analyze: |md
+  **LLM Analysis**
+  LLM summary
+
+  - Breaking changes
+  - Hardware issues
+  - CI/CD changes
+  - Dependency updates
+  - Performance regressions
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+report: |md
+  **Summary Report**
+
+  - Executive summary
+  - Key issues & resolutions
+  - CI/CD changes
+  - Action items for Red Hat
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+slack: |md
+  **Slack**
+  (vLLM CI SIG)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> export-slack
+export-slack -> convert: "slack_export/"
+convert -> analyze: "transcript.md"
+analyze -> report
+
+export-slack -> slack: "slackdump" {
+  style.stroke-dash: 3
+}

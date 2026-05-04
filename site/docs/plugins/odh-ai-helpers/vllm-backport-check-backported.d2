@@ -1,0 +1,28 @@
+direction: right
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-backport-check-backported**
+  - --input filtered.json
+  - --downstream, --branch
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+check: |md
+  **Check Backported**
+  - check-backported.sh
+  - SHA match via git log
+  - Title match fallback
+  - Mark already_backported
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+output-node: |md
+  **Output**
+  - candidates.json
+  - already_backported flags
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+entry -> check: "filtered.json"
+check -> output-node: "candidates.json"

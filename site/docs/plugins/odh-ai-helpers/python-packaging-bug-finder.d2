@@ -5,12 +5,87 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# ── Column 1: Entry ──────────────────────────────────
+# --- Entry ---
+
 entry: |md
   **/python-packaging-bug-finder**
 
-  Package name + optional version
-  Allowed tools: WebFetch, WebSearch
+  - package name
+  - target version
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: source-finder skill ---
+
+source-finder: |md
+  **/python-packaging-source-finder**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Find Repo ---
+
+find-repo: |md
+  **Find Repository**
+
+  - invoke source-finder skill
+  - receive repo URL + confidence
+  - gate on confidence level
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: GitHub ---
+
+github: |md
+  **GitHub Issues**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Search Issues ---
+
+search-issues: |md
+  **Search Issues**
+
+  - WebFetch repo issues page
+  - filter by packaging keywords
+  - build, install, compiler,
+    platform, dependency terms
+  - prioritize open issues
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analyze Issues ---
+
+analyze: |md
+  **Analyze Each Issue**
+  LLM analysis
+
+  - fetch full issue + comments
+  - extract problem description
+  - identify affected versions
+  - find fixes, PRs, workarounds
+  - check resolution indicators
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -19,141 +94,71 @@ entry: |md
   style.double-border: true
 }
 
-# ── Column 2: Find Repository ───────────────────────
-source-finder: |md
-  **Invoke source-finder**
+# --- Version Impact ---
 
-  Skill: python-packaging-
-  source-finder
-  Locate GitHub repository
-|
-
-confidence-gate: |md
-  **Confidence Gate**
-
-  High / Medium → proceed
-  Low / null → stop with error
-| {
-  style.fill: "#FFF3E0"
-  style.stroke: "#E65100"
-}
-
-# ── Column 3: Search Issues ─────────────────────────
-search-issues: |md
-  **Search Packaging Issues**
-
-  WebFetch repo issues page
-  Filter by keywords:
-  build, install, pip, wheel,
-  cmake, gcc, dependency, fail
-|
-
-prioritize: |md
-  **Prioritize Issues**
-
-  Open issues first
-  Then closed issues that
-  may affect target version
-|
-
-# ── Column 4: Analyze Issues ────────────────────────
-fetch-details: |md
-  **Fetch Issue Details**
-
-  Full description + comments
-  Labels and milestones
-  Open / closed status
-|
-
-extract-info: |md
-  **Extract Key Information**
-
-  Problem description
-  Affected versions
-  Resolution status
-  Available fixes / workarounds
-|
-
-resolution: |md
-  **Resolution Indicators**
-
-  Fixed with PR / commit
-  Version mentions
-  Workarounds available
-  Status updates
-|
-
-# ── Column 5: Version Impact & Output ───────────────
 version-impact: |md
   **Version Impact Assessment**
   LLM analysis
 
-  Does it affect target version?
-  Fixed and Included
-  Fixed but Pending
-  Open with Workarounds
-  Unresolved
+  - compare affected vs target version
+  - classify: fixed & included,
+    fixed but pending, workaround
+    available, or unresolved
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
 }
 
-output: |md
-  **Structured Report**
+# --- Report ---
 
-  Issues found (count)
-  Per-issue analysis
-  Recommendations
-  Summary statistics
-|
+report: |md
+  **Report**
 
-# ── External ────────────────────────────────────────
-github: |md
-  **GitHub Issues**
+  - issues found count
+  - per-issue status & resolution
+  - workarounds listed
+  - recommendations
 | {
-  style.stroke-dash: 3
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-dep-skill: |md
-  **python-packaging-
-  source-finder**
+# --- Error output ---
+
+error-stop: |md
+  **Error**
+
+  - low confidence or
+    no repo found
 | {
-  style.stroke-dash: 3
-  style.fill: "#E3F2FD"
-  style.stroke: "#1565C0"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Edges: Column 1 → 2 ────────────────────────────
-entry -> source-finder: package name
+# --- Flow ---
 
-# ── Edges: Column 2 ────────────────────────────────
-source-finder -> confidence-gate: repo URL + confidence
-confidence-gate -> search-issues: high / medium {
-  style.stroke: "#2E7D32"
-}
-
-# ── Edges: Column 3 ────────────────────────────────
-search-issues -> prioritize
-prioritize -> fetch-details: relevant issues
-
-# ── Edges: Column 4 ────────────────────────────────
-fetch-details -> extract-info
-extract-info -> resolution
-
-# ── Edges: Column 4 → 5 ────────────────────────────
-resolution -> version-impact: per issue
-version-impact -> output
-
-# ── External edges ──────────────────────────────────
-dep-skill -> source-finder: "skill call" {
-  style.stroke-dash: 3
-  style.stroke: "#1565C0"
-}
-search-issues -> github: "WebFetch" {
+entry -> find-repo
+find-repo -> source-finder: {
   style.stroke-dash: 3
 }
-fetch-details -> github: "WebFetch" {
+find-repo -> search-issues: "high/medium\nconfidence"
+find-repo -> error-stop: "low/none"
+
+search-issues -> github: {
   style.stroke-dash: 3
 }
+search-issues -> analyze: "matching issues"
+
+analyze -> github: "fetch details" {
+  style.stroke-dash: 3
+}
+analyze -> version-impact: "per issue"
+
+version-impact -> report

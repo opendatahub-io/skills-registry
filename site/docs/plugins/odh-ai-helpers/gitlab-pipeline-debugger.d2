@@ -9,8 +9,78 @@ direction: right
 entry: |md
   **/gitlab-pipeline-debugger**
 
-  Pipeline URL, job URL,
-  branch name, or pipeline ID
+  - pipeline URL, job URL
+  - branch name, pipeline ID
+  - or default (current branch)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ── Column 2: Prerequisites & Input Parsing ──────────
+prereq: |md
+  **Check Prerequisites**
+
+  - glab CLI installed?
+  - glab auth status
+  - git remote configured?
+|
+
+parse: |md
+  **Parse & Validate Input**
+
+  - pipeline URL -> -R + -p
+  - job URL -> -R + job-id
+  - branch -> -b flag
+  - pipeline ID -> -p flag
+  - validate IDs are numeric
+  - validate project path chars
+|
+
+# ── Column 3: Pipeline Inspection ───────────────────
+status: |md
+  **Check Pipeline Status**
+
+  - glab ci get -d
+  - pipeline metadata (ID,
+    status, ref, user)
+  - job status table
+  - failure reasons
+|
+
+mr-lookup: |md
+  **Find Merge Request**
+
+  - glab mr list -s branch
+  - MR title, URL, reviewers
+|
+
+# ── Column 4: Log Retrieval ─────────────────────────
+identify: |md
+  **Identify Failed Jobs**
+
+  - filter by failed status
+  - extract job IDs / names
+|
+
+trace: |md
+  **Retrieve Job Logs**
+
+  - glab ci trace job-id
+  - glab ci trace name -p id
+  - full log output
+|
+
+# ── Column 5: Analysis & Output ─────────────────────
+analyze: |md
+  **Analyze Errors**
+  LLM analysis
+
+  - parse log output
+  - identify root cause
+  - match error patterns
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -19,81 +89,12 @@ entry: |md
   style.double-border: true
 }
 
-# ── Column 2: Prerequisites & Input Parsing ──────────
-prereq: |md
-  **Prerequisite Check**
-
-  glab CLI installed?
-  glab auth status
-  Git remote configured?
-|
-
-parse: |md
-  **Parse Input**
-
-  Pipeline URL → -R + -p
-  Job URL → -R + job-id
-  Branch → -b flag
-  Pipeline ID → -p flag
-  Default → current branch
-|
-
-# ── Column 3: Pipeline Inspection ───────────────────
-status: |md
-  **Check Pipeline Status**
-
-  glab ci get -d
-  Pipeline metadata
-  Job status table
-  Failure reasons
-|
-
-mr-lookup: |md
-  **Find Merge Request**
-
-  glab mr list -s branch
-  MR title, URL, reviewers
-| {
-  style.stroke-dash: 3
-}
-
-# ── Column 4: Log Retrieval ─────────────────────────
-identify: |md
-  **Identify Failed Jobs**
-
-  Filter by status
-  Extract job IDs/names
-|
-
-trace: |md
-  **Retrieve Job Logs**
-
-  glab ci trace job-id
-  glab ci trace name -p id
-  Full log output
-|
-
-# ── Column 5: Analysis & Output ─────────────────────
-analyze: |md
-  **Analyze Errors**
-  LLM analysis
-
-  Parse log output
-  Identify root cause
-  Match error patterns
-| {
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
 diagnosis: |md
-  **Diagnosis**
+  **Diagnosis & Fix**
 
-  Root cause
-  Fix suggestions
-  Remediation steps
+  - root cause explanation
+  - fix suggestions
+  - remediation steps
 |
 
 # ── External ────────────────────────────────────────
@@ -103,29 +104,43 @@ gitlab: |md
   style.stroke-dash: 3
 }
 
-# ── Edges: Column 1 → 2 ────────────────────────────
+glab-cli: |md
+  **glab CLI**
+| {
+  style.stroke-dash: 3
+}
+
+# ── Edges: Column 1 -> 2 ────────────────────────────
 entry -> prereq
 prereq -> parse
 
-# ── Edges: Column 2 → 3 ────────────────────────────
+# ── Edges: Column 2 -> 3 ────────────────────────────
 parse -> status
-parse -> mr-lookup: "optional"
+parse -> mr-lookup: "MR context\nneeded"
 
-# ── Edges: Column 3 → 4 ────────────────────────────
-status -> identify
+# ── Edges: Column 3 -> 4 ────────────────────────────
+status -> identify: "failures found"
 identify -> trace
 
-# ── Edges: Column 4 → 5 ────────────────────────────
-trace -> analyze
+# ── Edges: Column 4 -> 5 ────────────────────────────
+trace -> analyze: "job log output"
 analyze -> diagnosis
 
 # ── External edges ──────────────────────────────────
-status -> gitlab: "glab ci get" {
+glab-cli -> gitlab: {
   style.stroke-dash: 3
 }
-trace -> gitlab: "glab ci trace" {
+status -> glab-cli: "glab ci get" {
   style.stroke-dash: 3
 }
-mr-lookup -> gitlab: "glab mr list" {
+trace -> glab-cli: "glab ci trace" {
+  style.stroke-dash: 3
+}
+mr-lookup -> glab-cli: "glab mr list" {
+  style.stroke-dash: 3
+}
+
+# ── Error handling back-edges ────────────────────────
+prereq -> entry: "glab not found\nor not authed" {
   style.stroke-dash: 3
 }
