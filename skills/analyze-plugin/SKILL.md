@@ -61,8 +61,13 @@ skip it and add it to the "skipped" list in the report. Do not fail — continue
 remaining skills.
 
 Extract from each SKILL.md:
-- **Frontmatter** fields (description, allowed-tools, user-invocable, etc.)
+- **Frontmatter** fields (description, allowed-tools, user-invocable, argument-hint, etc.)
 - **Detailed description** — the full markdown content beyond the frontmatter
+- **Arguments** — look for "Parse Arguments", "Arguments", "Usage" sections. Extract from
+  markdown tables, bullet lists, or usage code blocks. Capture: name, type/format,
+  required/optional, default value, description. For positional arguments, use descriptive
+  names (e.g., "input", "plugin-name"). Also extract usage examples (invocation patterns
+  like `/skill-name arg1 arg2`). If the frontmatter has `argument-hint`, use it as a guide.
 - **Usage examples** — any example invocations or usage patterns
 - **Input/output** — what the skill takes and produces
 - **Architecture notes** — how the skill works internally (sub-agents, scripts, prompts)
@@ -81,11 +86,18 @@ architecture_notes: |
   How the plugin's skills connect and work together.
   Internal architecture patterns (sub-agents, scripts, prompt chains).
 skills:
-  <skill-name>:
+  skill-name:
     description: |
       Detailed description from the SKILL.md content.
-    usage: |
-      Example invocation and usage patterns.
+    arguments:
+      - name: "--flag"
+        type: "(value type)"
+        required: false
+        default: "default-value"
+        description: "What this argument does"
+    usage_examples:
+      - "/skill-name --flag value"
+      - "/skill-name positional-arg"
   # ... repeat for each skill
 ```
 

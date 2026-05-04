@@ -115,7 +115,9 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
     lines.append("")
     lines.append(GENERATED_MARKER)
     lines.append("")
-    lines.append(f"# {registry.get('description', registry['name']).strip()}")
+    title = registry.get('description', registry['name']).strip()
+    title = title.split(',')[0].rstrip('.')
+    lines.append(f"# {title}")
     lines.append("")
     lines.append(f"{len(plugins)} plugins | "
                  f"{sum(len(p.get('skills', [])) for p in plugins)} skills | "
@@ -328,8 +330,30 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         lines.append(f"</div>")
         lines.append("")
 
-    # Usage from enrichment
-    if enriched_skill and enriched_skill.get("usage"):
+    # Arguments from enrichment
+    if enriched_skill and enriched_skill.get("arguments"):
+        lines.append("## Arguments")
+        lines.append("")
+        lines.append("| Argument | Required | Default | Description |")
+        lines.append("|----------|----------|---------|-------------|")
+        for arg in enriched_skill["arguments"]:
+            aname = f'`{arg["name"]}`'
+            req = ":material-check:" if arg.get("required") else ""
+            default = f'`{arg["default"]}`' if arg.get("default") else "—"
+            adesc = arg.get("description", "")
+            lines.append(f"| {aname} | {req} | {default} | {adesc} |")
+        lines.append("")
+
+    # Usage examples from enrichment
+    if enriched_skill and enriched_skill.get("usage_examples"):
+        lines.append("## Usage")
+        lines.append("")
+        lines.append("```")
+        for ex in enriched_skill["usage_examples"]:
+            lines.append(ex)
+        lines.append("```")
+        lines.append("")
+    elif enriched_skill and enriched_skill.get("usage"):
         lines.append("## Usage")
         lines.append("")
         lines.append(enriched_skill["usage"].strip())
