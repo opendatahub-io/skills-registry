@@ -1,3 +1,7 @@
+---
+title: test-plan.analyze.infra
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

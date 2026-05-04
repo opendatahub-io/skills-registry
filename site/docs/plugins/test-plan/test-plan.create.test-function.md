@@ -1,3 +1,7 @@
+---
+title: test-plan.create.test-function
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

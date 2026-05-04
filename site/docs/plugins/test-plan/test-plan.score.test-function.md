@@ -1,3 +1,7 @@
+---
+title: test-plan.score.test-function
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

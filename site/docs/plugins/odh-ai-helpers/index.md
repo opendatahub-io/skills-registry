@@ -1,3 +1,7 @@
+---
+title: odh-ai-helpers
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

@@ -170,7 +170,8 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
 def generate_plugins_index(registry: dict) -> str:
     plugins = registry.get("plugins", [])
     categories = registry.get("categories", {})
-    lines = [GENERATED_MARKER]
+    lines = ["---\ntitle: Plugins\n---\n"]
+    lines.append(GENERATED_MARKER)
     lines.append("# Plugins")
     lines.append("")
     lines.append(f"{len(plugins)} plugins registered in the marketplace.")
@@ -208,7 +209,8 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     if enrichment:
         desc = enrichment.get("description", desc)
 
-    lines = [GENERATED_MARKER]
+    lines = [f"---\ntitle: {name}\n---\n"]
+    lines.append(GENERATED_MARKER)
     lines.append(f"# {name}")
     lines.append("")
     lines.append(desc)
@@ -309,7 +311,8 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     if enriched_skill and enriched_skill.get("description"):
         sdesc = enriched_skill["description"].strip()
 
-    lines = [GENERATED_MARKER]
+    lines = [f"---\ntitle: {sname}\n---\n"]
+    lines.append(GENERATED_MARKER)
     lines.append(f"# {sname}")
     lines.append("")
     lines.append(sdesc)
@@ -361,9 +364,32 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     return "\n".join(lines)
 
 
+def generate_categories_index(registry: dict) -> str:
+    categories = registry.get("categories", {})
+    by_cat = build_category_plugins(registry)
+    lines = ["---\ntitle: Categories\n---\n"]
+    lines.append(GENERATED_MARKER)
+    lines.append("# Categories")
+    lines.append("")
+    lines.append(f"{len(categories)} categories in the marketplace.")
+    lines.append("")
+    lines.append("| Category | Plugins | Description |")
+    lines.append("|----------|---------|-------------|")
+    for key, meta in categories.items():
+        if not by_cat.get(key):
+            continue
+        name = meta["name"]
+        desc = meta.get("description", "").strip().split("\n")[0]
+        count = len(by_cat[key])
+        lines.append(f"| [{name}]({key}.md) | {count} | {desc} |")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def generate_category_page(cat_key: str, cat_meta: dict,
                            plugins: list) -> str:
-    lines = [GENERATED_MARKER]
+    lines = [f"---\ntitle: {cat_meta['name']}\n---\n"]
+    lines.append(GENERATED_MARKER)
     lines.append(f"# {cat_meta['name']}")
     lines.append("")
     lines.append(cat_meta.get("description", ""))
@@ -418,8 +444,9 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
             sname = skill["name"]
             nav_lines.append(f"      - {sname}: plugins/{name}/{sname}.md")
 
-    # Categories section — flat list
+    # Categories section — with index page
     nav_lines.append("  - Categories:")
+    nav_lines.append("    - categories/index.md")
     for cat_key, cat_meta in categories.items():
         if cat_plugins.get(cat_key):
             nav_lines.append(f"    - {cat_meta['name']}: categories/{cat_key}.md")
@@ -464,6 +491,9 @@ def generate_site(registry: dict, output_dir: Path):
                 generate_skill_page(skill, plugin, enrichment, plugin_dir))
 
     # Category pages
+    (docs / "categories").mkdir(parents=True, exist_ok=True)
+    (docs / "categories" / "index.md").write_text(
+        generate_categories_index(registry))
     for cat_key, cat_meta in categories.items():
         cat_list = cat_plugins.get(cat_key, [])
         if cat_list:

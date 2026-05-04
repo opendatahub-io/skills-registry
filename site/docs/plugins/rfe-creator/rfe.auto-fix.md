@@ -1,3 +1,7 @@
+---
+title: rfe.auto-fix
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 
