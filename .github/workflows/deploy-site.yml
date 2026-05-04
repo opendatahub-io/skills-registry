@@ -28,11 +28,12 @@ jobs:
         run: pip install -r site/requirements.txt
 
       - name: Build site
-        run: mkdocs build --config-file site/mkdocs.yml --site-dir site/_site
+        working-directory: site
+        run: mkdocs build --site-dir ../_site
 
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
-          path: site/_site
+          path: _site
 
   deploy:
     needs: build
