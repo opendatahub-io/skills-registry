@@ -1,0 +1,55 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/meeting-async-update-check&lt;/b&gt;&lt;br&gt;&lt;br&gt;meeting title &amp; date&lt;br&gt;attendee list&lt;br&gt;shared document content&lt;br&gt;optional format expectation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="155" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse-inputs" value="&lt;b&gt;Parse Inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;read attendee list&lt;br&gt;read shared document&lt;br&gt;identify document structure&lt;br&gt;detect Jira exports or dashboards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="235" y="50" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="match-updates" value="&lt;b&gt;Match Attendee Updates&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;scan for name/alias headers&lt;br&gt;find attributed bullet lists&lt;br&gt;parse Jira assignee fields&lt;br&gt;best-effort on inconsistent docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="450" y="40" width="180" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="classify" value="&lt;b&gt;Classify Attendees&lt;/b&gt;&lt;br&gt;&lt;br&gt;updated: clear match found&lt;br&gt;missing: no content attributed&lt;br&gt;uncertain: ambiguous ownership" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="680" y="55" width="165" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="coverage-check" value="&lt;b&gt;Coverage Assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;most updated: note success&lt;br&gt;none updated: flag meeting&lt;br&gt;not ready for status review&lt;br&gt;partial: list gaps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="895" y="55" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Organizer Summary&lt;/b&gt;&lt;br&gt;&lt;br&gt;meeting name &amp; counts&lt;br&gt;updates found / missing&lt;br&gt;uncertain matches&lt;br&gt;suggested reminder message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1115" y="55" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-format" value="Organizer Summary&lt;br&gt;─────────────────&lt;br&gt;Meeting: [title]&lt;br&gt;Total reviewed: N&lt;br&gt;Updates found: N&lt;br&gt;Missing: N&lt;br&gt;Uncertain: N&lt;br&gt;&lt;br&gt;Missing Update List&lt;br&gt;─────────────────&lt;br&gt;- Name 1&lt;br&gt;- Name 2&lt;br&gt;&lt;br&gt;Suggested Reminder&lt;br&gt;─────────────────&lt;br&gt;&quot;Please add your async&lt;br&gt;&amp;nbsp;updates before the meeting...&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1115" y="215" width="220" height="275" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="entry" target="parse-inputs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="parse-inputs" target="match-updates" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="match-updates" target="classify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="classify" target="coverage-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="coverage-check" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="output-format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1202" y="195"/>
+          <mxPoint x="1225" y="195"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

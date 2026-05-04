@@ -8,6 +8,12 @@ indicate low-quality meetings. Provides recommendations for improvement.
 
 **Plugin**: [meeting-quality-skills](index.md) | **:material-check: User-invocable**
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![meeting-risk-agenda diagram](meeting-risk-agenda.svg)
+</div>
+
 ## Arguments
 
 | Argument | Required | Default | Description |
