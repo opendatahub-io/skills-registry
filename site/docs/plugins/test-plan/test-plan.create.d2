@@ -5,29 +5,14 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# ── Entry ──
+# --- Entry ---
+
 entry: |md
   **/test-plan.create**
 
-  - `JIRA_KEY [ADR_FILE_PATH]`
-  - Auto-detect from session
-  - Interactive fallback
-| {
-  shape: rectangle
-  style.fill: "#dbeafe"
-  style.stroke: "#2563eb"
-  style.stroke-width: 2
-}
-
-# ── Preflight ──
-preflight: |md
-  **Preflight Checks**
-
-  - Python deps (`frontmatter.py`)
-  - MCP availability check
-  - Resolve output directory
-  - Validate not in skill repo
-  - Save preference prompt
+  - JIRA_KEY (required)
+  - ADR_FILE_PATH (optional)
+  - auto-detect from session
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -35,13 +20,31 @@ preflight: |md
   style.stroke-width: 2
 }
 
-# ── Gather ──
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight Checks**
+
+  - verify Python deps (uv)
+  - check Jira MCP available
+  - determine output directory
+  - validate not in skill repo
+  - save preference prompt
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Gather ---
+
 gather: |md
   **Gather Information**
 
-  - Fetch strategy via MCP
-  - Extract Jira components
-  - Read ADR file (optional)
+  - fetch strategy via Jira MCP
+  - extract components list
+  - read ADR file (if provided)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -49,33 +52,32 @@ gather: |md
   style.stroke-width: 2
 }
 
-# ── External: Jira MCP ──
+# --- External: Jira MCP ---
+
 jira: |md
   **Jira MCP**
 | {
   shape: rectangle
-  style.fill: "#fff7ed"
-  style.stroke: "#c2410c"
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 5
+  style.stroke-dash: 3
 }
 
-# ── Parallel Sub-Agents ──
-analyze: **Step 2: Parallel Analysis** {
-  style.fill: "#f0fdf4"
-  style.stroke: "#16a34a"
-  style.stroke-width: 1
-  style.stroke-dash: 3
-  style.border-radius: 12
-  style.font-size: 12
+# --- Parallel Analysis (container) ---
+
+analyze: Parallel Analysis {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
   endpoints: |md
     **analyze.endpoints**
     forked agent
 
-    - Feature scope (in/out)
-    - Test objectives
-    - API endpoints & priority
+    - feature scope (in/out)
+    - test objectives
+    - API endpoints and methods
     - Sections 1 + 4
   | {
     shape: rectangle
@@ -89,8 +91,9 @@ analyze: **Step 2: Parallel Analysis** {
     **analyze.risks**
     forked agent
 
-    - Test levels & types
-    - Priority definitions
+    - test levels and types
+    - priority definitions
+    - risks with mitigations
     - NFR assessments
     - Sections 2, 7 + 8
   | {
@@ -105,9 +108,9 @@ analyze: **Step 2: Parallel Analysis** {
     **analyze.infra**
     forked agent
 
-    - Cluster config
-    - Test data & users
-    - Tooling requirements
+    - test environment config
+    - test data and users
+    - tooling requirements
     - Sections 3 + 9
   | {
     shape: rectangle
@@ -118,14 +121,15 @@ analyze: **Step 2: Parallel Analysis** {
   }
 }
 
-# ── Generate ──
+# --- Generate ---
+
 generate: |md
   **Generate Files**
 
-  - Fill test plan template
-  - Write `TestPlan.md`
-  - Set frontmatter (script)
-  - Write `README.md`
+  - fill test plan template
+  - TestPlan.md (10 sections)
+  - set frontmatter via script
+  - README.md with links
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -133,13 +137,15 @@ generate: |md
   style.stroke-width: 2
 }
 
-# ── Gaps ──
+# --- Gaps ---
+
 gaps: |md
   **Collect Gaps**
 
-  - Extract sub-agent gaps
-  - Write `TestPlanGaps.md`
-  - Set gaps frontmatter
+  - merge sub-agent gaps
+  - write TestPlanGaps.md
+  - set gaps frontmatter
+  - present action menu
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -147,44 +153,31 @@ gaps: |md
   style.stroke-width: 2
 }
 
-# ── Decision ──
-decision: |md
-  **User Decision**
+# --- Review (external skill) ---
 
-  1. Provide more docs
-  2. Proceed to review
-  3. Proceed + create cases
-| {
-  shape: diamond
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 2
-  style.font-size: 11
-}
-
-# ── Review ──
 review: |md
-  **Review & Score**
-  LLM (test-plan.review)
+  **test-plan.review**
 
   - 5-criteria rubric (10pt)
-  - Auto-revision (max 2x)
-  - Write `TestPlanReview.md`
+  - auto-revision (max 2x)
+  - TestPlanReview.md
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.stroke-dash: 3
   style.double-border: true
 }
 
-# ── Auto-fix ──
-autofix: |md
-  **Auto-Fix**
+# --- Auto-fix + Summary ---
 
-  - Consistency fixes
-  - Feature-specific priorities
-  - Never invent for TBDs
+finalize: |md
+  **Finalize**
+
+  - apply auto-fixes (Edit)
+  - present score and verdict
+  - show remaining gaps
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -192,67 +185,101 @@ autofix: |md
   style.stroke-width: 2
 }
 
-# ── Output ──
+# --- Output ---
+
 output: |md
   **Output**
 
-  - `TestPlan.md`
-  - `TestPlanReview.md`
-  - `TestPlanGaps.md`
-  - `README.md`
-| {
-  shape: rectangle
-  style.fill: "#ecfdf5"
-  style.stroke: "#059669"
-  style.stroke-width: 2
-}
-
-# ── Optional chaining ──
-create-cases: |md
-  **/test-plan.create-cases**
-  (optional chaining)
+  - TestPlan.md
+  - TestPlanReview.md
+  - TestPlanGaps.md
+  - README.md
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#999999"
-  style.stroke-width: 1
-  style.stroke-dash: 5
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Main flow edges ──
-entry -> preflight
-preflight -> gather
-gather -> jira: "fetch strategy" {style.stroke-dash: 5}
-gather -> analyze.endpoints: "parallel" {style.stroke-dash: 5; style.font-style: italic}
-gather -> analyze.risks: "parallel" {style.stroke-dash: 5; style.font-style: italic}
-gather -> analyze.infra: "parallel" {style.stroke-dash: 5; style.font-style: italic}
-analyze.endpoints -> generate: "findings"
-analyze.risks -> generate: "findings"
-analyze.infra -> generate: "findings"
-generate -> gaps
-gaps -> decision: "gaps found?"
+# --- Optional downstream ---
 
-# ── Decision edges ──
-decision -> gather: "1: provide docs" {
-  style.stroke: "#a16207"
-  style.stroke-dash: 5
-  style.font-style: italic
-}
-decision -> review: "2: proceed" {
-  style.stroke: "#16a34a"
-}
-decision -> review: "3: proceed + cases" {
-  style.stroke: "#2563eb"
+create-cases: |md
+  **/test-plan.create-cases**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# ── Review flow ──
-review -> autofix: "verdict"
-autofix -> output
+# --- Output callout ---
 
-# ── Optional chaining ──
+output-tree: |md
+  {feature_name}/
+    TestPlan.md        <- 10 sections
+    TestPlanGaps.md    <- gap tracker
+    TestPlanReview.md  <- scores
+    README.md          <- links
+    test_cases/        <- placeholder
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Main flow ---
+
+entry -> preflight
+preflight -> gather
+
+gather -> jira: "RHAISTRAT / RHOAIENG" {
+  style.stroke-dash: 3
+}
+
+gather -> analyze.endpoints: "strategy + ADR"
+gather -> analyze.risks: "strategy + ADR"
+gather -> analyze.infra: "strategy + ADR"
+
+analyze.endpoints -> generate: "scope, endpoints"
+analyze.risks -> generate: "levels, risks, NFRs"
+analyze.infra -> generate: "env, data, tooling"
+
+generate -> gaps: "TestPlan.md"
+
+# --- Gap resolution loop ---
+
+gaps -> analyze.endpoints: "provide docs" {
+  style.stroke-dash: 3
+}
+gaps -> analyze.risks: "provide docs" {
+  style.stroke-dash: 3
+}
+gaps -> analyze.infra: "provide docs" {
+  style.stroke-dash: 3
+}
+
+# --- Proceed to review ---
+
+gaps -> review: "proceed"
+
+review -> finalize: "TestPlanReview.md"
+
+finalize -> output
+
+# --- Optional chaining ---
+
 output -> create-cases: "option 3" {
-  style.stroke: "#999999"
-  style.stroke-dash: 5
-  style.font-style: italic
+  style.stroke-dash: 3
+}
+
+# --- Callout connection ---
+
+output -> output-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

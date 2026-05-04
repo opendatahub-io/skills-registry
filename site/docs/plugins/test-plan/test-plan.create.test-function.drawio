@@ -1,0 +1,48 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/test-plan.create.test-function&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent (Opus)&lt;/i&gt;&lt;br&gt;&lt;br&gt;--tc-file TC spec&lt;br&gt;--function-name&lt;br&gt;--framework&lt;br&gt;--conventions-file&lt;br&gt;--pattern-guide (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="55" width="175" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-inputs" value="&lt;b&gt;Read Input Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;TC specification (objective,&lt;br&gt;steps, expected results)&lt;br&gt;Conventions file (framework,&lt;br&gt;naming, markers)&lt;br&gt;Pattern guide (if provided)&lt;br&gt;Repo instructions (CLAUDE.md)&lt;br&gt;Common setup (shared fixtures)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="250" y="50" width="185" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="generate" value="&lt;b&gt;Generate Test Function&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM code generation&lt;/i&gt;&lt;br&gt;&lt;br&gt;Decorators from repo markers&lt;br&gt;Function signature + fixtures&lt;br&gt;Docstring with TC reference&lt;br&gt;AAA pattern (Arrange/Act/Assert)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="480" y="65" width="185" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="style-match" value="&lt;b&gt;Match Repository Style&lt;/b&gt;&lt;br&gt;&lt;br&gt;Correct imports&lt;br&gt;Assertion style&lt;br&gt;Mocking patterns&lt;br&gt;Fixture usage&lt;br&gt;Priority: CONSTITUTION &gt;&lt;br&gt;CLAUDE.md &gt; pattern guide" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="710" y="60" width="175" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Raw test function code&lt;br&gt;No markdown, no explanations&lt;br&gt;Matches repo conventions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="930" y="85" width="155" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="odh-test-context" value="&lt;b&gt;odh-test-context&lt;/b&gt;&lt;br&gt;(conventions + patterns)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="290" y="250" width="145" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-inputs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="TC + conventions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="generate" target="style-match" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="style-match" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="conventions file" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="odh-test-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="342" y="235"/>
+          <mxPoint x="362" y="235"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

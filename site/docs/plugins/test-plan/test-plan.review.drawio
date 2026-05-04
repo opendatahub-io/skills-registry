@@ -2,143 +2,183 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;Parse Arguments&lt;/b&gt;&lt;br&gt;&lt;br&gt;Extract feature dir path&lt;br&gt;Auto-detect from session&lt;br&gt;Locate TestPlan.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="30" width="160" height="110" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/test-plan.review&lt;/b&gt;&lt;br&gt;&lt;br&gt;feature directory path&lt;br&gt;auto-detect from session" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="280" width="150" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="read-plan" value="&lt;b&gt;Read Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read TestPlan.md content&lt;br&gt;Extract source_key&lt;br&gt;frontmatter.py read" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="240" y="30" width="160" height="110" as="geometry"/>
+    <mxCell id="read-plan" value="&lt;b&gt;Read Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;read TestPlan.md&lt;br&gt;extract source_key&lt;br&gt;frontmatter.py read" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="275" width="155" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="fetch-strategy" value="&lt;b&gt;Fetch Strategy&lt;/b&gt;&lt;br&gt;&lt;br&gt;Jira MCP: getJiraIssue&lt;br&gt;Fallback: local file&lt;br&gt;Degraded: proceed without" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="450" y="30" width="160" height="110" as="geometry"/>
+    <mxCell id="fetch-strategy" value="&lt;b&gt;Fetch Strategy&lt;/b&gt;&lt;br&gt;&lt;br&gt;MCP getJiraIssue(source_key)&lt;br&gt;fallback: local strat-tasks/ file&lt;br&gt;degraded mode if unavailable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="435" y="270" width="185" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="score" value="&lt;b&gt;Score Agent (fork)&lt;/b&gt;&lt;br&gt;&lt;br&gt;5-criterion rubric (0-2 each)&lt;br&gt;Specificity, Grounding&lt;br&gt;Scope Fidelity, Actionability&lt;br&gt;Consistency cross-ref table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="660" y="30" width="175" height="120" as="geometry"/>
+    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="480" y="190" width="100" height="45" as="geometry"/>
     </mxCell>
-    <mxCell id="review" value="&lt;b&gt;Review Agent (fork)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Write TestPlanReview.md&lt;br&gt;Set frontmatter scores&lt;br&gt;6 consistency cross-checks&lt;br&gt;Section-by-section feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="885" y="30" width="175" height="120" as="geometry"/>
+    <mxCell id="score" value="&lt;b&gt;Score Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;5-criterion rubric (0-2 each)&lt;br&gt;specificity, grounding,&lt;br&gt;scope fidelity&lt;br&gt;actionability, consistency&lt;br&gt;grounding cross-ref table&lt;br&gt;calibration examples" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="670" y="250" width="200" height="160" as="geometry"/>
     </mxCell>
-    <mxCell id="check-scores" value="&lt;b&gt;Check Criteria&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read review frontmatter&lt;br&gt;All scores = 2?&lt;br&gt;frontmatter.py read" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="1110" y="40" width="130" height="100" as="geometry"/>
+    <mxCell id="review" value="&lt;b&gt;Review Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;write TestPlanReview.md&lt;br&gt;set frontmatter scores + verdict&lt;br&gt;6 consistency cross-checks&lt;br&gt;section-by-section feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="920" y="260" width="200" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="results" value="&lt;b&gt;Present Results&lt;/b&gt;&lt;br&gt;&lt;br&gt;Score summary (5 criteria)&lt;br&gt;Delta if score changed&lt;br&gt;Verdict: Ready/Revise/Rework&lt;br&gt;Next-step guidance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="1220" y="260" width="150" height="120" as="geometry"/>
+    <mxCell id="check-scores" value="&lt;b&gt;Check Criteria&lt;/b&gt;&lt;br&gt;&lt;br&gt;read review frontmatter&lt;br&gt;all scores = 2?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1170" y="285" width="155" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="revision-loop" value="&lt;b&gt;Revision Loop (max 2 cycles)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#757575;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;dashed=1;dashPattern=5 5;arcSize=8;" vertex="1" parent="1">
-      <mxGeometry x="30" y="195" width="800" height="420" as="geometry"/>
+    <mxCell id="revision-loop" value="&lt;b&gt;Revision Loop (max 2 cycles)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;arcSize=10;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1375" y="170" width="710" height="480" as="geometry"/>
     </mxCell>
-    <mxCell id="filter_node" value="&lt;b&gt;Filter for Revision&lt;/b&gt;&lt;br&gt;&lt;br&gt;filter_for_revision.py&lt;br&gt;Skip if no actionable items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="20" y="40" width="130" height="90" as="geometry"/>
+    <mxCell id="filter-node" value="&lt;b&gt;Filter for Revision&lt;/b&gt;&lt;br&gt;&lt;br&gt;filter_for_revision.py&lt;br&gt;skip if no actionable items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="revision-loop">
+      <mxGeometry x="20" y="80" width="150" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="revise" value="&lt;b&gt;Revise Agent (fork)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Edit only failing sections&lt;br&gt;Criterion-to-section map&lt;br&gt;Anti-hallucination rules&lt;br&gt;Set auto_revised flag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="200" y="40" width="155" height="110" as="geometry"/>
+    <mxCell id="revise" value="&lt;b&gt;Revise Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;edit only failing sections&lt;br&gt;criterion-to-section mapping&lt;br&gt;anti-hallucination constraints&lt;br&gt;set auto_revised flag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="revision-loop">
+      <mxGeometry x="195" y="70" width="165" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="check-revised" value="&lt;b&gt;Check auto_revised&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read frontmatter flag&lt;br&gt;Stop if no changes&lt;br&gt;Increment cycle counter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="405" y="50" width="130" height="90" as="geometry"/>
+    <mxCell id="check-revised" value="&lt;b&gt;Check Revised&lt;/b&gt;&lt;br&gt;&lt;br&gt;read auto_revised flag&lt;br&gt;stop if no changes made&lt;br&gt;increment cycle counter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="revision-loop">
+      <mxGeometry x="385" y="75" width="140" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="save-state" value="&lt;b&gt;Save State&lt;/b&gt;&lt;br&gt;&lt;br&gt;preserve_review_state.py&lt;br&gt;Preserve before_scores&lt;br&gt;Delete old review file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="585" y="50" width="130" height="90" as="geometry"/>
+    <mxCell id="save-state" value="&lt;b&gt;Save State&lt;/b&gt;&lt;br&gt;&lt;br&gt;preserve_review_state.py&lt;br&gt;preserve before_scores&lt;br&gt;delete old review file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="revision-loop">
+      <mxGeometry x="550" y="75" width="140" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="re-score" value="&lt;b&gt;Re-Score (fork)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Score agent on revised plan&lt;br&gt;Fresh rubric assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="20" y="210" width="145" height="90" as="geometry"/>
+    <mxCell id="re-score" value="&lt;b&gt;Re-Score&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;score agent on revised plan&lt;br&gt;fresh rubric assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="revision-loop">
+      <mxGeometry x="550" y="215" width="140" height="95" as="geometry"/>
     </mxCell>
-    <mxCell id="re-review" value="&lt;b&gt;Re-Review (fork)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Review agent, first_pass=false&lt;br&gt;Write new TestPlanReview.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="215" y="210" width="145" height="90" as="geometry"/>
+    <mxCell id="re-review" value="&lt;b&gt;Re-Review&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;review agent, first_pass=false&lt;br&gt;write new TestPlanReview.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="revision-loop">
+      <mxGeometry x="385" y="215" width="140" height="95" as="geometry"/>
     </mxCell>
-    <mxCell id="restore-state" value="&lt;b&gt;Restore State&lt;/b&gt;&lt;br&gt;&lt;br&gt;preserve_review_state.py&lt;br&gt;Merge before_scores back&lt;br&gt;Append revision history" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="410" y="210" width="145" height="90" as="geometry"/>
+    <mxCell id="restore-state" value="&lt;b&gt;Restore State&lt;/b&gt;&lt;br&gt;&lt;br&gt;preserve_review_state.py restore&lt;br&gt;merge before_scores back&lt;br&gt;append revision history" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="revision-loop">
+      <mxGeometry x="195" y="220" width="165" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="re-check" value="&lt;b&gt;Re-Check Criteria&lt;/b&gt;&lt;br&gt;&lt;br&gt;All scores = 2?&lt;br&gt;Cycles remaining?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="revision-loop">
-      <mxGeometry x="605" y="210" width="130" height="90" as="geometry"/>
+    <mxCell id="re-check" value="&lt;b&gt;Re-Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;all scores = 2?&lt;br&gt;cycles remaining?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="revision-loop">
+      <mxGeometry x="20" y="230" width="150" height="80" as="geometry"/>
     </mxCell>
-    <mxCell id="e_entry_readplan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="entry" target="read-plan" parent="1">
+    <mxCell id="results" value="&lt;b&gt;Present Results&lt;/b&gt;&lt;br&gt;&lt;br&gt;score summary table (5 criteria)&lt;br&gt;delta if score changed&lt;br&gt;verdict: Ready / Revise / Rework&lt;br&gt;next-step guidance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2135" y="290" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="create-cases" value="&lt;b&gt;/test-plan.create-cases&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2135" y="440" width="155" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve-feedback" value="&lt;b&gt;/test-plan.resolve-feedback&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2135" y="570" width="165" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="rubric-detail" value="TestPlanReview.md&lt;br&gt;scores:&lt;br&gt;&amp;nbsp;&amp;nbsp;specificity: 0-2&lt;br&gt;&amp;nbsp;&amp;nbsp;grounding: 0-2&lt;br&gt;&amp;nbsp;&amp;nbsp;scope_fidelity: 0-2&lt;br&gt;&amp;nbsp;&amp;nbsp;actionability: 0-2&lt;br&gt;&amp;nbsp;&amp;nbsp;consistency: 0-2&lt;br&gt;verdict: Ready/Revise/Rework&lt;br&gt;total: 0-10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="955" y="445" width="210" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_readplan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-plan" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_readplan_fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="read-plan" target="fetch-strategy" parent="1">
+    <mxCell id="e_readplan_fetch" value="source_key" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-plan" target="fetch-strategy" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_fetch_score" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="fetch-strategy" target="score" parent="1">
+    <mxCell id="e_fetch_jira" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="fetch-strategy" target="jira" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_score_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="score" target="review" parent="1">
+    <mxCell id="e_fetch_score" value="strategy text" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-strategy" target="score" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_review_check" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="review" target="check-scores" parent="1">
+    <mxCell id="e_score_review" value="assessment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="review" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_check_pass" value="all = 2 (pass)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2e7d32;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check-scores" target="results" parent="1">
+    <mxCell id="e_review_check" value="TestPlanReview.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="review" target="check-scores" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_check_pass" value="all = 2 (pass)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check-scores" target="results" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1295" y="90"/>
+          <mxPoint x="1350" y="330"/>
+          <mxPoint x="1350" y="130"/>
+          <mxPoint x="2225" y="130"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_check_fail" value="any &lt; 2 (fail)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c62828;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check-scores" target="filter_node" parent="1">
+    <mxCell id="e_check_fail" value="any &lt; 2 (fail)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-scores" target="filter-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_filter_revise" value="actionable items" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="filter-node" target="revise" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_filter_skip" value="SKIP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="filter-node" target="results" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1175" y="175"/>
-          <mxPoint x="115" y="175"/>
+          <mxPoint x="1395" y="145"/>
+          <mxPoint x="2225" y="145"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_filter_revise" value="actionable items" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="filter_node" target="revise" parent="1">
+    <mxCell id="e_revise_checkrevised" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="revise" target="check-revised" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_filter_skip" value="SKIP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#757575;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;" edge="1" source="filter_node" target="results" parent="1">
+    <mxCell id="e_checkrevised_false" value="revised = false" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check-revised" target="results" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="850" y="280"/>
+          <mxPoint x="1830" y="152"/>
+          <mxPoint x="2225" y="152"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_revise_checkrev" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="revise" target="check-revised" parent="1">
+    <mxCell id="e_checkrevised_save" value="revised = true
+cycles &lt; 2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-revised" target="save-state" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_checkrev_save" value="revised, cycles&lt;2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="check-revised" target="save-state" parent="1">
+    <mxCell id="e_save_rescore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="save-state" target="re-score" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_checkrev_results" value="revised=false" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#757575;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-revised" target="results" parent="1">
+    <mxCell id="e_rescore_rereview" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="re-score" target="re-review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rereview_restore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="re-review" target="restore-state" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_restore_recheck" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="restore-state" target="re-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_recheck_results" value="all = 2 OR
+cycles exhausted" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="re-check" target="results" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="850" y="320"/>
+          <mxPoint x="1375" y="680"/>
+          <mxPoint x="2120" y="680"/>
+          <mxPoint x="2120" y="350"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_save_rescore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" source="save-state" target="re-score" parent="1">
+    <mxCell id="e_recheck_back" value="still failing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="re-check" target="filter-node" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_rescore_rereview" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="re-score" target="re-review" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_rereview_restore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="re-review" target="restore-state" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_restore_recheck" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="restore-state" target="re-check" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_recheck_results" value="all=2 OR exhausted" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2e7d32;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.85;entryDx=0;entryDy=0;" edge="1" source="re-check" target="results" parent="1">
+    <mxCell id="e_results_cases" value="verdict: Ready" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="results" target="create-cases" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="850" y="360"/>
+          <mxPoint x="2180" y="425"/>
+          <mxPoint x="2180" y="440"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_recheck_loop" value="still failing, cycles remain" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#e65100;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="re-check" target="filter_node" parent="1">
+    <mxCell id="e_results_feedback" value="open PR exists" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="results" target="resolve-feedback" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="700" y="640"/>
-          <mxPoint x="115" y="640"/>
+          <mxPoint x="2315" y="425"/>
+          <mxPoint x="2315" y="592"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_rubric" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="review" target="rubric-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1020" y="420"/>
+          <mxPoint x="1060" y="420"/>
         </Array>
       </mxGeometry>
     </mxCell>

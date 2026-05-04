@@ -2,50 +2,225 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="create" value="&lt;b&gt;/test-plan.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fetch strategy + ADR&lt;br&gt;Invoke 3 sub-analyzers&lt;br&gt;Merge findings&lt;br&gt;Invoke review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="160" width="180" height="130" as="geometry"/>
+    <mxCell id="create" value="&lt;b&gt;/test-plan.create&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fetch strategy from Jira + optional ADR&lt;br&gt;Invoke 3 analyzers in parallel&lt;br&gt;Generate TestPlan.md, README, gaps&lt;br&gt;Invoke review with auto-revision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="30" width="195" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="endpoints" value="&lt;b&gt;analyze.endpoints&lt;/b&gt;&lt;br&gt;&lt;br&gt;API endpoints&lt;br&gt;Test objectives&lt;br&gt;Priority assignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="290" y="30" width="170" height="110" as="geometry"/>
+    <mxCell id="score" value="&lt;b&gt;/test-plan.score&lt;/b&gt;&lt;br&gt;&lt;br&gt;Score-only (no revision)&lt;br&gt;Same 5-criteria rubric&lt;br&gt;Present results to user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="210" width="160" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="risks" value="&lt;b&gt;analyze.risks&lt;/b&gt;&lt;br&gt;&lt;br&gt;Test levels &amp;amp; types&lt;br&gt;NFR categories&lt;br&gt;Risk mitigations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="290" y="170" width="170" height="110" as="geometry"/>
+    <mxCell id="update" value="&lt;b&gt;/test-plan.update&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read existing artifacts&lt;br&gt;Re-analyze with new docs&lt;br&gt;Invoke merge + resolve-gaps&lt;br&gt;Re-run review, version bump" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="370" width="195" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="infra" value="&lt;b&gt;analyze.infra&lt;/b&gt;&lt;br&gt;&lt;br&gt;Cluster config&lt;br&gt;Test data &amp;amp; users&lt;br&gt;Tooling needs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="290" y="310" width="170" height="110" as="geometry"/>
+    <mxCell id="endpoints" value="&lt;b&gt;analyze.endpoints&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Extract feature scope (in/out)&lt;br&gt;Identify API endpoints&lt;br&gt;Assign P0/P1/P2 priorities&lt;br&gt;Flag gaps in source docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="310" y="30" width="175" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="review" value="&lt;b&gt;/test-plan.review&lt;/b&gt;&lt;br&gt;&lt;br&gt;5-criteria rubric&lt;br&gt;Score + auto-revise&lt;br&gt;Max 2 revision cycles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="540" y="155" width="185" height="130" as="geometry"/>
+    <mxCell id="risks" value="&lt;b&gt;analyze.risks&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Determine test levels &amp; types&lt;br&gt;Define feature-specific priorities&lt;br&gt;Assess NFR categories&lt;br&gt;Identify risks with mitigations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="310" y="195" width="175" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="create-cases" value="&lt;b&gt;/test-plan.create-cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;Generate TC-*.md files&lt;br&gt;Upgrade-aware cases&lt;br&gt;INDEX.md + coverage&lt;br&gt;Validate completeness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="810" y="160" width="195" height="130" as="geometry"/>
+    <mxCell id="infra" value="&lt;b&gt;analyze.infra&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Cluster &amp; operator config&lt;br&gt;Test data and test users&lt;br&gt;Infrastructure dependencies&lt;br&gt;Tooling requirements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="310" y="360" width="175" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="e1" value="parallel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="endpoints" parent="1">
+    <mxCell id="review" value="&lt;b&gt;/test-plan.review&lt;/b&gt;&lt;br&gt;&lt;i&gt;internal orchestrator&lt;/i&gt;&lt;br&gt;&lt;br&gt;Score via 5-criteria rubric&lt;br&gt;Auto-revise failing sections&lt;br&gt;Re-score (max 2 cycles)&lt;br&gt;Write TestPlanReview.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="575" y="100" width="175" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="merge" value="&lt;b&gt;merge&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Additive merge strategy&lt;br&gt;Preserve user edits&lt;br&gt;Change summary + stats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="575" y="370" width="155" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve-gaps" value="&lt;b&gt;resolve-gaps&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Cross-ref old gaps vs new&lt;br&gt;Semantic matching logic&lt;br&gt;Track resolved/new/open" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="575" y="515" width="155" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="create-cases" value="&lt;b&gt;/test-plan.create-cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;Generate TC-*.md per category&lt;br&gt;E2E + upgrade-aware cases&lt;br&gt;Build INDEX.md&lt;br&gt;Coverage validation&lt;br&gt;Update TestPlan.md sections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="840" y="100" width="185" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="publish-node" value="&lt;b&gt;/test-plan.publish&lt;/b&gt;&lt;br&gt;&lt;br&gt;Validate frontmatter&lt;br&gt;Create branch + commit&lt;br&gt;Open or update GitHub PR&lt;br&gt;Assign reviewers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1115" y="30" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="case-implement" value="&lt;b&gt;/test-plan.case-implement&lt;/b&gt;&lt;br&gt;&lt;br&gt;Load testing context + patterns&lt;br&gt;Invoke placement analyzer&lt;br&gt;Generate pytest/Go/JS code&lt;br&gt;Score + auto-revise quality" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1115" y="210" width="185" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve-feedback" value="&lt;b&gt;/test-plan.resolve-feedback&lt;/b&gt;&lt;br&gt;&lt;br&gt;Fetch PR review comments&lt;br&gt;Assess each against plan&lt;br&gt;User decides: apply/skip&lt;br&gt;Commit + push updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1375" y="30" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="placement" value="&lt;b&gt;analyze.placement&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked sub-agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;Classify test level per TC&lt;br&gt;Score upstream vs downstream&lt;br&gt;User confirms placement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1375" y="210" width="160" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="ui-verify" value="&lt;b&gt;/test-plan.ui-verify&lt;/b&gt;&lt;br&gt;&lt;br&gt;Browser-based TC execution&lt;br&gt;Playwright CDP automation&lt;br&gt;PASS/FAIL/BLOCKED verdicts&lt;br&gt;HTML report + screenshots" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1375" y="390" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_create_endpoints" value="parallel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="endpoints" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="270" y="79"/>
+          <mxPoint x="270" y="95"/>
+        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="risks" parent="1">
+    <mxCell id="e_create_risks" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="risks" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="265" y="121"/>
+          <mxPoint x="265" y="260"/>
+        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="infra" parent="1">
+    <mxCell id="e_create_infra" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create" target="infra" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="260" y="149"/>
+          <mxPoint x="260" y="425"/>
+        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4" value="findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="endpoints" target="review" parent="1">
+    <mxCell id="e_endpoints_review" value="findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="endpoints" target="review" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="535" y="95"/>
+          <mxPoint x="535" y="140"/>
+        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="risks" target="review" parent="1">
+    <mxCell id="e_risks_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="risks" target="review" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="540" y="260"/>
+          <mxPoint x="540" y="168"/>
+        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="infra" target="review" parent="1">
+    <mxCell id="e_infra_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="infra" target="review" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="545" y="425"/>
+          <mxPoint x="545" y="200"/>
+        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e7" value="test plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="review" target="create-cases" parent="1">
+    <mxCell id="e_create_review" value="TestPlan.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.15;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="create" target="review" parent="1">
       <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="250" y="50"/>
+          <mxPoint x="250" y="10"/>
+          <mxPoint x="662" y="10"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_cases" value="ready" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="review" target="create-cases" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="800" y="168"/>
+          <mxPoint x="800" y="175"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cases_publish" value="TC-*.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create-cases" target="publish-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1075" y="145"/>
+          <mxPoint x="1075" y="95"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cases_implement" value="TC specs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create-cases" target="case-implement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1080" y="205"/>
+          <mxPoint x="1080" y="280"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_implement_placement" value="TC analysis" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="case-implement" target="placement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1345" y="280"/>
+          <mxPoint x="1345" y="268"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_publish_feedback" value="PR URL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="publish-node" target="resolve-feedback" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1340" y="95"/>
+          <mxPoint x="1340" y="95"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_feedback_publish" value="updated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="resolve-feedback" target="publish-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1462" y="15"/>
+          <mxPoint x="1200" y="15"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_endpoints" value="re-analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update" target="endpoints" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="245" y="398"/>
+          <mxPoint x="245" y="95"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_risks" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update" target="risks" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="240" y="426"/>
+          <mxPoint x="240" y="260"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_infra" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update" target="infra" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="275" y="440"/>
+          <mxPoint x="275" y="425"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_merge" value="old + new" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update" target="merge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="127" y="525"/>
+          <mxPoint x="127" y="640"/>
+          <mxPoint x="520" y="640"/>
+          <mxPoint x="520" y="422"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_resolvegaps" value="old gaps + new" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.65;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update" target="resolve-gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="155" y="525"/>
+          <mxPoint x="155" y="670"/>
+          <mxPoint x="525" y="670"/>
+          <mxPoint x="525" y="567"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_review" value="re-score" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="15" y="440"/>
+          <mxPoint x="15" y="695"/>
+          <mxPoint x="780" y="695"/>
+          <mxPoint x="780" y="168"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_cases" value="optional regen" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0;exitY=0.9;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="update" target="create-cases" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="10" y="500"/>
+          <mxPoint x="10" y="700"/>
+          <mxPoint x="932" y="700"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_implement_uiverify" value="TC-UI-*.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="case-implement" target="ui-verify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1345" y="350"/>
+          <mxPoint x="1345" y="455"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>

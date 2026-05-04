@@ -2,48 +2,41 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;test-plan.analyze.infra&lt;/b&gt;&lt;br&gt;Fork context · Sonnet&lt;br&gt;&lt;br&gt;Called by test-plan.create&lt;br&gt;Receives file paths&lt;br&gt;allowed-tools: Read only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="30" y="60" width="155" height="120" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;test-plan.analyze.infra&lt;/b&gt;&lt;br&gt;forked sub-agent&lt;br&gt;&lt;br&gt;strategy files&lt;br&gt;ADR files (optional)&lt;br&gt;additional docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="80" width="155" height="105" as="geometry"/>
     </mxCell>
-    <mxCell id="read-sources" value="&lt;b&gt;Read Source Docs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Strategy files (from args&lt;br&gt;or artifacts/strat-tasks/)&lt;br&gt;ADR files (if provided)&lt;br&gt;Additional docs (API spec,&lt;br&gt;design doc, feature ref)&lt;br&gt;ONLY files specified in args" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="235" y="55" width="160" height="130" as="geometry"/>
+    <mxCell id="extract-env" value="&lt;b&gt;Extract Test Environment&lt;/b&gt;&lt;br&gt;LLM analysis (Section 3)&lt;br&gt;&lt;br&gt;cluster config: OCP version,&lt;br&gt;RHOAI version, operators&lt;br&gt;test data: sample configs,&lt;br&gt;model artifacts, seed data&lt;br&gt;test users: service accounts,&lt;br&gt;admin, unprivileged" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="230" y="50" width="170" height="160" as="geometry"/>
     </mxCell>
-    <mxCell id="extract-env" value="&lt;b&gt;Extract Test Environment&lt;/b&gt;&lt;br&gt;LLM analysis (Section 3)&lt;br&gt;&lt;br&gt;Cluster config: OCP version,&lt;br&gt;RHOAI version, operators,&lt;br&gt;DB, language runtimes&lt;br&gt;Test data: sample configs,&lt;br&gt;model artifacts, seed data,&lt;br&gt;mock responses, CRDs&lt;br&gt;Test users: service accounts,&lt;br&gt;admin users, unprivileged,&lt;br&gt;anonymous access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="445" y="30" width="200" height="180" as="geometry"/>
+    <mxCell id="extract-infra" value="&lt;b&gt;Extract Infra &amp; Tools&lt;/b&gt;&lt;br&gt;LLM analysis (Section 9)&lt;br&gt;&lt;br&gt;infrastructure: cluster reqs,&lt;br&gt;operator deps, external svcs&lt;br&gt;configuration: env vars,&lt;br&gt;ConfigMaps, feature gates&lt;br&gt;test tools: oc, curl, psql" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="445" y="55" width="170" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="extract-infra" value="&lt;b&gt;Extract Infra &amp;amp; Tools&lt;/b&gt;&lt;br&gt;LLM analysis (Section 9)&lt;br&gt;&lt;br&gt;Infrastructure: cluster reqs,&lt;br&gt;operator deps, external svcs&lt;br&gt;Configuration: env vars,&lt;br&gt;ConfigMaps, catalog sources,&lt;br&gt;feature gates&lt;br&gt;Test tools: API tools, DB&lt;br&gt;tools, debugging, perf,&lt;br&gt;K8s tools (oc, kubectl)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="695" y="30" width="200" height="180" as="geometry"/>
+    <mxCell id="gap-analysis" value="&lt;b&gt;Gap Analysis&lt;/b&gt;&lt;br&gt;LLM assessment&lt;br&gt;&lt;br&gt;identify missing info&lt;br&gt;mark underspecified as TBD&lt;br&gt;map each gap to&lt;br&gt;resolving doc type&lt;br&gt;(ADR / API spec /&lt;br&gt;design doc)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="660" y="60" width="155" height="135" as="geometry"/>
     </mxCell>
-    <mxCell id="gap-analysis" value="&lt;b&gt;Gap Analysis&lt;/b&gt;&lt;br&gt;LLM assessment&lt;br&gt;&lt;br&gt;Identify missing info&lt;br&gt;Mark underspecified&lt;br&gt;items as TBD&lt;br&gt;Map each gap to&lt;br&gt;resolving doc type&lt;br&gt;(ADR / API spec /&lt;br&gt;feature ref / design doc)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="945" y="40" width="180" height="160" as="geometry"/>
+    <mxCell id="output" value="&lt;b&gt;Structured Findings&lt;/b&gt;&lt;br&gt;&lt;br&gt;Test Environment section&lt;br&gt;Infrastructure &amp; Tools&lt;br&gt;Gaps section&lt;br&gt;returns to orchestrator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="860" y="85" width="155" height="95" as="geometry"/>
     </mxCell>
-    <mxCell id="output_node" value="&lt;b&gt;Structured Findings&lt;/b&gt;&lt;br&gt;&lt;br&gt;Test Environment section&lt;br&gt;Infrastructure &amp;amp; Tools section&lt;br&gt;Gaps section&lt;br&gt;Returns to orchestrator&lt;br&gt;(test-plan.create)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
-      <mxGeometry x="1175" y="55" width="155" height="130" as="geometry"/>
+    <mxCell id="output-structure" value="Markdown output&lt;br&gt;  Test Environment&lt;br&gt;    Cluster Configuration&lt;br&gt;    Test Data Requirements&lt;br&gt;    Test Users&lt;br&gt;  Infrastructure and Tools&lt;br&gt;    Infrastructure&lt;br&gt;    Configuration&lt;br&gt;    Test Tools&lt;br&gt;  Gaps&lt;br&gt;    {gap} — resolved by: {doc}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="830" y="220" width="210" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="output-structure" value="Markdown output&lt;br&gt;├── Test Environment&lt;br&gt;│   ├── Cluster Configuration&lt;br&gt;│   ├── Test Data Requirements&lt;br&gt;│   └── Test Users&lt;br&gt;├── Infrastructure and Tools&lt;br&gt;│   ├── Infrastructure&lt;br&gt;│   ├── Configuration&lt;br&gt;│   └── Test Tools&lt;br&gt;└── Gaps&lt;br&gt;    └── {gap} — resolved by: {doc}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
-      <mxGeometry x="1100" y="260" width="230" height="210" as="geometry"/>
-    </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="entry" target="read-sources" parent="1">
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="extract-env" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="read-sources" target="extract-env" parent="1">
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="extract-env" target="extract-infra" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="extract-env" target="extract-infra" parent="1">
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="extract-infra" target="gap-analysis" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="extract-infra" target="gap-analysis" parent="1">
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gap-analysis" target="output" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="gap-analysis" target="output_node" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;" edge="1" source="output_node" target="output-structure" parent="1">
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output" target="output-structure" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>

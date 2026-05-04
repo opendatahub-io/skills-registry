@@ -1,0 +1,37 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;test-plan.resolve-gaps&lt;/b&gt;&lt;br&gt;forked sub-agent&lt;br&gt;&lt;br&gt;old gaps (TestPlanGaps.md)&lt;br&gt;new analyzer findings&lt;br&gt;new documents list" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="70" width="155" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse-gaps" value="&lt;b&gt;Parse Old Gaps&lt;/b&gt;&lt;br&gt;&lt;br&gt;scope &amp; endpoints gaps&lt;br&gt;strategy &amp; risks gaps&lt;br&gt;environment &amp; infra gaps&lt;br&gt;identify resolution criteria" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="75" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="semantic-match" value="&lt;b&gt;Semantic Matching&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;cross-ref gaps vs findings&lt;br&gt;intelligent matching&lt;br&gt;resolved / partial&lt;br&gt;conservative: keep if unsure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="430" y="60" width="165" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="new-gaps" value="&lt;b&gt;Identify New Gaps&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;new APIs without details&lt;br&gt;new risks w/o mitigations&lt;br&gt;new deps w/o versions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="640" y="70" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="output" value="&lt;b&gt;Structured Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;resolved gaps list&lt;br&gt;unresolved gaps list&lt;br&gt;new gaps identified&lt;br&gt;gap count statistics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="835" y="75" width="140" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="parse-gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="gaps + findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse-gaps" target="semantic-match" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="semantic-match" target="new-gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="new-gaps" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

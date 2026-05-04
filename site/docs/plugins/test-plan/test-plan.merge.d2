@@ -1,0 +1,95 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **test-plan.merge**
+  forked sub-agent
+
+  - old TestPlan.md content
+  - new analyzer findings
+  - new documents list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parse ---
+
+parse: |md
+  **Parse Inputs**
+
+  - extract old sections 1-9
+  - parse analyzer findings
+    (endpoints, risks, infra)
+  - identify new documents
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Merge ---
+
+merge-sections: |md
+  **Intelligent Merge**
+  LLM section-by-section
+
+  - additive for scope, deps
+  - update contradictions
+  - preserve user edits
+  - skip TC sections (5, 6, 10)
+  - mark deprecated items
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Summary ---
+
+change-summary: |md
+  **Change Summary**
+
+  - per-section change list
+  - user edits preserved
+  - merge statistics
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+output: |md
+  **Structured Output**
+
+  - updated sections 1-9
+  - change summary
+  - merge statistics
+  - returns to parent
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+entry -> parse
+parse -> merge-sections
+merge-sections -> change-summary
+change-summary -> output
