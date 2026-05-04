@@ -1,201 +1,229 @@
 direction: right
 
-# ── Global Styles ──────────────────────────────────────
 *.style.border-radius: 8
-*.style.font-size: 14
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
 
-# ── Entry ──────────────────────────────────────────────
+# --- Entry ---
+
 entry: |md
-  ### Parse Arguments
-  - Extract feature directory path
-  - Auto-detect from session context
-  - Locate TestPlan.md
+  **/test-plan.review**
+
+  - feature directory path
+  - auto-detect from session
 | {
-  style: {
-    fill: "#e8f5e9"
-    stroke: "#2e7d32"
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Step 0: Read Inputs ───────────────────────────────
+# --- Step 0: Read Inputs ---
+
 read-plan: |md
-  ### Read Test Plan
-  - Read `TestPlan.md` content
-  - Extract `source_key` from frontmatter
-  - `frontmatter.py read`
+  **Read Test Plan**
+
+  - read TestPlan.md
+  - extract source_key
+  - frontmatter.py read
 | {
-  style: {
-    fill: "#e3f2fd"
-    stroke: "#1565c0"
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+jira: |md
+  **Jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
 fetch-strategy: |md
-  ### Fetch Source Strategy
-  - Jira MCP: `getJiraIssue(source_key)`
-  - Fallback: local `strat-tasks/` file
-  - Degraded: warn and proceed without
+  **Fetch Strategy**
+
+  - MCP getJiraIssue(source_key)
+  - fallback: local strat-tasks/ file
+  - degraded mode if unavailable
 | {
-  style: {
-    fill: "#fff3e0"
-    stroke: "#e65100"
-    stroke-dash: 3
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Step 2: Score ──────────────────────────────────────
+# --- Step 2: Score ---
+
 score: |md
-  ### Score Agent (fork)
-  - Apply 5-criterion rubric (0-2 each)
-  - Specificity, Grounding, Scope Fidelity
-  - Actionability, Consistency
-  - Grounding cross-reference table
-  - Read calibration examples
+  **Score Agent**
+  forked LLM
+
+  - 5-criterion rubric (0-2 each)
+  - specificity, grounding,
+    scope fidelity
+  - actionability, consistency
+  - grounding cross-ref table
+  - calibration examples
 | {
-  style: {
-    fill: "#f3e5f5"
-    stroke: "#6a1b9a"
-    double-border: true
-  }
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
 }
 
-# ── Step 3: Review ─────────────────────────────────────
+# --- Step 3: Review ---
+
 review: |md
-  ### Review Agent (fork)
-  - Write `TestPlanReview.md`
-  - Set frontmatter scores and verdict
-  - Consistency cross-checks (6 checks)
-  - Section-by-section feedback
+  **Review Agent**
+  forked LLM
+
+  - write TestPlanReview.md
+  - set frontmatter scores + verdict
+  - 6 consistency cross-checks
+  - section-by-section feedback
 | {
-  style: {
-    fill: "#f3e5f5"
-    stroke: "#6a1b9a"
-    double-border: true
-  }
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
 }
 
-# ── Step 4: Check & Decide ─────────────────────────────
+# --- Step 4: Check ---
+
 check-scores: |md
-  ### Check Criteria
-  - Read review frontmatter
-  - All scores = 2?
-  - `frontmatter.py read`
+  **Check Criteria**
+
+  - read review frontmatter
+  - all scores = 2?
 | {
-  style: {
-    fill: "#fff9c4"
-    stroke: "#f57f17"
-    shape: diamond
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Revision Loop Container ───────────────────────────
+# --- Revision Loop ---
+
 revision-loop: "Revision Loop (max 2 cycles)" {
-  style: {
-    fill: "#fafafa"
-    stroke: "#757575"
-    stroke-dash: 5
-    border-radius: 12
-  }
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
   filter: |md
-    ### Filter for Revision
-    - `filter_for_revision.py`
-    - Skip if no actionable items
+    **Filter for Revision**
+
+    - filter_for_revision.py
+    - skip if no actionable items
   | {
-    style: {
-      fill: "#e3f2fd"
-      stroke: "#1565c0"
-    }
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
   }
 
   revise: |md
-    ### Revise Agent (fork)
-    - Edit only failing sections
-    - Criterion-to-section mapping
-    - Anti-hallucination constraints
-    - Set `auto_revised` flag
+    **Revise Agent**
+    forked LLM
+
+    - edit only failing sections
+    - criterion-to-section mapping
+    - anti-hallucination constraints
+    - set auto_revised flag
   | {
-    style: {
-      fill: "#f3e5f5"
-      stroke: "#6a1b9a"
-      double-border: true
-    }
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   check-revised: |md
-    ### Check auto_revised
-    - Read frontmatter flag
-    - Stop if no changes made
-    - Increment cycle counter
+    **Check Revised**
+
+    - read auto_revised flag
+    - stop if no changes made
+    - increment cycle counter
   | {
-    style: {
-      fill: "#fff9c4"
-      stroke: "#f57f17"
-      shape: diamond
-    }
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
   }
 
   save-state: |md
-    ### Save State
-    - `preserve_review_state.py save`
-    - Preserve before_scores
-    - Delete old review file
+    **Save State**
+
+    - preserve_review_state.py save
+    - preserve before_scores
+    - delete old review file
   | {
-    style: {
-      fill: "#e3f2fd"
-      stroke: "#1565c0"
-    }
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
   }
 
   re-score: |md
-    ### Re-Score (fork)
-    - Score agent on revised plan
-    - Fresh rubric assessment
+    **Re-Score**
+    forked LLM
+
+    - score agent on revised plan
+    - fresh rubric assessment
   | {
-    style: {
-      fill: "#f3e5f5"
-      stroke: "#6a1b9a"
-      double-border: true
-    }
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   re-review: |md
-    ### Re-Review (fork)
-    - Review agent, first_pass=false
-    - Write new TestPlanReview.md
+    **Re-Review**
+    forked LLM
+
+    - review agent, first_pass=false
+    - write new TestPlanReview.md
   | {
-    style: {
-      fill: "#f3e5f5"
-      stroke: "#6a1b9a"
-      double-border: true
-    }
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   restore-state: |md
-    ### Restore State
-    - `preserve_review_state.py restore`
-    - Merge before_scores back
-    - Append revision history
+    **Restore State**
+
+    - preserve_review_state.py restore
+    - merge before_scores back
+    - append revision history
   | {
-    style: {
-      fill: "#e3f2fd"
-      stroke: "#1565c0"
-    }
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
   }
 
   re-check: |md
-    ### Re-Check Criteria
-    - All scores = 2?
-    - Cycles remaining?
+    **Re-Check**
+
+    - all scores = 2?
+    - cycles remaining?
   | {
-    style: {
-      fill: "#fff9c4"
-      stroke: "#f57f17"
-      shape: diamond
-    }
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
   }
 
-  # ── Internal edges ──
+  # Internal edges
   filter -> revise: "actionable items"
   revise -> check-revised
   check-revised -> save-state: "revised = true\ncycles < 2"
@@ -205,52 +233,101 @@ revision-loop: "Revision Loop (max 2 cycles)" {
   restore-state -> re-check
 }
 
-# ── Step 5: Present Results ────────────────────────────
+# --- Step 5: Results ---
+
 results: |md
-  ### Present Results
-  - Score summary table (5 criteria)
-  - Delta if score changed
-  - Verdict: Ready / Revise / Rework
-  - Next-step guidance
+  **Present Results**
+
+  - score summary table (5 criteria)
+  - delta if score changed
+  - verdict: Ready / Revise / Rework
+  - next-step guidance
 | {
-  style: {
-    fill: "#e8f5e9"
-    stroke: "#2e7d32"
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Main Flow Edges ───────────────────────────────────
+# --- Downstream ---
+
+create-cases: |md
+  **/test-plan.create-cases**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+resolve-feedback: |md
+  **/test-plan.resolve-feedback**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Rubric callout ---
+
+rubric-detail: |md
+  TestPlanReview.md
+  scores:
+    specificity: 0-2
+    grounding: 0-2
+    scope_fidelity: 0-2
+    actionability: 0-2
+    consistency: 0-2
+  verdict: Ready/Revise/Rework
+  total: 0-10
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Main Flow ---
+
 entry -> read-plan
-read-plan -> fetch-strategy
-fetch-strategy -> score
-score -> review
-review -> check-scores
+read-plan -> fetch-strategy: "source_key"
+fetch-strategy -> jira: {
+  style.stroke-dash: 3
+}
+fetch-strategy -> score: "strategy text"
+score -> review: "assessment"
+review -> check-scores: "TestPlanReview.md"
 
-check-scores -> results: "all = 2\n(pass)" {
-  style.stroke: "#2e7d32"
-}
-check-scores -> revision-loop.filter: "any < 2\n(fail)" {
-  style.stroke: "#c62828"
-}
+check-scores -> results: "all = 2 (pass)"
+check-scores -> revision-loop.filter: "any < 2 (fail)"
 
 revision-loop.filter -> results: "SKIP" {
-  style: {
-    stroke: "#757575"
-    stroke-dash: 3
-  }
+  style.stroke-dash: 3
 }
 revision-loop.check-revised -> results: "revised = false" {
-  style: {
-    stroke: "#757575"
-    stroke-dash: 3
-  }
+  style.stroke-dash: 3
 }
-revision-loop.re-check -> results: "all = 2 OR\ncycles exhausted" {
-  style.stroke: "#2e7d32"
+revision-loop.re-check -> results: "all = 2 OR\ncycles exhausted"
+revision-loop.re-check -> revision-loop.filter: "still failing" {
+  style.stroke-dash: 3
 }
-revision-loop.re-check -> revision-loop.filter: "still failing\ncycles remain" {
-  style: {
-    stroke: "#e65100"
-    stroke-dash: 3
-  }
+
+# Downstream suggestions
+results -> create-cases: "verdict: Ready" {
+  style.stroke-dash: 3
+}
+results -> resolve-feedback: "open PR exists" {
+  style.stroke-dash: 3
+}
+
+# Callout connection
+review -> rubric-detail: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

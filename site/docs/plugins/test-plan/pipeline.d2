@@ -5,13 +5,15 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
+# --- Entry / Primary Pipeline ---
+
 create: |md
   **/test-plan.create**
 
-  - Fetch strategy + ADR
-  - Invoke 3 sub-analyzers
-  - Merge findings
-  - Invoke review
+  - Fetch strategy from Jira + optional ADR
+  - Invoke 3 analyzers in parallel
+  - Generate TestPlan.md, README, gaps
+  - Invoke review with auto-revision
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -20,12 +22,16 @@ create: |md
   style.double-border: true
 }
 
+# --- Parallel Analyzer Sub-Agents ---
+
 endpoints: |md
   **analyze.endpoints**
+  forked sub-agent
 
-  - API endpoints
-  - Test objectives
-  - Priority assignment
+  - Extract feature scope (in/out)
+  - Identify API endpoints, methods
+  - Assign P0/P1/P2 priorities
+  - Flag gaps in source docs
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -36,10 +42,12 @@ endpoints: |md
 
 risks: |md
   **analyze.risks**
+  forked sub-agent
 
-  - Test levels & types
-  - NFR categories
-  - Risk mitigations
+  - Determine test levels & types
+  - Define feature-specific priorities
+  - Assess NFR categories
+  - Identify risks with mitigations
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -50,10 +58,12 @@ risks: |md
 
 infra: |md
   **analyze.infra**
+  forked sub-agent
 
-  - Cluster config
-  - Test data & users
-  - Tooling needs
+  - Cluster & operator config
+  - Test data and test users
+  - Infrastructure dependencies
+  - Tooling requirements
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -61,13 +71,17 @@ infra: |md
   style.stroke-width: 2
   style.double-border: true
 }
+
+# --- Review ---
 
 review: |md
   **/test-plan.review**
+  internal orchestrator
 
-  - 5-criteria rubric
-  - Score + auto-revise
-  - Max 2 revision cycles
+  - Score via 5-criteria rubric
+  - Auto-revise failing sections
+  - Re-score (max 2 cycles)
+  - Write TestPlanReview.md
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -75,13 +89,33 @@ review: |md
   style.stroke-width: 2
   style.double-border: true
 }
+
+# --- Score (standalone) ---
+
+score: |md
+  **/test-plan.score**
+
+  - Score-only (no revision)
+  - Same 5-criteria rubric
+  - Present results to user
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Test Case Generation ---
 
 create-cases: |md
   **/test-plan.create-cases**
 
-  - Generate TC-*.md files
-  - Upgrade-aware cases
+  - Generate TC-*.md per category
+  - E2E + upgrade-aware cases
+  - Build INDEX.md
   - Coverage validation
+  - Update TestPlan.md sections
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -89,11 +123,236 @@ create-cases: |md
   style.stroke-width: 2
 }
 
-# Flow
+# --- Publish ---
+
+publish: |md
+  **/test-plan.publish**
+
+  - Validate frontmatter
+  - Create branch + commit
+  - Open or update GitHub PR
+  - Assign reviewers
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Resolve Feedback ---
+
+resolve-feedback: |md
+  **/test-plan.resolve-feedback**
+
+  - Fetch PR review comments
+  - Assess each against plan
+  - User decides: apply/skip
+  - Commit + push updates
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Update ---
+
+update: |md
+  **/test-plan.update**
+
+  - Read existing artifacts
+  - Re-analyze with new docs
+  - Invoke merge + resolve-gaps
+  - Re-run review, version bump
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Merge Sub-Agent ---
+
+merge: |md
+  **merge**
+  forked sub-agent
+
+  - Additive merge strategy
+  - Preserve user edits
+  - Change summary + stats
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Resolve Gaps Sub-Agent ---
+
+resolve-gaps: |md
+  **resolve-gaps**
+  forked sub-agent
+
+  - Cross-ref old gaps vs new
+  - Semantic matching logic
+  - Track resolved/new/open
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Case Implement ---
+
+case-implement: |md
+  **/test-plan.case-implement**
+
+  - Load testing context + patterns
+  - Invoke placement analyzer
+  - Generate pytest/Go/JS code
+  - Score + auto-revise quality
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Placement Analyzer ---
+
+placement: |md
+  **analyze.placement**
+  forked sub-agent
+
+  - Classify test level per TC
+  - Score upstream vs downstream
+  - User confirms placement
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- UI Verify ---
+
+ui-verify: |md
+  **/test-plan.ui-verify**
+
+  - Browser-based TC execution
+  - Playwright CDP automation
+  - PASS/FAIL/BLOCKED verdicts
+  - HTML report + screenshots
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External Services ---
+
+jira: |md
+  **Jira (MCP)**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+github: |md
+  **GitHub**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+odh-test-context: |md
+  **odh-test-context**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+tiger-team: |md
+  **Tiger Team**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ============================================================
+# Edges — Primary creation flow
+# ============================================================
+
 create -> endpoints: "parallel" {style.stroke-dash: 3}
 create -> risks: "parallel" {style.stroke-dash: 3}
 create -> infra: "parallel" {style.stroke-dash: 3}
 endpoints -> review: "findings"
 risks -> review: "findings"
 infra -> review: "findings"
-review -> create-cases: "test plan"
+create -> review: "TestPlan.md"
+review -> create-cases: "ready"
+
+# ============================================================
+# Edges — Test case flow
+# ============================================================
+
+create-cases -> publish: "TC-*.md"
+create-cases -> case-implement: "TC specs"
+case-implement -> placement: "TC analysis"
+
+# ============================================================
+# Edges — Publish / feedback loop
+# ============================================================
+
+publish -> resolve-feedback: "PR URL"
+resolve-feedback -> publish: "updated" {style.stroke-dash: 3}
+
+# ============================================================
+# Edges — Update flow
+# ============================================================
+
+update -> endpoints: "re-analyze"
+update -> risks: "re-analyze"
+update -> infra: "re-analyze"
+update -> merge: "old + new findings"
+update -> resolve-gaps: "old gaps + new"
+update -> review: "re-score"
+update -> create-cases: "optional regen" {style.stroke-dash: 3}
+
+# ============================================================
+# Edges — External services
+# ============================================================
+
+create -> jira: "fetch strategy"
+review -> jira: "fetch strategy"
+score -> jira: "fetch strategy"
+publish -> github: "PR create/update"
+resolve-feedback -> github: "PR comments"
+case-implement -> odh-test-context: "conventions"
+case-implement -> tiger-team: "pattern guides"
+
+# ============================================================
+# Edges — Standalone paths
+# ============================================================
+
+score -> review: "same rubric" {style.stroke-dash: 3}
+case-implement -> ui-verify: "TC-UI-*.md" {style.stroke-dash: 3}

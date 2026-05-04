@@ -1,0 +1,243 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan.publish**
+
+  - FEATURE_SOURCE
+  - --repo owner/repo
+  - --reviewers user1,user2
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: Pre-flight {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  gh-auth: |md
+    **GitHub CLI**
+
+    - gh auth status
+    - fail if unauthenticated
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  locate: |md
+    **Locate Feature Dir**
+
+    - local path, GitHub URL,
+      or auto-detect
+    - repo.py locate-feature-dir
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  validate: |md
+    **Validate Artifacts**
+
+    - TestPlan.md + README.md
+    - frontmatter.py validate
+    - check clean working state
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  gh-auth -> locate
+  locate -> validate
+}
+
+# --- Read Metadata ---
+
+metadata: |md
+  **Read Metadata**
+
+  - frontmatter.py read
+  - extract source_key, version
+  - branch: test-plan/{source_key}
+  - resolve reviewers list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Target Repo ---
+
+target-repo: |md
+  **Determine Target Repo**
+
+  - --repo flag or ask user
+  - validate not skill repo
+  - repo.py validate-remote
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- User Confirmation ---
+
+confirm: |md
+  **Confirm with User**
+
+  - feature, strategy, version
+  - branch, target repo
+  - reviewers, file list
+  - AskUserQuestion yes/no
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Update Frontmatter ---
+
+update-fm: |md
+  **Update Frontmatter**
+
+  - status → "In Review"
+  - frontmatter.py set
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Branch & Commit ---
+
+branch-commit: Branch & Commit {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  checkout: |md
+    **Checkout Branch**
+
+    - fetch from publish-target
+    - safe-checkout or create
+    - version-free branch name
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  stage: |md
+    **Stage & Commit**
+
+    - git add public artifacts
+    - exclude internal files
+    - skip if no changes
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  git-push: |md
+    **Push**
+
+    - git push publish-target
+    - remove temporary remote
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  checkout -> stage
+  stage -> git-push
+}
+
+# --- Create PR ---
+
+create-pr: |md
+  **Create / Update PR**
+
+  - gh pr list (check existing)
+  - gh pr create if new
+  - title, body from TestPlan.md
+  - assign reviewers
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - PR URL
+  - branch, version, status
+  - git checkout - (restore)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+github: |md
+  **GitHub**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> metadata: "TestPlan.md"
+metadata -> target-repo
+target-repo -> confirm
+confirm -> update-fm: "yes"
+update-fm -> branch-commit
+branch-commit -> create-pr
+create-pr -> report: "PR URL"
+
+# External edges
+branch-commit.git-push -> github: "git push"
+create-pr -> github: "gh pr create"
+
+# Decision edge
+confirm -> report: "no (abort)" {
+  style.stroke-dash: 3
+}

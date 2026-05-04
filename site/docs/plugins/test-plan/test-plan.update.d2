@@ -1,0 +1,292 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan.update**
+
+  - \<SOURCE\> (local dir,
+    GitHub branch/PR)
+  - \<NEW_DOC_PATH\>...
+    (ADR, API spec, design)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight Checks**
+
+  - verify Python deps (uv)
+  - locate feature dir
+    (local / GitHub)
+  - validate local path
+    against skill repo
+  - verify new docs exist
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Existing ---
+
+read-existing: |md
+  **Read Existing Artifacts**
+
+  - TestPlan.md (frontmatter:
+    version, source_key)
+  - TestPlanGaps.md
+  - TestPlanReview.md
+  - README.md
+  - test_cases/INDEX.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read New Docs ---
+
+read-new: |md
+  **Read New Documents**
+
+  - read each doc path
+  - classify type (ADR,
+    API spec, design doc)
+  - add to additional_docs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parallel Analysis (container) ---
+
+analyze: "Parallel Analysis" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  endpoints: |md
+    **analyze.endpoints**
+
+    - re-extract feature scope
+    - API endpoint inventory
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  risks: |md
+    **analyze.risks**
+
+    - test levels and types
+    - priorities and risks
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  infra: |md
+    **analyze.infra**
+
+    - environment needs
+    - test data, infrastructure
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+}
+
+# --- Merge ---
+
+merge: |md
+  **Merge Findings**
+  LLM sub-agent
+
+  - merge analyzer output
+    into existing TestPlan.md
+  - preserve user edits
+  - detect contradictions
+  - change summary + stats
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Merge Approval ---
+
+approve-merge: |md
+  **User Approval**
+
+  - review change summary
+  - sections modified
+  - items added/updated
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Resolve Gaps ---
+
+resolve-gaps: |md
+  **Resolve Gaps**
+  LLM sub-agent
+
+  - cross-ref old gaps
+    with new findings
+  - mark resolved gaps
+  - identify new gaps
+  - validate gap arithmetic
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Quality Review ---
+
+review: |md
+  **Quality Review**
+
+  - invoke /test-plan.review
+  - new score and verdict
+  - apply auto-fix suggestions
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Test Cases Decision ---
+
+tc-decide: |md
+  **Test Cases?**
+
+  - ask user: update,
+    keep, or review first
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Create Cases (external) ---
+
+create-cases: |md
+  **test-plan.create-cases**
+
+  - regenerate affected TCs
+  - add new TCs for coverage
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Version + README ---
+
+version: |md
+  **Version & README**
+
+  - bump minor version
+  - update frontmatter
+  - changelog entry
+  - update status if needed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Summary ---
+
+summary: |md
+  **Summary**
+
+  - version: old -> new
+  - quality score delta
+  - gaps resolved/remaining
+  - updated artifact list
+  - next: /test-plan.publish
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> read-existing
+read-existing -> read-new: "TestPlan.md,\nGaps, Review"
+
+# Fan-out to parallel analyzers
+read-new -> analyze.endpoints: "strategy +\nnew docs"
+read-new -> analyze.risks: "strategy +\nnew docs"
+read-new -> analyze.infra: "strategy +\nnew docs"
+
+# Analyzers feed merge
+analyze.endpoints -> merge: "findings"
+analyze.risks -> merge: "findings"
+analyze.infra -> merge: "findings"
+
+# Merge approval gate
+merge -> approve-merge: "change summary"
+approve-merge -> resolve-gaps: "approved"
+
+# Resolve gaps
+resolve-gaps -> review: "TestPlanGaps.md"
+
+# Quality review to test case decision
+review -> tc-decide: "TestPlanReview.md"
+
+# Test cases branch
+tc-decide -> create-cases: "update TCs"
+tc-decide -> version: "keep as-is"
+create-cases -> version
+
+# Version and summary
+version -> summary
+
+# Rejection back-edge
+approve-merge -> summary: "rejected" {
+  style.stroke-dash: 3
+  style.stroke: "#999999"
+}

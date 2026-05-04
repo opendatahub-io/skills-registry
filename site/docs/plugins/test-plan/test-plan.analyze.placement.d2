@@ -1,0 +1,116 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **test-plan.analyze.placement**
+  forked sub-agent (Opus)
+
+  - --feature-dir
+  - --code-repo
+  - --code-repo-readiness
+  - --downstream-readiness
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read ---
+
+read-tcs: |md
+  **Read Test Cases**
+
+  - TestPlan.md (Sec 2, 4)
+  - all TC-*.md files
+  - parse frontmatter
+  - extract steps + results
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Classify ---
+
+classify: |md
+  **Classify Each TC**
+  LLM analysis
+
+  - extract test level signals
+  - is_unit, is_e2e, is_api
+  - infrastructure requirements
+  - requires_k8s_api vs
+    requires_full_stack
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Score ---
+
+score: |md
+  **Score Placement**
+
+  - same_repo vs downstream
+  - test level preferences
+  - infrastructure requirements
+  - P0 fast feedback priority
+  - repo readiness factor
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Present ---
+
+present: |md
+  **Present Decisions**
+  user interaction
+
+  - placement summary table
+  - AskUser: accept all
+    or review each TC
+  - allow per-TC overrides
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Return Placements**
+
+  - tc_placements JSON
+  - per-TC: level, scores,
+    reasons, override flag
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+entry -> read-tcs
+read-tcs -> classify
+classify -> score
+score -> present
+present -> output

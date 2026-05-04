@@ -1,0 +1,70 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/test-plan.score.test-function**
+  forked sub-agent (Sonnet)
+
+  - --test-code-file
+  - --tc-file
+  - --conventions-file
+  - --framework
+  - --output-file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+read-rubric: |md
+  **Read Scoring Rubric**
+
+  - score-test-function.md
+  - 5-criteria rubric
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+score: |md
+  **Execute Scoring**
+  LLM evaluation
+
+  - Coverage (0-2)
+  - Assertions (0-2)
+  - Convention adherence (0-2)
+  - Test data quality (0-2)
+  - Code quality (0-2)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+write-assessment: |md
+  **Write Assessment**
+
+  - Per-criterion scores
+  - Total score (0-10)
+  - Verdict: Ready/Good/
+    Revise/Rework
+  - Revision recommendations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+entry -> read-rubric
+read-rubric -> score: "rubric + inputs"
+score -> write-assessment: "assessment"

@@ -1,0 +1,118 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan.create.test-function**
+  forked sub-agent (Opus)
+
+  - --tc-file TC spec
+  - --function-name
+  - --framework
+  - --conventions-file
+  - --pattern-guide (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Inputs ---
+
+read-inputs: |md
+  **Read Input Files**
+
+  - TC specification (objective,
+    steps, expected results)
+  - Conventions file (framework,
+    naming, markers)
+  - Pattern guide (if provided)
+  - Repo instructions (CLAUDE.md)
+  - Common setup (shared fixtures)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate ---
+
+generate: |md
+  **Generate Test Function**
+  LLM code generation
+
+  - Decorators from repo markers
+  - Function signature + fixtures
+  - Docstring with TC reference
+  - AAA pattern (Arrange/Act/Assert)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Style Match ---
+
+style-match: |md
+  **Match Repository Style**
+
+  - Correct imports
+  - Assertion style
+  - Mocking patterns
+  - Fixture usage
+  - Priority: CONSTITUTION >
+    CLAUDE.md > pattern guide
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+output-node: |md
+  **Output**
+
+  - Raw test function code
+  - No markdown, no explanations
+  - Matches repo conventions
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+odh-test-context: |md
+  **odh-test-context**
+  (conventions + patterns)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> read-inputs
+read-inputs -> generate: "TC + conventions"
+generate -> style-match
+style-match -> output-node
+
+read-inputs -> odh-test-context: "conventions file" {
+  style.stroke-dash: 3
+}

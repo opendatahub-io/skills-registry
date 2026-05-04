@@ -1,0 +1,248 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan.ui-verify**
+
+  - run after ui_prepare.py
+  - reads TC-*.md from PR
+  - persistent CDP browser
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Context ---
+
+read-ctx: |md
+  **Read Context**
+
+  - ui_read_ctx.py
+  - load ui_context.json
+  - test_cases array, creds
+  - read js-patterns.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- TC Execution Loop ---
+
+tc-loop: "For Each Test Case" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  preconditions: |md
+    **2A — Preconditions**
+
+    - check tc["preconditions"]
+    - oc verify cluster state
+    - ui_block.py if not met
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  reset: |md
+    **2B — Reset**
+
+    - goto target URL twice
+    - clears filters/React state
+    - KNOWN_ROUTES lookup
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  execute: |md
+    **2C — Execute Steps**
+
+    - ui_interact.py actions
+    - click, fill, scroll, goto
+    - expand pagination
+    - --in-row for table rows
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  assert: |md
+    **2D — Assert**
+    LLM writes JS assertions
+
+    - ui_assert.py per result
+    - JS returns PASS/FAIL
+    - highlight + screenshot
+    - --click-before ephemeral UI
+    - --inspect for diagnosis
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  end-tc: |md
+    **2E — End TC**
+
+    - log verdict to tc_log
+    - ui_block.py on crash
+    - max 2 retries per action
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  preconditions -> reset
+  reset -> execute
+  execute -> assert
+  assert -> end-tc
+
+  preconditions -> end-tc: "not met" {
+    style.stroke-dash: 3
+  }
+}
+
+# --- Post-Execution ---
+
+stop-browser: |md
+  **Stop Browser**
+
+  - ui_stop_browser.py
+  - close CDP session
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+cleanup: |md
+  **Cleanup**
+
+  - ui_cleanup.py
+  - always runs, even on failure
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+collect: |md
+  **Collect**
+
+  - ui_collect.py
+  - gather screenshots + logs
+  - print SESSION_DIR path
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+report: |md
+  **Report**
+
+  - ui_report.py
+  - report.html (visual)
+  - report.md (plain-text)
+  - upgrade-report.html
+    (pre/post comparison)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+browser: |md
+  **Playwright Browser**
+  CDP persistent session
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+cluster: |md
+  **ODH/RHOAI Cluster**
+  live dashboard UI
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Callout: Session output ---
+
+session-tree: |md
+  results/{session}/
+    report.html
+    report.md
+    TC-*-verify-*.png
+    tc_log.json
+    upgrade-report.html
+    pre-session/ → baseline
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Edges ---
+
+entry -> read-ctx
+read-ctx -> tc-loop
+
+tc-loop -> stop-browser
+stop-browser -> cleanup
+cleanup -> collect
+collect -> report: "SESSION_DIR"
+
+# External connections
+tc-loop.execute -> browser
+tc-loop.assert -> browser
+browser -> cluster
+
+# Callout connection
+report -> session-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# Back-edge: next TC
+tc-loop.end-tc -> tc-loop.preconditions: "next TC" {
+  style.stroke-dash: 3
+}

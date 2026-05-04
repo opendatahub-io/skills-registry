@@ -1,210 +1,102 @@
 direction: right
 
-# --- Global styles ---
 *.style.border-radius: 8
-*.style.font-size: 14
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
 
 # --- Entry ---
+
 entry: |md
-  ## Receive Inputs
-  - Orchestrator passes file paths
-  - Strategy files (args or `artifacts/strat-tasks/`)
+  **test-plan.analyze.risks**
+  forked sub-agent
+
+  - strategy files
   - ADR files (optional)
-  - Additional docs (API spec, design doc)
+  - additional docs
 | {
-  style: {
-    fill: "#E8F5E9"
-    stroke: "#43A047"
-    font-size: 14
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# --- Read Sources ---
-read: |md
-  ## Read Source Documents
-  - Read strategy files
-  - Read ADR files if provided
-  - Read additional documents
-  - ONLY files specified in arguments
+# --- Strategy ---
+
+strategy: |md
+  **Extract Test Strategy**
+  LLM analysis
+
+  - test levels (API, UI,
+    perf, security)
+  - test types (positive,
+    negative, boundary)
+  - priority definitions
+    (P0/P1/P2 per feature)
 | {
-  style: {
-    fill: "#E3F2FD"
-    stroke: "#1E88E5"
-    font-size: 14
-  }
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
 }
 
-# --- LLM Analysis Container ---
-analyze: LLM Analysis {
-  style: {
-    fill: "#FFF8E1"
-    stroke: "#F9A825"
-    font-size: 14
-  }
+# --- NFR ---
 
-  # --- Test Strategy ---
-  strategy: |md
-    ## Extract Test Strategy
-    - **Test Levels**: API, Data, Functional,
-      UI, Performance, Security
-    - **Test Types**: Positive, Negative,
-      Boundary, Regression
-    - **Priority Definitions**: P0/P1/P2
-      scoped to this feature
-  | {
-    style: {
-      fill: "#FFF3E0"
-      stroke: "#FB8C00"
-      double-border: true
-      font-size: 14
-    }
-  }
+nfr: |md
+  **Assess NFRs**
+  LLM analysis
 
-  # --- NFR Assessment ---
-  nfr: |md
-    ## Assess NFRs
-    - Disconnected / Air-Gapped
-    - Upgrade / Migration
-    - Performance / Scalability
-    - RBAC / Authorization
-  | {
-    style: {
-      fill: "#FFF3E0"
-      stroke: "#FB8C00"
-      double-border: true
-      font-size: 14
-    }
-  }
+  - disconnected/air-gapped
+  - upgrade/migration
+  - performance/scalability
+  - RBAC/authorization
+  - N/A with justification
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
 
-  # --- NFR Decision ---
-  nfr_decision: |md
-    ## Per-category Decision
-    - Feature touches this area?
-  | {
-    style: {
-      fill: "#FCE4EC"
-      stroke: "#E53935"
-      font-size: 14
-    }
-    shape: diamond
-  }
+# --- Risks ---
 
-  applicable: |md
-    ## Testing Considerations
-    - Concrete test scenarios
-    - Environment requirements
-  | {
-    style: {
-      fill: "#E8F5E9"
-      stroke: "#43A047"
-      font-size: 14
-    }
-  }
+risks: |md
+  **Identify Risks**
+  LLM analysis
 
-  not_applicable: |md
-    ## Not Applicable
-    - Explicit justification
-  | {
-    style: {
-      fill: "#EFEBE9"
-      stroke: "#8D6E63"
-      font-size: 14
-    }
-  }
-
-  # --- Risk Identification ---
-  risks: |md
-    ## Identify Risks
-    - Dependencies on other teams
-    - External service dependencies
-    - Data migration risks
-    - Backwards compatibility
-    - Performance unknowns
-    - Test environment limitations
-  | {
-    style: {
-      fill: "#FFF3E0"
-      stroke: "#FB8C00"
-      double-border: true
-      font-size: 14
-    }
-  }
-
-  # --- Risk Assessment ---
-  assess: |md
-    ## Assess Each Risk
-    - Impact: High / Medium / Low
-    - Probability: High / Medium / Low
-    - Mitigation strategy
-  | {
-    style: {
-      fill: "#FFF3E0"
-      stroke: "#FB8C00"
-      double-border: true
-      font-size: 14
-    }
-  }
-
-  # --- Gap Analysis ---
-  gaps: |md
-    ## Gap Analysis
-    - Identify missing information
-    - Map gaps to document types
-      (ADR, API spec, design doc)
-  | {
-    style: {
-      fill: "#FFF3E0"
-      stroke: "#FB8C00"
-      double-border: true
-      font-size: 14
-    }
-  }
-
-  # --- Internal edges ---
-  strategy -> nfr: next
-  nfr -> nfr_decision: per category
-  nfr_decision -> applicable: "yes"
-  nfr_decision -> not_applicable: "no"
-  applicable -> risks
-  not_applicable -> risks
-  risks -> assess: each risk
-  assess -> gaps: complete
+  - dependencies, external svcs
+  - data migration, compat
+  - impact + probability
+  - concrete mitigations
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
 }
 
 # --- Output ---
+
 output: |md
-  ## Structured Markdown Output
-  - Section 2: Test Strategy
-    (levels, types, priorities)
-  - Section 7: NFR assessments
-  - Section 8: Risk table
-    (risk, impact, probability, mitigation)
-  - Gaps list with resolution paths
+  **Structured Output**
+
+  - Test Strategy (Sec 2)
+  - NFRs (Sec 7)
+  - Risk table (Sec 8)
+  - Gaps list
 | {
-  style: {
-    fill: "#F3E5F5"
-    stroke: "#8E24AA"
-    font-size: 14
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# --- Orchestrator (external) ---
-orchestrator: |md
-  ## Orchestrating Skill
-  - Invokes this sub-agent
-  - Receives structured output
-| {
-  style: {
-    fill: "#ECEFF1"
-    stroke: "#546E6F"
-    stroke-dash: 5
-    font-size: 14
-  }
-}
+# --- Edges ---
 
-# --- Main edges ---
-orchestrator -> entry: "file paths + context"
-entry -> read
-read -> analyze: "documents loaded"
-analyze.gaps -> output: "structured findings"
-output -> orchestrator: "markdown sections 2, 7, 8"
+entry -> strategy
+strategy -> nfr
+nfr -> risks
+risks -> output
