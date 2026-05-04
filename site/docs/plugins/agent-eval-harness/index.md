@@ -8,6 +8,11 @@ end-to-end pipeline to analyze skills, generate test cases, execute evaluations,
 review results with human feedback, sync with MLflow, and iteratively optimize
 skill quality with regression checks.
 
+The framework is schema-driven via eval.yaml, which defines execution mode,
+dataset schemas, output descriptions, judges, models, and thresholds. Supports
+inline, LLM-based, and external judges for scoring, with MLflow integration
+for experiment tracking and tracing.
+
 
 !!! info "Plugin Details"
 
@@ -16,6 +21,15 @@ skill quality with regression checks.
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
     - **Tags**: <span class="tag-pill">evaluation</span> <span class="tag-pill">testing</span> <span class="tag-pill">skills</span> <span class="tag-pill">agents</span> <span class="tag-pill">mlflow</span> <span class="tag-pill">optimization</span> <span class="tag-pill">scoring</span>
+
+## Architecture
+
+Seven skills form a linear pipeline with feedback loops: analyze → dataset →
+run → review/optimize. eval-run is the hub — it executes skills, runs judges,
+and produces summary.yaml consumed by review, optimize, and mlflow. eval-optimize
+creates a closed loop by editing SKILL.md and re-running eval-run with regression
+checks. eval-mlflow provides bidirectional sync with MLflow for datasets, results,
+and feedback.
 
 ## Pipeline
 

@@ -28,7 +28,8 @@ initial-run: |md
   **Initial Eval Run**
   invokes /eval-run
 
-  - skip if recent results
+  - skip if recent results exist
+  - --run-id \<id\>-iter-0
   - read summary.yaml
   - all pass → exit early
 | {
@@ -39,16 +40,28 @@ initial-run: |md
   style.double-border: true
 }
 
+# --- External: /eval-run ---
+
+eval-run: |md
+  **/eval-run**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
 # --- Step 2: Identify Failures ---
 
 identify: |md
   **Identify Failures**
 
   - which judges failed
-  - failure rationale
-  - systematic vs input-dep
+  - failure rationale per case
+  - systematic vs input-dependent
   - check review.yaml
-    (human feedback)
+    (human feedback priority)
   - build failure map
 | {
   shape: rectangle
@@ -63,12 +76,11 @@ analyze: |md
   **Analyze Root Causes**
   LLM agents (Explore)
 
-  - read SKILL.md
+  - read skill's SKILL.md
   - read failing transcripts
-  - read failing outputs
+  - examine failing outputs
   - form hypotheses
-  - connect to SKILL.md
-    sections
+  - connect to SKILL.md sections
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -79,13 +91,13 @@ analyze: |md
 
 # --- Step 4: Edit the Skill ---
 
-edit: |md
+edit-skill: |md
   **Edit SKILL.md**
 
   - surgical, targeted fixes
-  - ground in evidence
-  - explain why, not just what
-  - avoid overfitting
+  - ground in judge evidence
+  - explain why, not just rules
+  - avoid overfitting to one case
   - respect execution mode
 | {
   shape: rectangle
@@ -101,9 +113,9 @@ rerun: |md
   invokes /eval-run
 
   - --baseline previous iter
-  - check fixed failures
-  - check regressions
-  - score improvement
+  - check targeted fixes passed
+  - detect regressions
+  - compare aggregate scores
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -118,8 +130,8 @@ regressions: |md
   **Handle Regressions**
 
   - assess severity
-  - minor → continue
-  - major → revert, retry
+  - minor → net positive, continue
+  - major → revert edit, retry
   - stuck → report to user
 | {
   shape: rectangle
@@ -130,7 +142,7 @@ regressions: |md
 
 # --- Decision: Continue? ---
 
-decision: |md
+iterate: |md
   **Iterate?**
 
   - failures remain?
@@ -147,17 +159,50 @@ decision: |md
 report: |md
   **Report**
 
-  - edits + fixes summary
+  - edits applied + fixes summary
   - iteration count
-  - final scores
-  - suggest /eval-review
-    for remaining failures
-  - suggest /eval-mlflow
+  - final summary.yaml scores
+  - persistent failures explained
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+# --- Downstream suggestions ---
+
+eval-review: |md
+  **/eval-review**
+  remaining failures
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-mlflow: |md
+  **/eval-mlflow**
+  log optimization results
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-dataset: |md
+  **/eval-dataset**
+  expand coverage
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
 # --- Callout: Rules ---
@@ -180,31 +225,84 @@ rules: |md
   style.font-size: 10
 }
 
+# --- Callout: Failure Map ---
+
+failure-map: |md
+  failure map
+  ─────────────────────
+  judge_name:
+    case-001: "rationale..."
+    case-003: "rationale..."
+  human_review:
+    case-002: "user comment"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
 args -> initial-run
+
+initial-run -> eval-run: "invoke" {
+  style.stroke-dash: 3
+}
+
 initial-run -> report: "all pass" {
   style.stroke-dash: 3
 }
-initial-run -> identify: "failures found"
-identify -> analyze
-analyze -> edit
-edit -> rerun
-rerun -> regressions
-regressions -> decision
 
-regressions -> edit: "major → revert + retry" {
+initial-run -> identify: "summary.yaml"
+
+identify -> analyze: "failure map"
+
+analyze -> edit-skill: "hypotheses"
+
+edit-skill -> rerun
+
+rerun -> eval-run: "invoke\n--baseline" {
   style.stroke-dash: 3
 }
 
-decision -> identify: "yes → next iteration" {
+rerun -> regressions: "summary.yaml"
+
+regressions -> iterate
+
+regressions -> edit-skill: "major → revert + retry" {
   style.stroke-dash: 3
 }
 
-decision -> report: "no → done"
+iterate -> identify: "yes → next iteration" {
+  style.stroke-dash: 3
+}
 
-# Callout connection
-edit -> rules {
+iterate -> report: "no → done"
+
+# Downstream suggestions
+report -> eval-review: "remaining failures" {
+  style.stroke-dash: 3
+}
+
+report -> eval-mlflow: "log results" {
+  style.stroke-dash: 3
+}
+
+report -> eval-dataset: "expand coverage" {
+  style.stroke-dash: 3
+}
+
+# Callout connections
+edit-skill -> rules {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+identify -> failure-map {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

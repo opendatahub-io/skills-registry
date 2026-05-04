@@ -7,12 +7,14 @@ direction: right
 
 # --- Entry ---
 
-args: |md
+entry: |md
   **/eval-mlflow**
 
-  - --action \<action\>
+  - --action (sync-dataset,
+    log-results, push-feedback,
+    pull-feedback, all)
   - --config eval.yaml
-  - --run-id \<id\>
+  - --run-id (for log/push/pull)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -27,7 +29,7 @@ verify: |md
 
   - ensure_server() check
   - resolve tracking URI
-  - eval.yaml → env → default
+    (eval.yaml → env → default)
   - suggest /eval-setup if down
 | {
   shape: rectangle
@@ -51,30 +53,13 @@ read-config: |md
   style.stroke-width: 2
 }
 
-# --- Action Router ---
-
-router: |md
-  **Action Router**
-
-  - sync-dataset
-  - log-results
-  - push-feedback
-  - pull-feedback
-  - all (runs first three)
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
 # --- Sync Dataset Container ---
 
 sync: {
   label: "Sync Dataset"
-  style.fill: "#fafafa"
-  style.stroke: "#999999"
-  style.stroke-width: 1
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
   read-schema: |md
     **Read Schema**
@@ -120,7 +105,7 @@ sync: {
   }
 
   read-schema -> build-mapping
-  build-mapping -> run-sync
+  build-mapping -> run-sync: "schema_mapping.json"
 
   run-sync -> build-mapping: "preview wrong" {
     style.stroke-dash: 3
@@ -170,8 +155,7 @@ pull-feedback: |md
   **Pull Feedback**
 
   - attach_feedback.py --pull
-  - search MLflow UI annotations
-  - filter out self-pushed entries
+  - MLflow UI annotations
   - save to review.yaml
     (mlflow_feedback section)
 | {
@@ -181,7 +165,24 @@ pull-feedback: |md
   style.stroke-width: 2
 }
 
-# --- MLflow Server (external) ---
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - N cases synced
+  - run logged to experiment
+  - N feedback entries pushed
+  - N annotations pulled
+  - MLflow UI link
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: MLflow Server ---
 
 mlflow-server: |md
   **MLflow Server**
@@ -195,38 +196,84 @@ mlflow-server: |md
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 5
+  style.stroke-dash: 3
 }
 
-# --- Report ---
+# --- External: /eval-setup ---
 
-report: |md
-  **Report**
-
-  - N cases synced
-  - run logged to experiment
-  - N feedback entries pushed
-  - N annotations pulled
-  - next: /eval-review
-    or /eval-optimize
+eval-setup: |md
+  **/eval-setup**
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Downstream: /eval-review ---
+
+eval-review: |md
+  **/eval-review**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Downstream: /eval-optimize ---
+
+eval-optimize: |md
+  **/eval-optimize**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Callout: schema_mapping.json ---
+
+mapping-callout: |md
+  ```
+  schema_mapping.json
+  {
+    "inputs": {
+      "prompt": "input.yaml:prompt",
+      "context": "input.yaml:context"
+    },
+    "expectations": {
+      "ref": "reference.md:__file__"
+    }
+  }
+  ```
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-args -> verify
+entry -> verify
 verify -> read-config
-read-config -> router
 
-router -> sync: "sync-dataset / all"
-router -> log-results: "log-results / all"
-router -> push-feedback: "push-feedback / all"
-router -> pull-feedback: "pull-feedback"
+verify -> eval-setup: "not reachable" {
+  style.stroke-dash: 3
+}
 
+read-config -> sync: "sync-dataset\nor all"
+read-config -> log-results: "log-results\nor all"
+read-config -> push-feedback: "push-feedback\nor all"
+read-config -> pull-feedback: "pull-feedback"
+
+# Sequential flow when action=all
 sync -> log-results: "all" {
   style.stroke-dash: 3
 }
@@ -234,25 +281,35 @@ log-results -> push-feedback: "all" {
   style.stroke-dash: 3
 }
 
+# MLflow Server connections
+verify -> mlflow-server
+sync.run-sync -> mlflow-server: "dataset registry"
+log-results -> mlflow-server: "experiment run"
+push-feedback -> mlflow-server: "trace feedback"
+pull-feedback -> mlflow-server: "annotations"
+
+# Callout connection
+sync.build-mapping -> mapping-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# Converge to report
 sync -> report
 log-results -> report
 push-feedback -> report
-pull-feedback -> report
+pull-feedback -> report: "review.yaml"
 
-# External connections
-sync.run-sync -> mlflow-server: "sync records" {
-  style.stroke: "#999999"
+# Downstream suggestions
+report -> eval-review: "next step" {
   style.stroke-dash: 3
 }
-log-results -> mlflow-server: "log run" {
-  style.stroke: "#999999"
+report -> eval-optimize: "next step" {
   style.stroke-dash: 3
 }
-push-feedback -> mlflow-server: "attach feedback" {
-  style.stroke: "#999999"
-  style.stroke-dash: 3
-}
-pull-feedback -> mlflow-server: "pull annotations" {
-  style.stroke: "#999999"
+
+# Pull feedback feeds optimize
+pull-feedback -> eval-optimize: "review.yaml" {
   style.stroke-dash: 3
 }

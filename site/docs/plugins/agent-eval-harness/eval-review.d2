@@ -7,11 +7,11 @@ direction: right
 
 # --- Entry ---
 
-args: |md
+entry: |md
   **/eval-review**
 
   - --run-id \<id\> (required)
-  - --config eval.yaml
+  - --config \<path\>
   - --case \<filter\>
 | {
   shape: rectangle
@@ -41,10 +41,10 @@ load-results: |md
 overview: |md
   **Present Overview**
 
-  - link to report.html (if exists)
+  - link to report.html
   - pass rates per judge
   - cases all-pass vs failures
-  - pairwise win/loss/tie counts
+  - pairwise win/loss/tie
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -52,30 +52,16 @@ overview: |md
   style.stroke-width: 2
 }
 
-# --- User Choice ---
-
-user-choice: |md
-  **User Choice**
-
-  "Review all, only
-  failures, or specific?"
-| {
-  shape: diamond
-  style.fill: "#fff3e0"
-  style.stroke: "#e65100"
-  style.stroke-width: 2
-}
-
 # --- Walk Through Cases ---
 
 walk-cases: |md
   **Walk Through Cases**
-  Interactive loop
+  interactive review
 
-  - show judge scores + rationale
+  - present judge scores + rationale
   - summarize output files
-  - ask for feedback per case
-  - "looks fine" → move on
+  - ask feedback per case
+  - empty feedback = acceptable
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -91,8 +77,8 @@ check-transcripts: |md
   Agent (sub-agent)
 
   - read stdout.log per case
-  - detect multi-approach tries
-  - flag roundabout tool usage
+  - multi-approach attempts?
+  - unnecessary tool usage?
   - error recovery patterns
   - wasted turns count
 | {
@@ -109,7 +95,7 @@ save-feedback: |md
   **Save Feedback**
 
   - write review.yaml
-  - run_id, reviewer: human
+  - run_id, reviewer: "human"
   - per-case feedback text
   - empty = acceptable
 | {
@@ -119,13 +105,33 @@ save-feedback: |md
   style.stroke-width: 2
 }
 
+# --- review.yaml callout ---
+
+review-yaml: |md
+  review.yaml
+  run_id: "\<id\>"
+  reviewed_cases: N
+  feedback_cases: M
+  reviewer: "human"
+  feedback:
+    case-001: "comment"
+    case-002: ""
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Analyze Patterns ---
 
 analyze: |md
   **Analyze Patterns**
-  LLM synthesis
+  LLM analysis
 
-  - review-results.md prompt
+  - read review-results.md
   - judge-human alignment
   - systematic vs edge cases
   - new judge candidates
@@ -141,19 +147,21 @@ analyze: |md
 
 propose: |md
   **Propose Changes**
+  LLM analysis
 
-  - read skill's SKILL.md
+  - find skill's SKILL.md
   - before/after diffs
   - grounded in feedback
-  - ask user approval
+  - propose eval.yaml judges
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.double-border: true
 }
 
-# --- Apply ---
+# --- Apply Changes ---
 
 apply: |md
   **Apply Changes**
@@ -183,54 +191,90 @@ next-steps: |md
   style.stroke-width: 2
 }
 
-# --- Callout: review.yaml structure ---
+# --- Downstream Skills (external) ---
 
-review-yaml: |md
-  review.yaml
-  ├── run_id: "<id>"
-  ├── reviewed_cases: N
-  ├── feedback_cases: M
-  ├── reviewer: "human"
-  └── feedback:
-      ├── case-001: "comment"
-      ├── case-002: "comment"
-      └── case-003: ""
+eval-run: |md
+  **/eval-run**
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
-# --- Flow ---
+eval-optimize: |md
+  **/eval-optimize**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
 
-args -> load-results
-load-results -> overview
-overview -> user-choice
+eval-dataset: |md
+  **/eval-dataset**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
 
-user-choice -> walk-cases: "all / failures / filter"
+eval-mlflow: |md
+  **/eval-mlflow**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
 
+# --- Edges ---
+
+# Main flow
+entry -> load-results
+load-results -> overview: "summary.yaml"
+overview -> walk-cases: "all / failures / filter"
+
+# Walk cases with conditional transcript check
 walk-cases -> check-transcripts: "transcripts exist"
 walk-cases -> save-feedback: "no transcripts" {
   style.stroke-dash: 3
 }
-
 check-transcripts -> save-feedback
-save-feedback -> analyze
+
+# Save feedback with callout
+save-feedback -> review-yaml: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# Analysis and proposal
+save-feedback -> analyze: "review.yaml"
 analyze -> propose
 
+# Approval gate
 propose -> apply: "approved"
 propose -> next-steps: "declined" {
   style.stroke-dash: 3
 }
-
 apply -> next-steps
 
-# Callout connection
-save-feedback -> review-yaml {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
+# Downstream skill fan-out
+next-steps -> eval-run: "re-run + compare" {
+  style.stroke-dash: 3
+}
+next-steps -> eval-optimize: "auto-iterate" {
+  style.stroke-dash: 3
+}
+next-steps -> eval-dataset: "expand coverage" {
+  style.stroke-dash: 3
+}
+next-steps -> eval-mlflow: "push feedback" {
+  style.stroke-dash: 3
 }

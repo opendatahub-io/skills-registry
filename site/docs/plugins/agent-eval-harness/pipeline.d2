@@ -1,0 +1,153 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Skills ---
+
+eval-setup: |md
+  **/eval-setup**
+
+  - Environment configurator
+  - MLflow tracking setup
+  - API key verification
+  - Dependency checks
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-analyze: |md
+  **/eval-analyze**
+
+  - Deep-read target skill
+  - Generate eval.yaml config
+  - Dataset schema + judges
+  - Produce eval.md analysis
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+eval-dataset: |md
+  **/eval-dataset**
+
+  - Generate test cases
+  - Bootstrap, expand, or
+    from-traces strategies
+  - Match dataset schema
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+eval-run: |md
+  **/eval-run**
+
+  - Execute skill vs cases
+  - Run judges (inline/LLM)
+  - Detect regressions
+  - Produce summary.yaml
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+eval-review: |md
+  **/eval-review**
+
+  - Human-in-the-loop review
+  - Present scores + outputs
+  - Collect qualitative feedback
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+eval-mlflow: |md
+  **/eval-mlflow**
+
+  - Bidirectional MLflow sync
+  - Log results + datasets
+  - Push/pull feedback
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+eval-optimize: |md
+  **/eval-optimize**
+
+  - Identify judge failures
+  - Edit SKILL.md fixes
+  - Re-run with regression check
+  - Iterative improvement loop
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- External ---
+
+mlflow-server: |md
+  **MLflow Server**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Pipeline Flow ---
+
+eval-setup -> eval-analyze: "optional" {
+  style.stroke-dash: 3
+}
+eval-analyze -> eval-dataset: "eval.yaml"
+eval-dataset -> eval-run: "test cases"
+eval-run -> eval-review: "summary.yaml"
+eval-run -> eval-optimize: "summary.yaml"
+
+# Auto-invoke
+eval-dataset -> eval-analyze: "if missing" {
+  style.stroke-dash: 3
+}
+eval-run -> eval-analyze: "if missing" {
+  style.stroke-dash: 3
+}
+
+# MLflow integration
+eval-run -> eval-mlflow: "log results"
+eval-mlflow -> mlflow-server: "sync" {
+  style.stroke-dash: 3
+}
+
+# Feedback loops
+eval-optimize -> eval-run: "re-run" {
+  style.stroke-dash: 3
+}
+eval-review -> eval-optimize: "feedback" {
+  style.stroke-dash: 3
+}
