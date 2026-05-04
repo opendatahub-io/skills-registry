@@ -1,3 +1,7 @@
+---
+title: strat.create
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

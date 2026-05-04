@@ -1,3 +1,7 @@
+---
+title: vllm-compare-reqs
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

@@ -1,3 +1,7 @@
+---
+title: historical-bug-coverage
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

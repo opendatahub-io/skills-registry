@@ -1,3 +1,7 @@
+---
+title: test-plan.analyze.risks
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 

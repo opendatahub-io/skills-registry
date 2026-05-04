@@ -139,6 +139,7 @@ nav:
       - meeting-async-update-check: plugins/meeting-quality-skills/meeting-async-update-check.md
       - meeting-risk-agenda: plugins/meeting-quality-skills/meeting-risk-agenda.md
   - Categories:
+    - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
     - Security Review: categories/security.md
     - Development Tools: categories/development-tools.md

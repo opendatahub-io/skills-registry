@@ -1,3 +1,7 @@
+---
+title: strat.prioritize
+---
+
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 
