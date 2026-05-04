@@ -6,3 +6,9 @@
 Analyze PR for risk, test coverage, architecture impact, and cross-repo intelligence
 
 **Plugin**: [quality-tooling](index.md) | **:material-check: User-invocable**
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![risk-assessment diagram](risk-assessment.svg)
+</div>

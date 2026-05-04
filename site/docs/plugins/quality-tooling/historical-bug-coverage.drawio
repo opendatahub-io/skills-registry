@@ -1,0 +1,134 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/historical-bug-coverage&lt;/b&gt;&lt;br&gt;&lt;br&gt;--jql / --filter&lt;br&gt;--repo (required)&lt;br&gt;--external-tests&lt;br&gt;--output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="145" width="140" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="discover" value="&lt;b&gt;Discover Tests&lt;/b&gt;&lt;br&gt;&lt;br&gt;scan repo + external tests&lt;br&gt;detect frameworks (Jest,&lt;br&gt;Cypress, pytest, Go, Ginkgo)&lt;br&gt;map test types and levels&lt;br&gt;build test file inventory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="75" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate-env" value="&lt;b&gt;Validate Env&lt;/b&gt;&lt;br&gt;&lt;br&gt;locate .env file&lt;br&gt;require JIRA_SERVER,&lt;br&gt;JIRA_USER, JIRA_TOKEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="245" width="170" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-bugs" value="&lt;b&gt;Fetch Bugs&lt;/b&gt;&lt;br&gt;&lt;br&gt;JQL or saved filter query&lt;br&gt;cursor-based pagination&lt;br&gt;extract key, summary,&lt;br&gt;priority, labels" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="150" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira" value="&lt;b&gt;Jira API&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="465" y="30" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="coverage" value="&lt;b&gt;Coverage Analysis&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="650" y="105" width="570" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract" value="&lt;b&gt;Extract Entities&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;components, functions, APIs&lt;br&gt;failure scenario keywords" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="coverage">
+      <mxGeometry x="20" y="45" width="120" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="match-tests" value="&lt;b&gt;Match Test Files&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;search by entity names&lt;br&gt;read matched test files&lt;br&gt;extract assertions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="coverage">
+      <mxGeometry x="155" y="45" width="120" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Confidence Score&lt;/b&gt;&lt;br&gt;&lt;br&gt;entity match (30 pts)&lt;br&gt;scenario match (30 pts)&lt;br&gt;assertion validation (40 pts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="coverage">
+      <mxGeometry x="290" y="45" width="120" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="classify" value="&lt;b&gt;Classify Status&lt;/b&gt;&lt;br&gt;&lt;br&gt;COVERED (&gt;= 80%)&lt;br&gt;PARTIAL (60-80%)&lt;br&gt;GAP (&lt; 60%)&lt;br&gt;NOT TESTABLE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="coverage">
+      <mxGeometry x="425" y="45" width="120" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-level" value="&lt;b&gt;Classify Test Level&lt;/b&gt;&lt;br&gt;&lt;br&gt;earliest feasible level:&lt;br&gt;Unit &gt; Mock &gt; Component &gt;&lt;br&gt;Integration &gt; E2E &gt; Contract&lt;br&gt;distinguish E2E upstream&lt;br&gt;vs downstream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1270" y="145" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Generate HTML Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;sortable/filterable table&lt;br&gt;confidence score badges&lt;br&gt;SVG coverage charts&lt;br&gt;test gap recommendations&lt;br&gt;print-friendly (PDF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1490" y="140" width="170" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-rules" value="&lt;b&gt;/test-rules-generator&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1470" y="340" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="report-detail" value="repo-bug-coverage.html&lt;br&gt;&lt;br&gt;COVERED ......  7%&lt;br&gt;PARTIAL ...... 10%&lt;br&gt;GAP .......... 76%&lt;br&gt;NOT TESTABLE .  4%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1630" y="340" width="200" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="discover" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="195" y="191"/>
+          <mxPoint x="195" y="140"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="validate-env" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="195" y="236"/>
+          <mxPoint x="195" y="290"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="test_capabilities" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" source="discover" target="fetch-bugs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="415" y="140"/>
+          <mxPoint x="415" y="192"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="credentials" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="validate-env" target="fetch-bugs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="415" y="290"/>
+          <mxPoint x="415" y="234"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="POST /search/jql" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="fetch-bugs" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="issues[]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.82;exitY=1;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;" edge="1" source="jira" target="fetch-bugs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="555" y="100"/>
+          <mxPoint x="576" y="100"/>
+          <mxPoint x="576" y="150"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-bugs" target="coverage" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="extract" target="match-tests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="match-tests" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="classify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e11" value="per bug" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="coverage" target="test-level" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="test-level" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e13" value="no tests found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.26;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="test-rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1535" y="310"/>
+          <mxPoint x="1535" y="340"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="report-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1618" y="310"/>
+          <mxPoint x="1730" y="310"/>
+          <mxPoint x="1730" y="340"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
