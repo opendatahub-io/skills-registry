@@ -5,13 +5,15 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
+# --- Skills ---
+
 assess-rfe: |md
   **/assess-rfe**
 
   - Single or bulk RFE scoring
   - 30 parallel scorer agents
   - Rubric-based evaluation
-  - CSV results + run directory
+  - CSV results + summary
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -30,5 +32,41 @@ export-rubric: |md
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+# --- Shared Artifact ---
+
+rubric: |md
+  **agent_prompt.md**
+  (scoring rubric)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font-size: 11
+}
+
+# --- External ---
+
+jira: |md
+  **Jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+assess-rfe -> rubric: "reads" {
+  style.stroke-dash: 3
+}
+export-rubric -> rubric: "exports" {
+  style.stroke-dash: 3
+}
+assess-rfe -> jira: "MCP / REST" {
   style.stroke-dash: 3
 }

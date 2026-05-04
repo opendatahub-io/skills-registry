@@ -39,10 +39,11 @@ detect: |md
 # --- Single Mode ---
 
 fetch-single: |md
-  **Fetch Single Issue**
+  **Fetch & Prepare**
 
-  - MCP getJiraIssue
+  - MCP getJiraIssue first
   - REST fallback (fetch_single.py)
+  - prep_single.py cleanup
   - Write to /tmp/rfe-assess/single/
 | {
   shape: rectangle
@@ -56,9 +57,10 @@ fetch-single: |md
 preflight: |md
   **Preflight Checks**
 
-  - Verify env vars
+  - Verify JIRA_SERVER,
+    JIRA_USER, JIRA_TOKEN
   - Check cache state
-  - Resume detection
+  - Resume incomplete runs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -71,7 +73,7 @@ dump-jira: |md
 
   - dump_jira.py
   - All issues → local cache
-  - ADF → markdown
+  - ADF → markdown conversion
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -83,8 +85,8 @@ setup-run: |md
   **Setup Run**
 
   - setup_run.py
-  - Timestamped directory
-  - Queue file + resume
+  - Timestamped run directory
+  - Resume logic + pending list
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -95,13 +97,13 @@ setup-run: |md
 # --- Scoring ---
 
 score: |md
-  **Spawn Scorer Agents**
+  **Scorer Agents**
   LLM agents (Opus)
 
-  - 30 concurrent agents
-  - next_batch.py for keys
+  - 30 concurrent max (bulk)
+  - Rolling pipeline launch
   - agent_prompt.md rubric
-  - .result.md per issue
+  - Poll every 30s
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -115,10 +117,10 @@ score: |md
 results: |md
   **Results & Summary**
 
-  - parse_results.py → CSV
+  - parse_results.py → scores.csv
   - summarize_run.py
-  - Pass/fail, averages
-  - What-if analysis
+  - Pass/fail rates, averages
+  - What-if analysis, near-misses
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -129,13 +131,35 @@ results: |md
 # --- External ---
 
 jira: |md
-  **Jira (RHAIRFE)**
+  **Jira**
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
+}
+
+# --- Callout: Directory Structure ---
+
+dir-tree: |md
+  assessments/RHAIRFE/
+    20260322-143000/
+      RHAIRFE-42.result.md
+      scores.csv
+    current → 20260322-143000
+
+  /tmp/rfe-assess/RHAIRFE/
+    RHAIRFE-42.md
+  /tmp/rfe-assess/single/
+    RHAIRFE-1234.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
@@ -145,11 +169,11 @@ entry -> detect
 detect -> fetch-single: "single"
 detect -> preflight: "RHAIRFE-*"
 
-fetch-single -> score
+fetch-single -> score: "{KEY}.md"
 
 preflight -> dump-jira
 dump-jira -> setup-run
-setup-run -> score: "queue.txt"
+setup-run -> score: "pending keys"
 
 score -> results: "*.result.md"
 
@@ -159,4 +183,11 @@ fetch-single -> jira: "MCP / REST" {
 }
 dump-jira -> jira: "REST API" {
   style.stroke-dash: 3
+}
+
+# Callout
+results -> dir-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

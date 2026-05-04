@@ -1,152 +1,66 @@
 direction: right
 
-# --- Global styles ---
-style: {
-  border-radius: 8
-  font-size: 14
-  fill: "#FAFAFA"
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/export-rubric**
+
+  - No arguments
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# --- Nodes ---
-entry: |md
-  ### /export-rubric
-  - No arguments required
-  - Invokes rubric export
-| {
-  style: {
-    fill: "#E8F5E9"
-    stroke: "#43A047"
-    border-radius: 10
-    font-size: 13
-    bold: true
-  }
-}
+# --- Processing ---
 
 resolve: |md
-  ### Resolve Plugin Root
+  **Resolve Plugin Root**
+
   - Locate SKILL.md path
   - Navigate two levels up
-  - Determine absolute plugin root
 | {
-  style: {
-    fill: "#E3F2FD"
-    stroke: "#1E88E5"
-    border-radius: 8
-    font-size: 13
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-script: |md
-  ### Run export_rubric.py
-  - `python3 {PLUGIN_ROOT}/scripts/export_rubric.py`
-  - Executes via Bash tool
+export: |md
+  **Run export_rubric.py**
+
+  - Extract rubric from
+    agent_prompt.md
+  - Write artifacts/rfe-rubric.md
 | {
-  style: {
-    fill: "#FFF3E0"
-    stroke: "#FB8C00"
-    border-radius: 8
-    font-size: 13
-    stroke-dash: 5
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-read_prompt: |md
-  ### Read agent_prompt.md
-  - Load `scripts/agent_prompt.md`
-  - Full source text into memory
-| {
-  style: {
-    fill: "#E3F2FD"
-    stroke: "#1E88E5"
-    border-radius: 8
-    font-size: 13
-  }
-}
-
-extract: |md
-  ### Extract Rubric Section
-  - Find `## Scoring Rubric` marker
-  - Find `## Output Format` marker
-  - Slice text between markers
-| {
-  style: {
-    fill: "#E3F2FD"
-    stroke: "#1E88E5"
-    border-radius: 8
-    font-size: 13
-  }
-}
-
-write_file: |md
-  ### Write Rubric File
-  - Create `artifacts/` directory
-  - Write `artifacts/rfe-rubric.md`
-  - Add header & attribution
-| {
-  style: {
-    fill: "#E3F2FD"
-    stroke: "#1E88E5"
-    border-radius: 8
-    font-size: 13
-  }
-}
+# --- Output ---
 
 confirm: |md
-  ### Confirm Output
-  - Verify file was written
-  - Print absolute file path
+  **Confirm Output**
+
+  - Verify file written
+  - Print file path
 | {
-  style: {
-    fill: "#F3E5F5"
-    stroke: "#8E24AA"
-    border-radius: 10
-    font-size: 13
-  }
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# --- Artifacts ---
-agent_prompt: |md
-  **agent_prompt.md**
-  _(plugin source)_
-| {
-  shape: page
-  style: {
-    fill: "#FFFDE7"
-    stroke: "#F9A825"
-    font-size: 12
-    italic: true
-  }
-}
+# --- Flow ---
 
-rubric_out: |md
-  **artifacts/rfe-rubric.md**
-  _(exported rubric)_
-| {
-  shape: page
-  style: {
-    fill: "#FFFDE7"
-    stroke: "#F9A825"
-    font-size: 12
-    italic: true
-  }
-}
-
-# --- Edges ---
-entry -> resolve: invoke
-resolve -> script: plugin root path
-script -> read_prompt: step 1
-agent_prompt -> read_prompt: reads {
-  style: {
-    stroke: "#F9A825"
-    stroke-dash: 3
-  }
-}
-read_prompt -> extract: source text
-extract -> write_file: rubric markdown
-write_file -> rubric_out: writes {
-  style: {
-    stroke: "#F9A825"
-    stroke-dash: 3
-  }
-}
-write_file -> confirm: success
+entry -> resolve
+resolve -> export: "plugin root path"
+export -> confirm: "artifacts/rfe-rubric.md"
