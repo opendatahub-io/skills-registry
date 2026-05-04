@@ -1,231 +1,303 @@
 direction: right
 
-# ── Global styles ──
 *.style.border-radius: 8
-*.style.font-size: 14
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
 
-# ── Entry ──
+# --- Entry ---
+
 entry: |md
-  ## Parse Arguments
-  - STRAT key (e.g. RHAISTRAT-400)
-  - \`--reviewer N\` (1, 2, or 3)
-  - \`--threat-surface <path>\`
-  - \`--tier <light|standard|deep>\`
+  **security-reviewer**
+
+  - STRAT key (RHAISTRAT-NNN)
+  - --reviewer N (1, 2, or 3)
+  - --threat-surface path
+  - --tier light/standard/deep
 | {
-  style.fill: "#e8f5e9"
-  style.stroke: "#2e7d32"
-  style.font-size: 13
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Step 1: Read Threat Surface ──
+# --- Step 1: Read Threat Surface ---
+
 read-threat: |md
-  ## Read Threat Surface
-  - Read structured inventory file
-  - Endpoints, services, data flows
-  - Credentials, CRDs, trust boundaries
-  - RBAC, agent/MCP surfaces
+  **Read Threat Surface**
+
+  - structured inventory file
+  - endpoints, services, data flows
+  - credentials, CRDs, trust boundaries
+  - RBAC changes, agent/MCP surfaces
 | {
-  style.fill: "#e3f2fd"
-  style.stroke: "#1565c0"
-  style.font-size: 13
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Step 2: Fetch STRAT ──
-jira: |md
-  ## Jira
-| {
-  style.fill: "#fff3e0"
-  style.stroke: "#e65100"
-  style.stroke-dash: 5
-  style.font-size: 13
-}
+# --- Step 2: Fetch STRAT ---
 
 fetch-strat: |md
-  ## Fetch STRAT
-  - Call mcp\_\_atlassian\_\_getJiraIssue
-  - Fields: summary, description,
-    priority, labels, status, comment
-  - Response in markdown format
-  - Read full STRAT content
+  **Fetch STRAT from Jira**
+  MCP call
+
+  - mcp\_\_atlassian\_\_getJiraIssue
+  - summary, description, priority
+  - labels, status, comments
+  - full STRAT content in markdown
 | {
-  style.fill: "#e3f2fd"
-  style.stroke: "#1565c0"
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
   style.double-border: true
-  style.font-size: 13
 }
 
-# ── Step 3: Architecture Context (conditional) ──
-tier-check: |md
-  ## Tier Check
+jira: |md
+  **Jira (Atlassian MCP)**
 | {
-  style.fill: "#fff9c4"
-  style.stroke: "#f9a825"
-  style.font-size: 13
-  shape: diamond
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
+
+# --- Step 3: Architecture Context (conditional) ---
 
 read-arch: |md
-  ## Read Architecture Context
+  **Read Architecture Context**
+
   - PLATFORM.md overview
-  - Component-specific files for
-    each affected component
-  - Identify existing security controls
+  - component-specific files
+  - existing security controls
   - .context/architecture-context/
 | {
-  style.fill: "#e3f2fd"
-  style.stroke: "#1565c0"
-  style.font-size: 13
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Phase A: Discovery (container) ──
-phase-a: Phase A — Discovery {
-  style.fill: "#fce4ec"
-  style.stroke: "#c62828"
-  style.font-size: 16
-  style.border-radius: 12
+# --- Phase A: Discovery (container) ---
+
+phase-a: "Phase A: Discovery" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
   catalog: |md
-    ## A.1 Risk Pattern Catalog
-    - Check ALL 39 patterns against
+    **A.1 Risk Pattern Catalog**
+    LLM analysis
+
+    - check ALL 39 patterns against
       threat surface inventory
-    - Record APPLICABLE or
-      NOT-APPLICABLE per pattern
+    - APPLICABLE or NOT-APPLICABLE
     - 10 categories: AUTH, DATA,
       CRYPTO, NET, SUPPLY, INFRA,
       TENANT, AGENT, MCP, UPSTREAM
-    - Each finding cites threat surface
-      items and STRAT text
+    - cite threat surface items
+      and STRAT text
   | {
-    style.fill: "#ffebee"
-    style.stroke: "#c62828"
-    style.font-size: 13
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   creative: |md
-    ## A.2 Creative Exploration
-    - Cross-component attack chains
-    - Novel attack surfaces unique
-      to this STRAT
-    - Emergent risks from combinations
-    - Unvalidated assumptions
-    - Choices that block future controls
+    **A.2 Creative Exploration**
+    LLM analysis
+
+    - cross-component attack chains
+    - novel attack surfaces
+    - emergent combination risks
+    - unvalidated assumptions
+    - choices blocking future controls
   | {
-    style.fill: "#ffebee"
-    style.stroke: "#c62828"
-    style.font-size: 13
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
-  catalog -> creative: after all\n39 patterns
+  catalog -> creative: "after all 39 patterns"
 }
 
-# ── Phase B: Filter & Classify (container) ──
-phase-b: Phase B — Filter & Classify {
-  style.fill: "#ede7f6"
-  style.stroke: "#4527a0"
-  style.font-size: 16
-  style.border-radius: 12
+# --- Phase B: Filter and Classify (container) ---
+
+phase-b: "Phase B: Filter and Classify" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
   relevance-gate: |md
-    ## B.1 Relevance Gate
-    - What specific STRAT content
+    **B.1 Relevance Gate**
+    LLM analysis
+
+    - what specific STRAT content
       creates this concern?
-    - Already addressed by existing
+    - already addressed by existing
       security infrastructure?
     - DROP if cannot answer both
-      with specifics
   | {
-    style.fill: "#f3e5f5"
-    style.stroke: "#6a1b9a"
-    style.font-size: 13
-  }
-
-  gate-decision: |md
-    ## Pass / Drop
-  | {
-    style.fill: "#fff9c4"
-    style.stroke: "#f9a825"
-    style.font-size: 13
-    shape: diamond
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
   }
 
   severity-tree: |md
-    ## B.2 Severity Decision Tree
+    **B.2 Severity Decision Tree**
+    LLM classification
+
     - Critical: no auth, no isolation,
       lethal trifecta, irreversible arch
     - High: auth bypass, insecure creds,
       cluster RBAC, vulnerable upstream
-    - Medium: real concern, not
-      Critical or High
-    - NFR Gap: missing spec, not
-      active flaw
+    - Medium: real concern, below High
+    - NFR Gap: missing spec, not flaw
   | {
-    style.fill: "#f3e5f5"
-    style.stroke: "#6a1b9a"
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
     style.double-border: true
-    style.font-size: 13
   }
 
   org-constraints: |md
-    ## B.3 Org Constraints
+    **B.3 Org Constraints**
+
     - FIPS 140-3 compliance
-    - TLS profile compliance
-    - OpenShift Gateway API
-    - Approved auth patterns only
-    - Namespace-scoped RBAC
-    - Image provenance
-    - Upstream-first policy
+    - TLS profile compliance (ML-KEM)
+    - OpenShift Gateway API only
+    - approved auth patterns only
+    - namespace-scoped RBAC
+    - image provenance
+    - upstream-first policy
   | {
-    style.fill: "#f3e5f5"
-    style.stroke: "#6a1b9a"
-    style.font-size: 13
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
   }
 
-  relevance-gate -> gate-decision
-  gate-decision -> severity-tree: passed
+  relevance-gate -> severity-tree: "passed"
   severity-tree -> org-constraints
 }
 
+# --- Dropped findings ---
+
 dropped: |md
-  ## Dropped Findings
-  - Recorded with reason
+  **Dropped Findings**
+
+  - recorded with reason
 | {
-  style.fill: "#efebe9"
-  style.stroke: "#795548"
-  style.font-size: 13
-  style.stroke-dash: 5
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
-# ── Output ──
+# --- Catalog callout ---
+
+catalog-patterns: |code
+  39 Risk Patterns
+  ────────────────────
+  AUTH-01..06     (6)
+  DATA-01..04     (4)
+  CRYPTO-01..04   (4)
+  NET-01..03      (3)
+  SUPPLY-01..04   (4)
+  INFRA-01..03    (3)
+  TENANT-01..03   (3)
+  AGENT-01..05    (5)
+  MCP-01..04      (4)
+  UPSTREAM-01..04  (3)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font-size: 10
+}
+
+# --- Output ---
+
 output: |md
-  ## Write Review File
+  **Write Review File**
+
   - artifacts/security-reviews/
-    \<STRAT\>-reviewer-\<N\>.md
-  - Full catalog check results (39)
-  - Creative exploration findings
-  - Relevance gate pass/drop
-  - Security risks with severity
-  - NFR gaps
-  - Org constraint violations
+  - catalog check results (39)
+  - creative findings
+  - relevance gate pass/drop
+  - security risks with severity
+  - NFR gaps, org violations
 | {
-  style.fill: "#e8f5e9"
-  style.stroke: "#2e7d32"
-  style.font-size: 13
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-# ── Edges ──
-entry -> read-threat
-read-threat -> fetch-strat
-fetch-strat -> jira: MCP call {
-  style.stroke: "#e65100"
-  style.stroke-dash: 5
+# --- Output callout ---
+
+output-format: |code
+  STRAT-reviewer-N.md
+  ────────────────────
+  strat_key: RHAISTRAT-NNN
+  reviewer: N
+  finding_count:
+    security_risks: N
+    nfr_gaps: N
+    dropped: N
+  ────────────────────
+  Catalog Check Results
+  Creative Exploration
+  Relevance Gate Results
+  Security Risks (RISK-001..)
+  NFR Gaps
+  Org Constraint Violations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font-size: 10
 }
-fetch-strat -> tier-check
-tier-check -> read-arch: standard / deep
-tier-check -> phase-a: light\n(skip arch)
-read-arch -> phase-a
-phase-a -> phase-b: all findings
-phase-b.gate-decision -> dropped: dropped {
-  style.stroke: "#795548"
-  style.stroke-dash: 5
+
+# --- Flow ---
+
+entry -> read-threat
+read-threat -> fetch-strat: "threat surface\ninventory"
+fetch-strat -> jira: "MCP call" {
+  style.stroke-dash: 3
+}
+fetch-strat -> read-arch: "standard / deep"
+fetch-strat -> phase-a: "light (skip arch)"
+read-arch -> phase-a: "existing controls"
+phase-a -> phase-b: "all findings"
+phase-b.relevance-gate -> dropped: "dropped" {
+  style.stroke-dash: 3
 }
 phase-b -> output
+
+# --- Callout edges ---
+
+phase-a.catalog -> catalog-patterns: "" {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+output -> output-format: "" {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
