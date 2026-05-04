@@ -16,16 +16,45 @@ Usage:
     python3 scripts/sync_drawio_from_svg.py --dry-run site/docs/plugins/**/*.svg
 """
 
+import base64
 import html
 import re
 import sys
+import urllib.parse
+import zlib
 from pathlib import Path
 
 
+def _decompress_diagram(compressed: str) -> str:
+    """Decompress a base64+deflate+URL-encoded diagram body to XML.
+
+    The draw.io web editor saves diagrams in compressed format:
+    XML → URL-encode → deflate → base64. This reverses that.
+    """
+    try:
+        decoded = base64.b64decode(compressed)
+        inflated = zlib.decompress(decoded, -15)
+        return urllib.parse.unquote(inflated.decode("utf-8"))
+    except Exception:
+        return compressed
+
+
 def extract_mxfile_from_svg(svg_content: str) -> str | None:
+    """Extract embedded mxfile XML from an SVG, decompressing if needed."""
     match = re.search(r'content="([^"]*)"', svg_content)
     if match:
-        return html.unescape(match.group(1))
+        mxfile = html.unescape(match.group(1))
+        # Decompress any base64-encoded diagram bodies to readable XML
+        def _expand(m):
+            body = m.group(1).strip()
+            if not body.startswith("<"):
+                xml = _decompress_diagram(body)
+                return f"{m.group(0)[:m.group(0).index('>')]+1}>{xml}</diagram>"
+            return m.group(0)
+        mxfile = re.sub(r"(<diagram[^>]*>)(.*?)(</diagram>)",
+                        lambda m: f"{m.group(1)}{_decompress_diagram(m.group(2).strip()) if not m.group(2).strip().startswith('<') else m.group(2)}{m.group(3)}",
+                        mxfile, flags=re.DOTALL)
+        return mxfile
     if "mxGraphModel" in svg_content:
         match = re.search(r"(<mxGraphModel.*?</mxGraphModel>)", svg_content, re.DOTALL)
         if match:
