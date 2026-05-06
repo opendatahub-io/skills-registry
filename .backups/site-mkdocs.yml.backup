@@ -134,6 +134,10 @@ nav:
       - eval-review: plugins/agent-eval-harness/eval-review.md
       - eval-mlflow: plugins/agent-eval-harness/eval-mlflow.md
       - eval-optimize: plugins/agent-eval-harness/eval-optimize.md
+    - meeting-quality-skills:
+      - plugins/meeting-quality-skills/index.md
+      - meeting-async-update-check: plugins/meeting-quality-skills/meeting-async-update-check.md
+      - meeting-risk-agenda: plugins/meeting-quality-skills/meeting-risk-agenda.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
