@@ -1,0 +1,156 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="prepare" value="&lt;b&gt;ui_prepare.py&lt;/b&gt;&lt;br&gt;&lt;i&gt;(terminal, before skill)&lt;/i&gt;&lt;br&gt;&lt;br&gt;--test-plan-pr or --test-plan&lt;br&gt;--tc filter, --priority&lt;br&gt;resolve creds, launch browser&lt;br&gt;write ui_context.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="240" width="160" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="entry" value="&lt;b&gt;/test-plan.ui-verify&lt;/b&gt;&lt;br&gt;&lt;br&gt;(no arguments)&lt;br&gt;invoked after ui_prepare.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="240" y="265" width="145" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-ctx" value="&lt;b&gt;Read Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;ui_read_ctx.py&lt;br&gt;parse ui_context.json&lt;br&gt;read js-patterns.md&lt;br&gt;extract test_cases array" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="435" y="255" width="150" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="cluster" value="&lt;b&gt;ODH / RHOAI Cluster&lt;/b&gt;&lt;br&gt;&lt;i&gt;(live, via Playwright CDP)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="850" y="30" width="155" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="tc-loop" value="&lt;b&gt;Phase 2: Execute Test Cases&lt;/b&gt;  &lt;i&gt;(for each TC)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=0;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="635" y="130" width="685" height="360" as="geometry"/>
+    </mxCell>
+    <mxCell id="preconditions" value="&lt;b&gt;2A — Preconditions&lt;/b&gt;&lt;br&gt;&lt;br&gt;check tc[&quot;preconditions&quot;]&lt;br&gt;oc verify if cluster-state&lt;br&gt;ui_block.py if not met" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="tc-loop">
+      <mxGeometry x="20" y="45" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="reset" value="&lt;b&gt;2B — Reset&lt;/b&gt;&lt;br&gt;&lt;br&gt;goto TARGET_URL (base)&lt;br&gt;goto TARGET_URL + route&lt;br&gt;clears filters, React state" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="tc-loop">
+      <mxGeometry x="195" y="45" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="execute" value="&lt;b&gt;2C — Execute Steps&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM-driven&lt;/i&gt;&lt;br&gt;&lt;br&gt;ui_interact.py click/fill&lt;br&gt;scroll, goto, expand, wait&lt;br&gt;--in-row for table scoping&lt;br&gt;complete all steps first" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="tc-loop">
+      <mxGeometry x="360" y="45" width="145" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="assert" value="&lt;b&gt;2D — Assert&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM-driven&lt;/i&gt;&lt;br&gt;&lt;br&gt;ui_assert.py per Expected Result&lt;br&gt;--js with DOM evaluation&lt;br&gt;--screenshot with highlights&lt;br&gt;--click-before for ephemeral UI&lt;br&gt;--inspect for diagnostics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="tc-loop">
+      <mxGeometry x="530" y="45" width="140" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="end-tc" value="&lt;b&gt;2E — End TC&lt;/b&gt;&lt;br&gt;&lt;br&gt;log verdict (PASS/FAIL)&lt;br&gt;ui_block.py --incomplete&lt;br&gt;on crash or disconnect" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="tc-loop">
+      <mxGeometry x="530" y="205" width="140" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="blocked" value="&lt;b&gt;BLOCKED / Skip&lt;/b&gt;&lt;br&gt;&lt;br&gt;precondition not met&lt;br&gt;no browser action possible&lt;br&gt;logged via ui_block.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="685" y="530" width="140" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="stop-browser" value="&lt;b&gt;Stop Browser&lt;/b&gt;&lt;br&gt;&lt;br&gt;ui_stop_browser.py&lt;br&gt;close CDP connection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1370" y="200" width="125" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="cleanup" value="&lt;b&gt;Cleanup&lt;/b&gt;&lt;br&gt;&lt;br&gt;ui_cleanup.py&lt;br&gt;always runs, even on failure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1370" y="310" width="125" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="collect" value="&lt;b&gt;Collect&lt;/b&gt;&lt;br&gt;&lt;br&gt;ui_collect.py&lt;br&gt;prints SESSION_DIR path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1370" y="415" width="125" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;ui_report.py&lt;br&gt;report.html (visual, screenshots)&lt;br&gt;report.md (plain-text)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1545" y="300" width="155" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="upgrade-report" value="&lt;b&gt;Upgrade Report&lt;/b&gt;&lt;br&gt;&lt;i&gt;(post-phase only)&lt;/i&gt;&lt;br&gt;&lt;br&gt;upgrade-report.html&lt;br&gt;FIXED / REGRESSION /&lt;br&gt;STABLE / STILL FAILING&lt;br&gt;pre-session/ symlink" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1545" y="450" width="155" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="session-tree" value="results/{session}/&lt;br&gt;&amp;nbsp;&amp;nbsp;report.html&lt;br&gt;&amp;nbsp;&amp;nbsp;report.md&lt;br&gt;&amp;nbsp;&amp;nbsp;TC-*-verify-*.png&lt;br&gt;&amp;nbsp;&amp;nbsp;tc_log.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1750" y="285" width="140" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_prepare_entry" value="ui_context.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="prepare" target="entry" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_entry_readctx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-ctx" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_readctx_preconditions" value="test_cases[]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-ctx" target="preconditions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preconditions_blocked" value="not met" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preconditions" target="blocked" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="615" y="225"/>
+          <mxPoint x="615" y="575"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preconditions_reset" value="met" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preconditions" target="reset" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_reset_execute" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="reset" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_execute_assert" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="execute" target="assert" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assert_endtc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="assert" target="end-tc" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assert_self" value="--replace (fix FAIL)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.7;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="assert" target="assert" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1263" y="110"/>
+          <mxPoint x="1207" y="110"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_endtc_preconditions" value="next TC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="end-tc" target="preconditions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1235" y="510"/>
+          <mxPoint x="725" y="510"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cluster_execute" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="cluster" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="927" y="105"/>
+          <mxPoint x="1062" y="105"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cluster_assert" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="cluster" target="assert" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="927" y="105"/>
+          <mxPoint x="1235" y="105"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_endtc_stopbrowser" value="all TCs done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="end-tc" target="stop-browser" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1345" y="235"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_stop_cleanup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="stop-browser" target="cleanup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cleanup_collect" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="cleanup" target="collect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_report" value="SESSION_DIR" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="collect" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1520" y="447"/>
+          <mxPoint x="1520" y="350"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_report_upgrade" value="--upgrade-phase post" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="upgrade-report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_report_sessiontree" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="session-tree" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

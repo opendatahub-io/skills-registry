@@ -1,0 +1,243 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-create-cases**
+
+  - FEATURE_SOURCE (dir, branch, PR)
+  - --output-dir PATH
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight**
+
+  - uv sync --extra dev
+  - auto-detect from session
+  - or locate-feature-dir
+  - validate local path
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Inputs ---
+
+read-plan: |md
+  **Read Test Plan**
+
+  - TestPlan.md frontmatter
+  - endpoints (Section 4)
+  - strategy, scope, objectives
+  - naming convention (5.2)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+read-gaps: |md
+  **Read Gaps**
+
+  - TestPlanGaps.md (if exists)
+  - skip pending areas
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+read-template: |md
+  **Read Template**
+
+  - test-case-template.md
+  - omit empty sections
+  - placeholder for automation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Regeneration Check ---
+
+regen-check: |md
+  **Detect Regen Mode**
+
+  - tc_regeneration.py check
+  - count existing TC files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Design & Generate (LLM) ---
+
+generate: |md
+  **Design & Generate TCs**
+  LLM (Opus)
+
+  - category-by-category
+  - positive, negative, boundary
+  - P0/P1/P2 priority assignment
+  - E2E scenarios (mandatory)
+  - upgrade TCs (conditional)
+  - YAML frontmatter per TC
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- TC callout ---
+
+tc-example: |md
+  test_cases/
+    TC-API-001.md
+    TC-API-002.md
+    TC-UI-001.md
+    TC-E2E-001.md
+    TC-UPGRADE-001.md
+    INDEX.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Index ---
+
+gen-index: |md
+  **Generate Index**
+
+  - scan all TC-*.md files
+  - stats: total, P0/P1/P2
+  - tables by category
+  - link to TestPlan.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Update Plan ---
+
+update-plan: |md
+  **Update Test Plan**
+
+  - Section 5: TC organization
+  - Section 6: E2E summary
+  - Section 10: coverage matrix
+  - Section 10.2: TC mapping
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Update README ---
+
+update-readme: |md
+  **Update README**
+
+  - add Test Cases section
+  - link to INDEX.md
+  - count + priority breakdown
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Coverage Validation ---
+
+coverage: |md
+  **Coverage Validation**
+
+  - endpoint coverage check
+  - E2E coverage for P0
+  - test objective coverage
+  - priority distribution
+  - gap cross-reference
+  - append to TestPlanGaps.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate Frontmatter ---
+
+validate: |md
+  **Validate Frontmatter**
+
+  - validate_test_cases.py
+  - check all TC files
+  - fix + re-run on error
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> read-plan
+read-plan -> read-gaps: "TestPlan.md"
+read-gaps -> read-template
+read-template -> regen-check
+
+regen-check -> generate: "create" {
+  style.font-size: 12
+}
+regen-check -> generate: "regenerate\n(user confirms)" {
+  style.font-size: 12
+}
+
+generate -> tc-example: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+generate -> gen-index: "TC-*.md"
+gen-index -> update-plan: "INDEX.md"
+update-plan -> update-readme
+update-readme -> coverage
+coverage -> validate
+
+# --- Back-edge: validation retry ---
+
+validate -> generate: "errors" {
+  style.stroke-dash: 3
+}

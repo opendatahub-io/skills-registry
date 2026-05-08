@@ -1,0 +1,119 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **test-plan-score-test-function**
+  sub-agent (fork, sonnet)
+
+  - --test-code-file
+  - --tc-file
+  - --conventions-file
+  - --framework
+  - --output-file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Upstream ---
+
+case-implement: |md
+  **test-plan.case-implement**
+  (Step 5.6)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Steps ---
+
+read-rubric: |md
+  **Read Scoring Rubric**
+
+  - prompts/score-test-function.md
+  - 5-criteria quality rubric
+  - scoring scale 0-2 per criterion
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+score: |md
+  **Score Test Function**
+  LLM evaluation
+
+  - Coverage (0-2): all TC reqs?
+  - Assertions (0-2): specific?
+  - Convention (0-2): repo patterns?
+  - Test Data (0-2): realistic values?
+  - Code Quality (0-2): clean code?
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+write-assessment: |md
+  **Write Assessment**
+
+  - per-criterion scores + issues
+  - total score (0-10)
+  - verdict decision
+  - revision recommendations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: Assessment Output ---
+
+assessment-detail: |md
+  **Assessment Output**
+  ─────────────────────
+  Coverage:     1/2 - missing edge case
+  Assertions:   2/2
+  Convention:   2/2
+  Test Data:    1/2 - hardcoded values
+  Code Quality: 2/2
+  ─────────────────────
+  Total: 8/10
+  Verdict: **Good**
+  (Ready ≥ 9 / Good ≥ 7 / Revise ≥ 4 / Rework < 4)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+case-implement -> entry: "fork sub-agent"
+entry -> read-rubric
+read-rubric -> score: "rubric + inputs"
+score -> write-assessment: "structured scores"
+
+write-assessment -> assessment-detail: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

@@ -1,0 +1,221 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-resolve-feedback**
+
+  - PR URL (required)
+  - parse owner/repo/number
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: Pre-flight Checks {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  deps: |md
+    **Environment**
+
+    - uv sync --extra dev
+    - gh auth status
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  repo: |md
+    **Locate Repo**
+
+    - find local clone or
+      clone from GitHub
+    - checkout PR branch
+    - git pull latest
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  feature: |md
+    **Feature Directory**
+
+    - find TestPlan.md
+    - validate frontmatter
+    - ask user if ambiguous
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  deps -> repo
+  repo -> feature
+}
+
+# --- Collect ---
+
+collect: |md
+  **Collect Comments**
+
+  - gh pr view (comments,
+    reviews)
+  - gh api /comments (inline)
+  - filter bots, LGTM,
+    resolved threads
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Plan ---
+
+read-plan: |md
+  **Read Test Plan**
+
+  - TestPlan.md (full content)
+  - TestPlanGaps.md (if exists)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess (LLM + interactive) ---
+
+assess: |md
+  **Assess & Present**
+  LLM + interactive
+
+  - evaluate each comment
+    against plan content
+  - classify: aligns, conflicts,
+    unclear, already covered
+  - propose concrete change
+  - user decides per item
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Apply ---
+
+apply: |md
+  **Apply Changes**
+
+  - edit TestPlan.md, TC-*.md,
+    TestPlanGaps.md
+  - regenerate INDEX.md
+    if cases changed
+  - update Sections 5 and 8
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate ---
+
+validate: |md
+  **Update & Validate**
+
+  - bump version patch
+  - keep status "In Review"
+  - update gap count
+  - frontmatter validate
+  - test case validate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Commit & Push ---
+
+commit: |md
+  **Commit & Push**
+
+  - present change summary
+  - user confirms (yes/no)
+  - git add (selective)
+  - git commit + push
+  - switch back to
+    previous branch
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: GitHub ---
+
+github: |md
+  **GitHub CLI**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- External: User ---
+
+user: |md
+  **User**
+  (AskUserQuestion)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> collect
+collect -> read-plan: "actionable\ncomments"
+read-plan -> assess: "plan context"
+
+assess -> apply: "accepted items"
+assess -> assess: "discuss" {
+  style.stroke-dash: 3
+}
+
+apply -> validate: "modified files"
+validate -> commit
+
+# --- External connections ---
+
+collect -> github: "gh pr view\ngh api"
+preflight.repo -> github: "gh pr view"
+
+assess -> user: "apply / skip /\ndiscuss?"
+commit -> user: "confirm push?"

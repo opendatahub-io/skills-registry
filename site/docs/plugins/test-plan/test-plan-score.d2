@@ -1,0 +1,167 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-score**
+
+  - feature_dir (required)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Setup ---
+
+install: |md
+  **Install Deps**
+
+  - uv sync --extra dev
+  - test-plan package
+  - abort if fails
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Inputs ---
+
+read-plan: |md
+  **Read Test Plan**
+
+  - TestPlan.md content
+  - extract source_key
+    from frontmatter
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Strategy source (branch) ---
+
+jira: |md
+  **Fetch from Jira**
+
+  - MCP getJiraIssue
+  - source_key lookup
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+local-strat: |md
+  **Local Strategy**
+
+  - artifacts/strat-tasks/
+  - {source_key}.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Score Agent ---
+
+score-agent: |md
+  **Score Agent**
+  forked LLM agent
+
+  - 5-criteria rubric (0-2 each)
+  - calibration examples
+  - grounding cross-reference
+  - consistency cross-checks
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Rubric callout ---
+
+rubric: |md
+  **Rubric (0-10)**
+  1. Specificity
+  2. Grounding
+  3. Scope Fidelity
+  4. Actionability
+  5. Consistency
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font-size: 10
+}
+
+# --- Verdict ---
+
+verdict: |md
+  **Present Results**
+
+  - score table with rationale
+  - grounding cross-reference
+  - verdict: Ready / Revise / Rework
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verdict callout ---
+
+thresholds: |md
+  >= 8, no zeros: **Ready**
+  = 7, no zeros: **Revise**
+  < 7 or any zero: **Rework**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Edges ---
+
+entry -> install
+install -> read-plan
+read-plan -> jira: "MCP available"
+read-plan -> local-strat: "MCP unavailable" {
+  style.stroke-dash: 3
+}
+jira -> score-agent: "strategy text"
+local-strat -> score-agent: "strategy text"
+score-agent -> verdict
+
+# --- Callout edges ---
+
+score-agent -> rubric: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+verdict -> thresholds: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

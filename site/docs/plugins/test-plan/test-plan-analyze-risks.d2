@@ -1,0 +1,128 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- External ---
+
+orchestrator: |md
+  **test-plan-create**
+  (orchestrator)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Entry ---
+
+entry: |md
+  **analyze-risks**
+  LLM sub-agent (Sonnet)
+
+  - file paths from orchestrator
+  - context: fork
+  - allowed tools: Read
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Read ---
+
+read-inputs: |md
+  **Read Source Documents**
+
+  - strategy files (strat-tasks/)
+  - ADR files (if provided)
+  - additional docs
+  - ONLY specified files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analysis branches ---
+
+test-strategy: |md
+  **Extract Test Strategy**
+  LLM analysis
+
+  - test levels (API, data, UI...)
+  - test types (positive, negative...)
+  - priority definitions (P0/P1/P2)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+nfr-assessment: |md
+  **Assess NFRs**
+  LLM analysis
+
+  - disconnected / air-gapped
+  - upgrade / migration
+  - performance / scalability
+  - RBAC / authorization
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+risk-analysis: |md
+  **Identify Risks**
+  LLM analysis
+
+  - dependencies, external services
+  - data migration, compatibility
+  - impact / probability rating
+  - concrete mitigations
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Structured Output**
+
+  - Section 2: Test Strategy
+  - Section 7: NFRs
+  - Section 8: Risks table
+  - Gaps with resolution paths
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+orchestrator -> entry: "file paths"
+entry -> read-inputs
+read-inputs -> test-strategy: "strategy + ADR content"
+read-inputs -> nfr-assessment
+read-inputs -> risk-analysis
+test-strategy -> output
+nfr-assessment -> output
+risk-analysis -> output

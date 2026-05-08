@@ -1,0 +1,258 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-publish**
+
+  - FEATURE_SOURCE
+  - --repo owner/repo
+  - --reviewers user1,user2
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight Checks**
+
+  - uv sync (install deps)
+  - gh auth status
+  - locate feature directory
+  - validate TestPlan.md exists
+  - validate frontmatter
+  - check clean working state
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Metadata ---
+
+metadata: |md
+  **Read Metadata**
+
+  - parse TestPlan.md frontmatter
+  - extract source_key, version
+  - branch: test-plan/{source_key}
+  - resolve reviewers list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Target Repo ---
+
+target-repo: |md
+  **Determine Target Repo**
+
+  - use --repo if provided
+  - else ask user (AskUserQuestion)
+  - validate not skill repo
+  - retry until valid
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Confirm ---
+
+confirm: |md
+  **Confirm with User**
+
+  - show feature, version, branch
+  - show target repo, reviewers
+  - list files to publish
+  - AskUserQuestion yes/no
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Update Frontmatter ---
+
+update-fm: |md
+  **Update Frontmatter**
+
+  - set status = "In Review"
+  - frontmatter.py set
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Branch and Commit ---
+
+branch-new: |md
+  **Create New Branch**
+
+  - fetch main from remote
+  - checkout main
+  - create test-plan/{source_key}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+branch-existing: |md
+  **Update Existing Branch**
+
+  - safe-checkout with pull
+  - handle stale local branch
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+commit: |md
+  **Stage and Commit**
+
+  - git add TestPlan.md, README.md
+  - add TestPlanGaps.md if exists
+  - add test_cases/*.md if exists
+  - commit with descriptive message
+  - git push to remote
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- GitHub CLI ---
+
+github: |md
+  **GitHub CLI**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Create PR ---
+
+create-pr: |md
+  **Create New PR**
+
+  - build title and body
+  - extract Executive Summary
+  - gh pr create
+  - assign reviewers
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+update-pr: |md
+  **Confirm PR Updated**
+
+  - commits auto-pushed
+  - preserve existing title/body
+  - gh pr view for URL
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - display PR URL
+  - show publish summary
+  - git checkout - (restore branch)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Upstream / Downstream ---
+
+tp-create: |md
+  **/test-plan-create**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+tp-resolve: |md
+  **/test-plan-resolve-feedback**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+tp-update: |md
+  **/test-plan-update**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+tp-create -> entry: "TestPlan.md" {
+  style.stroke-dash: 3
+}
+
+entry -> preflight
+preflight -> metadata
+metadata -> target-repo: "source_key, version"
+target-repo -> confirm: "target_repo"
+confirm -> update-fm: "yes"
+update-fm -> branch-new: "branch not found"
+update-fm -> branch-existing: "branch exists"
+branch-new -> commit
+branch-existing -> commit
+commit -> create-pr: "PR not found"
+commit -> update-pr: "PR exists"
+commit -> github
+create-pr -> report
+update-pr -> report
+report -> tp-resolve: "after review" {
+  style.stroke-dash: 3
+}
+report -> tp-update: "version bump" {
+  style.stroke-dash: 3
+}

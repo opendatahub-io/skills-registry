@@ -1,0 +1,44 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="case-implement" value="&lt;b&gt;test-plan.case-implement&lt;/b&gt;&lt;br&gt;(Step 5.6)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="92" width="130" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="entry" value="&lt;b&gt;test-plan-score-&lt;br&gt;test-function&lt;/b&gt;&lt;br&gt;sub-agent (fork, sonnet)&lt;br&gt;&lt;br&gt;--test-code-file&lt;br&gt;--tc-file&lt;br&gt;--conventions-file&lt;br&gt;--framework&lt;br&gt;--output-file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="30" width="150" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-rubric" value="&lt;b&gt;Read Scoring Rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;prompts/score-test-function.md&lt;br&gt;5-criteria quality rubric&lt;br&gt;scoring scale 0-2 per criterion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="410" y="60" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Score Test Function&lt;/b&gt;&lt;br&gt;LLM evaluation&lt;br&gt;&lt;br&gt;Coverage (0-2): all TC reqs?&lt;br&gt;Assertions (0-2): specific?&lt;br&gt;Convention (0-2): repo patterns?&lt;br&gt;Test Data (0-2): realistic values?&lt;br&gt;Code Quality (0-2): clean code?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="640" y="32" width="210" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="write-assessment" value="&lt;b&gt;Write Assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;per-criterion scores + issues&lt;br&gt;total score (0-10)&lt;br&gt;verdict decision&lt;br&gt;revision recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="900" y="55" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="assessment-detail" value="&lt;b&gt;Assessment Output&lt;/b&gt;&lt;br&gt;─────────────────────&lt;br&gt;Coverage:     1/2 - missing edge case&lt;br&gt;Assertions:   2/2&lt;br&gt;Convention:   2/2&lt;br&gt;Test Data:    1/2 - hardcoded values&lt;br&gt;Code Quality: 2/2&lt;br&gt;─────────────────────&lt;br&gt;Total: 8/10&lt;br&gt;Verdict: &lt;b&gt;Good&lt;/b&gt;&lt;br&gt;(Ready ≥ 9 / Good ≥ 7 / Revise ≥ 4 / Rework &lt; 4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="880" y="215" width="220" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="fork sub-agent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="case-implement" target="entry" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-rubric" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="rubric + inputs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-rubric" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="structured scores" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="write-assessment" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="write-assessment" target="assessment-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

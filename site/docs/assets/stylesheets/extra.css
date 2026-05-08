@@ -487,6 +487,12 @@
   height: auto;
 }
 
+/* Dark mode for diagram SVGs. The SVGs use fixed light-mode colors
+   (light-dark() stripped during export). CSS filter inverts for dark. */
+[data-md-color-scheme="slate"] .diagram-container img[src$=".svg"] {
+  filter: invert(0.88) hue-rotate(180deg);
+}
+
 /* ── Footer ── */
 .md-footer {
   border-top: 1px solid var(--sr-border);

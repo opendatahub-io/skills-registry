@@ -1,0 +1,80 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="orchestrator" value="&lt;b&gt;/test-plan-create&lt;/b&gt;&lt;br&gt;(orchestrator)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="195" width="130" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="entry" value="&lt;b&gt;analyze-risks&lt;/b&gt;&lt;br&gt;LLM sub-agent (Sonnet)&lt;br&gt;&lt;br&gt;file paths from orchestrator&lt;br&gt;context: fork&lt;br&gt;allowed tools: Read" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="210" y="155" width="155" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-inputs" value="&lt;b&gt;Read Source Documents&lt;/b&gt;&lt;br&gt;&lt;br&gt;strategy files (strat-tasks/)&lt;br&gt;ADR files (if provided)&lt;br&gt;additional docs&lt;br&gt;ONLY specified files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="415" y="165" width="160" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-strategy" value="&lt;b&gt;Extract Test Strategy&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;test levels (API, data, UI...)&lt;br&gt;test types (pos, neg, boundary)&lt;br&gt;priority defs (P0/P1/P2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="630" y="30" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="nfr-assessment" value="&lt;b&gt;Assess NFRs&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;disconnected / air-gapped&lt;br&gt;upgrade / migration&lt;br&gt;performance / scalability&lt;br&gt;RBAC / authorization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="630" y="180" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="risk-analysis" value="&lt;b&gt;Identify Risks&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;dependencies, ext. services&lt;br&gt;data migration, compatibility&lt;br&gt;impact / probability rating&lt;br&gt;concrete mitigations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="630" y="340" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Structured Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Section 2: Test Strategy&lt;br&gt;Section 7: NFRs&lt;br&gt;Section 8: Risks table&lt;br&gt;Gaps with resolution paths" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="860" y="175" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="file paths" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="orchestrator" target="entry" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-inputs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="strategy +
+ADR content" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="test-strategy" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="600" y="203"/>
+          <mxPoint x="600" y="90"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.55;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="nfr-assessment" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="605" y="225"/>
+          <mxPoint x="605" y="240"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="risk-analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="600" y="247"/>
+          <mxPoint x="600" y="400"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="test-strategy" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="830" y="90"/>
+          <mxPoint x="830" y="211"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.54;entryDx=0;entryDy=0;" edge="1" source="nfr-assessment" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="risk-analysis" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="830" y="400"/>
+          <mxPoint x="830" y="265"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

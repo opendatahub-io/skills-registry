@@ -1,0 +1,244 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-create**
+
+  - JIRA_KEY (required)
+  - ADR_FILE_PATH (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight Checks**
+
+  - install Python deps (uv sync)
+  - verify Jira MCP available
+  - determine output directory
+  - save user dir preference
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Gather ---
+
+gather: |md
+  **Gather Information**
+
+  - fetch strategy via Jira MCP
+  - extract components list
+  - read ADR file (if provided)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira MCP (external) ---
+
+jira: |md
+  **Jira MCP**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Parallel Analysis Container ---
+
+analyze: Analyze (parallel) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  endpoints: |md
+    **analyze.endpoints**
+    LLM sub-agent
+
+    - feature scope (in/out)
+    - test objectives
+    - API endpoints/methods
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  risks: |md
+    **analyze.risks**
+    LLM sub-agent
+
+    - test levels & types
+    - priority definitions
+    - risks & mitigations
+    - non-functional reqs
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  infra: |md
+    **analyze.infra**
+    LLM sub-agent
+
+    - test environment config
+    - test data & users
+    - infrastructure & tooling
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+}
+
+# --- Generate ---
+
+generate: |md
+  **Generate Files**
+
+  - fill test plan template
+  - TestPlan.md + README.md
+  - set frontmatter (script)
+  - coverage table skeleton
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Gaps ---
+
+gaps: |md
+  **Collect Gaps**
+
+  - merge sub-agent gaps
+  - write TestPlanGaps.md
+  - set gap frontmatter
+  - present action menu
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Review (external skill) ---
+
+review: |md
+  **test-plan.review**
+  internal skill
+
+  - quality rubric (5 criteria)
+  - auto-revision (up to 2x)
+  - TestPlanReview.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+  style.double-border: true
+}
+
+# --- Auto-fix & Summary ---
+
+finalize: |md
+  **Finalize**
+
+  - apply auto-fixes
+  - present score & verdict
+  - show remaining gaps
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Downstream (optional) ---
+
+create-cases: |md
+  **/test-plan-create-cases**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Output callout ---
+
+output-tree: |md
+  feature_name/
+    TestPlan.md
+    TestPlanGaps.md
+    TestPlanReview.md
+    README.md
+    test_cases/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Edges ---
+
+entry -> preflight
+preflight -> gather
+gather -> jira: "RHAISTRAT /\nRHOAIENG key" {
+  style.stroke-dash: 3
+}
+jira -> gather
+gather -> analyze.endpoints: "strategy + ADR"
+gather -> analyze.risks: "strategy + ADR"
+gather -> analyze.infra: "strategy + ADR"
+analyze.endpoints -> generate: "scope & endpoints"
+analyze.risks -> generate: "risks & NFRs"
+analyze.infra -> generate: "env & infra"
+generate -> gaps: "TestPlan.md"
+gaps -> review: "proceed"
+gaps -> analyze.endpoints: "provide docs" {
+  style.stroke-dash: 3
+}
+review -> finalize: "TestPlanReview.md"
+finalize -> create-cases: "option 3\nor manual" {
+  style.stroke-dash: 3
+}
+
+# --- Callout edge ---
+
+generate -> output-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

@@ -1,0 +1,262 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-review**
+
+  - feature directory path
+  - called by test-plan.create
+  - or automation flows
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Setup ---
+
+setup: |md
+  **Install Dependencies**
+
+  - uv sync --extra dev
+  - abort if install fails
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Inputs ---
+
+read-inputs: |md
+  **Read Test Plan & Strategy**
+
+  - read TestPlan.md
+  - extract source_key from frontmatter
+  - fetch strategy from Jira (MCP)
+  - fallback: local strat-tasks/ file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: Jira ---
+
+jira: |md
+  **Jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Score Agent ---
+
+score: |md
+  **Score Agent**
+  forked LLM
+
+  - 5-criterion rubric
+  - specificity, grounding,
+    scope fidelity, actionability,
+    consistency
+  - completeness checks (16 sections)
+  - grounding cross-reference table
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Review Agent ---
+
+review: |md
+  **Review Agent**
+  forked LLM
+
+  - write TestPlanReview.md
+  - rubric scores + feedback
+  - consistency checks
+  - validate frontmatter
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Decision ---
+
+check: |md
+  **Check Scores**
+
+  - read review frontmatter
+  - all criteria = 2?
+  - track cycle count
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Revision Loop ---
+
+revise-loop: Revision Loop (max 2 cycles) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  filter: |md
+    **Filter for Revision**
+
+    - filter_for_revision.py
+    - skip if no actionable items
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  revise: |md
+    **Revise Agent**
+    forked LLM
+
+    - edit failing sections only
+    - grounded in source strategy
+    - set auto_revised flag
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  save-state: |md
+    **Save & Re-assess**
+
+    - preserve_review_state.py save
+    - delete TestPlanReview.md
+    - re-score + re-review
+    - restore cumulative state
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  filter -> revise
+  revise -> save-state
+}
+
+# --- Results ---
+
+results: |md
+  **Present Results**
+
+  - score/10, verdict
+  - per-criterion table
+  - delta if improved
+  - next step guidance
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: Review Output ---
+
+review-output: |md
+  TestPlanReview.md
+  ─────────────────
+  scores:
+    specificity: 0-2
+    grounding: 0-2
+    scope_fidelity: 0-2
+    actionability: 0-2
+    consistency: 0-2
+  verdict: Ready/Revise/Rework
+  before_scores: (if revised)
+  auto_revised: true/false
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Downstream Skills ---
+
+create-cases: |md
+  **/test-plan-create-cases**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+resolve-feedback: |md
+  **/test-plan-resolve-feedback**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> setup
+setup -> read-inputs
+read-inputs -> jira: "source_key" {
+  style.stroke-dash: 3
+}
+read-inputs -> score: "TestPlan.md\n+ strategy"
+score -> review: "assessment"
+review -> check: "TestPlanReview.md"
+
+check -> results: "all = 2\n(pass)"
+check -> revise-loop.filter: "any < 2\n(fail)"
+
+revise-loop.save-state -> score: "re-score" {
+  style.stroke-dash: 3
+}
+
+results -> create-cases: "Ready" {
+  style.stroke-dash: 3
+}
+results -> resolve-feedback: "PR exists" {
+  style.stroke-dash: 3
+}
+
+# --- Callout edge ---
+
+review -> review-output: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

@@ -1,0 +1,354 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan-case-implement**
+
+  - FEATURE_SOURCE (path, PR, branch)
+  - --test-cases TC-ID,TC-ID
+  - --target-repo PATH
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: Pre-flight {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  deps: |md
+    **Install Deps**
+
+    - uv sync --extra dev
+    - test-plan package
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  locate: |md
+    **Locate Feature**
+
+    - parse PR URL / branch / path
+    - repo.py locate-feature-dir
+    - resolve feature_dir
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  checks: |md
+    **Run Preflight**
+
+    - preflight.py validation
+    - detect components, repos
+    - find odh-test-context
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  confirm: |md
+    **Confirm Target Repo**
+
+    - 1 repo: confirm
+    - multiple: user chooses
+    - none: manual input
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  deps -> locate
+  locate -> checks
+  checks -> confirm
+}
+
+# --- Load Context ---
+
+load-context: Load Testing Context {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  load-repo: |md
+    **Load Repo Context**
+
+    - odh-test-context JSON
+    - framework, conventions
+    - container recipe
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  load-downstream: |md
+    **Load Downstream**
+
+    - opendatahub-tests context
+    - E2E conventions
+    - fallback defaults
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  detect-fw: |md
+    **Detect Framework**
+
+    - pytest / unittest / playwright
+    - robot / ginkgo / jest / cypress
+    - ask user if unknown
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  conventions: |md
+    **Load Conventions**
+
+    - extract_and_format_conventions.py
+    - file patterns, markers, linting
+    - save conventions.md
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  patterns: |md
+    **Load Pattern Guides**
+
+    - CLAUDE.md, AGENTS.md
+    - {framework}-tests.md
+    - testing-standards.md
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  load-repo -> load-downstream
+  load-downstream -> detect-fw
+  detect-fw -> conventions
+  conventions -> patterns
+}
+
+# --- External: Tiger Team ---
+
+tiger-team: |md
+  **Tiger Team**
+  /test-rules-generator
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Placement Analysis ---
+
+placement: |md
+  **Placement Analysis**
+  LLM subagent
+
+  - classify test level per TC
+  - score same_repo vs downstream
+  - P0 strongly prefers upstream
+  - K8s integration uses envtest
+  - user confirms or overrides
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- External: analyze.placement ---
+
+analyze-placement: |md
+  **test-plan.analyze.placement**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Select TCs ---
+
+select-tcs: |md
+  **Select Test Cases**
+
+  - parse --test-cases filter
+  - filter already-implemented
+  - parse TC files to structured data
+  - confirm with user
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Map to Files ---
+
+map-files: |md
+  **Map TCs to Files**
+
+  - map_test_files.py
+  - group by category
+  - generate file paths
+  - generate function names
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate Code ---
+
+gen-code: |md
+  **Generate Test Code**
+  parallel sub-agents
+
+  - analyze common setup
+  - one agent per test file
+  - pattern guides + conventions
+  - quality scoring per TC
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- External: generate-test-file ---
+
+gen-test-file: |md
+  **test-plan-generate-test-file**
+  (parallel, one per file)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Write Tests ---
+
+write-tests: Write & Validate {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  write-files: |md
+    **Write Test Files**
+
+    - mkdir -p, write content
+    - py_compile syntax check
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  validate-imports: |md
+    **Validate Imports**
+
+    - import in repo context
+    - warn on failures
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  container-val: |md
+    **Container Validation**
+
+    - podman run base image
+    - lint generated files
+    - run pytest in container
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  write-files -> validate-imports
+  validate-imports -> container-val: "if opted-in"
+}
+
+# --- Summary ---
+
+summary: |md
+  **Summary Report**
+
+  - update TC frontmatter
+  - mark as Implemented
+  - quality distribution
+  - draft files needing review
+  - commit & push if branch
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+entry -> preflight
+preflight -> load-context
+load-context.patterns -> tiger-team: "no guides found" {
+  style.stroke-dash: 3
+}
+load-context -> placement
+placement -> analyze-placement: "forked subagent" {
+  style.stroke-dash: 3
+}
+placement -> select-tcs: "placement decisions"
+select-tcs -> map-files: "selected TC list"
+map-files -> gen-code: "file_mapping"
+gen-code -> gen-test-file: "parallel agents" {
+  style.stroke-dash: 3
+}
+gen-code -> write-tests: "files_to_write"
+write-tests -> summary

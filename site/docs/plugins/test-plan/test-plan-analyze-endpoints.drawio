@@ -1,0 +1,86 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="orchestrator" value="&lt;b&gt;/test-plan-create&lt;/b&gt;&lt;br&gt;(orchestrator)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="145" width="130" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="entry" value="&lt;b&gt;analyze-endpoints&lt;/b&gt;&lt;br&gt;LLM sub-agent (Sonnet)&lt;br&gt;&lt;br&gt;file paths from orchestrator&lt;br&gt;context: fork&lt;br&gt;allowed tools: Read" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="210" y="105" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-inputs" value="&lt;b&gt;Read Source Documents&lt;/b&gt;&lt;br&gt;&lt;br&gt;strategy files (strat-tasks/)&lt;br&gt;ADR files (if provided)&lt;br&gt;additional docs (API spec)&lt;br&gt;ONLY specified files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="425" y="115" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract-scope" value="&lt;b&gt;Extract Feature Scope&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;purpose: what + why&lt;br&gt;in-scope / out-of-scope&lt;br&gt;test objectives (3-7)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="645" y="30" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract-endpoints" value="&lt;b&gt;Extract Testable Interfaces&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;REST endpoints (path, method)&lt;br&gt;gRPC services / methods&lt;br&gt;Python/Go methods&lt;br&gt;UI, CLI, CRDs, env vars" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="645" y="190" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="prioritize" value="&lt;b&gt;Assign Priorities&lt;/b&gt;&lt;br&gt;&lt;br&gt;P0: core functionality&lt;br&gt;P1: important user-facing&lt;br&gt;P2: edge cases, advanced" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="870" y="45" width="145" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="gap-analysis" value="&lt;b&gt;Identify Gaps&lt;/b&gt;&lt;br&gt;&lt;br&gt;flag ambiguous items&lt;br&gt;missing endpoint details&lt;br&gt;specify resolving doc type&lt;br&gt;(ADR / API spec / design)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="870" y="195" width="145" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Structured Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Section 1: Scope Analysis&lt;br&gt;Section 4: Endpoints table&lt;br&gt;Pending details list&lt;br&gt;Gaps with resolution paths" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1065" y="110" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-format" value="## Scope Analysis&lt;br&gt;Purpose / In Scope / Out of Scope&lt;br&gt;Test Objectives (3-7)&lt;br&gt;## Endpoints Under Test&lt;br&gt;Endpoint / Type / Purpose / Priority&lt;br&gt;### Pending Details&lt;br&gt;## Gaps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1055" y="350" width="175" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="file paths" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="orchestrator" target="entry" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-inputs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="strategy +
+ADR content" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="extract-scope" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="620" y="153"/>
+          <mxPoint x="620" y="90"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="extract-endpoints" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="620" y="192"/>
+          <mxPoint x="620" y="255"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="extract-scope" target="prioritize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="extract-endpoints" target="gap-analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="prioritize" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1040" y="95"/>
+          <mxPoint x="1040" y="146"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="gap-analysis" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1040" y="250"/>
+          <mxPoint x="1040" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output-node" target="output-format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

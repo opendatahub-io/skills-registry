@@ -1,0 +1,125 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- External ---
+
+caller: |md
+  **case-implement**
+  (caller)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Entry ---
+
+entry: |md
+  **analyze-placement**
+  LLM sub-agent (Opus)
+
+  - --feature-dir
+  - --code-repo
+  - --code-repo-readiness
+  - --downstream-readiness
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Read ---
+
+read-tcs: |md
+  **Read Test Cases**
+
+  - TestPlan.md (sections 1,2,4)
+  - TC-*.md frontmatter
+  - preconditions + steps
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Classify ---
+
+classify: |md
+  **Classify Test Level**
+  LLM analysis
+
+  - signal extraction (unit, API, e2e...)
+  - infra requirements (K8s, cluster, full stack)
+  - level assignment per TC
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Score ---
+
+score: |md
+  **Score Placement**
+
+  - test level preferences
+  - infrastructure requirements
+  - priority (P0 = upstream)
+  - code repo readiness
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- User Review ---
+
+user-review: |md
+  **User Confirmation**
+
+  - present placement summary
+  - accept all or review each
+  - allow per-TC overrides
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+output: |md
+  **Placement Decisions**
+
+  - tc_id, level, placement
+  - scores (same/downstream/both)
+  - reasons list
+  - override flags
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+caller -> entry
+entry -> read-tcs
+read-tcs -> classify: "TC-*.md"
+classify -> score: "level per TC"
+score -> user-review: "recommendations"
+user-review -> output

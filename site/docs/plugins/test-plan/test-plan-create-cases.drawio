@@ -1,0 +1,125 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/test-plan-create-cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;FEATURE_SOURCE (dir, branch, PR)&lt;br&gt;--output-dir PATH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="preflight" value="&lt;b&gt;Pre-flight&lt;/b&gt;&lt;br&gt;&lt;br&gt;uv sync --extra dev&lt;br&gt;auto-detect from session&lt;br&gt;or locate-feature-dir&lt;br&gt;validate local path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="35" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-plan" value="&lt;b&gt;Read Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;TestPlan.md frontmatter&lt;br&gt;endpoints (Section 4)&lt;br&gt;strategy, scope, objectives&lt;br&gt;naming convention (5.2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="445" y="35" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-gaps" value="&lt;b&gt;Read Gaps&lt;/b&gt;&lt;br&gt;&lt;br&gt;TestPlanGaps.md (if exists)&lt;br&gt;skip pending areas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="665" y="50" width="165" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-template" value="&lt;b&gt;Read Template&lt;/b&gt;&lt;br&gt;&lt;br&gt;test-case-template.md&lt;br&gt;omit empty sections&lt;br&gt;placeholder for automation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="875" y="42" width="170" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="regen-check" value="&lt;b&gt;Detect Regen Mode&lt;/b&gt;&lt;br&gt;&lt;br&gt;tc_regeneration.py check&lt;br&gt;count existing TC files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="50" width="165" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="generate" value="&lt;b&gt;Design &amp; Generate TCs&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM (Opus)&lt;/i&gt;&lt;br&gt;&lt;br&gt;category-by-category&lt;br&gt;positive, negative, boundary&lt;br&gt;P0/P1/P2 priority assignment&lt;br&gt;E2E scenarios (mandatory)&lt;br&gt;upgrade TCs (conditional)&lt;br&gt;YAML frontmatter per TC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1310" y="15" width="200" height="165" as="geometry"/>
+    </mxCell>
+    <mxCell id="tc-example" value="test_cases/&lt;br&gt;&amp;nbsp;&amp;nbsp;TC-API-001.md&lt;br&gt;&amp;nbsp;&amp;nbsp;TC-API-002.md&lt;br&gt;&amp;nbsp;&amp;nbsp;TC-UI-001.md&lt;br&gt;&amp;nbsp;&amp;nbsp;TC-E2E-001.md&lt;br&gt;&amp;nbsp;&amp;nbsp;TC-UPGRADE-001.md&lt;br&gt;&amp;nbsp;&amp;nbsp;INDEX.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1120" y="210" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-index" value="&lt;b&gt;Generate Index&lt;/b&gt;&lt;br&gt;&lt;br&gt;scan all TC-*.md files&lt;br&gt;stats: total, P0/P1/P2&lt;br&gt;tables by category&lt;br&gt;link to TestPlan.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="390" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="update-plan" value="&lt;b&gt;Update Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;Section 5: TC organization&lt;br&gt;Section 6: E2E summary&lt;br&gt;Section 10: coverage matrix&lt;br&gt;Section 10.2: TC mapping" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="875" y="390" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="update-readme" value="&lt;b&gt;Update README&lt;/b&gt;&lt;br&gt;&lt;br&gt;add Test Cases section&lt;br&gt;link to INDEX.md&lt;br&gt;count + priority breakdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="660" y="395" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="coverage" value="&lt;b&gt;Coverage Validation&lt;/b&gt;&lt;br&gt;&lt;br&gt;endpoint coverage check&lt;br&gt;E2E coverage for P0&lt;br&gt;test objective coverage&lt;br&gt;priority distribution&lt;br&gt;gap cross-reference&lt;br&gt;append to TestPlanGaps.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="400" y="375" width="210" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate" value="&lt;b&gt;Validate Frontmatter&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_test_cases.py&lt;br&gt;check all TC files&lt;br&gt;fix + re-run on error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="170" y="395" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_preflight" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="preflight" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preflight_readplan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="read-plan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_readplan_readgaps" value="TestPlan.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-plan" target="read-gaps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_readgaps_readtemplate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-gaps" target="read-template" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_readtemplate_regencheck" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-template" target="regen-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_regencheck_generate_create" value="create" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="regen-check" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1280" y="82"/>
+          <mxPoint x="1280" y="65"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_regencheck_generate_regen" value="regenerate
+(user confirms)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="regen-check" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1280" y="113"/>
+          <mxPoint x="1280" y="131"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_generate_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate" target="tc-example" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1310" y="180"/>
+          <mxPoint x="1205" y="180"/>
+          <mxPoint x="1205" y="210"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_generate_genindex" value="TC-*.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate" target="gen-index" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1510" y="180"/>
+          <mxPoint x="1510" y="365"/>
+          <mxPoint x="1175" y="365"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_genindex_updateplan" value="INDEX.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-index" target="update-plan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_updateplan_updatereadme" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update-plan" target="update-readme" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_updatereadme_coverage" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update-readme" target="coverage" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_coverage_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="coverage" target="validate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_generate_back" value="errors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" source="validate" target="generate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="260" y="560"/>
+          <mxPoint x="1520" y="560"/>
+          <mxPoint x="1520" y="180"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

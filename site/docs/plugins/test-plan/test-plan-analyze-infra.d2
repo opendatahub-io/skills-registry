@@ -1,0 +1,110 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- External ---
+
+orchestrator: |md
+  **test-plan-create**
+  (orchestrator)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Entry ---
+
+entry: |md
+  **analyze-infra**
+  LLM sub-agent (Sonnet)
+
+  - file paths from orchestrator
+  - context: fork
+  - allowed tools: Read
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Read ---
+
+read-inputs: |md
+  **Read Source Documents**
+
+  - strategy files (strat-tasks/)
+  - ADR files (if provided)
+  - additional docs
+  - ONLY specified files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analysis branches ---
+
+env-config: |md
+  **Extract Environment**
+  LLM analysis
+
+  - cluster config (OCP, RHOAI)
+  - test data requirements
+  - test users / RBAC roles
+  - mark unknowns as TBD
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+infra-tools: |md
+  **Extract Infra & Tools**
+  LLM analysis
+
+  - cluster requirements
+  - operator dependencies
+  - configuration (env vars, CMs)
+  - test tools (kubectl, curl...)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Structured Output**
+
+  - Section 3: Test Environment
+  - Section 9: Infra & Tools
+  - Gaps with resolution paths
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+orchestrator -> entry: "file paths"
+entry -> read-inputs
+read-inputs -> env-config: "strategy + ADR content"
+read-inputs -> infra-tools
+env-config -> output
+infra-tools -> output

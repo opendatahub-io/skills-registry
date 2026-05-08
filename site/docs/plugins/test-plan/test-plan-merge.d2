@@ -1,0 +1,120 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- External ---
+
+orchestrator: |md
+  **test-plan-update**
+  (orchestrator)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Entry ---
+
+entry: |md
+  **test-plan-merge**
+  LLM sub-agent (Sonnet)
+
+  - old TestPlan.md content
+  - new analyzer findings
+  - new document list
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Parse ---
+
+parse-old: |md
+  **Parse Old TestPlan.md**
+
+  - extract sections 1-4, 7-9
+  - store baseline content
+  - identify user customizations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+parse-new: |md
+  **Parse New Findings**
+
+  - endpoints: scope, endpoints
+  - risks: types, priorities, NFRs
+  - infra: env, data, deps
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Merge ---
+
+merge: |md
+  **Intelligent Merge**
+  LLM analysis
+
+  - additive: add new, keep existing
+  - update contradictions
+  - preserve user edits
+  - skip test case sections (5,6,10)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+change-summary: |md
+  **Change Summary**
+
+  - sections updated count
+  - items added / updated / deprecated
+  - user edits preserved count
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+output: |md
+  **Structured Output**
+
+  - updated section content
+  - change summary
+  - merge statistics
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+orchestrator -> entry: "inline content"
+entry -> parse-old
+entry -> parse-new
+parse-old -> merge: "baseline sections"
+parse-new -> merge: "new findings"
+merge -> change-summary
+change-summary -> output

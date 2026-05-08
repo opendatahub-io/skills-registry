@@ -1,0 +1,144 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- External ---
+
+caller: |md
+  **case-implement**
+  (parallel per file)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Entry ---
+
+entry: |md
+  **generate-test-file**
+  LLM sub-agent (Opus)
+
+  - file_path, file_index
+  - test_cases array
+  - framework, conventions
+  - pattern_guide, repo_instructions
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Check Existing ---
+
+check-existing: |md
+  **Check Existing File**
+
+  - list_test_functions.py
+  - semantic match vs TCs
+  - ask user: skip/regen/review
+  - set mode: create/append
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate ---
+
+generate: |md
+  **Generate Test Functions**
+  LLM code generation
+
+  - header + imports + fixtures
+  - per TC: decorators, signature
+  - AAA pattern (Arrange/Act/Assert)
+  - follow conventions priority
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Validate ---
+
+validate: |md
+  **Validate Syntax**
+
+  - py_compile check
+  - fix once if error
+  - save as .draft if still invalid
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Score ---
+
+score-fn: |md
+  **Score Quality**
+
+  - /score-test-function (parallel)
+  - 7-10: accept
+  - 4-6: auto-revise (max 1)
+  - 0-3: save as .draft
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External skill ---
+
+scorer: |md
+  **/score-test-function**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Output ---
+
+output: |md
+  **Return Result**
+
+  - write result to /tmp/
+  - tiny JSON confirmation
+  - parent reads full result
+  - cleanup temp files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+caller -> entry: "JSON prompt"
+entry -> check-existing
+check-existing -> generate
+generate -> validate: "complete file"
+validate -> score-fn
+score-fn -> scorer
+score-fn -> output
+
+validate -> generate: "syntax error" {
+  style.stroke-dash: 3
+}
