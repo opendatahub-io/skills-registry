@@ -27,6 +27,9 @@ and generate enriched documentation pages with SVG diagrams for the skills-regis
 
 - `<plugin-name>` — Name of the plugin as it appears in `registry.yaml` (e.g., `rfe-creator`).
   If omitted, list available plugins and ask the user to choose.
+- `--no-diagrams` — Skip diagram generation (Steps 5-6). Only clone, read SKILL.md files,
+  and generate the enrichment YAML. Useful for refreshing descriptions, arguments, and
+  argument hints without the slow diagram pipeline.
 
 ## Instructions
 
@@ -117,11 +120,17 @@ remaining skills.
 Extract from each SKILL.md:
 - **Frontmatter** fields (description, allowed-tools, user-invocable, argument-hint, etc.)
 - **Detailed description** — the full markdown content beyond the frontmatter
-- **Arguments** — look for "Parse Arguments", "Arguments", "Usage" sections. Extract from
-  markdown tables, bullet lists, or usage code blocks. Capture: name, type/format,
-  required/optional, default value, description. For positional arguments, use descriptive
-  names (e.g., "input", "plugin-name"). Also extract usage examples (invocation patterns
-  like `/skill-name arg1 arg2`). If the frontmatter has `argument-hint`, use it as a guide.
+- **argument-hint** — if present in frontmatter, store it as `argument_hint` in the
+  enrichment. Then use it as the starting point for building the arguments list:
+  parse each token (`<NAME>` = required, `[NAME]` = optional, `--flag` = flag),
+  then search the SKILL.md body for descriptions of each argument name. Look for
+  the argument name in headings, table rows, bullet lists, or prose near "Parse
+  Arguments", "Inputs", "Arguments", or "Usage" sections.
+- **Arguments** — look for "Parse Arguments", "Arguments", "Usage", "Inputs" sections.
+  Extract from markdown tables, bullet lists, or usage code blocks. Capture: name,
+  type/format, required/optional, default value, description. If `argument-hint`
+  was already parsed, merge — the hint provides names and required/optional status,
+  the body provides descriptions and types.
 - **Usage examples** — any example invocations or usage patterns
 - **Input/output** — what the skill takes and produces
 - **Architecture notes** — how the skill works internally (sub-agents, scripts, prompts)
@@ -143,15 +152,22 @@ skills:
   skill-name:
     description: |
       Detailed description from the SKILL.md content.
+    argument_hint: "<REQUIRED_ARG> [OPTIONAL_ARG] --flag"
     arguments:
+      - name: "REQUIRED_ARG"
+        required: true
+        description: "Description inferred from SKILL.md body"
+      - name: "OPTIONAL_ARG"
+        required: false
+        description: "Description inferred from SKILL.md body"
       - name: "--flag"
         type: "(value type)"
         required: false
         default: "default-value"
         description: "What this argument does"
     usage_examples:
+      - "/skill-name <REQUIRED_ARG> [OPTIONAL_ARG]"
       - "/skill-name --flag value"
-      - "/skill-name positional-arg"
   # ... repeat for each skill
 ```
 
@@ -159,6 +175,8 @@ The description should be richer than the one-line registry description — it s
 explain what the plugin does, why, and how. Keep it concise but informative (2-4 paragraphs).
 
 ### 5. Generate pipeline diagram
+
+**Skip this step if `--no-diagrams` is set.**
 
 Invoke `/skill-diagram` to create a pipeline diagram showing all skills in the plugin.
 The `--layout` flag chains to `/diagram-layout` automatically — do not invoke diagram-layout
@@ -176,6 +194,8 @@ mv site/docs/plugins/<plugin-name>/pipeline.drawio.svg site/docs/plugins/<plugin
 ```
 
 ### 6. Generate individual skill diagrams
+
+**Skip this step if `--no-diagrams` is set.**
 
 For each skill, invoke `/skill-diagram` to create a detailed architecture diagram.
 Use sub-agents with `run_in_background: true` to generate diagrams **in parallel** —
