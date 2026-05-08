@@ -91,7 +91,7 @@
       },
       "category": "evaluation",
       "description": "End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.\n",
-      "homepage": "https://github.com/fege/test-plan",
+      "homepage": "https://github.com/opendatahub-io/odh-test-gen",
       "keywords": [
         "test-plan",
         "test-cases",
@@ -104,17 +104,13 @@
         "ui-testing"
       ],
       "name": "test-plan",
-      "repository": "https://github.com/fege/test-plan",
-      "skills": [
-        "./.claude/skills"
-      ],
+      "repository": "https://github.com/opendatahub-io/odh-test-gen",
       "source": {
         "ref": "main",
-        "repo": "fege/test-plan",
+        "repo": "opendatahub-io/odh-test-gen",
         "source": "github"
       },
-      "strict": false,
-      "version": "0.2.0"
+      "version": "1.0.0"
     },
     {
       "author": {

@@ -185,69 +185,67 @@ plugins:
       UI tests against live clusters via Playwright, publish to GitHub with PR
       creation, resolve review feedback, and score quality with automated rubrics
       using parallel sub-agent analysis.
-    version: "0.2.0"
+    version: "1.0.0"
     category: evaluation
     tags: [test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing]
     author:
       name: Federico Mosca
     source:
       type: github
-      repo: fege/test-plan
+      repo: opendatahub-io/odh-test-gen
       ref: main
-    strict: false
-    skills_dir: .claude/skills
-    homepage: https://github.com/fege/test-plan
-    repository: https://github.com/fege/test-plan
+    homepage: https://github.com/opendatahub-io/odh-test-gen
+    repository: https://github.com/opendatahub-io/odh-test-gen
     skills:
-      - name: test-plan.create
+      - name: test-plan-create
         description: Generate a test plan from a strategy
         user-invocable: true
-      - name: test-plan.create-cases
+      - name: test-plan-create-cases
         description: Generate test case files from a test plan
         user-invocable: true
-      - name: test-plan.update
+      - name: test-plan-update
         description: Update test plan with new docs (ADR, API specs), re-analyze, bump version
         user-invocable: true
-      - name: test-plan.case-implement
+      - name: test-plan-case-implement
         description: Generate executable test automation code from TC specifications with intelligent placement
         user-invocable: true
-      - name: test-plan.ui-verify
+      - name: test-plan-ui-verify
         description: Verify UI test cases from a PR against a live ODH/RHOAI cluster via Playwright; supports upgrade testing workflow
         user-invocable: true
-      - name: test-plan.publish
+      - name: test-plan-publish
         description: Publish test plan artifacts to GitHub with PR creation
         user-invocable: true
-      - name: test-plan.resolve-feedback
+      - name: test-plan-resolve-feedback
         description: Assess and resolve PR review comments on test plans
         user-invocable: true
-      - name: test-plan.score
+      - name: test-plan-score
         description: Score test plan quality using rubric without auto-revision
         user-invocable: true
-      - name: test-plan.analyze.endpoints
+      - name: test-plan-analyze-endpoints
         description: Extract scope and API endpoints
         user-invocable: false
-      - name: test-plan.analyze.risks
+      - name: test-plan-analyze-risks
         description: Determine test levels, priorities, NFRs, and risks
         user-invocable: false
-      - name: test-plan.analyze.infra
+      - name: test-plan-analyze-infra
         description: Identify environment and infrastructure needs
         user-invocable: false
-      - name: test-plan.merge
+      - name: test-plan-merge
         description: Intelligently merge new analyzer findings into existing test plan
         user-invocable: false
-      - name: test-plan.resolve-gaps
+      - name: test-plan-resolve-gaps
         description: Cross-reference gaps with new findings to determine what's resolved
         user-invocable: false
-      - name: test-plan.analyze.placement
+      - name: test-plan-analyze-placement
         description: Analyze test cases and recommend placement (component repo vs downstream)
         user-invocable: false
-      - name: test-plan.review
+      - name: test-plan-review
         description: Review test plan with 5-criteria rubric and auto-revision
         user-invocable: false
-      - name: test-plan.create.test-function
-        description: Generate test function code from TC specification matching repo conventions
+      - name: test-plan-generate-test-file
+        description: Generate complete test file with all functions, quality scoring and auto-revision
         user-invocable: false
-      - name: test-plan.score.test-function
+      - name: test-plan-score-test-function
         description: Score generated test function code using 5-criteria quality rubric
         user-invocable: false
     harnesses:
