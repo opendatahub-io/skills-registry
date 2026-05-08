@@ -1,0 +1,12 @@
+---
+title: test-plan-analyze-infra
+---
+
+<!-- Auto-generated from registry.yaml. Do not edit directly. -->
+
+
+# test-plan-analyze-infra
+
+Identify environment and infrastructure needs
+
+**Plugin**: [test-plan](index.md) | **:material-close: Internal**

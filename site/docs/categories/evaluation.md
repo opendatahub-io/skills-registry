@@ -21,7 +21,7 @@ Assess RFEs against quality criteria using a structured rubric.
 
 End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
 
-**17 skills** · v0.2.0
+**17 skills** · v1.0.0
 
 ### [quality-tooling](../plugins/quality-tooling/index.md)
 

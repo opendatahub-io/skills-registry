@@ -80,23 +80,23 @@ nav:
       - security-reviewer: plugins/rhoai-security-reviewer/security-reviewer.md
     - test-plan:
       - plugins/test-plan/index.md
-      - test-plan.create: plugins/test-plan/test-plan.create.md
-      - test-plan.create-cases: plugins/test-plan/test-plan.create-cases.md
-      - test-plan.update: plugins/test-plan/test-plan.update.md
-      - test-plan.case-implement: plugins/test-plan/test-plan.case-implement.md
-      - test-plan.ui-verify: plugins/test-plan/test-plan.ui-verify.md
-      - test-plan.publish: plugins/test-plan/test-plan.publish.md
-      - test-plan.resolve-feedback: plugins/test-plan/test-plan.resolve-feedback.md
-      - test-plan.score: plugins/test-plan/test-plan.score.md
-      - test-plan.analyze.endpoints: plugins/test-plan/test-plan.analyze.endpoints.md
-      - test-plan.analyze.risks: plugins/test-plan/test-plan.analyze.risks.md
-      - test-plan.analyze.infra: plugins/test-plan/test-plan.analyze.infra.md
-      - test-plan.merge: plugins/test-plan/test-plan.merge.md
-      - test-plan.resolve-gaps: plugins/test-plan/test-plan.resolve-gaps.md
-      - test-plan.analyze.placement: plugins/test-plan/test-plan.analyze.placement.md
-      - test-plan.review: plugins/test-plan/test-plan.review.md
-      - test-plan.create.test-function: plugins/test-plan/test-plan.create.test-function.md
-      - test-plan.score.test-function: plugins/test-plan/test-plan.score.test-function.md
+      - test-plan-create: plugins/test-plan/test-plan-create.md
+      - test-plan-create-cases: plugins/test-plan/test-plan-create-cases.md
+      - test-plan-update: plugins/test-plan/test-plan-update.md
+      - test-plan-case-implement: plugins/test-plan/test-plan-case-implement.md
+      - test-plan-ui-verify: plugins/test-plan/test-plan-ui-verify.md
+      - test-plan-publish: plugins/test-plan/test-plan-publish.md
+      - test-plan-resolve-feedback: plugins/test-plan/test-plan-resolve-feedback.md
+      - test-plan-score: plugins/test-plan/test-plan-score.md
+      - test-plan-analyze-endpoints: plugins/test-plan/test-plan-analyze-endpoints.md
+      - test-plan-analyze-risks: plugins/test-plan/test-plan-analyze-risks.md
+      - test-plan-analyze-infra: plugins/test-plan/test-plan-analyze-infra.md
+      - test-plan-merge: plugins/test-plan/test-plan-merge.md
+      - test-plan-resolve-gaps: plugins/test-plan/test-plan-resolve-gaps.md
+      - test-plan-analyze-placement: plugins/test-plan/test-plan-analyze-placement.md
+      - test-plan-review: plugins/test-plan/test-plan-review.md
+      - test-plan-generate-test-file: plugins/test-plan/test-plan-generate-test-file.md
+      - test-plan-score-test-function: plugins/test-plan/test-plan-score-test-function.md
     - quality-tooling:
       - plugins/quality-tooling/index.md
       - quality-repo-analysis: plugins/quality-tooling/quality-repo-analysis.md

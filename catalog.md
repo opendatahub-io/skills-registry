@@ -38,20 +38,20 @@ Tags: rfe, rubric, quality, assessment
 
 End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.
 
-v0.2.0 | [fege/test-plan](https://github.com/fege/test-plan)
+v1.0.0 | [opendatahub-io/odh-test-gen](https://github.com/opendatahub-io/odh-test-gen)
 
 Tags: test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing
 
 | Skill | Description |
 |-------|-------------|
-| `/test-plan.create` | Generate a test plan from a strategy |
-| `/test-plan.create-cases` | Generate test case files from a test plan |
-| `/test-plan.update` | Update test plan with new docs (ADR, API specs), re-analyze, bump version |
-| `/test-plan.case-implement` | Generate executable test automation code from TC specifications with intelligent placement |
-| `/test-plan.ui-verify` | Verify UI test cases from a PR against a live ODH/RHOAI cluster via Playwright; supports upgrade testing workflow |
-| `/test-plan.publish` | Publish test plan artifacts to GitHub with PR creation |
-| `/test-plan.resolve-feedback` | Assess and resolve PR review comments on test plans |
-| `/test-plan.score` | Score test plan quality using rubric without auto-revision |
+| `/test-plan-create` | Generate a test plan from a strategy |
+| `/test-plan-create-cases` | Generate test case files from a test plan |
+| `/test-plan-update` | Update test plan with new docs (ADR, API specs), re-analyze, bump version |
+| `/test-plan-case-implement` | Generate executable test automation code from TC specifications with intelligent placement |
+| `/test-plan-ui-verify` | Verify UI test cases from a PR against a live ODH/RHOAI cluster via Playwright; supports upgrade testing workflow |
+| `/test-plan-publish` | Publish test plan artifacts to GitHub with PR creation |
+| `/test-plan-resolve-feedback` | Assess and resolve PR review comments on test plans |
+| `/test-plan-score` | Score test plan quality using rubric without auto-revision |
 
 ```bash
 /plugin install test-plan@opendatahub-skills
