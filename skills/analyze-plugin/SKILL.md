@@ -43,20 +43,74 @@ If the plugin name is not found, list available plugins and exit.
 Clone into `.tmp/skill-repos/<plugin-name>` inside the project directory (not a system
 temp dir — sub-agents need read access and can't access paths outside the project).
 
+If the directory already exists, check that it points to the correct repo:
+
+```bash
+if [ -d .tmp/skill-repos/<plugin-name> ]; then
+  remote=$(cd .tmp/skill-repos/<plugin-name> && git remote get-url origin 2>/dev/null)
+  if [ "$remote" != "https://github.com/<repo>.git" ]; then
+    echo "Repo URL changed ($remote → <repo>), re-cloning"
+    rm -rf .tmp/skill-repos/<plugin-name>
+  fi
+fi
+```
+
+If the directory doesn't exist (or was just deleted), clone fresh:
+
 ```bash
 mkdir -p .tmp/skill-repos
-rm -rf .tmp/skill-repos/<plugin-name>
 git clone --depth 1 --branch <ref> https://github.com/<repo>.git .tmp/skill-repos/<plugin-name>
 ```
 
+If the directory exists and the remote matches, pull latest:
+
+```bash
+cd .tmp/skill-repos/<plugin-name> && git pull --ff-only
+```
+
 The `.tmp/` directory is already in `.gitignore`.
+
+### 2.5. Clean up stale files
+
+Compare existing site files against the current registry skill names. Remove files
+from previous runs that no longer correspond to registered skills (e.g., after a
+skill rename from `test-plan.create` to `test-plan-create`).
+
+```bash
+# Build the set of expected file stems
+expected_stems="pipeline index _enriched"
+for skill in <registered skill names>; do
+  expected_stems="$expected_stems $skill"
+done
+
+# Remove orphaned diagram/page files
+for file in site/docs/plugins/<plugin-name>/*; do
+  stem=$(basename "$file" | sed 's/\.[^.]*$//')  # strip last extension
+  # Skip _enriched.yaml, index.md, pipeline.*, artifacts/
+  if echo "$expected_stems" | grep -qw "$stem"; then continue; fi
+  if [ -d "$file" ]; then continue; fi  # skip directories like artifacts/
+  echo "Removing stale file: $file"
+  rm -f "$file"
+done
+```
+
+This handles:
+- Skill renames (e.g., `test-plan.create` → `test-plan-create`)
+- Removed skills (skill deleted from registry but files remain)
+- Repo moves (old diagrams from previous repo version)
 
 ### 3. Read all SKILL.md files
 
 For each skill listed in the plugin's registry entry, read the corresponding SKILL.md file
 from the cloned repo at `<skills_dir>/<skill-name>/SKILL.md`.
 
-If a skill listed in `registry.yaml` is not found in the repo (wrong path, renamed, etc.),
+If a skill's SKILL.md is not found at the expected path, try common name transformations:
+- Replace `-` with `.` (dashes to dots): `test-plan-create` → `test-plan.create`
+- Replace `.` with `-` (dots to dashes): `test-plan.create` → `test-plan-create`
+
+Report any name mapping used so the user knows.
+
+If a skill listed in `registry.yaml` is not found in the repo after trying transformations,
 skip it and add it to the "skipped" list in the report. Do not fail — continue with the
 remaining skills.
 
@@ -130,10 +184,13 @@ sequential execution is too slow for plugins with many skills.
 ```
 Agent({
   description: "diagram <skill-name>",
-  prompt: "/skill-diagram --skill .tmp/skill-repos/<plugin-name>/<skills_dir>/<skill-name> --output site/docs/plugins/<plugin-name>/<skill-name> --layout",
+  prompt: "/skill-diagram --skill .tmp/skill-repos/<plugin-name>/<skills_dir>/<dir-name> --output site/docs/plugins/<plugin-name>/<skill-name> --layout",
   run_in_background: true
 })
 ```
+
+Use `<dir-name>` from the name mapping in Step 3 (the actual directory name in the repo).
+Use `<skill-name>` from the registry for the output path (so site files match registry names).
 
 Launch all skill diagram agents at once (or in batches of 6-8 if there are many).
 Wait for all to complete before proceeding.
