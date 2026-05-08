@@ -1,0 +1,176 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/vllm-compare-reqs**
+
+  - version1, version2
+  - variant or file path
+  - --pretty (default)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Input Resolution ---
+
+resolve: |md
+  **Resolve Input**
+
+  - detect variant vs file
+  - map variant to file set
+  - rocm, cuda, cpu, tpu, xpu
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch variants ---
+
+fetch-variant: |md
+  **Fetch Variant Bundle**
+  (rocm, cuda, cpu, tpu, xpu)
+
+  - common.txt (shared deps)
+  - variant.txt (runtime)
+  - variant-build.txt (build)
+  - Dockerfile.variant
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+fetch-file: |md
+  **Fetch Single File**
+  (specific file path)
+
+  - requirements file, or
+  - Dockerfile path
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- GitHub ---
+
+github: |md
+  **GitHub**
+  vllm-project/vllm
+
+  - raw file fetch per version
+  - handles 404 gracefully
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Compare ---
+
+compare: |md
+  **Compare Versions**
+
+  - parse requirements specs
+  - parse Dockerfile ARGs
+  - categorize: added,
+    changed, removed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+display: |md
+  **Format Output**
+
+  - summary table (all files)
+  - per-file detail sections
+  - added, changed, removed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- AI Analysis ---
+
+analysis: |md
+  **Impact Analysis**
+  LLM
+
+  - impact level assessment
+  - AIPCC wheels builder impact
+  - new package details
+  - Dockerfile ARG changes
+  - next steps and action items
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Callout: variant mapping ---
+
+variant-map: |md
+  rocm  common + rocm + rocm-build
+        + Dockerfile.rocm_base
+  cuda  common + cuda
+        + Dockerfile
+  cpu   common + cpu + cpu-build
+        + Dockerfile.cpu
+  tpu   common + tpu
+        + Dockerfile.tpu
+  xpu   common + xpu
+        + Dockerfile.xpu
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> resolve
+resolve -> fetch-variant: "variant name"
+resolve -> fetch-file: "specific file"
+
+fetch-variant -> github
+fetch-file -> github
+
+github -> compare: "file contents\n(both versions)"
+
+compare -> display: "change sets"
+display -> analysis
+
+# --- Callout edge ---
+
+resolve -> variant-map: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

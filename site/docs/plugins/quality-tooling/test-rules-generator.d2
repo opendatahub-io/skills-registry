@@ -1,0 +1,287 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-rules-generator**
+
+  - [repository-url]
+  - optional: test type focus
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 1: Repository Discovery ---
+
+clone: |md
+  **Clone & Scan**
+
+  - git clone to /tmp
+  - find test directories
+  - identify primary language
+  - detect frameworks
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+git: |md
+  **Git**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+detect: |md
+  **Detect Test Types**
+
+  - unit: *_test.go, *.spec.ts
+  - mock: cypress/tests/mocked/
+  - e2e: e2e/, integration/
+  - contract: contract-tests/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+infra: |md
+  **Identify Infrastructure**
+
+  - mock factories, fixtures
+  - page objects
+  - test utilities, helpers
+  - config: jest, cypress, pytest
+  - CI workflows
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 2: Pattern Extraction (container) ---
+
+extraction: Pattern Extraction {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  sample: |md
+    **Collect Samples**
+    LLM analysis
+
+    - 5-10 files per type
+    - recently modified
+    - varying complexity
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  extract: |md
+    **Extract Patterns**
+    LLM analysis
+
+    - file structure & naming
+    - describe/it conventions
+    - mock/stub patterns
+    - assertion styles
+    - setup/teardown
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  framework: |md
+    **Framework Specifics**
+    LLM analysis
+
+    - Jest / React Testing Lib
+    - Cypress (E2E / mock)
+    - Go testing package
+    - contract frameworks
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  sample -> extract
+  extract -> framework
+}
+
+# --- Phase 3: Rule Generation ---
+
+gen-rules: |md
+  **Generate Rule Files**
+  LLM generation
+
+  - testing-standards.md
+  - unit-tests.md (always)
+  - mock-tests.md (if found)
+  - e2e-tests.md (if found)
+  - contract-tests.md (if found)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Rule template callout ---
+
+rule-template: |md
+  Each rule file contains:
+    description + globs
+    when to write this type
+    framework & tools table
+    file naming & location
+    pattern examples from repo
+    DO / DON'T best practices
+    implementation checklist
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Phase 4: Supporting Files ---
+
+gen-support: |md
+  **Generate Support Files**
+
+  - .claude/rules/README.md
+  - TEST-RULES-ANALYSIS.md
+  - summary of findings
+  - gap recommendations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 5: Validation ---
+
+validate: |md
+  **Validate Rules**
+
+  - completeness check
+  - accuracy vs repo code
+  - file paths correct
+  - framework versions match
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+test-apply: |md
+  **Test Application**
+  LLM generation
+
+  - create test from rules
+  - verify pattern match
+  - confirm lint passes
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Output**
+
+  - .claude/rules/ directory
+  - TEST-RULES-ANALYSIS.md
+  - rules ready for agent use
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output tree callout ---
+
+output-tree: |md
+  .claude/
+    rules/
+      testing-standards.md
+      unit-tests.md
+      mock-tests.md
+      e2e-tests.md
+      contract-tests.md
+      README.md
+  TEST-RULES-ANALYSIS.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> clone
+clone -> git: {
+  style.stroke-dash: 3
+}
+clone -> detect
+detect -> infra
+infra -> extraction: "per test type"
+extraction -> gen-rules: "patterns"
+
+gen-rules -> rule-template: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+gen-rules -> gen-support
+gen-support -> validate
+validate -> test-apply
+test-apply -> validate: "adjust rules" {
+  style.stroke-dash: 3
+}
+test-apply -> output
+
+output -> output-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

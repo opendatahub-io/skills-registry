@@ -1,0 +1,98 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/feasibility-review**
+  forked sub-agent
+
+  - `artifacts/strat-tasks/`
+  - `artifacts/rfe-tasks/`
+  - Model: opus
+  - Tools: Read, Grep, Glob
+| {style.fill: "#e0e7ff"; style.stroke: "#4338ca"; style.stroke-width: 2}
+
+# --- Cross-reference RFEs ---
+
+cross-ref: |md
+  **Cross-reference RFEs**
+
+  - Read source RFEs
+  - Verify strategy delivers
+    stated business need
+  - Match deliverables to
+    acceptance criteria
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Check for prior reviews ---
+
+check-reviews: |md
+  **Prior Reviews?**
+
+  `strat-reviews/` exists?
+| {
+  style.fill: "#fef9c3"
+  style.stroke: "#a16207"
+  style.stroke-width: 1
+  shape: diamond
+}
+
+# --- Architecture context ---
+
+arch-context: |md
+  **Architecture Context**
+
+  `.context/architecture-context/`
+  `PLATFORM.md` + components
+  Ground in real architecture
+| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+
+# --- Initial assessment ---
+
+initial: |md
+  **Initial Assessment**
+
+  1. Can we build this?
+  2. Does it deliver the RFE?
+  3. Effort estimate credible?
+  4. Hidden dependencies?
+  5. What's harder than it looks?
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Re-review mode ---
+
+re-review: |md
+  **Re-review Mode**
+
+  - What concerns addressed?
+  - What concerns remain?
+  - New issues from revisions?
+| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+# --- Output ---
+
+output: |md
+  **Review Output**
+  per strategy
+
+  - Feasibility verdict
+  - Effort estimate check
+  - RFE alignment
+  - Key concerns
+  - Recommendation
+| {style.fill: "#dcfce7"; style.stroke: "#16a34a"; style.stroke-width: 2}
+
+# --- Edges ---
+
+entry -> cross-ref
+cross-ref -> check-reviews
+cross-ref -> arch-context: "if available" {style.stroke-dash: 3}
+check-reviews -> initial: "first review"
+check-reviews -> re-review: "re-review"
+initial -> output
+re-review -> output

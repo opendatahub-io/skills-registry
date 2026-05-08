@@ -1,0 +1,146 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe.create**
+
+  - --headless
+  - --priority \<value\>
+  - --labels \<csv\>
+  - --rfe-id \<ID\>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Load Rubric ---
+
+load-rubric: |md
+  **Load Rubric**
+
+  - check artifacts/rfe-rubric.md
+  - bootstrap assess-rfe plugin
+  - shape questions from criteria
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+export-rubric: |md
+  **/export-rubric**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Clarifying Questions ---
+
+clarify: |md
+  **Clarifying Questions**
+  LLM
+
+  - 2-5 targeted questions
+  - customers, justification
+  - user problem, scope
+  - success criteria
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Generate RFEs ---
+
+generate: |md
+  **Generate RFEs**
+  LLM
+
+  - apply rfe-template.md
+  - WHAT/WHY only, no HOW
+  - one RFE per business need
+  - right-size by S/M/L/XL
+  - Jira priority values
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Write Artifacts ---
+
+write: |md
+  **Write Artifacts**
+
+  - next_rfe_id.py for IDs
+  - frontmatter.py set fields
+  - rebuild-index
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+output: |md
+  **Output**
+
+  - artifacts/rfe-tasks/RFE-NNN.md
+  - suggest /rfe.review
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Downstream ---
+
+rfe-review: |md
+  **/rfe.review**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> load-rubric
+
+load-rubric -> export-rubric: "missing" {
+  style.stroke-dash: 3
+}
+
+load-rubric -> clarify
+load-rubric -> generate: "--headless"
+
+clarify -> generate
+
+generate -> write: "RFE-NNN.md"
+
+write -> output
+
+output -> rfe-review: "next step" {
+  style.stroke-dash: 3
+}

@@ -1,0 +1,169 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/test-plan.case-implement&lt;/b&gt;&lt;br&gt;&lt;br&gt;FEATURE_SOURCE&lt;br&gt;--test-cases TC-IDs&lt;br&gt;--target-repo PATH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="220" width="140" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="preflight" value="&lt;b&gt;Pre-flight&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="195" width="360" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch" value="&lt;b&gt;Fetch Artifacts&lt;/b&gt;&lt;br&gt;&lt;br&gt;GitHub branch or local path&lt;br&gt;clone/checkout if remote&lt;br&gt;validate TestPlan.md exists&lt;br&gt;check test_cases/ directory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="preflight">
+      <mxGeometry x="15" y="35" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="identify-repo" value="&lt;b&gt;Identify Code Repo&lt;/b&gt;&lt;br&gt;&lt;br&gt;extract components from&lt;br&gt;frontmatter + content&lt;br&gt;map components to repos&lt;br&gt;user confirms target repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="preflight">
+      <mxGeometry x="190" y="35" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="odh-test-context" value="&lt;b&gt;odh-test-context&lt;/b&gt;&lt;br&gt;validated test conventions&lt;br&gt;for ~162 repos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="660" y="100" width="140" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="load-context" value="&lt;b&gt;Load Context&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="630" y="185" width="520" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect-framework" value="&lt;b&gt;Detect Framework&lt;/b&gt;&lt;br&gt;&lt;br&gt;pytest, unittest, playwright&lt;br&gt;robot, ginkgo, jest, cypress&lt;br&gt;from odh-test-context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="load-context">
+      <mxGeometry x="15" y="35" width="150" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="load-conventions" value="&lt;b&gt;Load Conventions&lt;/b&gt;&lt;br&gt;&lt;br&gt;file/function patterns&lt;br&gt;import style, markers&lt;br&gt;linting tools, directories&lt;br&gt;read repo CLAUDE.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="load-context">
+      <mxGeometry x="185" y="35" width="145" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="load-patterns" value="&lt;b&gt;Load Pattern Guides&lt;/b&gt;&lt;br&gt;&lt;br&gt;check .claude/rules/&lt;br&gt;if missing: auto-generate&lt;br&gt;pytest, go, typescript, cypress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="load-context">
+      <mxGeometry x="350" y="35" width="155" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="tiger-team" value="&lt;b&gt;/test-rules-generator&lt;/b&gt;&lt;br&gt;Tiger Team pattern guides" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1015" y="410" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="placement" value="&lt;b&gt;Placement Analysis&lt;/b&gt;&lt;br&gt;&lt;i&gt;sub-agent (forked)&lt;/i&gt;&lt;br&gt;&lt;br&gt;classify test level per TC&lt;br&gt;(unit, integration, api, e2e)&lt;br&gt;score same_repo vs downstream&lt;br&gt;user confirms or overrides" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="200" width="165" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="analyze-placement" value="&lt;b&gt;test-plan.analyze.placement&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1215" y="410" width="135" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="select-tcs" value="&lt;b&gt;Select Test Cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;parse --test-cases filter&lt;br&gt;skip already-implemented&lt;br&gt;read and parse TC files&lt;br&gt;confirm with user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1415" y="200" width="145" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="map-files" value="&lt;b&gt;Map TCs to Files&lt;/b&gt;&lt;br&gt;&lt;br&gt;by-category (default)&lt;br&gt;by-category-with-subdirs&lt;br&gt;one-per-tc or by-endpoint&lt;br&gt;present file mapping table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1415" y="340" width="145" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="generate" value="&lt;b&gt;Generate Tests&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1610" y="175" width="520" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="common-setup" value="&lt;b&gt;Identify Common Setup&lt;/b&gt;&lt;br&gt;&lt;br&gt;extract all preconditions&lt;br&gt;find shared across 2+ TCs&lt;br&gt;sort by usage count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="generate">
+      <mxGeometry x="15" y="45" width="140" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-functions" value="&lt;b&gt;Generate Test Functions&lt;/b&gt;&lt;br&gt;&lt;i&gt;parallel sub-agents&lt;/i&gt;&lt;br&gt;&lt;br&gt;one sub-agent per TC&lt;br&gt;uses conventions + patterns&lt;br&gt;uses repo instructions&lt;br&gt;framework-specific code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="generate">
+      <mxGeometry x="175" y="35" width="155" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate-syntax" value="&lt;b&gt;Validate &amp; Score&lt;/b&gt;&lt;br&gt;&lt;br&gt;py_compile syntax check&lt;br&gt;score quality (0-10)&lt;br&gt;auto-revise if score 4-6&lt;br&gt;flag rework if score 0-3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="generate">
+      <mxGeometry x="350" y="35" width="155" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="create-function" value="&lt;b&gt;test-plan.create.test-function&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1815" y="420" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="score-function" value="&lt;b&gt;test-plan.score.test-function&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1980" y="420" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="write-tests" value="&lt;b&gt;Write Tests&lt;/b&gt;&lt;br&gt;&lt;br&gt;create directories&lt;br&gt;write test files&lt;br&gt;validate imports in repo&lt;br&gt;optional container validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2180" y="195" width="145" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="summary" value="&lt;b&gt;Summary Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;files created with LOC&lt;br&gt;TC status table&lt;br&gt;quality scores&lt;br&gt;suggested fixtures&lt;br&gt;next steps (PR creation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2180" y="340" width="145" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="fetch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_identify" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch" target="identify-repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preflight_loadctx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="identify-repo" target="detect-framework" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_odh_detect" value="conventions
+framework" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="odh-test-context" target="detect-framework" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_detect_conventions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect-framework" target="load-conventions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_conventions_patterns" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="load-conventions" target="load-patterns" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_patterns_tiger" value="if no guides exist" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="load-patterns" target="tiger-team" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_loadctx_placement" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="load-patterns" target="placement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_placement_analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="placement" target="analyze-placement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_placement_select" value="placement decisions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="placement" target="select-tcs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1395" y="275"/>
+          <mxPoint x="1395" y="255"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_select_map" value="TC specs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="select-tcs" target="map-files" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_map_generate" value="file mapping" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="map-files" target="common-setup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1590" y="395"/>
+          <mxPoint x="1590" y="263"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_setup_gen" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="common-setup" target="gen-functions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gen_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-functions" target="validate-syntax" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gen_create" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-functions" target="create-function" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_score" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate-syntax" target="score-function" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_gen_back" value="revise (score 4-6)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate-syntax" target="gen-functions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2038" y="150"/>
+          <mxPoint x="1863" y="150"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_write" value="test files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="validate-syntax" target="write-tests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_write_summary" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="write-tests" target="summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_summary_fetch_back" value="commit updated TC frontmatter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="summary" target="fetch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2253" y="520"/>
+          <mxPoint x="313" y="520"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

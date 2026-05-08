@@ -1,0 +1,372 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ─── Entry ────────────────────────────────────────────────────
+
+entry: |md
+  **/eval-run**
+
+  - --config, --model, --skill
+  - --case, --baseline
+  - --no-judge, --gold, --effort
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Step 0: Load Config ─────────────────────────────────────
+
+load-config: |md
+  **Load Config**
+
+  - read eval.yaml
+  - verify skill, models, judges
+  - check tool interception coverage
+  - persist flags via state.py
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── External: /eval-analyze (bootstrap) ─────────────────────
+
+eval-analyze: |md
+  **/eval-analyze**
+
+  - bootstrap eval.yaml
+  - analyze skill under test
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ─── Step 1: Find Dataset ────────────────────────────────────
+
+find-dataset: |md
+  **Find Dataset**
+
+  - read dataset.path from config
+  - verify case subdirectories
+  - apply --case filter
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Step 2: Preflight Check ─────────────────────────────────
+
+preflight: |md
+  **Preflight Check**
+
+  - preflight.py
+  - check tmp/ state files
+  - detect previous run output
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Step 3: Prepare Workspace ───────────────────────────────
+
+workspace: |md
+  **Prepare Workspace**
+
+  - workspace.py
+  - isolated /tmp/agent-eval/{id}
+  - symlink project resources
+  - case or batch mode
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Workspace callout ───────────────────────────────────────
+
+workspace-tree: |md
+  /tmp/agent-eval/{id}/
+  cases/
+    case-001/
+      input.yaml
+      .claude/settings.json
+      hooks.py
+    case-002/
+      ...
+  case_order.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# ─── Step 3b: Tool Interception ──────────────────────────────
+
+resolve-tools: |md
+  **Resolve Tool Handlers**
+  LLM
+
+  - read tool_handlers.yaml
+  - resolve prompts to runtime checks
+  - add input_filters, env_checks
+  - verify Bash handlers have filters
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# ─── Step 4: Execute Skill ───────────────────────────────────
+
+execute: |md
+  **Execute Skill**
+
+  - execute.py (background)
+  - case mode: once per case
+  - batch mode: single invocation
+  - parallel via thread pool
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── External: Claude Code CLI ───────────────────────────────
+
+claude-code: |md
+  **Claude Code CLI**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ─── Monitor + Check ─────────────────────────────────────────
+
+monitor: |md
+  **Monitor Progress**
+
+  - poll output file
+  - detect stuck / errors
+  - report to user
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Step 5: Collect Artifacts ────────────────────────────────
+
+collect: |md
+  **Collect Artifacts**
+
+  - collect.py
+  - distribute outputs per case
+  - write collection.json
+  - warn on 0-artifact cases
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Step 6: Score (container) ────────────────────────────────
+
+scoring: Score {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  judges: |md
+    **Run Judges**
+    LLM + inline
+
+    - score.py judges
+    - inline checks (Python)
+    - LLM judges (prompt)
+    - external (module/function)
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  pairwise: |md
+    **Pairwise Comparison**
+    LLM
+
+    - score.py pairwise
+    - position-swapped A/B
+    - wins / losses / ties
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  judges -> pairwise: "--baseline"
+}
+
+# ─── External: Anthropic API ─────────────────────────────────
+
+anthropic-api: |md
+  **Anthropic API**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ─── Step 7: Report ──────────────────────────────────────────
+
+report: |md
+  **Analyze & Report**
+  LLM
+
+  - read summary.yaml
+  - analyze-results.md framework
+  - write analysis.md
+  - report.py → report.html
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# ─── Step 7b: Gold References ────────────────────────────────
+
+save-gold: |md
+  **Save Gold References**
+
+  - copy artifacts to dataset
+  - as reference files per case
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ─── Step 8: MLflow ──────────────────────────────────────────
+
+eval-mlflow: |md
+  **/eval-mlflow**
+
+  - log params, metrics, artifacts
+  - sync dataset to registry
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ─── Output: Next Steps ──────────────────────────────────────
+
+next-steps: |md
+  **Next Steps**
+
+  - /eval-review (human review)
+  - /eval-optimize (auto-improve)
+  - /eval-mlflow (tracking)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ═══ Edges ════════════════════════════════════════════════════
+
+# Entry → Config
+entry -> load-config
+entry -> eval-analyze: "config missing" {
+  style.stroke-dash: 3
+}
+eval-analyze -> load-config: "eval.yaml"
+
+# Config → Dataset
+load-config -> find-dataset
+
+# Dataset → Preflight
+find-dataset -> preflight: "cases found"
+
+# Preflight → Workspace
+preflight -> workspace: "CLEAN"
+preflight -> workspace: "DIRTY → clean" {
+  style.stroke-dash: 3
+}
+
+# Workspace
+workspace -> workspace-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+workspace -> resolve-tools: "inputs.tools"
+workspace -> execute: "no tools"
+resolve-tools -> execute: "tool_handlers.yaml"
+
+# Execute
+execute -> claude-code: "claude --print" {
+  style.stroke-dash: 3
+}
+execute -> monitor
+monitor -> collect: "run_result.json"
+
+# Collect → Score
+collect -> scoring.judges: "collection.json"
+
+# Score → external
+scoring.judges -> anthropic-api: "LLM judges" {
+  style.stroke-dash: 3
+}
+scoring.pairwise -> anthropic-api: "comparison" {
+  style.stroke-dash: 3
+}
+
+# Score → Report
+scoring -> report: "summary.yaml"
+
+# Report → outputs
+report -> save-gold: "--gold" {
+  style.stroke-dash: 3
+}
+report -> eval-mlflow: "mlflow configured" {
+  style.stroke-dash: 3
+}
+report -> next-steps

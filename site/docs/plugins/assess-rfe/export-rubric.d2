@@ -1,0 +1,66 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/export-rubric**
+
+  - No arguments
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Processing ---
+
+resolve: |md
+  **Resolve Plugin Root**
+
+  - Locate SKILL.md path
+  - Navigate two levels up
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+export: |md
+  **Run export_rubric.py**
+
+  - Extract rubric from
+    agent_prompt.md
+  - Write artifacts/rfe-rubric.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+confirm: |md
+  **Confirm Output**
+
+  - Verify file written
+  - Print file path
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> resolve
+resolve -> export: "plugin root path"
+export -> confirm: "artifacts/rfe-rubric.md"

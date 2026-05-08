@@ -1,0 +1,122 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **rfe-feasibility-review**
+  internal sub-agent
+
+  - Receives RFE ID
+  - model: opus
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read RFE ---
+
+read-rfe: |md
+  **Read RFE**
+
+  - artifacts/rfe-tasks/{ID}.md
+  - {ID}-comments.md (if exists)
+  - Stakeholder context
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Architecture context ---
+
+arch-context: |md
+  **Architecture Context**
+
+  - .context/architecture-context/
+  - PLATFORM.md + components
+  - Skip if unavailable
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Prior review ---
+
+prior-review: |md
+  **Prior Review**
+
+  - rfe-review-report.md
+  - What was addressed?
+  - What remains?
+  - New issues from revisions?
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess ---
+
+assess: |md
+  **Feasibility Assessment**
+  LLM (opus)
+
+  - Technically feasible?
+  - Architectural conflicts?
+  - Strategy alignment?
+  - Scope realistic?
+  - Hidden complexities?
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+write-output: |md
+  **Write Assessment**
+
+  - rfe-reviews/{ID}-feasibility.md
+  - Verdict: feasible /
+    infeasible / indeterminate
+  - Strategy considerations
+  - Blockers + scope assessment
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+entry -> read-rfe
+
+read-rfe -> arch-context: {
+  style.stroke-dash: 3
+}
+
+read-rfe -> prior-review: "if re-review"
+
+prior-review -> assess
+
+arch-context -> assess: {
+  style.stroke-dash: 3
+}
+
+assess -> write-output

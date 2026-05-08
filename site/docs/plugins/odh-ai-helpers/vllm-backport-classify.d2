@@ -1,0 +1,29 @@
+direction: right
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-backport-classify**
+  - --input raw-prs.json
+  - --repo, --tag, --output
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+classify: |md
+  **Classify & Filter**
+  - classify-and-filter.py
+  - Type: runtime_bug,
+    platform_specific, unclear
+  - File existence at tag
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+output-node: |md
+  **Output**
+  - filtered.json
+  - Typed + filtered candidates
+  - "unclear" → agent review
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+entry -> classify: "raw-prs.json"
+classify -> output-node: "filtered.json"

@@ -1,0 +1,177 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan.resolve-feedback**
+
+  - PR_URL (required)
+  - interactive fallback
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Preflight ---
+
+preflight: |md
+  **Pre-flight Checks**
+
+  - gh auth status
+  - validate PR exists
+  - locate/clone repo
+  - checkout PR branch
+  - find feature directory
+  - validate frontmatter
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Collect ---
+
+collect: |md
+  **Collect Comments**
+
+  - gh pr view (comments, reviews)
+  - gh api (inline comments)
+  - filter bots, LGTM, resolved
+  - build actionable list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read ---
+
+read-plan: |md
+  **Read Test Plan**
+
+  - TestPlan.md
+  - TestPlanGaps.md (if exists)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess ---
+
+assess: |md
+  **Assess & Present**
+  LLM + user interaction
+
+  - per-comment assessment
+  - aligns / conflicts / covered
+  - AskUser: Apply / Skip / Discuss
+  - running tally
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Apply ---
+
+apply-changes: |md
+  **Apply Changes**
+
+  - Edit TestPlan.md
+  - update TC-*.md files
+  - update INDEX.md
+  - frontmatter.py set
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate & Push ---
+
+validate: |md
+  **Validate & Push**
+
+  - frontmatter.py validate
+  - bump version patch
+  - confirm with user
+  - git commit + push
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+confirm: |md
+  **Summary**
+
+  - applied N / skipped M
+  - version delta
+  - PR updated
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+github: |md
+  **GitHub**
+  PR comments + branch
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Edges ---
+
+entry -> preflight
+preflight -> collect
+collect -> read-plan
+read-plan -> assess
+
+assess -> apply-changes: "accepted items"
+apply-changes -> validate
+validate -> confirm
+
+# Back-edge: discuss loop
+assess -> assess: "Discuss" {
+  style.stroke-dash: 3
+}
+
+# No actionable comments
+collect -> confirm: "none found" {
+  style.stroke-dash: 3
+}
+
+# External connections
+preflight -> github
+collect -> github
+validate -> github: "git push"
+
+# Validate retry
+validate -> validate: "errors" {
+  style.stroke-dash: 3
+}

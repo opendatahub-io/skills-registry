@@ -1,0 +1,145 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+adr-review: |md
+  **/adr-review**
+
+  - 6 specialist reviewers
+  - Consolidated PDF/PPTX
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+gitlab-pipeline-debugger: |md
+  **/gitlab-pipeline-debugger**
+
+  - Pipeline status
+  - Job logs & debugging
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+git-shallow-clone: |md
+  **/git-shallow-clone**
+
+  - Shallow clone to tmp
+  - Local analysis prep
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+jira-upload-chat-log: |md
+  **/jira-upload-chat-log**
+
+  - Export chat as markdown
+  - Attach to Jira ticket
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+python-full-deps: |md
+  **/python-full-deps**
+
+  - Full dependency tree
+  - Environment markers
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+source-finder: |md
+  **/python-packaging-source-finder**
+
+  - Locate source repos
+  - PyPI + code hosting
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+license-finder: |md
+  **/python-packaging-license-finder**
+
+  - PyPI metadata
+  - Git LICENSE fallback
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+license-checker: |md
+  **/python-packaging-license-checker**
+
+  - Red Hat redistribution
+  - Fedora license policy
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+complexity: |md
+  **/python-packaging-complexity**
+
+  - Build complexity
+  - Compilation needs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+env-finder: |md
+  **/python-packaging-env-finder**
+
+  - Build env vars
+  - setup.py / CMake
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+bug-finder: |md
+  **/python-packaging-bug-finder**
+
+  - Known packaging bugs
+  - GitHub issue search
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# Python packaging flow
+source-finder -> license-finder {style.stroke-dash: 3}
+license-finder -> license-checker {style.stroke-dash: 3}
+source-finder -> complexity {style.stroke-dash: 3}
+source-finder -> bug-finder {style.stroke-dash: 3}

@@ -1,0 +1,122 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-backport-cherry-pick**
+
+  - --input ranked.json
+  - --downstream repo path
+  - --branch target branch
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+filter-candidates: |md
+  **Filter Candidates**
+
+  - backport_ease = ai-fixable
+  - score >= 50
+  - not already backported
+  - must/likely verdict
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+setup-branch: |md
+  **Setup Branch**
+
+  - Create backport branch
+  - From target branch
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+cherry-pick-loop: |md
+  **Cherry-Pick Loop**
+
+  - git cherry-pick per PR
+  - Track success/conflict
+  - Continue on conflict
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+create-pr: |md
+  **Create Draft PR**
+
+  - gh pr create --draft
+  - Link Jira + report URLs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+agent-review: |md
+  **Agent Follow-up**
+  LLM validation
+
+  - Semantic diff review
+  - Check imports exist
+  - Comment on PR if issues
+  - Update Jira ticket
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+result: |md
+  **Result**
+
+  - cherry-pick-result.json
+  - succeeded/conflict counts
+  - PR URL
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+github: |md
+  **GitHub**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> filter-candidates: "ranked.json"
+filter-candidates -> setup-branch: "eligible PRs"
+setup-branch -> cherry-pick-loop
+cherry-pick-loop -> create-pr: "any succeeded"
+create-pr -> agent-review
+agent-review -> result
+
+create-pr -> github: "gh pr create" {
+  style.stroke-dash: 3
+}

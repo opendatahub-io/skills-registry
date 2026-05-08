@@ -1,0 +1,46 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="meeting-doc" value="&lt;b&gt;Meeting Document&lt;/b&gt;&lt;br&gt;&lt;br&gt;shared Google Doc or text&lt;br&gt;attendee list&lt;br&gt;pre-meeting updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="130" width="160" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="async-update-check" value="&lt;b&gt;/meeting-async-update-check&lt;/b&gt;&lt;br&gt;&lt;br&gt;parse attendee list and document&lt;br&gt;match updates to attendees&lt;br&gt;classify: updated / missing / uncertain&lt;br&gt;generate reminder message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="260" y="30" width="195" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="risk-agenda" value="&lt;b&gt;/meeting-risk-agenda&lt;/b&gt;&lt;br&gt;&lt;br&gt;detect risk signals in updates&lt;br&gt;classify: blocked / at-risk / no issues&lt;br&gt;extract owners&lt;br&gt;generate prioritized agenda" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="260" y="210" width="195" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="update-report" value="&lt;b&gt;Attendance Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;who updated / who didn't&lt;br&gt;organizer summary&lt;br&gt;reminder to send" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="530" y="40" width="170" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="risk-report" value="&lt;b&gt;Risk-Focused Agenda&lt;/b&gt;&lt;br&gt;&lt;br&gt;blocked items first&lt;br&gt;at-risk items second&lt;br&gt;meeting skip suggestion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="530" y="225" width="170" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="attendee list +
+document" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="meeting-doc" target="async-update-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="225" y="163"/>
+          <mxPoint x="225" y="100"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="update content" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="meeting-doc" target="risk-agenda" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="225" y="207"/>
+          <mxPoint x="225" y="280"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="async-update-check" target="update-report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" edge="1" source="risk-agenda" target="risk-report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

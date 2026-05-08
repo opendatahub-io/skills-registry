@@ -1,0 +1,18 @@
+---
+title: test-plan.create.test-function
+---
+
+<!-- Auto-generated from registry.yaml. Do not edit directly. -->
+
+
+# test-plan.create.test-function
+
+Generate test function code from TC specification matching repo conventions
+
+**Plugin**: [test-plan](index.md) | **:material-close: Internal**
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![test-plan.create.test-function diagram](test-plan.create.test-function.svg)
+</div>

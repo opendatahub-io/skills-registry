@@ -1,0 +1,91 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe.submit**
+
+  - --dry-run
+  - --artifacts-dir
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Check Credentials ---
+
+creds: |md
+  **Check Credentials**
+
+  - JIRA_SERVER
+  - JIRA_USER
+  - JIRA_TOKEN
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Submit ---
+
+submit: |md
+  **Run Submission**
+
+  - submit.py script
+  - create or update tickets
+  - apply labels automatically
+  - conflict detection
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report Results**
+
+  - read artifacts/rfes.md
+  - report created/updated
+  - report errors
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+jira: |md
+  **Jira REST API**
+  RHAIRFE project
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> creds
+
+creds -> submit: "credentials present"
+
+submit -> report
+
+submit -> jira: {
+  style.stroke-dash: 3
+}

@@ -1,0 +1,138 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe.speedrun**
+
+  - --input \<YAML\>
+  - --headless
+  - --dry-run
+  - --batch-size N
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parse ---
+
+parse: |md
+  **Parse & Mode**
+
+  - clean temp state
+  - detect mode A/B/C
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Mode fan-out ---
+
+mode-a: |md
+  **Batch YAML**
+
+  - pre-allocate IDs
+  - /rfe.create x N agents
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+mode-b: |md
+  **Existing RFE**
+
+  - Jira key argument
+  - skip create
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+mode-c: |md
+  **Single Idea**
+
+  - /rfe.create x 1
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Auto-fix ---
+
+autofix: |md
+  **/rfe.auto-fix**
+
+  - assess + review
+  - auto-revise + split
+  - retry queue
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Submit ---
+
+submit: |md
+  **/rfe.submit**
+
+  - collect passing IDs
+  - create/update in Jira
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Summary ---
+
+summary: |md
+  **Summary**
+
+  - created / passed / failed
+  - submitted tickets
+  - run + review reports
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> parse
+
+parse -> mode-a: "--input"
+parse -> mode-b: "Jira key"
+parse -> mode-c: "free text"
+
+mode-a -> autofix
+mode-b -> autofix
+mode-c -> autofix
+
+autofix -> submit: "passing IDs"
+
+submit -> summary

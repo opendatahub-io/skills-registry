@@ -1,0 +1,6 @@
+{
+  "name": "skills-registry",
+  "description": "Site generation skills for the OpenDataHub Skills Registry",
+  "version": "0.1.0",
+  "skills": ["./skills"]
+}

@@ -1,0 +1,282 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# ── Column 1: Entry ──────────────────────────────────
+entry: |md
+  **/konflux-build-simulator**
+
+  - [repository-url]
+  - simulates Konflux build
+  - catches failures pre-merge
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# ── Column 2: Repo Analysis ─────────────────────────
+analyze: Analyze {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  clone: |md
+    **Clone & Scan**
+
+    - shallow clone repo
+    - read Dockerfiles
+    - read package.json
+    - detect build args
+  |
+
+  detect: |md
+    **Detect Repo Type**
+
+    - Monorepo (turbo.json)
+    - Operator (CRDs/manifests)
+    - Component / Library
+    - Module Federation config
+  |
+
+  clone -> detect
+}
+
+# ── Column 3: Phase 0 Static Checks ─────────────────
+static-checks: "Phase 0: Static Checks" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  lockfile: |md
+    **Hermetic Lockfile**
+
+    - git+/github:/file: protocols
+    - resolved URL completeness
+    - go.sum existence check
+    - go mod verify
+  |
+
+  workspace: |md
+    **Workspace Deps**
+
+    - detect scope & dirs
+    - cross-ref COPY commands
+    - runtime vs dev deps
+    - missing package warnings
+  |
+
+  fips: |md
+    **FIPS Compliance**
+
+    - esbuild removal check
+    - strictfipsruntime tag
+    - Go binary flags
+    - release blocker warnings
+  |
+
+  preflight: |md
+    **Hermetic Preflight**
+
+    - docker --network=none
+    - npm ci --ignore-scripts
+    - root + module lockfiles
+    - <1 min fast validation
+  |
+
+  lockfile -> preflight
+}
+
+# ── Column 4: Phase 1-2 Build & Runtime ──────────────
+docker-build: |md
+  **Phase 1: Docker Build**
+
+  - production BUILD_MODE
+  - multi-stage build
+  - COPY path validation
+  - build arg injection
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+runtime: "Phase 2: Runtime" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  startup: |md
+    **Container Startup**
+
+    - start container
+    - crashloop detection
+    - health check wait
+    - log error scan
+  |
+
+  api-test: |md
+    **API Endpoint Tests**
+
+    - merge-patch+json (415)
+    - json-patch+json (415)
+    - Fastify v5 regression
+    - 28+ operations check
+  |
+
+  ws-test: |md
+    **WebSocket Tests**
+
+    - connection crash detect
+    - @fastify/websocket v11
+    - non-admin user crash
+    - SocketStream removal
+  |
+
+  nonroot: |md
+    **Non-Root Runtime**
+
+    - UID 1001:0 test
+    - permission issues
+    - delayed crash detect
+    - stability monitor
+  |
+
+  startup -> api-test
+  startup -> ws-test
+  startup -> nonroot
+}
+
+# ── Column 5: Phase 3-5 Conditional ─────────────────
+modfed: |md
+  **Phase 3: Module Federation**
+
+  - remoteEntry.js size check
+  - chunk completeness
+  - ChunkLoadError detection
+  - load performance test
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+operator: |md
+  **Phase 4: Operator Integration**
+
+  - Kind cluster create
+  - mock secrets + CRDs
+  - deployment + patch
+  - container lifecycle check
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+manifest-val: |md
+  **Phase 5: Manifest Validation**
+
+  - kustomize build
+  - ConfigMap generation
+  - overlay testing
+  - resource validation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ── Column 6: Output ────────────────────────────────
+generate: |md
+  **Generate Artifacts**
+
+  - pr-build-validation.yml
+  - validate-build.sh
+  - test manifests
+  - setup documentation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ── Callout: Generated output structure ──────────────
+output-tree: |md
+  .github/workflows/
+    pr-build-validation.yml
+  scripts/
+    validate-build.sh
+  docs/
+    pr-build-validation.md
+  manifests/pr-testing/
+    kustomization.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# ── GitHub Actions (external) ────────────────────────
+gha: |md
+  **GitHub Actions**
+
+  - PR trigger
+  - ubuntu-latest runner
+  - [skip konflux-sim]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# ── Edges: Entry -> Analysis ────────────────────────
+entry -> analyze
+
+# ── Edges: Analysis -> Phase 0 ──────────────────────
+analyze -> static-checks
+
+# ── Edges: Phase 0 -> Phase 1 ───────────────────────
+static-checks -> docker-build
+
+# ── Edges: Phase 1 -> Phase 2 ───────────────────────
+docker-build -> runtime
+
+# ── Edges: Phase 2 -> Conditional Phases ─────────────
+runtime -> modfed: "if monorepo" {style.stroke-dash: 3}
+runtime -> operator: "if operator" {style.stroke-dash: 3}
+runtime -> manifest-val: "if manifests" {style.stroke-dash: 3}
+
+# ── Edges: Conditional -> Output ─────────────────────
+modfed -> generate
+operator -> generate
+manifest-val -> generate
+runtime -> generate: "direct"
+
+# ── Callout edge ─────────────────────────────────────
+generate -> output-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# ── External service edge ────────────────────────────
+generate -> gha: "installed into"

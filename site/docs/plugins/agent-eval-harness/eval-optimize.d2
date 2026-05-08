@@ -1,0 +1,309 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+args: |md
+  **/eval-optimize**
+
+  - --config eval.yaml
+  - --model \<model\>
+  - --max-iterations 3
+  - --run-id \<id\>
+  - --target-judge \<name\>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Initial Eval Run ---
+
+initial-run: |md
+  **Initial Eval Run**
+  invokes /eval-run
+
+  - skip if recent results exist
+  - --run-id \<id\>-iter-0
+  - read summary.yaml
+  - all pass → exit early
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- External: /eval-run ---
+
+eval-run: |md
+  **/eval-run**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 2: Identify Failures ---
+
+identify: |md
+  **Identify Failures**
+
+  - which judges failed
+  - failure rationale per case
+  - systematic vs input-dependent
+  - check review.yaml
+    (human feedback priority)
+  - build failure map
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 3: Analyze Root Causes ---
+
+analyze: |md
+  **Analyze Root Causes**
+  LLM agents (Explore)
+
+  - read skill's SKILL.md
+  - read failing transcripts
+  - examine failing outputs
+  - form hypotheses
+  - connect to SKILL.md sections
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 4: Edit the Skill ---
+
+edit-skill: |md
+  **Edit SKILL.md**
+
+  - surgical, targeted fixes
+  - ground in judge evidence
+  - explain why, not just rules
+  - avoid overfitting to one case
+  - respect execution mode
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 5: Re-Run and Verify ---
+
+rerun: |md
+  **Re-Run & Verify**
+  invokes /eval-run
+
+  - --baseline previous iter
+  - check targeted fixes passed
+  - detect regressions
+  - compare aggregate scores
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 6: Handle Regressions ---
+
+regressions: |md
+  **Handle Regressions**
+
+  - assess severity
+  - minor → net positive, continue
+  - major → revert edit, retry
+  - stuck → report to user
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Decision: Continue? ---
+
+iterate: |md
+  **Iterate?**
+
+  - failures remain?
+  - iterations < max?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - edits applied + fixes summary
+  - iteration count
+  - final summary.yaml scores
+  - persistent failures explained
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Downstream suggestions ---
+
+eval-review: |md
+  **/eval-review**
+  remaining failures
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-mlflow: |md
+  **/eval-mlflow**
+  log optimization results
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+eval-dataset: |md
+  **/eval-dataset**
+  expand coverage
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Callout: Rules ---
+
+rules: |md
+  Rules
+  ─────────────────────
+  • never broad generic changes
+  • check regressions after every edit
+  • stop after max iterations
+  • don't modify test cases or judges
+  • don't modify eval.yaml
+  • try different approaches
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: Failure Map ---
+
+failure-map: |md
+  failure map
+  ─────────────────────
+  judge_name:
+    case-001: "rationale..."
+    case-003: "rationale..."
+  human_review:
+    case-002: "user comment"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+args -> initial-run
+
+initial-run -> eval-run: "invoke" {
+  style.stroke-dash: 3
+}
+
+initial-run -> report: "all pass" {
+  style.stroke-dash: 3
+}
+
+initial-run -> identify: "summary.yaml"
+
+identify -> analyze: "failure map"
+
+analyze -> edit-skill: "hypotheses"
+
+edit-skill -> rerun
+
+rerun -> eval-run: "invoke\n--baseline" {
+  style.stroke-dash: 3
+}
+
+rerun -> regressions: "summary.yaml"
+
+regressions -> iterate
+
+regressions -> edit-skill: "major → revert + retry" {
+  style.stroke-dash: 3
+}
+
+iterate -> identify: "yes → next iteration" {
+  style.stroke-dash: 3
+}
+
+iterate -> report: "no → done"
+
+# Downstream suggestions
+report -> eval-review: "remaining failures" {
+  style.stroke-dash: 3
+}
+
+report -> eval-mlflow: "log results" {
+  style.stroke-dash: 3
+}
+
+report -> eval-dataset: "expand coverage" {
+  style.stroke-dash: 3
+}
+
+# Callout connections
+edit-skill -> rules {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+identify -> failure-map {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

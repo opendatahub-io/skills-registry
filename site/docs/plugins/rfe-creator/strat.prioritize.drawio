@@ -1,0 +1,93 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/strat.prioritize&lt;/b&gt;&lt;br&gt;&lt;i&gt;NOT YET IMPLEMENTED&lt;/i&gt;&lt;br&gt;&lt;br&gt;Prioritize new strategies&lt;br&gt;Against RHAISTRAT backlog&lt;br&gt;Collaborative with PM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="60" width="150" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-strats" value="&lt;b&gt;Read Strategies&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font face=&#x27;Courier New&#x27; style=&#x27;font-size:10px&#x27;&gt;artifacts/strat-tasks/&lt;/font&gt;&lt;br&gt;&lt;font face=&#x27;Courier New&#x27; style=&#x27;font-size:10px&#x27;&gt;strat-review-report.md&lt;/font&gt;&lt;br&gt;New strategies + reviews&lt;br&gt;Frontmatter metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="230" y="60" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="ask-scope" value="&lt;b&gt;Ask for Scope&lt;/b&gt;&lt;br&gt;&lt;br&gt;PM specifies product area&lt;br&gt;Or infer from components&lt;br&gt;Labels, team, domain" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="445" y="70" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="pull-comparison" value="&lt;b&gt;Pull Comparison Set&lt;/b&gt;&lt;br&gt;&lt;br&gt;JQL query on RHAISTRAT&lt;br&gt;Filter by product area&lt;br&gt;10–30 comparable items&lt;br&gt;Priority, status, labels" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="650" y="60" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="present-lists" value="&lt;b&gt;Present Both Lists&lt;/b&gt;&lt;br&gt;&lt;br&gt;Existing backlog (filtered)&lt;br&gt;New strategies side by side&lt;br&gt;Key, summary, priority&lt;br&gt;Status, labels per item" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="865" y="60" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="ordering" value="&lt;b&gt;Collaborative Ordering&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM + PM&lt;/i&gt;&lt;br&gt;&lt;br&gt;Suggest placement&lt;br&gt;Priority reasoning&lt;br&gt;Dependencies, urgency&lt;br&gt;Review feedback context&lt;br&gt;PM makes final call" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="370" width="180" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="update-jira" value="&lt;b&gt;Update Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;Update rank/priority&lt;br&gt;Update labels&lt;br&gt;RHAISTRAT tickets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="290" y="350" width="145" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="fallback" value="&lt;b&gt;Recommendation Doc&lt;/b&gt;&lt;br&gt;&lt;br&gt;Manual grooming guide&lt;br&gt;Ordering rationale&lt;br&gt;For non-Jira fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="290" y="500" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="document" value="&lt;b&gt;Document Decisions&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font face=&#x27;Courier New&#x27; style=&#x27;font-size:10px&#x27;&gt;strat-prioritization.md&lt;/font&gt;&lt;br&gt;Ordering rationale&lt;br&gt;Final placement record" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="540" y="410" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira_ext" value="&lt;b&gt;Jira&lt;/b&gt;&lt;br&gt;RHAISTRAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="900" y="310" width="130" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="entry" target="read-strats" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_read_scope" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="read-strats" target="ask-scope" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scope_pull" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="ask-scope" target="pull-comparison" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pull_present" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="pull-comparison" target="present-lists" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_present_ordering" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="present-lists" target="ordering" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="947" y="270"/>
+          <mxPoint x="120" y="270"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ordering_update" value="MCP available" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="ordering" target="update-jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ordering_fallback" value="no MCP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="ordering" target="fallback" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="update-jira" target="document" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fallback_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="fallback" target="document" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pull_jira" value="JQL query" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pull-comparison" target="jira_ext" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="732" y="30"/>
+          <mxPoint x="1060" y="30"/>
+          <mxPoint x="1060" y="337"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_update_jira_ext" value="rank/priority API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" source="update-jira" target="jira_ext" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="362" y="310"/>
+          <mxPoint x="900" y="310"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

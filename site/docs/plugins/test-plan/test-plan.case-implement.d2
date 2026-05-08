@@ -1,0 +1,356 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/test-plan.case-implement**
+
+  - FEATURE_SOURCE
+  - --test-cases TC-IDs
+  - --target-repo PATH
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: Pre-flight {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  fetch: |md
+    **Fetch Artifacts**
+
+    - GitHub branch or local path
+    - clone/checkout if remote
+    - validate TestPlan.md exists
+    - check test_cases/ directory
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  identify-repo: |md
+    **Identify Code Repo**
+
+    - extract components from
+      frontmatter + content
+    - map components to repos
+    - user confirms target repo
+    - locate repo locally or clone
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  fetch -> identify-repo
+}
+
+# --- odh-test-context (external) ---
+
+odh-test-context: |md
+  **odh-test-context**
+
+  validated test conventions
+  for ~162 repos
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Load Context ---
+
+load-context: Load Context {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  detect-framework: |md
+    **Detect Framework**
+
+    - pytest, unittest, playwright
+    - robot, ginkgo, jest, cypress
+    - from odh-test-context or manual
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  load-conventions: |md
+    **Load Conventions**
+
+    - file/function patterns
+    - import style, markers
+    - linting tools, directories
+    - read repo CLAUDE.md/AGENTS.md
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  load-patterns: |md
+    **Load Pattern Guides**
+
+    - check .claude/rules/ for
+      existing Tiger Team guides
+    - if missing: auto-generate
+    - pytest, go, typescript, cypress
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  detect-framework -> load-conventions
+  load-conventions -> load-patterns
+}
+
+# --- Tiger Team (external) ---
+
+tiger-team: |md
+  **/test-rules-generator**
+
+  Tiger Team pattern guides
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Placement Analysis ---
+
+placement: |md
+  **Placement Analysis**
+  sub-agent (forked)
+
+  - classify test level per TC
+    (unit, integration, api, e2e)
+  - score same_repo vs downstream
+  - user confirms or overrides
+  - locate downstream repo if needed
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- analyze.placement (external) ---
+
+analyze-placement: |md
+  **test-plan.analyze.placement**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Select & Map ---
+
+select-tcs: |md
+  **Select Test Cases**
+
+  - parse --test-cases filter
+  - skip already-implemented
+  - read and parse TC files
+  - confirm with user
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+map-files: |md
+  **Map TCs to Files**
+
+  - by-category (default)
+  - by-category-with-subdirs
+  - one-per-tc or by-endpoint
+  - present file mapping table
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate Test Code ---
+
+generate: Generate Tests {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  common-setup: |md
+    **Identify Common Setup**
+
+    - extract all preconditions
+    - find shared across 2+ TCs
+    - sort by usage count
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  gen-functions: |md
+    **Generate Test Functions**
+    parallel sub-agents
+
+    - one sub-agent per TC
+    - uses conventions + patterns
+    - uses repo instructions
+    - framework-specific code
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  validate-syntax: |md
+    **Validate & Score**
+
+    - py_compile syntax check
+    - score quality (0-10)
+    - auto-revise if score 4-6
+    - flag rework if score 0-3
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  common-setup -> gen-functions
+  gen-functions -> validate-syntax
+}
+
+# --- Sub-agents (external) ---
+
+create-function: |md
+  **test-plan.create.test-function**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+score-function: |md
+  **test-plan.score.test-function**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Write & Validate ---
+
+write-tests: |md
+  **Write Tests**
+
+  - create directories
+  - write test files
+  - validate imports in repo
+  - optional container validation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Summary ---
+
+summary: |md
+  **Summary Report**
+
+  - files created with LOC
+  - TC status table
+  - quality scores
+  - suggested fixtures
+  - next steps (PR creation)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> preflight
+
+preflight -> load-context
+odh-test-context -> load-context: "conventions\nframework" {
+  style.stroke-dash: 3
+}
+
+load-context.load-patterns -> tiger-team: "if no guides exist" {
+  style.stroke-dash: 3
+}
+
+load-context -> placement
+
+placement -> analyze-placement {
+  style.stroke-dash: 3
+}
+
+placement -> select-tcs: "placement decisions"
+
+select-tcs -> map-files: "TC specs"
+
+map-files -> generate: "file mapping"
+
+generate.gen-functions -> create-function {
+  style.stroke-dash: 3
+}
+
+generate.validate-syntax -> score-function {
+  style.stroke-dash: 3
+}
+
+generate.validate-syntax -> generate.gen-functions: "revise\n(score 4-6)" {
+  style.stroke-dash: 3
+}
+
+generate -> write-tests: "test files"
+
+write-tests -> summary
+
+summary -> preflight.fetch: "commit updated\nTC frontmatter" {
+  style.stroke-dash: 3
+}

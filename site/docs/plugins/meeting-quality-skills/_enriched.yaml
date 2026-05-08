@@ -1,0 +1,40 @@
+description: |
+  Skills for evaluating meeting quality and optimizing async collaboration.
+  Analyzes meeting agendas for risk factors and checks whether meetings
+  could be replaced with async updates.
+skills:
+  meeting-risk-agenda:
+    description: |
+      Analyze a meeting agenda or update document for risk factors that
+      indicate low-quality meetings. Provides recommendations for improvement.
+    arguments:
+      - name: "meeting_title"
+        required: false
+        description: "Title of the meeting"
+      - name: "update_document"
+        required: true
+        description: "Meeting update document content (Google Doc or pasted text)"
+      - name: "attendee_list"
+        required: false
+        description: "List of meeting attendees"
+    usage_examples:
+      - "/meeting-risk-agenda"
+  meeting-async-update-check:
+    description: |
+      Check whether a meeting could be replaced with an async update.
+      Validates that attendees have provided their updates in the shared document.
+    arguments:
+      - name: "meeting_title"
+        required: true
+        description: "Title of the meeting"
+      - name: "meeting_datetime"
+        required: true
+        description: "Meeting date and time"
+      - name: "attendee_list"
+        required: true
+        description: "List of meeting attendees"
+      - name: "update_document"
+        required: true
+        description: "Shared meeting update document content or link"
+    usage_examples:
+      - "/meeting-async-update-check"

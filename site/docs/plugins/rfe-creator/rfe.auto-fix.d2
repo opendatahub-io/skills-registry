@@ -1,0 +1,256 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe.auto-fix**
+
+  - --jql, --limit, --batch-size
+  - --headless, --reprocess
+  - --random N, explicit IDs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Init ---
+
+init: |md
+  **Pipeline Init**
+
+  - pipeline_state.py init
+  - Set batch-size, headless,
+    announce-complete flags
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- ID Resolution ---
+
+ids: ID Resolution {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  jql-mode: |md
+    **JQL Mode**
+
+    - snapshot_fetch.py fetch
+    - --ids-file, --changed-file
+    - --limit, --data-dir
+    - --reprocess, --random
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  reprocess-mode: |md
+    **Reprocess Mode**
+
+    - snapshot_fetch.py fetch
+    - --reprocess only
+    - Re-use cached data
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  explicit-mode: |md
+    **Explicit Mode**
+
+    - state.py write-ids
+    - Direct RFE IDs
+    - No Jira fetch
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Bootstrap ---
+
+bootstrap: |md
+  **Bootstrap**
+
+  - bootstrap-assess-rfe.sh
+  - Retry once on failure
+  - Installs assess-rfe plugin
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Resume + Batch ---
+
+batch: |md
+  **Resume Check + Batch**
+
+  - check_resume.py
+  - Skip already-processed IDs
+  - Split into batches of N
+  - pipeline_state.py set phase
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Dispatch Loop ---
+
+dispatch: Dispatch Loop {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  next-action: |md
+    **Get Next Action**
+
+    - pipeline_state.py next-action
+    - Returns YAML: action,
+      phase, message, agents
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  run-script: |md
+    **Run Script**
+
+    - pipeline_state.py run-phase
+    - Phase transition logic
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  launch-wave: |md
+    **Launch Wave**
+    Sub-agents (parallel)
+
+    - Build prompt from vars
+    - Read prompt_file
+    - Launch background agents
+    - rfe-scorer, rfe.review,
+      feasibility-review, etc.
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  wait-wave: |md
+    **Wait for Wave**
+
+    - pipeline_state.py
+      wait-for-wave
+    - Exit 0 → complete
+    - Exit 3 → retry wait
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  done-check: |md
+    **Done?**
+  | {
+    shape: diamond
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  next-action -> done-check
+  done-check -> run-script: "run_script"
+  done-check -> launch-wave: "launch_wave"
+  run-script -> next-action {style.stroke-dash: 3}
+  launch-wave -> wait-wave
+  wait-wave -> next-action {style.stroke-dash: 3}
+  wait-wave -> wait-wave: "exit 3\n(retry)" {
+    style.stroke-dash: 3
+    style.stroke: "#999999"
+  }
+}
+
+# --- Teardown ---
+
+teardown: |md
+  **Teardown & Summary**
+
+  - batch_summary.py
+  - --counts-only
+  - Pass/fail per RFE
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+jira: |md
+  **Jira (RHAIRFE)**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+assess-rfe: |md
+  **assess-rfe plugin**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> init
+init -> ids
+
+ids.jql-mode -> bootstrap: "JQL IDs"
+ids.reprocess-mode -> bootstrap: "cached IDs"
+ids.explicit-mode -> bootstrap: "explicit IDs"
+
+bootstrap -> batch
+batch -> dispatch
+dispatch.done-check -> teardown: "done" {
+  style.stroke: "#333333"
+}
+
+# External edges
+ids.jql-mode -> jira: "JQL query" {
+  style.stroke-dash: 3
+}
+bootstrap -> assess-rfe: "install" {
+  style.stroke-dash: 3
+}

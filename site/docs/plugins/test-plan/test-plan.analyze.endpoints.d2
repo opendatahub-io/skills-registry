@@ -1,0 +1,79 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **test-plan.analyze.endpoints**
+  forked sub-agent
+
+  - strategy files
+  - ADR files (optional)
+  - additional docs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Scope ---
+
+scope: |md
+  **Extract Feature Scope**
+  LLM analysis
+
+  - purpose (WHAT/WHY/HOW)
+  - in-scope items (from strategy)
+  - out-of-scope (explicit only)
+  - 3-7 test objectives
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Endpoints ---
+
+endpoints: |md
+  **Extract Endpoints**
+  LLM analysis
+
+  - REST, gRPC, CLI, UI, Config
+  - anti-hallucination rules
+  - assign P0/P1/P2 priority
+  - flag pending details
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Structured Output**
+
+  - Scope Analysis (Sec 1)
+  - Endpoints table (Sec 4)
+  - Gaps list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+entry -> scope
+scope -> endpoints
+endpoints -> output

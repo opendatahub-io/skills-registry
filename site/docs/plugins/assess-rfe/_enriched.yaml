@@ -1,0 +1,26 @@
+description: |
+  Assess RFEs against quality criteria using a structured rubric. Supports
+  single-input mode (Jira key, file, URL, raw text) and bulk mode with
+  30 concurrent scorer agents and CSV results.
+skills:
+  assess-rfe:
+    description: |
+      Assess RFEs against quality criteria using a structured rubric. Supports
+      single-input mode (Jira key, file path, URL, raw text) and bulk mode
+      (wildcard pattern) with 30 concurrent parallel scorer agents.
+    arguments:
+      - name: "input"
+        type: "Jira key | file path | URL | raw text | wildcard"
+        required: true
+        description: "RFE to assess — accepts multiple input formats"
+    usage_examples:
+      - "/assess-rfe RHAIRFE-1234"
+      - "/assess-rfe /path/to/document.md"
+      - "/assess-rfe https://some-url"
+      - "/assess-rfe RHAIRFE-*"
+  export-rubric:
+    description: |
+      Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md
+      in the current working directory.
+    usage_examples:
+      - "/export-rubric"

@@ -1,0 +1,157 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- RFE Pipeline ---
+
+rfe-pipeline: RFE Pipeline {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  create: |md
+    **/rfe.create**
+
+    - Problem statement → RFE
+    - Loads assess-rfe rubric
+    - Clarifying questions
+    - YAML frontmatter output
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  review: |md
+    **/rfe.review**
+
+    - Rubric scoring (assess-rfe)
+    - Feasibility check (forked)
+    - Review + auto-revise loop
+    - Pass/fail verdict
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  split: |md
+    **/rfe.split**
+
+    - Decompose oversized RFEs
+    - Generate child RFEs
+    - Review children
+    - Coverage validation
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  submit: |md
+    **/rfe.submit**
+
+    - Push to Jira REST API
+    - Create or update tickets
+    - Rename local files
+  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  create -> review: "rfe-tasks/"
+  review -> split: "oversized"
+  split -> review: "child RFEs" {style.stroke-dash: 3}
+  review -> submit: "passing RFEs"
+}
+
+# --- Orchestrators ---
+
+speedrun: |md
+  **/rfe.speedrun**
+
+  - End-to-end orchestrator
+  - Batch YAML, Jira key, or idea
+  - create → auto-fix → submit
+  - --headless, --dry-run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+auto-fix: |md
+  **/rfe.auto-fix**
+
+  - Batch review + revise + split
+  - JQL or explicit IDs
+  - Rolling batch pipeline
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+speedrun -> rfe-pipeline: "orchestrates"
+auto-fix -> rfe-pipeline.review: "batch IDs"
+
+# --- Strategy Pipeline ---
+
+strat-pipeline: Strategy Pipeline {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  strat-create: |md
+    **/strat.create**
+
+    - Clone RFEs → RHAISTRAT
+    - MCP or REST API
+    - Create local artifacts
+  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  strat-refine: |md
+    **/strat.refine**
+
+    - Add HOW section
+    - Dependencies, NFRs
+    - Architecture context
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  strat-review: |md
+    **/strat.review**
+
+    - 4 forked reviewers
+    - Architecture, feasibility,
+      scope, testability
+    - Synthesized verdict
+  | {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+
+  strat-create -> strat-refine
+  strat-refine -> strat-review
+  strat-review -> strat-refine: "revisions" {style.stroke-dash: 3}
+}
+
+# --- External ---
+
+jira: |md
+  **Jira**
+  (RHAIRFE + RHAISTRAT)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+assess-rfe-rubric: |md
+  **assess-rfe**
+  (scoring rubric)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Cross-pipeline flow ---
+
+rfe-pipeline.submit -> strat-pipeline.strat-create: "approved RFEs" {style.stroke-dash: 3}
+
+# --- External connections ---
+
+rfe-pipeline.review -> assess-rfe-rubric: "rubric" {style.stroke-dash: 3}
+rfe-pipeline.submit -> jira: "REST API" {style.stroke-dash: 3}
+strat-pipeline.strat-create -> jira: "MCP / REST" {style.stroke-dash: 3}

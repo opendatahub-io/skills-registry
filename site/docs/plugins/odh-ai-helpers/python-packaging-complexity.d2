@@ -1,0 +1,79 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/python-packaging-complexity**
+
+  - package name (required)
+  - version (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+inspect: |md
+  **Run pypi_inspect.py**
+
+  - Fetch PyPI metadata
+  - Classifiers, keywords
+  - Distribution types
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+analyze: |md
+  **Analyze Complexity**
+  LLM analysis
+
+  - Compilation requirements
+  - Complexity score (0-10+)
+  - Distribution coverage
+  - Dependency analysis
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+report: |md
+  **Report**
+
+  - Build complexity assessment
+  - Wheel building strategy
+  - Required build tools
+  - Platform considerations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+pypi: |md
+  **PyPI**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+entry -> inspect
+inspect -> analyze: "metadata"
+analyze -> report
+
+inspect -> pypi: "API" {
+  style.stroke-dash: 3
+}

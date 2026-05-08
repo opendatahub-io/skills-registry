@@ -1,0 +1,114 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="invoke" value="&lt;b&gt;/python-packaging-&lt;br&gt;license-finder&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="100" width="140" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="inputs" value="&lt;b&gt;Inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;package_name (required)&lt;br&gt;version (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4fd;strokeColor=#5b9bd5;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="210" y="85" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="pypi_fetch" value="&lt;b&gt;find_license.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch PyPI metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="400" y="92" width="140" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="check_expression" value="&lt;b&gt;license_expression&lt;/b&gt;&lt;br&gt;(PEP 639)?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#856404;strokeWidth=1;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="580" y="92" width="145" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="check_legacy" value="&lt;b&gt;legacy license&lt;/b&gt;&lt;br&gt;field?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#856404;strokeWidth=1;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="765" y="92" width="130" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="get_repo_url" value="&lt;b&gt;extract source&lt;/b&gt;&lt;br&gt;&lt;b&gt;repository URL&lt;/b&gt;&lt;br&gt;from PyPI metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="210" y="310" width="160" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="has_repo" value="&lt;b&gt;repo URL&lt;/b&gt;&lt;br&gt;found?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#856404;strokeWidth=1;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="415" y="315" width="120" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="shallow_clone" value="&lt;b&gt;Skill: git:shallow-clone&lt;/b&gt;&lt;br&gt;clone repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dce6f1;strokeColor=#4472c4;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+      <mxGeometry x="580" y="305" width="155" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="find_files" value="&lt;b&gt;find -iname&lt;/b&gt;&lt;br&gt;license* copying*&lt;br&gt;copyright*" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="780" y="305" width="145" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="read_license" value="&lt;b&gt;head -20 &amp;lt;file&amp;gt;&lt;/b&gt;&lt;br&gt;identify license type" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="970" y="305" width="155" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="license_found" value="&lt;b&gt;License Found&lt;/b&gt;&lt;br&gt;e.g. Apache-2.0,&lt;br&gt;MIT, GPL-3.0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="160" width="150" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="not_found" value="&lt;b&gt;License Not Found&lt;/b&gt;&lt;br&gt;could not be&lt;br&gt;determined" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8d7da;strokeColor=#dc3545;strokeWidth=2;arcSize=10;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="410" width="150" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_invoke_inputs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="invoke" target="inputs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_inputs_pypi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="inputs" target="pypi_fetch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pypi_check_expr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="pypi_fetch" target="check_expression" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_check_expr_found" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check_expression" target="license_found" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="652" y="35"/>
+          <mxPoint x="1275" y="35"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_check_expr_legacy" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="check_expression" target="check_legacy" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_check_legacy_found" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check_legacy" target="license_found" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="830" y="55"/>
+          <mxPoint x="1275" y="55"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_check_legacy_repo" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check_legacy" target="get_repo_url" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="830" y="220"/>
+          <mxPoint x="290" y="220"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_repo_has" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="get_repo_url" target="has_repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_has_clone" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;" edge="1" source="has_repo" target="shallow_clone" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_has_notfound" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="has_repo" target="not_found" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="475" y="442"/>
+          <mxPoint x="1200" y="442"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_clone_find" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="shallow_clone" target="find_files" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_find_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;" edge="1" source="find_files" target="read_license" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_read_found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read_license" target="license_found" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1160" y="337"/>
+          <mxPoint x="1160" y="192"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

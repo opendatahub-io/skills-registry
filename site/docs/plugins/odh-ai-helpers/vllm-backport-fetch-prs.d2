@@ -1,0 +1,32 @@
+direction: right
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-backport-fetch-prs**
+  - DAYS_BACK (default: 14)
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+fetch: |md
+  **Fetch Bugfix PRs**
+  - fetch-bugfix-prs.sh
+  - Merged PRs with bug labels
+  - Date window filter
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+output-node: |md
+  **Output**
+  - raw-prs.json
+  - PR objects with labels,
+    authors, merge commits
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+github: |md
+  **GitHub API**
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2; style.stroke-dash: 3 }
+
+entry -> fetch
+fetch -> output-node: "raw-prs.json"
+fetch -> github: "gh api" { style.stroke-dash: 3 }

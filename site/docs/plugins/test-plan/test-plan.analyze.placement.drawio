@@ -1,0 +1,44 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;test-plan.analyze.placement&lt;/b&gt;&lt;br&gt;forked sub-agent (Opus)&lt;br&gt;&lt;br&gt;--feature-dir&lt;br&gt;--code-repo&lt;br&gt;--code-repo-readiness&lt;br&gt;--downstream-readiness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="75" width="165" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-tcs" value="&lt;b&gt;Read Test Cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;TestPlan.md (Sec 2, 4)&lt;br&gt;all TC-*.md files&lt;br&gt;parse frontmatter&lt;br&gt;extract steps + results" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="240" y="80" width="145" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="classify" value="&lt;b&gt;Classify Each TC&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;extract test level signals&lt;br&gt;is_unit, is_e2e, is_api&lt;br&gt;infrastructure requirements&lt;br&gt;requires_k8s_api vs&lt;br&gt;requires_full_stack" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="430" y="65" width="155" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Score Placement&lt;/b&gt;&lt;br&gt;&lt;br&gt;same_repo vs downstream&lt;br&gt;test level preferences&lt;br&gt;infrastructure reqs&lt;br&gt;P0 fast feedback priority&lt;br&gt;repo readiness factor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="630" y="70" width="150" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="present" value="&lt;b&gt;Present Decisions&lt;/b&gt;&lt;br&gt;user interaction&lt;br&gt;&lt;br&gt;placement summary&lt;br&gt;AskUser: accept all&lt;br&gt;or review each TC&lt;br&gt;allow overrides" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="825" y="70" width="140" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="output" value="&lt;b&gt;Return Placements&lt;/b&gt;&lt;br&gt;&lt;br&gt;tc_placements JSON&lt;br&gt;level, scores, reasons" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="825" y="220" width="140" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-tcs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-tcs" target="classify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="classify" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="present" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="present" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

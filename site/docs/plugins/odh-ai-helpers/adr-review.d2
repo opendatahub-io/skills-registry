@@ -1,0 +1,343 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/adr-review**
+
+  - ADR file path
+  - .md, .docx, or directory
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Prompt & Clarify ---
+
+clarify: |md
+  **Gather Context**
+
+  - ask for ADR location
+  - audience & stakes
+  - scope emphasis / skip
+  - decision status (draft vs final)
+  - known concerns
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2: Read & Normalize ---
+
+read-adr: |md
+  **Read & Normalize ADR**
+
+  - extract context, decision,
+    alternatives, consequences
+  - note missing sections
+  - handle MADR / Nygard / custom
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: docx skill ---
+
+docx-skill: |md
+  **document-skills:docx**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 3: Reviewer Panel (container) ---
+
+panel: "Reviewer Panel  (6 agents in parallel)" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  r1: |md
+    **Context & Problem**
+    **Framing**
+
+    - forces articulated?
+    - stakeholders named?
+    - genuine alternatives?
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  r2: |md
+    **Technical**
+    **Soundness**
+
+    - feasibility
+    - failure modes
+    - anti-patterns
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  r3: |md
+    **Operational &**
+    **Reliability**
+
+    - observability
+    - rollback plan
+    - SLOs
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  r4: |md
+    **Security &**
+    **Compliance**
+
+    - threat model
+    - authN/authZ
+    - data handling
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  r5: |md
+    **Cost &**
+    **Performance**
+
+    - resource footprint
+    - cost at scale
+    - latency / throughput
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  r6: |md
+    **Consequences &**
+    **Reversibility**
+
+    - trade-offs honest?
+    - lock-in risk
+    - migration path
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+}
+
+# --- Step 3.5: Human-in-the-Loop Review ---
+
+human-review: |md
+  **Human Review**
+
+  - present findings per reviewer
+  - collect agree / disagree
+  - partially agree / reword
+  - already addressed elsewhere
+  - apply corrections
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 4: Synthesize ---
+
+synthesize: |md
+  **Synthesize**
+  LLM cross-analysis
+
+  - agreements (multi-reviewer)
+  - tensions between dimensions
+  - gaps (under-addressed areas)
+  - top 3-5 risks
+  - overall recommendation
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 5: Generate Reports (container) ---
+
+reports: "Generate Reports" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  pdf: |md
+    **PDF Report**
+
+    - title page + verdict
+    - executive summary
+    - full reviewer sections
+    - What / So what / Fix
+    - synthesis section
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  pptx: |md
+    **PPTX Deck**
+
+    - title slide + badge
+    - exec summary + top 3
+    - 1 slide per reviewer
+    - synthesis + next steps
+    - short-form bullets only
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- External: document skills ---
+
+pdf-skill: |md
+  **document-skills:pdf**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+pptx-skill: |md
+  **document-skills:pptx**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 6: Output ---
+
+output: |md
+  **Report Back**
+
+  - output file paths
+  - inline summary
+  - overall recommendation
+  - top risks
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: concern structure ---
+
+concern-structure: |md
+  **[severity] Short title**
+  _What:_ specific gap found
+  _So what:_ concrete consequence
+  _Suggested fix:_ actionable change
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: output directory ---
+
+output-tree: |md
+  adr-review/
+    {adr-name}-review.pdf
+    {adr-name}-review.pptx
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> clarify
+clarify -> read-adr
+
+read-adr -> docx-skill: ".docx input" {
+  style.stroke-dash: 3
+}
+
+read-adr -> panel: "ADR text + user context"
+
+panel -> human-review: "raw findings"
+human-review -> synthesize: "corrected findings"
+
+synthesize -> reports
+
+reports.pdf -> pdf-skill {
+  style.stroke-dash: 3
+}
+reports.pptx -> pptx-skill {
+  style.stroke-dash: 3
+}
+
+reports -> output: "adr-review/"
+
+# --- Callout edges ---
+
+panel -> concern-structure: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+output -> output-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

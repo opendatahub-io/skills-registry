@@ -1,0 +1,297 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/quality-repo-analysis**
+
+  - repository URL
+  - branch (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight Checks**
+
+  - verify PyYAML available
+  - uv run --with pyyaml
+  - install requirements if missing
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Repository Discovery ---
+
+discover: |md
+  **Repo Discovery**
+
+  - clone/access repository
+  - detect language (Go, TS, Py)
+  - identify framework
+  - classify type (operator, app, CLI)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Target Repo (external) ---
+
+target-repo: |md
+  **Target Repository**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Analysis Container ---
+
+analyze: Analysis Dimensions {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  cicd: |md
+    **CI/CD Pipeline**
+
+    - workflow inventory + triggers
+    - test automation coverage
+    - build caching + concurrency
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  tests: |md
+    **Test Coverage**
+
+    - unit/integration/E2E suites
+    - test-to-code ratio
+    - coverage tracking + enforcement
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  quality: |md
+    **Code Quality**
+
+    - linting config (golangci, ESLint)
+    - pre-commit hooks
+    - SAST + secret detection
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  build-integ: |md
+    **Build Integration**
+
+    - PR-time image build validation
+    - Kustomize/manifest generation
+    - cross-component builds
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  container: |md
+    **Container Images**
+
+    - Dockerfile analysis
+    - runtime validation
+    - Trivy/Snyk scanning + SBOM
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  rules: |md
+    **Agent Rules**
+
+    - .claude/rules/ directory
+    - rule completeness + quality
+    - missing test type rules
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+}
+
+# --- Gap Analysis ---
+
+gaps: |md
+  **Gap Analysis**
+  LLM agent
+
+  - compare vs gold standards
+  - odh-dashboard, notebooks, kserve
+  - score each dimension (0-10)
+  - weighted overall score
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Report Container ---
+
+report: Report {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  markdown: |md
+    **Markdown Report**
+
+    - YAML frontmatter (scorecard)
+    - critical gaps + quick wins
+    - prioritized recommendations
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  html: |md
+    **HTML Report**
+
+    - html_generator.py via uv
+    - animated score circles
+    - collapsible sections
+    - color-coded severity
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  browser: |md
+    **Open in Browser**
+
+    - quality-report-{repo}.html
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  markdown -> html: "quality-analysis-{repo}.md"
+  html -> browser
+}
+
+# --- Downstream skill ---
+
+test-rules: |md
+  **/test-rules-generator**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Scorecard Callout ---
+
+scorecard-detail: |md
+  quality-analysis-{repo}.md
+  ---
+  overall_score: 7.8
+  scorecard:
+    Unit Tests:      8/10
+    Integration/E2E: 9/10
+    Build Integr.:   4/10
+    Image Testing:   6/10
+    Coverage:        8/10
+    CI/CD:           9/10
+    Agent Rules:     2/10
+  critical_gaps: [...]
+  quick_wins: [...]
+  ---
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> discover
+
+target-repo -> discover: "clone" {
+  style.stroke-dash: 3
+}
+
+discover -> analyze.cicd
+discover -> analyze.tests
+discover -> analyze.quality
+discover -> analyze.build-integ
+discover -> analyze.container
+discover -> analyze.rules
+
+analyze.cicd -> gaps
+analyze.tests -> gaps
+analyze.quality -> gaps
+analyze.build-integ -> gaps
+analyze.container -> gaps
+analyze.rules -> gaps
+
+gaps -> report.markdown
+
+# Callout connection
+report.markdown -> scorecard-detail: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# Downstream suggestion
+report.browser -> test-rules: "if agent rules\ngaps found" {
+  style.stroke-dash: 3
+}

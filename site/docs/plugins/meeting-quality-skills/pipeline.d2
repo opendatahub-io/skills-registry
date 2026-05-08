@@ -1,0 +1,92 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Meeting Doc (shared input) ---
+
+meeting-doc: |md
+  **Meeting Document**
+
+  - shared Google Doc or text
+  - attendee list
+  - pre-meeting updates
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Async Update Check ---
+
+async-update-check: |md
+  **/meeting-async-update-check**
+
+  - parse attendee list and document
+  - match updates to attendees
+  - classify: updated / missing / uncertain
+  - generate reminder message
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Risk Agenda ---
+
+risk-agenda: |md
+  **/meeting-risk-agenda**
+
+  - detect risk signals in updates
+  - classify: blocked / at-risk / no issues
+  - extract owners
+  - generate prioritized agenda
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Outputs ---
+
+update-report: |md
+  **Attendance Report**
+
+  - who updated / who didn't
+  - organizer summary
+  - reminder to send
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+risk-report: |md
+  **Risk-Focused Agenda**
+
+  - blocked items first
+  - at-risk items second
+  - meeting skip suggestion
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+meeting-doc -> async-update-check: "attendee list +\ndocument"
+meeting-doc -> risk-agenda: "update content"
+
+async-update-check -> update-report
+risk-agenda -> risk-report

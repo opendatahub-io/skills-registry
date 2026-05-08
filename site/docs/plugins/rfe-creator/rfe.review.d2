@@ -1,0 +1,222 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe.review**
+
+  - RFE IDs (RHAIRFE-NNN)
+  - --headless
+  - --caller \<name\>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parse & Classify ---
+
+parse: |md
+  **Parse & Persist**
+
+  - state.py init flags
+  - write-ids to disk
+  - classify local vs remote
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch ---
+
+fetch: |md
+  **Fetch Agents**
+  LLM (opus, per ID)
+
+  - fetch from Jira MCP
+  - poll check_review_progress
+  - verify task files exist
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Setup ---
+
+setup: |md
+  **Setup**
+
+  - fetch-architecture-context.sh
+  - bootstrap-assess-rfe.sh
+  - parallel execution
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess + Feasibility ---
+
+assess: |md
+  **Assess + Feasibility**
+  LLM (opus, 2N agents)
+
+  - prep_assess.py per ID
+  - assess agent (rfe-scorer)
+  - feasibility agent per ID
+  - poll both phases
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Review ---
+
+review: |md
+  **Review Agents**
+  LLM (opus, per ID)
+
+  - reads assess + feasibility
+  - scores + recommendation
+  - pass / revise / reject
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Revise ---
+
+revise: |md
+  **Revise Agents**
+  LLM (opus, per ID)
+
+  - filter_for_revision.py
+  - fix failing criteria
+  - check_revised.py --batch
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Reassess ---
+
+reassess: |md
+  **Re-assess Cycle**
+  (max 2 cycles)
+
+  - save + clear state
+  - re-run assess agents
+  - re-run review agents
+  - restore + filter + revise
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Finalize ---
+
+finalize: |md
+  **Finalize**
+
+  - rebuild-index
+  - batch_summary.py
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Outputs ---
+
+headless-return: |md
+  **Headless Return**
+
+  - return to /rfe.auto-fix
+  - or return to /rfe.split
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+interactive: |md
+  **Summary**
+
+  - suggest /rfe.submit
+  - suggest /rfe.split
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External ---
+
+jira: |md
+  **Jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> parse
+
+parse -> fetch: "remote IDs"
+parse -> setup: "local IDs"
+
+fetch -> setup
+
+setup -> assess
+
+assess -> review: "assess + feasibility results"
+
+review -> revise: "needs revision"
+review -> finalize: "all pass" {
+  style.stroke-dash: 3
+}
+
+revise -> reassess: "auto_revised"
+
+reassess -> reassess: "cycle again" {
+  style.stroke-dash: 3
+}
+reassess -> finalize: "pass or max cycles"
+
+finalize -> headless-return: "--headless"
+finalize -> interactive: "interactive"
+
+fetch -> jira: {
+  style.stroke-dash: 3
+}

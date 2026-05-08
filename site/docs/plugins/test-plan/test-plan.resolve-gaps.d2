@@ -1,0 +1,96 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **test-plan.resolve-gaps**
+  forked sub-agent
+
+  - old gaps (TestPlanGaps.md)
+  - new analyzer findings
+  - new documents list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Parse ---
+
+parse-gaps: |md
+  **Parse Old Gaps**
+
+  - scope & endpoints gaps
+  - strategy & risks gaps
+  - environment & infra gaps
+  - identify resolution criteria
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Match ---
+
+semantic-match: |md
+  **Semantic Matching**
+  LLM analysis
+
+  - cross-reference gaps vs findings
+  - intelligent matching (not keyword)
+  - resolved / partially resolved
+  - conservative: keep if unsure
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- New Gaps ---
+
+new-gaps: |md
+  **Identify New Gaps**
+  LLM analysis
+
+  - new APIs without details
+  - new risks without mitigations
+  - new deps without versions
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Output ---
+
+output: |md
+  **Structured Output**
+
+  - resolved gaps list
+  - unresolved gaps list
+  - new gaps identified
+  - gap count statistics
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Edges ---
+
+entry -> parse-gaps
+parse-gaps -> semantic-match: "gaps + findings"
+semantic-match -> new-gaps
+new-gaps -> output

@@ -1,0 +1,41 @@
+description: |
+  Quality tooling and automation for RHOAI component development. Includes
+  automated repository analysis against gold standards, Konflux build simulation
+  for PR validation, and test pattern extraction for agent rules.
+skills:
+  quality-repo-analysis:
+    description: |
+      Comprehensive quality assessment across 7 dimensions: CI/CD, test coverage,
+      code quality, container image testing, security practices, agent rules, and
+      testing frameworks. Produces markdown report and interactive HTML visualization.
+    arguments:
+      - name: "repository-url"
+        required: true
+        description: "GitHub repository URL to analyze"
+    usage_examples:
+      - "/quality-repo-analysis https://github.com/opendatahub-io/kserve"
+      - "/quality-repo-analysis https://github.com/kubeflow/training-operator"
+  konflux-build-simulator:
+    description: |
+      Simulates Konflux build environment on PRs to catch build failures before
+      production. Generates GitHub Actions workflows for hermetic build validation,
+      Docker checks, FIPS compliance, and operator integration testing.
+    arguments:
+      - name: "repository-url"
+        required: true
+        description: "GitHub repository URL to simulate builds for"
+    usage_examples:
+      - "/konflux-build-simulator https://github.com/opendatahub-io/odh-dashboard"
+      - "/konflux-build-simulator https://github.com/opendatahub-io/kserve"
+  test-rules-generator:
+    description: |
+      Analyzes existing test patterns in a repository and generates Claude Code
+      agent rules (.claude/rules/) for consistent test creation across unit,
+      mock, E2E, and contract tests.
+    arguments:
+      - name: "repository-url"
+        required: true
+        description: "GitHub repository URL to analyze test patterns from"
+    usage_examples:
+      - "/test-rules-generator https://github.com/opendatahub-io/odh-dashboard"
+      - "/test-rules-generator https://github.com/kubeflow/training-operator"

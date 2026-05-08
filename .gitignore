@@ -1,0 +1,6 @@
+.venv/
+site/_site/
+__pycache__/
+*.pyc
+.idea/
+.tmp/

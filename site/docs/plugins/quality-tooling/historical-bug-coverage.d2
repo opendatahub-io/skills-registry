@@ -1,0 +1,231 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/historical-bug-coverage**
+
+  - --jql / --filter
+  - --repo (required)
+  - --external-tests
+  - --output
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Repository Test Discovery ---
+
+discover: |md
+  **Discover Tests**
+
+  - scan repo + external tests
+  - detect frameworks (Jest,
+    Cypress, pytest, Go, Ginkgo)
+  - map test types and levels
+  - build test file inventory
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2: Environment Validation ---
+
+validate-env: |md
+  **Validate Env**
+
+  - locate .env file
+  - require JIRA_SERVER,
+    JIRA_USER, JIRA_TOKEN
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 3: Fetch Bugs ---
+
+fetch-bugs: |md
+  **Fetch Bugs**
+
+  - JQL or saved filter query
+  - cursor-based pagination
+  - extract key, summary,
+    priority, labels
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira API (external) ---
+
+jira: "Jira API" {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 4: Coverage Analysis (container) ---
+
+coverage: Coverage Analysis {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  extract: |md
+    **Extract Entities**
+
+    - components, functions, APIs
+    - failure scenario keywords
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  match-tests: |md
+    **Match Test Files**
+
+    - search by entity names
+    - read matched test files
+    - extract assertions
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  score: |md
+    **Confidence Score**
+
+    - entity match (30 pts)
+    - scenario match (30 pts)
+    - assertion validation (40 pts)
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  classify: |md
+    **Classify Status**
+
+    - COVERED (>= 80%)
+    - PARTIAL (60-80%)
+    - GAP (< 60%)
+    - NOT TESTABLE
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  extract -> match-tests
+  match-tests -> score
+  score -> classify
+}
+
+# --- Step 5: Test Level ---
+
+test-level: |md
+  **Classify Test Level**
+
+  - earliest feasible level:
+    Unit > Mock > Component >
+    Integration > E2E > Contract
+  - distinguish E2E upstream
+    vs downstream
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 6: Report ---
+
+report: |md
+  **Generate HTML Report**
+
+  - sortable/filterable table
+  - confidence score badges
+  - SVG coverage charts
+  - test gap recommendations
+  - print-friendly (PDF)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report callout ---
+
+report-detail: |||md
+  repo-bug-coverage.html
+
+  COVERED ......  7%
+  PARTIAL ...... 10%
+  GAP .......... 76%
+  NOT TESTABLE .  4%
+||| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Related skills (external) ---
+
+test-rules: "/test-rules-generator" {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> discover
+discover -> validate-env
+validate-env -> fetch-bugs
+fetch-bugs -> jira: "POST /search/jql"
+jira -> fetch-bugs: "issues[]" {
+  style.stroke-dash: 3
+}
+fetch-bugs -> coverage
+coverage -> test-level: "per bug"
+test-level -> report
+
+report -> report-detail: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+report -> test-rules: "no tests found" {
+  style.stroke-dash: 3
+}

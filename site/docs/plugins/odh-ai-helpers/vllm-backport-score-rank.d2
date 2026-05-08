@@ -1,0 +1,30 @@
+direction: right
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+entry: |md
+  **/vllm-backport-score-rank**
+  - --input analyzed.json
+  - --output ranked.json
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+score: |md
+  **Score & Rank**
+  - score-and-rank.py
+  - Composite formula:
+    verdict, severity, scope,
+    risk, self-containedness
+  - Sort descending
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+output-node: |md
+  **Output**
+  - ranked.json
+  - Prioritized candidate list
+  - Scores + verdicts
+| { shape: rectangle; style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2 }
+
+entry -> score: "analyzed.json"
+score -> output-node: "ranked.json"
