@@ -19,3 +19,9 @@ structured output with resolved/unresolved/new gaps and statistics.
 <div class="diagram-container" markdown>
 ![test-plan-resolve-gaps diagram](test-plan-resolve-gaps.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-resolve-gaps
+```

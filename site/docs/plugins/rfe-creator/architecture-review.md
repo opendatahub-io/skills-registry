@@ -22,3 +22,9 @@ skips if unavailable. Runs with model: opus.
 <div class="diagram-container" markdown>
 ![architecture-review diagram](architecture-review.svg)
 </div>
+
+## Usage
+
+```
+/architecture-review
+```

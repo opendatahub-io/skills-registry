@@ -19,3 +19,9 @@ Returns updated section content, change summary, and merge statistics.
 <div class="diagram-container" markdown>
 ![test-plan-merge diagram](test-plan-merge.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-merge
+```

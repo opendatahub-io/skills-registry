@@ -402,6 +402,14 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         lines.append("")
         lines.append(enriched_skill["usage"].strip())
         lines.append("")
+    elif not (enriched_skill and enriched_skill.get("arguments")) and not argument_hint:
+        # No arguments, no usage examples — show basic invocation
+        lines.append("## Usage")
+        lines.append("")
+        lines.append("```")
+        lines.append(f"/{sname}")
+        lines.append("```")
+        lines.append("")
 
     return "\n".join(lines)
 

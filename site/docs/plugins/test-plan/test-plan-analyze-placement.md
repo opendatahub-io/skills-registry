@@ -20,3 +20,9 @@ and code repo agent readiness. Returns recommendations with user confirmation.
 <div class="diagram-container" markdown>
 ![test-plan-analyze-placement diagram](test-plan-analyze-placement.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-analyze-placement
+```

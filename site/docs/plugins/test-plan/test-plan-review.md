@@ -21,3 +21,9 @@ and verdict (Ready/Revise/Rework).
 <div class="diagram-container" markdown>
 ![test-plan-review diagram](test-plan-review.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-review
+```

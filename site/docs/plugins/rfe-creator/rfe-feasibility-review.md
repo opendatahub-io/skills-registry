@@ -23,3 +23,9 @@ with model: opus.
 <div class="diagram-container" markdown>
 ![rfe-feasibility-review diagram](rfe-feasibility-review.svg)
 </div>
+
+## Usage
+
+```
+/rfe-feasibility-review
+```

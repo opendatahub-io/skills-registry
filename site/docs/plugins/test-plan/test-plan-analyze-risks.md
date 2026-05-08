@@ -20,3 +20,9 @@ for Sections 2, 7, and 8.
 <div class="diagram-container" markdown>
 ![test-plan-analyze-risks diagram](test-plan-analyze-risks.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-analyze-risks
+```

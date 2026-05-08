@@ -19,3 +19,9 @@ priorities and reports gaps. Produces findings for Sections 1 and 4 of the test 
 <div class="diagram-container" markdown>
 ![test-plan-analyze-endpoints diagram](test-plan-analyze-endpoints.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-analyze-endpoints
+```

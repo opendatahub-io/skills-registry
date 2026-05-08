@@ -20,3 +20,9 @@ Sections 3 and 9.
 <div class="diagram-container" markdown>
 ![test-plan-analyze-infra diagram](test-plan-analyze-infra.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-analyze-infra
+```

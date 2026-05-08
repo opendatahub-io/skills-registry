@@ -20,3 +20,9 @@ values from TC), Code Quality (clean, no excessive TODOs). Returns verdict
 <div class="diagram-container" markdown>
 ![test-plan-score-test-function diagram](test-plan-score-test-function.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-score-test-function
+```

@@ -22,3 +22,9 @@ vague criteria.
 <div class="diagram-container" markdown>
 ![testability-review diagram](testability-review.svg)
 </div>
+
+## Usage
+
+```
+/testability-review
+```

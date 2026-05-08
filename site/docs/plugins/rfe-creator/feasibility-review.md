@@ -21,3 +21,9 @@ optimistic estimates. Runs with model: opus.
 <div class="diagram-container" markdown>
 ![feasibility-review diagram](feasibility-review.svg)
 </div>
+
+## Usage
+
+```
+/feasibility-review
+```

@@ -22,3 +22,9 @@ original RFE scope.
 <div class="diagram-container" markdown>
 ![scope-review diagram](scope-review.svg)
 </div>
+
+## Usage
+
+```
+/scope-review
+```

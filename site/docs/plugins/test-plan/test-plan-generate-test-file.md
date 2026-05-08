@@ -20,3 +20,9 @@ low-scoring functions. Returns result via temp file for parent to write.
 <div class="diagram-container" markdown>
 ![test-plan-generate-test-file diagram](test-plan-generate-test-file.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-generate-test-file
+```
