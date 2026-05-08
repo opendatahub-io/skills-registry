@@ -101,6 +101,20 @@
   letter-spacing: -0.01em;
 }
 
+/* ── GitHub repo link ── */
+.md-source {
+  color: var(--sr-text) !important;
+}
+
+.md-source__icon,
+.md-source__repository {
+  color: var(--sr-text) !important;
+}
+
+.md-source:hover .md-source__repository {
+  color: var(--md-primary-fg-color) !important;
+}
+
 /* ── Tabs ── */
 .md-tabs {
   background: var(--sr-bg) !important;

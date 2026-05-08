@@ -7,8 +7,13 @@ title: eval-mlflow
 
 # eval-mlflow
 
-Bidirectional MLflow sync. Syncs datasets, logs run results and metrics,
-pushes judge scores and human feedback to execution traces.
+Bidirectional MLflow integration for evaluation results, datasets, and
+feedback. Syncs test cases to MLflow dataset registry with a schema mapping
+you define (inputs vs expectations), logs run params/metrics/artifacts/traces
+to MLflow experiments, pushes judge scores and human feedback to execution
+traces, and pulls annotations added via the MLflow UI back into review.yaml
+for /eval-optimize to consume. Resolves tracking URI from eval.yaml, then
+MLFLOW_TRACKING_URI env var, then defaults to localhost:5000.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -20,15 +25,20 @@ pushes judge scores and human feedback to execution traces.
 
 ## Arguments
 
+```
+/eval-mlflow [--action <action>] [--run-id <id>] [--config <path>]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--run-id` | :material-check: | — | Which eval run to sync |
-| `--action` |  | `all` | Which sync action to perform |
-| `--config` |  | `eval.yaml` | Path to eval config |
+| `--action` |  | `all` | Which sync action to perform. |
+| `--run-id` |  | — | Which eval run to log or attach feedback to. Required for log-results, push-feedback, and pull-feedback. |
+| `--config` |  | `eval.yaml` | Path to eval config. |
 
 ## Usage
 
 ```
-/eval-mlflow --run-id 2026-05-01
-/eval-mlflow --run-id latest --action sync-dataset
+/eval-mlflow --run-id 2026-05-01-opus
+/eval-mlflow --action sync-dataset
+/eval-mlflow --run-id 2026-05-01-opus --action push-feedback
 ```

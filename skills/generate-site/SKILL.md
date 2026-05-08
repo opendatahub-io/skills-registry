@@ -20,48 +20,31 @@ allowed-tools:
 
 # generate-site
 
-Generate the complete documentation site for the skills-registry. Produces structural
-pages from `registry.yaml` and optionally enriches each plugin with detailed content
-and SVG diagrams via `/analyze-plugin`.
+Generate the complete documentation site for the skills-registry. Enriches each plugin
+with detailed content extracted from SKILL.md files, generates presentation-quality SVG
+diagrams, and produces structural pages from `registry.yaml`.
 
 ## Arguments
 
-- `--structure-only` — Only generate structural pages (no enrichment or diagrams).
-  Equivalent to running `python3 scripts/generate_site.py` directly.
-- `--enrich` — Also run `/analyze-plugin` for each plugin to generate enrichment
-  and diagrams. This is slower but produces richer content.
-- `--plugin <name>` — Only enrich a specific plugin. Implies `--enrich` — you don't
-  need to pass both.
-
-If no arguments are provided, defaults to `--structure-only`.
+- `--plugin <name>` — Only process a specific plugin. Without this, all plugins are processed.
+- `--no-diagrams` — Skip diagram generation (enrichment only). Useful for refreshing
+  descriptions, arguments, and argument hints without the slow diagram pipeline.
 
 ## Instructions
 
-### 1. Generate structural pages
+### 1. Enrich plugins
 
-```bash
-python3 scripts/generate_site.py
-```
+Invoke `/analyze-plugin` for each plugin in the registry (or just the `--plugin` if specified).
 
-This reads `registry.yaml` and generates all markdown pages and the `mkdocs.yml`
-navigation under `site/`. It preserves non-markdown files (SVGs, drawio, enrichment
-YAMLs) — only `.md` files are regenerated.
-
-Report the counts: plugins, skills, categories.
-
-### 2. Enrich plugins (if --enrich or --plugin)
-
-If `--enrich` or `--plugin` is specified, invoke `/analyze-plugin` for each plugin
-in the registry (or just the specified `--plugin`).
+If `--no-diagrams` is set, pass it through to `/analyze-plugin` so it skips Steps 5-6
+(pipeline and individual skill diagrams) and only generates the enrichment YAML.
 
 For efficiency, use sub-agents to analyze plugins **in parallel** (up to 6-8 at a time).
-Each agent clones the plugin repo, reads SKILL.md files, generates enrichment YAML,
-and produces pipeline + individual skill diagrams via `/skill-diagram --layout`.
 
 ```
 Agent({
   description: "Analyze <plugin-name>",
-  prompt: "/analyze-plugin <plugin-name>",
+  prompt: "/analyze-plugin <plugin-name> [--no-diagrams]",
   run_in_background: true
 })
 ```
@@ -72,7 +55,7 @@ Wait for all to complete before proceeding.
 #### Permissions
 
 Sub-agents need these permissions to work in the background without interactive approval.
-Verify these are in `.claude/settings.local.json` before launching:
+Verify these are in `.claude/settings.json` before launching:
 
 ```json
 {
@@ -81,9 +64,18 @@ Verify these are in `.claude/settings.local.json` before launching:
       "Read(.tmp/skill-repos/**)",
       "Write(site/docs/plugins/**)",
       "Edit(site/docs/plugins/**)",
-      "Bash(python3:*)",
-      "Bash(d2:*)",
-      "Bash(open:*)"
+      "Bash(python3 *)",
+      "Bash(d2 *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(find *)",
+      "Bash(rm *)",
+      "Bash(git clone *)",
+      "Bash(git pull *)",
+      "Bash(open *)",
+      "Bash(ls *)",
+      "Skill(diagram-skills:skill-diagram:*)",
+      "Skill(diagram-skills:diagram-layout:*)"
     ]
   }
 }
@@ -92,7 +84,7 @@ Verify these are in `.claude/settings.local.json` before launching:
 If permissions are missing, warn the user and suggest adding them before proceeding —
 otherwise every sub-agent will be denied and the enrichment pass will fail silently.
 
-### 3. Clean up after enrichment
+### 2. Clean up after enrichment
 
 After all enrichment agents complete, clean up stray files produced by the
 diagram-layout pipeline:
@@ -106,7 +98,7 @@ find site/docs/plugins -name "*.drawio.png" -delete
 find site/docs/plugins -name "layout-plan.json" -delete
 ```
 
-### 4. Regenerate with enrichments
+### 3. Generate pages
 
 After cleanup, run the generation script again to merge enrichment data into pages:
 
@@ -114,10 +106,10 @@ After cleanup, run the generation script again to merge enrichment data into pag
 python3 scripts/generate_site.py
 ```
 
-This picks up `_enriched.yaml` files and conditionally includes SVG diagram references
-in pages where the SVG exists.
+This picks up `_enriched.yaml` files (including `argument_hint` and `arguments`) and
+conditionally includes SVG diagram references in pages where the SVG exists.
 
-### 5. Build and verify
+### 4. Build and verify
 
 Stop any running dev server first (it holds a file lock):
 
@@ -134,12 +126,12 @@ mkdocs build --config-file site/mkdocs.yml --site-dir /tmp/skills-site-verify-$$
 Check the build output for warnings or errors. Zero warnings is the target — any
 "unrecognized relative link" or "target not found" warnings indicate broken references.
 
-### 6. Report
+### 5. Report
 
 Report:
 - Total pages generated
-- Plugins enriched (if --enrich)
-- Diagrams generated (if --enrich) — pipeline + individual count
+- Plugins enriched
+- Diagrams generated (if not `--no-diagrams`) — pipeline + individual count
 - Build status (success/warnings/errors)
 - Any skipped skills or failed diagram exports
 

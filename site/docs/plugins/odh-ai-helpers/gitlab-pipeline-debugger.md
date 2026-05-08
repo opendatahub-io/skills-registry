@@ -8,7 +8,10 @@ title: gitlab-pipeline-debugger
 # gitlab-pipeline-debugger
 
 Debug and monitor GitLab CI/CD pipelines for merge requests. Check
-pipeline status, view job logs, and troubleshoot CI failures using glab CLI.
+pipeline status, view job logs, and troubleshoot CI failures using the
+glab CLI. Supports auto-detection of the GitLab project from the local
+git remote, or targeting a specific project via URL or -R flag. Can
+parse full GitLab pipeline and job URLs to extract project paths and IDs.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -20,14 +23,21 @@ pipeline status, view job logs, and troubleshoot CI failures using glab CLI.
 
 ## Arguments
 
+```
+/gitlab-pipeline-debugger [PIPELINE_URL] [-b] [-p] [-R]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `repository_url` |  | `auto-detected from git remote` | GitLab repository URL or branch name |
-| `--p` |  | — | Specific pipeline ID to inspect |
+| `PIPELINE_URL` |  | — | Full GitLab pipeline or job URL to debug |
+| `-b` |  | — | Branch name to check pipeline for |
+| `-p` |  | — | Specific pipeline ID to inspect |
+| `-R` |  | `auto-detected from git remote` | GitLab project path to target |
 
 ## Usage
 
 ```
 /gitlab-pipeline-debugger
-/gitlab-pipeline-debugger https://gitlab.com/org/repo
+/gitlab-pipeline-debugger https://gitlab.com/org/project/-/pipelines/123456
+/gitlab-pipeline-debugger -b feature-branch
 ```

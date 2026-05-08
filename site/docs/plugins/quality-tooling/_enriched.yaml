@@ -1,41 +1,168 @@
 description: |
-  Quality tooling and automation for RHOAI component development. Includes
-  automated repository analysis against gold standards, Konflux build simulation
-  for PR validation, and test pattern extraction for agent rules.
+  Quality tooling and automation suite for RHOAI component development. Provides
+  five complementary skills that span the full quality lifecycle: repository-wide
+  quality assessment against gold standards, Konflux build simulation for catching
+  failures at PR time, test pattern extraction for generating agent rules,
+  historical bug coverage analysis with Jira integration, and multi-dimensional
+  PR risk assessment with parallel analyzer agents.
+
+  The plugin targets Red Hat OpenShift AI repositories and understands RHOAI-specific
+  concerns such as FIPS compliance, hermetic builds, module federation, operator
+  packaging, and cross-repo test dependencies. All skills produce rich output
+  artifacts -- interactive HTML reports, GitHub Actions workflows, or markdown
+  rule files -- that are immediately actionable without manual post-processing.
+architecture_notes: |
+  Each skill operates independently as a standalone analysis pipeline invoked via
+  slash command. The common pattern is: clone or access a target repository, perform
+  deep structural analysis, and generate output artifacts (HTML reports, YAML configs,
+  GitHub Actions workflows, or markdown rule files).
+
+  The risk-assessment skill is the most architecturally complex: it uses an
+  orchestrator pattern that launches four parallel sub-agents (risk analyzer, test
+  validator, impact analyzer, cross-repo analyzer) via the Agent tool, then
+  aggregates their results through a decision engine. Shell scripts handle PR
+  extraction, context loading, output verification, and result reporting.
+
+  The historical-bug-coverage skill integrates with Jira via environment-configured
+  credentials and uses Python modules for deep test analysis (Jest, Cypress, pytest,
+  Go test), confidence scoring, and HTML report generation.
+
+  Several skills share conceptual overlap (quality-repo-analysis and test-rules-generator
+  both analyze test infrastructure) but operate at different abstraction levels --
+  scoring vs. pattern extraction.
 skills:
   quality-repo-analysis:
     description: |
-      Comprehensive quality assessment across 7 dimensions: CI/CD, test coverage,
-      code quality, container image testing, security practices, agent rules, and
-      testing frameworks. Produces markdown report and interactive HTML visualization.
+      Comprehensive quality assessment that evaluates a repository across seven
+      dimensions: CI/CD pipeline analysis, test coverage assessment, code quality
+      tools, container image testing, security practices, agent rules assessment,
+      and testing frameworks. Compares findings against gold standard repositories
+      (odh-dashboard, notebooks, kserve) and produces a weighted overall score.
+
+      Generates two output formats automatically: a markdown report with YAML
+      frontmatter containing structured scorecard data, and an interactive HTML
+      report with animated score visualizations, collapsible sections, and
+      color-coded severity indicators. The HTML report opens in the default
+      browser upon completion.
     arguments:
       - name: "repository-url"
-        required: true
-        description: "GitHub repository URL to analyze"
+        required: false
+        description: "GitHub repository URL to analyze (prompted if omitted)"
     usage_examples:
       - "/quality-repo-analysis https://github.com/opendatahub-io/kserve"
       - "/quality-repo-analysis https://github.com/kubeflow/training-operator"
   konflux-build-simulator:
     description: |
-      Simulates Konflux build environment on PRs to catch build failures before
-      production. Generates GitHub Actions workflows for hermetic build validation,
-      Docker checks, FIPS compliance, and operator integration testing.
+      Analyzes a repository and generates GitHub Actions workflows that simulate
+      the Konflux build environment at PR time, catching failures before they
+      reach production. Performs validation across six phases: static checks
+      (hermetic lockfiles, workspace dependencies, FIPS compliance), Docker build
+      validation, runtime validation (crashloop detection, API endpoint testing,
+      WebSocket compatibility), module federation validation (remoteEntry.js,
+      chunk integrity, load performance), operator integration (Kind cluster),
+      and manifest validation (kustomize, ConfigMap, overlays).
+
+      Automatically detects repository type (monorepo, Kubernetes operator, or
+      component/library) and generates appropriate validation phases. Key
+      RHOAI-specific checks include Hermeto/Cachi2 hermetic build compatibility,
+      FIPS strictfipsruntime enforcement, and fastify v5 regression testing.
     arguments:
       - name: "repository-url"
-        required: true
-        description: "GitHub repository URL to simulate builds for"
+        required: false
+        description: "GitHub repository URL to generate build simulation for (prompted if omitted)"
     usage_examples:
       - "/konflux-build-simulator https://github.com/opendatahub-io/odh-dashboard"
       - "/konflux-build-simulator https://github.com/opendatahub-io/kserve"
+      - "/konflux-build-simulator https://github.com/kubeflow/training-operator"
   test-rules-generator:
     description: |
       Analyzes existing test patterns in a repository and generates Claude Code
-      agent rules (.claude/rules/) for consistent test creation across unit,
-      mock, E2E, and contract tests.
+      agent rules in .claude/rules/ for consistent test creation. Covers unit,
+      mock, E2E, and contract test types with framework-specific awareness
+      (Jest, Cypress, Go testing, React Testing Library, pytest).
+
+      The generation process has three phases: repository analysis (identify test
+      directories, frameworks, and test types), pattern extraction (sample 5-10
+      representative files per type, extract structure, naming, setup/teardown,
+      assertion styles), and rule generation (produce markdown files with
+      description, structure, examples, conventions, and checklists). The output
+      serves as living documentation that enables agents to auto-create tests
+      following established repository conventions.
     arguments:
       - name: "repository-url"
-        required: true
-        description: "GitHub repository URL to analyze test patterns from"
+        required: false
+        description: "GitHub repository URL to extract test patterns from (prompted if omitted)"
     usage_examples:
       - "/test-rules-generator https://github.com/opendatahub-io/odh-dashboard"
+      - "/test-rules-generator https://github.com/opendatahub-io/kserve"
       - "/test-rules-generator https://github.com/kubeflow/training-operator"
+  historical-bug-coverage:
+    description: |
+      Analyzes historical blocking and critical bugs from Jira and determines
+      what test coverage exists today through deep test inspection with confidence
+      scoring. Reads matched test files, extracts actual assertions, and calculates
+      0-100% confidence scores based on entity matches and scenario validation.
+
+      Coverage thresholds are strict: COVERED requires 80%+ confidence that a test
+      explicitly validates the failure scenario, PARTIALLY COVERED is 60-80%, and
+      GAP is below 60%. Supports granular test levels (unit, mock, component,
+      integration, E2E upstream/downstream, contract) and auto-categorizes bugs
+      by type (upgrade, platform-specific, FIPS, performance, security, disconnected).
+
+      Generates a standalone HTML report with sortable/filterable tables, SVG charts,
+      color-coded confidence badges, E2E breakdown by category, and prioritized
+      recommendations for test gaps. Supports external test repositories for
+      cross-repo coverage analysis.
+    argument_hint: "--jql JQL_QUERY --repo REPO_PATH [--external-tests PATH] [--filter FILTER_ID] [--output PATH]"
+    arguments:
+      - name: "--jql"
+        required: true
+        description: "JQL query string to fetch bugs from Jira (mutually exclusive with --filter)"
+      - name: "--repo"
+        required: true
+        description: "Path to the target repository to analyze for test coverage"
+      - name: "--external-tests"
+        required: false
+        description: "Path to an external test repository for cross-repo coverage analysis"
+      - name: "--filter"
+        required: false
+        description: "Saved Jira filter ID (alternative to --jql)"
+      - name: "--output"
+        required: false
+        description: "Output HTML file path (defaults to {repo-name}-bug-coverage.html)"
+    usage_examples:
+      - "/historical-bug-coverage --jql \"project = MYPROJECT AND priority in (Blocker, Critical)\" --repo /path/to/repo"
+      - "/historical-bug-coverage --jql \"project = MYPROJECT AND component = 'Dashboard'\" --repo /path/to/repo --external-tests /path/to/e2e-tests"
+      - "/historical-bug-coverage --jql \"project = MYPROJECT AND created >= -90d\" --repo /path/to/repo"
+  risk-assessment:
+    description: |
+      Multi-agent PR risk assessment orchestrator that coordinates four parallel
+      analyzer sub-agents to evaluate a GitHub pull request across complementary
+      dimensions: security risk and breaking changes, test coverage validation,
+      architecture impact and blast radius, and cross-repository intelligence
+      for affected test repos.
+
+      The orchestrator extracts PR metadata via gh CLI, loads context from
+      architecture docs and Jira, launches all four analyzers in parallel using
+      the Agent tool, then aggregates results through a decision engine. This is
+      an advisory-only system -- it provides recommendations but never blocks PRs.
+
+      Supports headless mode for CI integration and dry-run mode for testing
+      without publishing. Results are published as PR comments and status checks
+      on GitHub.
+    arguments:
+      - name: "PR_NUMBER"
+        required: true
+        description: "GitHub pull request number to analyze"
+      - name: "REPO"
+        required: true
+        description: "Repository identifier (owner/repo format)"
+      - name: "--headless"
+        required: false
+        description: "Run in headless mode for CI integration"
+      - name: "--dry-run"
+        required: false
+        description: "Run analysis without publishing results to GitHub"
+    usage_examples:
+      - "/risk-assessment 123 opendatahub-io/odh-dashboard"
+      - "/risk-assessment 456 opendatahub-io/kserve --dry-run"

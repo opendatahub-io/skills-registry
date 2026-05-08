@@ -7,8 +7,13 @@ title: eval-review
 
 # eval-review
 
-Interactive review of evaluation results. Presents judge scores and skill
-outputs for human feedback, identifies judge gaps, and proposes SKILL.md improvements.
+Interactive human-in-the-loop review of evaluation results. Presents judge
+scores and skill outputs case by case, collects qualitative feedback, delegates
+transcript analysis to Explore sub-agents to identify inefficiencies (roundabout
+paths, multiple approaches, unnecessary tools), identifies judge-human alignment
+gaps, and proposes targeted SKILL.md improvements grounded in feedback evidence.
+Complements /eval-optimize (automated) by catching tone, intent, and UX issues
+that judges cannot measure.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -20,13 +25,19 @@ outputs for human feedback, identifies judge gaps, and proposes SKILL.md improve
 
 ## Arguments
 
+```
+/eval-review --run-id <id> [--config <path>] [--case <filter>]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--run-id` |  | `latest run` | Which eval run to review |
+| `--run-id` | :material-check: | — | Which eval run to review. |
+| `--config` |  | `eval.yaml` | Path to eval config. |
+| `--case` |  | — | Substring match to select specific cases for review. |
 
 ## Usage
 
 ```
-/eval-review
-/eval-review --run-id 2026-05-01-claude-opus-4-6
+/eval-review --run-id 2026-05-01-opus
+/eval-review --run-id 2026-05-01-opus --case case-003
 ```

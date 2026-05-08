@@ -7,8 +7,12 @@ title: python-full-deps
 
 # python-full-deps
 
-Resolve the full install-time dependency tree for a Python package
-with environment markers, using uv or pip as resolver.
+Resolve the full install-time transitive dependency tree for a Python
+package, respecting environment markers for a specific Python version.
+Uses uv pip compile (preferred) with fallback to pip install --dry-run
+--report. Outputs a sorted, deduplicated list of name==version pairs.
+Complements python-packaging-complexity which only shows direct
+dependencies from metadata.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -20,15 +24,19 @@ with environment markers, using uv or pip as resolver.
 
 ## Arguments
 
+```
+/python-full-deps <PACKAGE_NAME> [VERSION] [PYTHON_VERSION]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `package_name` | :material-check: | — | PyPI project name (e.g., vllm) |
-| `version` |  | `latest` | Specific package version |
-| `python_version` |  | `3.12` | Python version for resolution |
+| `PACKAGE_NAME` | :material-check: | — | PyPI project name (e.g., vllm, requests) |
+| `VERSION` |  | `latest` | Specific package version (e.g., 0.4.0) |
+| `PYTHON_VERSION` |  | `3.12` | Python version for environment marker resolution (e.g., 3.11) |
 
 ## Usage
 
 ```
 /python-full-deps requests
-/python-full-deps requests 2.32.3 3.11
+/python-full-deps vllm 0.4.0 3.11
 ```

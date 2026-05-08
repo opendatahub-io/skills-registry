@@ -7,8 +7,14 @@ title: rfe-feasibility-review
 
 # rfe-feasibility-review
 
-Internal forked reviewer. Reviews RFEs for technical feasibility,
-blockers, and alignment with technical strategy.
+Internal sub-agent launched by rfe.review. Reviews individual RFEs for
+technical feasibility against platform architecture. Uses three verdicts:
+feasible (can be built), infeasible (platform architecture fundamentally
+conflicts), indeterminate (RFE too ambiguous to assess). Distinguishes
+between capabilities not yet existing (feasible) and architectural
+incompatibilities (infeasible). Reads Jira comment history for additional
+context. Outputs to artifacts/rfe-reviews/{ID}-feasibility.md. Runs
+with model: opus.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -17,3 +23,9 @@ blockers, and alignment with technical strategy.
 <div class="diagram-container" markdown>
 ![rfe-feasibility-review diagram](rfe-feasibility-review.svg)
 </div>
+
+## Usage
+
+```
+/rfe-feasibility-review
+```

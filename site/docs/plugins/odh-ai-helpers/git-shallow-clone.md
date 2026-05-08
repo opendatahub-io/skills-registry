@@ -8,7 +8,8 @@ title: git-shallow-clone
 # git-shallow-clone
 
 Perform a shallow clone of a Git repository to a temporary location
-for local analysis instead of using web APIs.
+for local analysis instead of using web APIs. Uses a helper script that
+prints the clone path to stdout for downstream consumption.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -20,10 +21,14 @@ for local analysis instead of using web APIs.
 
 ## Arguments
 
+```
+/git-shallow-clone <REPOSITORY_URL> [TAG_OR_BRANCH]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `repository_url` | :material-check: | — | URL of the Git repository to clone |
-| `tag_or_branch` |  | `HEAD` | Git tag or branch to shallow clone |
+| `REPOSITORY_URL` | :material-check: | — | URL of the Git repository to clone |
+| `TAG_OR_BRANCH` |  | `HEAD` | Git tag or branch to shallow-clone |
 
 ## Usage
 

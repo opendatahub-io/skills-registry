@@ -7,8 +7,16 @@ title: test-plan
 
 # test-plan
 
-Generate test plans and test cases from RHOAI strategies using parallel
-sub-agent analysis and automated review with a 5-criteria quality rubric.
+End-to-end test planning and automation workflow for RHOAI (Red Hat OpenShift AI).
+Takes a Jira strategy document as input and produces a complete test plan, individual
+test case specifications, executable test automation code, and visual UI verification
+reports. The pipeline uses parallel sub-agent analysis (endpoints, risks, infrastructure)
+to extract testable interfaces, then scores quality with a 5-criteria rubric and
+auto-revises up to 2 cycles. Supports the full lifecycle: create, review, publish to
+GitHub, resolve PR feedback, update with new documentation, and verify UI test cases
+against live clusters via Playwright. Test code generation uses odh-test-context for
+repo-specific conventions, Tiger Team pattern guides, and intelligent placement analysis
+to decide whether tests belong in the component repo or downstream E2E repo.
 
 
 !!! info "Plugin Details"
@@ -52,3 +60,34 @@ sub-agent analysis and automated review with a 5-criteria quality rubric.
 ```bash
 /plugin install test-plan@opendatahub-skills
 ```
+
+## Architecture
+
+The plugin is organized as an orchestrated pipeline of 19 skills, split into
+user-invocable commands and internal forked sub-agents:
+
+**User-invocable pipeline stages:**
+1. test-plan-create -- generates a test plan from a Jira strategy with 3 parallel analyzers
+2. test-plan-create-cases -- generates TC-*.md files from the test plan
+3. test-plan-update -- re-analyzes with new documents, merges findings, bumps version
+4. test-plan-case-implement -- generates executable test code with placement analysis
+5. test-plan-ui-verify -- browser-based UI test execution via Playwright CDP
+6. test-plan-publish -- creates/updates GitHub PRs with test plan artifacts
+7. test-plan-resolve-feedback -- triages and applies PR review comments
+8. test-plan-score -- standalone quality rubric assessment (read-only)
+
+**Internal sub-agents (context: fork):**
+- test-plan-analyze-endpoints, test-plan-analyze-risks, test-plan-analyze-infra -- parallel analyzers
+- test-plan-merge -- intelligent merge of new findings into existing plans
+- test-plan-resolve-gaps -- cross-references gaps with new documentation
+- test-plan-analyze-placement -- recommends component vs downstream repo placement
+- test-plan-review -- quality scoring + auto-revision loop (max 2 cycles)
+- test-plan-generate-test-file -- parallel test file generation sub-agent
+- test-plan-score-test-function -- quality scoring for generated test functions
+
+Key architectural patterns:
+- Parallel forked sub-agents for analysis and code generation (isolated context, clean return)
+- Python scripts for deterministic operations (frontmatter, validation, file mapping, repo utilities)
+- MCP integration (Atlassian) for fetching Jira strategies
+- Persistent Playwright CDP browser for UI verification with screenshot capture
+- odh-test-context integration for repository-specific test conventions

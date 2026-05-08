@@ -7,8 +7,10 @@ title: python-packaging-license-finder
 
 # python-packaging-license-finder
 
-Deterministically find license information for Python packages
-by checking PyPI metadata and Git repository LICENSE files.
+Deterministically find license information for Python packages using a
+two-step approach: first check PyPI metadata via a helper script, then
+fall back to cloning the source repository and reading LICENSE files
+directly. Can also accept a source URL to skip PyPI lookup entirely.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -20,14 +22,20 @@ by checking PyPI metadata and Git repository LICENSE files.
 
 ## Arguments
 
+```
+/python-packaging-license-finder <PACKAGE_NAME> [VERSION] [--source-url]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `package_name` | :material-check: | — | Python package name |
-| `version` |  | `latest` | Specific package version |
+| `PACKAGE_NAME` | :material-check: | — | Python package name |
+| `VERSION` |  | `latest` | Specific package version |
+| `--source-url` |  | — | Source repository URL (skips PyPI lookup) |
 
 ## Usage
 
 ```
 /python-packaging-license-finder requests
 /python-packaging-license-finder django 4.2.0
+/python-packaging-license-finder some-pkg --source-url https://github.com/org/repo
 ```

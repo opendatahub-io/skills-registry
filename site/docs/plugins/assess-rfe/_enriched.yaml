@@ -1,26 +1,79 @@
 description: |
-  Assess RFEs against quality criteria using a structured rubric. Supports
-  single-input mode (Jira key, file, URL, raw text) and bulk mode with
-  30 concurrent scorer agents and CSV results.
+  Structured quality assessment for RFEs (Requests for Enhancement) against
+  a five-criteria rubric: WHAT (clear customer need), WHY (business justification
+  with named customers or revenue data), Open to HOW (leaves architecture to
+  engineering), Not a Task (business need vs. activity), and Right-Sized (maps
+  to approximately one strategy feature). Each criterion is scored 0-2 for a
+  total out of 10, with pass requiring 7+ and no zeros.
+
+  Supports single-input mode accepting Jira issue keys (via MCP or REST API
+  fallback), file paths, URLs, or raw text. Bulk mode fetches all issues from
+  a Jira project, then dispatches up to 30 concurrent scorer sub-agents that
+  each apply the identical rubric from a single source-of-truth prompt file.
+  Results are written as individual markdown files into a timestamped run
+  directory, then aggregated into a CSV with summary statistics including
+  pass/fail rates, score distribution, criteria averages, what-if analysis,
+  and near-miss identification.
+
+  The scorer agents run with restricted tool access (Read and Write only) to
+  prevent prompt injection from untrusted Jira content. The rubric includes
+  detailed calibration examples for each criterion and a comprehensive list of
+  established RHOAI platform technologies that are considered vocabulary rather
+  than architecture prescription.
+architecture_notes: |
+  The plugin uses an orchestrator/agent pattern. The main assess-rfe skill acts
+  as a coordinator that handles input detection, Jira fetching, run directory
+  management, and agent lifecycle. Individual assessments are delegated to
+  rfe-scorer sub-agents (defined in agents/rfe-scorer.md) running with minimal
+  permissions (Read + Write only, acceptEdits permission mode) as a security
+  boundary against prompt injection from untrusted Jira content.
+
+  Bulk mode operates in phases: preflight checks (environment variables, run
+  state), Jira dump (all issues cached locally), run setup (timestamped
+  directory with queue file), concurrent agent dispatch (batches of 30 via
+  next_batch.py), and result aggregation (parse_results.py + summarize_run.py).
+  Resume support is built in via queue files and symlinked run directories.
+
+  Python scripts handle all data operations (Jira API calls, ADF-to-markdown
+  conversion, queue management, progress tracking, result parsing, CSV
+  generation, and summary statistics). The coordinator never uses shell pipes
+  or compound commands, relying instead on structured script output with
+  key=value parsing.
 skills:
   assess-rfe:
     description: |
-      Assess RFEs against quality criteria using a structured rubric. Supports
-      single-input mode (Jira key, file path, URL, raw text) and bulk mode
-      (wildcard pattern) with 30 concurrent parallel scorer agents.
+      Assess RFEs against quality criteria using a structured five-criteria
+      rubric (WHAT, WHY, HOW, Not a Task, Right-Sized) scored 0-2 each for
+      a total out of 10. Supports single-input mode (Jira issue key via MCP
+      or REST API, file path, URL, or raw text) and bulk mode (wildcard
+      pattern like RHAIRFE-*) with up to 30 concurrent parallel scorer
+      sub-agents. Bulk mode includes phased execution with preflight checks,
+      Jira project dump, timestamped run directories with resume support,
+      queue-based batch dispatching, and CSV result aggregation with summary
+      statistics (pass/fail rates, score distribution, criteria averages,
+      what-if analysis, and near-miss identification).
     arguments:
       - name: "input"
         type: "Jira key | file path | URL | raw text | wildcard"
         required: true
-        description: "RFE to assess — accepts multiple input formats"
+        description: >
+          The RFE to assess. Accepts multiple formats: a Jira issue key
+          (e.g., RHAIRFE-1234), a file path to a document, a URL, raw
+          pasted text, or a wildcard pattern (e.g., RHAIRFE-*) for bulk
+          assessment of an entire Jira project.
     usage_examples:
       - "/assess-rfe RHAIRFE-1234"
+      - "/assess-rfe PROJ-99"
       - "/assess-rfe /path/to/document.md"
       - "/assess-rfe https://some-url"
+      - "/assess-rfe <paste raw text>"
       - "/assess-rfe RHAIRFE-*"
   export-rubric:
     description: |
-      Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md
-      in the current working directory.
+      Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md in the
+      current working directory. Useful for reviewing the rubric criteria,
+      calibration examples, and scoring guidelines outside of an assessment
+      context, or for sharing the rubric with team members who want to
+      understand how RFEs are evaluated.
     usage_examples:
       - "/export-rubric"

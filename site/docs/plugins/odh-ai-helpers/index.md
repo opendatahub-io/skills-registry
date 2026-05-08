@@ -7,10 +7,25 @@ title: odh-ai-helpers
 
 # odh-ai-helpers
 
-Developer productivity tools for Python packaging, CI/CD debugging, and
-workflow automation. Includes skills for analyzing package build complexity,
-resolving dependencies, finding licenses, debugging GitLab pipelines,
-reviewing ADRs, and more.
+A comprehensive suite of developer productivity tools for Python packaging,
+CI/CD debugging, upstream maintenance, and workflow automation. The plugin
+spans three functional domains: (1) a Python packaging toolchain that can
+analyze build complexity, resolve full dependency trees, locate source repos,
+find and check licenses against Red Hat redistribution policy, discover build
+environment variables, and surface known packaging bugs; (2) a vLLM backport
+triage pipeline that fetches upstream bugfix PRs, classifies them, checks
+for existing cherry-picks, scores and ranks candidates, auto-cherry-picks
+clean fixes, pushes reports, compares requirements across versions, and
+summarizes Slack channel activity; and (3) general-purpose skills for ADR
+review panels, GitLab CI debugging, Jira chat-log uploads, and Git
+shallow-cloning.
+
+The Python packaging skills are designed to work both independently and as a
+coordinated pipeline through the python-packaging-investigator agent, which
+orchestrates all packaging skills in parallel and produces a standardized
+build analysis report. The vLLM backport skills form a linear pipeline from
+PR fetching through classification, deduplication, scoring, and cherry-picking,
+with each stage producing JSON artifacts consumed by the next.
 
 
 !!! info "Plugin Details"
@@ -63,3 +78,25 @@ reviewing ADRs, and more.
 ```bash
 /plugin install odh-ai-helpers@opendatahub-skills
 ```
+
+## Architecture
+
+The plugin follows a modular architecture with three distinct skill families:
+
+**Python Packaging Toolchain** -- Seven skills that share a common pattern of
+wrapping helper scripts (Python/Bash) and chaining through skill invocations.
+The source-finder locates repositories, the shallow-clone skill provides local
+access, and downstream skills (complexity, license-finder, license-checker,
+env-finder, bug-finder) analyze different facets. The investigator agent
+orchestrates all of them in parallel sub-agents.
+
+**vLLM Backport Pipeline** -- Eight skills forming a linear data pipeline.
+Each produces a JSON artifact (raw-prs.json -> filtered.json -> candidates.json
+-> analyzed.json -> ranked.json -> cherry-pick-result.json) consumed by the
+next stage. The pipeline combines deterministic script-based steps with
+agent-driven semantic analysis for unclear classifications.
+
+**Utility Skills** -- Standalone skills (adr-review, gitlab-pipeline-debugger,
+jira-upload-chat-log, git-shallow-clone) that operate independently with no
+inter-skill dependencies. The adr-review skill uses six parallel reviewer
+sub-agents with human-in-the-loop correction before synthesis.

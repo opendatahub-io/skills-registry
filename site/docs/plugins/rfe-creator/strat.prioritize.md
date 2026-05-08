@@ -7,8 +7,9 @@ title: strat.prioritize
 
 # strat.prioritize
 
-Prioritize strategies against the existing RHAISTRAT backlog.
-Not yet implemented.
+Prioritize strategies against the existing RHAISTRAT backlog in Jira.
+Not yet implemented -- returns a message explaining the design intent
+and open questions (JQL filtering, backlog ordering representation).
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -21,5 +22,5 @@ Not yet implemented.
 ## Usage
 
 ```
-/strat.prioritize (not yet implemented)
+/strat.prioritize
 ```

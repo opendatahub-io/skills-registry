@@ -7,9 +7,18 @@ title: quality-tooling
 
 # quality-tooling
 
-Quality tooling and automation for RHOAI component development. Includes
-automated repository analysis against gold standards, Konflux build simulation
-for PR validation, and test pattern extraction for agent rules.
+Quality tooling and automation suite for RHOAI component development. Provides
+five complementary skills that span the full quality lifecycle: repository-wide
+quality assessment against gold standards, Konflux build simulation for catching
+failures at PR time, test pattern extraction for generating agent rules,
+historical bug coverage analysis with Jira integration, and multi-dimensional
+PR risk assessment with parallel analyzer agents.
+
+The plugin targets Red Hat OpenShift AI repositories and understands RHOAI-specific
+concerns such as FIPS compliance, hermetic builds, module federation, operator
+packaging, and cross-repo test dependencies. All skills produce rich output
+artifacts -- interactive HTML reports, GitHub Actions workflows, or markdown
+rule files -- that are immediately actionable without manual post-processing.
 
 
 !!! info "Plugin Details"
@@ -41,3 +50,24 @@ for PR validation, and test pattern extraction for agent rules.
 ```bash
 /plugin install quality-tooling@opendatahub-skills
 ```
+
+## Architecture
+
+Each skill operates independently as a standalone analysis pipeline invoked via
+slash command. The common pattern is: clone or access a target repository, perform
+deep structural analysis, and generate output artifacts (HTML reports, YAML configs,
+GitHub Actions workflows, or markdown rule files).
+
+The risk-assessment skill is the most architecturally complex: it uses an
+orchestrator pattern that launches four parallel sub-agents (risk analyzer, test
+validator, impact analyzer, cross-repo analyzer) via the Agent tool, then
+aggregates their results through a decision engine. Shell scripts handle PR
+extraction, context loading, output verification, and result reporting.
+
+The historical-bug-coverage skill integrates with Jira via environment-configured
+credentials and uses Python modules for deep test analysis (Jest, Cypress, pytest,
+Go test), confidence scoring, and HTML report generation.
+
+Several skills share conceptual overlap (quality-repo-analysis and test-rules-generator
+both analyze test infrastructure) but operate at different abstraction levels --
+scoring vs. pattern extraction.

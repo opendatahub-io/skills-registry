@@ -1,150 +1,438 @@
 description: |
-  Developer productivity tools for Python packaging, CI/CD debugging, and
-  workflow automation. Includes skills for analyzing package build complexity,
-  resolving dependencies, finding licenses, debugging GitLab pipelines,
-  reviewing ADRs, and more.
+  A comprehensive suite of developer productivity tools for Python packaging,
+  CI/CD debugging, upstream maintenance, and workflow automation. The plugin
+  spans three functional domains: (1) a Python packaging toolchain that can
+  analyze build complexity, resolve full dependency trees, locate source repos,
+  find and check licenses against Red Hat redistribution policy, discover build
+  environment variables, and surface known packaging bugs; (2) a vLLM backport
+  triage pipeline that fetches upstream bugfix PRs, classifies them, checks
+  for existing cherry-picks, scores and ranks candidates, auto-cherry-picks
+  clean fixes, pushes reports, compares requirements across versions, and
+  summarizes Slack channel activity; and (3) general-purpose skills for ADR
+  review panels, GitLab CI debugging, Jira chat-log uploads, and Git
+  shallow-cloning.
+
+  The Python packaging skills are designed to work both independently and as a
+  coordinated pipeline through the python-packaging-investigator agent, which
+  orchestrates all packaging skills in parallel and produces a standardized
+  build analysis report. The vLLM backport skills form a linear pipeline from
+  PR fetching through classification, deduplication, scoring, and cherry-picking,
+  with each stage producing JSON artifacts consumed by the next.
+architecture_notes: |
+  The plugin follows a modular architecture with three distinct skill families:
+
+  **Python Packaging Toolchain** -- Seven skills that share a common pattern of
+  wrapping helper scripts (Python/Bash) and chaining through skill invocations.
+  The source-finder locates repositories, the shallow-clone skill provides local
+  access, and downstream skills (complexity, license-finder, license-checker,
+  env-finder, bug-finder) analyze different facets. The investigator agent
+  orchestrates all of them in parallel sub-agents.
+
+  **vLLM Backport Pipeline** -- Eight skills forming a linear data pipeline.
+  Each produces a JSON artifact (raw-prs.json -> filtered.json -> candidates.json
+  -> analyzed.json -> ranked.json -> cherry-pick-result.json) consumed by the
+  next stage. The pipeline combines deterministic script-based steps with
+  agent-driven semantic analysis for unclear classifications.
+
+  **Utility Skills** -- Standalone skills (adr-review, gitlab-pipeline-debugger,
+  jira-upload-chat-log, git-shallow-clone) that operate independently with no
+  inter-skill dependencies. The adr-review skill uses six parallel reviewer
+  sub-agents with human-in-the-loop correction before synthesis.
 skills:
   adr-review:
     description: |
-      Review an Architectural Decision Record using a team of 6 specialist
-      reviewer subagents (architecture, security, performance, maintainability,
-      testing, documentation). Produces consolidated PDF and PPTX reports.
+      Review an Architectural Decision Record (ADR) using a panel of six
+      specialist reviewer sub-agents running in parallel. The reviewers cover
+      Context & Problem Framing, Technical Soundness, Operational & Reliability,
+      Security & Compliance, Cost & Performance, and Consequences & Reversibility.
+      After the panel runs, a human-in-the-loop step lets the user agree, disagree,
+      or refine each finding before synthesis. Produces consolidated outputs as
+      both a detailed PDF report and a scannable PPTX slide deck. Handles
+      Markdown files, .docx documents, and directories of multiple ADRs.
+    arguments:
+      - name: "ADR_PATH"
+        required: true
+        description: "Path to an ADR file (.md or .docx) or a directory containing multiple ADRs"
     usage_examples:
       - "/adr-review /path/to/adr.md"
+      - "/adr-review /path/to/adr-directory/"
   gitlab-pipeline-debugger:
     description: |
       Debug and monitor GitLab CI/CD pipelines for merge requests. Check
-      pipeline status, view job logs, and troubleshoot CI failures using glab CLI.
+      pipeline status, view job logs, and troubleshoot CI failures using the
+      glab CLI. Supports auto-detection of the GitLab project from the local
+      git remote, or targeting a specific project via URL or -R flag. Can
+      parse full GitLab pipeline and job URLs to extract project paths and IDs.
     arguments:
-      - name: "repository_url"
+      - name: "PIPELINE_URL"
         required: false
-        default: "auto-detected from git remote"
-        description: "GitLab repository URL or branch name"
-      - name: "--p"
-        type: "<pipeline-id>"
+        description: "Full GitLab pipeline or job URL to debug"
+      - name: "-b"
+        type: "branch-name"
+        required: false
+        description: "Branch name to check pipeline for"
+      - name: "-p"
+        type: "pipeline-id"
         required: false
         description: "Specific pipeline ID to inspect"
+      - name: "-R"
+        type: "owner/group/project"
+        required: false
+        default: "auto-detected from git remote"
+        description: "GitLab project path to target"
     usage_examples:
       - "/gitlab-pipeline-debugger"
-      - "/gitlab-pipeline-debugger https://gitlab.com/org/repo"
+      - "/gitlab-pipeline-debugger https://gitlab.com/org/project/-/pipelines/123456"
+      - "/gitlab-pipeline-debugger -b feature-branch"
   git-shallow-clone:
     description: |
       Perform a shallow clone of a Git repository to a temporary location
-      for local analysis instead of using web APIs.
+      for local analysis instead of using web APIs. Uses a helper script that
+      prints the clone path to stdout for downstream consumption.
     arguments:
-      - name: "repository_url"
+      - name: "REPOSITORY_URL"
         required: true
         description: "URL of the Git repository to clone"
-      - name: "tag_or_branch"
+      - name: "TAG_OR_BRANCH"
         required: false
         default: "HEAD"
-        description: "Git tag or branch to shallow clone"
+        description: "Git tag or branch to shallow-clone"
     usage_examples:
       - "/git-shallow-clone https://github.com/psf/requests.git"
       - "/git-shallow-clone https://github.com/psf/requests.git v2.28.0"
   jira-upload-chat-log:
     description: |
-      Export the current chat conversation as a markdown file and attach
-      it to a Jira ticket.
+      Export the current chat conversation as a formatted markdown document
+      (with both a summary and full transcript) and upload it as a file
+      attachment to a Jira ticket. Automatically detects ticket keys from
+      conversation context, or prompts the user if none is found. Delegates
+      the actual upload to the jira-workitem-attach skill.
     arguments:
-      - name: "ticket_key"
+      - name: "TICKET_KEY"
         required: false
-        default: "auto-detected from conversation"
+        default: "auto-detected from conversation context"
         description: "Jira ticket key (e.g., AIPCC-1234)"
     usage_examples:
       - "/jira-upload-chat-log AIPCC-7354"
       - "/jira-upload-chat-log"
   python-full-deps:
     description: |
-      Resolve the full install-time dependency tree for a Python package
-      with environment markers, using uv or pip as resolver.
+      Resolve the full install-time transitive dependency tree for a Python
+      package, respecting environment markers for a specific Python version.
+      Uses uv pip compile (preferred) with fallback to pip install --dry-run
+      --report. Outputs a sorted, deduplicated list of name==version pairs.
+      Complements python-packaging-complexity which only shows direct
+      dependencies from metadata.
     arguments:
-      - name: "package_name"
+      - name: "PACKAGE_NAME"
         required: true
-        description: "PyPI project name (e.g., vllm)"
-      - name: "version"
+        description: "PyPI project name (e.g., vllm, requests)"
+      - name: "VERSION"
         required: false
         default: "latest"
-        description: "Specific package version"
-      - name: "python_version"
+        description: "Specific package version (e.g., 0.4.0)"
+      - name: "PYTHON_VERSION"
         required: false
         default: "3.12"
-        description: "Python version for resolution"
+        description: "Python version for environment marker resolution (e.g., 3.11)"
     usage_examples:
       - "/python-full-deps requests"
-      - "/python-full-deps requests 2.32.3 3.11"
-  python-packaging-source-finder:
+      - "/python-full-deps vllm 0.4.0 3.11"
+  python-packaging-bug-finder:
     description: |
-      Locate source code repositories for Python packages by analyzing
-      PyPI metadata and code hosting platforms.
+      Find known packaging bugs, fixes, and workarounds for Python projects
+      by searching GitHub issues. First uses source-finder to locate the repo,
+      then searches issues for build, installation, dependency, compiler, and
+      platform-specific problems. Analyzes resolution status, version impact,
+      and available workarounds for each issue found.
     arguments:
-      - name: "package_name"
+      - name: "PACKAGE_NAME"
         required: true
-        description: "Python package name to find repository for"
+        description: "Python package name to search issues for"
     usage_examples:
-      - "/python-packaging-source-finder requests"
-  python-packaging-license-finder:
-    description: |
-      Deterministically find license information for Python packages
-      by checking PyPI metadata and Git repository LICENSE files.
-    arguments:
-      - name: "package_name"
-        required: true
-        description: "Python package name"
-      - name: "version"
-        required: false
-        default: "latest"
-        description: "Specific package version"
-    usage_examples:
-      - "/python-packaging-license-finder requests"
-      - "/python-packaging-license-finder django 4.2.0"
-  python-packaging-license-checker:
-    description: |
-      Check whether a Python package license is compatible with
-      redistribution in Red Hat products using Fedora License Data policy.
-    arguments:
-      - name: "package_name"
-        required: true
-        description: "Python package name to check"
-    usage_examples:
-      - "/python-packaging-license-checker requests"
+      - "/python-packaging-bug-finder torch"
+      - "/python-packaging-bug-finder numpy"
   python-packaging-complexity:
     description: |
-      Analyze Python package build complexity by inspecting PyPI metadata,
-      compilation requirements, and distribution types.
+      Analyze Python package build complexity by inspecting PyPI metadata.
+      Evaluates compilation requirements (C/C++/Rust/Fortran), dependency
+      complexity, distribution types (sdist, platform-specific wheels, universal
+      wheels), and produces a numerical complexity score (0-10+). Provides
+      actionable recommendations for wheel building strategies.
     arguments:
-      - name: "package_name"
+      - name: "PACKAGE_NAME"
         required: true
         description: "Python package name to analyze"
-      - name: "version"
+      - name: "VERSION"
         required: false
         default: "latest"
         description: "Specific package version"
       - name: "--json"
         required: false
-        description: "Output as structured JSON"
+        description: "Output as structured JSON for programmatic processing"
     usage_examples:
       - "/python-packaging-complexity torch"
-      - "/python-packaging-complexity numpy 1.24.3 --json"
+      - "/python-packaging-complexity numpy 1.24.3"
+      - "/python-packaging-complexity tensorflow --json"
   python-packaging-env-finder:
     description: |
-      Investigate environment variables that can be set when building
-      Python wheels by analyzing setup.py, CMake, and build config files.
+      Investigate environment variables that can be set when building Python
+      wheels for a given project. Analyzes setup.py, CMake files, and other
+      build configuration files to discover compiler variables (CC, CXX, CFLAGS),
+      path configuration, feature control flags (ENABLE_*, WITH_*, USE_*), and
+      Python-specific build variables.
     arguments:
-      - name: "project_path"
+      - name: "PROJECT_PATH"
         required: false
         default: "current directory"
-        description: "Path to Python project"
+        description: "Path to the Python project to analyze"
     usage_examples:
       - "/python-packaging-env-finder"
       - "/python-packaging-env-finder /path/to/project"
-  python-packaging-bug-finder:
+  python-packaging-license-checker:
     description: |
-      Find known packaging bugs, fixes, and workarounds for Python projects
-      by searching GitHub issues.
+      Check whether a Python package license is compatible with redistribution
+      in Red Hat products, using the Fedora License Data as the authoritative
+      policy source. Clones the source repo to read the actual LICENSE file
+      (not just PyPI metadata), normalizes to SPDX identifiers, handles
+      compound AND/OR expressions, checks vendor agreements (NVIDIA, Intel
+      Gaudi, IBM Spyre), and performs build and export compliance checks.
+      Produces a structured six-field verdict: License, Source verified,
+      Verdict, Build compliance, Export compliance, and Notes.
     arguments:
-      - name: "package_name"
+      - name: "PACKAGE_NAME"
         required: true
-        description: "Python package name to search issues for"
+        description: "Python package name to check"
+      - name: "--repo-url"
+        type: "URL"
+        required: false
+        description: "Source repository URL (skips source-finder step)"
+      - name: "--source-available"
+        type: "boolean"
+        required: false
+        description: "Whether buildable source exists"
+      - name: "--upstream-org"
+        type: "string"
+        required: false
+        description: "Name and primary country of the maintaining organization"
     usage_examples:
-      - "/python-packaging-bug-finder torch"
+      - "/python-packaging-license-checker requests"
+      - "/python-packaging-license-checker some-package --repo-url https://github.com/org/repo"
+  python-packaging-license-finder:
+    description: |
+      Deterministically find license information for Python packages using a
+      two-step approach: first check PyPI metadata via a helper script, then
+      fall back to cloning the source repository and reading LICENSE files
+      directly. Can also accept a source URL to skip PyPI lookup entirely.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name"
+      - name: "VERSION"
+        required: false
+        default: "latest"
+        description: "Specific package version"
+      - name: "--source-url"
+        type: "URL"
+        required: false
+        description: "Source repository URL (skips PyPI lookup)"
+    usage_examples:
+      - "/python-packaging-license-finder requests"
+      - "/python-packaging-license-finder django 4.2.0"
+      - "/python-packaging-license-finder some-pkg --source-url https://github.com/org/repo"
+  python-packaging-source-finder:
+    description: |
+      Locate source code repositories for Python packages by analyzing PyPI
+      metadata, project URLs, and code hosting platforms (GitHub, GitLab,
+      Bitbucket). Returns a JSON result with repository URL, confidence level
+      (high/medium/low), and the method used to find it. Falls back to web
+      search when PyPI metadata is insufficient.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name to find the repository for"
+    usage_examples:
+      - "/python-packaging-source-finder requests"
+      - "/python-packaging-source-finder vllm"
+  vllm-backport-fetch-prs:
+    description: |
+      Fetch merged bugfix PRs from vllm-project/vllm within a configurable
+      date window using GitHub CLI. Uses multiple search queries (label:bug,
+      [Bugfix]/[BugFix]/[Bug Fix] title patterns) and deduplicates results.
+      Also detects reverted PRs. Outputs a JSON array of PR objects to stdout.
+    arguments:
+      - name: "DAYS_BACK"
+        required: false
+        default: "7"
+        description: "Number of days to look back for merged PRs"
+    usage_examples:
+      - "/vllm-backport-fetch-prs"
+      - "/vllm-backport-fetch-prs 14"
+  vllm-backport-classify:
+    description: |
+      Classify bugfix PRs by type (runtime_bug, platform_specific, unclear,
+      not_bugfix) and filter by file existence at a release tag. Applies
+      deterministic regex rules, checks which files existed at the target tag,
+      detects subsystems, and filters PRs touching only post-release or
+      non-runtime code. PRs classified as "unclear" require agent review.
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to raw-prs.json from fetch-prs step"
+      - name: "--repo"
+        type: "path"
+        required: true
+        description: "Path to local vllm repository clone"
+      - name: "--tag"
+        type: "string"
+        required: true
+        description: "Release tag to check file existence against (e.g., v0.13.0)"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for filtered.json"
+    usage_examples:
+      - "/vllm-backport-classify --input artifacts/raw-prs.json --repo /path/to/vllm --tag v0.13.0 --output artifacts/filtered.json"
+  vllm-backport-check-backported:
+    description: |
+      Check which candidate PRs have already been cherry-picked into a
+      downstream branch. Uses two detection methods: SHA match (via git log
+      --grep for cherry-pick messages) and title match (via gh pr list on
+      the downstream branch). Adds an already_backported boolean to each PR.
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to filtered.json from classify step"
+      - name: "--downstream"
+        type: "path"
+        required: true
+        description: "Path to downstream repository"
+      - name: "--branch"
+        type: "string"
+        required: true
+        description: "Downstream branch name (e.g., rhai/0.13.0)"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for candidates.json"
+    usage_examples:
+      - "/vllm-backport-check-backported --input artifacts/filtered.json --downstream /path/to/downstream --branch rhai/0.13.0 --output artifacts/candidates.json"
+  vllm-backport-score-rank:
+    description: |
+      Score and rank backport candidates using a deterministic composite
+      formula (max 100 points) based on verdict (0-30), severity (5-25),
+      affected scope (3-20), backport risk (0-15), and self-containedness
+      (0-10). Filters out SKIP/already_backported PRs and assigns
+      backport_ease labels (ai-fixable if self-contained and safe/moderate risk).
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to analyzed.json with agent-added semantic fields"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for ranked.json"
+    usage_examples:
+      - "/vllm-backport-score-rank --input artifacts/analyzed.json --output artifacts/ranked.json"
+  vllm-backport-push-report:
+    description: |
+      Push a triage report to a GitHub repository under a timestamped
+      directory in reports/. Copies the report markdown and candidates JSON,
+      commits, pushes, and prints the GitHub URL to stdout.
+    arguments:
+      - name: "--report"
+        type: "path"
+        required: true
+        description: "Path to report markdown file"
+      - name: "--candidates"
+        type: "path"
+        required: true
+        description: "Path to ranked.json"
+      - name: "--version"
+        type: "string"
+        required: true
+        description: "Release version (e.g., v0.13.0)"
+    usage_examples:
+      - "/vllm-backport-push-report --report artifacts/report.md --candidates artifacts/ranked.json --version v0.13.0"
+  vllm-backport-cherry-pick:
+    description: |
+      Attempt automatic cherry-pick of clean backport candidates to a
+      downstream release branch. Selects eligible PRs (ai-fixable, score >= 50,
+      not already backported, verdict is must_backport or likely_relevant),
+      cherry-picks each, and creates a draft PR if any succeed. Requires agent
+      follow-up for semantic validation of the cherry-picked diff.
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to ranked.json from score-rank step"
+      - name: "--downstream"
+        type: "path"
+        required: true
+        description: "Path to downstream repository"
+      - name: "--branch"
+        type: "string"
+        required: true
+        description: "Downstream branch name (e.g., rhai/0.13.0)"
+      - name: "--jira-url"
+        type: "URL"
+        required: false
+        description: "Jira ticket URL to link in the PR"
+      - name: "--report-url"
+        type: "URL"
+        required: false
+        description: "GitHub report URL to link in the PR"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for cherry-pick-result.json"
+    usage_examples:
+      - "/vllm-backport-cherry-pick --input artifacts/ranked.json --downstream /path/to/repo --branch rhai/0.13.0 --output artifacts/cherry-pick-result.json"
+  vllm-compare-reqs:
+    description: |
+      Compare Python requirements files and Dockerfiles between vLLM versions
+      to identify dependency changes. Supports variant-based comparison (rocm,
+      cuda, cpu, tpu, xpu) which auto-includes runtime, build, and Dockerfile
+      differences, or single-file comparison. Produces a categorized summary
+      table followed by detailed per-file change listings. Designed for AIPCC
+      package onboarding workflows.
+    arguments:
+      - name: "VERSION1"
+        required: true
+        description: "First version to compare (e.g., v0.13.0)"
+      - name: "VERSION2"
+        required: true
+        description: "Second version to compare (e.g., v0.14.0)"
+      - name: "VARIANT_OR_FILE"
+        required: true
+        description: "Variant name (rocm, cuda, cpu, tpu, xpu) or specific file (common.txt, rocm-build.txt)"
+      - name: "--pretty"
+        required: false
+        default: "true"
+        description: "Show clean categorized output (use --no-pretty for simple diff)"
+    usage_examples:
+      - "/vllm-compare-reqs v0.13.0 v0.14.0 rocm"
+      - "/vllm-compare-reqs v0.13.0 v0.14.0 cuda"
+      - "/vllm-compare-reqs v0.13.0 v0.14.0 common.txt"
+  vllm-slack-summary:
+    description: |
+      Generate a summary of the vLLM CI SIG Slack channel activity for the
+      RHAIIS midstream release team. Uses slackdump to export channel messages,
+      generates a markdown transcript, then analyzes it for breaking changes,
+      hardware issues, CI/CD infrastructure changes, dependency updates,
+      performance regressions, and upstream release stability.
+    arguments:
+      - name: "--days"
+        required: false
+        default: "7"
+        description: "Number of days of Slack history to export"
+      - name: "--output-dir"
+        required: false
+        default: "vllm_slack_summary"
+        description: "Output directory for transcript and summary"
+    usage_examples:
+      - "/vllm-slack-summary"
+      - "/vllm-slack-summary --days 14"

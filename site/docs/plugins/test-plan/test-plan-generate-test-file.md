@@ -7,7 +7,11 @@ title: test-plan-generate-test-file
 
 # test-plan-generate-test-file
 
-Generate complete test file with all functions, quality scoring and auto-revision
+Internal forked sub-agent for parallel test file generation. Receives test case
+data, repository conventions, and pattern guides. Generates complete test files
+with framework-appropriate structure (imports, fixtures, AAA pattern functions),
+validates syntax, scores quality via test-plan-score-test-function, and auto-revises
+low-scoring functions. Returns result via temp file for parent to write.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 
@@ -16,3 +20,9 @@ Generate complete test file with all functions, quality scoring and auto-revisio
 <div class="diagram-container" markdown>
 ![test-plan-generate-test-file diagram](test-plan-generate-test-file.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-generate-test-file
+```

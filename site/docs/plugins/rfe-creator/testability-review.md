@@ -7,8 +7,13 @@ title: testability-review
 
 # testability-review
 
-Internal forked reviewer. Assesses whether acceptance criteria are
-measurable, edge cases covered, and validation approach defined.
+Internal forked reviewer sub-agent for strat.review. Determines whether
+strategy acceptance criteria are testable and measurable, identifies
+missing edge cases (failure modes, boundary conditions, concurrent
+access, large-scale scenarios), assesses test complexity, and evaluates
+whether non-functional requirements (performance, security, scalability)
+can be validated with concrete tests. Suggests specific rewrites for
+vague criteria.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -17,3 +22,9 @@ measurable, edge cases covered, and validation approach defined.
 <div class="diagram-container" markdown>
 ![testability-review diagram](testability-review.svg)
 </div>
+
+## Usage
+
+```
+/testability-review
+```

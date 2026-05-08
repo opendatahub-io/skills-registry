@@ -7,7 +7,11 @@ title: test-plan-analyze-placement
 
 # test-plan-analyze-placement
 
-Analyze test cases and recommend placement (component repo vs downstream)
+Internal forked sub-agent for test case placement analysis. Classifies each TC
+by test level (unit, integration, k8s-integration, api, e2e) and scores placement
+options (same_repo, downstream, both) using factors: test level preferences,
+infrastructure requirements, TC priority (P0 prefers upstream for fast feedback),
+and code repo agent readiness. Returns recommendations with user confirmation.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 
@@ -16,3 +20,9 @@ Analyze test cases and recommend placement (component repo vs downstream)
 <div class="diagram-container" markdown>
 ![test-plan-analyze-placement diagram](test-plan-analyze-placement.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-analyze-placement
+```

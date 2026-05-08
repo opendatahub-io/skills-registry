@@ -7,8 +7,13 @@ title: eval-dataset
 
 # eval-dataset
 
-Generate realistic test cases from the eval.yaml schema. Supports bootstrap
-(from scratch), expand (fill gaps), and from-traces (extract from MLflow) strategies.
+Generates realistic test cases based on the eval.yaml dataset schema and
+judge criteria. Supports three strategies: bootstrap (from scratch with
+simple/complex/edge case coverage), expand (fills gaps in existing datasets
+by analyzing what judges check that no case tests), and from-traces (extracts
+real inputs from MLflow production traces). Handles external-state fields
+with TODO_ placeholders, generates answers.yaml for interactive skills using
+AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -20,16 +25,20 @@ Generate realistic test cases from the eval.yaml schema. Supports bootstrap
 
 ## Arguments
 
+```
+/eval-dataset [--config <path>] [--count <N>] [--strategy <type>]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--count` |  | `3` | Number of test cases to generate |
-| `--strategy` |  | `auto` | Generation strategy |
-| `--config` |  | `eval.yaml` | Path to eval config |
+| `--config` |  | `eval.yaml` | Path to eval config. |
+| `--count` |  | `5` | Number of test cases to generate. |
+| `--strategy` |  | `bootstrap` | Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces. |
 
 ## Usage
 
 ```
 /eval-dataset
-/eval-dataset --count 5 --strategy expand
+/eval-dataset --count 10 --strategy expand
 /eval-dataset --strategy from-traces
 ```

@@ -7,8 +7,11 @@ title: python-packaging-source-finder
 
 # python-packaging-source-finder
 
-Locate source code repositories for Python packages by analyzing
-PyPI metadata and code hosting platforms.
+Locate source code repositories for Python packages by analyzing PyPI
+metadata, project URLs, and code hosting platforms (GitHub, GitLab,
+Bitbucket). Returns a JSON result with repository URL, confidence level
+(high/medium/low), and the method used to find it. Falls back to web
+search when PyPI metadata is insufficient.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -20,12 +23,17 @@ PyPI metadata and code hosting platforms.
 
 ## Arguments
 
+```
+/python-packaging-source-finder <PACKAGE_NAME>
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `package_name` | :material-check: | — | Python package name to find repository for |
+| `PACKAGE_NAME` | :material-check: | — | Python package name to find the repository for |
 
 ## Usage
 
 ```
 /python-packaging-source-finder requests
+/python-packaging-source-finder vllm
 ```

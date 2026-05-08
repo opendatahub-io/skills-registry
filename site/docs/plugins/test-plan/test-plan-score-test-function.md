@@ -7,7 +7,11 @@ title: test-plan-score-test-function
 
 # test-plan-score-test-function
 
-Score generated test function code using 5-criteria quality rubric
+Internal forked scorer sub-agent. Evaluates generated test function code using a
+5-criteria rubric: Coverage (all TC requirements implemented), Assertions (specific
+and meaningful), Convention Adherence (follows repo patterns), Test Data (realistic
+values from TC), Code Quality (clean, no excessive TODOs). Returns verdict
+(Ready/Good/Revise/Rework) with per-criterion scores and revision recommendations.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 
@@ -16,3 +20,9 @@ Score generated test function code using 5-criteria quality rubric
 <div class="diagram-container" markdown>
 ![test-plan-score-test-function diagram](test-plan-score-test-function.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-score-test-function
+```

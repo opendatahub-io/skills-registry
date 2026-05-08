@@ -4,167 +4,282 @@ description: |
   review results with human feedback, sync with MLflow, and iteratively optimize
   skill quality with regression checks.
 
-  The framework is schema-driven via eval.yaml, which defines execution mode,
-  dataset schemas, output descriptions, judges, models, and thresholds. Supports
-  inline, LLM-based, and external judges for scoring, with MLflow integration
-  for experiment tracking and tracing.
+  The framework is schema-driven via eval.yaml, which defines execution mode
+  (case-by-case or batch), dataset schemas, output descriptions, judges (inline
+  checks, LLM prompts, external modules), model selection per role (skill, subagent,
+  judge, hook), thresholds for regression detection, and tool interception handlers.
+  Supports AskUserQuestion answering via 3-tier resolution (exact overrides, LLM
+  with case context, fallback) and annotation-aware judges that adapt scoring based
+  on expected outcomes per test case.
+
+  The harness also integrates with EvalHub for running evaluations on Red Hat
+  OpenShift AI via a custom provider adapter, supporting S3-hosted datasets and
+  containerized execution.
 architecture_notes: |
-  Seven skills form a linear pipeline with feedback loops: analyze → dataset →
-  run → review/optimize. eval-run is the hub — it executes skills, runs judges,
-  and produces summary.yaml consumed by review, optimize, and mlflow. eval-optimize
-  creates a closed loop by editing SKILL.md and re-running eval-run with regression
-  checks. eval-mlflow provides bidirectional sync with MLflow for datasets, results,
-  and feedback.
+  Seven skills form a linear pipeline with feedback loops: setup (optional) ->
+  analyze -> dataset -> run -> review/optimize, with mlflow available at any
+  point after run. eval-run is the central hub -- it executes skills headlessly,
+  runs judges (inline checks + LLM scoring + pairwise comparison), and produces
+  summary.yaml consumed by review, optimize, and mlflow.
+
+  eval-optimize creates a closed loop by reading judge rationale and execution
+  transcripts, forming hypotheses about SKILL.md deficiencies, making surgical
+  edits, and re-running eval-run with regression baseline checks. eval-review
+  complements this with human-in-the-loop feedback that catches qualitative
+  issues judges miss. eval-mlflow provides bidirectional sync -- pushing datasets,
+  results, and feedback to MLflow experiment tracking and pulling annotations
+  back for optimization.
+
+  Scripts live alongside each skill and share the agent_eval Python package
+  (auto-installed via SessionStart hook into an isolated venv at .eval-venv/).
+  The data flow is: eval.yaml config -> workspace creation (isolated per run) ->
+  skill execution via EvalRunner -> artifact collection -> judge scoring ->
+  summary.yaml + HTML report.
 skills:
   eval-setup:
     description: |
-      One-time environment setup for the evaluation framework. Installs dependencies,
-      configures MLflow tracking, verifies API keys, and runs preflight checks.
+      Optional environment configurator for the evaluation harness. Installs
+      dependencies into the isolated venv, configures MLflow tracking (local
+      server, file store, or remote), verifies API keys (Anthropic or Vertex AI),
+      sets up the runs directory, checks skill-specific environment variables
+      referenced in eval.yaml, and creates the MLflow experiment. Most users
+      can skip this -- dependencies auto-install via the plugin's SessionStart
+      hook and agent_eval is available via symlinks.
+    argument_hint: "[--tracking-uri <uri>] [--skip-mlflow] [--runs-dir <path>]"
+    arguments:
+      - name: "--tracking-uri"
+        type: "<uri>"
+        required: false
+        description: "MLflow tracking URI (skips interactive setup). Accepts local or remote URIs."
+      - name: "--skip-mlflow"
+        required: false
+        default: "false"
+        description: "Skip MLflow setup entirely. The harness works without MLflow."
+      - name: "--runs-dir"
+        type: "<path>"
+        required: false
+        default: "eval/runs"
+        description: "Directory where eval runs are stored. Configured via AGENT_EVAL_RUNS_DIR env var."
     usage_examples:
       - "/eval-setup"
+      - "/eval-setup --tracking-uri http://127.0.0.1:5000"
+      - "/eval-setup --skip-mlflow"
   eval-analyze:
     description: |
-      Deeply examines a target skill's SKILL.md, sub-skills, scripts, and test cases
-      to generate eval.yaml — the configuration that /eval-run needs.
+      Deep-reads a target skill and generates eval.yaml -- the configuration that
+      /eval-run needs. Examines the skill's SKILL.md, follows sub-skill chains
+      recursively (up to 5 levels), explores scripts and test cases, and produces
+      a complete config with execution mode, dataset schema, output descriptions,
+      judges, model defaults, and thresholds. Uses an Explore sub-agent for the
+      recursive skill analysis and caches the result in eval.md with a content
+      hash for staleness detection.
+    argument_hint: "[--skill <name>] [--config <path>] [--update]"
     arguments:
       - name: "--skill"
         type: "<name>"
         required: false
         default: "auto-detect"
-        description: "Which skill to analyze"
+        description: "Which skill to analyze. If omitted, lists all project skills and picks automatically if only one is found."
       - name: "--config"
         type: "<path>"
         required: false
         default: "eval.yaml"
-        description: "Output path for the eval config"
+        description: "Output path for the eval config file."
       - name: "--update"
         required: false
         default: "false"
-        description: "Fill in missing sections only, preserve user edits"
+        description: "Fill in missing sections only, preserving user edits. Useful for upgrading older configs."
     usage_examples:
       - "/eval-analyze --skill my-skill"
       - "/eval-analyze --update"
+      - "/eval-analyze --skill rfe.create --config eval-rfe.yaml"
   eval-dataset:
     description: |
-      Generate realistic test cases from the eval.yaml schema. Supports bootstrap
-      (from scratch), expand (fill gaps), and from-traces (extract from MLflow) strategies.
+      Generates realistic test cases based on the eval.yaml dataset schema and
+      judge criteria. Supports three strategies: bootstrap (from scratch with
+      simple/complex/edge case coverage), expand (fills gaps in existing datasets
+      by analyzing what judges check that no case tests), and from-traces (extracts
+      real inputs from MLflow production traces). Handles external-state fields
+      with TODO_ placeholders, generates answers.yaml for interactive skills using
+      AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
+    argument_hint: "[--config <path>] [--count <N>] [--strategy <type>]"
     arguments:
+      - name: "--config"
+        type: "<path>"
+        required: false
+        default: "eval.yaml"
+        description: "Path to eval config."
       - name: "--count"
         type: "<N>"
         required: false
-        default: "3"
-        description: "Number of test cases to generate"
+        default: "5"
+        description: "Number of test cases to generate."
       - name: "--strategy"
         type: "bootstrap | expand | from-traces"
         required: false
-        default: "auto"
-        description: "Generation strategy"
-      - name: "--config"
-        type: "<path>"
-        required: false
-        default: "eval.yaml"
-        description: "Path to eval config"
+        default: "bootstrap"
+        description: "Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces."
     usage_examples:
       - "/eval-dataset"
-      - "/eval-dataset --count 5 --strategy expand"
+      - "/eval-dataset --count 10 --strategy expand"
       - "/eval-dataset --strategy from-traces"
   eval-run:
     description: |
-      Execute a skill against test cases, collect artifacts, score with inline and
-      LLM judges, detect regressions against a baseline, and generate an HTML report.
+      Executes a skill against test cases, collects artifacts, scores with judges,
+      and generates an HTML report. Orchestrates via scripts: preflight checks for
+      stale artifacts, workspace creation with isolated per-case directories, headless
+      skill execution (case mode: once per case; batch mode: single invocation),
+      artifact collection into per-case dirs, scoring with inline checks and LLM
+      judges, optional pairwise comparison against a baseline for regression detection,
+      and report generation. Supports concurrent case execution via parallelism setting,
+      tool interception for AskUserQuestion and external APIs, and configurable
+      reasoning effort levels.
+    argument_hint: "[--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--case <filter>] [--no-judge] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]"
     arguments:
       - name: "--config"
         type: "<path>"
         required: false
         default: "eval.yaml"
-        description: "Path to eval config"
+        description: "Path to eval config."
       - name: "--model"
         type: "<model>"
         required: false
         default: "models.skill from config"
-        description: "Model for skill execution"
+        description: "Model for skill execution. Required if models.skill is unset in eval.yaml."
       - name: "--subagent-model"
         type: "<model>"
         required: false
-        description: "Model for subagents (falls back to skill model)"
-      - name: "--judge-model"
-        type: "<model>"
-        required: false
-        default: "models.judge from config"
-        description: "Model for LLM judges"
-      - name: "--baseline"
-        type: "<run-id>"
-        required: false
-        description: "Compare against a previous run for regression detection"
-      - name: "--cases"
-        type: "<pattern>"
-        required: false
-        description: "Filter cases by glob pattern (e.g. case-001*)"
-      - name: "--no-judge"
-        required: false
-        description: "Skip judge scoring (execution only)"
-      - name: "--gold"
-        required: false
-        description: "Save outputs as gold references"
-    usage_examples:
-      - "/eval-run"
-      - "/eval-run --model claude-opus-4-6 --baseline 2026-05-01"
-      - "/eval-run --cases 'case-001*' --no-judge"
-  eval-review:
-    description: |
-      Interactive review of evaluation results. Presents judge scores and skill
-      outputs for human feedback, identifies judge gaps, and proposes SKILL.md improvements.
-    arguments:
+        default: "models.subagent, falls back to skill model"
+        description: "Model for subagents (e.g., claude-sonnet-4-6 while main is claude-opus-4-7)."
       - name: "--run-id"
         type: "<id>"
         required: false
-        default: "latest run"
-        description: "Which eval run to review"
+        default: "YYYY-MM-DD-<model>"
+        description: "Identifier for this run."
+      - name: "--case"
+        type: "<filter>"
+        required: false
+        description: "Substring match to select specific cases."
+      - name: "--baseline"
+        type: "<run-id>"
+        required: false
+        description: "Previous run to compare against for regression detection via pairwise comparison."
+      - name: "--no-judge"
+        required: false
+        default: "false"
+        description: "Skip LLM judges, run inline checks only."
+      - name: "--gold"
+        required: false
+        default: "false"
+        description: "Save outputs as gold references after the run."
+      - name: "--effort"
+        type: "low | medium | high | xhigh | max"
+        required: false
+        default: "runner.effort from config"
+        description: "Claude Code reasoning effort level."
+      - name: "--skill"
+        type: "<name>"
+        required: false
+        default: "from config"
+        description: "Override the skill to test."
     usage_examples:
-      - "/eval-review"
-      - "/eval-review --run-id 2026-05-01-claude-opus-4-6"
-  eval-mlflow:
+      - "/eval-run --model claude-opus-4-6"
+      - "/eval-run --model claude-opus-4-6 --baseline 2026-05-01-opus"
+      - "/eval-run --case case-001 --no-judge"
+      - "/eval-run --gold"
+  eval-review:
     description: |
-      Bidirectional MLflow sync. Syncs datasets, logs run results and metrics,
-      pushes judge scores and human feedback to execution traces.
+      Interactive human-in-the-loop review of evaluation results. Presents judge
+      scores and skill outputs case by case, collects qualitative feedback, delegates
+      transcript analysis to Explore sub-agents to identify inefficiencies (roundabout
+      paths, multiple approaches, unnecessary tools), identifies judge-human alignment
+      gaps, and proposes targeted SKILL.md improvements grounded in feedback evidence.
+      Complements /eval-optimize (automated) by catching tone, intent, and UX issues
+      that judges cannot measure.
+    argument_hint: "--run-id <id> [--config <path>] [--case <filter>]"
     arguments:
       - name: "--run-id"
         type: "<id>"
         required: true
-        description: "Which eval run to sync"
+        description: "Which eval run to review."
+      - name: "--config"
+        type: "<path>"
+        required: false
+        default: "eval.yaml"
+        description: "Path to eval config."
+      - name: "--case"
+        type: "<filter>"
+        required: false
+        description: "Substring match to select specific cases for review."
+    usage_examples:
+      - "/eval-review --run-id 2026-05-01-opus"
+      - "/eval-review --run-id 2026-05-01-opus --case case-003"
+  eval-mlflow:
+    description: |
+      Bidirectional MLflow integration for evaluation results, datasets, and
+      feedback. Syncs test cases to MLflow dataset registry with a schema mapping
+      you define (inputs vs expectations), logs run params/metrics/artifacts/traces
+      to MLflow experiments, pushes judge scores and human feedback to execution
+      traces, and pulls annotations added via the MLflow UI back into review.yaml
+      for /eval-optimize to consume. Resolves tracking URI from eval.yaml, then
+      MLFLOW_TRACKING_URI env var, then defaults to localhost:5000.
+    argument_hint: "[--action <action>] [--run-id <id>] [--config <path>]"
+    arguments:
       - name: "--action"
         type: "sync-dataset | log-results | push-feedback | pull-feedback | all"
         required: false
         default: "all"
-        description: "Which sync action to perform"
+        description: "Which sync action to perform."
+      - name: "--run-id"
+        type: "<id>"
+        required: false
+        description: "Which eval run to log or attach feedback to. Required for log-results, push-feedback, and pull-feedback."
       - name: "--config"
         type: "<path>"
         required: false
         default: "eval.yaml"
-        description: "Path to eval config"
+        description: "Path to eval config."
     usage_examples:
-      - "/eval-mlflow --run-id 2026-05-01"
-      - "/eval-mlflow --run-id latest --action sync-dataset"
+      - "/eval-mlflow --run-id 2026-05-01-opus"
+      - "/eval-mlflow --action sync-dataset"
+      - "/eval-mlflow --run-id 2026-05-01-opus --action push-feedback"
   eval-optimize:
     description: |
-      Automated improvement loop. Identifies judge failures, analyzes transcripts,
-      edits SKILL.md, re-runs evaluation with regression checks, and iterates.
+      Automated skill improvement loop. Runs evaluation, identifies judge failures
+      from summary.yaml, reads execution transcripts via Explore sub-agents to trace
+      root causes to specific SKILL.md instructions, makes surgical edits grounded
+      in evidence, re-runs evaluation with regression baseline checks, and iterates
+      up to a configurable maximum. Also reads human feedback from review.yaml
+      (from /eval-review) and MLflow annotations to prioritize issues flagged by
+      humans over automated judge failures. Stops when all judges pass or max
+      iterations reached.
+    argument_hint: "[--config <path>] [--model <model>] [--max-iterations <N>] [--run-id <id>] [--target-judge <name>]"
     arguments:
-      - name: "--max-iterations"
-        type: "<N>"
-        required: false
-        default: "3"
-        description: "Maximum optimization iterations"
       - name: "--config"
         type: "<path>"
         required: false
         default: "eval.yaml"
-        description: "Path to eval config"
+        description: "Path to eval config."
       - name: "--model"
         type: "<model>"
         required: false
         default: "models.skill from config"
-        description: "Model for skill execution"
+        description: "Model for skill execution across all iterations."
+      - name: "--max-iterations"
+        type: "<N>"
+        required: false
+        default: "3"
+        description: "Maximum optimization iterations before stopping."
+      - name: "--run-id"
+        type: "<id>"
+        required: false
+        default: "auto-generated"
+        description: "Base run ID. Iterations append -iter-N."
+      - name: "--target-judge"
+        type: "<name>"
+        required: false
+        description: "Focus optimization on a specific failing judge instead of all judges."
     usage_examples:
       - "/eval-optimize"
       - "/eval-optimize --max-iterations 5 --model claude-opus-4-6"
+      - "/eval-optimize --target-judge completeness"

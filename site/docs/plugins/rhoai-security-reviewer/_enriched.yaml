@@ -1,42 +1,121 @@
 description: |
-  Consensus-based security review for RHOAI strategy documents. An orchestrator
-  extracts threat surfaces, spawns three independent reviewers in parallel,
-  synthesizes findings with confidence tagging, and produces a PASS/CONCERNS/FAIL
-  verdict covering 39 catalog patterns.
+  Consensus-based security review system for RHOAI strategy documents (STRATs).
+  Rather than relying on a single reviewer pass, this plugin uses an orchestrator
+  that extracts a mechanical threat surface inventory from the STRAT, then spawns
+  three independent security reviewers running in isolated forked contexts. Each
+  reviewer checks the STRAT against all 39 catalog risk patterns covering
+  authentication, data protection, cryptographic compliance (FIPS 140-3),
+  network security, supply chain, infrastructure, multi-tenant isolation,
+  agentic AI security, MCP security, and upstream component risk. Reviewers
+  also perform creative exploration for risks not covered by the catalog.
+
+  The orchestrator synthesizes reviewer findings using confidence tagging based
+  on cross-reviewer agreement: risks found by all three reviewers are HIGH
+  confidence, by two are MEDIUM, and by one are LOW. Severity is resolved by
+  majority vote. The final output includes a verdict (PASS / CONCERNS / FAIL),
+  a full review with consensus findings, and an actionable security requirements
+  file that is automatically attached to the Jira ticket. The system also
+  cross-references findings against a 47-item NFR checklist derived from 422
+  prior STRAT reviews, and adds idempotency labels to Jira for pipeline
+  integration.
+architecture_notes: |
+  The plugin follows a two-skill architecture with a clear separation of concerns:
+
+  1. **strat-security-review** (orchestrator): Manages the full review lifecycle.
+     It fetches the STRAT from Jira via Atlassian MCP, performs mechanical threat
+     surface extraction (endpoints, services, data flows, credentials, CRDs,
+     trust boundaries, RBAC, dependencies, agent/MCP surfaces), determines the
+     review tier (Light / Standard / Deep), and spawns three isolated reviewer
+     instances. After synthesis, it writes two output files (full review +
+     requirements), attaches the requirements file to Jira, and adds verdict
+     labels for downstream pipeline idempotency.
+
+  2. **security-reviewer** (worker): Runs in `context: fork` isolation on the
+     `claude-opus-4-6` model. Each instance performs a two-phase analysis:
+     Phase A discovers all potential concerns by checking every catalog pattern
+     and performing creative exploration. Phase B applies a relevance gate
+     (requiring specific STRAT citations and checking existing controls) and a
+     severity decision tree. Architecture context from `.context/` is consulted
+     for Standard/Deep tiers to avoid flagging already-mitigated controls.
+
+  The Light tier includes a short-circuit: if the threat surface inventory is
+  entirely empty, the orchestrator skips reviewer spawning and issues a direct
+  PASS verdict. Intermediate files (threat surface, individual reviewer outputs)
+  are preserved for auditability and calibration.
 skills:
   strat-security-review:
     description: |
-      Security review orchestrator for STRAT documents. Extracts threat surface,
-      determines review tier, spawns 3 independent reviewers, synthesizes
-      consensus findings, and produces a final verdict with confidence tagging.
+      Multi-reviewer consensus orchestrator for security review of RHOAI strategy
+      documents. Operates in four phases: (1) fetch the STRAT from Jira and extract
+      a mechanical threat surface inventory covering endpoints, services, data flows,
+      credentials, CRDs, trust boundaries, RBAC, external dependencies, and agent/MCP
+      surfaces; (2) determine review tier (Light/Standard/Deep) based on security
+      surface hints and effort size, then spawn three independent security-reviewer
+      instances in isolated forked contexts; (3) synthesize findings using confidence
+      tagging (HIGH=3/3, MEDIUM=2/3, LOW=1/3 reviewer agreement) with majority-vote
+      severity resolution; (4) write a full review and a requirements file, attach
+      requirements to Jira, and add idempotency labels (strat-security-pass,
+      strat-security-concerns, strat-security-fail).
+
+      Includes a Light tier short-circuit that skips reviewer spawning when the
+      threat surface inventory is entirely empty. Cross-references synthesized
+      findings against a 47-item NFR checklist derived from 422 prior reviews.
+      Five or more NFR gaps at Standard/Deep tier upgrade the verdict to CONCERNS.
+    argument_hint: "<RHAISTRAT_KEY> [--force]"
     arguments:
       - name: "RHAISTRAT_KEY"
         required: true
-        description: "RHAISTRAT Jira key (e.g., RHAISTRAT-400)"
+        description: "RHAISTRAT Jira key identifying the strategy document to review (e.g., RHAISTRAT-400)"
       - name: "--force"
         required: false
-        description: "Regenerate review even if one already exists"
+        default: "false"
+        description: "Regenerate the security review even if one already exists for this STRAT"
     usage_examples:
       - "/strat-security-review RHAISTRAT-400"
       - "/strat-security-review RHAISTRAT-400 --force"
   security-reviewer:
     description: |
-      Independent security reviewer that assesses RHOAI strategy documents
-      against 39 catalog patterns. Runs in isolated forked context as part
-      of the multi-reviewer consensus process.
+      Independent security reviewer that assesses RHOAI strategy documents against
+      a 39-pattern risk catalog plus creative exploration. Runs in isolated forked
+      context (context: fork) on the claude-opus-4-6 model as part of the
+      multi-reviewer consensus process -- not intended for direct user invocation.
+
+      Operates in two phases: Phase A (Discovery) checks every catalog pattern
+      against the threat surface inventory, recording each as APPLICABLE or
+      NOT-APPLICABLE, then performs creative exploration for cross-component
+      attack chains, novel attack surfaces, emergent risks, and unvalidated
+      assumptions. Phase B (Filter and Classify) applies a relevance gate
+      requiring specific STRAT text citations and checking existing controls
+      from architecture context, then assigns severity via a decision tree
+      (Critical > High > Medium > NFR Gap).
+
+      The catalog covers 39 patterns across 10 categories: Authentication &
+      Authorization (AUTH-01 through AUTH-06), Data Protection (DATA-01 through
+      DATA-04), Cryptographic Compliance (CRYPTO-01 through CRYPTO-04), Network
+      & API Security (NET-01 through NET-03), Supply Chain (SUPPLY-01 through
+      SUPPLY-04), Infrastructure (INFRA-01 through INFRA-03), Multi-Tenant
+      Isolation (TENANT-01 through TENANT-03), Agentic AI Security (AGENT-01
+      through AGENT-05), MCP Security (MCP-01 through MCP-04), and Upstream
+      Component Risk (UPSTREAM-01 through UPSTREAM-04). Also checks RHOAI
+      organizational constraints (FIPS 140-3, TLS profile compliance, auth
+      patterns, secret management, namespace-scoped RBAC).
+    argument_hint: "<STRAT_KEY> --reviewer <N> --threat-surface <path> --tier <tier>"
     arguments:
       - name: "STRAT_KEY"
         required: true
-        description: "STRAT key (e.g., RHAISTRAT-400)"
+        description: "RHAISTRAT Jira key (e.g., RHAISTRAT-400)"
       - name: "--reviewer"
-        type: "N"
+        type: "integer"
         required: true
-        description: "Reviewer number (1, 2, or 3)"
+        description: "Reviewer number (1, 2, or 3) identifying this instance in the consensus set"
       - name: "--threat-surface"
-        type: "<path>"
+        type: "path"
         required: true
-        description: "Path to threat surface inventory file"
+        description: "Path to the threat surface inventory file extracted by the orchestrator"
       - name: "--tier"
-        type: "light | standard | deep"
+        type: "enum"
         required: true
-        description: "Review depth tier"
+        description: "Review depth tier: light (minimal surface), standard (1-2 hints), or deep (3+ hints, auth+crypto, agentic/MCP)"
+    usage_examples:
+      - "/security-reviewer RHAISTRAT-400 --reviewer 1 --threat-surface artifacts/security-reviews/RHAISTRAT-400-threat-surface.md --tier standard"
+      - "/security-reviewer RHAISTRAT-400 --reviewer 2 --threat-surface artifacts/security-reviews/RHAISTRAT-400-threat-surface.md --tier deep"

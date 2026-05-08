@@ -7,8 +7,11 @@ title: jira-upload-chat-log
 
 # jira-upload-chat-log
 
-Export the current chat conversation as a markdown file and attach
-it to a Jira ticket.
+Export the current chat conversation as a formatted markdown document
+(with both a summary and full transcript) and upload it as a file
+attachment to a Jira ticket. Automatically detects ticket keys from
+conversation context, or prompts the user if none is found. Delegates
+the actual upload to the jira-workitem-attach skill.
 
 **Plugin**: [odh-ai-helpers](index.md) | **:material-check: User-invocable**
 
@@ -20,9 +23,13 @@ it to a Jira ticket.
 
 ## Arguments
 
+```
+/jira-upload-chat-log [TICKET_KEY]
+```
+
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `ticket_key` |  | `auto-detected from conversation` | Jira ticket key (e.g., AIPCC-1234) |
+| `TICKET_KEY` |  | `auto-detected from conversation context` | Jira ticket key (e.g., AIPCC-1234) |
 
 ## Usage
 

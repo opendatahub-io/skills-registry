@@ -1,63 +1,268 @@
 description: |
-  Generate test plans and test cases from RHOAI strategies using parallel
-  sub-agent analysis and automated review with a 5-criteria quality rubric.
+  End-to-end test planning and automation workflow for RHOAI (Red Hat OpenShift AI).
+  Takes a Jira strategy document as input and produces a complete test plan, individual
+  test case specifications, executable test automation code, and visual UI verification
+  reports. The pipeline uses parallel sub-agent analysis (endpoints, risks, infrastructure)
+  to extract testable interfaces, then scores quality with a 5-criteria rubric and
+  auto-revises up to 2 cycles. Supports the full lifecycle: create, review, publish to
+  GitHub, resolve PR feedback, update with new documentation, and verify UI test cases
+  against live clusters via Playwright. Test code generation uses odh-test-context for
+  repo-specific conventions, Tiger Team pattern guides, and intelligent placement analysis
+  to decide whether tests belong in the component repo or downstream E2E repo.
+
+architecture_notes: |
+  The plugin is organized as an orchestrated pipeline of 19 skills, split into
+  user-invocable commands and internal forked sub-agents:
+
+  **User-invocable pipeline stages:**
+  1. test-plan-create -- generates a test plan from a Jira strategy with 3 parallel analyzers
+  2. test-plan-create-cases -- generates TC-*.md files from the test plan
+  3. test-plan-update -- re-analyzes with new documents, merges findings, bumps version
+  4. test-plan-case-implement -- generates executable test code with placement analysis
+  5. test-plan-ui-verify -- browser-based UI test execution via Playwright CDP
+  6. test-plan-publish -- creates/updates GitHub PRs with test plan artifacts
+  7. test-plan-resolve-feedback -- triages and applies PR review comments
+  8. test-plan-score -- standalone quality rubric assessment (read-only)
+
+  **Internal sub-agents (context: fork):**
+  - test-plan-analyze-endpoints, test-plan-analyze-risks, test-plan-analyze-infra -- parallel analyzers
+  - test-plan-merge -- intelligent merge of new findings into existing plans
+  - test-plan-resolve-gaps -- cross-references gaps with new documentation
+  - test-plan-analyze-placement -- recommends component vs downstream repo placement
+  - test-plan-review -- quality scoring + auto-revision loop (max 2 cycles)
+  - test-plan-generate-test-file -- parallel test file generation sub-agent
+  - test-plan-score-test-function -- quality scoring for generated test functions
+
+  Key architectural patterns:
+  - Parallel forked sub-agents for analysis and code generation (isolated context, clean return)
+  - Python scripts for deterministic operations (frontmatter, validation, file mapping, repo utilities)
+  - MCP integration (Atlassian) for fetching Jira strategies
+  - Persistent Playwright CDP browser for UI verification with screenshot capture
+  - odh-test-context integration for repository-specific test conventions
+
 skills:
-  test-plan.create:
+  test-plan-create:
     description: |
-      Generate a complete test plan for a RHOAI feature from a strategy document.
-      Spawns 3 parallel sub-analyzers (endpoints, risks, infra), merges findings,
-      and runs an automated review with scoring and auto-revision.
+      Generate a complete test plan for a RHOAI feature from a Jira strategy
+      (RHAISTRAT or RHOAIENG issue), with optional ADR for additional technical depth.
+      Spawns 3 parallel sub-analyzers (endpoints, risks, infra), merges their findings
+      into a structured template, collects gaps into TestPlanGaps.md, then runs an
+      automated quality review with scoring and up to 2 auto-revision cycles. Produces
+      TestPlan.md, TestPlanGaps.md, TestPlanReview.md, and README.md in a feature directory.
+    argument_hint: "<JIRA_KEY> [ADR_FILE_PATH]"
     arguments:
       - name: "JIRA_KEY"
         required: true
-        description: "Strategy key (RHAISTRAT-*) or issue key (RHOAIENG-*)"
+        description: "Jira strategy key (RHAISTRAT-*) or issue key (RHOAIENG-*) to generate the test plan from"
       - name: "ADR_FILE_PATH"
         required: false
-        description: "Local path to ADR document (markdown, text, or PDF)"
+        description: "Local path to an ADR document (markdown, text, or PDF) for additional technical depth"
       - name: "--output-dir"
-        type: "<path>"
         required: false
-        description: "Override output directory for test plan artifacts"
+        description: "Override output directory for test plan artifacts (skips validation)"
     usage_examples:
-      - "/test-plan.create RHAISTRAT-400"
-      - "/test-plan.create RHOAIENG-48676"
-      - "/test-plan.create RHAISTRAT-400 /path/to/adr.pdf"
-  test-plan.create-cases:
+      - "/test-plan-create RHAISTRAT-400"
+      - "/test-plan-create RHOAIENG-48676"
+      - "/test-plan-create RHAISTRAT-400 /path/to/adr.pdf"
+
+  test-plan-create-cases:
     description: |
-      Generate individual test case files (TC-*.md) from an existing test plan.
-      Supports upgrade-aware cases and validates endpoint coverage.
+      Generate individual test case specification files (TC-*.md) from an existing test plan.
+      Processes categories one at a time, generates E2E and optional upgrade test cases,
+      validates endpoint coverage, and updates the test plan with traceability data.
+      Supports regeneration mode for updating existing test cases.
+    argument_hint: "[FEATURE_SOURCE] [--output-dir PATH]"
     arguments:
-      - name: "FEATURE_DIR"
+      - name: "FEATURE_SOURCE"
         required: false
-        default: "auto-detected from prior /test-plan.create"
-        description: "Feature directory, GitHub branch URL, or PR URL"
+        default: "auto-detected from prior /test-plan-create run"
+        description: "Feature directory path, GitHub branch URL, or GitHub PR URL"
       - name: "--output-dir"
-        type: "<path>"
         required: false
-        description: "Force creation in specified directory"
+        description: "Force creation in specified directory (contributor override)"
     usage_examples:
-      - "/test-plan.create-cases"
-      - "/test-plan.create-cases mcp_catalog"
-      - "/test-plan.create-cases /path/to/feature_dir"
-  test-plan.analyze.endpoints:
+      - "/test-plan-create-cases"
+      - "/test-plan-create-cases mcp_catalog"
+      - "/test-plan-create-cases /path/to/feature_dir"
+
+  test-plan-update:
     description: |
-      Internal forked sub-analyzer. Extracts feature scope, test objectives,
-      and API endpoints/methods under test from strategy and ADR documents.
-  test-plan.analyze.risks:
-    description: |
-      Internal forked sub-analyzer. Determines test levels, test types,
-      priority definitions, NFR assessments, and risks with mitigations.
-  test-plan.analyze.infra:
-    description: |
-      Internal forked sub-analyzer. Identifies test environment configuration,
-      test data, test users, infrastructure, and tooling requirements.
-  test-plan.review:
-    description: |
-      Internal quality reviewer. Scores test plans against a 5-criteria rubric
-      (specificity, grounding, scope fidelity, actionability, consistency) and
-      auto-revises failing plans up to 2 cycles.
+      Update an existing test plan with new documentation (ADR, API specs, design docs).
+      Re-runs the 3 parallel analyzers with original + new material, uses the merge
+      sub-agent to intelligently integrate findings while preserving user edits, resolves
+      gaps, re-runs quality review, and optionally regenerates test cases. Bumps the
+      version number automatically.
+    argument_hint: "<SOURCE> <NEW_DOC_PATH> [<NEW_DOC_PATH>...]"
     arguments:
-      - name: "FEATURE_DIR"
+      - name: "SOURCE"
+        required: true
+        description: "Test plan location: local directory path, GitHub branch URL, or GitHub PR URL"
+      - name: "NEW_DOC_PATH"
+        required: true
+        description: "One or more paths to new documentation files (ADR, API spec, design doc)"
+    usage_examples:
+      - "/test-plan-update ~/Code/collection-tests/mcp_catalog adr.pdf"
+      - "/test-plan-update https://github.com/org/repo/pull/42 api-spec.md design.md"
+
+  test-plan-case-implement:
+    description: |
+      Generate executable test automation code (pytest, Go, Jest, etc.) from TC-*.md
+      test case specifications. Runs placement analysis to determine component repo vs
+      downstream E2E repo placement, loads repository conventions from odh-test-context,
+      generates test files in parallel via sub-agents, scores quality with a 5-criteria
+      rubric, and auto-revises low-scoring functions. Supports selective implementation
+      via --test-cases flag.
+    argument_hint: "<FEATURE_SOURCE> [--test-cases TC-ID,TC-ID] [--target-repo PATH]"
+    arguments:
+      - name: "FEATURE_SOURCE"
+        required: true
+        description: "Feature directory, GitHub PR URL, or GitHub branch containing test case artifacts"
+      - name: "--test-cases"
         required: false
-        default: "auto-detected"
-        description: "Feature directory containing TestPlan.md"
+        description: "Comma-separated list of specific test case IDs to implement (e.g., TC-API-001,TC-E2E-001)"
+      - name: "--target-repo"
+        required: false
+        description: "Override auto-detected target repository path or URL"
+    usage_examples:
+      - "/test-plan-case-implement features/notebooks/RHAISTRAT-400-notebook-spawning"
+      - "/test-plan-case-implement https://github.com/org/repo/pull/7"
+      - "/test-plan-case-implement features/notebooks/RHAISTRAT-400 --test-cases TC-API-001,TC-API-002"
+      - "/test-plan-case-implement features/notebooks/RHAISTRAT-400 --target-repo ~/Code/opendatahub-tests"
+
+  test-plan-ui-verify:
+    description: |
+      Browser-based UI test execution against live ODH/RHOAI clusters. Uses a two-step
+      flow: ui_prepare.py (deterministic setup in terminal) followed by Claude Code
+      execution. Loads TC-*.md files from a GitHub PR or repo folder, executes each via
+      a persistent Playwright CDP browser, and produces a visual HTML report with
+      PASS/FAIL/BLOCKED/INCOMPLETE verdicts and highlighted screenshots. Supports upgrade
+      testing workflow with pre/post phase comparison and regression detection.
+    arguments: []
+    usage_examples:
+      - "python3 scripts/ui_prepare.py --test-plan-pr https://github.com/org/repo/pull/5"
+      - "python3 scripts/ui_prepare.py --test-plan-pr <url> --tc TC-UI --priority P0"
+      - "python3 scripts/ui_prepare.py --test-plan-pr <url> --upgrade-phase pre"
+      - "/test-plan-ui-verify"
+
+  test-plan-publish:
+    description: |
+      Publish test plan artifacts to GitHub by creating a branch, committing all files,
+      and opening a pull request. Validates frontmatter and artifacts before publishing.
+      Supports updating existing PRs (pushes new commits to the same branch). Uses
+      version-free branch names (test-plan/<source_key>) for iterative updates.
+    argument_hint: "[FEATURE_SOURCE] [--repo owner/repo] [--reviewers user1,user2]"
+    arguments:
+      - name: "FEATURE_SOURCE"
+        required: false
+        default: "auto-detected from prior /test-plan-create run"
+        description: "Feature directory path, GitHub branch URL, or GitHub PR URL"
+      - name: "--repo"
+        required: false
+        description: "Target GitHub repository in owner/repo format"
+      - name: "--reviewers"
+        required: false
+        description: "Comma-separated list of GitHub usernames to assign as PR reviewers"
+    usage_examples:
+      - "/test-plan-publish tool_calling_metadata"
+      - "/test-plan-publish tool_calling_metadata --reviewers alice,bob"
+      - "/test-plan-publish tool_calling_metadata --repo org/test-plans-repo"
+
+  test-plan-resolve-feedback:
+    description: |
+      Read PR review comments from a published test plan, assess each against the
+      existing test plan content, and let the user decide which to apply. Processes
+      comments one at a time with assessment (aligns, conflicts, needs clarification,
+      already covered) and concrete change proposals. Commits and pushes approved
+      changes to the same branch with a descriptive commit message.
+    argument_hint: "<PR_URL>"
+    arguments:
+      - name: "PR_URL"
+        required: true
+        description: "Full GitHub PR URL (e.g., https://github.com/owner/repo/pull/42)"
+    usage_examples:
+      - "/test-plan-resolve-feedback https://github.com/org/test-plans-repo/pull/42"
+
+  test-plan-score:
+    description: |
+      Score an existing test plan using the 5-criteria quality rubric (Specificity,
+      Grounding, Scope Fidelity, Actionability, Consistency) without triggering
+      auto-revision. Read-only assessment for standalone quality evaluation or
+      evaluating test plans created outside the automated pipeline.
+    argument_hint: "<feature_dir>"
+    arguments:
+      - name: "feature_dir"
+        required: true
+        description: "Path to directory containing TestPlan.md"
+    usage_examples:
+      - "/test-plan-score kagenti_agent_templates"
+      - "/test-plan-score mcp_catalog"
+
+  test-plan-analyze-endpoints:
+    description: |
+      Internal forked sub-analyzer. Extracts feature scope (in-scope, out-of-scope,
+      test objectives) and identifies API endpoints, gRPC services, Python/Go methods,
+      UI components, CLI commands, and configuration interfaces under test. Assigns
+      priorities and reports gaps. Produces findings for Sections 1 and 4 of the test plan.
+
+  test-plan-analyze-risks:
+    description: |
+      Internal forked sub-analyzer. Determines test levels (API integration, UI, security,
+      performance), test types (positive, negative, boundary, regression), feature-specific
+      priority definitions, non-functional requirement assessments (disconnected, upgrade,
+      performance, RBAC), and risks with impact/probability/mitigation. Produces findings
+      for Sections 2, 7, and 8.
+
+  test-plan-analyze-infra:
+    description: |
+      Internal forked sub-analyzer. Identifies cluster configuration requirements
+      (OpenShift/RHOAI versions, databases, runtimes), test data requirements, test
+      users (service accounts, RBAC roles), infrastructure dependencies, configuration
+      (env vars, ConfigMaps, feature gates), and test tooling. Produces findings for
+      Sections 3 and 9.
+
+  test-plan-merge:
+    description: |
+      Internal forked sub-agent for intelligent merge of new analyzer findings into
+      an existing test plan. Applies section-by-section merge logic (additive for scope
+      and endpoints, replacement for boilerplate priorities, preserving user edits).
+      Returns updated section content, change summary, and merge statistics.
+
+  test-plan-resolve-gaps:
+    description: |
+      Internal forked sub-agent that cross-references existing test plan gaps with
+      new analyzer findings and documentation. Uses semantic matching to determine
+      which gaps are resolved, which remain open, and identifies new gaps. Returns
+      structured output with resolved/unresolved/new gaps and statistics.
+
+  test-plan-analyze-placement:
+    description: |
+      Internal forked sub-agent for test case placement analysis. Classifies each TC
+      by test level (unit, integration, k8s-integration, api, e2e) and scores placement
+      options (same_repo, downstream, both) using factors: test level preferences,
+      infrastructure requirements, TC priority (P0 prefers upstream for fast feedback),
+      and code repo agent readiness. Returns recommendations with user confirmation.
+
+  test-plan-review:
+    description: |
+      Internal quality reviewer and auto-revision orchestrator. Scores test plans
+      against a 5-criteria rubric (specificity, grounding, scope fidelity, actionability,
+      consistency), each scored 0-2 for a 10-point scale. Uses forked score and review
+      agents, then enters a revision loop (max 2 cycles) where a revise agent edits
+      failing sections and re-scores. Writes TestPlanReview.md with scores, feedback,
+      and verdict (Ready/Revise/Rework).
+
+  test-plan-generate-test-file:
+    description: |
+      Internal forked sub-agent for parallel test file generation. Receives test case
+      data, repository conventions, and pattern guides. Generates complete test files
+      with framework-appropriate structure (imports, fixtures, AAA pattern functions),
+      validates syntax, scores quality via test-plan-score-test-function, and auto-revises
+      low-scoring functions. Returns result via temp file for parent to write.
+
+  test-plan-score-test-function:
+    description: |
+      Internal forked scorer sub-agent. Evaluates generated test function code using a
+      5-criteria rubric: Coverage (all TC requirements implemented), Assertions (specific
+      and meaningful), Convention Adherence (follows repo patterns), Test Data (realistic
+      values from TC), Code Quality (clean, no excessive TODOs). Returns verdict
+      (Ready/Good/Revise/Rework) with per-criterion scores and revision recommendations.

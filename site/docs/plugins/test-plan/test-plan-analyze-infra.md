@@ -7,7 +7,11 @@ title: test-plan-analyze-infra
 
 # test-plan-analyze-infra
 
-Identify environment and infrastructure needs
+Internal forked sub-analyzer. Identifies cluster configuration requirements
+(OpenShift/RHOAI versions, databases, runtimes), test data requirements, test
+users (service accounts, RBAC roles), infrastructure dependencies, configuration
+(env vars, ConfigMaps, feature gates), and test tooling. Produces findings for
+Sections 3 and 9.
 
 **Plugin**: [test-plan](index.md) | **:material-close: Internal**
 
@@ -16,3 +20,9 @@ Identify environment and infrastructure needs
 <div class="diagram-container" markdown>
 ![test-plan-analyze-infra diagram](test-plan-analyze-infra.svg)
 </div>
+
+## Usage
+
+```
+/test-plan-analyze-infra
+```
