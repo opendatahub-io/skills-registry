@@ -73,8 +73,8 @@
   max-width: 75rem;
 }
 
-.md-content {
-  padding-top: 1.5rem;
+.md-main__inner {
+  margin-top: 0;
 }
 
 /* ── Header ── */
@@ -290,7 +290,7 @@
   background: var(--sr-surface);
   color: var(--sr-heading-h2);
   text-align: left;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -298,6 +298,23 @@
 .md-typeset table:not([class]) td {
   padding: 0.7em 1em;
   border-bottom: 1px solid var(--sr-border);
+  font-size: 0.72rem;
+}
+
+.md-typeset table:not([class]) code {
+  font-size: 0.85em;
+  display: inline-block;
+  padding: 0.1em 0.35em;
+  line-height: 1.4;
+}
+
+.md-typeset table:not([class]) td:first-child code {
+  white-space: nowrap;
+}
+
+.md-typeset table:not([class]) td:nth-child(3) code {
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .md-typeset table:not([class]) tr:last-child td {
