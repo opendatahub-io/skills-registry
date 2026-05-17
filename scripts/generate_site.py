@@ -12,9 +12,25 @@ Usage:
 import argparse
 import os
 import shutil
+import sys
 from pathlib import Path
 
 import yaml
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from scripts.registry_contracts import (  # noqa: E402
+    CANONICAL_FUNCTION_DOCS,
+    CANONICAL_METRIC_DOCS,
+    MEASURE_DOCS,
+    contract_metrics_as_dicts,
+    mapping_if_dict,
+    sequence_as_list,
+    skill_contract_mapping,
+)
 
 
 MKDOCS_CONFIG_TEMPLATE = """\
@@ -80,6 +96,22 @@ def load_registry(path: str = "registry.yaml") -> dict:
         return yaml.safe_load(f)
 
 
+def _string_list(items) -> list[str]:
+    if items is None or not isinstance(items, list):
+        return []
+    return [item.strip() for item in items if isinstance(item, str) and item.strip()]
+
+
+def _knowledge_input_label(item: dict) -> str:
+    kind = item.get("kind")
+    privacy = item.get("privacy")
+    if kind and privacy:
+        return f"`{kind}` ({privacy})"
+    if kind:
+        return f"`{kind}`"
+    return "`unknown`"
+
+
 def clean_generated(output_dir: Path):
     """Remove generated .md files, preserving SVGs, enrichment YAMLs, and drawio files."""
     docs = output_dir / "docs"
@@ -116,15 +148,15 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
     lines.append("")
     lines.append(GENERATED_MARKER)
     lines.append("")
-    title = registry.get('description', registry['name']).strip()
-    title = title.split(',')[0].rstrip('.')
+    title = registry.get("description", registry["name"]).strip()
+    title = title.split(",")[0].rstrip(".")
     lines.append(f"# {title}")
     lines.append("")
     lines.append(f"{len(plugins)} plugins | "
-                 f"{sum(len(p.get('skills', [])) for p in plugins)} skills | "
+                 f'{sum(len(p.get("skills", [])) for p in plugins)} skills | '
                  f"{len([k for k, v in cat_plugins.items() if v])} categories")
     lines.append("")
-    lines.append('[Getting Started](getting-started.md){ .md-button .md-button--primary }')
+    lines.append("[Getting Started](getting-started.md){ .md-button .md-button--primary }")
     lines.append("")
     lines.append("---")
     lines.append("")
@@ -145,7 +177,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
 
         lines.append(f"-   **[{name}](plugins/{name}/index.md)**")
         lines.append("")
-        lines.append(f"    ---")
+        lines.append("    ---")
         lines.append("")
         lines.append(f"    {desc}")
         lines.append("")
@@ -242,9 +274,9 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     if plugin_dir and (plugin_dir / "pipeline.svg").exists():
         lines.append("## Pipeline")
         lines.append("")
-        lines.append(f'<div class="diagram-container" markdown>')
+        lines.append('<div class="diagram-container" markdown>')
         lines.append(f"![{name} pipeline](pipeline.svg)")
-        lines.append(f"</div>")
+        lines.append("</div>")
         lines.append("")
 
     # Dependencies
@@ -279,6 +311,54 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
             aname = agent["name"]
             adesc = agent.get("description", "")
             lines.append(f"| {aname} | {adesc} |")
+        lines.append("")
+
+    contract_summary = mapping_if_dict(plugin.get("contract_summary"))
+    if contract_summary:
+        lines.append("## Contract Summary")
+        lines.append("")
+        lines.append(
+            "Headline view only. Individual skill pages carry the detailed measures, "
+            "references, success conditions, and invariants."
+        )
+        lines.append("")
+        focus_functions = _string_list(contract_summary.get("focus_functions"))
+        lines.append("### Focus Functions")
+        lines.append("")
+        if focus_functions:
+            for value in focus_functions:
+                description = CANONICAL_FUNCTION_DOCS.get(value)
+                if description:
+                    lines.append(f"- `{value}` — {description}")
+                else:
+                    lines.append(f"- `{value}`")
+        else:
+            lines.append("- —")
+        lines.append("")
+        focus_metrics = _string_list(contract_summary.get("focus_metrics"))
+        lines.append("### Focus Metrics")
+        lines.append("")
+        if focus_metrics:
+            for value in focus_metrics:
+                metadata = CANONICAL_METRIC_DOCS.get(value)
+                if metadata:
+                    lines.append(
+                        f"- `{value}` — {metadata['summary']} "
+                        f"({metadata['measure_guidance']})"
+                    )
+                else:
+                    lines.append(f"- `{value}`")
+        else:
+            lines.append("- —")
+        lines.append("")
+        notes = contract_summary.get("notes", "")
+        if notes is None or isinstance(notes, (dict, list)):
+            notes_txt = ""
+        else:
+            notes_txt = str(notes)
+        lines.append("### Notes")
+        lines.append("")
+        lines.append(notes_txt)
         lines.append("")
 
     # Install
@@ -325,13 +405,151 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     lines.append(f"**Plugin**: [{plugin_name}](index.md) | **{badge}**")
     lines.append("")
 
+    contract = skill_contract_mapping(skill)
+    if contract:
+        lines.append("## Contract")
+        lines.append("")
+        version = contract.get("version")
+        version_txt = "" if version is None else str(version)
+        lines.append(f"- **Version**: `{version_txt}`")
+        lines.append("")
+        problem_statement = contract.get("problem_statement")
+        if isinstance(problem_statement, str) and problem_statement.strip():
+            lines.append("### Problem Statement")
+            lines.append("")
+            lines.append(problem_statement.strip())
+            lines.append("")
+        functions = _string_list(contract.get("functions"))
+        lines.append("### Functions")
+        lines.append("")
+        if functions:
+            for value in functions:
+                description = CANONICAL_FUNCTION_DOCS.get(value)
+                if description:
+                    lines.append(f"- `{value}` — {description}")
+                else:
+                    lines.append(f"- `{value}`")
+        else:
+            lines.append("- —")
+        lines.append("")
+        lines.append("### Metrics")
+        lines.append("")
+        metric_entries = contract_metrics_as_dicts(contract.get("metrics"))
+        if metric_entries:
+            for metric in metric_entries:
+                metric_id = str(metric["id"])
+                lines.append(f"- `{metric_id}`")
+                metadata = CANONICAL_METRIC_DOCS.get(metric_id)
+                if metadata:
+                    lines.append(f"  - **What It Optimizes**: {metadata['summary']}")
+                    lines.append(
+                        f"  - **Measurement Guidance**: {metadata['measure_guidance']}"
+                    )
+                measure = metric.get("measure")
+                if isinstance(measure, str) and measure.strip():
+                    measure_key = measure.strip()
+                    measure_desc = MEASURE_DOCS.get(measure_key)
+                    if measure_desc:
+                        lines.append(
+                            f"  - **Measure**: `{measure_key}` — {measure_desc}"
+                        )
+                    else:
+                        lines.append(f"  - **Measure**: `{measure_key}`")
+                target_measure = metric.get("target_measure")
+                if isinstance(target_measure, str) and target_measure.strip():
+                    lines.append(f"  - **Target Measure**: `{target_measure.strip()}`")
+                references = []
+                rubric_ref = metric.get("rubric_ref")
+                if isinstance(rubric_ref, str) and rubric_ref.strip():
+                    references.append(f"rubric_ref=`{rubric_ref.strip()}`")
+                verifier_ref = metric.get("verifier_ref")
+                if isinstance(verifier_ref, str) and verifier_ref.strip():
+                    references.append(f"verifier_ref=`{verifier_ref.strip()}`")
+                calibration_ref = metric.get("calibration_ref")
+                if isinstance(calibration_ref, str) and calibration_ref.strip():
+                    references.append(f"calibration_ref=`{calibration_ref.strip()}`")
+                if references:
+                    lines.append("  - **References**: " + ", ".join(references))
+                success_mode = metric.get("success_mode")
+                if isinstance(success_mode, str) and success_mode.strip():
+                    lines.append(f"  - **Success Mode**: `{success_mode.strip()}`")
+                trials = metric.get("trials")
+                if isinstance(trials, int):
+                    lines.append(f"  - **Trials**: `{trials}`")
+        else:
+            lines.append("- —")
+        lines.append("")
+        success_conditions = _string_list(contract.get("success_conditions"))
+        lines.append("### Success Conditions")
+        lines.append("")
+        if success_conditions:
+            for item in success_conditions:
+                lines.append(f"- {item}")
+        else:
+            lines.append("- —")
+        lines.append("")
+        invariants = mapping_if_dict(contract.get("invariants"))
+        if invariants:
+            lines.append("### Invariants")
+            lines.append("")
+            must_preserve = _string_list(invariants.get("must_preserve"))
+            lines.append("#### Must Preserve")
+            lines.append("")
+            if must_preserve:
+                for item in must_preserve:
+                    lines.append(f"- {item}")
+            else:
+                lines.append("- —")
+            lines.append("")
+            fixed_context = mapping_if_dict(invariants.get("fixed_context"))
+            if fixed_context:
+                lines.append("#### Fixed Context")
+                lines.append("")
+                tools = _string_list(fixed_context.get("tools"))
+                cli = _string_list(fixed_context.get("cli"))
+                documents = _string_list(fixed_context.get("documents"))
+                knowledge_inputs = [
+                    _knowledge_input_label(item)
+                    for item in sequence_as_list(fixed_context.get("knowledge_inputs"))
+                    if isinstance(item, dict)
+                ]
+                lines.append(
+                    "- **Tools**: " + (", ".join(f"`{value}`" for value in tools) if tools else "—")
+                )
+                lines.append(
+                    "- **CLI**: " + (", ".join(f"`{value}`" for value in cli) if cli else "—")
+                )
+                lines.append(
+                    "- **Documents**: "
+                    + (", ".join(f"`{value}`" for value in documents) if documents else "—")
+                )
+                lines.append(
+                    "- **Knowledge Inputs**: " + (", ".join(knowledge_inputs) if knowledge_inputs else "—")
+                )
+                lines.append("")
+        source_assertions = mapping_if_dict(contract.get("source_assertions"))
+        if source_assertions:
+            lines.append("### Source Assertions")
+            lines.append("")
+            skill_path = source_assertions.get("skill_path")
+            if isinstance(skill_path, str) and skill_path.strip():
+                lines.append(f"- **Skill Path**: `{skill_path.strip()}`")
+            else:
+                lines.append("- **Skill Path**: —")
+            supporting_paths = _string_list(source_assertions.get("supporting_paths"))
+            lines.append(
+                "- **Supporting Paths**: "
+                + (", ".join(f"`{value}`" for value in supporting_paths) if supporting_paths else "—")
+            )
+            lines.append("")
+
     # Skill diagram (only if SVG exists)
     if plugin_dir and (plugin_dir / f"{sname}.svg").exists():
         lines.append("## Diagram")
         lines.append("")
-        lines.append(f'<div class="diagram-container" markdown>')
+        lines.append('<div class="diagram-container" markdown>')
         lines.append(f"![{sname} diagram]({sname}.svg)")
-        lines.append(f"</div>")
+        lines.append("</div>")
         lines.append("")
 
     # Argument hint from enrichment (frontmatter argument-hint)
@@ -354,9 +572,9 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
                 else:
                     parts.append(f"[{name}]")
             hint = " ".join(parts)
-        lines.append(f"```")
+        lines.append("```")
         lines.append(f"/{sname} {hint}")
-        lines.append(f"```")
+        lines.append("```")
         lines.append("")
         lines.append("| Argument | Required | Default | Description |")
         lines.append("|----------|----------|---------|-------------|")
@@ -371,9 +589,9 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         # No enriched arguments but argument-hint exists — parse it as fallback
         lines.append("## Arguments")
         lines.append("")
-        lines.append(f"```")
+        lines.append("```")
         lines.append(f"/{sname} {argument_hint}")
-        lines.append(f"```")
+        lines.append("```")
         lines.append("")
         lines.append("| Argument | Required | Description |")
         lines.append("|----------|----------|-------------|")
@@ -557,7 +775,7 @@ def generate_site(registry: dict, output_dir: Path):
         generate_mkdocs_yml(registry, categories, cat_plugins))
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)

@@ -20,6 +20,60 @@ what-if analysis, and near-miss identification).
 
 **Plugin**: [assess-rfe](index.md) | **:material-check: User-invocable**
 
+## Contract
+
+- **Version**: `canonical-skill-v1`
+
+### Problem Statement
+
+Score an RFE against the published rubric and explain the result.
+
+### Functions
+
+- `review` — Assess an artifact against expectations and identify issues, risks, or fit.
+
+### Metrics
+
+- `task_success`
+  - **What It Optimizes**: Whether the skill completes the intended job correctly for the task.
+  - **Measurement Guidance**: Prefer deterministic or verifier-backed checks; use judge only as a fallback.
+  - **Measure**: `judge` — Use rubric-based human or LLM evaluation only when deterministic checks are insufficient.
+  - **References**: rubric_ref=`n1hility/assess-rfe@main:scripts/agent_prompt.md`
+- `evidence_completeness`
+  - **What It Optimizes**: Whether claims and verdicts are backed by enough concrete evidence.
+  - **Measurement Guidance**: Use verifier-backed checks when evidence can be counted; otherwise use a rubric-backed judge.
+  - **Measure**: `judge` — Use rubric-based human or LLM evaluation only when deterministic checks are insufficient.
+  - **References**: rubric_ref=`n1hility/assess-rfe@main:scripts/agent_prompt.md`
+- `output_quality`
+  - **What It Optimizes**: Human-judged quality of the final artifact when deterministic checks are insufficient.
+  - **Measurement Guidance**: Judge only; always pair it with a stable rubric_ref and, when available, calibration data.
+  - **Measure**: `judge` — Use rubric-based human or LLM evaluation only when deterministic checks are insufficient.
+  - **References**: rubric_ref=`n1hility/assess-rfe@main:scripts/agent_prompt.md`
+
+### Success Conditions
+
+- Produces a complete rubric-based assessment for the supplied RFE input.
+- Includes evidence-backed scoring rationale for each criterion.
+
+### Invariants
+
+#### Must Preserve
+
+- Do not skip rubric criteria or invent unsupported evidence.
+- Do not change the accepted input modes declared by the skill.
+
+#### Fixed Context
+
+- **Tools**: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `Agent`, `TaskGet`, `mcp__atlassian__getJiraIssue`, `mcp__atlassian__searchJiraIssuesUsingJql`
+- **CLI**: `python3`
+- **Documents**: —
+- **Knowledge Inputs**: `repository_content` (public), `task_input` (task_private), `tool_output` (task_private)
+
+### Source Assertions
+
+- **Skill Path**: `skills/assess-rfe/SKILL.md`
+- **Supporting Paths**: `scripts/agent_prompt.md`
+
 ## Diagram
 
 <div class="diagram-container" markdown>

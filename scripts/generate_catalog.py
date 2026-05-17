@@ -9,14 +9,100 @@ Usage:
 """
 
 import argparse
+import sys
 from pathlib import Path
 
 import yaml
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from scripts.registry_contracts import (  # noqa: E402
+    CANONICAL_FUNCTION_DOCS,
+    CANONICAL_METRIC_DOCS,
+    MEASURE_DOCS,
+    contract_metrics_as_dicts,
+    skill_contract_mapping,
+)
 
 
 def load_registry(path: str = "registry.yaml") -> dict:
     with open(path) as f:
         return yaml.safe_load(f)
+
+
+def format_contract_functions(skill: dict) -> str:
+    contract = skill_contract_mapping(skill)
+    if contract is None:
+        return "—"
+    functions = contract.get("functions")
+    if not isinstance(functions, list):
+        return "—"
+    parts = [f"`{value}`" for value in functions]
+    return ", ".join(parts) if parts else "—"
+
+
+def format_metric_assignment(metric: dict) -> str:
+    metric_id = metric.get("id")
+    if not metric_id:
+        return ""
+    measure = metric.get("measure")
+    if isinstance(measure, str) and measure.strip():
+        return f"`{metric_id}` (`{measure.strip()}`)"
+    return f"`{metric_id}`"
+
+
+def format_contract_metrics(skill: dict) -> str:
+    contract = skill_contract_mapping(skill)
+    if contract is None:
+        return "—"
+    metric_labels = [
+        format_metric_assignment(metric)
+        for metric in contract_metrics_as_dicts(contract.get("metrics"))
+    ]
+    return ", ".join(label for label in metric_labels if label) if metric_labels else "—"
+
+
+def render_contract_reference() -> list[str]:
+    lines = []
+    lines.append("## Canonical Contract System")
+    lines.append("")
+    lines.append(
+        "Contracts are contributor-facing optimization specs: functions describe the "
+        "published job-to-be-done, metrics describe what should improve, and measures "
+        "state how each metric is scored today."
+    )
+    lines.append("")
+    lines.append("### Functions")
+    lines.append("")
+    lines.append("| Function | Meaning |")
+    lines.append("|----------|---------|")
+    for function_name, description in CANONICAL_FUNCTION_DOCS.items():
+        lines.append(f"| `{function_name}` | {description} |")
+    lines.append("")
+    lines.append("### Metrics")
+    lines.append("")
+    lines.append("| Metric | What It Optimizes | Measurement Guidance |")
+    lines.append("|--------|-------------------|----------------------|")
+    for metric_name, metadata in CANONICAL_METRIC_DOCS.items():
+        lines.append(
+            f"| `{metric_name}` | {metadata['summary']} | {metadata['measure_guidance']} |"
+        )
+    lines.append("")
+    lines.append("### Measures")
+    lines.append("")
+    lines.append("| Measure | When To Use |")
+    lines.append("|---------|-------------|")
+    for measure_name, description in MEASURE_DOCS.items():
+        lines.append(f"| `{measure_name}` | {description} |")
+    lines.append("")
+    lines.append(
+        "Skill tables below show metric ids with the current measure in parentheses."
+    )
+    lines.append("")
+    return lines
 
 
 def generate_catalog(registry: dict) -> str:
@@ -38,6 +124,7 @@ def generate_catalog(registry: dict) -> str:
     lines.append("/plugin")
     lines.append("```")
     lines.append("")
+    lines.extend(render_contract_reference())
 
     # Group plugins by category
     categories = registry.get("categories", {})
@@ -115,12 +202,24 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
     # Skills table (only user-invocable skills; internal ones are hidden)
     skills = [s for s in plugin.get("skills", []) if s.get("user-invocable", True)]
     if skills:
-        lines.append("| Skill | Description |")
-        lines.append("|-------|-------------|")
-        for skill in skills:
-            sname = skill["name"]
-            sdesc = skill.get("description", "")
-            lines.append(f"| `/{sname}` | {sdesc} |")
+        show_contract_columns = any(skill_contract_mapping(skill) is not None for skill in skills)
+        if show_contract_columns:
+            lines.append("| Skill | Description | Functions | Metrics |")
+            lines.append("|-------|-------------|-----------|---------|")
+            for skill in skills:
+                sname = skill["name"]
+                sdesc = skill.get("description", "")
+                lines.append(
+                    f"| `/{sname}` | {sdesc} | "
+                    f"{format_contract_functions(skill)} | {format_contract_metrics(skill)} |"
+                )
+        else:
+            lines.append("| Skill | Description |")
+            lines.append("|-------|-------------|")
+            for skill in skills:
+                sname = skill["name"]
+                sdesc = skill.get("description", "")
+                lines.append(f"| `/{sname}` | {sdesc} |")
         lines.append("")
 
     # Agents table
@@ -143,11 +242,13 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
     return lines
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--registry", default="registry.yaml")
-    parser.add_argument("--output", default="catalog.md")
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("--registry", default="registry.yaml", help="Registry file path")
+    parser.add_argument("--output", default="catalog.md", help="Output markdown path")
     args = parser.parse_args()
 
     registry = load_registry(args.registry)

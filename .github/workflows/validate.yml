@@ -4,9 +4,14 @@ on:
     paths:
       - 'registry.yaml'
       - '.claude-plugin/**'
+      - '.github/workflows/**'
+      - '.pre-commit-config.yaml'
+      - 'config/**'
+      - 'CONTRIBUTING.md'
       - 'schema/**'
       - 'scripts/**'
       - 'site/**'
+      - 'tests/**'
   push:
     branches: [main]
 
@@ -17,6 +22,12 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
@@ -25,8 +36,29 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml==6.0.3 jsonschema==4.26.0
 
-      - name: Validate registry schema
-        run: python3 scripts/validate_registry.py
+      - name: Fetch base branch for diff-aware checks
+        if: github.event_name == 'pull_request'
+        run: git fetch origin "${{ github.base_ref }}" --depth=1
+
+      - name: Determine diff base for touched-skill checks
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "DIFF_BASE=origin/${{ github.base_ref }}" >> "$GITHUB_ENV"
+          elif [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            echo "DIFF_BASE=${{ github.event.before }}" >> "$GITHUB_ENV"
+          else
+            echo "DIFF_BASE=HEAD~1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Validate registry schema and touched skill contracts
+        run: python3 scripts/validate_registry.py --diff-base "${{ env.DIFF_BASE }}"
+
+      - name: Run skill-linter for touched skills
+        run: python3 scripts/run_skill_linter.py --diff-base "${{ env.DIFF_BASE }}"
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Sync marketplace.json
         run: python3 scripts/sync_marketplace.py
