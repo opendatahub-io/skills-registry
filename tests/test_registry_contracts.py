@@ -1,6 +1,13 @@
+import subprocess
 import unittest
+from unittest import mock
 
-from scripts.registry_contracts import SkillKey, detect_touched_skills
+from scripts.registry_contracts import (
+    SkillKey,
+    detect_touched_skills,
+    load_registry_from_ref,
+    load_staged_registry,
+)
 
 
 def build_registry():
@@ -58,6 +65,50 @@ class TouchDetectionTests(unittest.TestCase):
             ],
             detect_touched_skills(before, after),
         )
+
+
+class RegistryGitReadTests(unittest.TestCase):
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_load_registry_from_ref_rejects_option_like_ref(self, run_mock):
+        run_mock.side_effect = AssertionError("subprocess.run should not be called")
+        with self.assertRaises(ValueError):
+            load_registry_from_ref("-oops")
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_load_registry_from_ref_rejects_invalid_path_token(self, run_mock):
+        run_mock.side_effect = AssertionError("subprocess.run should not be called")
+        with self.assertRaises(ValueError):
+            load_registry_from_ref("HEAD", path="../registry.yaml")
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_load_staged_registry_rejects_invalid_path_token(self, run_mock):
+        run_mock.side_effect = AssertionError("subprocess.run should not be called")
+        with self.assertRaises(ValueError):
+            load_staged_registry(path="../registry.yaml")
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_load_registry_from_ref_wraps_timeouts(self, run_mock):
+        run_mock.side_effect = subprocess.TimeoutExpired(["git", "show"], 30)
+        with self.assertRaises(RuntimeError):
+            load_registry_from_ref("HEAD")
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_load_staged_registry_wraps_timeouts(self, run_mock):
+        run_mock.side_effect = subprocess.TimeoutExpired(["git", "show"], 30)
+        with self.assertRaises(RuntimeError):
+            load_staged_registry()
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_load_registry_from_ref_passes_timeout(self, run_mock):
+        run_mock.return_value = subprocess.CompletedProcess(
+            ["git", "show"],
+            0,
+            stdout="name: example\nplugins: []\n",
+            stderr="",
+        )
+        load_registry_from_ref("HEAD")
+        _, kwargs = run_mock.call_args
+        self.assertEqual(kwargs["timeout"], 30)
 
 
 if __name__ == "__main__":

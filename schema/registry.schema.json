@@ -47,6 +47,16 @@
       "type": "string",
       "pattern": ".*\\S.*"
     },
+    "repoRelativePath": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).*\\S.*$"
+    },
+    "skillSourcePath": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?:[^/]+/)*SKILL\\.md$"
+    },
     "evaluationNonEmptyList": {
       "type": "array",
       "minItems": 1,
@@ -144,11 +154,11 @@
       "required": ["skill_path"],
       "additionalProperties": false,
       "properties": {
-        "skill_path": { "$ref": "#/$defs/nonEmptyText" },
+        "skill_path": { "$ref": "#/$defs/skillSourcePath" },
         "supporting_paths": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/nonEmptyText" }
+          "items": { "$ref": "#/$defs/repoRelativePath" }
         }
       }
     },

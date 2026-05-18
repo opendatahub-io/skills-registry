@@ -38,18 +38,36 @@ jobs:
 
       - name: Fetch base branch for diff-aware checks
         if: github.event_name == 'pull_request'
-        run: git fetch origin "${{ github.base_ref }}" --depth=1
+        shell: bash
+        env:
+          BASE_REF_RAW: ${{ github.base_ref }}
+        run: |
+          [[ "$BASE_REF_RAW" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "Invalid base ref"; exit 1; }
+          git fetch origin "$BASE_REF_RAW" --depth=1
 
       - name: Determine diff base for touched-skill checks
         shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF_RAW: ${{ github.base_ref }}
+          BEFORE_RAW: ${{ github.event.before }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "DIFF_BASE=origin/${{ github.base_ref }}" >> "$GITHUB_ENV"
-          elif [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
-            echo "DIFF_BASE=${{ github.event.before }}" >> "$GITHUB_ENV"
-          else
-            echo "DIFF_BASE=HEAD~1" >> "$GITHUB_ENV"
-          fi
+          case "$EVENT_NAME" in
+            pull_request)
+              [[ "$BASE_REF_RAW" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "Invalid base ref"; exit 1; }
+              echo "DIFF_BASE=origin/$BASE_REF_RAW" >> "$GITHUB_ENV"
+              ;;
+            push)
+              if [[ "$BEFORE_RAW" =~ ^[0-9a-f]{40}$ ]] && [ "$BEFORE_RAW" != "0000000000000000000000000000000000000000" ]; then
+                echo "DIFF_BASE=$BEFORE_RAW" >> "$GITHUB_ENV"
+              else
+                echo "DIFF_BASE=HEAD~1" >> "$GITHUB_ENV"
+              fi
+              ;;
+            *)
+              echo "DIFF_BASE=HEAD~1" >> "$GITHUB_ENV"
+              ;;
+          esac
 
       - name: Validate registry schema and touched skill contracts
         run: python3 scripts/validate_registry.py --diff-base "${{ env.DIFF_BASE }}"

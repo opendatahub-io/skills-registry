@@ -35,6 +35,7 @@ from scripts.registry_contracts import (  # noqa: E402
     iter_skills,
     load_registry_from_ref,
     load_staged_registry,
+    normalize_git_ref,
 )
 
 try:
@@ -128,23 +129,6 @@ def has_placeholder_text(text: str) -> bool:
     return _PLACEHOLDER_RE.search(stripped) is not None
 
 
-def normalize_git_ref(ref: str | None) -> str:
-    if ref is None:
-        return "main"
-    if not isinstance(ref, str):
-        raise ValueError("source.ref must be a string when provided")
-
-    normalized = ref.strip()
-    if not normalized:
-        return "main"
-    if normalized.startswith("-"):
-        raise ValueError("source.ref must not start with '-'")
-    if any(character.isspace() or ord(character) < 32 or ord(character) == 127
-           for character in normalized):
-        raise ValueError("source.ref must not contain whitespace or control characters")
-    return normalized
-
-
 def get_plugin_label(plugin: dict) -> str:
     return plugin.get("name", "<unknown>")
 
@@ -157,7 +141,7 @@ def select_required_skills(args, current_registry: dict) -> tuple[set[SkillKey],
         try:
             before = load_registry_from_ref("HEAD", path=registry_path)
             after = load_staged_registry(path=registry_path)
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, RuntimeError, ValueError):
             return set(), [
                 "  Could not read registry.yaml from git (HEAD or staged copy). "
                 "Use --staged from a git repository with the registry file staged."
@@ -167,7 +151,7 @@ def select_required_skills(args, current_registry: dict) -> tuple[set[SkillKey],
         ref = args.diff_base
         try:
             before = load_registry_from_ref(ref, path=registry_path)
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, RuntimeError, ValueError):
             return set(), [
                 f"  Could not load {registry_path} from git ref {ref!r} "
                 "(missing ref or path not present at that revision)."
@@ -288,16 +272,12 @@ def check_sources(registry: dict) -> list[str]:
 
 def diff_plugins(registry: dict, base_ref: str) -> list[str]:
     """Find plugin names added since base_ref."""
-    result = subprocess.run(
-        ["git", "show", "--", f"{base_ref}:registry.yaml"],
-        capture_output=True, text=True,
-    )
-    if result.returncode != 0:
+    try:
+        base_registry = load_registry_from_ref(base_ref)
+    except (subprocess.CalledProcessError, RuntimeError, ValueError):
         print(f"WARNING: could not read registry.yaml from {base_ref}, treating all as new",
               file=sys.stderr)
         return [p["name"] for p in registry.get("plugins", [])]
-
-    base_registry = yaml.safe_load(result.stdout) or {}
     base_names = {p["name"] for p in base_registry.get("plugins", [])}
     current_names = {p["name"] for p in registry.get("plugins", [])}
     new_names = sorted(current_names - base_names)

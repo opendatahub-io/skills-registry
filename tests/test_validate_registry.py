@@ -212,6 +212,41 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("measure" in error for error in errors), errors)
 
+    def test_schema_rejects_traversal_skill_path(self):
+        registry = build_registry()
+        add_minimal_contract(registry["plugins"][0]["skills"][0])
+        registry["plugins"][0]["skills"][0]["contract"]["source_assertions"]["skill_path"] = (
+            "../outside/SKILL.md"
+        )
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertNotEqual([], errors, errors)
+        self.assertTrue(any("skill_path" in error for error in errors), errors)
+
+    def test_schema_rejects_absolute_supporting_path(self):
+        registry = build_registry()
+        add_minimal_contract(registry["plugins"][0]["skills"][0])
+        registry["plugins"][0]["skills"][0]["contract"]["source_assertions"]["supporting_paths"] = [
+            "/tmp/guide.md"
+        ]
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertNotEqual([], errors, errors)
+        self.assertTrue(any("supporting_paths" in error for error in errors), errors)
+
+    def test_schema_accepts_dot_prefixed_skill_path(self):
+        registry = build_registry()
+        add_minimal_contract(registry["plugins"][0]["skills"][0])
+        registry["plugins"][0]["skills"][0]["contract"]["source_assertions"]["skill_path"] = (
+            ".claude/skills/example-skill/SKILL.md"
+        )
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertEqual([], errors)
+
 
 class ContractValidatorTests(unittest.TestCase):
     @classmethod
@@ -361,6 +396,21 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertEqual(set(), required)
         self.assertTrue(len(errs) >= 1, errs)
+        self.assertTrue(
+            any("git ref" in e.lower() or "could not load" in e.lower() for e in errs),
+            errs,
+        )
+
+    def test_select_required_skills_invalid_diff_base_returns_error(self):
+        args = argparse.Namespace(
+            registry="registry.yaml",
+            staged=False,
+            diff_base="-oops",
+        )
+        required, errs = self.validate_registry.select_required_skills(args, build_registry())
+
+        self.assertEqual(set(), required)
+        self.assertTrue(errs, errs)
         self.assertTrue(
             any("git ref" in e.lower() or "could not load" in e.lower() for e in errs),
             errs,

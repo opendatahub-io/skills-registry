@@ -27,6 +27,7 @@ from scripts.registry_contracts import (  # noqa: E402
     load_registry,
     load_registry_from_ref,
     load_staged_registry,
+    normalize_git_ref,
 )
 
 CACHE_ROOT = Path(".cache/skills-registry/repos")
@@ -67,23 +68,6 @@ def build_skill_linter_command(skill_path: Path, config_path: Path) -> list[str]
         "--config",
         str(config_path.resolve()),
     ]
-
-
-def normalize_git_ref(ref: str | None) -> str:
-    if ref is None:
-        return "main"
-    if not isinstance(ref, str):
-        raise ValueError("source.ref must be a string when provided")
-
-    normalized = ref.strip()
-    if not normalized:
-        return "main"
-    if normalized.startswith("-"):
-        raise ValueError("source.ref must not start with '-'")
-    if any(character.isspace() or ord(character) < 32 or ord(character) == 127
-           for character in normalized):
-        raise ValueError("source.ref must not contain whitespace or control characters")
-    return normalized
 
 
 def _resolve_repo_file(repo_root: Path, relative_path: str) -> Path:
@@ -157,7 +141,7 @@ def _select_touched_skill_keys(registry_path: str, staged: bool, diff_base: str 
         try:
             before = load_registry_from_ref("HEAD", path=registry_path)
             after = load_staged_registry(path=registry_path)
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, RuntimeError, ValueError):
             return set(), [
                 "  Could not read registry.yaml from git (HEAD or staged copy). "
                 "Use --staged from a git repository with the registry file staged."
@@ -167,7 +151,7 @@ def _select_touched_skill_keys(registry_path: str, staged: bool, diff_base: str 
     if diff_base is not None:
         try:
             before = load_registry_from_ref(diff_base, path=registry_path)
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, RuntimeError, ValueError):
             return set(), [
                 f"  Could not load {registry_path} from git ref {diff_base!r} "
                 "(missing ref or path not present at that revision)."
@@ -287,6 +271,9 @@ def _lookup_skill(registry: dict, key: SkillKey) -> tuple[dict | None, dict | No
 
 
 def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
+    plug_name = plugin.get("name")
+    ski_name = skill.get("name")
+
     contract = skill.get("contract")
     if not isinstance(contract, dict):
         return 0
@@ -301,7 +288,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
     source = plugin.get("source") or {}
     if not isinstance(source, dict) or source.get("type") != "github":
         print(
-            f"ERROR: Plugin '{plugin.get('name')}' skill '{skill.get('name')}' "
+            f"ERROR: Plugin '{plug_name}' skill '{ski_name}' "
             "has contract source_assertions but source is not type 'github'",
             file=sys.stderr,
         )
@@ -310,7 +297,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
     repo = source.get("repo")
     if not isinstance(repo, str) or not repo.strip():
         print(
-            f"ERROR: Plugin '{plugin.get('name')}' is missing source.repo.",
+            f"ERROR: Plugin '{plug_name}' is missing source.repo.",
             file=sys.stderr,
         )
         return 1
@@ -319,7 +306,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
         plugin_ref = normalize_git_ref(source.get("ref", "main"))
     except ValueError:
         print(
-            f"ERROR: Plugin '{plugin.get('name')}' has invalid source.ref.",
+            f"ERROR: Plugin '{plug_name}' has invalid source.ref.",
             file=sys.stderr,
         )
         return 1
@@ -331,7 +318,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
         resolved_skill_dir = skill_linter_dir_from_contract_skill_path(repo_root, skill_path_raw)
     except (ValueError, FileNotFoundError) as exc:
         print(
-            f"ERROR: Plugin '{plugin.get('name')}' skill '{skill.get('name')}': invalid skill_path: {exc}",
+            f"ERROR: Plugin '{plug_name}' skill '{ski_name}': invalid skill_path: {exc}",
             file=sys.stderr,
         )
         return 1
@@ -343,8 +330,6 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
     )
 
     command = build_skill_linter_command(resolved_skill_dir, config_abs)
-    plug_name = plugin.get("name")
-    ski_name = skill.get("name")
     print(f"Running skill-linter for {plug_name}/{ski_name} (repo={repo} ref={plugin_ref})...")
 
     proc = run_captured_command(

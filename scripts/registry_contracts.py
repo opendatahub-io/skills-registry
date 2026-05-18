@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import subprocess
 from dataclasses import dataclass
+from pathlib import Path
 
 import yaml
 
 CONTRACT_VERSION = "canonical-skill-v1"
 SKILL_LINTER_VERSION = "0.1.4"
+GIT_READ_TIMEOUT_SECONDS = 30
 CANONICAL_FUNCTION_DOCS = {
     "plan": "Choose an approach, sequence, or strategy before execution.",
     "retrieve": "Locate and return source material, facts, or artifacts needed for later work.",
@@ -115,23 +117,88 @@ def load_registry(path: str = "registry.yaml") -> dict:
         return yaml.safe_load(handle) or {}
 
 
+def normalize_git_ref(ref: str | None) -> str:
+    """Normalize plugin ``source.ref`` for clone/checkout commands (defaults to ``main``)."""
+
+    if ref is None:
+        return "main"
+    if not isinstance(ref, str):
+        raise ValueError("source.ref must be a string when provided")
+
+    normalized = ref.strip()
+    if not normalized:
+        return "main"
+    if normalized.startswith("-"):
+        raise ValueError("source.ref must not start with '-'")
+    if any(
+        character.isspace() or ord(character) < 32 or ord(character) == 127
+        for character in normalized
+    ):
+        raise ValueError("source.ref must not contain whitespace or control characters")
+    return normalized
+
+
+def _validate_git_ref_token(ref: str) -> str:
+    if not isinstance(ref, str):
+        raise ValueError("git ref must be a string")
+
+    normalized = ref.strip()
+    if not normalized:
+        raise ValueError("git ref must not be empty")
+    if normalized.startswith("-"):
+        raise ValueError("git ref must not start with '-'")
+    if "\0" in normalized:
+        raise ValueError("git ref must not contain null bytes")
+    if any(character.isspace() or ord(character) < 32 or ord(character) == 127
+           for character in normalized):
+        raise ValueError("git ref must not contain whitespace or control characters")
+    return normalized
+
+
+def _validate_registry_path_token(path: str) -> str:
+    if not isinstance(path, str):
+        raise ValueError("registry path must be a string")
+
+    normalized = path.strip()
+    if not normalized:
+        raise ValueError("registry path must not be empty")
+    if normalized.startswith("-"):
+        raise ValueError("registry path must not start with '-'")
+    if "\0" in normalized or ":" in normalized:
+        raise ValueError("registry path contains unsupported characters")
+
+    path_obj = Path(normalized)
+    if path_obj.is_absolute() or ".." in path_obj.parts:
+        raise ValueError("registry path must stay within the repository")
+    return normalized
+
+
+def _run_git_read(command: list[str]) -> subprocess.CompletedProcess[str]:
+    try:
+        return subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=GIT_READ_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"git command timed out after {GIT_READ_TIMEOUT_SECONDS}s: {' '.join(command)}"
+        ) from exc
+
+
 def load_registry_from_ref(ref: str, path: str = "registry.yaml") -> dict:
-    result = subprocess.run(
-        ["git", "show", f"{ref}:{path}"],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
+    safe_ref = _validate_git_ref_token(ref)
+    safe_path = _validate_registry_path_token(path)
+    _run_git_read(["git", "rev-parse", "--verify", "--quiet", f"{safe_ref}^{{object}}"])
+    result = _run_git_read(["git", "show", f"{safe_ref}:{safe_path}"])
     return yaml.safe_load(result.stdout) or {}
 
 
 def load_staged_registry(path: str = "registry.yaml") -> dict:
-    result = subprocess.run(
-        ["git", "show", f":{path}"],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
+    safe_path = _validate_registry_path_token(path)
+    result = _run_git_read(["git", "show", f":{safe_path}"])
     return yaml.safe_load(result.stdout) or {}
 
 

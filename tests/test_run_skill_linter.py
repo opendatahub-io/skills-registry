@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest import mock
 
 from scripts.run_skill_linter import (
+    _select_touched_skill_keys,
     build_skill_linter_command,
     interpret_skill_linter_success_stdout,
     normalize_git_ref,
@@ -198,6 +199,18 @@ class SkillLinterWrapperTests(unittest.TestCase):
     def test_normalize_git_ref_rejects_embedded_whitespace(self):
         with self.assertRaises(ValueError):
             normalize_git_ref("feature branch")
+
+    def test_select_touched_skill_keys_invalid_diff_base_returns_error(self):
+        touched, errors = _select_touched_skill_keys(
+            "registry.yaml",
+            staged=False,
+            diff_base="-oops",
+            current_registry={"plugins": []},
+        )
+        self.assertEqual(set(), touched)
+        self.assertTrue(errors)
+        self.assertTrue(any("git ref" in error.lower() or "could not load" in error.lower()
+                            for error in errors))
 
     @mock.patch("scripts.run_skill_linter.subprocess.run")
     def test_run_captured_command_passes_timeout(self, run_mock):
