@@ -130,7 +130,13 @@ def interpret_skill_linter_success_stdout(stdout: str) -> tuple[bool, str | None
     except ValueError as exc:
         return False, str(exc)
 
-    if report.get("errorCount", 0) > 0 or report.get("errors"):
+    error_count_raw = report.get("errorCount", 0)
+    try:
+        error_count = int(error_count_raw)
+    except (TypeError, ValueError):
+        return False, f"skill-linter output has non-numeric errorCount: {error_count_raw!r}"
+
+    if error_count > 0 or report.get("errors"):
         return False, json.dumps(report, indent=2)
     return True, None
 

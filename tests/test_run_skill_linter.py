@@ -177,6 +177,12 @@ class SkillLinterWrapperTests(unittest.TestCase):
         self.assertIsNotNone(detail)
         self.assertIn("errorCount", detail)
 
+    def test_interpret_stdout_rejects_nonnumeric_error_count(self):
+        ok, detail = interpret_skill_linter_success_stdout('{"errorCount": "oops"}')
+        self.assertFalse(ok)
+        self.assertIsNotNone(detail)
+        self.assertIn("errorCount", detail)
+
     def test_skill_is_skill_linter_candidate_requires_skill_md_path(self):
         plugin_github = {"name": "p", "source": {"type": "github", "repo": "a/b"}, "skills": []}
         skill_bad = {"name": "s", "contract": {"source_assertions": {"skill_path": "x/readme.md"}}}
