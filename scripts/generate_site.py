@@ -505,6 +505,122 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
     return MKDOCS_CONFIG_TEMPLATE + "\n".join(nav_lines) + "\n"
 
 
+def generate_llms_txt(registry: dict, site_url: str) -> str:
+    """Generate llms.txt index following the llmstxt.org spec."""
+    plugins = registry.get("plugins", [])
+    lines = ["# OpenDataHub Skills Registry"]
+    lines.append("")
+    lines.append("> Claude Code skills and plugins marketplace for the "
+                 "opendatahub-io organization. Aggregates skills from multiple "
+                 "GitHub repositories into a single discoverable marketplace.")
+    lines.append("")
+    lines.append("## Plugins")
+    lines.append("")
+    for p in plugins:
+        name = p["name"]
+        desc = p["description"].strip().split("\n")[0]
+        if len(desc) > 120:
+            desc = desc[:117] + "..."
+        lines.append(f"- [{name}]({site_url}/plugins/{name}/): {desc}")
+    lines.append("")
+    lines.append("## Skills")
+    lines.append("")
+    for p in plugins:
+        pname = p["name"]
+        for s in p.get("skills", []):
+            sname = s["name"]
+            sdesc = s.get("description", "").strip()
+            if len(sdesc) > 100:
+                sdesc = sdesc[:97] + "..."
+            if s.get("user-invocable", True):
+                lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc}")
+    lines.append("")
+    lines.append("## Optional")
+    lines.append("")
+    for p in plugins:
+        pname = p["name"]
+        for s in p.get("skills", []):
+            if not s.get("user-invocable", True):
+                sname = s["name"]
+                sdesc = s.get("description", "").strip()
+                lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc} (internal)")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
+    """Generate llms-full.txt with all skill details inlined."""
+    plugins = registry.get("plugins", [])
+    lines = ["# OpenDataHub Skills Registry"]
+    lines.append("")
+    lines.append("> Claude Code skills and plugins marketplace for the "
+                 "opendatahub-io organization. Aggregates skills from multiple "
+                 "GitHub repositories into a single discoverable marketplace.")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+    for p in plugins:
+        name = p["name"]
+        desc = p["description"].strip()
+        repo = p.get("source", {}).get("repo", "")
+        enrichment = load_enrichment(docs_dir / "plugins" / name)
+        edesc = enrichment.get("description", desc).strip() if enrichment else desc
+        arch = (enrichment.get("architecture_notes", "").strip()
+                if enrichment else "")
+        lines.append(f"## {name}")
+        lines.append("")
+        lines.append(edesc)
+        lines.append("")
+        if repo:
+            lines.append(f"**Repository**: https://github.com/{repo}")
+            lines.append("")
+        if arch:
+            lines.append("### Architecture")
+            lines.append("")
+            lines.append(arch)
+            lines.append("")
+        lines.append("### Skills")
+        lines.append("")
+        eskills = enrichment.get("skills", {}) if enrichment else {}
+        for s in p.get("skills", []):
+            sname = s["name"]
+            sdesc = s.get("description", "").strip()
+            invocable = s.get("user-invocable", True)
+            badge = "" if invocable else " (internal)"
+            es = eskills.get(sname, {})
+            if es.get("description"):
+                sdesc = es["description"].strip()
+            hint = es.get("argument_hint", "")
+            args = es.get("arguments", [])
+            examples = es.get("usage_examples", [])
+            lines.append(f"#### /{sname}{badge}")
+            lines.append("")
+            lines.append(sdesc)
+            lines.append("")
+            if hint:
+                lines.append(f"```\n/{sname} {hint}\n```")
+                lines.append("")
+            if args:
+                lines.append("| Argument | Required | Description |")
+                lines.append("|----------|----------|-------------|")
+                for arg in args:
+                    aname = arg.get("name", "")
+                    req = "yes" if arg.get("required") else ""
+                    adesc = arg.get("description", "")
+                    lines.append(f"| `{aname}` | {req} | {adesc} |")
+                lines.append("")
+            if examples:
+                lines.append("Examples:")
+                lines.append("```")
+                for ex in examples:
+                    lines.append(ex)
+                lines.append("```")
+                lines.append("")
+        lines.append("---")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def generate_site(registry: dict, output_dir: Path):
     docs = output_dir / "docs"
     categories = registry.get("categories", {})
@@ -552,6 +668,13 @@ def generate_site(registry: dict, output_dir: Path):
     # mkdocs.yml
     (output_dir / "mkdocs.yml").write_text(
         generate_mkdocs_yml(registry, categories, cat_plugins))
+
+    # llms.txt protocol files (at repo root, not inside site/)
+    repo_root = output_dir.parent
+    site_url = "https://opendatahub-io.github.io/skills-registry"
+    (repo_root / "llms.txt").write_text(generate_llms_txt(registry, site_url))
+    (repo_root / "llms-full.txt").write_text(
+        generate_llms_full_txt(registry, docs))
 
 
 def main():
