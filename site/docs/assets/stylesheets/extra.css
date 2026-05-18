@@ -19,8 +19,8 @@
 }
 
 :root {
-  --md-text-font: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-  --md-code-font: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  --md-text-font: 'Google Sans Flex', -apple-system, blinkmacsystemfont, helvetica, arial, sans-serif;
+  --md-code-font: 'JetBrains Mono', 'SFMono-Regular', consolas, monospace;
   --sr-blue: #2563EB;
   --sr-blue-light: #3B82F6;
   --sr-blue-bright: #60A5FA;
