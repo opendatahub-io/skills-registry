@@ -1,0 +1,97 @@
+# OpenDataHub Skills Registry
+
+> Claude Code skills and plugins marketplace for the opendatahub-io organization. Aggregates skills from multiple GitHub repositories into a single discoverable marketplace.
+
+## Plugins
+
+- [rfe-creator](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/): Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.
+- [assess-rfe](https://opendatahub-io.github.io/skills-registry/plugins/assess-rfe/): Assess RFEs against quality criteria using a structured rubric.
+- [rhoai-security-reviewer](https://opendatahub-io.github.io/skills-registry/plugins/rhoai-security-reviewer/): Consensus-based security review for RHOAI strategy documents (STRATs). An orchestrator spawns three independent reviewers to identify security risks, then synthesizes findings with confidence tagging based on cross-reviewer agreement. Covers 39 catalog patterns across auth, data protection, cryptographic compliance, network security, supply chain, and infrastructure.
+- [test-plan](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/): End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.
+- [quality-tooling](https://opendatahub-io.github.io/skills-registry/plugins/quality-tooling/): Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validation, and test pattern extraction.
+- [odh-ai-helpers](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/): Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
+- [agent-eval-harness](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/): Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
+- [knowledge-skills](https://opendatahub-io.github.io/skills-registry/plugins/knowledge-skills/): Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant knowledge using parallel agents, and proposes updates as a git-apply-able patch for human review. Supports GitHub and GitLab.
+- [autofix-skills](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/): Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic Python scripts for automated bug fixing, CVE remediation, and ticket triage. Designed to run inside a Claude Code container as part of a CI pipeline.
+- [meeting-quality-skills](https://opendatahub-io.github.io/skills-registry/plugins/meeting-quality-skills/): Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, and helping organizers focus meetings on items that actually need discussion.
+
+## Skills
+
+- [rfe.create](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.create/): Generate new RFEs from problem statements
+- [rfe.review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.review/): Score and improve RFEs with auto-revision
+- [rfe.split](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.split/): Decompose oversized RFEs into appropriately-scoped pieces
+- [rfe.submit](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.submit/): Push RFEs to Jira
+- [rfe.speedrun](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.speedrun/): Execute the full RFE pipeline end-to-end
+- [rfe.auto-fix](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.auto-fix/): Batch review, revise, and split operations
+- [strat.create](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/strat.create/): Create strategy documents
+- [strat.refine](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/strat.refine/): Refine strategy documents
+- [strat.review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/strat.review/): Review strategy documents
+- [strat.prioritize](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/strat.prioritize/): Prioritize strategy items
+- [rfe-creator.update-deps](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe-creator.update-deps/): Update vendored dependencies
+- [architecture-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/architecture-review/): Architecture review skill
+- [feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/feasibility-review/): Feasibility review skill
+- [rfe-feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe-feasibility-review/): RFE feasibility review
+- [scope-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/scope-review/): Scope review skill
+- [testability-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/testability-review/): Testability review skill
+- [assess-rfe](https://opendatahub-io.github.io/skills-registry/plugins/assess-rfe/assess-rfe/): Assess RFEs against quality criteria using a structured rubric
+- [export-rubric](https://opendatahub-io.github.io/skills-registry/plugins/assess-rfe/export-rubric/): Export the assessment rubric
+- [strat-security-review](https://opendatahub-io.github.io/skills-registry/plugins/rhoai-security-reviewer/strat-security-review/): Multi-reviewer consensus orchestrator for security review of STRAT documents. Extracts threat surfaces, spawns three independent security-reviewer instances, synthesizes findings with confidence levels, and produces a final verdict (PASS/CONCERNS/FAIL).
+- [security-reviewer](https://opendatahub-io.github.io/skills-registry/plugins/rhoai-security-reviewer/security-reviewer/): Individual security reviewer that assesses RHOAI strategy documents against 39 catalog patterns covering authentication, data protection, cryptographic compliance, network security, supply chain, and infrastructure. Uses a two-phase discovery-then-filter approach with severity classification.
+- [test-plan-create](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-create/): Generate a test plan from a strategy
+- [test-plan-create-cases](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-create-cases/): Generate test case files from a test plan
+- [test-plan-update](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-update/): Update test plan with new docs (ADR, API specs), re-analyze, bump version
+- [test-plan-case-implement](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-case-implement/): Generate executable test automation code from TC specifications with intelligent placement
+- [test-plan-ui-verify](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-ui-verify/): Verify UI test cases from a PR against a live ODH/RHOAI cluster via Playwright; supports upgrade testing workflow
+- [test-plan-publish](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-publish/): Publish test plan artifacts to GitHub with PR creation
+- [test-plan-resolve-feedback](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-resolve-feedback/): Assess and resolve PR review comments on test plans
+- [test-plan-score](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-score/): Score test plan quality using rubric without auto-revision
+- [quality-repo-analysis](https://opendatahub-io.github.io/skills-registry/plugins/quality-tooling/quality-repo-analysis/): Automated analysis tool that evaluates CI/CD, testing, security, and best practices against gold standards
+- [konflux-build-simulator](https://opendatahub-io.github.io/skills-registry/plugins/quality-tooling/konflux-build-simulator/): Generate GitHub Actions workflows that simulate Konflux builds at PR time to catch failures before merge
+- [test-rules-generator](https://opendatahub-io.github.io/skills-registry/plugins/quality-tooling/test-rules-generator/): Extract test patterns from existing tests and generate .claude/rules/ documentation for consistency
+- [historical-bug-coverage](https://opendatahub-io.github.io/skills-registry/plugins/quality-tooling/historical-bug-coverage/): Analyzes historical blocking and critical bugs from Jira, determines what test coverage exists today with deep test inspection and confidence scoring, and generates standalone HTML reports
+- [risk-assessment](https://opendatahub-io.github.io/skills-registry/plugins/quality-tooling/risk-assessment/): Analyze PR for risk, test coverage, architecture impact, and cross-repo intelligence
+- [adr-review](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/adr-review/): Review an Architectural Decision Record (ADR) using a team of specialist reviewer subagents and produce a consolidated report
+- [gitlab-pipeline-debugger](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/gitlab-pipeline-debugger/): Debug and monitor GitLab CI/CD pipelines for merge requests, check pipeline status, view job logs, and troubleshoot CI failures
+- [git-shallow-clone](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/git-shallow-clone/): Perform a shallow clone of a Git repository to a temporary location
+- [jira-upload-chat-log](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/jira-upload-chat-log/): Export and upload the current chat conversation as a markdown file attachment to a Jira ticket
+- [python-full-deps](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-full-deps/): Resolve the full install-time dependency tree for a Python package with environment markers
+- [python-packaging-bug-finder](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-packaging-bug-finder/): Find known packaging bugs, fixes, and workarounds for Python projects by searching GitHub issues
+- [python-packaging-complexity](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-packaging-complexity/): Analyze Python package build complexity by inspecting PyPI metadata, compilation requirements, and distribution types
+- [python-packaging-env-finder](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-packaging-env-finder/): Investigate environment variables that can be set when building Python wheels for a given project
+- [python-packaging-license-checker](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-packaging-license-checker/): Check whether a Python package license is compatible with redistribution in Red Hat products
+- [python-packaging-license-finder](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-packaging-license-finder/): Deterministically find license information for Python packages by checking PyPI metadata and Git repository LICENSE files
+- [python-packaging-source-finder](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/python-packaging-source-finder/): Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs
+- [vllm-backport-fetch-prs](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-backport-fetch-prs/): Fetch merged bugfix PRs from upstream vLLM within a configurable date window using GitHub CLI
+- [vllm-backport-classify](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-backport-classify/): Classify PRs by backport relevance using labels, title patterns, and file-existence heuristics
+- [vllm-backport-check-backported](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-backport-check-backported/): Check if PRs are already cherry-picked in a downstream release branch via SHA and title matching
+- [vllm-backport-score-rank](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-backport-score-rank/): Score and rank backport candidates by severity, scope, and risk using a deterministic composite score
+- [vllm-backport-push-report](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-backport-push-report/): Push triage report to a GitHub repository with timestamped directory structure
+- [vllm-backport-cherry-pick](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-backport-cherry-pick/): Attempt automatic cherry-pick of clean backport candidates to a downstream release branch
+- [vllm-compare-reqs](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-compare-reqs/): Compare Python requirements between upstream vLLM and a downstream fork to identify version mismatches and missing packages
+- [vllm-slack-summary](https://opendatahub-io.github.io/skills-registry/plugins/odh-ai-helpers/vllm-slack-summary/): Generate a concise Slack-formatted summary of vLLM backport triage results
+- [eval-setup](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-setup/): One-time environment setup for evaluation (dependencies, MLflow, API keys)
+- [eval-analyze](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-analyze/): Deep-read a target skill and generate eval.yaml configuration with dataset schemas and judges
+- [eval-dataset](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-dataset/): Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-traces)
+- [eval-run](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-run/): Execute skill against test cases, collect artifacts, run judges, and detect regressions
+- [eval-review](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-review/): Human-in-the-loop review of scores and outputs with qualitative feedback collection
+- [eval-mlflow](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-mlflow/): Bidirectional MLflow sync for results, datasets, and feedback
+- [eval-optimize](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-optimize/): Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks
+- [knowledge.repo](https://opendatahub-io.github.io/skills-registry/plugins/knowledge-skills/knowledge.repo/): Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch
+- [autofix-resolve](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/autofix-resolve/): Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations)
+- [autofix-cve-resolve](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/autofix-cve-resolve/): CVE remediation across multiple repos with state-machine dispatch
+- [autofix-triage](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/autofix-triage/): Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable)
+- [autofix-research](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/autofix-research/): Investigate spike tickets with no associated repository
+- [meeting-async-update-check](https://opendatahub-io.github.io/skills-registry/plugins/meeting-quality-skills/meeting-async-update-check/): Check a shared update doc and identify attendees missing async updates before a status meeting
+- [meeting-risk-agenda](https://opendatahub-io.github.io/skills-registry/plugins/meeting-quality-skills/meeting-risk-agenda/): Analyze pre-meeting updates and generate a risk-focused agenda by identifying blocked and at-risk items
+
+## Optional
+
+- [test-plan-analyze-endpoints](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-analyze-endpoints/): Extract scope and API endpoints (internal)
+- [test-plan-analyze-risks](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-analyze-risks/): Determine test levels, priorities, NFRs, and risks (internal)
+- [test-plan-analyze-infra](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-analyze-infra/): Identify environment and infrastructure needs (internal)
+- [test-plan-merge](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-merge/): Intelligently merge new analyzer findings into existing test plan (internal)
+- [test-plan-resolve-gaps](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-resolve-gaps/): Cross-reference gaps with new findings to determine what's resolved (internal)
+- [test-plan-analyze-placement](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-analyze-placement/): Analyze test cases and recommend placement (component repo vs downstream) (internal)
+- [test-plan-review](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-review/): Review test plan with 5-criteria rubric and auto-revision (internal)
+- [test-plan-generate-test-file](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-generate-test-file/): Generate complete test file with all functions, quality scoring and auto-revision (internal)
+- [test-plan-score-test-function](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-score-test-function/): Score generated test function code using 5-criteria quality rubric (internal)

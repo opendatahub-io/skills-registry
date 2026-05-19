@@ -1,0 +1,1842 @@
+# OpenDataHub Skills Registry
+
+> Claude Code skills and plugins marketplace for the opendatahub-io organization. Aggregates skills from multiple GitHub repositories into a single discoverable marketplace.
+
+---
+
+## rfe-creator
+
+A comprehensive Claude Code skill suite for the full lifecycle of Requests for
+Enhancement (RFEs) in the RHAIRFE Jira project. Covers creation from problem
+statements, rubric-based review with auto-revision, intelligent splitting of
+oversized RFEs, and submission to Jira. Also provides strategy document skills
+(RHAISTRAT) for refining approved RFEs into implementation strategies with
+adversarial multi-reviewer validation.
+
+The plugin uses a shared artifact convention -- all skills read from and write to
+an `artifacts/` directory with YAML frontmatter for structured metadata. Jira
+write operations use deterministic Python scripts rather than LLM tool-calling,
+while read operations support both Atlassian MCP and REST API fallback. A
+dependency on the `assess-rfe` plugin provides the scoring rubric, bootstrapped
+automatically on first use.
+
+**Repository**: https://github.com/jwforres/rfe-creator
+
+### Architecture
+
+Two skill families: RFE skills (rfe.*) for the requirements pipeline and
+Strategy skills (strat.*) for implementation planning. A speedrun skill
+orchestrates the full end-to-end flow by invoking other skills.
+
+Review skills use a forked reviewer pattern -- independent sub-agents
+(feasibility, testability, scope, architecture) run in isolated contexts
+and produce separate assessments that are synthesized into a consolidated
+review. The rfe.review skill is the central orchestrator: it launches
+parallel waves of fetch, assess, feasibility, review, and revise agents,
+polling for completion via scripts/check_review_progress.py.
+
+State persistence uses scripts/state.py for long-running operations across
+context compression boundaries, and scripts/frontmatter.py manages YAML
+frontmatter on all artifact files. The rfe.auto-fix skill wraps this into
+a pipeline state machine (scripts/pipeline_state.py) that handles batching,
+resumption, and multi-phase dispatch with launch_wave/wait-for-wave
+synchronization.
+
+Architecture context is fetched from opendatahub-io/architecture-context
+into .context/architecture-context/ and used by review and strategy skills
+to ground assessments in actual platform components and APIs.
+
+### Skills
+
+#### /rfe.create
+
+Generate new RFEs from problem statements or ideas. Loads the assess-rfe
+rubric (bootstrapping it if needed), asks 2-5 clarifying questions about
+customers, business justification, user problems, scope, and success
+criteria, then produces well-formed RFEs using a template. Each RFE
+describes WHAT and WHY (business needs), never HOW (implementation).
+Supports headless mode for batch/CI use.
+
+```
+/rfe.create <problem-statement> [--headless] [--priority <value>] [--labels <csv>] [--rfe-id <ID>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `problem-statement` | yes | The problem statement, idea, or need to turn into RFEs |
+| `--headless` |  | Skip clarifying questions (Step 2), generate RFEs directly from the input |
+| `--priority` |  | Override default priority for created RFEs |
+| `--labels` |  | Labels to apply to created RFEs |
+| `--rfe-id` |  | Pre-assigned RFE ID; use this instead of allocating a new one. The placeholder file must already exist. |
+
+Examples:
+```
+/rfe.create Users need better error messages when model serving fails
+/rfe.create --headless --priority Critical Fix dashboard latency for large clusters
+/rfe.create --headless --rfe-id RFE-003 --labels candidate-3.5 Support GPU sharing
+```
+
+#### /rfe.review
+
+Score and improve RFEs with a multi-phase agent pipeline. Accepts one or
+more Jira keys (RHAIRFE-NNNN) or local IDs (RFE-NNN). Fetches missing
+RFEs from Jira, runs rubric-based assessment via assess-rfe, launches
+parallel feasibility checks, synthesizes review files with scored
+criteria, auto-revises failing RFEs, and re-assesses (up to 2 cycles).
+The orchestrator never reads RFE content directly -- all content-heavy
+work is delegated to sub-agents (fetch, assess, feasibility, review,
+revise).
+
+```
+/rfe.review <ID> [ID2 ...] [--headless] [--caller <name>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `ID` | yes | One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) |
+| `--headless` |  | Suppress end-of-run summary; used when called from rfe.auto-fix or rfe.split |
+| `--caller` |  | Identifies calling skill for headless return routing |
+
+Examples:
+```
+/rfe.review RHAIRFE-1234
+/rfe.review RFE-001 RFE-002 RFE-003
+/rfe.review --headless --caller autofix RHAIRFE-1234 RHAIRFE-5678
+```
+
+#### /rfe.split
+
+Decompose oversized RFEs into appropriately-scoped pieces. Launches
+parallel split agents that analyze the parent RFE and generate child
+RFEs, then invokes rfe.review on all children. Includes a self-correction
+loop (1 cycle max) that re-splits children still scoring poorly on
+right-sizing. Validates coverage to ensure all original scope items
+are represented in the children.
+
+```
+/rfe.split <ID> [ID2 ...] [--headless]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `ID` | yes | One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) to split |
+| `--headless` |  | Suppress end-of-run summary; used when called from rfe.auto-fix |
+
+Examples:
+```
+/rfe.split RHAIRFE-1234
+/rfe.split RHAIRFE-1234 RHAIRFE-5678
+```
+
+#### /rfe.submit
+
+Push RFEs to Jira via deterministic Python scripts using the REST API
+with Basic Auth. Creates new RHAIRFE tickets for new RFEs or updates
+existing tickets for fetched RFEs. Applies labels automatically based
+on pipeline outcomes (auto-created, auto-revised, split-original,
+split-result, needs-attention, feasibility verdicts). Non-interactive --
+invoking this skill is the confirmation. Requires JIRA_SERVER,
+JIRA_USER, and JIRA_TOKEN environment variables.
+
+```
+/rfe.submit [--dry-run] [--artifacts-dir <path>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--dry-run` |  | Validate locally without writing to Jira |
+| `--artifacts-dir` |  | Path to the artifacts directory |
+
+Examples:
+```
+/rfe.submit
+/rfe.submit --dry-run
+```
+
+#### /rfe.speedrun
+
+Execute the full RFE pipeline end-to-end: create, auto-fix (review +
+revise + split), and submit. Supports three modes: batch YAML input
+(multiple ideas in a file), existing Jira keys, or a single free-text
+idea. In batch mode, pre-allocates all RFE IDs and launches parallel
+create agents. Orchestrates by invoking rfe.create, rfe.auto-fix, and
+rfe.submit as sub-skills.
+
+```
+/rfe.speedrun <idea-or-key> [--input <path>] [--headless] [--dry-run] [--batch-size N] [--announce-complete]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `idea-or-key` |  | A free-text idea or Jira key (RHAIRFE-NNNN). Mutually exclusive with --input. |
+| `--input` |  | Path to a YAML file with batch entries (prompt, priority, labels per entry) |
+| `--headless` |  | Suppress questions and confirmations (for CI/eval) |
+| `--dry-run` |  | Skip Jira writes in submit phase |
+| `--batch-size` |  | Override batch size for auto-fix phase |
+| `--announce-complete` |  | Print completion marker when done (for CI/eval harnesses) |
+
+Examples:
+```
+/rfe.speedrun Better dashboard for ML model monitoring
+/rfe.speedrun RHAIRFE-1234
+/rfe.speedrun --input batch.yaml --headless --dry-run
+/rfe.speedrun --input batch.yaml --headless --batch-size 10 --announce-complete
+```
+
+#### /rfe.auto-fix
+
+Non-interactive batch pipeline for reviewing, revising, and splitting
+RFEs at scale. Accepts explicit IDs or a JQL query to fetch from Jira.
+Uses a pipeline state machine (pipeline_state.py) with phased dispatch:
+fetch, bootstrap, assess, feasibility, review, revise, re-assess, and
+split. Processes in configurable batch sizes with resume support via
+snapshot-based incremental fetch. Supports reprocessing previously
+handled RFEs and random sampling.
+
+```
+/rfe.auto-fix <IDs...> | --jql <query> [--limit N] [--batch-size N] [--headless] [--reprocess] [--random N] [--announce-complete] [--data-dir <path>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `IDs` |  | Explicit RFE IDs to process (space-separated) |
+| `--jql` |  | JQL query to fetch RFE IDs from Jira |
+| `--limit` |  | Max number of results from JQL query |
+| `--batch-size` |  | Process IDs in batches of this size |
+| `--data-dir` |  | Directory for snapshot data |
+| `--headless` |  | Non-interactive mode |
+| `--reprocess` |  | Reprocess RFEs that had prior runs |
+| `--random` |  | Process N random RFEs from the result set |
+| `--announce-complete` |  | Print completion marker when done |
+
+Examples:
+```
+/rfe.auto-fix RFE-001 RFE-002 RFE-003
+/rfe.auto-fix --jql "project=RHAIRFE AND status=New" --limit 20
+/rfe.auto-fix --jql "project=RHAIRFE" --reprocess --random 5
+```
+
+#### /strat.create
+
+Create strategies from approved RFEs by cloning them to the RHAISTRAT
+project in Jira. Supports both Atlassian MCP and REST API fallback for
+reading RFE data. When Jira MCP is available, clones issues directly;
+otherwise generates a manual cloning guide. Creates local strategy stub
+files in artifacts/strat-tasks/ with the business need copied from the
+source RFE, ready for refinement with strat.refine.
+
+Examples:
+```
+/strat.create RHAIRFE-1234
+/strat.create
+```
+
+#### /strat.refine
+
+Refine strategy documents by adding the HOW -- technical approach,
+affected components, impacted teams, dependencies, non-functional
+requirements, effort estimates, risks, and open questions. Uses
+architecture context from opendatahub-io/architecture-context to ground
+the strategy in actual platform components and APIs. Supports revision
+mode: if prior reviews exist, addresses specific reviewer concerns
+without regenerating from scratch. Uses a fork context for isolated
+execution.
+
+Examples:
+```
+/strat.refine
+```
+
+#### /strat.review
+
+Adversarial review of refined strategies. Spawns 4 independent forked
+reviewers in parallel -- architecture-review, feasibility-review,
+scope-review, and testability-review -- each running in isolated context.
+Synthesizes findings into per-strategy review files preserving both
+agreements and disagreements between reviewers. Supports re-review
+after revisions.
+
+Examples:
+```
+/strat.review
+```
+
+#### /strat.prioritize
+
+Prioritize strategies against the existing RHAISTRAT backlog in Jira.
+Not yet implemented -- returns a message explaining the design intent
+and open questions (JQL filtering, backlog ordering representation).
+
+Examples:
+```
+/strat.prioritize
+```
+
+#### /rfe-creator.update-deps
+
+Force update all vendored dependencies by removing cached copies and
+re-fetching. Updates the assess-rfe skills (from the assess-rfe plugin)
+and architecture context (from opendatahub-io/architecture-context).
+Has disable-model-invocation set, meaning it can only be triggered
+explicitly by the user.
+
+Examples:
+```
+/rfe-creator.update-deps
+```
+
+#### /architecture-review
+
+Internal forked reviewer sub-agent for strat.review. Checks strategy
+features for architectural correctness -- verifies dependencies against
+architecture docs, validates integration patterns match actual component
+communication, checks component boundaries are respected, verifies
+deployment model correctness, identifies architectural conflicts, and
+flags cross-component coordination needs. Requires architecture context;
+skips if unavailable. Runs with model: opus.
+
+#### /feasibility-review
+
+Internal forked reviewer sub-agent for strat.review. Assesses technical
+feasibility of refined strategies -- whether the proposed approach works,
+whether it delivers what the RFE asks for, whether effort estimates are
+credible, and identifies hidden dependencies or integration challenges.
+Adversarial stance: flags things that are harder than they look and
+optimistic estimates. Runs with model: opus.
+
+#### /rfe-feasibility-review
+
+Internal sub-agent launched by rfe.review. Reviews individual RFEs for
+technical feasibility against platform architecture. Uses three verdicts:
+feasible (can be built), infeasible (platform architecture fundamentally
+conflicts), indeterminate (RFE too ambiguous to assess). Distinguishes
+between capabilities not yet existing (feasible) and architectural
+incompatibilities (infeasible). Reads Jira comment history for additional
+context. Outputs to artifacts/rfe-reviews/{ID}-feasibility.md. Runs
+with model: opus.
+
+#### /scope-review
+
+Internal forked reviewer sub-agent for strat.review. Assesses whether
+each strategy is right-sized -- not too big (needs splitting), not too
+small (just a task), and scoped to match its effort estimate. Checks
+that scope is clearly bounded, deliverables are complete capabilities,
+and flags scope traps like "and related functionality" or "full support
+for". Verifies the strategy neither silently expands nor shrinks the
+original RFE scope.
+
+#### /testability-review
+
+Internal forked reviewer sub-agent for strat.review. Determines whether
+strategy acceptance criteria are testable and measurable, identifies
+missing edge cases (failure modes, boundary conditions, concurrent
+access, large-scale scenarios), assesses test complexity, and evaluates
+whether non-functional requirements (performance, security, scalability)
+can be validated with concrete tests. Suggests specific rewrites for
+vague criteria.
+
+---
+
+## assess-rfe
+
+Structured quality assessment for RFEs (Requests for Enhancement) against
+a five-criteria rubric: WHAT (clear customer need), WHY (business justification
+with named customers or revenue data), Open to HOW (leaves architecture to
+engineering), Not a Task (business need vs. activity), and Right-Sized (maps
+to approximately one strategy feature). Each criterion is scored 0-2 for a
+total out of 10, with pass requiring 7+ and no zeros.
+
+Supports single-input mode accepting Jira issue keys (via MCP or REST API
+fallback), file paths, URLs, or raw text. Bulk mode fetches all issues from
+a Jira project, then dispatches up to 30 concurrent scorer sub-agents that
+each apply the identical rubric from a single source-of-truth prompt file.
+Results are written as individual markdown files into a timestamped run
+directory, then aggregated into a CSV with summary statistics including
+pass/fail rates, score distribution, criteria averages, what-if analysis,
+and near-miss identification.
+
+The scorer agents run with restricted tool access (Read and Write only) to
+prevent prompt injection from untrusted Jira content. The rubric includes
+detailed calibration examples for each criterion and a comprehensive list of
+established RHOAI platform technologies that are considered vocabulary rather
+than architecture prescription.
+
+**Repository**: https://github.com/n1hility/assess-rfe
+
+### Architecture
+
+The plugin uses an orchestrator/agent pattern. The main assess-rfe skill acts
+as a coordinator that handles input detection, Jira fetching, run directory
+management, and agent lifecycle. Individual assessments are delegated to
+rfe-scorer sub-agents (defined in agents/rfe-scorer.md) running with minimal
+permissions (Read + Write only, acceptEdits permission mode) as a security
+boundary against prompt injection from untrusted Jira content.
+
+Bulk mode operates in phases: preflight checks (environment variables, run
+state), Jira dump (all issues cached locally), run setup (timestamped
+directory with queue file), concurrent agent dispatch (batches of 30 via
+next_batch.py), and result aggregation (parse_results.py + summarize_run.py).
+Resume support is built in via queue files and symlinked run directories.
+
+Python scripts handle all data operations (Jira API calls, ADF-to-markdown
+conversion, queue management, progress tracking, result parsing, CSV
+generation, and summary statistics). The coordinator never uses shell pipes
+or compound commands, relying instead on structured script output with
+key=value parsing.
+
+### Skills
+
+#### /assess-rfe
+
+Assess RFEs against quality criteria using a structured five-criteria
+rubric (WHAT, WHY, HOW, Not a Task, Right-Sized) scored 0-2 each for
+a total out of 10. Supports single-input mode (Jira issue key via MCP
+or REST API, file path, URL, or raw text) and bulk mode (wildcard
+pattern like RHAIRFE-*) with up to 30 concurrent parallel scorer
+sub-agents. Bulk mode includes phased execution with preflight checks,
+Jira project dump, timestamped run directories with resume support,
+queue-based batch dispatching, and CSV result aggregation with summary
+statistics (pass/fail rates, score distribution, criteria averages,
+what-if analysis, and near-miss identification).
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | yes | The RFE to assess. Accepts multiple formats: a Jira issue key (e.g., RHAIRFE-1234), a file path to a document, a URL, raw pasted text, or a wildcard pattern (e.g., RHAIRFE-*) for bulk assessment of an entire Jira project.
+ |
+
+Examples:
+```
+/assess-rfe RHAIRFE-1234
+/assess-rfe PROJ-99
+/assess-rfe /path/to/document.md
+/assess-rfe https://some-url
+/assess-rfe <paste raw text>
+/assess-rfe RHAIRFE-*
+```
+
+#### /export-rubric
+
+Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md in the
+current working directory. Useful for reviewing the rubric criteria,
+calibration examples, and scoring guidelines outside of an assessment
+context, or for sharing the rubric with team members who want to
+understand how RFEs are evaluated.
+
+Examples:
+```
+/export-rubric
+```
+
+---
+
+## rhoai-security-reviewer
+
+Consensus-based security review system for RHOAI strategy documents (STRATs).
+Rather than relying on a single reviewer pass, this plugin uses an orchestrator
+that extracts a mechanical threat surface inventory from the STRAT, then spawns
+three independent security reviewers running in isolated forked contexts. Each
+reviewer checks the STRAT against all 39 catalog risk patterns covering
+authentication, data protection, cryptographic compliance (FIPS 140-3),
+network security, supply chain, infrastructure, multi-tenant isolation,
+agentic AI security, MCP security, and upstream component risk. Reviewers
+also perform creative exploration for risks not covered by the catalog.
+
+The orchestrator synthesizes reviewer findings using confidence tagging based
+on cross-reviewer agreement: risks found by all three reviewers are HIGH
+confidence, by two are MEDIUM, and by one are LOW. Severity is resolved by
+majority vote. The final output includes a verdict (PASS / CONCERNS / FAIL),
+a full review with consensus findings, and an actionable security requirements
+file that is automatically attached to the Jira ticket. The system also
+cross-references findings against a 47-item NFR checklist derived from 422
+prior STRAT reviews, and adds idempotency labels to Jira for pipeline
+integration.
+
+**Repository**: https://github.com/jctanner/ai-first-pipeline
+
+### Architecture
+
+The plugin follows a two-skill architecture with a clear separation of concerns:
+
+1. **strat-security-review** (orchestrator): Manages the full review lifecycle.
+   It fetches the STRAT from Jira via Atlassian MCP, performs mechanical threat
+   surface extraction (endpoints, services, data flows, credentials, CRDs,
+   trust boundaries, RBAC, dependencies, agent/MCP surfaces), determines the
+   review tier (Light / Standard / Deep), and spawns three isolated reviewer
+   instances. After synthesis, it writes two output files (full review +
+   requirements), attaches the requirements file to Jira, and adds verdict
+   labels for downstream pipeline idempotency.
+
+2. **security-reviewer** (worker): Runs in `context: fork` isolation on the
+   `claude-opus-4-6` model. Each instance performs a two-phase analysis:
+   Phase A discovers all potential concerns by checking every catalog pattern
+   and performing creative exploration. Phase B applies a relevance gate
+   (requiring specific STRAT citations and checking existing controls) and a
+   severity decision tree. Architecture context from `.context/` is consulted
+   for Standard/Deep tiers to avoid flagging already-mitigated controls.
+
+The Light tier includes a short-circuit: if the threat surface inventory is
+entirely empty, the orchestrator skips reviewer spawning and issues a direct
+PASS verdict. Intermediate files (threat surface, individual reviewer outputs)
+are preserved for auditability and calibration.
+
+### Skills
+
+#### /strat-security-review
+
+Multi-reviewer consensus orchestrator for security review of RHOAI strategy
+documents. Operates in four phases: (1) fetch the STRAT from Jira and extract
+a mechanical threat surface inventory covering endpoints, services, data flows,
+credentials, CRDs, trust boundaries, RBAC, external dependencies, and agent/MCP
+surfaces; (2) determine review tier (Light/Standard/Deep) based on security
+surface hints and effort size, then spawn three independent security-reviewer
+instances in isolated forked contexts; (3) synthesize findings using confidence
+tagging (HIGH=3/3, MEDIUM=2/3, LOW=1/3 reviewer agreement) with majority-vote
+severity resolution; (4) write a full review and a requirements file, attach
+requirements to Jira, and add idempotency labels (strat-security-pass,
+strat-security-concerns, strat-security-fail).
+
+Includes a Light tier short-circuit that skips reviewer spawning when the
+threat surface inventory is entirely empty. Cross-references synthesized
+findings against a 47-item NFR checklist derived from 422 prior reviews.
+Five or more NFR gaps at Standard/Deep tier upgrade the verdict to CONCERNS.
+
+```
+/strat-security-review <RHAISTRAT_KEY> [--force]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `RHAISTRAT_KEY` | yes | RHAISTRAT Jira key identifying the strategy document to review (e.g., RHAISTRAT-400) |
+| `--force` |  | Regenerate the security review even if one already exists for this STRAT |
+
+Examples:
+```
+/strat-security-review RHAISTRAT-400
+/strat-security-review RHAISTRAT-400 --force
+```
+
+#### /security-reviewer
+
+Independent security reviewer that assesses RHOAI strategy documents against
+a 39-pattern risk catalog plus creative exploration. Runs in isolated forked
+context (context: fork) on the claude-opus-4-6 model as part of the
+multi-reviewer consensus process -- not intended for direct user invocation.
+
+Operates in two phases: Phase A (Discovery) checks every catalog pattern
+against the threat surface inventory, recording each as APPLICABLE or
+NOT-APPLICABLE, then performs creative exploration for cross-component
+attack chains, novel attack surfaces, emergent risks, and unvalidated
+assumptions. Phase B (Filter and Classify) applies a relevance gate
+requiring specific STRAT text citations and checking existing controls
+from architecture context, then assigns severity via a decision tree
+(Critical > High > Medium > NFR Gap).
+
+The catalog covers 39 patterns across 10 categories: Authentication &
+Authorization (AUTH-01 through AUTH-06), Data Protection (DATA-01 through
+DATA-04), Cryptographic Compliance (CRYPTO-01 through CRYPTO-04), Network
+& API Security (NET-01 through NET-03), Supply Chain (SUPPLY-01 through
+SUPPLY-04), Infrastructure (INFRA-01 through INFRA-03), Multi-Tenant
+Isolation (TENANT-01 through TENANT-03), Agentic AI Security (AGENT-01
+through AGENT-05), MCP Security (MCP-01 through MCP-04), and Upstream
+Component Risk (UPSTREAM-01 through UPSTREAM-04). Also checks RHOAI
+organizational constraints (FIPS 140-3, TLS profile compliance, auth
+patterns, secret management, namespace-scoped RBAC).
+
+```
+/security-reviewer <STRAT_KEY> --reviewer <N> --threat-surface <path> --tier <tier>
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `STRAT_KEY` | yes | RHAISTRAT Jira key (e.g., RHAISTRAT-400) |
+| `--reviewer` | yes | Reviewer number (1, 2, or 3) identifying this instance in the consensus set |
+| `--threat-surface` | yes | Path to the threat surface inventory file extracted by the orchestrator |
+| `--tier` | yes | Review depth tier: light (minimal surface), standard (1-2 hints), or deep (3+ hints, auth+crypto, agentic/MCP) |
+
+Examples:
+```
+/security-reviewer RHAISTRAT-400 --reviewer 1 --threat-surface artifacts/security-reviews/RHAISTRAT-400-threat-surface.md --tier standard
+/security-reviewer RHAISTRAT-400 --reviewer 2 --threat-surface artifacts/security-reviews/RHAISTRAT-400-threat-surface.md --tier deep
+```
+
+---
+
+## test-plan
+
+End-to-end test planning and automation workflow for RHOAI (Red Hat OpenShift AI).
+Takes a Jira strategy document as input and produces a complete test plan, individual
+test case specifications, executable test automation code, and visual UI verification
+reports. The pipeline uses parallel sub-agent analysis (endpoints, risks, infrastructure)
+to extract testable interfaces, then scores quality with a 5-criteria rubric and
+auto-revises up to 2 cycles. Supports the full lifecycle: create, review, publish to
+GitHub, resolve PR feedback, update with new documentation, and verify UI test cases
+against live clusters via Playwright. Test code generation uses odh-test-context for
+repo-specific conventions, Tiger Team pattern guides, and intelligent placement analysis
+to decide whether tests belong in the component repo or downstream E2E repo.
+
+**Repository**: https://github.com/opendatahub-io/odh-test-gen
+
+### Architecture
+
+The plugin is organized as an orchestrated pipeline of 19 skills, split into
+user-invocable commands and internal forked sub-agents:
+
+**User-invocable pipeline stages:**
+1. test-plan-create -- generates a test plan from a Jira strategy with 3 parallel analyzers
+2. test-plan-create-cases -- generates TC-*.md files from the test plan
+3. test-plan-update -- re-analyzes with new documents, merges findings, bumps version
+4. test-plan-case-implement -- generates executable test code with placement analysis
+5. test-plan-ui-verify -- browser-based UI test execution via Playwright CDP
+6. test-plan-publish -- creates/updates GitHub PRs with test plan artifacts
+7. test-plan-resolve-feedback -- triages and applies PR review comments
+8. test-plan-score -- standalone quality rubric assessment (read-only)
+
+**Internal sub-agents (context: fork):**
+- test-plan-analyze-endpoints, test-plan-analyze-risks, test-plan-analyze-infra -- parallel analyzers
+- test-plan-merge -- intelligent merge of new findings into existing plans
+- test-plan-resolve-gaps -- cross-references gaps with new documentation
+- test-plan-analyze-placement -- recommends component vs downstream repo placement
+- test-plan-review -- quality scoring + auto-revision loop (max 2 cycles)
+- test-plan-generate-test-file -- parallel test file generation sub-agent
+- test-plan-score-test-function -- quality scoring for generated test functions
+
+Key architectural patterns:
+- Parallel forked sub-agents for analysis and code generation (isolated context, clean return)
+- Python scripts for deterministic operations (frontmatter, validation, file mapping, repo utilities)
+- MCP integration (Atlassian) for fetching Jira strategies
+- Persistent Playwright CDP browser for UI verification with screenshot capture
+- odh-test-context integration for repository-specific test conventions
+
+### Skills
+
+#### /test-plan-create
+
+Generate a complete test plan for a RHOAI feature from a Jira strategy
+(RHAISTRAT or RHOAIENG issue), with optional ADR for additional technical depth.
+Spawns 3 parallel sub-analyzers (endpoints, risks, infra), merges their findings
+into a structured template, collects gaps into TestPlanGaps.md, then runs an
+automated quality review with scoring and up to 2 auto-revision cycles. Produces
+TestPlan.md, TestPlanGaps.md, TestPlanReview.md, and README.md in a feature directory.
+
+```
+/test-plan-create <JIRA_KEY> [ADR_FILE_PATH]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `JIRA_KEY` | yes | Jira strategy key (RHAISTRAT-*) or issue key (RHOAIENG-*) to generate the test plan from |
+| `ADR_FILE_PATH` |  | Local path to an ADR document (markdown, text, or PDF) for additional technical depth |
+| `--output-dir` |  | Override output directory for test plan artifacts (skips validation) |
+
+Examples:
+```
+/test-plan-create RHAISTRAT-400
+/test-plan-create RHOAIENG-48676
+/test-plan-create RHAISTRAT-400 /path/to/adr.pdf
+```
+
+#### /test-plan-create-cases
+
+Generate individual test case specification files (TC-*.md) from an existing test plan.
+Processes categories one at a time, generates E2E and optional upgrade test cases,
+validates endpoint coverage, and updates the test plan with traceability data.
+Supports regeneration mode for updating existing test cases.
+
+```
+/test-plan-create-cases [FEATURE_SOURCE] [--output-dir PATH]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `FEATURE_SOURCE` |  | Feature directory path, GitHub branch URL, or GitHub PR URL |
+| `--output-dir` |  | Force creation in specified directory (contributor override) |
+
+Examples:
+```
+/test-plan-create-cases
+/test-plan-create-cases mcp_catalog
+/test-plan-create-cases /path/to/feature_dir
+```
+
+#### /test-plan-update
+
+Update an existing test plan with new documentation (ADR, API specs, design docs).
+Re-runs the 3 parallel analyzers with original + new material, uses the merge
+sub-agent to intelligently integrate findings while preserving user edits, resolves
+gaps, re-runs quality review, and optionally regenerates test cases. Bumps the
+version number automatically.
+
+```
+/test-plan-update <SOURCE> <NEW_DOC_PATH> [<NEW_DOC_PATH>...]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `SOURCE` | yes | Test plan location: local directory path, GitHub branch URL, or GitHub PR URL |
+| `NEW_DOC_PATH` | yes | One or more paths to new documentation files (ADR, API spec, design doc) |
+
+Examples:
+```
+/test-plan-update ~/Code/collection-tests/mcp_catalog adr.pdf
+/test-plan-update https://github.com/org/repo/pull/42 api-spec.md design.md
+```
+
+#### /test-plan-case-implement
+
+Generate executable test automation code (pytest, Go, Jest, etc.) from TC-*.md
+test case specifications. Runs placement analysis to determine component repo vs
+downstream E2E repo placement, loads repository conventions from odh-test-context,
+generates test files in parallel via sub-agents, scores quality with a 5-criteria
+rubric, and auto-revises low-scoring functions. Supports selective implementation
+via --test-cases flag.
+
+```
+/test-plan-case-implement <FEATURE_SOURCE> [--test-cases TC-ID,TC-ID] [--target-repo PATH]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `FEATURE_SOURCE` | yes | Feature directory, GitHub PR URL, or GitHub branch containing test case artifacts |
+| `--test-cases` |  | Comma-separated list of specific test case IDs to implement (e.g., TC-API-001,TC-E2E-001) |
+| `--target-repo` |  | Override auto-detected target repository path or URL |
+
+Examples:
+```
+/test-plan-case-implement features/notebooks/RHAISTRAT-400-notebook-spawning
+/test-plan-case-implement https://github.com/org/repo/pull/7
+/test-plan-case-implement features/notebooks/RHAISTRAT-400 --test-cases TC-API-001,TC-API-002
+/test-plan-case-implement features/notebooks/RHAISTRAT-400 --target-repo ~/Code/opendatahub-tests
+```
+
+#### /test-plan-ui-verify
+
+Browser-based UI test execution against live ODH/RHOAI clusters. Uses a two-step
+flow: ui_prepare.py (deterministic setup in terminal) followed by Claude Code
+execution. Loads TC-*.md files from a GitHub PR or repo folder, executes each via
+a persistent Playwright CDP browser, and produces a visual HTML report with
+PASS/FAIL/BLOCKED/INCOMPLETE verdicts and highlighted screenshots. Supports upgrade
+testing workflow with pre/post phase comparison and regression detection.
+
+Examples:
+```
+python3 scripts/ui_prepare.py --test-plan-pr https://github.com/org/repo/pull/5
+python3 scripts/ui_prepare.py --test-plan-pr <url> --tc TC-UI --priority P0
+python3 scripts/ui_prepare.py --test-plan-pr <url> --upgrade-phase pre
+/test-plan-ui-verify
+```
+
+#### /test-plan-publish
+
+Publish test plan artifacts to GitHub by creating a branch, committing all files,
+and opening a pull request. Validates frontmatter and artifacts before publishing.
+Supports updating existing PRs (pushes new commits to the same branch). Uses
+version-free branch names (test-plan/<source_key>) for iterative updates.
+
+```
+/test-plan-publish [FEATURE_SOURCE] [--repo owner/repo] [--reviewers user1,user2]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `FEATURE_SOURCE` |  | Feature directory path, GitHub branch URL, or GitHub PR URL |
+| `--repo` |  | Target GitHub repository in owner/repo format |
+| `--reviewers` |  | Comma-separated list of GitHub usernames to assign as PR reviewers |
+
+Examples:
+```
+/test-plan-publish tool_calling_metadata
+/test-plan-publish tool_calling_metadata --reviewers alice,bob
+/test-plan-publish tool_calling_metadata --repo org/test-plans-repo
+```
+
+#### /test-plan-resolve-feedback
+
+Read PR review comments from a published test plan, assess each against the
+existing test plan content, and let the user decide which to apply. Processes
+comments one at a time with assessment (aligns, conflicts, needs clarification,
+already covered) and concrete change proposals. Commits and pushes approved
+changes to the same branch with a descriptive commit message.
+
+```
+/test-plan-resolve-feedback <PR_URL>
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PR_URL` | yes | Full GitHub PR URL (e.g., https://github.com/owner/repo/pull/42) |
+
+Examples:
+```
+/test-plan-resolve-feedback https://github.com/org/test-plans-repo/pull/42
+```
+
+#### /test-plan-score
+
+Score an existing test plan using the 5-criteria quality rubric (Specificity,
+Grounding, Scope Fidelity, Actionability, Consistency) without triggering
+auto-revision. Read-only assessment for standalone quality evaluation or
+evaluating test plans created outside the automated pipeline.
+
+```
+/test-plan-score <feature_dir>
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `feature_dir` | yes | Path to directory containing TestPlan.md |
+
+Examples:
+```
+/test-plan-score kagenti_agent_templates
+/test-plan-score mcp_catalog
+```
+
+#### /test-plan-analyze-endpoints (internal)
+
+Internal forked sub-analyzer. Extracts feature scope (in-scope, out-of-scope,
+test objectives) and identifies API endpoints, gRPC services, Python/Go methods,
+UI components, CLI commands, and configuration interfaces under test. Assigns
+priorities and reports gaps. Produces findings for Sections 1 and 4 of the test plan.
+
+#### /test-plan-analyze-risks (internal)
+
+Internal forked sub-analyzer. Determines test levels (API integration, UI, security,
+performance), test types (positive, negative, boundary, regression), feature-specific
+priority definitions, non-functional requirement assessments (disconnected, upgrade,
+performance, RBAC), and risks with impact/probability/mitigation. Produces findings
+for Sections 2, 7, and 8.
+
+#### /test-plan-analyze-infra (internal)
+
+Internal forked sub-analyzer. Identifies cluster configuration requirements
+(OpenShift/RHOAI versions, databases, runtimes), test data requirements, test
+users (service accounts, RBAC roles), infrastructure dependencies, configuration
+(env vars, ConfigMaps, feature gates), and test tooling. Produces findings for
+Sections 3 and 9.
+
+#### /test-plan-merge (internal)
+
+Internal forked sub-agent for intelligent merge of new analyzer findings into
+an existing test plan. Applies section-by-section merge logic (additive for scope
+and endpoints, replacement for boilerplate priorities, preserving user edits).
+Returns updated section content, change summary, and merge statistics.
+
+#### /test-plan-resolve-gaps (internal)
+
+Internal forked sub-agent that cross-references existing test plan gaps with
+new analyzer findings and documentation. Uses semantic matching to determine
+which gaps are resolved, which remain open, and identifies new gaps. Returns
+structured output with resolved/unresolved/new gaps and statistics.
+
+#### /test-plan-analyze-placement (internal)
+
+Internal forked sub-agent for test case placement analysis. Classifies each TC
+by test level (unit, integration, k8s-integration, api, e2e) and scores placement
+options (same_repo, downstream, both) using factors: test level preferences,
+infrastructure requirements, TC priority (P0 prefers upstream for fast feedback),
+and code repo agent readiness. Returns recommendations with user confirmation.
+
+#### /test-plan-review (internal)
+
+Internal quality reviewer and auto-revision orchestrator. Scores test plans
+against a 5-criteria rubric (specificity, grounding, scope fidelity, actionability,
+consistency), each scored 0-2 for a 10-point scale. Uses forked score and review
+agents, then enters a revision loop (max 2 cycles) where a revise agent edits
+failing sections and re-scores. Writes TestPlanReview.md with scores, feedback,
+and verdict (Ready/Revise/Rework).
+
+#### /test-plan-generate-test-file (internal)
+
+Internal forked sub-agent for parallel test file generation. Receives test case
+data, repository conventions, and pattern guides. Generates complete test files
+with framework-appropriate structure (imports, fixtures, AAA pattern functions),
+validates syntax, scores quality via test-plan-score-test-function, and auto-revises
+low-scoring functions. Returns result via temp file for parent to write.
+
+#### /test-plan-score-test-function (internal)
+
+Internal forked scorer sub-agent. Evaluates generated test function code using a
+5-criteria rubric: Coverage (all TC requirements implemented), Assertions (specific
+and meaningful), Convention Adherence (follows repo patterns), Test Data (realistic
+values from TC), Code Quality (clean, no excessive TODOs). Returns verdict
+(Ready/Good/Revise/Rework) with per-criterion scores and revision recommendations.
+
+---
+
+## quality-tooling
+
+Quality tooling and automation suite for RHOAI component development. Provides
+five complementary skills that span the full quality lifecycle: repository-wide
+quality assessment against gold standards, Konflux build simulation for catching
+failures at PR time, test pattern extraction for generating agent rules,
+historical bug coverage analysis with Jira integration, and multi-dimensional
+PR risk assessment with parallel analyzer agents.
+
+The plugin targets Red Hat OpenShift AI repositories and understands RHOAI-specific
+concerns such as FIPS compliance, hermetic builds, module federation, operator
+packaging, and cross-repo test dependencies. All skills produce rich output
+artifacts -- interactive HTML reports, GitHub Actions workflows, or markdown
+rule files -- that are immediately actionable without manual post-processing.
+
+**Repository**: https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team
+
+### Architecture
+
+Each skill operates independently as a standalone analysis pipeline invoked via
+slash command. The common pattern is: clone or access a target repository, perform
+deep structural analysis, and generate output artifacts (HTML reports, YAML configs,
+GitHub Actions workflows, or markdown rule files).
+
+The risk-assessment skill is the most architecturally complex: it uses an
+orchestrator pattern that launches four parallel sub-agents (risk analyzer, test
+validator, impact analyzer, cross-repo analyzer) via the Agent tool, then
+aggregates their results through a decision engine. Shell scripts handle PR
+extraction, context loading, output verification, and result reporting.
+
+The historical-bug-coverage skill integrates with Jira via environment-configured
+credentials and uses Python modules for deep test analysis (Jest, Cypress, pytest,
+Go test), confidence scoring, and HTML report generation.
+
+Several skills share conceptual overlap (quality-repo-analysis and test-rules-generator
+both analyze test infrastructure) but operate at different abstraction levels --
+scoring vs. pattern extraction.
+
+### Skills
+
+#### /quality-repo-analysis
+
+Comprehensive quality assessment that evaluates a repository across seven
+dimensions: CI/CD pipeline analysis, test coverage assessment, code quality
+tools, container image testing, security practices, agent rules assessment,
+and testing frameworks. Compares findings against gold standard repositories
+(odh-dashboard, notebooks, kserve) and produces a weighted overall score.
+
+Generates two output formats automatically: a markdown report with YAML
+frontmatter containing structured scorecard data, and an interactive HTML
+report with animated score visualizations, collapsible sections, and
+color-coded severity indicators. The HTML report opens in the default
+browser upon completion.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `repository-url` |  | GitHub repository URL to analyze (prompted if omitted) |
+
+Examples:
+```
+/quality-repo-analysis https://github.com/opendatahub-io/kserve
+/quality-repo-analysis https://github.com/kubeflow/training-operator
+```
+
+#### /konflux-build-simulator
+
+Analyzes a repository and generates GitHub Actions workflows that simulate
+the Konflux build environment at PR time, catching failures before they
+reach production. Performs validation across six phases: static checks
+(hermetic lockfiles, workspace dependencies, FIPS compliance), Docker build
+validation, runtime validation (crashloop detection, API endpoint testing,
+WebSocket compatibility), module federation validation (remoteEntry.js,
+chunk integrity, load performance), operator integration (Kind cluster),
+and manifest validation (kustomize, ConfigMap, overlays).
+
+Automatically detects repository type (monorepo, Kubernetes operator, or
+component/library) and generates appropriate validation phases. Key
+RHOAI-specific checks include Hermeto/Cachi2 hermetic build compatibility,
+FIPS strictfipsruntime enforcement, and fastify v5 regression testing.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `repository-url` |  | GitHub repository URL to generate build simulation for (prompted if omitted) |
+
+Examples:
+```
+/konflux-build-simulator https://github.com/opendatahub-io/odh-dashboard
+/konflux-build-simulator https://github.com/opendatahub-io/kserve
+/konflux-build-simulator https://github.com/kubeflow/training-operator
+```
+
+#### /test-rules-generator
+
+Analyzes existing test patterns in a repository and generates Claude Code
+agent rules in .claude/rules/ for consistent test creation. Covers unit,
+mock, E2E, and contract test types with framework-specific awareness
+(Jest, Cypress, Go testing, React Testing Library, pytest).
+
+The generation process has three phases: repository analysis (identify test
+directories, frameworks, and test types), pattern extraction (sample 5-10
+representative files per type, extract structure, naming, setup/teardown,
+assertion styles), and rule generation (produce markdown files with
+description, structure, examples, conventions, and checklists). The output
+serves as living documentation that enables agents to auto-create tests
+following established repository conventions.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `repository-url` |  | GitHub repository URL to extract test patterns from (prompted if omitted) |
+
+Examples:
+```
+/test-rules-generator https://github.com/opendatahub-io/odh-dashboard
+/test-rules-generator https://github.com/opendatahub-io/kserve
+/test-rules-generator https://github.com/kubeflow/training-operator
+```
+
+#### /historical-bug-coverage
+
+Analyzes historical blocking and critical bugs from Jira and determines
+what test coverage exists today through deep test inspection with confidence
+scoring. Reads matched test files, extracts actual assertions, and calculates
+0-100% confidence scores based on entity matches and scenario validation.
+
+Coverage thresholds are strict: COVERED requires 80%+ confidence that a test
+explicitly validates the failure scenario, PARTIALLY COVERED is 60-80%, and
+GAP is below 60%. Supports granular test levels (unit, mock, component,
+integration, E2E upstream/downstream, contract) and auto-categorizes bugs
+by type (upgrade, platform-specific, FIPS, performance, security, disconnected).
+
+Generates a standalone HTML report with sortable/filterable tables, SVG charts,
+color-coded confidence badges, E2E breakdown by category, and prioritized
+recommendations for test gaps. Supports external test repositories for
+cross-repo coverage analysis.
+
+```
+/historical-bug-coverage --jql JQL_QUERY --repo REPO_PATH [--external-tests PATH] [--filter FILTER_ID] [--output PATH]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--jql` | yes | JQL query string to fetch bugs from Jira (mutually exclusive with --filter) |
+| `--repo` | yes | Path to the target repository to analyze for test coverage |
+| `--external-tests` |  | Path to an external test repository for cross-repo coverage analysis |
+| `--filter` |  | Saved Jira filter ID (alternative to --jql) |
+| `--output` |  | Output HTML file path (defaults to {repo-name}-bug-coverage.html) |
+
+Examples:
+```
+/historical-bug-coverage --jql "project = MYPROJECT AND priority in (Blocker, Critical)" --repo /path/to/repo
+/historical-bug-coverage --jql "project = MYPROJECT AND component = 'Dashboard'" --repo /path/to/repo --external-tests /path/to/e2e-tests
+/historical-bug-coverage --jql "project = MYPROJECT AND created >= -90d" --repo /path/to/repo
+```
+
+#### /risk-assessment
+
+Multi-agent PR risk assessment orchestrator that coordinates four parallel
+analyzer sub-agents to evaluate a GitHub pull request across complementary
+dimensions: security risk and breaking changes, test coverage validation,
+architecture impact and blast radius, and cross-repository intelligence
+for affected test repos.
+
+The orchestrator extracts PR metadata via gh CLI, loads context from
+architecture docs and Jira, launches all four analyzers in parallel using
+the Agent tool, then aggregates results through a decision engine. This is
+an advisory-only system -- it provides recommendations but never blocks PRs.
+
+Supports headless mode for CI integration and dry-run mode for testing
+without publishing. Results are published as PR comments and status checks
+on GitHub.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PR_NUMBER` | yes | GitHub pull request number to analyze |
+| `REPO` | yes | Repository identifier (owner/repo format) |
+| `--headless` |  | Run in headless mode for CI integration |
+| `--dry-run` |  | Run analysis without publishing results to GitHub |
+
+Examples:
+```
+/risk-assessment 123 opendatahub-io/odh-dashboard
+/risk-assessment 456 opendatahub-io/kserve --dry-run
+```
+
+---
+
+## odh-ai-helpers
+
+A comprehensive suite of developer productivity tools for Python packaging,
+CI/CD debugging, upstream maintenance, and workflow automation. The plugin
+spans three functional domains: (1) a Python packaging toolchain that can
+analyze build complexity, resolve full dependency trees, locate source repos,
+find and check licenses against Red Hat redistribution policy, discover build
+environment variables, and surface known packaging bugs; (2) a vLLM backport
+triage pipeline that fetches upstream bugfix PRs, classifies them, checks
+for existing cherry-picks, scores and ranks candidates, auto-cherry-picks
+clean fixes, pushes reports, compares requirements across versions, and
+summarizes Slack channel activity; and (3) general-purpose skills for ADR
+review panels, GitLab CI debugging, Jira chat-log uploads, and Git
+shallow-cloning.
+
+The Python packaging skills are designed to work both independently and as a
+coordinated pipeline through the python-packaging-investigator agent, which
+orchestrates all packaging skills in parallel and produces a standardized
+build analysis report. The vLLM backport skills form a linear pipeline from
+PR fetching through classification, deduplication, scoring, and cherry-picking,
+with each stage producing JSON artifacts consumed by the next.
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers
+
+### Architecture
+
+The plugin follows a modular architecture with three distinct skill families:
+
+**Python Packaging Toolchain** -- Seven skills that share a common pattern of
+wrapping helper scripts (Python/Bash) and chaining through skill invocations.
+The source-finder locates repositories, the shallow-clone skill provides local
+access, and downstream skills (complexity, license-finder, license-checker,
+env-finder, bug-finder) analyze different facets. The investigator agent
+orchestrates all of them in parallel sub-agents.
+
+**vLLM Backport Pipeline** -- Eight skills forming a linear data pipeline.
+Each produces a JSON artifact (raw-prs.json -> filtered.json -> candidates.json
+-> analyzed.json -> ranked.json -> cherry-pick-result.json) consumed by the
+next stage. The pipeline combines deterministic script-based steps with
+agent-driven semantic analysis for unclear classifications.
+
+**Utility Skills** -- Standalone skills (adr-review, gitlab-pipeline-debugger,
+jira-upload-chat-log, git-shallow-clone) that operate independently with no
+inter-skill dependencies. The adr-review skill uses six parallel reviewer
+sub-agents with human-in-the-loop correction before synthesis.
+
+### Skills
+
+#### /adr-review
+
+Review an Architectural Decision Record (ADR) using a panel of six
+specialist reviewer sub-agents running in parallel. The reviewers cover
+Context & Problem Framing, Technical Soundness, Operational & Reliability,
+Security & Compliance, Cost & Performance, and Consequences & Reversibility.
+After the panel runs, a human-in-the-loop step lets the user agree, disagree,
+or refine each finding before synthesis. Produces consolidated outputs as
+both a detailed PDF report and a scannable PPTX slide deck. Handles
+Markdown files, .docx documents, and directories of multiple ADRs.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `ADR_PATH` | yes | Path to an ADR file (.md or .docx) or a directory containing multiple ADRs |
+
+Examples:
+```
+/adr-review /path/to/adr.md
+/adr-review /path/to/adr-directory/
+```
+
+#### /gitlab-pipeline-debugger
+
+Debug and monitor GitLab CI/CD pipelines for merge requests. Check
+pipeline status, view job logs, and troubleshoot CI failures using the
+glab CLI. Supports auto-detection of the GitLab project from the local
+git remote, or targeting a specific project via URL or -R flag. Can
+parse full GitLab pipeline and job URLs to extract project paths and IDs.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PIPELINE_URL` |  | Full GitLab pipeline or job URL to debug |
+| `-b` |  | Branch name to check pipeline for |
+| `-p` |  | Specific pipeline ID to inspect |
+| `-R` |  | GitLab project path to target |
+
+Examples:
+```
+/gitlab-pipeline-debugger
+/gitlab-pipeline-debugger https://gitlab.com/org/project/-/pipelines/123456
+/gitlab-pipeline-debugger -b feature-branch
+```
+
+#### /git-shallow-clone
+
+Perform a shallow clone of a Git repository to a temporary location
+for local analysis instead of using web APIs. Uses a helper script that
+prints the clone path to stdout for downstream consumption.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `REPOSITORY_URL` | yes | URL of the Git repository to clone |
+| `TAG_OR_BRANCH` |  | Git tag or branch to shallow-clone |
+
+Examples:
+```
+/git-shallow-clone https://github.com/psf/requests.git
+/git-shallow-clone https://github.com/psf/requests.git v2.28.0
+```
+
+#### /jira-upload-chat-log
+
+Export the current chat conversation as a formatted markdown document
+(with both a summary and full transcript) and upload it as a file
+attachment to a Jira ticket. Automatically detects ticket keys from
+conversation context, or prompts the user if none is found. Delegates
+the actual upload to the jira-workitem-attach skill.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `TICKET_KEY` |  | Jira ticket key (e.g., AIPCC-1234) |
+
+Examples:
+```
+/jira-upload-chat-log AIPCC-7354
+/jira-upload-chat-log
+```
+
+#### /python-full-deps
+
+Resolve the full install-time transitive dependency tree for a Python
+package, respecting environment markers for a specific Python version.
+Uses uv pip compile (preferred) with fallback to pip install --dry-run
+--report. Outputs a sorted, deduplicated list of name==version pairs.
+Complements python-packaging-complexity which only shows direct
+dependencies from metadata.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PACKAGE_NAME` | yes | PyPI project name (e.g., vllm, requests) |
+| `VERSION` |  | Specific package version (e.g., 0.4.0) |
+| `PYTHON_VERSION` |  | Python version for environment marker resolution (e.g., 3.11) |
+
+Examples:
+```
+/python-full-deps requests
+/python-full-deps vllm 0.4.0 3.11
+```
+
+#### /python-packaging-bug-finder
+
+Find known packaging bugs, fixes, and workarounds for Python projects
+by searching GitHub issues. First uses source-finder to locate the repo,
+then searches issues for build, installation, dependency, compiler, and
+platform-specific problems. Analyzes resolution status, version impact,
+and available workarounds for each issue found.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PACKAGE_NAME` | yes | Python package name to search issues for |
+
+Examples:
+```
+/python-packaging-bug-finder torch
+/python-packaging-bug-finder numpy
+```
+
+#### /python-packaging-complexity
+
+Analyze Python package build complexity by inspecting PyPI metadata.
+Evaluates compilation requirements (C/C++/Rust/Fortran), dependency
+complexity, distribution types (sdist, platform-specific wheels, universal
+wheels), and produces a numerical complexity score (0-10+). Provides
+actionable recommendations for wheel building strategies.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PACKAGE_NAME` | yes | Python package name to analyze |
+| `VERSION` |  | Specific package version |
+| `--json` |  | Output as structured JSON for programmatic processing |
+
+Examples:
+```
+/python-packaging-complexity torch
+/python-packaging-complexity numpy 1.24.3
+/python-packaging-complexity tensorflow --json
+```
+
+#### /python-packaging-env-finder
+
+Investigate environment variables that can be set when building Python
+wheels for a given project. Analyzes setup.py, CMake files, and other
+build configuration files to discover compiler variables (CC, CXX, CFLAGS),
+path configuration, feature control flags (ENABLE_*, WITH_*, USE_*), and
+Python-specific build variables.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PROJECT_PATH` |  | Path to the Python project to analyze |
+
+Examples:
+```
+/python-packaging-env-finder
+/python-packaging-env-finder /path/to/project
+```
+
+#### /python-packaging-license-checker
+
+Check whether a Python package license is compatible with redistribution
+in Red Hat products, using the Fedora License Data as the authoritative
+policy source. Clones the source repo to read the actual LICENSE file
+(not just PyPI metadata), normalizes to SPDX identifiers, handles
+compound AND/OR expressions, checks vendor agreements (NVIDIA, Intel
+Gaudi, IBM Spyre), and performs build and export compliance checks.
+Produces a structured six-field verdict: License, Source verified,
+Verdict, Build compliance, Export compliance, and Notes.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PACKAGE_NAME` | yes | Python package name to check |
+| `--repo-url` |  | Source repository URL (skips source-finder step) |
+| `--source-available` |  | Whether buildable source exists |
+| `--upstream-org` |  | Name and primary country of the maintaining organization |
+
+Examples:
+```
+/python-packaging-license-checker requests
+/python-packaging-license-checker some-package --repo-url https://github.com/org/repo
+```
+
+#### /python-packaging-license-finder
+
+Deterministically find license information for Python packages using a
+two-step approach: first check PyPI metadata via a helper script, then
+fall back to cloning the source repository and reading LICENSE files
+directly. Can also accept a source URL to skip PyPI lookup entirely.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PACKAGE_NAME` | yes | Python package name |
+| `VERSION` |  | Specific package version |
+| `--source-url` |  | Source repository URL (skips PyPI lookup) |
+
+Examples:
+```
+/python-packaging-license-finder requests
+/python-packaging-license-finder django 4.2.0
+/python-packaging-license-finder some-pkg --source-url https://github.com/org/repo
+```
+
+#### /python-packaging-source-finder
+
+Locate source code repositories for Python packages by analyzing PyPI
+metadata, project URLs, and code hosting platforms (GitHub, GitLab,
+Bitbucket). Returns a JSON result with repository URL, confidence level
+(high/medium/low), and the method used to find it. Falls back to web
+search when PyPI metadata is insufficient.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `PACKAGE_NAME` | yes | Python package name to find the repository for |
+
+Examples:
+```
+/python-packaging-source-finder requests
+/python-packaging-source-finder vllm
+```
+
+#### /vllm-backport-fetch-prs
+
+Fetch merged bugfix PRs from vllm-project/vllm within a configurable
+date window using GitHub CLI. Uses multiple search queries (label:bug,
+[Bugfix]/[BugFix]/[Bug Fix] title patterns) and deduplicates results.
+Also detects reverted PRs. Outputs a JSON array of PR objects to stdout.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `DAYS_BACK` |  | Number of days to look back for merged PRs |
+
+Examples:
+```
+/vllm-backport-fetch-prs
+/vllm-backport-fetch-prs 14
+```
+
+#### /vllm-backport-classify
+
+Classify bugfix PRs by type (runtime_bug, platform_specific, unclear,
+not_bugfix) and filter by file existence at a release tag. Applies
+deterministic regex rules, checks which files existed at the target tag,
+detects subsystems, and filters PRs touching only post-release or
+non-runtime code. PRs classified as "unclear" require agent review.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--input` | yes | Path to raw-prs.json from fetch-prs step |
+| `--repo` | yes | Path to local vllm repository clone |
+| `--tag` | yes | Release tag to check file existence against (e.g., v0.13.0) |
+| `--output` | yes | Output path for filtered.json |
+
+Examples:
+```
+/vllm-backport-classify --input artifacts/raw-prs.json --repo /path/to/vllm --tag v0.13.0 --output artifacts/filtered.json
+```
+
+#### /vllm-backport-check-backported
+
+Check which candidate PRs have already been cherry-picked into a
+downstream branch. Uses two detection methods: SHA match (via git log
+--grep for cherry-pick messages) and title match (via gh pr list on
+the downstream branch). Adds an already_backported boolean to each PR.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--input` | yes | Path to filtered.json from classify step |
+| `--downstream` | yes | Path to downstream repository |
+| `--branch` | yes | Downstream branch name (e.g., rhai/0.13.0) |
+| `--output` | yes | Output path for candidates.json |
+
+Examples:
+```
+/vllm-backport-check-backported --input artifacts/filtered.json --downstream /path/to/downstream --branch rhai/0.13.0 --output artifacts/candidates.json
+```
+
+#### /vllm-backport-score-rank
+
+Score and rank backport candidates using a deterministic composite
+formula (max 100 points) based on verdict (0-30), severity (5-25),
+affected scope (3-20), backport risk (0-15), and self-containedness
+(0-10). Filters out SKIP/already_backported PRs and assigns
+backport_ease labels (ai-fixable if self-contained and safe/moderate risk).
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--input` | yes | Path to analyzed.json with agent-added semantic fields |
+| `--output` | yes | Output path for ranked.json |
+
+Examples:
+```
+/vllm-backport-score-rank --input artifacts/analyzed.json --output artifacts/ranked.json
+```
+
+#### /vllm-backport-push-report
+
+Push a triage report to a GitHub repository under a timestamped
+directory in reports/. Copies the report markdown and candidates JSON,
+commits, pushes, and prints the GitHub URL to stdout.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--report` | yes | Path to report markdown file |
+| `--candidates` | yes | Path to ranked.json |
+| `--version` | yes | Release version (e.g., v0.13.0) |
+
+Examples:
+```
+/vllm-backport-push-report --report artifacts/report.md --candidates artifacts/ranked.json --version v0.13.0
+```
+
+#### /vllm-backport-cherry-pick
+
+Attempt automatic cherry-pick of clean backport candidates to a
+downstream release branch. Selects eligible PRs (ai-fixable, score >= 50,
+not already backported, verdict is must_backport or likely_relevant),
+cherry-picks each, and creates a draft PR if any succeed. Requires agent
+follow-up for semantic validation of the cherry-picked diff.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--input` | yes | Path to ranked.json from score-rank step |
+| `--downstream` | yes | Path to downstream repository |
+| `--branch` | yes | Downstream branch name (e.g., rhai/0.13.0) |
+| `--jira-url` |  | Jira ticket URL to link in the PR |
+| `--report-url` |  | GitHub report URL to link in the PR |
+| `--output` | yes | Output path for cherry-pick-result.json |
+
+Examples:
+```
+/vllm-backport-cherry-pick --input artifacts/ranked.json --downstream /path/to/repo --branch rhai/0.13.0 --output artifacts/cherry-pick-result.json
+```
+
+#### /vllm-compare-reqs
+
+Compare Python requirements files and Dockerfiles between vLLM versions
+to identify dependency changes. Supports variant-based comparison (rocm,
+cuda, cpu, tpu, xpu) which auto-includes runtime, build, and Dockerfile
+differences, or single-file comparison. Produces a categorized summary
+table followed by detailed per-file change listings. Designed for AIPCC
+package onboarding workflows.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `VERSION1` | yes | First version to compare (e.g., v0.13.0) |
+| `VERSION2` | yes | Second version to compare (e.g., v0.14.0) |
+| `VARIANT_OR_FILE` | yes | Variant name (rocm, cuda, cpu, tpu, xpu) or specific file (common.txt, rocm-build.txt) |
+| `--pretty` |  | Show clean categorized output (use --no-pretty for simple diff) |
+
+Examples:
+```
+/vllm-compare-reqs v0.13.0 v0.14.0 rocm
+/vllm-compare-reqs v0.13.0 v0.14.0 cuda
+/vllm-compare-reqs v0.13.0 v0.14.0 common.txt
+```
+
+#### /vllm-slack-summary
+
+Generate a summary of the vLLM CI SIG Slack channel activity for the
+RHAIIS midstream release team. Uses slackdump to export channel messages,
+generates a markdown transcript, then analyzes it for breaking changes,
+hardware issues, CI/CD infrastructure changes, dependency updates,
+performance regressions, and upstream release stability.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--days` |  | Number of days of Slack history to export |
+| `--output-dir` |  | Output directory for transcript and summary |
+
+Examples:
+```
+/vllm-slack-summary
+/vllm-slack-summary --days 14
+```
+
+---
+
+## agent-eval-harness
+
+Generic agentic evaluation framework for Claude Code skills. Provides an
+end-to-end pipeline to analyze skills, generate test cases, execute evaluations,
+review results with human feedback, sync with MLflow, and iteratively optimize
+skill quality with regression checks.
+
+The framework is schema-driven via eval.yaml, which defines execution mode
+(case-by-case or batch), dataset schemas, output descriptions, judges (inline
+checks, LLM prompts, external modules), model selection per role (skill, subagent,
+judge, hook), thresholds for regression detection, and tool interception handlers.
+Supports AskUserQuestion answering via 3-tier resolution (exact overrides, LLM
+with case context, fallback) and annotation-aware judges that adapt scoring based
+on expected outcomes per test case.
+
+The harness also integrates with EvalHub for running evaluations on Red Hat
+OpenShift AI via a custom provider adapter, supporting S3-hosted datasets and
+containerized execution.
+
+**Repository**: https://github.com/opendatahub-io/agent-eval-harness
+
+### Architecture
+
+Seven skills form a linear pipeline with feedback loops: setup (optional) ->
+analyze -> dataset -> run -> review/optimize, with mlflow available at any
+point after run. eval-run is the central hub -- it executes skills headlessly,
+runs judges (inline checks + LLM scoring + pairwise comparison), and produces
+summary.yaml consumed by review, optimize, and mlflow.
+
+eval-optimize creates a closed loop by reading judge rationale and execution
+transcripts, forming hypotheses about SKILL.md deficiencies, making surgical
+edits, and re-running eval-run with regression baseline checks. eval-review
+complements this with human-in-the-loop feedback that catches qualitative
+issues judges miss. eval-mlflow provides bidirectional sync -- pushing datasets,
+results, and feedback to MLflow experiment tracking and pulling annotations
+back for optimization.
+
+Scripts live alongside each skill and share the agent_eval Python package
+(auto-installed via SessionStart hook into an isolated venv at .eval-venv/).
+The data flow is: eval.yaml config -> workspace creation (isolated per run) ->
+skill execution via EvalRunner -> artifact collection -> judge scoring ->
+summary.yaml + HTML report.
+
+### Skills
+
+#### /eval-setup
+
+Optional environment configurator for the evaluation harness. Installs
+dependencies into the isolated venv, configures MLflow tracking (local
+server, file store, or remote), verifies API keys (Anthropic or Vertex AI),
+sets up the runs directory, checks skill-specific environment variables
+referenced in eval.yaml, and creates the MLflow experiment. Most users
+can skip this -- dependencies auto-install via the plugin's SessionStart
+hook and agent_eval is available via symlinks.
+
+```
+/eval-setup [--tracking-uri <uri>] [--skip-mlflow] [--runs-dir <path>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--tracking-uri` |  | MLflow tracking URI (skips interactive setup). Accepts local or remote URIs. |
+| `--skip-mlflow` |  | Skip MLflow setup entirely. The harness works without MLflow. |
+| `--runs-dir` |  | Directory where eval runs are stored. Configured via AGENT_EVAL_RUNS_DIR env var. |
+
+Examples:
+```
+/eval-setup
+/eval-setup --tracking-uri http://127.0.0.1:5000
+/eval-setup --skip-mlflow
+```
+
+#### /eval-analyze
+
+Deep-reads a target skill and generates eval.yaml -- the configuration that
+/eval-run needs. Examines the skill's SKILL.md, follows sub-skill chains
+recursively (up to 5 levels), explores scripts and test cases, and produces
+a complete config with execution mode, dataset schema, output descriptions,
+judges, model defaults, and thresholds. Uses an Explore sub-agent for the
+recursive skill analysis and caches the result in eval.md with a content
+hash for staleness detection.
+
+```
+/eval-analyze [--skill <name>] [--config <path>] [--update]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--skill` |  | Which skill to analyze. If omitted, lists all project skills and picks automatically if only one is found. |
+| `--config` |  | Output path for the eval config file. |
+| `--update` |  | Fill in missing sections only, preserving user edits. Useful for upgrading older configs. |
+
+Examples:
+```
+/eval-analyze --skill my-skill
+/eval-analyze --update
+/eval-analyze --skill rfe.create --config eval-rfe.yaml
+```
+
+#### /eval-dataset
+
+Generates realistic test cases based on the eval.yaml dataset schema and
+judge criteria. Supports three strategies: bootstrap (from scratch with
+simple/complex/edge case coverage), expand (fills gaps in existing datasets
+by analyzing what judges check that no case tests), and from-traces (extracts
+real inputs from MLflow production traces). Handles external-state fields
+with TODO_ placeholders, generates answers.yaml for interactive skills using
+AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
+
+```
+/eval-dataset [--config <path>] [--count <N>] [--strategy <type>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--config` |  | Path to eval config. |
+| `--count` |  | Number of test cases to generate. |
+| `--strategy` |  | Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces. |
+
+Examples:
+```
+/eval-dataset
+/eval-dataset --count 10 --strategy expand
+/eval-dataset --strategy from-traces
+```
+
+#### /eval-run
+
+Executes a skill against test cases, collects artifacts, scores with judges,
+and generates an HTML report. Orchestrates via scripts: preflight checks for
+stale artifacts, workspace creation with isolated per-case directories, headless
+skill execution (case mode: once per case; batch mode: single invocation),
+artifact collection into per-case dirs, scoring with inline checks and LLM
+judges, optional pairwise comparison against a baseline for regression detection,
+and report generation. Supports concurrent case execution via parallelism setting,
+tool interception for AskUserQuestion and external APIs, and configurable
+reasoning effort levels.
+
+```
+/eval-run [--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--case <filter>] [--no-judge] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--config` |  | Path to eval config. |
+| `--model` |  | Model for skill execution. Required if models.skill is unset in eval.yaml. |
+| `--subagent-model` |  | Model for subagents (e.g., claude-sonnet-4-6 while main is claude-opus-4-7). |
+| `--run-id` |  | Identifier for this run. |
+| `--case` |  | Substring match to select specific cases. |
+| `--baseline` |  | Previous run to compare against for regression detection via pairwise comparison. |
+| `--no-judge` |  | Skip LLM judges, run inline checks only. |
+| `--gold` |  | Save outputs as gold references after the run. |
+| `--effort` |  | Claude Code reasoning effort level. |
+| `--skill` |  | Override the skill to test. |
+
+Examples:
+```
+/eval-run --model claude-opus-4-6
+/eval-run --model claude-opus-4-6 --baseline 2026-05-01-opus
+/eval-run --case case-001 --no-judge
+/eval-run --gold
+```
+
+#### /eval-review
+
+Interactive human-in-the-loop review of evaluation results. Presents judge
+scores and skill outputs case by case, collects qualitative feedback, delegates
+transcript analysis to Explore sub-agents to identify inefficiencies (roundabout
+paths, multiple approaches, unnecessary tools), identifies judge-human alignment
+gaps, and proposes targeted SKILL.md improvements grounded in feedback evidence.
+Complements /eval-optimize (automated) by catching tone, intent, and UX issues
+that judges cannot measure.
+
+```
+/eval-review --run-id <id> [--config <path>] [--case <filter>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--run-id` | yes | Which eval run to review. |
+| `--config` |  | Path to eval config. |
+| `--case` |  | Substring match to select specific cases for review. |
+
+Examples:
+```
+/eval-review --run-id 2026-05-01-opus
+/eval-review --run-id 2026-05-01-opus --case case-003
+```
+
+#### /eval-mlflow
+
+Bidirectional MLflow integration for evaluation results, datasets, and
+feedback. Syncs test cases to MLflow dataset registry with a schema mapping
+you define (inputs vs expectations), logs run params/metrics/artifacts/traces
+to MLflow experiments, pushes judge scores and human feedback to execution
+traces, and pulls annotations added via the MLflow UI back into review.yaml
+for /eval-optimize to consume. Resolves tracking URI from eval.yaml, then
+MLFLOW_TRACKING_URI env var, then defaults to localhost:5000.
+
+```
+/eval-mlflow [--action <action>] [--run-id <id>] [--config <path>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--action` |  | Which sync action to perform. |
+| `--run-id` |  | Which eval run to log or attach feedback to. Required for log-results, push-feedback, and pull-feedback. |
+| `--config` |  | Path to eval config. |
+
+Examples:
+```
+/eval-mlflow --run-id 2026-05-01-opus
+/eval-mlflow --action sync-dataset
+/eval-mlflow --run-id 2026-05-01-opus --action push-feedback
+```
+
+#### /eval-optimize
+
+Automated skill improvement loop. Runs evaluation, identifies judge failures
+from summary.yaml, reads execution transcripts via Explore sub-agents to trace
+root causes to specific SKILL.md instructions, makes surgical edits grounded
+in evidence, re-runs evaluation with regression baseline checks, and iterates
+up to a configurable maximum. Also reads human feedback from review.yaml
+(from /eval-review) and MLflow annotations to prioritize issues flagged by
+humans over automated judge failures. Stops when all judges pass or max
+iterations reached.
+
+```
+/eval-optimize [--config <path>] [--model <model>] [--max-iterations <N>] [--run-id <id>] [--target-judge <name>]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--config` |  | Path to eval config. |
+| `--model` |  | Model for skill execution across all iterations. |
+| `--max-iterations` |  | Maximum optimization iterations before stopping. |
+| `--run-id` |  | Base run ID. Iterations append -iter-N. |
+| `--target-judge` |  | Focus optimization on a specific failing judge instead of all judges. |
+
+Examples:
+```
+/eval-optimize
+/eval-optimize --max-iterations 5 --model claude-opus-4-6
+/eval-optimize --target-judge completeness
+```
+
+---
+
+## knowledge-skills
+
+Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant knowledge using parallel agents, and proposes updates as a git-apply-able patch for human review. Supports GitHub and GitLab.
+
+**Repository**: https://github.com/opendatahub-io/knowledge-skills
+
+### Skills
+
+#### /knowledge.repo
+
+Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch
+
+---
+
+## autofix-skills
+
+Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic Python scripts for automated bug fixing, CVE remediation, and ticket triage. Designed to run inside a Claude Code container as part of a CI pipeline.
+
+**Repository**: https://github.com/opendatahub-io/autofix-skills
+
+### Skills
+
+#### /autofix-resolve
+
+Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations)
+
+#### /autofix-cve-resolve
+
+CVE remediation across multiple repos with state-machine dispatch
+
+#### /autofix-triage
+
+Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable)
+
+#### /autofix-research
+
+Investigate spike tickets with no associated repository
+
+---
+
+## meeting-quality-skills
+
+Pre-meeting skills for improving meeting quality by shifting recurring status
+meetings away from general reporting and toward exception-based discussion.
+The plugin provides two complementary skills: one checks a shared update
+document to identify attendees who have not provided async updates, and the
+other analyzes collected updates to generate a risk-focused agenda that
+prioritizes blockers and at-risk items.
+
+Both skills work with Google Docs or pasted text, and handle edge cases such
+as Jira-exported content (issue keys, dashboards, JQL output) by attempting
+to extract owners from fields like Assignee or Owner. When ownership cannot
+be determined, items are flagged as uncertain rather than silently dropped.
+
+**Repository**: https://github.com/ahinek/meeting-quality-skills
+
+### Architecture
+
+The two skills operate independently but form a natural pre-meeting workflow:
+first run meeting-async-update-check to ensure updates are in, then run
+meeting-risk-agenda to build a focused agenda from those updates. Both skills
+are purely prompt-driven with no external tool dependencies — they rely on
+the LLM's ability to parse unstructured document content and apply
+classification heuristics (name matching, risk-signal detection).
+
+### Skills
+
+#### /meeting-async-update-check
+
+Checks a shared pre-meeting update document and identifies attendees who
+have not provided an async update before a status meeting. For each
+attendee, the skill determines whether they appear to have contributed by
+looking for section headers with their name, email alias references, or
+attributed bullet lists. When the document contains Jira-exported content,
+it attempts to identify owners from Assignee/Owner fields and marks
+ambiguous items as uncertain.
+
+Produces three sections: attendees with updates, attendees missing updates,
+and uncertain matches needing organizer review. Also drafts a professional
+reminder message the organizer can send to those who haven't updated yet.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `meeting_title` | yes | Title of the meeting being checked |
+| `meeting_datetime` | yes | Date and time of the upcoming meeting |
+| `attendee_list` | yes | List of meeting attendees to check for updates |
+| `update_document` | yes | Shared meeting update document content or link (Google Doc or pasted text) |
+| `update_format` |  | Optional expected format for updates, if one exists |
+
+Examples:
+```
+/meeting-async-update-check
+Check who hasn't updated the weekly sync doc yet
+```
+
+#### /meeting-risk-agenda
+
+Analyzes pre-meeting updates and generates a risk-focused agenda by
+classifying each update into Blocked, At Risk, or No Issues categories.
+Detects risk signals such as "blocked", "stuck", "waiting", "dependency",
+lack of progress, and unclear ownership. Extracts owner names when present
+and organizes the agenda with blocked items first, at-risk items second,
+and no-issues items deprioritized or summarized.
+
+If no risks are found, the skill suggests the meeting may not be necessary
+or could be shortened. If ownership is unclear, it explicitly calls that out.
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `meeting_title` |  | Title of the meeting (optional context) |
+| `update_document` | yes | Meeting update document content (Google Doc or pasted text) |
+| `attendee_list` |  | List of meeting attendees (optional, helps with owner matching) |
+
+Examples:
+```
+/meeting-risk-agenda
+Build a focused agenda from our team's weekly updates
+```
+
+---
