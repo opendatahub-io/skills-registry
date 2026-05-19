@@ -669,17 +669,12 @@ def generate_site(registry: dict, output_dir: Path):
     (output_dir / "mkdocs.yml").write_text(
         generate_mkdocs_yml(registry, categories, cat_plugins))
 
-    # llms.txt protocol files (at repo root, not inside site/)
-    repo_root = output_dir.parent
+    # llms.txt protocol files — written to docs/ so MkDocs includes them
+    # in the build output (served at /skills-registry/llms.txt)
     site_url = "https://opendatahub-io.github.io/skills-registry"
-    (repo_root / "llms.txt").write_text(generate_llms_txt(registry, site_url))
-    (repo_root / "llms-full.txt").write_text(
+    (docs / "llms.txt").write_text(generate_llms_txt(registry, site_url))
+    (docs / "llms-full.txt").write_text(
         generate_llms_full_txt(registry, docs))
-
-    # Copy llms.txt files into docs/ so MkDocs includes them in the build
-    # output (served at /skills-registry/llms.txt and llms-full.txt)
-    shutil.copy2(repo_root / "llms.txt", docs / "llms.txt")
-    shutil.copy2(repo_root / "llms-full.txt", docs / "llms-full.txt")
 
 
 
