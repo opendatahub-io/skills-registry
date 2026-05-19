@@ -676,6 +676,12 @@ def generate_site(registry: dict, output_dir: Path):
     (repo_root / "llms-full.txt").write_text(
         generate_llms_full_txt(registry, docs))
 
+    # Copy llms.txt files into docs/ so MkDocs includes them in the build
+    # output (served at /skills-registry/llms.txt and llms-full.txt)
+    shutil.copy2(repo_root / "llms.txt", docs / "llms.txt")
+    shutil.copy2(repo_root / "llms-full.txt", docs / "llms-full.txt")
+
+
 
 def main():
     parser = argparse.ArgumentParser(
