@@ -519,8 +519,6 @@ def generate_llms_txt(registry: dict, site_url: str) -> str:
     for p in plugins:
         name = p["name"]
         desc = p["description"].strip().split("\n")[0]
-        if len(desc) > 120:
-            desc = desc[:117] + "..."
         lines.append(f"- [{name}]({site_url}/plugins/{name}/): {desc}")
     lines.append("")
     lines.append("## Skills")
@@ -530,8 +528,6 @@ def generate_llms_txt(registry: dict, site_url: str) -> str:
         for s in p.get("skills", []):
             sname = s["name"]
             sdesc = s.get("description", "").strip()
-            if len(sdesc) > 100:
-                sdesc = sdesc[:97] + "..."
             if s.get("user-invocable", True):
                 lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc}")
     lines.append("")
