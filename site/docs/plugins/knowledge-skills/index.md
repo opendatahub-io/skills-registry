@@ -7,7 +7,17 @@ title: knowledge-skills
 
 # knowledge-skills
 
-Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant knowledge using parallel agents, and proposes updates as a git-apply-able patch for human review. Supports GitHub and GitLab.
+Autonomous knowledge management for keeping AI context files (CLAUDE.md,
+AGENTS.md) up to date with recent codebase changes. Scans merged PRs from
+the last N days, dispatches parallel extraction agents to identify knowledge
+items, synthesizes proposed updates, runs an adversarial review, and produces
+a git-apply-able patch for human review.
+
+The skill is forge-agnostic (GitHub via gh CLI, GitLab via glab CLI) and
+designed for CI pipeline execution. It produces artifacts (patch file,
+run report, extraction data) but never creates PRs/MRs itself — external
+tooling handles forge interactions.
+
 
 !!! info "Plugin Details"
 
@@ -29,3 +39,20 @@ Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, 
 ```bash
 /plugin install knowledge-skills@opendatahub-skills
 ```
+
+## Architecture
+
+A 7-phase pipeline with early-exit gates at each phase:
+Setup → Fetch PRs → Extract (parallel haiku agents, waves of 10) →
+Synthesize (opus) → Review (opus, context-isolated) → Revise (opus,
+conditional) → Artifacts.
+
+Key architectural patterns:
+- Separation of concerns: SKILL.md orchestrates, scripts handle
+  deterministic work, agent prompts handle judgment
+- Adversarial review: review agent is context-isolated from synthesis
+  agent (doesn't see rationale, only diff + raw extractions)
+- Stateless: no tracking of prior runs. Rejected proposals are handled
+  by adding guidance to context files, not by building state
+- Per-PR extraction: each PR gets its own agent context to avoid
+  overflow, dispatched in parallel waves

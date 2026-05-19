@@ -1,0 +1,221 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/knowledge.repo**
+
+  - --days N (default: 7)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 1: Setup ---
+
+setup: |md
+  **Setup**
+
+  - detect forge (GitHub/GitLab)
+  - create artifacts/ dirs
+  - list context files
+    (CLAUDE.md, AGENTS.md)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 2: Fetch ---
+
+fetch: |md
+  **Fetch PRs**
+
+  - fetch-prs.py via CLI
+  - merged PRs in date range
+  - truncate diffs > 5000 lines
+  - save to artifacts/pr-data/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: Forge CLI ---
+
+forge-cli: |md
+  **Forge CLI**
+  gh / glab
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Phase 3: Extract ---
+
+extract: |md
+  **Extract Knowledge**
+  Haiku agents (parallel)
+
+  - one agent per PR
+  - waves of 10, 30s poll
+  - 5 min timeout per wave
+  - output: pr-extractions/{id}.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Phase 4: Synthesize ---
+
+synthesize: |md
+  **Synthesize Changes**
+  Opus agent
+
+  - cross-PR reasoning
+  - edit context files in place
+  - match existing style/structure
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Phase 5: Review ---
+
+review: |md
+  **Review Diff**
+  Opus agent
+
+  - context-isolated from
+    synthesis rationale
+  - receives diff + raw
+    extractions only
+  - verdict: PASS or REVISE
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Phase 6: Revise ---
+
+revise: |md
+  **Revise Changes**
+  Opus agent
+
+  - apply review feedback
+  - single revision pass
+  - no re-review loop
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Phase 7: Artifacts ---
+
+artifacts: |md
+  **Finalize Artifacts**
+
+  - git diff > proposed-updates.patch
+  - git checkout -- . (reset tree)
+  - write run-report.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Early Exit ---
+
+early-exit: |md
+  **Early Exit**
+
+  - no context files
+  - no merged PRs
+  - no knowledge items
+  - no changes proposed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+}
+
+# --- Callout: run-report.json ---
+
+report-callout: |md
+  run-report.json
+  forge, repo, date_range
+  prs_scanned, prs_with_knowledge
+  knowledge_items: {high, med, low}
+  changes_proposed
+  review_verdict
+  patch_file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> setup
+setup -> fetch
+setup -> early-exit: "no context files" {
+  style.stroke-dash: 3
+}
+
+fetch -> extract: "pr-data/*.json"
+fetch -> early-exit: "0 PRs" {
+  style.stroke-dash: 3
+}
+
+forge-cli -> fetch: {
+  style.stroke-dash: 3
+}
+
+extract -> synthesize: "pr-extractions/*.md"
+extract -> early-exit: "no knowledge" {
+  style.stroke-dash: 3
+}
+
+synthesize -> review: "proposed-diff.txt"
+synthesize -> early-exit: "empty diff" {
+  style.stroke-dash: 3
+}
+
+review -> artifacts: "PASS"
+review -> revise: "REVISE"
+revise -> artifacts
+artifacts -> report-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
