@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: validate-registry-contracts
+        name: validate-registry-contracts
+        entry: python3 scripts/validate_registry.py --staged
+        language: system
+        pass_filenames: false
+        files: ^registry\.yaml$
+      - id: skill-linter-registry
+        name: skill-linter-registry
+        entry: python3 scripts/run_skill_linter.py --staged
+        language: system
+        pass_filenames: false
+        files: ^registry\.yaml$

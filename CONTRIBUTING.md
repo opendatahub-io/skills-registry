@@ -73,22 +73,52 @@ The `user-invocable` field mirrors the [native Claude Code SKILL.md frontmatter 
 
 ### 3. Regenerate Artifacts
 
-After editing `registry.yaml`, regenerate the marketplace and catalog:
+After editing `registry.yaml`, validate and regenerate artifacts so CI stays in sync (same sequence as `CLAUDE.md`):
 
 ```bash
-pip install pyyaml jsonschema
+pip install pyyaml jsonschema  # once, if dependencies are missing
+python3 scripts/validate_registry.py
 python3 scripts/sync_marketplace.py
 python3 scripts/generate_catalog.py
+python3 scripts/generate_site.py
 ```
 
-Commit the updated `marketplace.json` and `catalog.md` with your PR.
+Commit generated updates under `.claude-plugin/marketplace.json`, `catalog.md`, and `site/` with your PR.
+
+### Local Hooks
+
+Install the same contract and `skill-linter` checks used in CI:
+
+```bash
+python3 -m pip install pre-commit
+pre-commit install
+```
+
+The hooks validate staged `registry.yaml` changes and run pinned `skill-linter` checks against the referenced source skills. You also need Node.js 22 or newer available locally because `skill-linter` requires Node 22.
+
+`config/skill-linter-registry.json` may downgrade an occasionally noisy rule to warning when permission-documentation text would otherwise false-positive, so you can still see warning-level linter output while the hook passes.
+
+When you add a skill or change an existing skill's registry entry (compared against `HEAD` for pre-commit or the configured base ref in CI), include a canonical `contract` block on that skill plus accurate `contract.source_assertions` paths into the upstream repository; CI and hooks enforce this for touched skills.
+
+### Choosing Canonical Contracts
+
+Treat the `contract` block as a contributor-facing optimization spec, not a bag of tags. Keep it deliberate and minimal.
+
+Use the generated canonical reference in [`catalog.md`](catalog.md#canonical-contract-system) for the full glossary of functions, metrics, and measures. In `CONTRIBUTING.md`, focus on these decision rules:
+
+- Pick 1-2 `functions` that describe the published job-to-be-done, not an internal implementation step.
+- Pick the smallest metric set that captures what a downstream optimizer should improve without changing the skill's purpose.
+- Declare `measure` explicitly for every metric. Prefer `deterministic`, then `verifier_backed`, and use `judge` only when rubric-based evaluation is genuinely necessary.
+- When `measure: judge`, include a stable `rubric_ref`. When `measure: verifier_backed`, include `verifier_ref`.
+- Use `success_conditions`, `invariants`, and `source_assertions` to document what must remain fixed while the skill is optimized.
+- Reserve `output_quality` for genuinely judge-only artifact quality; it always needs a rubric, and `calibration_ref`, `trials`, and `success_mode` become important once the metric is used for repeatable optimization rather than one-off review.
 
 ### 4. CI Validation
 
-The PR will automatically:
-- Validate `registry.yaml` against the JSON Schema
-- Check that your GitHub repo is accessible
-- Clone your repo and verify `plugin.json` and `SKILL.md` files exist
+CI runs on pull requests and pushes to `main`. It automatically:
+- Validates `registry.yaml` against the JSON Schema and touched-skill contract rules (diff-aware vs the PR base branch or prior push commit).
+- Runs pinned `skill-linter` on skills you changed when they declare GitHub `source` and `contract.source_assertions`.
+- Checks that referenced GitHub repos are reachable and that expected manifests or paths resolve as validated by `scripts/validate_registry.py`.
 
 ### 5. Review and Merge
 
