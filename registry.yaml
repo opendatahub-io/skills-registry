@@ -120,10 +120,10 @@ plugins:
       name: Jason Greene
     source:
       type: github
-      repo: n1hility/assess-rfe
+      repo: opendatahub-io/assess-rfe
       ref: main
-    homepage: https://github.com/n1hility/assess-rfe
-    repository: https://github.com/n1hility/assess-rfe
+    homepage: https://github.com/opendatahub-io/assess-rfe
+    repository: https://github.com/opendatahub-io/assess-rfe
     skills:
       - name: assess-rfe
         description: Assess RFEs against quality criteria using a structured rubric

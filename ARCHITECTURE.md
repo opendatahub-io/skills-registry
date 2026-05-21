@@ -86,7 +86,7 @@ that contains the actual skills:
  │              │        └────────────────────────────────┘
  │              │
  │              │        ┌────────────────────────────────┐
- │  assess-rfe  ├───────►│ n1hility/assess-rfe            │
+ │  assess-rfe  ├───────►│ opendatahub-io/assess-rfe      │
  │  (strict:    │        │  ├─ .claude-plugin/            │
  │   true)      │        │  │   └─ plugin.json            │
  │              │        │  └─ skills/                    │

@@ -21,7 +21,7 @@ Skills for evaluating and testing AI agent skills
 
 Assess RFEs against quality criteria using a structured rubric.
 
-v1.0.0 | [n1hility/assess-rfe](https://github.com/n1hility/assess-rfe)
+v1.0.0 | [opendatahub-io/assess-rfe](https://github.com/opendatahub-io/assess-rfe)
 
 Tags: rfe, rubric, quality, assessment
 

@@ -361,7 +361,7 @@ detailed calibration examples for each criterion and a comprehensive list of
 established RHOAI platform technologies that are considered vocabulary rather
 than architecture prescription.
 
-**Repository**: https://github.com/n1hility/assess-rfe
+**Repository**: https://github.com/opendatahub-io/assess-rfe
 
 ### Architecture
 
