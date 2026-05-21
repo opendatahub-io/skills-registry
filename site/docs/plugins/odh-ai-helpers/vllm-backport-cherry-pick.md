@@ -23,21 +23,21 @@ follow-up for semantic validation of the cherry-picked diff.
 
 ## Arguments
 
-```
+```bash
 /vllm-backport-cherry-pick [--input] [--downstream] [--branch] [--jira-url] [--report-url] [--output]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--input` | :material-check: | — | Path to ranked.json from score-rank step |
-| `--downstream` | :material-check: | — | Path to downstream repository |
-| `--branch` | :material-check: | — | Downstream branch name (e.g., rhai/0.13.0) |
-| `--jira-url` |  | — | Jira ticket URL to link in the PR |
-| `--report-url` |  | — | GitHub report URL to link in the PR |
-| `--output` | :material-check: | — | Output path for cherry-pick-result.json |
+| `--input` | :material-check: | - | Path to ranked.json from score-rank step |
+| `--downstream` | :material-check: | - | Path to downstream repository |
+| `--branch` | :material-check: | - | Downstream branch name (e.g., rhai/0.13.0) |
+| `--jira-url` |  | - | Jira ticket URL to link in the PR |
+| `--report-url` |  | - | GitHub report URL to link in the PR |
+| `--output` | :material-check: | - | Output path for cherry-pick-result.json |
 
 ## Usage
 
-```
+```bash
 /vllm-backport-cherry-pick --input artifacts/ranked.json --downstream /path/to/repo --branch rhai/0.13.0 --output artifacts/cherry-pick-result.json
 ```

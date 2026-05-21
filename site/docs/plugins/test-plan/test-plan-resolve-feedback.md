@@ -23,16 +23,16 @@ changes to the same branch with a descriptive commit message.
 
 ## Arguments
 
-```
+```bash
 /test-plan-resolve-feedback <PR_URL>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PR_URL` | :material-check: | — | Full GitHub PR URL (e.g., https://github.com/owner/repo/pull/42) |
+| `PR_URL` | :material-check: | - | Full GitHub PR URL (e.g., https://github.com/owner/repo/pull/42) |
 
 ## Usage
 
-```
+```bash
 /test-plan-resolve-feedback https://github.com/org/test-plans-repo/pull/42
 ```

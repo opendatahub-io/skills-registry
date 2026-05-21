@@ -26,6 +26,6 @@ with model: opus.
 
 ## Usage
 
-```
+```bash
 /rfe-feasibility-review
 ```

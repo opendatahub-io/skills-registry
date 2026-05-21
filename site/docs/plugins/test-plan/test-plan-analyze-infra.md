@@ -23,6 +23,6 @@ Sections 3 and 9.
 
 ## Usage
 
-```
+```bash
 /test-plan-analyze-infra
 ```

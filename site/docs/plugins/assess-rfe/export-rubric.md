@@ -23,6 +23,6 @@ understand how RFEs are evaluated.
 
 ## Usage
 
-```
+```bash
 /export-rubric
 ```

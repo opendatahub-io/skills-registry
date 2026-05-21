@@ -25,19 +25,19 @@ MLFLOW_TRACKING_URI env var, then defaults to localhost:5000.
 
 ## Arguments
 
-```
+```bash
 /eval-mlflow [--action <action>] [--run-id <id>] [--config <path>]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `--action` |  | `all` | Which sync action to perform. |
-| `--run-id` |  | — | Which eval run to log or attach feedback to. Required for log-results, push-feedback, and pull-feedback. |
+| `--run-id` |  | - | Which eval run to log or attach feedback to. Required for log-results, push-feedback, and pull-feedback. |
 | `--config` |  | `eval.yaml` | Path to eval config. |
 
 ## Usage
 
-```
+```bash
 /eval-mlflow --run-id 2026-05-01-opus
 /eval-mlflow --action sync-dataset
 /eval-mlflow --run-id 2026-05-01-opus --action push-feedback

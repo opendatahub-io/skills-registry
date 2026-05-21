@@ -24,7 +24,7 @@ source RFE, ready for refinement with strat.refine.
 
 ## Usage
 
-```
+```bash
 /strat.create RHAIRFE-1234
 /strat.create
 ```

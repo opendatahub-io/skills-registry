@@ -24,7 +24,7 @@ Never writes code directly — all coding happens through prompt agents.
 
 ## Arguments
 
-```
+```bash
 /autofix-resolve [mode]
 ```
 
@@ -34,7 +34,7 @@ Never writes code directly — all coding happens through prompt agents.
 
 ## Usage
 
-```
+```bash
 /autofix-resolve
 /autofix-resolve iterate
 ```

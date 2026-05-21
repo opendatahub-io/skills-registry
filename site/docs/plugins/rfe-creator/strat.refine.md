@@ -26,6 +26,6 @@ execution.
 
 ## Usage
 
-```
+```bash
 /strat.refine
 ```

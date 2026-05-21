@@ -31,17 +31,17 @@ FIPS strictfipsruntime enforcement, and fastify v5 regression testing.
 
 ## Arguments
 
-```
+```bash
 /konflux-build-simulator [repository-url]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `repository-url` |  | — | GitHub repository URL to generate build simulation for (prompted if omitted) |
+| `repository-url` |  | - | GitHub repository URL to generate build simulation for (prompted if omitted) |
 
 ## Usage
 
-```
+```bash
 /konflux-build-simulator https://github.com/opendatahub-io/odh-dashboard
 /konflux-build-simulator https://github.com/opendatahub-io/kserve
 /konflux-build-simulator https://github.com/kubeflow/training-operator

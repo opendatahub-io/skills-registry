@@ -22,6 +22,6 @@ structured output with resolved/unresolved/new gaps and statistics.
 
 ## Usage
 
-```
+```bash
 /test-plan-resolve-gaps
 ```

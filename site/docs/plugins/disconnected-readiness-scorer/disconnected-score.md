@@ -13,6 +13,6 @@ Score a repository's readiness for disconnected / air-gapped OpenShift deploymen
 
 ## Usage
 
-```
+```bash
 /disconnected-score
 ```

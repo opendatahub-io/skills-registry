@@ -25,18 +25,18 @@ JIRA_USER, and JIRA_TOKEN environment variables.
 
 ## Arguments
 
-```
+```bash
 /rfe.submit [--dry-run] [--artifacts-dir <path>]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--dry-run` |  | — | Validate locally without writing to Jira |
+| `--dry-run` |  | - | Validate locally without writing to Jira |
 | `--artifacts-dir` |  | `artifacts` | Path to the artifacts directory |
 
 ## Usage
 
-```
+```bash
 /rfe.submit
 /rfe.submit --dry-run
 ```

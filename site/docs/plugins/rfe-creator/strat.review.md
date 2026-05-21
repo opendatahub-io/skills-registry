@@ -24,6 +24,6 @@ after revisions.
 
 ## Usage
 
-```
+```bash
 /strat.review
 ```

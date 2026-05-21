@@ -21,18 +21,18 @@ prints the clone path to stdout for downstream consumption.
 
 ## Arguments
 
-```
+```bash
 /git-shallow-clone <REPOSITORY_URL> [TAG_OR_BRANCH]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `REPOSITORY_URL` | :material-check: | — | URL of the Git repository to clone |
+| `REPOSITORY_URL` | :material-check: | - | URL of the Git repository to clone |
 | `TAG_OR_BRANCH` |  | `HEAD` | Git tag or branch to shallow-clone |
 
 ## Usage
 
-```
+```bash
 /git-shallow-clone https://github.com/psf/requests.git
 /git-shallow-clone https://github.com/psf/requests.git v2.28.0
 ```

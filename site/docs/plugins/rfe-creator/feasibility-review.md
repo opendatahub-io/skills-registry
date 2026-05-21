@@ -24,6 +24,6 @@ optimistic estimates. Runs with model: opus.
 
 ## Usage
 
-```
+```bash
 /feasibility-review
 ```

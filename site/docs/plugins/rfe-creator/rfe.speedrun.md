@@ -24,22 +24,22 @@ rfe.submit as sub-skills.
 
 ## Arguments
 
-```
+```bash
 /rfe.speedrun <idea-or-key> [--input <path>] [--headless] [--dry-run] [--batch-size N] [--announce-complete]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `idea-or-key` |  | — | A free-text idea or Jira key (RHAIRFE-NNNN). Mutually exclusive with --input. |
-| `--input` |  | — | Path to a YAML file with batch entries (prompt, priority, labels per entry) |
-| `--headless` |  | — | Suppress questions and confirmations (for CI/eval) |
-| `--dry-run` |  | — | Skip Jira writes in submit phase |
+| `idea-or-key` |  | - | A free-text idea or Jira key (RHAIRFE-NNNN). Mutually exclusive with --input. |
+| `--input` |  | - | Path to a YAML file with batch entries (prompt, priority, labels per entry) |
+| `--headless` |  | - | Suppress questions and confirmations (for CI/eval) |
+| `--dry-run` |  | - | Skip Jira writes in submit phase |
 | `--batch-size` |  | `5` | Override batch size for auto-fix phase |
-| `--announce-complete` |  | — | Print completion marker when done (for CI/eval harnesses) |
+| `--announce-complete` |  | - | Print completion marker when done (for CI/eval harnesses) |
 
 ## Usage
 
-```
+```bash
 /rfe.speedrun Better dashboard for ML model monitoring
 /rfe.speedrun RHAIRFE-1234
 /rfe.speedrun --input batch.yaml --headless --dry-run

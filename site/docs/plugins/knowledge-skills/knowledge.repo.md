@@ -25,7 +25,7 @@ and artifacts (patch file, run report). Non-interactive — designed for CI.
 
 ## Arguments
 
-```
+```bash
 /knowledge.repo [--days N]
 ```
 
@@ -35,7 +35,7 @@ and artifacts (patch file, run report). Non-interactive — designed for CI.
 
 ## Usage
 
-```
+```bash
 /knowledge.repo
 /knowledge.repo --days 14
 /knowledge.repo --days 30

@@ -25,6 +25,6 @@ or external deps). Produces a structured JSON verdict
 
 ## Usage
 
-```
+```bash
 /autofix-triage
 ```

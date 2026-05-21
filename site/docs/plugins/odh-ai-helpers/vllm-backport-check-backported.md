@@ -22,19 +22,19 @@ the downstream branch). Adds an already_backported boolean to each PR.
 
 ## Arguments
 
-```
+```bash
 /vllm-backport-check-backported [--input] [--downstream] [--branch] [--output]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--input` | :material-check: | — | Path to filtered.json from classify step |
-| `--downstream` | :material-check: | — | Path to downstream repository |
-| `--branch` | :material-check: | — | Downstream branch name (e.g., rhai/0.13.0) |
-| `--output` | :material-check: | — | Output path for candidates.json |
+| `--input` | :material-check: | - | Path to filtered.json from classify step |
+| `--downstream` | :material-check: | - | Path to downstream repository |
+| `--branch` | :material-check: | - | Downstream branch name (e.g., rhai/0.13.0) |
+| `--output` | :material-check: | - | Output path for candidates.json |
 
 ## Usage
 
-```
+```bash
 /vllm-backport-check-backported --input artifacts/filtered.json --downstream /path/to/downstream --branch rhai/0.13.0 --output artifacts/candidates.json
 ```

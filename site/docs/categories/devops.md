@@ -15,4 +15,4 @@ Skills for deployment, CI/CD, and infrastructure
 
 Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation. Supports automatic detection of image management patterns (env var vs static CSV) and cross-references against the opendatahub-operator manifest.
 
-**1 skills** · v0.1.0
+**1 skills** - v0.1.0

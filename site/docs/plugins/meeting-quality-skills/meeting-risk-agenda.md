@@ -27,19 +27,19 @@ or could be shortened. If ownership is unclear, it explicitly calls that out.
 
 ## Arguments
 
-```
+```bash
 /meeting-risk-agenda [meeting_title] <update_document> [attendee_list]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `meeting_title` |  | — | Title of the meeting (optional context) |
-| `update_document` | :material-check: | — | Meeting update document content (Google Doc or pasted text) |
-| `attendee_list` |  | — | List of meeting attendees (optional, helps with owner matching) |
+| `meeting_title` |  | - | Title of the meeting (optional context) |
+| `update_document` | :material-check: | - | Meeting update document content (Google Doc or pasted text) |
+| `attendee_list` |  | - | List of meeting attendees (optional, helps with owner matching) |
 
 ## Usage
 
-```
+```bash
 /meeting-risk-agenda
 Build a focused agenda from our team's weekly updates
 ```

@@ -33,21 +33,21 @@ cross-repo coverage analysis.
 
 ## Arguments
 
-```
+```bash
 /historical-bug-coverage --jql JQL_QUERY --repo REPO_PATH [--external-tests PATH] [--filter FILTER_ID] [--output PATH]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--jql` | :material-check: | — | JQL query string to fetch bugs from Jira (mutually exclusive with --filter) |
-| `--repo` | :material-check: | — | Path to the target repository to analyze for test coverage |
-| `--external-tests` |  | — | Path to an external test repository for cross-repo coverage analysis |
-| `--filter` |  | — | Saved Jira filter ID (alternative to --jql) |
-| `--output` |  | — | Output HTML file path (defaults to {repo-name}-bug-coverage.html) |
+| `--jql` | :material-check: | - | JQL query string to fetch bugs from Jira (mutually exclusive with --filter) |
+| `--repo` | :material-check: | - | Path to the target repository to analyze for test coverage |
+| `--external-tests` |  | - | Path to an external test repository for cross-repo coverage analysis |
+| `--filter` |  | - | Saved Jira filter ID (alternative to --jql) |
+| `--output` |  | - | Output HTML file path (defaults to {repo-name}-bug-coverage.html) |
 
 ## Usage
 
-```
+```bash
 /historical-bug-coverage --jql "project = MYPROJECT AND priority in (Blocker, Critical)" --repo /path/to/repo
 /historical-bug-coverage --jql "project = MYPROJECT AND component = 'Dashboard'" --repo /path/to/repo --external-tests /path/to/e2e-tests
 /historical-bug-coverage --jql "project = MYPROJECT AND created >= -90d" --repo /path/to/repo

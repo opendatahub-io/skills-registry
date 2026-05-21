@@ -148,7 +148,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
         lines.append("")
         lines.append(f"    {desc}")
         lines.append("")
-        lines.append(f"    **{skill_count} skills** · {cat_name} · v{version}")
+        lines.append(f"    **{skill_count} skills** - {cat_name} - v{version}")
         lines.append("")
 
     lines.append("</div>")
@@ -162,7 +162,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
             continue
         count = len(cat_list)
         lines.append(f"- [{cat_meta['name']}](categories/{cat_key}.md) "
-                     f"— {cat_meta.get('description', '')} ({count} plugin{'s' if count != 1 else ''})")
+                     f"-- {cat_meta.get('description', '')} ({count} plugin{'s' if count != 1 else ''})")
     lines.append("")
 
     return "\n".join(lines)
@@ -353,7 +353,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
                 else:
                     parts.append(f"[{name}]")
             hint = " ".join(parts)
-        lines.append(f"```")
+        lines.append(f"```bash")
         lines.append(f"/{sname} {hint}")
         lines.append(f"```")
         lines.append("")
@@ -362,7 +362,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         for arg in enriched_skill["arguments"]:
             aname = f'`{arg["name"]}`'
             req = ":material-check:" if arg.get("required") else ""
-            default = f'`{arg["default"]}`' if arg.get("default") else "—"
+            default = f'`{arg["default"]}`' if arg.get("default") else "-"
             adesc = arg.get("description", "")
             lines.append(f"| {aname} | {req} | {default} | {adesc} |")
         lines.append("")
@@ -370,7 +370,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         # No enriched arguments but argument-hint exists — parse it as fallback
         lines.append("## Arguments")
         lines.append("")
-        lines.append(f"```")
+        lines.append(f"```bash")
         lines.append(f"/{sname} {argument_hint}")
         lines.append(f"```")
         lines.append("")
@@ -393,7 +393,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     if enriched_skill and enriched_skill.get("usage_examples"):
         lines.append("## Usage")
         lines.append("")
-        lines.append("```")
+        lines.append("```bash")
         for ex in enriched_skill["usage_examples"]:
             lines.append(ex)
         lines.append("```")
@@ -407,7 +407,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         # No arguments, no usage examples — show basic invocation
         lines.append("## Usage")
         lines.append("")
-        lines.append("```")
+        lines.append("```bash")
         lines.append(f"/{sname}")
         lines.append("```")
         lines.append("")
@@ -458,7 +458,7 @@ def generate_category_page(cat_key: str, cat_meta: dict,
             lines.append("")
             lines.append(desc)
             lines.append("")
-            lines.append(f"**{skill_count} skills** · v{version}")
+            lines.append(f"**{skill_count} skills** - v{version}")
             lines.append("")
 
     return "\n".join(lines)

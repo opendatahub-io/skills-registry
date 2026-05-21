@@ -29,17 +29,17 @@ browser upon completion.
 
 ## Arguments
 
-```
+```bash
 /quality-repo-analysis [repository-url]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `repository-url` |  | — | GitHub repository URL to analyze (prompted if omitted) |
+| `repository-url` |  | - | GitHub repository URL to analyze (prompted if omitted) |
 
 ## Usage
 
-```
+```bash
 /quality-repo-analysis https://github.com/opendatahub-io/kserve
 /quality-repo-analysis https://github.com/kubeflow/training-operator
 ```

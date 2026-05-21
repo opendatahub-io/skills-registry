@@ -29,21 +29,21 @@ reminder message the organizer can send to those who haven't updated yet.
 
 ## Arguments
 
-```
+```bash
 /meeting-async-update-check <meeting_title> <meeting_datetime> <attendee_list> <update_document> [update_format]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `meeting_title` | :material-check: | — | Title of the meeting being checked |
-| `meeting_datetime` | :material-check: | — | Date and time of the upcoming meeting |
-| `attendee_list` | :material-check: | — | List of meeting attendees to check for updates |
-| `update_document` | :material-check: | — | Shared meeting update document content or link (Google Doc or pasted text) |
-| `update_format` |  | — | Optional expected format for updates, if one exists |
+| `meeting_title` | :material-check: | - | Title of the meeting being checked |
+| `meeting_datetime` | :material-check: | - | Date and time of the upcoming meeting |
+| `attendee_list` | :material-check: | - | List of meeting attendees to check for updates |
+| `update_document` | :material-check: | - | Shared meeting update document content or link (Google Doc or pasted text) |
+| `update_format` |  | - | Optional expected format for updates, if one exists |
 
 ## Usage
 
-```
+```bash
 /meeting-async-update-check
 Check who hasn't updated the weekly sync doc yet
 ```

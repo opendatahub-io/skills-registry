@@ -25,6 +25,6 @@ vague criteria.
 
 ## Usage
 
-```
+```bash
 /testability-review
 ```

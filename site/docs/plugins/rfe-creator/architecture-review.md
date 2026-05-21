@@ -25,6 +25,6 @@ skips if unavailable. Runs with model: opus.
 
 ## Usage
 
-```
+```bash
 /architecture-review
 ```

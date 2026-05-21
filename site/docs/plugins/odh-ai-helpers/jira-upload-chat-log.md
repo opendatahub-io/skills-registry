@@ -23,7 +23,7 @@ the actual upload to the jira-workitem-attach skill.
 
 ## Arguments
 
-```
+```bash
 /jira-upload-chat-log [TICKET_KEY]
 ```
 
@@ -33,7 +33,7 @@ the actual upload to the jira-workitem-attach skill.
 
 ## Usage
 
-```
+```bash
 /jira-upload-chat-log AIPCC-7354
 /jira-upload-chat-log
 ```

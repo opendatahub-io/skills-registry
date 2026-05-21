@@ -25,6 +25,6 @@ original RFE scope.
 
 ## Usage
 
-```
+```bash
 /scope-review
 ```

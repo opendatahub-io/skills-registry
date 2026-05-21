@@ -23,7 +23,7 @@ Python-specific build variables.
 
 ## Arguments
 
-```
+```bash
 /python-packaging-env-finder [PROJECT_PATH]
 ```
 
@@ -33,7 +33,7 @@ Python-specific build variables.
 
 ## Usage
 
-```
+```bash
 /python-packaging-env-finder
 /python-packaging-env-finder /path/to/project
 ```

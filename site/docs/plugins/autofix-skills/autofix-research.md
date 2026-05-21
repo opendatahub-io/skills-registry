@@ -23,6 +23,6 @@ observations if external access would be needed.
 
 ## Usage
 
-```
+```bash
 /autofix-research
 ```
