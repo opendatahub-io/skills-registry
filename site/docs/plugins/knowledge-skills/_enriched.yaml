@@ -1,0 +1,47 @@
+description: |
+  Autonomous knowledge management for keeping AI context files (CLAUDE.md,
+  AGENTS.md) up to date with recent codebase changes. Scans merged PRs from
+  the last N days, dispatches parallel extraction agents to identify knowledge
+  items, synthesizes proposed updates, runs an adversarial review, and produces
+  a git-apply-able patch for human review.
+
+  The skill is forge-agnostic (GitHub via gh CLI, GitLab via glab CLI) and
+  designed for CI pipeline execution. It produces artifacts (patch file,
+  run report, extraction data) but never creates PRs/MRs itself — external
+  tooling handles forge interactions.
+architecture_notes: |
+  A 7-phase pipeline with early-exit gates at each phase:
+  Setup → Fetch PRs → Extract (parallel haiku agents, waves of 10) →
+  Synthesize (opus) → Review (opus, context-isolated) → Revise (opus,
+  conditional) → Artifacts.
+
+  Key architectural patterns:
+  - Separation of concerns: SKILL.md orchestrates, scripts handle
+    deterministic work, agent prompts handle judgment
+  - Adversarial review: review agent is context-isolated from synthesis
+    agent (doesn't see rationale, only diff + raw extractions)
+  - Stateless: no tracking of prior runs. Rejected proposals are handled
+    by adding guidance to context files, not by building state
+  - Per-PR extraction: each PR gets its own agent context to avoid
+    overflow, dispatched in parallel waves
+skills:
+  knowledge.repo:
+    description: |
+      Scan merged PRs from the last N days, extract knowledge relevant to AI
+      agent context, and propose updates to context files (CLAUDE.md, AGENTS.md)
+      as a git-apply-able patch. Runs a 7-phase pipeline: setup (forge detection,
+      context file discovery), fetch (PR data via CLI), extract (parallel haiku
+      agents per PR), synthesize (opus agent merges findings into proposed edits),
+      review (adversarial opus agent checks quality), revise (conditional fix pass),
+      and artifacts (patch file, run report). Non-interactive — designed for CI.
+    argument_hint: "[--days N]"
+    arguments:
+      - name: "--days"
+        type: "integer"
+        required: false
+        default: "7"
+        description: "How far back to scan merged PRs"
+    usage_examples:
+      - "/knowledge.repo"
+      - "/knowledge.repo --days 14"
+      - "/knowledge.repo --days 30"

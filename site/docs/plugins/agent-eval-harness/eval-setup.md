@@ -25,19 +25,19 @@ hook and agent_eval is available via symlinks.
 
 ## Arguments
 
-```
+```bash
 /eval-setup [--tracking-uri <uri>] [--skip-mlflow] [--runs-dir <path>]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--tracking-uri` |  | — | MLflow tracking URI (skips interactive setup). Accepts local or remote URIs. |
+| `--tracking-uri` |  | - | MLflow tracking URI (skips interactive setup). Accepts local or remote URIs. |
 | `--skip-mlflow` |  | `false` | Skip MLflow setup entirely. The harness works without MLflow. |
 | `--runs-dir` |  | `eval/runs` | Directory where eval runs are stored. Configured via AGENT_EVAL_RUNS_DIR env var. |
 
 ## Usage
 
-```
+```bash
 /eval-setup
 /eval-setup --tracking-uri http://127.0.0.1:5000
 /eval-setup --skip-mlflow

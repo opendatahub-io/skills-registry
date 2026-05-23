@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-8 plugins | 70 skills | 4 categories
+11 plugins | 76 skills | 6 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -26,7 +26,7 @@ hide:
 
     Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pi...
 
-    **16 skills** · Product Planning · v0.1.0
+    **16 skills** - Product Planning - v0.1.0
 
 -   **[assess-rfe](plugins/assess-rfe/index.md)**
 
@@ -34,7 +34,7 @@ hide:
 
     Assess RFEs against quality criteria using a structured rubric.
 
-    **2 skills** · Evaluation & Testing · v1.0.0
+    **2 skills** - Evaluation & Testing - v1.0.0
 
 -   **[rhoai-security-reviewer](plugins/rhoai-security-reviewer/index.md)**
 
@@ -42,7 +42,7 @@ hide:
 
     Consensus-based security review for RHOAI strategy documents (STRATs). An orchestrator spawns three independent revie...
 
-    **2 skills** · Security Review · v0.1.0
+    **2 skills** - Security Review - v0.1.0
 
 -   **[test-plan](plugins/test-plan/index.md)**
 
@@ -50,7 +50,7 @@ hide:
 
     End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
 
-    **17 skills** · Evaluation & Testing · v1.0.0
+    **17 skills** - Evaluation & Testing - v1.0.0
 
 -   **[quality-tooling](plugins/quality-tooling/index.md)**
 
@@ -58,7 +58,7 @@ hide:
 
     Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validat...
 
-    **5 skills** · Evaluation & Testing · v1.0.0
+    **5 skills** - Evaluation & Testing - v1.0.0
 
 -   **[odh-ai-helpers](plugins/odh-ai-helpers/index.md)**
 
@@ -66,7 +66,7 @@ hide:
 
     Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
 
-    **19 skills** · Development Tools · v0.1.0
+    **19 skills** - Development Tools - v0.1.0
 
 -   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
 
@@ -74,7 +74,23 @@ hide:
 
     Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
 
-    **7 skills** · Evaluation & Testing · v0.1.0
+    **7 skills** - Evaluation & Testing - v0.1.0
+
+-   **[knowledge-skills](plugins/knowledge-skills/index.md)**
+
+    ---
+
+    Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged P...
+
+    **1 skills** - Documentation - v0.1.0
+
+-   **[autofix-skills](plugins/autofix-skills/index.md)**
+
+    ---
+
+    Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic...
+
+    **4 skills** - Development Tools - v0.1.0
 
 -   **[meeting-quality-skills](plugins/meeting-quality-skills/index.md)**
 
@@ -82,13 +98,23 @@ hide:
 
     Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, a...
 
-    **2 skills** · Product Planning · v0.1.0
+    **2 skills** - Product Planning - v0.1.0
+
+-   **[disconnected-readiness-scorer](plugins/disconnected-readiness-scorer/index.md)**
+
+    ---
+
+    Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest complete...
+
+    **1 skills** - DevOps & CI/CD - v0.1.0
 
 </div>
 
 ## Categories
 
-- [Evaluation & Testing](categories/evaluation.md) — Skills for evaluating and testing AI agent skills (4 plugins)
-- [Security Review](categories/security.md) — Security analysis, threat modeling, and compliance review (1 plugin)
-- [Development Tools](categories/development-tools.md) — Developer productivity tools for packaging, CI/CD debugging, and workflow automation (1 plugin)
-- [Product Planning](categories/planning.md) — Skills for requirements, RFEs, and product strategy (2 plugins)
+- [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (4 plugins)
+- [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (1 plugin)
+- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (1 plugin)
+- [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
+- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)
+- [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (2 plugins)

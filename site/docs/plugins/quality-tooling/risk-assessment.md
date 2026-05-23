@@ -32,20 +32,20 @@ on GitHub.
 
 ## Arguments
 
-```
+```bash
 /risk-assessment <PR_NUMBER> <REPO> [--headless] [--dry-run]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PR_NUMBER` | :material-check: | — | GitHub pull request number to analyze |
-| `REPO` | :material-check: | — | Repository identifier (owner/repo format) |
-| `--headless` |  | — | Run in headless mode for CI integration |
-| `--dry-run` |  | — | Run analysis without publishing results to GitHub |
+| `PR_NUMBER` | :material-check: | - | GitHub pull request number to analyze |
+| `REPO` | :material-check: | - | Repository identifier (owner/repo format) |
+| `--headless` |  | - | Run in headless mode for CI integration |
+| `--dry-run` |  | - | Run analysis without publishing results to GitHub |
 
 ## Usage
 
-```
+```bash
 /risk-assessment 123 opendatahub-io/odh-dashboard
 /risk-assessment 456 opendatahub-io/kserve --dry-run
 ```

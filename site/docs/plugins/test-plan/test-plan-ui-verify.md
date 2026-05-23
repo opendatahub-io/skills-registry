@@ -24,7 +24,7 @@ testing workflow with pre/post phase comparison and regression detection.
 
 ## Usage
 
-```
+```bash
 python3 scripts/ui_prepare.py --test-plan-pr https://github.com/org/repo/pull/5
 python3 scripts/ui_prepare.py --test-plan-pr <url> --tc TC-UI --priority P0
 python3 scripts/ui_prepare.py --test-plan-pr <url> --upgrade-phase pre

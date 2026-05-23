@@ -22,6 +22,6 @@ priorities and reports gaps. Produces findings for Sections 1 and 4 of the test 
 
 ## Usage
 
-```
+```bash
 /test-plan-analyze-endpoints
 ```

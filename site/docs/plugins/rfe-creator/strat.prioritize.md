@@ -21,6 +21,6 @@ and open questions (JQL filtering, backlog ordering representation).
 
 ## Usage
 
-```
+```bash
 /strat.prioritize
 ```

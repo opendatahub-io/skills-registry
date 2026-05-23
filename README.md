@@ -50,13 +50,13 @@ Other platforms (Cursor, Gemini CLI, Codex, OpenCode) do not have a marketplace 
 #### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/n1hility/assess-rfe
+gemini extensions install https://github.com/opendatahub-io/assess-rfe
 ```
 
 #### Codex
 
 ```bash
-git clone https://github.com/n1hility/assess-rfe ~/.codex/assess-rfe
+git clone https://github.com/opendatahub-io/assess-rfe ~/.codex/assess-rfe
 mkdir -p ~/.agents/skills
 ln -s ~/.codex/assess-rfe/skills ~/.agents/skills/assess-rfe
 ```
@@ -67,14 +67,14 @@ Add to your `opencode.json`:
 
 ```json
 {
-  "plugin": ["assess-rfe@git+https://github.com/n1hility/assess-rfe.git"]
+  "plugin": ["assess-rfe@git+https://github.com/opendatahub-io/assess-rfe.git"]
 }
 ```
 
 #### Cursor
 
 ```
-/add-plugin https://github.com/n1hility/assess-rfe
+/add-plugin https://github.com/opendatahub-io/assess-rfe
 ```
 
 Replace the repo URL with the plugin you want to install. See [catalog.md](catalog.md) for the full list of plugins and their source repositories.

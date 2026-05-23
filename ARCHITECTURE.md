@@ -78,7 +78,7 @@ that contains the actual skills:
  ┌──────────────┐
  │ plugins:     │
  │              │        ┌────────────────────────────────┐
- │  rfe-creator ├───────►│ jwforres/rfe-creator           │
+ │  rfe-creator ├───────►│ opendatahub-io/rfe-creator     │
  │              │        │  └─ .claude/skills/            │
  │              │        │      ├─ rfe.create/SKILL.md    │
  │              │        │      ├─ rfe.review/SKILL.md    │
@@ -86,7 +86,7 @@ that contains the actual skills:
  │              │        └────────────────────────────────┘
  │              │
  │              │        ┌────────────────────────────────┐
- │  assess-rfe  ├───────►│ n1hility/assess-rfe            │
+ │  assess-rfe  ├───────►│ opendatahub-io/assess-rfe      │
  │  (strict:    │        │  ├─ .claude-plugin/            │
  │   true)      │        │  │   └─ plugin.json            │
  │              │        │  └─ skills/                    │

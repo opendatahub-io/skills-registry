@@ -26,7 +26,7 @@ iterations reached.
 
 ## Arguments
 
-```
+```bash
 /eval-optimize [--config <path>] [--model <model>] [--max-iterations <N>] [--run-id <id>] [--target-judge <name>]
 ```
 
@@ -36,11 +36,11 @@ iterations reached.
 | `--model` |  | `models.skill from config` | Model for skill execution across all iterations. |
 | `--max-iterations` |  | `3` | Maximum optimization iterations before stopping. |
 | `--run-id` |  | `auto-generated` | Base run ID. Iterations append -iter-N. |
-| `--target-judge` |  | — | Focus optimization on a specific failing judge instead of all judges. |
+| `--target-judge` |  | - | Focus optimization on a specific failing judge instead of all judges. |
 
 ## Usage
 
-```
+```bash
 /eval-optimize
 /eval-optimize --max-iterations 5 --model claude-opus-4-6
 /eval-optimize --target-judge completeness

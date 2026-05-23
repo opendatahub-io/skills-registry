@@ -24,6 +24,6 @@ and verdict (Ready/Revise/Rework).
 
 ## Usage
 
-```
+```bash
 /test-plan-review
 ```

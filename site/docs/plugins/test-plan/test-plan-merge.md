@@ -22,6 +22,6 @@ Returns updated section content, change summary, and merge statistics.
 
 ## Usage
 
-```
+```bash
 /test-plan-merge
 ```

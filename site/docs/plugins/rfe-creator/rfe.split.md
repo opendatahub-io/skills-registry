@@ -24,18 +24,18 @@ are represented in the children.
 
 ## Arguments
 
-```
+```bash
 /rfe.split <ID> [ID2 ...] [--headless]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `ID` | :material-check: | — | One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) to split |
-| `--headless` |  | — | Suppress end-of-run summary; used when called from rfe.auto-fix |
+| `ID` | :material-check: | - | One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) to split |
+| `--headless` |  | - | Suppress end-of-run summary; used when called from rfe.auto-fix |
 
 ## Usage
 
-```
+```bash
 /rfe.split RHAIRFE-1234
 /rfe.split RHAIRFE-1234 RHAIRFE-5678
 ```

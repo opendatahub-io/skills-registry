@@ -1,0 +1,46 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/autofix-research&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike ticket investigation&lt;br&gt;no associated repository&lt;br&gt;allowed: Read, Write, Glob, Grep" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="105" width="150" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse" value="&lt;b&gt;Parse Ticket&lt;/b&gt;&lt;br&gt;&lt;br&gt;read ticket.json&lt;br&gt;extract research question&lt;br&gt;note constraints, scope&lt;br&gt;identify references, prior art&lt;br&gt;expected deliverable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="90" width="200" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="investigate" value="&lt;b&gt;Investigate&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;search docs, prior issues&lt;br&gt;check upstream changelogs&lt;br&gt;read ARCHITECTURE.md if available&lt;br&gt;synthesize findings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=0;" vertex="1" parent="1">
+      <mxGeometry x="480" y="95" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict" value="&lt;b&gt;Write Verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;.autofix-verdict.json&lt;br&gt;verdict: &quot;research&quot;&lt;br&gt;summary + observations&lt;br&gt;risks and blockers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="730" y="100" width="170" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="guardrails" value="&lt;b&gt;Guardrails&lt;/b&gt;&lt;br&gt;&lt;br&gt;untrusted ticket input&lt;br&gt;no command execution&lt;br&gt;HTTPS URLs only&lt;br&gt;no raw ticket in shell" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#856404;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="490" y="290" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict-detail" value="&lt;font face=&quot;JetBrains Mono, Courier New, monospace&quot; style=&quot;font-size:10px&quot;&gt;.autofix-verdict.json&lt;br&gt;─────────────────────&lt;br&gt;verdict: &quot;research&quot;&lt;br&gt;reason: &quot;...&quot;&lt;br&gt;summary: &quot;...&quot;&lt;br&gt;files_changed: []&lt;br&gt;risks: [...]&lt;br&gt;blockers: [...]&lt;br&gt;upstream_consideration: &quot;...&quot;&lt;br&gt;observations: [&lt;br&gt;&amp;nbsp;&amp;nbsp;&quot;finding 1&quot;,&lt;br&gt;&amp;nbsp;&amp;nbsp;&quot;finding 2&quot;,&lt;br&gt;&amp;nbsp;&amp;nbsp;...&lt;br&gt;]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="700" y="280" width="230" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value=".autofix-context/
+ticket.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="parse" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="research question
++ constraints" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse" target="investigate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="investigate" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="verdict" target="verdict-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#856404;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="investigate" target="guardrails" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

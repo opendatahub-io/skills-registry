@@ -23,7 +23,7 @@ performance regressions, and upstream release stability.
 
 ## Arguments
 
-```
+```bash
 /vllm-slack-summary [--days] [--output-dir]
 ```
 
@@ -34,7 +34,7 @@ performance regressions, and upstream release stability.
 
 ## Usage
 
-```
+```bash
 /vllm-slack-summary
 /vllm-slack-summary --days 14
 ```

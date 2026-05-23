@@ -63,7 +63,7 @@ Skills for evaluating and testing AI agent skills
 
 Assess RFEs against quality criteria using a structured rubric.
 
-v1.0.0 | [n1hility/assess-rfe](https://github.com/n1hility/assess-rfe)
+v1.0.0 | [opendatahub-io/assess-rfe](https://github.com/opendatahub-io/assess-rfe)
 
 Tags: rfe, rubric, quality, assessment
 
@@ -141,6 +141,46 @@ Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 /plugin install agent-eval-harness@opendatahub-skills
 ```
 
+## Documentation
+
+Skills for generating and maintaining documentation
+
+### knowledge-skills
+
+Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant knowledge using parallel agents, and proposes updates as a git-apply-able patch for human review. Supports GitHub and GitLab.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/knowledge-skills](https://github.com/opendatahub-io/knowledge-skills)
+
+Tags: knowledge, context, claude-md, agents-md, pr-analysis, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/knowledge.repo` | Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch |
+
+```bash
+/plugin install knowledge-skills@opendatahub-skills
+```
+
+## DevOps & CI/CD
+
+Skills for deployment, CI/CD, and infrastructure
+
+### disconnected-readiness-scorer
+
+Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation. Supports automatic detection of image management patterns (env var vs static CSV) and cross-references against the opendatahub-operator manifest.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/disconnected-readiness-scorer](https://github.com/opendatahub-io/disconnected-readiness-scorer)
+
+Tags: disconnected, air-gap, openshift, image-mirroring, readiness, scoring
+
+| Skill | Description |
+|-------|-------------|
+| `/disconnected-score` | Score a repository's readiness for disconnected / air-gapped OpenShift deployments |
+
+```bash
+/plugin install disconnected-readiness-scorer@opendatahub-skills
+```
+
 ## Security Review
 
 Security analysis, threat modeling, and compliance review
@@ -206,6 +246,25 @@ Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automat
 /plugin install odh-ai-helpers@opendatahub-skills
 ```
 
+### autofix-skills
+
+Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic Python scripts for automated bug fixing, CVE remediation, and ticket triage. Designed to run inside a Claude Code container as part of a CI pipeline.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/autofix-skills](https://github.com/opendatahub-io/autofix-skills)
+
+Tags: autofix, jira, cve, bug-fixing, triage, pipeline, ci-cd
+
+| Skill | Description |
+|-------|-------------|
+| `/autofix-resolve` | Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations) |
+| `/autofix-cve-resolve` | CVE remediation across multiple repos with state-machine dispatch |
+| `/autofix-triage` | Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable) |
+| `/autofix-research` | Investigate spike tickets with no associated repository |
+
+```bash
+/plugin install autofix-skills@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy
@@ -216,7 +275,7 @@ Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE J
 
 **Requires:** `assess-rfe`
 
-v0.1.0 | [jwforres/rfe-creator](https://github.com/jwforres/rfe-creator)
+v0.1.0 | [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-creator)
 
 Tags: rfe, jira, review, strategy, pipeline
 

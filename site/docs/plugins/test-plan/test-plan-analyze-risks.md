@@ -23,6 +23,6 @@ for Sections 2, 7, and 8.
 
 ## Usage
 
-```
+```bash
 /test-plan-analyze-risks
 ```

@@ -47,12 +47,12 @@ plugins:
       name: jwforres
     source:
       type: github
-      repo: jwforres/rfe-creator
+      repo: opendatahub-io/rfe-creator
       ref: main
     strict: false
     skills_dir: .claude/skills
-    homepage: https://github.com/jwforres/rfe-creator
-    repository: https://github.com/jwforres/rfe-creator
+    homepage: https://github.com/opendatahub-io/rfe-creator
+    repository: https://github.com/opendatahub-io/rfe-creator
     skills:
       - name: rfe.create
         description: Generate new RFEs from problem statements
@@ -120,14 +120,14 @@ plugins:
       name: Jason Greene
     source:
       type: github
-      repo: n1hility/assess-rfe
+      repo: opendatahub-io/assess-rfe
       ref: main
     contract_summary:
       focus_functions: [review, generate]
       focus_metrics: [task_success, evidence_completeness, output_quality, latency]
       notes: "This plugin centers on rubric-based RFE assessment and rubric export."
-    homepage: https://github.com/n1hility/assess-rfe
-    repository: https://github.com/n1hility/assess-rfe
+    homepage: https://github.com/opendatahub-io/assess-rfe
+    repository: https://github.com/opendatahub-io/assess-rfe
     skills:
       - name: assess-rfe
         description: Assess RFEs against quality criteria using a structured rubric
@@ -492,6 +492,69 @@ plugins:
       requires_python: ">=3.11"
     depends_on: []
 
+  - name: knowledge-skills
+    description: >
+      Autonomous knowledge management skills for keeping AI context files
+      (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant
+      knowledge using parallel agents, and proposes updates as a git-apply-able
+      patch for human review. Supports GitHub and GitLab.
+    version: "0.1.0"
+    category: documentation
+    tags: [knowledge, context, claude-md, agents-md, pr-analysis, automation]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/knowledge-skills
+      ref: main
+    homepage: https://github.com/opendatahub-io/knowledge-skills
+    repository: https://github.com/opendatahub-io/knowledge-skills
+    skills:
+      - name: knowledge.repo
+        description: Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install knowledge-skills@opendatahub-skills"
+    depends_on: []
+
+  - name: autofix-skills
+    description: >
+      Claude Code plugin for the Jira autofix pipeline. Provides orchestrator
+      skills, agent prompt files, and deterministic Python scripts for automated
+      bug fixing, CVE remediation, and ticket triage. Designed to run inside
+      a Claude Code container as part of a CI pipeline.
+    version: "0.1.0"
+    category: development-tools
+    tags: [autofix, jira, cve, bug-fixing, triage, pipeline, ci-cd]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/autofix-skills
+      ref: main
+    homepage: https://github.com/opendatahub-io/autofix-skills
+    repository: https://github.com/opendatahub-io/autofix-skills
+    skills:
+      - name: autofix-resolve
+        description: Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations)
+        user-invocable: true
+      - name: autofix-cve-resolve
+        description: CVE remediation across multiple repos with state-machine dispatch
+        user-invocable: true
+      - name: autofix-triage
+        description: Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable)
+        user-invocable: true
+      - name: autofix-research
+        description: Investigate spike tickets with no associated repository
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install autofix-skills@opendatahub-skills"
+    depends_on: []
+
   - name: meeting-quality-skills
     description: >
       Pre-meeting skills for improving meeting quality by checking shared update docs,
@@ -523,4 +586,34 @@ plugins:
         skill_format: markdown
         skill_dir: skills/
         entry_point: "skills/{skill_name}/SKILL.md"
+    depends_on: []
+
+  - name: disconnected-readiness-scorer
+    description: >
+      Score a repository's readiness for disconnected / air-gapped OpenShift
+      deployments. Scans for image manifest completeness, digest enforcement,
+      runtime egress, and Python dependency validation. Supports automatic
+      detection of image management patterns (env var vs static CSV) and
+      cross-references against the opendatahub-operator manifest.
+    version: "0.1.0"
+    category: devops
+    tags: [disconnected, air-gap, openshift, image-mirroring, readiness, scoring]
+    author:
+      name: asanzgom
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/disconnected-readiness-scorer
+      ref: f8fbba8c8400caeaa1dd9c7455478aad2bf05b4d
+    strict: false
+    skills_dir: skills
+    homepage: https://github.com/opendatahub-io/disconnected-readiness-scorer
+    repository: https://github.com/opendatahub-io/disconnected-readiness-scorer
+    skills:
+      - name: disconnected-score
+        description: Score a repository's readiness for disconnected / air-gapped OpenShift deployments
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install disconnected-readiness-scorer@opendatahub-skills"
     depends_on: []

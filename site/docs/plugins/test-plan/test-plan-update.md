@@ -23,18 +23,18 @@ version number automatically.
 
 ## Arguments
 
-```
+```bash
 /test-plan-update <SOURCE> <NEW_DOC_PATH> [<NEW_DOC_PATH>...]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `SOURCE` | :material-check: | — | Test plan location: local directory path, GitHub branch URL, or GitHub PR URL |
-| `NEW_DOC_PATH` | :material-check: | — | One or more paths to new documentation files (ADR, API spec, design doc) |
+| `SOURCE` | :material-check: | - | Test plan location: local directory path, GitHub branch URL, or GitHub PR URL |
+| `NEW_DOC_PATH` | :material-check: | - | One or more paths to new documentation files (ADR, API spec, design doc) |
 
 ## Usage
 
-```
+```bash
 /test-plan-update ~/Code/collection-tests/mcp_catalog adr.pdf
 /test-plan-update https://github.com/org/repo/pull/42 api-spec.md design.md
 ```

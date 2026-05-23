@@ -23,6 +23,6 @@ low-scoring functions. Returns result via temp file for parent to write.
 
 ## Usage
 
-```
+```bash
 /test-plan-generate-test-file
 ```

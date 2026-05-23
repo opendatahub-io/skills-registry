@@ -23,19 +23,19 @@ actionable recommendations for wheel building strategies.
 
 ## Arguments
 
-```
+```bash
 /python-packaging-complexity <PACKAGE_NAME> [VERSION] [--json]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PACKAGE_NAME` | :material-check: | — | Python package name to analyze |
+| `PACKAGE_NAME` | :material-check: | - | Python package name to analyze |
 | `VERSION` |  | `latest` | Specific package version |
-| `--json` |  | — | Output as structured JSON for programmatic processing |
+| `--json` |  | - | Output as structured JSON for programmatic processing |
 
 ## Usage
 
-```
+```bash
 /python-packaging-complexity torch
 /python-packaging-complexity numpy 1.24.3
 /python-packaging-complexity tensorflow --json

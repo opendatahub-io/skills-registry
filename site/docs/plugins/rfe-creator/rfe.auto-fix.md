@@ -25,25 +25,25 @@ handled RFEs and random sampling.
 
 ## Arguments
 
-```
+```bash
 /rfe.auto-fix <IDs...> | --jql <query> [--limit N] [--batch-size N] [--headless] [--reprocess] [--random N] [--announce-complete] [--data-dir <path>]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `IDs` |  | — | Explicit RFE IDs to process (space-separated) |
-| `--jql` |  | — | JQL query to fetch RFE IDs from Jira |
-| `--limit` |  | — | Max number of results from JQL query |
+| `IDs` |  | - | Explicit RFE IDs to process (space-separated) |
+| `--jql` |  | - | JQL query to fetch RFE IDs from Jira |
+| `--limit` |  | - | Max number of results from JQL query |
 | `--batch-size` |  | `50` | Process IDs in batches of this size |
-| `--data-dir` |  | — | Directory for snapshot data |
-| `--headless` |  | — | Non-interactive mode |
-| `--reprocess` |  | — | Reprocess RFEs that had prior runs |
-| `--random` |  | — | Process N random RFEs from the result set |
-| `--announce-complete` |  | — | Print completion marker when done |
+| `--data-dir` |  | - | Directory for snapshot data |
+| `--headless` |  | - | Non-interactive mode |
+| `--reprocess` |  | - | Reprocess RFEs that had prior runs |
+| `--random` |  | - | Process N random RFEs from the result set |
+| `--announce-complete` |  | - | Print completion marker when done |
 
 ## Usage
 
-```
+```bash
 /rfe.auto-fix RFE-001 RFE-002 RFE-003
 /rfe.auto-fix --jql "project=RHAIRFE AND status=New" --limit 20
 /rfe.auto-fix --jql "project=RHAIRFE" --reprocess --random 5

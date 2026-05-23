@@ -1,0 +1,72 @@
+description: |
+  Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills
+  for automated bug fixing, CVE remediation, ticket triage, and spike research.
+  Designed to run inside a Claude Code container as part of a CI pipeline.
+
+  The plugin implements the inner layer of the autofix pipeline — orchestrator
+  skills dispatch to sub-agents via prompt files and delegate deterministic work
+  to Python scripts. The outer layer (ticket fetching, repo cloning, container
+  launch, verdict reading) lives in separate repos (jira-autofix, ai-agentic-lib).
+architecture_notes: |
+  Four skills form two tiers: orchestrators (autofix-resolve, autofix-cve-resolve)
+  and standalone assessors (autofix-triage, autofix-research).
+
+  autofix-resolve uses an implement → review → evaluate loop (max 3 iterations)
+  with state.py for persistence across context compression. Extension skills are
+  discovered via .autofix-context/config.json and called at post-implement and
+  post-review hook points.
+
+  autofix-cve-resolve uses a Python state machine (cve_pipeline.py) for
+  deterministic routing between phases: parse → resolve-repos → scan → fix →
+  verify → VEX → review → create-PR → finalize. Each phase dispatches to a
+  specialized agent prompt.
+
+  All skills write a structured verdict to autofix-output/.autofix-verdict.json
+  and treat .autofix-context/ files as untrusted input.
+skills:
+  autofix-resolve:
+    description: |
+      Orchestrate end-to-end bug fixing by dispatching implement and review
+      prompt agents in a loop. Uses state.py for persistence across context
+      compression. Supports resolve mode (fresh ticket) and iterate mode
+      (address MR/PR feedback). Extension skills called at post-implement
+      and post-review hook points. Hard cap of 3 implement invocations.
+      Never writes code directly — all coding happens through prompt agents.
+    arguments:
+      - name: "mode"
+        type: "resolve | iterate"
+        required: false
+        default: "resolve"
+        description: "resolve = fresh ticket fix; iterate = address MR/PR feedback"
+    usage_examples:
+      - "/autofix-resolve"
+      - "/autofix-resolve iterate"
+  autofix-cve-resolve:
+    description: |
+      Orchestrate CVE remediation for Jira Vulnerability tickets using a Python
+      state machine (cve_pipeline.py) for deterministic routing. Phases: parse
+      ticket → resolve repos → scan for vulnerability → fix → verify fix →
+      VEX assessment → review → create PR → finalize. Handles multiple repos
+      and branches per CVE. Never writes fix code directly.
+    usage_examples:
+      - "/autofix-cve-resolve"
+  autofix-triage:
+    description: |
+      Assess a Jira bug ticket for AI autofix readiness using a three-gate
+      rubric. Gate 1: Can the agent start? (repo URL, clear symptom). Gate 2:
+      Can the agent find and fix it? (locatable code, unambiguous behavior).
+      Gate 3: Should an agent fix this? (not blocked by design, infrastructure,
+      or external deps). Produces a structured JSON verdict
+      (ready/needs_info/not_fixable) with confidence level. Biased toward
+      "ready" — a wasted autofix cycle is cheaper than a missed fix.
+    usage_examples:
+      - "/autofix-triage"
+  autofix-research:
+    description: |
+      Investigate a Jira spike ticket with no associated repository. Reads the
+      ticket context, researches the topic using available files and codebase
+      search, and writes structured findings to autofix-output/.autofix-verdict.json.
+      Limited to read-only investigation (no Bash) — notes limitations in
+      observations if external access would be needed.
+    usage_examples:
+      - "/autofix-research"

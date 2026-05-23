@@ -23,17 +23,17 @@ and available workarounds for each issue found.
 
 ## Arguments
 
-```
+```bash
 /python-packaging-bug-finder <PACKAGE_NAME>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PACKAGE_NAME` | :material-check: | — | Python package name to search issues for |
+| `PACKAGE_NAME` | :material-check: | - | Python package name to search issues for |
 
 ## Usage
 
-```
+```bash
 /python-packaging-bug-finder torch
 /python-packaging-bug-finder numpy
 ```

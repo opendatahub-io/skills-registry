@@ -5,9 +5,8 @@ repo_name: opendatahub-io/skills-registry
 
 theme:
   name: material
-  font:
-    text: JetBrains Mono
-    code: JetBrains Mono
+  font: false
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -136,13 +135,27 @@ nav:
       - eval-review: plugins/agent-eval-harness/eval-review.md
       - eval-mlflow: plugins/agent-eval-harness/eval-mlflow.md
       - eval-optimize: plugins/agent-eval-harness/eval-optimize.md
+    - knowledge-skills:
+      - plugins/knowledge-skills/index.md
+      - knowledge.repo: plugins/knowledge-skills/knowledge.repo.md
+    - autofix-skills:
+      - plugins/autofix-skills/index.md
+      - autofix-resolve: plugins/autofix-skills/autofix-resolve.md
+      - autofix-cve-resolve: plugins/autofix-skills/autofix-cve-resolve.md
+      - autofix-triage: plugins/autofix-skills/autofix-triage.md
+      - autofix-research: plugins/autofix-skills/autofix-research.md
     - meeting-quality-skills:
       - plugins/meeting-quality-skills/index.md
       - meeting-async-update-check: plugins/meeting-quality-skills/meeting-async-update-check.md
       - meeting-risk-agenda: plugins/meeting-quality-skills/meeting-risk-agenda.md
+    - disconnected-readiness-scorer:
+      - plugins/disconnected-readiness-scorer/index.md
+      - disconnected-score: plugins/disconnected-readiness-scorer/disconnected-score.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
+    - Documentation: categories/documentation.md
+    - DevOps & CI/CD: categories/devops.md
     - Security Review: categories/security.md
     - Development Tools: categories/development-tools.md
     - Product Planning: categories/planning.md

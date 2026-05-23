@@ -23,17 +23,17 @@ search when PyPI metadata is insufficient.
 
 ## Arguments
 
-```
+```bash
 /python-packaging-source-finder <PACKAGE_NAME>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PACKAGE_NAME` | :material-check: | — | Python package name to find the repository for |
+| `PACKAGE_NAME` | :material-check: | - | Python package name to find the repository for |
 
 ## Usage
 
-```
+```bash
 /python-packaging-source-finder requests
 /python-packaging-source-finder vllm
 ```

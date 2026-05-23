@@ -23,17 +23,17 @@ backport_ease labels (ai-fixable if self-contained and safe/moderate risk).
 
 ## Arguments
 
-```
+```bash
 /vllm-backport-score-rank [--input] [--output]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--input` | :material-check: | — | Path to analyzed.json with agent-added semantic fields |
-| `--output` | :material-check: | — | Output path for ranked.json |
+| `--input` | :material-check: | - | Path to analyzed.json with agent-added semantic fields |
+| `--output` | :material-check: | - | Output path for ranked.json |
 
 ## Usage
 
-```
+```bash
 /vllm-backport-score-rank --input artifacts/analyzed.json --output artifacts/ranked.json
 ```

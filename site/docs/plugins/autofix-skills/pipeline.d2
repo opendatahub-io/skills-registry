@@ -1,0 +1,134 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry: Triage ---
+
+triage: |md
+  **/autofix-triage**
+
+  - Parse Jira bug ticket
+  - Orient via ARCHITECTURE.md, CLAUDE.md
+  - Explore code, locate bug area
+  - Assess readiness (3-gate rubric)
+  - Write .triage-verdict.json
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Entry: Research ---
+
+research: |md
+  **/autofix-research**
+
+  - Parse spike ticket (no repo)
+  - Investigate topic, gather findings
+  - Synthesize recommendations
+  - Write verdict (type: research)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Orchestrator: Resolve ---
+
+resolve: |md
+  **/autofix-resolve**
+
+  - Read ticket + project conventions
+  - Implement agent (prompt-based)
+  - Review agent + merge findings
+  - Evaluate severity, iterate (max 3x)
+  - Write verdict
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Orchestrator: CVE Resolve ---
+
+cve-resolve: |md
+  **/autofix-cve-resolve**
+
+  - State-machine dispatcher
+  - Scan, fix, verify, VEX, review, PR
+  - Per-repo, per-branch processing
+  - Deterministic routing (cve_pipeline.py)
+  - Write verdict
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- External: Jira ---
+
+jira: |md
+  **Jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- External: GitHub / GitLab ---
+
+git-forge: |md
+  **GitHub / GitLab**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Shared artifact: verdict ---
+
+verdict: |md
+  **.autofix-verdict.json**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+# Jira feeds context to skills
+jira -> triage: "ticket.json\n(bug)"
+jira -> research: "ticket.json\n(spike)"
+jira -> cve-resolve: "ticket.json\n(CVE)"
+
+# Triage gates resolve
+triage -> resolve: "ready" {
+  style.stroke: "#333333"
+}
+
+# CVE resolve creates PRs
+cve-resolve -> git-forge: "gh pr create"
+
+# All orchestrators write verdict
+resolve -> verdict
+cve-resolve -> verdict
+research -> verdict

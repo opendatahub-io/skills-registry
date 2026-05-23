@@ -25,7 +25,7 @@ AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
 
 ## Arguments
 
-```
+```bash
 /eval-dataset [--config <path>] [--count <N>] [--strategy <type>]
 ```
 
@@ -37,7 +37,7 @@ AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
 
 ## Usage
 
-```
+```bash
 /eval-dataset
 /eval-dataset --count 10 --strategy expand
 /eval-dataset --strategy from-traces

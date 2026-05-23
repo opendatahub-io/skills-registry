@@ -24,20 +24,20 @@ package onboarding workflows.
 
 ## Arguments
 
-```
+```bash
 /vllm-compare-reqs <VERSION1> <VERSION2> <VARIANT_OR_FILE> [--pretty]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `VERSION1` | :material-check: | — | First version to compare (e.g., v0.13.0) |
-| `VERSION2` | :material-check: | — | Second version to compare (e.g., v0.14.0) |
-| `VARIANT_OR_FILE` | :material-check: | — | Variant name (rocm, cuda, cpu, tpu, xpu) or specific file (common.txt, rocm-build.txt) |
+| `VERSION1` | :material-check: | - | First version to compare (e.g., v0.13.0) |
+| `VERSION2` | :material-check: | - | Second version to compare (e.g., v0.14.0) |
+| `VARIANT_OR_FILE` | :material-check: | - | Variant name (rocm, cuda, cpu, tpu, xpu) or specific file (common.txt, rocm-build.txt) |
 | `--pretty` |  | `true` | Show clean categorized output (use --no-pretty for simple diff) |
 
 ## Usage
 
-```
+```bash
 /vllm-compare-reqs v0.13.0 v0.14.0 rocm
 /vllm-compare-reqs v0.13.0 v0.14.0 cuda
 /vllm-compare-reqs v0.13.0 v0.14.0 common.txt

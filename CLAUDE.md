@@ -1,10 +1,17 @@
-# Skills Registry
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Overview
 
 Skills and Claude Code plugins marketplace for the opendatahub-io organization. `registry.yaml` is the single source of truth — all other files are generated from it.
 
 ## Common Commands
 
 ```bash
+# Install Python dependencies (needed for all scripts)
+pip install pyyaml jsonschema
+
 # Validate registry.yaml against schema
 python3 scripts/validate_registry.py
 
@@ -19,9 +26,12 @@ python3 scripts/generate_site.py
 
 # Check plugin repo versions against registry
 python3 scripts/check_versions.py --dry-run
+
+# Validate and also clone/check new plugin repos
+python3 scripts/validate_registry.py --diff origin/main --validate-remote-plugins
 ```
 
-Always run all four (validate, sync, generate catalog, generate site) before committing changes to registry.yaml. CI will fail if generated files are out of sync.
+**Before committing any change to `registry.yaml`**, run all four generators (validate, sync marketplace, generate catalog, generate site). CI checks that every generated file matches -- it does not auto-commit.
 
 ## Architecture
 
@@ -61,7 +71,8 @@ See @CONTRIBUTING.md for the full process. Quick checklist:
 2. Run `python3 scripts/validate_registry.py`
 3. Run `python3 scripts/sync_marketplace.py`
 4. Run `python3 scripts/generate_catalog.py`
-5. Commit all changed files and open a PR
+5. Run `python3 scripts/generate_site.py`
+6. Commit all changed files and open a PR
 
 ## Testing a Marketplace Branch
 

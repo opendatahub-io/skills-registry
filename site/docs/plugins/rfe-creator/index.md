@@ -27,7 +27,7 @@ automatically on first use.
     - **Version**: 0.1.0
     - **Author**: jwforres
     - **Category**: [Product Planning](../../categories/planning.md)
-    - **Repository**: [jwforres/rfe-creator](https://github.com/jwforres/rfe-creator)
+    - **Repository**: [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-creator)
     - **Tags**: <span class="tag-pill">rfe</span> <span class="tag-pill">jira</span> <span class="tag-pill">review</span> <span class="tag-pill">strategy</span> <span class="tag-pill">pipeline</span>
 
 ## Pipeline

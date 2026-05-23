@@ -1,0 +1,87 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="240" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="triage" value="&lt;b&gt;/autofix-triage&lt;/b&gt;&lt;br&gt;&lt;br&gt;Parse Jira bug ticket&lt;br&gt;Orient via ARCHITECTURE.md, CLAUDE.md&lt;br&gt;Explore code, locate bug area&lt;br&gt;Assess readiness (3-gate rubric)&lt;br&gt;Write .triage-verdict.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="30" width="220" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="research" value="&lt;b&gt;/autofix-research&lt;/b&gt;&lt;br&gt;&lt;br&gt;Parse spike ticket (no repo)&lt;br&gt;Investigate topic, gather findings&lt;br&gt;Synthesize recommendations&lt;br&gt;Write verdict (type: research)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="200" width="220" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="cve-resolve" value="&lt;b&gt;/autofix-cve-resolve&lt;/b&gt;&lt;br&gt;&lt;br&gt;State-machine dispatcher&lt;br&gt;Scan, fix, verify, VEX, review, PR&lt;br&gt;Per-repo, per-branch processing&lt;br&gt;Deterministic routing (cve_pipeline.py)&lt;br&gt;Write verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="365" width="220" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve" value="&lt;b&gt;/autofix-resolve&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read ticket + project conventions&lt;br&gt;Implement agent (prompt-based)&lt;br&gt;Review agent + merge findings&lt;br&gt;Evaluate severity, iterate (max 3x)&lt;br&gt;Write verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="520" y="30" width="220" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict" value="&lt;b&gt;.autofix-verdict.json&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=middle;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="560" y="237" width="170" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="git-forge" value="&lt;b&gt;GitHub / GitLab&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="520" y="430" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_jira_triage" value="ticket.json (bug)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=10;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira" target="triage" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="170" y="253"/>
+          <mxPoint x="170" y="100"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_jira_research" value="ticket.json (spike)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=10;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira" target="research" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="195" y="253"/>
+          <mxPoint x="195" y="262"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_jira_cve" value="ticket.json (CVE)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=10;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira" target="cve-resolve" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="183" y="271"/>
+          <mxPoint x="183" y="435"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_triage_resolve" value="ready" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=10;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="triage" target="resolve" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resolve_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="resolve" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="645" y="170"/>
+          <mxPoint x="645" y="237"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_research_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="research" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="500" y="262"/>
+          <mxPoint x="500" y="252"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cve_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="cve-resolve" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="480" y="407"/>
+          <mxPoint x="480" y="275"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cve_gitforge" value="gh pr create" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=10;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="cve-resolve" target="git-forge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="490" y="477"/>
+          <mxPoint x="490" y="452"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

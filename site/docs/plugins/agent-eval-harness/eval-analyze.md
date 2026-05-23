@@ -25,7 +25,7 @@ hash for staleness detection.
 
 ## Arguments
 
-```
+```bash
 /eval-analyze [--skill <name>] [--config <path>] [--update]
 ```
 
@@ -37,7 +37,7 @@ hash for staleness detection.
 
 ## Usage
 
-```
+```bash
 /eval-analyze --skill my-skill
 /eval-analyze --update
 /eval-analyze --skill rfe.create --config eval-rfe.yaml

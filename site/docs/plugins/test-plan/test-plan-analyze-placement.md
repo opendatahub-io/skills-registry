@@ -23,6 +23,6 @@ and code repo agent readiness. Returns recommendations with user confirmation.
 
 ## Usage
 
-```
+```bash
 /test-plan-analyze-placement
 ```

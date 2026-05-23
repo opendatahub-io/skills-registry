@@ -34,18 +34,18 @@ Five or more NFR gaps at Standard/Deep tier upgrade the verdict to CONCERNS.
 
 ## Arguments
 
-```
+```bash
 /strat-security-review <RHAISTRAT_KEY> [--force]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `RHAISTRAT_KEY` | :material-check: | — | RHAISTRAT Jira key identifying the strategy document to review (e.g., RHAISTRAT-400) |
+| `RHAISTRAT_KEY` | :material-check: | - | RHAISTRAT Jira key identifying the strategy document to review (e.g., RHAISTRAT-400) |
 | `--force` |  | `false` | Regenerate the security review even if one already exists for this STRAT |
 
 ## Usage
 
-```
+```bash
 /strat-security-review RHAISTRAT-400
 /strat-security-review RHAISTRAT-400 --force
 ```
