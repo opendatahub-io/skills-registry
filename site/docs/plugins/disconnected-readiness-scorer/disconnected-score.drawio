@@ -1,0 +1,137 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/disconnected-score&lt;/b&gt;&lt;br&gt;&lt;br&gt;--rules csv,tags,...&lt;br&gt;--fix&lt;br&gt;--report markdown / json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="160" width="140" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect" value="&lt;b&gt;Detect Image Pattern&lt;/b&gt;&lt;br&gt;&lt;i&gt;code analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;scan Go source for&lt;br&gt;RELATED_IMAGE_* env vars&lt;br&gt;threshold: 5+ occurrences&lt;br&gt;→ env_var pattern&lt;br&gt;else → static CSV pattern" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="220" y="140" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="build-manifest" value="&lt;b&gt;Build Manifest&lt;/b&gt;&lt;br&gt;&lt;br&gt;clone opendatahub-operator&lt;br&gt;(git clone --depth 1)&lt;br&gt;operator_manifest.build_manifest()&lt;br&gt;100+ RELATED_IMAGE_* vars&lt;br&gt;across 18 components" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="470" y="160" width="200" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="operator-repo" value="&lt;b&gt;opendatahub-operator&lt;/b&gt;&lt;br&gt;GitHub repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="500" y="60" width="140" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="rules" value="&lt;b&gt;Run Selected Rules&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="720" y="60" width="370" height="310" as="geometry"/>
+    </mxCell>
+    <mxCell id="csv" value="&lt;b&gt;csv_relatedimages&lt;/b&gt;&lt;br&gt;&lt;br&gt;image refs in Dockerfiles,&lt;br&gt;Helm, kustomize, Go, YAML&lt;br&gt;compare against CSV or&lt;br&gt;env var manifest&lt;br&gt;missing image → blocker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rules">
+      <mxGeometry x="15" y="40" width="160" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="tags" value="&lt;b&gt;no_image_tags&lt;/b&gt;&lt;br&gt;&lt;br&gt;scan for tag-based refs&lt;br&gt;(:latest, :v1.2.3)&lt;br&gt;require @sha256: digests&lt;br&gt;production → blocker&lt;br&gt;test/dev → warning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rules">
+      <mxGeometry x="195" y="40" width="160" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="egress" value="&lt;b&gt;no_runtime_egress&lt;/b&gt;&lt;br&gt;&lt;br&gt;Go, Python, TS, shell&lt;br&gt;http.Get, requests.get,&lt;br&gt;fetch, curl, wget&lt;br&gt;hardcoded URL → blocker&lt;br&gt;configurable → info" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rules">
+      <mxGeometry x="15" y="165" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="python" value="&lt;b&gt;python_imports&lt;/b&gt;&lt;br&gt;&lt;br&gt;requirements.txt,&lt;br&gt;setup.py, pyproject.toml&lt;br&gt;check vs known mirrors&lt;br&gt;runtime pip install → blocker&lt;br&gt;dev dependency → warning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rules">
+      <mxGeometry x="195" y="165" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="xref" value="&lt;b&gt;Cross-Reference Manifest&lt;/b&gt;&lt;br&gt;&lt;br&gt;(A) image var not in&lt;br&gt;operator manifest → blocker&lt;br&gt;(B) repo var not in&lt;br&gt;manifest → warning (stale)&lt;br&gt;(C) manifest var not in&lt;br&gt;repo → info" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1140" y="150" width="210" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Compute Score&lt;/b&gt;&lt;br&gt;&lt;br&gt;aggregate all RuleResults&lt;br&gt;any blocker → NOT READY&lt;br&gt;warnings only → WARNING&lt;br&gt;all pass → READY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1400" y="160" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="render" value="&lt;b&gt;Render Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;templates/report.md (Jinja2)&lt;br&gt;per-rule status + findings&lt;br&gt;blocker / warning / pass counts&lt;br&gt;exit 0 (READY/WARNING)&lt;br&gt;exit 1 (NOT READY)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1620" y="150" width="190" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="config" value="&lt;b&gt;Config&lt;/b&gt;&lt;br&gt;&lt;br&gt;config/known_mirrors.yaml&lt;br&gt;config/exceptions.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="560" y="400" width="155" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="rule-result" value="RuleResult&lt;br&gt;&amp;nbsp;&amp;nbsp;rule: &quot;csv-relatedimages&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;passed: false&lt;br&gt;&amp;nbsp;&amp;nbsp;findings:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- severity: blocker&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;file: pkg/controller/images.go&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;line: 42&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;image: quay.io/modh/odh-...&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;message: &quot;not in relatedImages&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;- severity: warning&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;file: deploy/kustomize/...&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;line: 18&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;message: &quot;stale env var&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="740" y="420" width="240" height="220" as="geometry"/>
+    </mxCell>
+    <mxCell id="exclusions" value="Excluded from blockers:&lt;br&gt;&amp;nbsp;&amp;nbsp;*_test.go, test/, testdata/, e2e/&lt;br&gt;&amp;nbsp;&amp;nbsp;.github/, .tekton/&lt;br&gt;&amp;nbsp;&amp;nbsp;semgrep.yaml&lt;br&gt;→ downgraded to info severity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1010" y="420" width="200" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="score-output" value="Disconnected Readiness Score: WARNING&lt;br&gt;&lt;br&gt;BLOCKER&amp;nbsp;&amp;nbsp;csv-relatedimages&amp;nbsp;&amp;nbsp;2 missing&lt;br&gt;PASS&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;no-image-tags&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;14 digests&lt;br&gt;WARNING&amp;nbsp;&amp;nbsp;no-runtime-egress&amp;nbsp;&amp;nbsp;1 HTTP call&lt;br&gt;PASS&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;python-imports&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;0 unbundled&lt;br&gt;&lt;br&gt;Blockers: 1&amp;nbsp;&amp;nbsp;Warnings: 1&amp;nbsp;&amp;nbsp;Passed: 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1580" y="330" width="270" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="detect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="env_var pattern" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.33;entryDx=0;entryDy=0;" edge="1" source="detect" target="build-manifest" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="445" y="200"/>
+          <mxPoint x="470" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="static CSV (skip manifest)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" source="detect" target="rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="320" y="30"/>
+          <mxPoint x="720" y="30"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="git clone --depth 1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="build-manifest" target="operator-repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="manifest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.72;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" edge="1" source="build-manifest" target="rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="695" y="246"/>
+          <mxPoint x="695" y="246"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="RuleResults" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.74;entryDx=0;entryDy=0;" edge="1" source="rules" target="xref" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1115" y="246"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="env_var pattern only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=0.3;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="detect" target="xref" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="280" y="15"/>
+          <mxPoint x="1245" y="15"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="xref" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="render" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" source="config" target="rules" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="637" y="400"/>
+          <mxPoint x="637" y="370"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.375;entryY=0;entryDx=0;entryDy=0;" edge="1" source="rules" target="rule-result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="830" y="370"/>
+          <mxPoint x="830" y="420"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="render" target="score-output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.9;exitY=1;exitDx=0;exitDy=0;entryX=0.2;entryY=0;entryDx=0;entryDy=0;" edge="1" source="rules" target="exclusions" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1050" y="370"/>
+          <mxPoint x="1050" y="420"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
