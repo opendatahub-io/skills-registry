@@ -1,0 +1,62 @@
+description: |
+  DevOps and TestOps automation skills for ODH/RHOAI — component onboarding,
+  Konflux CI/CD, release management, delivery pipelines, and operational tooling.
+
+  Provides an interactive onboarding pipeline for new ODH/RHOAI components:
+  collects component parameters through guided Q&A, generates a validated
+  component_onboarding_details.yaml, creates or updates Jira tickets with the
+  YAML attached, and validates existing onboarding tickets against a JSON Schema
+  with cross-checks for branch naming, Dockerfile digest pinning, and product-specific
+  requirements. Supports both ODH (CI and Release builds) and RHOAI (with architecture
+  selection, release categories, and operator manifest handling).
+architecture_notes: |
+  Two skills form a create-then-validate pipeline for component onboarding:
+
+  create-component-onboarding-jira runs an 8-step interactive flow: parse input,
+  check prerequisites (uv, jq, Jira credentials), collect parameters via guided
+  Q&A with product-aware conditional logic (ODH vs RHOAI), generate YAML, validate
+  against JSON Schema, create or update a Jira ticket (cloning product-specific
+  templates if no URL provided), attach the YAML, and report results.
+
+  validate-component-onboarding-jira runs a 6-step validation flow: check
+  prerequisites, create working directory from Jira URL, fetch issue details,
+  download YAML attachment, validate against schema with cross-checks (branch
+  naming for RHOAI, Dockerfile digest pinning), and update Jira with
+  validation-successful or validation-failed labels.
+
+  Both skills use deterministic Python scripts (run via uv) for Jira API
+  operations and YAML schema validation. The component_onboarding_details.schema.json
+  defines conditional requirements based on product_context (ODH vs RHOAI) and
+  is_operator fields.
+skills:
+  create-component-onboarding-jira:
+    description: |
+      Interactively collects ODH/RHOAI component onboarding parameters from the
+      user, generates a validated component_onboarding_details.yaml, and creates
+      or updates a Jira ticket with the YAML attached. When no Jira URL is provided,
+      automatically creates a new ticket by cloning the product-specific onboarding
+      template. Supports both ODH (CI and Release builds) and RHOAI (with
+      architecture selection, release categories, and operator manifest handling).
+    arguments:
+      - name: "JIRA_URL"
+        type: "string"
+        required: false
+        description: "Existing Jira ticket URL to update. If omitted, creates a new ticket by cloning the onboarding template."
+    usage_examples:
+      - "/create-component-onboarding-jira"
+      - "/create-component-onboarding-jira https://redhat.atlassian.net/browse/RHOAIENG-12345"
+  validate-component-onboarding-jira:
+    description: |
+      Pre-flight validation tool for ODH component onboarding. Given a Jira issue
+      URL, fetches issue details, downloads the component_onboarding_details.yaml
+      attachment, and validates it against the JSON Schema. Cross-validates
+      repo_branch for RHOAI (must match target version), checks Dockerfile digest
+      pinning for RHOAI components, and updates Jira with validation results
+      (labels: validation-successful/validation-failed, status: In Progress).
+    arguments:
+      - name: "JIRA_URL"
+        type: "string"
+        required: true
+        description: "Jira ticket URL containing the component_onboarding_details.yaml attachment to validate."
+    usage_examples:
+      - "/validate-component-onboarding-jira https://redhat.atlassian.net/browse/RHOAIENG-12345"

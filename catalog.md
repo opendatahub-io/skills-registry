@@ -139,6 +139,23 @@ Tags: disconnected, air-gap, openshift, image-mirroring, readiness, scoring
 /plugin install disconnected-readiness-scorer@opendatahub-skills
 ```
 
+### aiops-skills
+
+DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/aiops-infra](https://github.com/opendatahub-io/aiops-infra)
+
+Tags: devops, testops, odh, rhoai, konflux, onboarding, ci-cd, release, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/create-component-onboarding-jira` | Interactively collect component onboarding parameters and create/update a Jira ticket |
+| `/validate-component-onboarding-jira` | Pre-flight validation for ODH component onboarding — fetches Jira, downloads YAML, validates against schema |
+
+```bash
+/plugin install aiops-skills@opendatahub-skills
+```
+
 ## Security Review
 
 Security analysis, threat modeling, and compliance review

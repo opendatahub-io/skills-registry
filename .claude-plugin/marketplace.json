@@ -301,6 +301,38 @@
       },
       "strict": false,
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "DevOps and TestOps automation skills for ODH/RHOAI \u2014 component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.\n",
+      "homepage": "https://github.com/opendatahub-io/aiops-infra",
+      "keywords": [
+        "devops",
+        "testops",
+        "odh",
+        "rhoai",
+        "konflux",
+        "onboarding",
+        "ci-cd",
+        "release",
+        "automation"
+      ],
+      "license": "Apache-2.0",
+      "name": "aiops-skills",
+      "repository": "https://github.com/opendatahub-io/aiops-infra",
+      "skills": [
+        "./skills"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/aiops-infra",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
     }
   ]
 }

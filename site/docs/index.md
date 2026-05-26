@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-11 plugins | 76 skills | 6 categories
+12 plugins | 78 skills | 6 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -108,13 +108,21 @@ hide:
 
     **1 skills** - DevOps & CI/CD - v0.1.0
 
+-   **[aiops-skills](plugins/aiops-skills/index.md)**
+
+    ---
+
+    DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Konflux CI/CD, release management, deliver...
+
+    **2 skills** - DevOps & CI/CD - v0.1.0
+
 </div>
 
 ## Categories
 
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (4 plugins)
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (1 plugin)
-- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (1 plugin)
+- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (2 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (2 plugins)

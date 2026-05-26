@@ -550,3 +550,32 @@ plugins:
       claude-code:
         install: "/plugin install disconnected-readiness-scorer@opendatahub-skills"
     depends_on: []
+  - name: aiops-skills
+    description: >
+      DevOps and TestOps automation skills for ODH/RHOAI — component onboarding,
+      Konflux CI/CD, release management, delivery pipelines, and operational tooling.
+    version: "0.1.0"
+    category: devops
+    tags: [devops, testops, odh, rhoai, konflux, onboarding, ci-cd, release, automation]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/aiops-infra
+      ref: main
+    strict: false
+    skills_dir: skills
+    homepage: https://github.com/opendatahub-io/aiops-infra
+    repository: https://github.com/opendatahub-io/aiops-infra
+    skills:
+      - name: create-component-onboarding-jira
+        description: Interactively collect component onboarding parameters and create/update a Jira ticket
+        user-invocable: true
+      - name: validate-component-onboarding-jira
+        description: Pre-flight validation for ODH component onboarding — fetches Jira, downloads YAML, validates against schema
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install aiops-skills@opendatahub-skills"
+    depends_on: []

@@ -151,6 +151,10 @@ nav:
     - disconnected-readiness-scorer:
       - plugins/disconnected-readiness-scorer/index.md
       - disconnected-score: plugins/disconnected-readiness-scorer/disconnected-score.md
+    - aiops-skills:
+      - plugins/aiops-skills/index.md
+      - create-component-onboarding-jira: plugins/aiops-skills/create-component-onboarding-jira.md
+      - validate-component-onboarding-jira: plugins/aiops-skills/validate-component-onboarding-jira.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
