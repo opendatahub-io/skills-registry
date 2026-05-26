@@ -72,18 +72,6 @@ plugins:
       - name: rfe.auto-fix
         description: Batch review, revise, and split operations
         user-invocable: true
-      - name: strat.create
-        description: Create strategy documents
-        user-invocable: true
-      - name: strat.refine
-        description: Refine strategy documents
-        user-invocable: true
-      - name: strat.review
-        description: Review strategy documents
-        user-invocable: true
-      - name: strat.prioritize
-        description: Prioritize strategy items
-        user-invocable: true
       - name: rfe-creator.update-deps
         description: Update vendored dependencies
         user-invocable: true

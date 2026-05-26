@@ -262,10 +262,6 @@ Tags: rfe, jira, review, strategy, pipeline
 | `/rfe.submit` | Push RFEs to Jira |
 | `/rfe.speedrun` | Execute the full RFE pipeline end-to-end |
 | `/rfe.auto-fix` | Batch review, revise, and split operations |
-| `/strat.create` | Create strategy documents |
-| `/strat.refine` | Refine strategy documents |
-| `/strat.review` | Review strategy documents |
-| `/strat.prioritize` | Prioritize strategy items |
 | `/rfe-creator.update-deps` | Update vendored dependencies |
 | `/architecture-review` | Architecture review skill |
 | `/feasibility-review` | Feasibility review skill |

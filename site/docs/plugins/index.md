@@ -11,7 +11,7 @@ title: Plugins
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
-| [rfe-creator](rfe-creator/index.md) | Product Planning | 16 | v0.1.0 |
+| [rfe-creator](rfe-creator/index.md) | Product Planning | 12 | v0.1.0 |
 | [assess-rfe](assess-rfe/index.md) | Evaluation & Testing | 2 | v1.0.0 |
 | [rhoai-security-reviewer](rhoai-security-reviewer/index.md) | Security Review | 2 | v0.1.0 |
 | [test-plan](test-plan/index.md) | Evaluation & Testing | 17 | v1.0.0 |

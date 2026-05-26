@@ -10,9 +10,8 @@ title: rfe-creator
 A comprehensive Claude Code skill suite for the full lifecycle of Requests for
 Enhancement (RFEs) in the RHAIRFE Jira project. Covers creation from problem
 statements, rubric-based review with auto-revision, intelligent splitting of
-oversized RFEs, and submission to Jira. Also provides strategy document skills
-(RHAISTRAT) for refining approved RFEs into implementation strategies with
-adversarial multi-reviewer validation.
+oversized RFEs, and submission to Jira. Includes forked reviewer sub-agents
+for architecture, feasibility, scope, and testability assessment.
 
 The plugin uses a shared artifact convention -- all skills read from and write to
 an `artifacts/` directory with YAML frontmatter for structured metadata. Jira
@@ -50,10 +49,6 @@ automatically on first use.
 | [`/rfe.submit`](rfe.submit.md) | Push RFEs to Jira | :material-check: |
 | [`/rfe.speedrun`](rfe.speedrun.md) | Execute the full RFE pipeline end-to-end | :material-check: |
 | [`/rfe.auto-fix`](rfe.auto-fix.md) | Batch review, revise, and split operations | :material-check: |
-| [`/strat.create`](strat.create.md) | Create strategy documents | :material-check: |
-| [`/strat.refine`](strat.refine.md) | Refine strategy documents | :material-check: |
-| [`/strat.review`](strat.review.md) | Review strategy documents | :material-check: |
-| [`/strat.prioritize`](strat.prioritize.md) | Prioritize strategy items | :material-check: |
 | [`/rfe-creator.update-deps`](rfe-creator.update-deps.md) | Update vendored dependencies | :material-check: |
 | [`/architecture-review`](architecture-review.md) | Architecture review skill | :material-check: |
 | [`/feasibility-review`](feasibility-review.md) | Feasibility review skill | :material-check: |
@@ -69,8 +64,7 @@ automatically on first use.
 
 ## Architecture
 
-Two skill families: RFE skills (rfe.*) for the requirements pipeline and
-Strategy skills (strat.*) for implementation planning. A speedrun skill
+RFE skills (rfe.*) form the requirements pipeline. A speedrun skill
 orchestrates the full end-to-end flow by invoking other skills.
 
 Review skills use a forked reviewer pattern -- independent sub-agents
@@ -89,4 +83,6 @@ synchronization.
 
 Architecture context is fetched from opendatahub-io/architecture-context
 into .context/architecture-context/ and used by review and strategy skills
-to ground assessments in actual platform components and APIs.
+to ground assessments in actual platform components and APIs. Architecture
+context overlays (.context/architecture-context/overlays/) provide human-authored
+corrections that take precedence over generated docs.

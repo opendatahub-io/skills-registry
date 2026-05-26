@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-11 plugins | 76 skills | 6 categories
+11 plugins | 72 skills | 6 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -26,7 +26,7 @@ hide:
 
     Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pi...
 
-    **16 skills** - Product Planning - v0.1.0
+    **12 skills** - Product Planning - v0.1.0
 
 -   **[assess-rfe](plugins/assess-rfe/index.md)**
 
