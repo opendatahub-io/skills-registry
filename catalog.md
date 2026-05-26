@@ -276,20 +276,3 @@ Tags: rfe, jira, review, strategy, pipeline
 ```bash
 /plugin install rfe-creator@opendatahub-skills
 ```
-
-### meeting-quality-skills
-
-Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, and helping organizers focus meetings on items that actually need discussion.
-
-v0.1.0 | Apache-2.0 | [ahinek/meeting-quality-skills](https://github.com/ahinek/meeting-quality-skills)
-
-Tags: meeting, google-workspace, agenda, async-updates, productivity
-
-| Skill | Description |
-|-------|-------------|
-| `/meeting-async-update-check` | Check a shared update doc and identify attendees missing async updates before a status meeting |
-| `/meeting-risk-agenda` | Analyze pre-meeting updates and generate a risk-focused agenda by identifying blocked and at-risk items |
-
-```bash
-/plugin install meeting-quality-skills@opendatahub-skills
-```

@@ -251,30 +251,6 @@
     },
     {
       "author": {
-        "name": "Arjay Hinek"
-      },
-      "category": "planning",
-      "description": "Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, and helping organizers focus meetings on items that actually need discussion.\n",
-      "homepage": "https://github.com/ahinek/meeting-quality-skills",
-      "keywords": [
-        "meeting",
-        "google-workspace",
-        "agenda",
-        "async-updates",
-        "productivity"
-      ],
-      "license": "Apache-2.0",
-      "name": "meeting-quality-skills",
-      "repository": "https://github.com/ahinek/meeting-quality-skills",
-      "source": {
-        "ref": "f39c944a31cad1ec6d57360f56ef28f04dd0ad78",
-        "repo": "ahinek/meeting-quality-skills",
-        "source": "github"
-      },
-      "version": "0.1.0"
-    },
-    {
-      "author": {
         "name": "asanzgom"
       },
       "category": "devops",
