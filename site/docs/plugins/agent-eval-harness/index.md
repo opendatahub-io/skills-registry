@@ -27,7 +27,7 @@ containerized execution.
 
 !!! info "Plugin Details"
 
-    - **Version**: 0.1.0
+    - **Version**: 1.0.0
     - **Author**: Antonin Stefanutti
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)

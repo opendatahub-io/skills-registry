@@ -26,10 +26,9 @@ install-deps: |md
   **Install Dependencies**
   (fallback for SessionStart)
 
-  - pyyaml >= 6.0
-  - mlflow[genai] >= 3.5
-    (unless --skip-mlflow)
-  - anthropic[vertex] >= 0.40
+  - run ensure_deps.py
+  - isolated .eval-venv/
+  - uv or pip install
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -43,10 +42,8 @@ preflight: |md
   **Preflight Checks**
 
   - check_env.py --fix
-  - Python >= 3.11
-  - pyyaml, mlflow, anthropic
-  - agent_eval symlink
-  - API keys, directories
+  - verify venv, packages
+  - auto-fix what it can
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -195,12 +192,12 @@ mlflow-server: |md
 checks-detail: |md
   check_env.py
   [+] python       3.11+
-  [+] mlflow       >= 3.5
   [+] pyyaml       >= 6.0
+  [+] mlflow       >= 3.5
   [+] agent_eval   symlink
   [+] anthropic    (optional)
   [+] api_keys     set
-  [+] mlflow_server reachable
+  [+] mlflow       reachable
   [+] directories  present
   [+] eval_config  valid (--config)
 | {
@@ -247,7 +244,7 @@ eval-run: |md
 # --- Flow ---
 
 args -> install-deps
-install-deps -> preflight
+install-deps -> preflight: "ensure_deps.py"
 
 preflight -> report: "all pass" {
   style.stroke-dash: 3
