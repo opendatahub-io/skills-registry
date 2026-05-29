@@ -16,4 +16,4 @@ title: Categories
 | [DevOps & CI/CD](devops.md) | 2 | Skills for deployment, CI/CD, and infrastructure |
 | [Security Review](security.md) | 1 | Security analysis, threat modeling, and compliance review |
 | [Development Tools](development-tools.md) | 2 | Developer productivity tools for packaging, CI/CD debugging, and workflow automation |
-| [Product Planning](planning.md) | 1 | Skills for requirements, RFEs, and product strategy |
+| [Product Planning](planning.md) | 2 | Skills for requirements, RFEs, and product strategy |

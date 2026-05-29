@@ -309,6 +309,38 @@
       },
       "strict": false,
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "IKRedHat"
+      },
+      "category": "planning",
+      "description": "Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.\n",
+      "homepage": "https://github.com/IKRedHat/SPIKE-executor",
+      "keywords": [
+        "spike",
+        "assessment",
+        "jira",
+        "research",
+        "scoring",
+        "rfe",
+        "openshift",
+        "rhoai",
+        "feasibility"
+      ],
+      "license": "Apache-2.0",
+      "name": "spike-executor",
+      "repository": "https://github.com/IKRedHat/SPIKE-executor",
+      "skills": [
+        "./.claude/skills"
+      ],
+      "source": {
+        "ref": "924ec480198b89d42ceb82275938a7859dbf92ff",
+        "repo": "IKRedHat/SPIKE-executor",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.2.0"
     }
   ]
 }

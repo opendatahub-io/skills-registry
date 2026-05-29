@@ -147,6 +147,9 @@ nav:
       - plugins/aiops-skills/index.md
       - create-component-onboarding-jira: plugins/aiops-skills/create-component-onboarding-jira.md
       - validate-component-onboarding-jira: plugins/aiops-skills/validate-component-onboarding-jira.md
+    - spike-executor:
+      - plugins/spike-executor/index.md
+      - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md

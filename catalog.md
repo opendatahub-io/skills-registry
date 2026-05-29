@@ -272,3 +272,19 @@ Tags: rfe, jira, review, strategy, pipeline
 ```bash
 /plugin install rfe-creator@opendatahub-skills
 ```
+
+### spike-executor
+
+Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
+
+v0.2.0 | Apache-2.0 | [IKRedHat/SPIKE-executor](https://github.com/IKRedHat/SPIKE-executor)
+
+Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibility
+
+| Skill | Description |
+|-------|-------------|
+| `/SPIKE-executor` | Execute RHOAI SPIKE investigations with human-in-the-loop approval gates |
+
+```bash
+/plugin install spike-executor@opendatahub-skills
+```
