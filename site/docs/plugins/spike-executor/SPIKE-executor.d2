@@ -1,0 +1,376 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/SPIKE-executor**
+
+  - project name (required)
+  - --skip-tests
+  - --skip-jira
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Prerequisites & Intake ---
+
+intake: |md
+  **Intake**
+
+  - check Jira credentials
+  - check oc CLI + cluster login
+  - gather project context
+  - community URL, constraints
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Plan ---
+
+gen-plan: |md
+  **Generate Plan**
+
+  - spike-executor generate-plan
+  - 3-phase investigation plan
+  - community, RHOAI, deliverables
+  - BREAKPOINT: "Approve Plan"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira ---
+
+jira: Jira Sync {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  preview: |md
+    **Preview Jira**
+
+    - spike-executor preview-jira
+    - epic/story hierarchy
+    - no tickets created yet
+    - BREAKPOINT: "Create SPIKE Jiras"
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  create: |md
+    **Create Tickets**
+
+    - spike-executor sync-jira
+    - create epics + stories
+    - assign reporter, assignee
+    - transition to "In Progress"
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  preview -> create: "approved"
+}
+
+# --- Jira Server (external) ---
+
+jira-server: |md
+  **Jira Server**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Research ---
+
+research: AI Research & Enrichment {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  scaffold: |md
+    **Research Scaffold**
+
+    - spike-executor research
+    - YAML + MD + prompt files
+    - structured research brief
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  enrich: |md
+    **AI Deep Dive**
+    LLM enrichment
+
+    - web search for real data
+    - GitHub stats, CVEs, licenses
+    - architecture, UBI, security
+    - update YAML + MD findings
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  validate: |md
+    **Validate Research**
+
+    - spike-executor validate-research
+    - URL reachability checks
+    - hallucination detection
+    - TBD audit, format checks
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  update-jira: |md
+    **Update Jira Tickets**
+
+    - spike-executor update-jira-tickets
+    - targeted comments per story
+    - transition to "Review"
+    - BREAKPOINT: "Approve Research"
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  scaffold -> enrich: "Research-Prompt.md"
+  enrich -> validate: "Research-Findings.yaml"
+  validate -> update-jira
+}
+
+# --- Test Plan & Suite ---
+
+testing: Test Generation {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  test-plan: |md
+    **Generate Test Plan**
+
+    - spike-executor generate-test-plan-cmd
+    - 4 suites, 14 checks
+    - BREAKPOINT: "Approve Test Plan"
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  test-suite: |md
+    **Generate Test Suite**
+
+    - spike-executor generate-test-suite
+    - pytest with 4 test classes
+    - session-scoped OCP fixtures
+    - BREAKPOINT: "Start Execution"
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  test-plan -> test-suite: "approved"
+}
+
+# --- Run Tests + Score ---
+
+run-tests: |md
+  **Run Tests**
+
+  - spike-executor run-tests
+  - pytest against OCP cluster
+  - JUnit XML results
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+score: |md
+  **Calculate Score**
+
+  - spike-executor calculate-score
+  - rubric 0-3 per check
+  - domain weights (UBI/Op/Sec/HW)
+  - security gate: 0 blocks GO
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- OpenShift Cluster (external) ---
+
+ocp-cluster: |md
+  **OpenShift Cluster**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- RFE ---
+
+gen-rfe: |md
+  **Generate RFE**
+
+  - spike-executor generate-rfe
+  - rfe-creator compatible format
+  - YAML frontmatter + markdown
+  - BREAKPOINT: "Approve RFE"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Complete ---
+
+complete: |md
+  **Complete**
+
+  - spike-executor complete
+  - artifact inventory
+  - score + decision
+  - timeline summary
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Scoring callout ---
+
+score-rubric: |md
+  Domain Weights:
+    UBI Feasibility     25
+    Operator Integration 20
+    Security & Hardening 30
+    Hardware & MLOps     25
+
+  Decision Bands:
+    GO      >= 80
+    PIVOT   55-79
+    NO-GO   < 55
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Artifacts callout ---
+
+artifacts-tree: |md
+  artifacts/
+    SPIKE-Plan-{project}.md
+    Jira-Links-{project}-spike.md
+    Research-Findings-{project}.yaml
+    Research-Findings-{project}.md
+    Test-Plan-{project}.md
+    test_suite_{project}.py
+    Feasibility-Report-{project}.md
+    RFE-Input-{project}.md
+    SPIKE-Summary-{project}.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Forward flow ---
+
+entry -> intake
+intake -> gen-plan
+gen-plan -> jira: "plan approved"
+gen-plan -> research: "--skip-jira" {
+  style.stroke-dash: 3
+}
+jira -> research: "Jira-Links.md"
+research -> testing: "research approved"
+research -> gen-rfe: "--skip-tests" {
+  style.stroke-dash: 3
+}
+testing -> run-tests: "test suite ready"
+run-tests -> score: "Test-Results.yaml"
+score -> gen-rfe: "GO / PIVOT"
+gen-rfe -> complete: "RFE approved"
+
+# --- External connections ---
+
+jira.create -> jira-server
+research.update-jira -> jira-server
+run-tests -> ocp-cluster
+
+# --- Validation back-edge ---
+
+research.validate -> research.enrich: "errors" {
+  style.stroke-dash: 3
+}
+
+# --- NO-GO path ---
+
+score -> complete: "NO-GO\n(no RFE)" {
+  style.stroke-dash: 3
+}
+
+# --- Callout connections ---
+
+score -> score-rubric: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+complete -> artifacts-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

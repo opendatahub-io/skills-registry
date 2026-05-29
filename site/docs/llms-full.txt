@@ -2020,14 +2020,81 @@ Examples:
 
 ## spike-executor
 
-Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
+Execute RHOAI SPIKE investigations with human-in-the-loop approval gates on
+OpenShift. Provides a 9-step lifecycle covering intake, plan generation, Jira
+ticket creation and sync, AI-powered research enrichment with hallucination
+detection, pytest test suite generation and execution on OpenShift clusters,
+rubric-based feasibility scoring with a security gate, and RFE document
+generation.
+
+The skill orchestrates via a CLI (spike-executor) that handles each step as a
+separate command, writing artifacts to an artifacts/ directory with a consistent
+<Type>-<project> naming pattern. Workflow state is persisted in
+.spike-state-<project>.json for resume support. Supports both runtime evaluations
+(e.g., AutoGluon) and protocol library evaluations (e.g., gRPC). Integrates with
+Jira for ticket management (create, update, transition) and optionally requires
+OpenShift access for cluster test execution.
 
 **Repository**: https://github.com/IKRedHat/SPIKE-executor
+
+### Architecture
+
+Single-skill plugin with a 9-step CLI-driven workflow. Each step maps to a
+spike-executor subcommand that reads/writes from the artifacts/ directory.
+Breakpoints after each step pause for human review and approval before
+proceeding.
+
+Key modules: plan_generator.py (Jinja2 template rendering), jira_sync.py
+(Jira REST API with retry, labels, comments), test_generator.py (Phase 2
+plan parser + pytest suite generation), test_executor.py (pytest runner +
+JUnit XML parsing), scorer.py (rubric-based 0-3 scoring with domain weights
+and security gate), state.py (workflow persistence), cli.py (Typer CLI).
+
+Step 5 (AI Research) is the most complex: generates a research scaffold via
+templates, then the LLM performs a comprehensive web research deep dive
+covering community health, license, architecture, performance, UBI
+feasibility, operator integration, security (CVE, FIPS, rootless, air-gap,
+supply chain), and hardware/MLOps. A validation step (validate-research)
+checks for hallucination via URL reachability, evidence-backed claims, TBD
+audit, and GitHub metrics cross-referencing.
+
+Scoring uses a 4-domain rubric (UBI 25%, Operator 20%, Security 30%,
+Hardware 25%) with 14 checks, each scored 0-3. Decision bands: GO >= 80,
+PIVOT 55-79, NO-GO < 55. A security critical failure gate blocks GO if
+any security check scores 0.
+
+Three hooks handle artifact safety: backup-artifact.sh (PreToolUse on
+Write), validate-artifact.sh and auto-validate-research.sh (PostToolUse
+on Write).
 
 ### Skills
 
 #### /SPIKE-executor
 
-Execute RHOAI SPIKE investigations with human-in-the-loop approval gates
+Execute RHOAI SPIKE investigations through a 9-step human-in-the-loop
+lifecycle. Each step produces artifacts in the artifacts/ directory and
+pauses at a breakpoint for explicit user approval before continuing.
+Steps: (1) intake, (2) plan generation, (3) Jira preview, (4) Jira
+creation, (5) AI research enrichment with hallucination validation,
+(6) test plan + pytest suite generation, (7) test execution + rubric
+scoring, (8) RFE generation + approval, (9) completion summary. Supports
+--skip-tests (no OpenShift) and --skip-jira (no Jira credentials).
+
+```
+/SPIKE-executor <project> [--skip-tests] [--skip-jira]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `project` | yes | Name of the project/technology being investigated (e.g., AutoGluon, gRPC). Used as the suffix for all artifact filenames. |
+| `--skip-tests` |  | Skip cluster tests and scoring (Steps 6-7). For environments without OpenShift access. |
+| `--skip-jira` |  | Skip Jira sync steps (Steps 3-4, 5b). For testing without Jira credentials. |
+
+Examples:
+```
+/SPIKE-executor AutoGluon
+/SPIKE-executor gRPC --skip-tests
+/SPIKE-executor my-project --skip-jira
+```
 
 ---
