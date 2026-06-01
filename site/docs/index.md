@@ -74,7 +74,7 @@ hide:
 
     Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
 
-    **7 skills** - Evaluation & Testing - v1.0.0
+    **7 skills** - Evaluation & Testing - v1.4.0
 
 -   **[knowledge-skills](plugins/knowledge-skills/index.md)**
 

@@ -192,11 +192,11 @@
       "name": "agent-eval-harness",
       "repository": "https://github.com/opendatahub-io/agent-eval-harness",
       "source": {
-        "ref": "7d86a7ec657002a27c299fba67f7af1cd8124a6e",
+        "ref": "v1.4.0",
         "repo": "opendatahub-io/agent-eval-harness",
         "source": "github"
       },
-      "version": "1.0.0"
+      "version": "1.4.0"
     },
     {
       "author": {
@@ -271,7 +271,7 @@
         "./skills"
       ],
       "source": {
-        "ref": "f8fbba8c8400caeaa1dd9c7455478aad2bf05b4d",
+        "ref": "main",
         "repo": "opendatahub-io/disconnected-readiness-scorer",
         "source": "github"
       },
@@ -335,7 +335,7 @@
         "./.claude/skills"
       ],
       "source": {
-        "ref": "924ec480198b89d42ceb82275938a7859dbf92ff",
+        "ref": "master",
         "repo": "IKRedHat/SPIKE-executor",
         "source": "github"
       },

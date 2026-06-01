@@ -372,7 +372,7 @@ plugins:
       iteratively improve agent skills with MLflow support for experiment tracking,
       tracing, and reporting. Schema-driven evaluation via eval.yaml with
       support for inline, LLM-based, and external judges.
-    version: "1.0.0"
+    version: "1.4.0"
     category: evaluation
     tags: [evaluation, testing, skills, agents, mlflow, optimization, scoring]
     author:
@@ -380,7 +380,7 @@ plugins:
     source:
       type: github
       repo: opendatahub-io/agent-eval-harness
-      ref: 7d86a7ec657002a27c299fba67f7af1cd8124a6e # v1.0.0
+      ref: v1.4.0
     homepage: https://github.com/opendatahub-io/agent-eval-harness
     repository: https://github.com/opendatahub-io/agent-eval-harness
     skills:
@@ -492,7 +492,7 @@ plugins:
     source:
       type: github
       repo: opendatahub-io/disconnected-readiness-scorer
-      ref: f8fbba8c8400caeaa1dd9c7455478aad2bf05b4d
+      ref: main
     strict: false
     skills_dir: skills
     homepage: https://github.com/opendatahub-io/disconnected-readiness-scorer
@@ -551,7 +551,7 @@ plugins:
     source:
       type: github
       repo: IKRedHat/SPIKE-executor
-      ref: 924ec480198b89d42ceb82275938a7859dbf92ff
+      ref: master
     strict: false
     skills_dir: .claude/skills
     homepage: https://github.com/IKRedHat/SPIKE-executor
