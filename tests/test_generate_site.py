@@ -13,18 +13,24 @@ class SiteContractRenderingTests(unittest.TestCase):
 
         page = generate_site.generate_skill_page(skill, plugin, enrichment=None, plugin_dir=None)
 
-        self.assertIn("## Contract", page)
-        self.assertIn("canonical-skill-v1", page)
-        self.assertIn("task_success", page)
-        self.assertIn("`review`", page)
-        self.assertIn("### Problem Statement", page)
-        self.assertIn("### Success Conditions", page)
-        self.assertIn("### Metrics", page)
-        self.assertIn("`judge`", page)
-        self.assertIn("example-org/example-plugin@main:docs/review-rubric.md", page)
-        self.assertIn("### Invariants", page)
-        self.assertIn("### Source Assertions", page)
-        self.assertIn("skills/example-skill/SKILL.md", page)
+        for marker in (
+            "## Contract",
+            '!!! info "Skill Contract"',
+            "canonical-skill-v1",
+            "task_success",
+            "`review`",
+            "**Problem Statement**",
+            "**Success Conditions:**",
+            "**Metrics:**",
+            "`judge`",
+            "example-org/example-plugin@main:docs/review-rubric.md",
+            "**Must Preserve:**",
+            "**Source Assertions:**",
+            "skills/example-skill/SKILL.md",
+        ):
+            self.assertIn(marker, page)
+        for old_heading in ("### Problem Statement", "### Metrics"):
+            self.assertNotIn(old_heading, page)
         idx_contract = page.index("## Contract")
         idx_review = page.index("`review`", idx_contract)
         self.assertGreater(idx_review, idx_contract)

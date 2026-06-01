@@ -25,7 +25,6 @@ if str(_REPO_ROOT) not in sys.path:
 from scripts.registry_contracts import (  # noqa: E402
     CANONICAL_FUNCTION_DOCS,
     CANONICAL_METRIC_DOCS,
-    MEASURE_DOCS,
     contract_metrics_as_dicts,
     mapping_if_dict,
     sequence_as_list,
@@ -109,6 +108,65 @@ def _knowledge_input_label(item: dict) -> str:
     if kind:
         return f"`{kind}`"
     return "`unknown`"
+
+
+def _format_contract_function(value: str) -> str:
+    description = CANONICAL_FUNCTION_DOCS.get(value)
+    if description:
+        return f"`{value}`: {description}"
+    return f"`{value}`"
+
+
+def _append_contract_bullets(
+    lines: list[str],
+    items: list,
+    *,
+    format_item=str,
+) -> None:
+    if items:
+        for item in items:
+            lines.append(f"    - {format_item(item)}")
+    else:
+        lines.append("    - —")
+
+
+def _format_contract_metric(metric: dict) -> str:
+    metric_id = str(metric["id"])
+    header = f"`{metric_id}`"
+
+    measure = metric.get("measure")
+    if isinstance(measure, str) and measure.strip():
+        header += f" (`{measure.strip()}`)"
+
+    details: list[str] = []
+    metadata = CANONICAL_METRIC_DOCS.get(metric_id)
+    if metadata:
+        details.append(metadata["summary"])
+        details.append(f"Guidance: {metadata['measure_guidance']}")
+
+    for key, label in (
+        ("target_measure", "Target measure"),
+        ("success_mode", "Success mode"),
+    ):
+        value = metric.get(key)
+        if isinstance(value, str) and value.strip():
+            details.append(f"{label}: `{value.strip()}`")
+
+    references = []
+    for ref_key in ("rubric_ref", "verifier_ref", "calibration_ref"):
+        ref_value = metric.get(ref_key)
+        if isinstance(ref_value, str) and ref_value.strip():
+            references.append(f"{ref_key}=`{ref_value.strip()}`")
+    if references:
+        details.append("References: " + ", ".join(references))
+
+    trials = metric.get("trials")
+    if isinstance(trials, int):
+        details.append(f"Trials: `{trials}`")
+
+    if details:
+        return f"{header}: " + " ".join(details)
+    return header
 
 
 def clean_generated(output_dir: Path):
@@ -408,101 +466,43 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     if contract:
         lines.append("## Contract")
         lines.append("")
+        lines.append('!!! info "Skill Contract"')
+        lines.append("")
         version = contract.get("version")
         version_txt = "" if version is None else str(version)
-        lines.append(f"- **Version**: `{version_txt}`")
+        lines.append(f"    **Version**: `{version_txt}`")
         lines.append("")
         problem_statement = contract.get("problem_statement")
         if isinstance(problem_statement, str) and problem_statement.strip():
-            lines.append("### Problem Statement")
-            lines.append("")
-            lines.append(problem_statement.strip())
+            lines.append(f"    **Problem Statement**: {problem_statement.strip()}")
             lines.append("")
         functions = _string_list(contract.get("functions"))
-        lines.append("### Functions")
+        lines.append("    **Functions:**")
         lines.append("")
-        if functions:
-            for value in functions:
-                description = CANONICAL_FUNCTION_DOCS.get(value)
-                if description:
-                    lines.append(f"- `{value}` — {description}")
-                else:
-                    lines.append(f"- `{value}`")
-        else:
-            lines.append("- —")
+        _append_contract_bullets(lines, functions, format_item=_format_contract_function)
         lines.append("")
-        lines.append("### Metrics")
+        lines.append("    **Metrics:**")
         lines.append("")
         metric_entries = contract_metrics_as_dicts(contract.get("metrics"))
-        if metric_entries:
-            for metric in metric_entries:
-                metric_id = str(metric["id"])
-                lines.append(f"- `{metric_id}`")
-                metadata = CANONICAL_METRIC_DOCS.get(metric_id)
-                if metadata:
-                    lines.append(f"  - **What It Optimizes**: {metadata['summary']}")
-                    lines.append(
-                        f"  - **Measurement Guidance**: {metadata['measure_guidance']}"
-                    )
-                measure = metric.get("measure")
-                if isinstance(measure, str) and measure.strip():
-                    measure_key = measure.strip()
-                    measure_desc = MEASURE_DOCS.get(measure_key)
-                    if measure_desc:
-                        lines.append(
-                            f"  - **Measure**: `{measure_key}` — {measure_desc}"
-                        )
-                    else:
-                        lines.append(f"  - **Measure**: `{measure_key}`")
-                target_measure = metric.get("target_measure")
-                if isinstance(target_measure, str) and target_measure.strip():
-                    lines.append(f"  - **Target Measure**: `{target_measure.strip()}`")
-                references = []
-                rubric_ref = metric.get("rubric_ref")
-                if isinstance(rubric_ref, str) and rubric_ref.strip():
-                    references.append(f"rubric_ref=`{rubric_ref.strip()}`")
-                verifier_ref = metric.get("verifier_ref")
-                if isinstance(verifier_ref, str) and verifier_ref.strip():
-                    references.append(f"verifier_ref=`{verifier_ref.strip()}`")
-                calibration_ref = metric.get("calibration_ref")
-                if isinstance(calibration_ref, str) and calibration_ref.strip():
-                    references.append(f"calibration_ref=`{calibration_ref.strip()}`")
-                if references:
-                    lines.append("  - **References**: " + ", ".join(references))
-                success_mode = metric.get("success_mode")
-                if isinstance(success_mode, str) and success_mode.strip():
-                    lines.append(f"  - **Success Mode**: `{success_mode.strip()}`")
-                trials = metric.get("trials")
-                if isinstance(trials, int):
-                    lines.append(f"  - **Trials**: `{trials}`")
-        else:
-            lines.append("- —")
+        _append_contract_bullets(
+            lines, metric_entries, format_item=_format_contract_metric
+        )
         lines.append("")
         success_conditions = _string_list(contract.get("success_conditions"))
-        lines.append("### Success Conditions")
+        lines.append("    **Success Conditions:**")
         lines.append("")
-        if success_conditions:
-            for item in success_conditions:
-                lines.append(f"- {item}")
-        else:
-            lines.append("- —")
+        _append_contract_bullets(lines, success_conditions)
         lines.append("")
         invariants = mapping_if_dict(contract.get("invariants"))
         if invariants:
-            lines.append("### Invariants")
+            lines.append("    **Must Preserve:**")
             lines.append("")
             must_preserve = _string_list(invariants.get("must_preserve"))
-            lines.append("#### Must Preserve")
-            lines.append("")
-            if must_preserve:
-                for item in must_preserve:
-                    lines.append(f"- {item}")
-            else:
-                lines.append("- —")
+            _append_contract_bullets(lines, must_preserve)
             lines.append("")
             fixed_context = mapping_if_dict(invariants.get("fixed_context"))
             if fixed_context:
-                lines.append("#### Fixed Context")
+                lines.append("    **Fixed Context:**")
                 lines.append("")
                 tools = _string_list(fixed_context.get("tools"))
                 cli = _string_list(fixed_context.get("cli"))
@@ -513,31 +513,34 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
                     if isinstance(item, dict)
                 ]
                 lines.append(
-                    "- **Tools**: " + (", ".join(f"`{value}`" for value in tools) if tools else "—")
+                    "    - **Tools**: "
+                    + (", ".join(f"`{value}`" for value in tools) if tools else "—")
                 )
                 lines.append(
-                    "- **CLI**: " + (", ".join(f"`{value}`" for value in cli) if cli else "—")
+                    "    - **CLI**: "
+                    + (", ".join(f"`{value}`" for value in cli) if cli else "—")
                 )
                 lines.append(
-                    "- **Documents**: "
+                    "    - **Documents**: "
                     + (", ".join(f"`{value}`" for value in documents) if documents else "—")
                 )
                 lines.append(
-                    "- **Knowledge Inputs**: " + (", ".join(knowledge_inputs) if knowledge_inputs else "—")
+                    "    - **Knowledge Inputs**: "
+                    + (", ".join(knowledge_inputs) if knowledge_inputs else "—")
                 )
                 lines.append("")
         source_assertions = mapping_if_dict(contract.get("source_assertions"))
         if source_assertions:
-            lines.append("### Source Assertions")
+            lines.append("    **Source Assertions:**")
             lines.append("")
             skill_path = source_assertions.get("skill_path")
             if isinstance(skill_path, str) and skill_path.strip():
-                lines.append(f"- **Skill Path**: `{skill_path.strip()}`")
+                lines.append(f"    - **Skill Path**: `{skill_path.strip()}`")
             else:
-                lines.append("- **Skill Path**: —")
+                lines.append("    - **Skill Path**: —")
             supporting_paths = _string_list(source_assertions.get("supporting_paths"))
             lines.append(
-                "- **Supporting Paths**: "
+                "    - **Supporting Paths**: "
                 + (", ".join(f"`{value}`" for value in supporting_paths) if supporting_paths else "—")
             )
             lines.append("")
