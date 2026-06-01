@@ -19,12 +19,13 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Parse ---
+# --- Step 0: Parse ---
 
 parse: |md
   **Parse & Persist**
 
-  - persist split-config.yaml
+  - strip --headless flag
+  - init split-config.yaml
   - write IDs to disk
   - verify task files exist
 | {
@@ -34,16 +35,16 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Split Agents ---
+# --- Step 1: Split Agents ---
 
 split-agents: |md
-  **Split Agents**
-  LLM (opus, per ID)
+  **Launch Split Agents**
+  LLM agents (opus, parallel)
 
-  - load RFE + review
-  - decompose to children
-  - coverage check
-  - write split-status
+  - load RFE + review scores
+  - check right-sized threshold
+  - decompose into children
+  - coverage check + write status
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -52,14 +53,40 @@ split-agents: |md
   style.double-border: true
 }
 
-# --- Collect ---
+# --- Jira (external, referenced by split agent) ---
+
+jira: |md
+  **Jira / MCP**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- assess-rfe (external, rubric source) ---
+
+assess-rfe: |md
+  **assess-rfe**
+  (rubric plugin)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 2: Collect Children ---
 
 collect: |md
   **Collect Children**
 
+  - re-read parent IDs from disk
   - read split-status files
-  - collect_children.py
-  - no-split -> revise
+  - no-split -> set revise
+  - collect child IDs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -67,12 +94,12 @@ collect: |md
   style.stroke-width: 2
 }
 
-# --- Review ---
+# --- Review (external skill) ---
 
 rfe-review: |md
   **/rfe.review**
 
-  - inline Skill call
+  - inline Skill invocation
   - --headless --caller split
   - full review pipeline
 | {
@@ -83,15 +110,16 @@ rfe-review: |md
   style.stroke-dash: 3
 }
 
-# --- Self-Correction ---
+# --- Step 3: Self-Correction ---
 
 correct: |md
-  **Self-Correct**
+  **Right-sizing Check**
   (max 1 cycle)
 
-  - check right_sized < 2
-  - re-split offending child
+  - read right_sized scores
+  - re-split if score < 2/2
   - re-review new children
+  - increment cycle counter
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -100,13 +128,13 @@ correct: |md
   style.double-border: true
 }
 
-# --- Finalize ---
+# --- Step 4: Finalize ---
 
 finalize: |md
   **Finalize**
 
-  - rebuild-index
-  - headless or summary
+  - rebuild frontmatter index
+  - re-read flags from disk
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -114,12 +142,13 @@ finalize: |md
   style.stroke-width: 2
 }
 
-# --- Outputs ---
+# --- Output: Headless ---
 
 headless-out: |md
   **Headless Return**
 
   - return to /rfe.auto-fix
+  - resume batch loop
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -127,9 +156,13 @@ headless-out: |md
   style.stroke-width: 2
 }
 
-interactive-out: |md
-  **Summary**
+# --- Output: Interactive ---
 
+interactive-out: |md
+  **Interactive Summary**
+
+  - parent archived, children listed
+  - coverage report
   - suggest /rfe.submit
 | {
   shape: rectangle
@@ -138,15 +171,57 @@ interactive-out: |md
   style.stroke-width: 2
 }
 
+# --- External: rfe.auto-fix ---
+
+rfe-autofix: |md
+  **/rfe.auto-fix**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Split-status callout ---
+
+split-status-callout: |md
+  split-status.yaml
+  action: split / no-split
+  reason: "..."
+  children: [RFE-001, ...]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
 entry -> parse
 
-parse -> split-agents
+parse -> split-agents: "per ID"
+
+split-agents -> assess-rfe: "rubric" {
+  style.stroke-dash: 3
+}
+
+split-agents -> jira: "comments" {
+  style.stroke-dash: 3
+}
 
 split-agents -> collect: "split-status"
 
-collect -> rfe-review: "children found"
+split-agents -> split-status-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+collect -> rfe-review: "child IDs"
 
 rfe-review -> correct
 
@@ -158,3 +233,7 @@ correct -> finalize: "done / max cycles"
 
 finalize -> headless-out: "--headless"
 finalize -> interactive-out: "interactive"
+
+headless-out -> rfe-autofix: "resume" {
+  style.stroke-dash: 3
+}

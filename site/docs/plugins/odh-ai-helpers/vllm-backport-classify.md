@@ -23,19 +23,19 @@ non-runtime code. PRs classified as "unclear" require agent review.
 
 ## Arguments
 
-```
+```bash
 /vllm-backport-classify [--input] [--repo] [--tag] [--output]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--input` | :material-check: | — | Path to raw-prs.json from fetch-prs step |
-| `--repo` | :material-check: | — | Path to local vllm repository clone |
-| `--tag` | :material-check: | — | Release tag to check file existence against (e.g., v0.13.0) |
-| `--output` | :material-check: | — | Output path for filtered.json |
+| `--input` | :material-check: | - | Path to raw-prs.json from fetch-prs step |
+| `--repo` | :material-check: | - | Path to local vllm repository clone |
+| `--tag` | :material-check: | - | Release tag to check file existence against (e.g., v0.13.0) |
+| `--output` | :material-check: | - | Output path for filtered.json |
 
 ## Usage
 
-```
+```bash
 /vllm-backport-classify --input artifacts/raw-prs.json --repo /path/to/vllm --tag v0.13.0 --output artifacts/filtered.json
 ```

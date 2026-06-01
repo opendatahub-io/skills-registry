@@ -25,19 +25,19 @@ that judges cannot measure.
 
 ## Arguments
 
-```
+```bash
 /eval-review --run-id <id> [--config <path>] [--case <filter>]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--run-id` | :material-check: | — | Which eval run to review. |
+| `--run-id` | :material-check: | - | Which eval run to review. |
 | `--config` |  | `eval.yaml` | Path to eval config. |
-| `--case` |  | — | Substring match to select specific cases for review. |
+| `--case` |  | - | Substring match to select specific cases for review. |
 
 ## Usage
 
-```
+```bash
 /eval-review --run-id 2026-05-01-opus
 /eval-review --run-id 2026-05-01-opus --case case-003
 ```

@@ -5,9 +5,8 @@ repo_name: opendatahub-io/skills-registry
 
 theme:
   name: material
-  font:
-    text: JetBrains Mono
-    code: JetBrains Mono
+  font: false
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -62,10 +61,6 @@ nav:
       - rfe.submit: plugins/rfe-creator/rfe.submit.md
       - rfe.speedrun: plugins/rfe-creator/rfe.speedrun.md
       - rfe.auto-fix: plugins/rfe-creator/rfe.auto-fix.md
-      - strat.create: plugins/rfe-creator/strat.create.md
-      - strat.refine: plugins/rfe-creator/strat.refine.md
-      - strat.review: plugins/rfe-creator/strat.review.md
-      - strat.prioritize: plugins/rfe-creator/strat.prioritize.md
       - rfe-creator.update-deps: plugins/rfe-creator/rfe-creator.update-deps.md
       - architecture-review: plugins/rfe-creator/architecture-review.md
       - feasibility-review: plugins/rfe-creator/feasibility-review.md
@@ -136,13 +131,30 @@ nav:
       - eval-review: plugins/agent-eval-harness/eval-review.md
       - eval-mlflow: plugins/agent-eval-harness/eval-mlflow.md
       - eval-optimize: plugins/agent-eval-harness/eval-optimize.md
-    - meeting-quality-skills:
-      - plugins/meeting-quality-skills/index.md
-      - meeting-async-update-check: plugins/meeting-quality-skills/meeting-async-update-check.md
-      - meeting-risk-agenda: plugins/meeting-quality-skills/meeting-risk-agenda.md
+    - knowledge-skills:
+      - plugins/knowledge-skills/index.md
+      - knowledge.repo: plugins/knowledge-skills/knowledge.repo.md
+    - autofix-skills:
+      - plugins/autofix-skills/index.md
+      - autofix-resolve: plugins/autofix-skills/autofix-resolve.md
+      - autofix-cve-resolve: plugins/autofix-skills/autofix-cve-resolve.md
+      - autofix-triage: plugins/autofix-skills/autofix-triage.md
+      - autofix-research: plugins/autofix-skills/autofix-research.md
+    - disconnected-readiness-scorer:
+      - plugins/disconnected-readiness-scorer/index.md
+      - disconnected-score: plugins/disconnected-readiness-scorer/disconnected-score.md
+    - aiops-skills:
+      - plugins/aiops-skills/index.md
+      - create-component-onboarding-jira: plugins/aiops-skills/create-component-onboarding-jira.md
+      - validate-component-onboarding-jira: plugins/aiops-skills/validate-component-onboarding-jira.md
+    - spike-executor:
+      - plugins/spike-executor/index.md
+      - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
+    - Documentation: categories/documentation.md
+    - DevOps & CI/CD: categories/devops.md
     - Security Review: categories/security.md
     - Development Tools: categories/development-tools.md
     - Product Planning: categories/planning.md

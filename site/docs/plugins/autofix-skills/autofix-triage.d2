@@ -1,0 +1,285 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/autofix-triage**
+
+  - Jira ticket content
+  - cloned target repo
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Parse Ticket ---
+
+parse: |md
+  **Parse Ticket**
+  LLM extraction
+
+  - symptom description
+  - component / file paths
+  - error messages, stack traces
+  - repo URLs
+  - steps to reproduce
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 2: Orient ---
+
+orient: |md
+  **Orient via Context**
+
+  - ARCHITECTURE.md
+  - AGENTS.md / CLAUDE.md
+  - README.md (fallback)
+  - build repo mental map
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 3: Explore Code ---
+
+explore: Explore Code {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  locate: |md
+    **Locate Bug Area**
+
+    - grep error messages
+    - find functions, CRDs, endpoints
+    - confirm references are current
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  assess-repo: |md
+    **Assess Repo Readiness**
+
+    - AGENTS.md, CONTRIBUTING.md
+    - Makefile targets (lint, test, build)
+    - CI config (.github/workflows/)
+    - lint config (.golangci.yml, etc.)
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  check-risk: |md
+    **Check Risk Factors**
+
+    - test coverage near bug area
+    - recent git history / refactors
+    - cross-component impact (shared code)
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  locate -> assess-repo
+  assess-repo -> check-risk
+}
+
+# --- Step 4: Three-Gate Rubric ---
+
+rubric: Three-Gate Rubric {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  gate1: |md
+    **Gate 1: Can Start?**
+
+    - repo URL exists
+    - ticket states what is broken
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  gate2: |md
+    **Gate 2: Can Find & Fix?**
+
+    - code is locatable
+    - correct behavior is unambiguous
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  gate3: |md
+    **Gate 3: Should Agent Fix?**
+
+    - not design decisions
+    - not infrastructure / runtime
+    - not systemic architectural
+    - not performance tuning
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  gate1 -> gate2: pass
+  gate2 -> gate3: pass
+}
+
+# --- Verdict outputs ---
+
+ready: |md
+  **ready**
+
+  - confidence: high/med/low
+  - bias toward ready when uncertain
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+needs-info: |md
+  **needs_info**
+
+  - specific missing items
+  - message to ticket opener
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+not-fixable: |md
+  **not_fixable**
+
+  - Gate 3 category reason
+  - suggest human intervention
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+verdict: |md
+  **Write Verdict**
+
+  - .triage-verdict.json
+  - gate results + reasoning
+  - repo_readiness, risk_factors
+  - message_to_opener
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verdict schema callout ---
+
+verdict-schema: |md
+  .triage-verdict.json
+  verdict: ready/needs_info/not_fixable
+  confidence: high/medium/low
+  gate1:
+    repo_url: { pass, value, note }
+    bug_description: { pass, note }
+  gate2:
+    code_locatability: { pass, note }
+    fix_direction: { pass, note }
+  gate3:
+    pass, not_fixable_reason, note
+  repo_readiness:
+    has_agent_docs, has_build_targets
+    has_lint_config, note
+  risk_factors: [...]
+  missing: [...]
+  message_to_opener: "..."
+  reasoning: "..."
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Orchestrator (upstream) ---
+
+orchestrator: |md
+  **Autofix Orchestrator**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Edges ---
+
+orchestrator -> entry: "ticket + cloned repo" {
+  style.stroke-dash: 3
+}
+
+entry -> parse
+parse -> orient: "symptom, repo URL"
+orient -> explore: "repo mental map"
+explore.check-risk -> rubric.gate1: "repo readiness,\nrisk factors"
+
+rubric.gate1 -> needs-info: fail {
+  style.stroke-dash: 3
+}
+rubric.gate3 -> not-fixable: fail {
+  style.stroke-dash: 3
+}
+rubric.gate2 -> ready: pass {
+  style.stroke-dash: 3
+}
+rubric.gate2 -> needs-info: fail {
+  style.stroke-dash: 3
+}
+
+ready -> verdict
+needs-info -> verdict
+not-fixable -> verdict
+
+verdict -> verdict-schema: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

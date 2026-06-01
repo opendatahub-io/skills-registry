@@ -1,0 +1,402 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/create-component-onboarding-jira**
+
+  - optional: jira-url
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Prerequisites ---
+
+prereqs: |md
+  **Check Prerequisites**
+
+  - parse optional Jira URL
+  - validate URL format
+  - check uv, jq installed
+  - check JIRA_USER_EMAIL
+  - check JIRA_API_TOKEN
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Init workdir ---
+
+init-workdir: |md
+  **Init Working Dir**
+
+  - scripts/init_workdir.sh
+  - set YAML_PATH
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch Jira ---
+
+fetch-jira: |md
+  **Fetch Jira Details**
+
+  - fetch_jira_details.py
+  - extract summary, description
+  - read ticket context
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira API (external) ---
+
+jira-api: |md
+  **Jira API**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Interactive Q&A (container) ---
+
+qa: Interactive Q&A {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  product: |md
+    **Product Context**
+
+    - ODH or RHOAI
+    - determines downstream
+      questions and behavior
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  odh-qs: |md
+    **ODH Questions**
+
+    - build type (CI / Release)
+    - release tag (if Release)
+    - branch (user-specified)
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  rhoai-qs: |md
+    **RHOAI Questions**
+
+    - target version (x.y[-eaN])
+    - CPU architectures
+    - release category (GA/TP/DP)
+    - descriptions (from README)
+    - branch (auto-derived)
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  common-qs: |md
+    **Common Questions**
+
+    - component name (odh-*)
+    - repo URL (github.com)
+    - build context path
+    - Dockerfile path
+    - is operator? (+ manifests)
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  product -> odh-qs: "ODH"
+  product -> rhoai-qs: "RHOAI"
+  odh-qs -> common-qs
+  rhoai-qs -> common-qs
+}
+
+# --- GitHub (external, for README fetch) ---
+
+github-api: |md
+  **GitHub**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Confirm ---
+
+confirm: |md
+  **Confirm Values**
+
+  - display summary table
+  - yes / no / edit
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Generate YAML ---
+
+gen-yaml: |md
+  **Generate YAML**
+
+  - generate_onboarding_yaml.py
+  - product-specific args
+  - operator fields if applicable
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate ---
+
+validate: |md
+  **Validate YAML**
+
+  - validate_yaml_schema.py
+  - component_onboarding_details
+    .schema.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Dockerfile digest check ---
+
+digest-check: |md
+  **Dockerfile Digest Check**
+
+  - check_dockerfile_digests.py
+  - verify FROM @sha256 pins
+  - RHOAI only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira Integration (container) ---
+
+jira-int: Jira Integration {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  parent-id: |md
+    **Parent Feature ID**
+
+    - ask for RHAISTRAT-* ID
+    - links "relates to"
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  attach-existing: |md
+    **Attach to Existing**
+    Path A
+
+    - update_jira_issue.py
+    - attach YAML file
+    - add label, comment
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  clone-template: |md
+    **Clone Template**
+    Path B
+
+    - ODH: RHOAIENG-35683
+    - RHOAI: RHOAIENG-17225
+    - create new Jira ticket
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  attach-new: |md
+    **Attach to New**
+    Path B (continued)
+
+    - attach YAML to new ticket
+    - add label, comment
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  update-meta: |md
+    **Update Metadata**
+
+    - update_onboarding_jira.py
+    - title, description table
+    - labels
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  parent-id -> attach-existing: "URL provided"
+  parent-id -> clone-template: "no URL"
+  clone-template -> attach-new
+  attach-existing -> update-meta
+  attach-new -> update-meta
+}
+
+# --- Report ---
+
+report: |md
+  **Report Completion**
+
+  - YAML path
+  - Jira ID + URL
+  - parent feature link
+  - attachment + comment status
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Downstream skill ---
+
+validate-skill: |md
+  **/validate-component-**
+  **onboarding-jira**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- YAML callout ---
+
+yaml-callout: ||md
+  component_onboarding_details.yaml
+
+  product_context: ODH|RHOAI
+  component_name: odh-*
+  repo_url: github.com/...
+  repo_branch: main|rhoai-x.y
+  context_path: ./
+  dockerfile_path: Dockerfile
+  is_operator: true|false
+  # RHOAI-only:
+  target_rhoai_version: x.y
+  architectures: [x86_64, arm64]
+  release_category: GA|TP|Beta
+  long_description: ...
+  short_description: ...
+|| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Edges ---
+
+entry -> prereqs
+prereqs -> init-workdir
+init-workdir -> fetch-jira: "URL provided"
+init-workdir -> qa.product: "no URL"
+fetch-jira -> qa.product
+fetch-jira -> jira-api
+
+qa.rhoai-qs -> github-api: "fetch README" {
+  style.stroke-dash: 3
+}
+
+qa.common-qs -> confirm
+confirm -> gen-yaml: "yes"
+
+# Edit loop
+confirm -> qa.product: "edit" {
+  style.stroke-dash: 3
+}
+
+gen-yaml -> validate: "component_onboarding\n_details.yaml"
+validate -> digest-check: "pass"
+
+# Validation retry loop
+validate -> qa.product: "errors" {
+  style.stroke-dash: 3
+}
+
+digest-check -> jira-int.parent-id: "pass / skip (ODH)"
+
+jira-int.clone-template -> jira-api
+jira-int.attach-existing -> jira-api
+jira-int.attach-new -> jira-api
+jira-int.update-meta -> jira-api
+
+jira-int.update-meta -> report
+report -> validate-skill: "next step" {
+  style.stroke-dash: 3
+}
+
+gen-yaml -> yaml-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

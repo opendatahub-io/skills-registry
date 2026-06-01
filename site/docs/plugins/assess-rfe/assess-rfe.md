@@ -82,18 +82,17 @@ Score an RFE against the published rubric and explain the result.
 
 ## Arguments
 
-```
+```bash
 /assess-rfe <input>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `input` | :material-check: | — | The RFE to assess. Accepts multiple formats: a Jira issue key (e.g., RHAIRFE-1234), a file path to a document, a URL, raw pasted text, or a wildcard pattern (e.g., RHAIRFE-*) for bulk assessment of an entire Jira project.
- |
+| `input` | :material-check: | - | The RFE to assess. Accepts multiple formats: a Jira issue key (e.g., RHAIRFE-1234), a file path to a document, a URL, raw pasted text, or a wildcard pattern (e.g., RHAIRFE-*) for bulk assessment of an entire Jira project. |
 
 ## Usage
 
-```
+```bash
 /assess-rfe RHAIRFE-1234
 /assess-rfe PROJ-99
 /assess-rfe /path/to/document.md

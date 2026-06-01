@@ -25,6 +25,7 @@ resolve: |md
 
   - Locate SKILL.md path
   - Navigate two levels up
+  - Determine absolute path
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -35,9 +36,11 @@ resolve: |md
 export: |md
   **Run export_rubric.py**
 
-  - Extract rubric from
-    agent_prompt.md
-  - Write artifacts/rfe-rubric.md
+  - Read agent_prompt.md
+  - Extract "Scoring Rubric"
+    section (between headings)
+  - Create artifacts/ directory
+  - Write rfe-rubric.md
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -51,7 +54,7 @@ confirm: |md
   **Confirm Output**
 
   - Verify file written
-  - Print file path
+  - Print absolute path
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -59,8 +62,35 @@ confirm: |md
   style.stroke-width: 2
 }
 
+# --- Callout: output artifact ---
+
+rubric-file: |md
+  artifacts/rfe-rubric.md
+
+  # RFE Assessment Rubric
+  > Exported from assess-rfe
+  > Source: agent_prompt.md
+  ## Scoring Rubric
+  ...criteria and weights...
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
 entry -> resolve
 resolve -> export: "plugin root path"
 export -> confirm: "artifacts/rfe-rubric.md"
+
+# --- Callout edge ---
+
+confirm -> rubric-file: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

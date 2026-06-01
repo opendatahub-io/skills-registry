@@ -1,0 +1,263 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/validate-component-onboarding-jira**
+
+  - Jira issue URL or key
+  - e.g. RHOAIENG-1234
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Prerequisites ---
+
+prereqs: |md
+  **Check Prerequisites**
+
+  - JIRA_USER_EMAIL set?
+  - JIRA_API_TOKEN set?
+  - JIRA_SERVER (default provided)
+  - uv installed?
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Working Directory ---
+
+workdir: |md
+  **Create Working Dir**
+
+  - extract issue ID from URL
+  - init_workdir.sh
+  - ./{issue_id}/ directory
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch Jira Details ---
+
+fetch: |md
+  **Fetch Jira Details**
+
+  - fetch_jira_details.py
+  - save issue JSON locally
+  - component_onboarding_details.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Download Attachment ---
+
+download: |md
+  **Download YAML**
+
+  - download_jira_attachment.py
+  - component_onboarding_details.yaml
+  - from issue attachments
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validation Container ---
+
+validate: Validate {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  schema: |md
+    **Schema Validation**
+
+    - validate_yaml_schema.py
+    - check against JSON Schema
+    - field-level error reporting
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  branch: |md
+    **Branch Cross-Validation**
+    (RHOAI only)
+
+    - repo_branch vs target_rhoai_version
+    - derive expected branch name
+    - handle EA suffix variants
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  digest: |md
+    **Dockerfile Digest Check**
+    (RHOAI only)
+
+    - check_dockerfile_digests.py
+    - all FROM must pin @sha256
+    - fetch Dockerfile from GitHub
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  schema -> branch
+  branch -> digest
+}
+
+# --- Update Jira ---
+
+update-jira: |md
+  **Update Jira**
+
+  - add label: validation-successful
+  - remove label: validation-failed
+  - set status: In Progress
+  - comment if first validation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Report**
+
+  - details.json saved
+  - details.yaml downloaded
+  - schema validation PASSED
+  - Jira updated
+  - ready for onboarding
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: Jira API ---
+
+jira-api: |md
+  **Jira API**
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Failure handler ---
+
+fail: |md
+  **Validation Failed**
+
+  - update_jira_issue.py
+  - add label: validation-failed
+  - remove label: validation-successful
+  - post error comment
+  - abort with error message
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#cc3333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> prereqs
+prereqs -> workdir: "env vars OK"
+
+prereqs -> stop: "missing credentials" {
+  style.stroke: "#cc3333"
+}
+
+stop: |md
+  **Stop**
+
+  - tell user to set env vars
+  - exit
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#cc3333"
+  style.stroke-width: 2
+}
+
+workdir -> fetch
+fetch -> download: "issue JSON"
+download -> validate.schema: "YAML file"
+
+validate.schema -> validate.branch: "pass"
+validate.branch -> validate.digest: "RHOAI"
+
+validate.digest -> update-jira: "pass"
+validate.branch -> update-jira: "ODH\n(skip digest)" {
+  style.stroke-dash: 3
+}
+
+update-jira -> report
+
+# --- Failure edges ---
+
+fetch -> fail: "error" {
+  style.stroke: "#cc3333"
+}
+download -> fail: "not found" {
+  style.stroke: "#cc3333"
+}
+validate.schema -> fail: "errors" {
+  style.stroke: "#cc3333"
+}
+validate.branch -> fail: "mismatch" {
+  style.stroke: "#cc3333"
+}
+validate.digest -> fail: "unpinned images" {
+  style.stroke: "#cc3333"
+}
+
+# --- External connections ---
+
+fetch -> jira-api {
+  style.stroke-dash: 3
+}
+download -> jira-api {
+  style.stroke-dash: 3
+}
+update-jira -> jira-api {
+  style.stroke-dash: 3
+}
+fail -> jira-api {
+  style.stroke-dash: 3
+}

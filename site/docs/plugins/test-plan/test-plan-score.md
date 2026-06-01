@@ -22,17 +22,17 @@ evaluating test plans created outside the automated pipeline.
 
 ## Arguments
 
-```
+```bash
 /test-plan-score <feature_dir>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `feature_dir` | :material-check: | — | Path to directory containing TestPlan.md |
+| `feature_dir` | :material-check: | - | Path to directory containing TestPlan.md |
 
 ## Usage
 
-```
+```bash
 /test-plan-score kagenti_agent_templates
 /test-plan-score mcp_catalog
 ```

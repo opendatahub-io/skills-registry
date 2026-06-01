@@ -22,19 +22,19 @@ directly. Can also accept a source URL to skip PyPI lookup entirely.
 
 ## Arguments
 
-```
+```bash
 /python-packaging-license-finder <PACKAGE_NAME> [VERSION] [--source-url]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PACKAGE_NAME` | :material-check: | — | Python package name |
+| `PACKAGE_NAME` | :material-check: | - | Python package name |
 | `VERSION` |  | `latest` | Specific package version |
-| `--source-url` |  | — | Source repository URL (skips PyPI lookup) |
+| `--source-url` |  | - | Source repository URL (skips PyPI lookup) |
 
 ## Usage
 
-```
+```bash
 /python-packaging-license-finder requests
 /python-packaging-license-finder django 4.2.0
 /python-packaging-license-finder some-pkg --source-url https://github.com/org/repo

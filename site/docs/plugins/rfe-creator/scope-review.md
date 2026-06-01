@@ -13,7 +13,7 @@ small (just a task), and scoped to match its effort estimate. Checks
 that scope is clearly bounded, deliverables are complete capabilities,
 and flags scope traps like "and related functionality" or "full support
 for". Verifies the strategy neither silently expands nor shrinks the
-original RFE scope.
+original RFE scope. Suggests concrete boundaries when recommending splits.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -25,6 +25,6 @@ original RFE scope.
 
 ## Usage
 
-```
+```bash
 /scope-review
 ```

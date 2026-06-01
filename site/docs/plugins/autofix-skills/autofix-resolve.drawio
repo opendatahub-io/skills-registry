@@ -1,0 +1,149 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/autofix-resolve&lt;/b&gt;&lt;br&gt;&lt;br&gt;resolve (fresh ticket)&lt;br&gt;iterate (MR feedback)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="140" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-ctx" value="&lt;b&gt;Read Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;ticket.json (ticket details)&lt;br&gt;CLAUDE.md / CONTRIBUTING.md&lt;br&gt;config.json (extensions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="110" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="iterate-ctx" value="&lt;b&gt;Read Feedback&lt;/b&gt;&lt;br&gt;&lt;br&gt;review-comments.json&lt;br&gt;ci-failures.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="235" y="270" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="implement" value="&lt;b&gt;Implement Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;prompts/implement-agent.md&lt;br&gt;condensed ticket summary&lt;br&gt;or MR feedback summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="445" y="120" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext-impl" value="&lt;b&gt;Post-Implement&lt;br&gt;Extensions&lt;/b&gt;&lt;br&gt;&lt;br&gt;extra_skills from config.json&lt;br&gt;write to extension-findings/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="460" y="300" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="review" value="&lt;b&gt;Review Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;prompts/review-agent.md&lt;br&gt;writes review-findings.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="670" y="130" width="165" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext-rev" value="&lt;b&gt;Post-Review&lt;br&gt;Extensions&lt;/b&gt;&lt;br&gt;&lt;br&gt;extra_skills from config.json&lt;br&gt;write to extension-findings/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="685" y="300" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="merge" value="&lt;b&gt;Merge Findings&lt;/b&gt;&lt;br&gt;&lt;br&gt;merge_findings.py&lt;br&gt;core + extension findings&lt;br&gt;writes all-findings.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="885" y="130" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="evaluate" value="&lt;b&gt;Evaluate Findings&lt;/b&gt;&lt;br&gt;&lt;br&gt;read all-findings.json&lt;br&gt;check highest severity&lt;br&gt;track iteration count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1105" y="130" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict" value="&lt;b&gt;Write Verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;.autofix-verdict.json&lt;br&gt;committed / blocked /&lt;br&gt;no_changes / insufficient_info" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1325" y="130" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict-schema" value=".autofix-verdict.json&lt;br&gt;verdict: committed|blocked&lt;br&gt;observations: [nitpicks]&lt;br&gt;iterations: N" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1330" y="290" width="165" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="state" value="&lt;b&gt;state.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;orchestrator-state.yaml&lt;br&gt;phase / iteration tracking&lt;br&gt;context-compression recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="300" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_readctx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-ctx" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="195" y="190"/>
+          <mxPoint x="195" y="170"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_readctx_iteratectx" value="iterate mode" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="read-ctx" target="iterate-ctx" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_readctx_implement" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.385;entryDx=0;entryDy=0;" edge="1" source="read-ctx" target="implement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="420" y="170"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_iteratectx_implement" value="feedback summary" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="iterate-ctx" target="implement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="420" y="315"/>
+          <mxPoint x="420" y="211"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_implement_extimpl" value="extra_skills" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="implement" target="ext-impl" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_implement_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.48;entryDx=0;entryDy=0;" edge="1" source="implement" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="645" y="185"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_extimpl_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.565;entryDx=0;entryDy=0;" edge="1" source="ext-impl" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="645" y="345"/>
+          <mxPoint x="645" y="195"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_extrev" value="extra_skills" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="review" target="ext-rev" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="752" y="245"/>
+          <mxPoint x="752" y="300"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_merge" value="review-findings.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.48;exitDx=0;exitDy=0;entryX=0;entryY=0.46;entryDx=0;entryDy=0;" edge="1" source="review" target="merge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="860" y="185"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_extrev_merge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.58;entryDx=0;entryDy=0;" edge="1" source="ext-rev" target="merge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="862" y="345"/>
+          <mxPoint x="862" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_merge_evaluate" value="all-findings.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="merge" target="evaluate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_evaluate_verdict_ok" value="no findings / nitpick" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.375;exitDx=0;exitDy=0;entryX=0;entryY=0.41;entryDx=0;entryDy=0;" edge="1" source="evaluate" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1300" y="175"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_evaluate_verdict_cap" value="cap reached (3)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.667;exitDx=0;exitDy=0;entryX=0;entryY=0.727;entryDx=0;entryDy=0;" edge="1" source="evaluate" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1300" y="210"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_evaluate_implement_back" value="critical / minor (max 3)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="evaluate" target="implement" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1190" y="85"/>
+          <mxPoint x="532" y="85"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_verdict_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="verdict" target="verdict-schema" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_entry_state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;" edge="1" source="entry" target="state" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="100" y="240"/>
+          <mxPoint x="100" y="300"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

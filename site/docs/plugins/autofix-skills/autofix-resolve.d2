@@ -1,0 +1,226 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/autofix-resolve**
+
+  - resolve (fresh ticket)
+  - iterate (MR feedback)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read Context ---
+
+read-ctx: |md
+  **Read Context**
+
+  - ticket.json (ticket details)
+  - CLAUDE.md / CONTRIBUTING.md
+  - config.json (extensions)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+iterate-ctx: |md
+  **Read Feedback**
+
+  - review-comments.json
+  - ci-failures.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Implement ---
+
+implement: |md
+  **Implement Agent**
+  LLM agent
+
+  - prompts/implement-agent.md
+  - condensed ticket summary
+  - or MR feedback summary
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Extensions (post-implement) ---
+
+ext-impl: |md
+  **Post-Implement Extensions**
+
+  - extra_skills from config.json
+  - write to extension-findings/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Review ---
+
+review: |md
+  **Review Agent**
+  LLM agent
+
+  - prompts/review-agent.md
+  - writes review-findings.json
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Extensions (post-review) ---
+
+ext-rev: |md
+  **Post-Review Extensions**
+
+  - extra_skills from config.json
+  - write to extension-findings/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Merge Findings ---
+
+merge: |md
+  **Merge Findings**
+
+  - merge_findings.py
+  - core + extension findings
+  - writes all-findings.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Evaluate ---
+
+evaluate: |md
+  **Evaluate Findings**
+
+  - read all-findings.json
+  - check highest severity
+  - track iteration count
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verdict ---
+
+verdict: |md
+  **Write Verdict**
+
+  - .autofix-verdict.json
+  - committed / blocked /
+    no_changes / insufficient_info
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verdict callout ---
+
+verdict-schema: |||md
+  .autofix-verdict.json
+  verdict: committed / blocked
+  observations: [nitpicks]
+  iterations: N
+||| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- State persistence ---
+
+state: |md
+  **state.py**
+
+  - orchestrator-state.yaml
+  - phase / iteration tracking
+  - context-compression recovery
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Forward flow ---
+
+entry -> read-ctx: "resolve"
+entry -> read-ctx
+read-ctx -> iterate-ctx: "iterate mode"
+read-ctx -> implement
+iterate-ctx -> implement: "feedback summary"
+implement -> ext-impl: "config.json\nextra_skills"
+implement -> review
+ext-impl -> review
+review -> ext-rev: "config.json\nextra_skills"
+review -> merge
+ext-rev -> merge
+merge -> evaluate: "all-findings.json"
+
+# --- Decision branches ---
+
+evaluate -> verdict: "no findings\nor nitpick only"
+evaluate -> implement: "critical / minor\n(max 3 iterations)" {
+  style.stroke-dash: 3
+}
+evaluate -> verdict: "cap reached\n(3 iterations)"
+
+# --- Callout connections ---
+
+verdict -> verdict-schema: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# --- State connections ---
+
+entry -> state: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

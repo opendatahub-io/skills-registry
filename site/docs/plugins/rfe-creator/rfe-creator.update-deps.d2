@@ -10,8 +10,9 @@ direction: right
 entry: |md
   **/rfe-creator.update-deps**
 
-  - Force update vendored
+  - Force update all vendored
     dependencies
+  - Purge caches, re-fetch
   - No LLM invocation
 | {
   shape: rectangle
@@ -22,57 +23,72 @@ entry: |md
 
 # --- Step 1: Update assess-rfe ---
 
-clean-assess: |md
-  **Clean assess-rfe**
-
-  - rm -rf .context/assess-rfe
-  - rm -rf .claude/skills/assess-rfe
-  - rm -rf .claude/skills/export-rubric
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
+update-assess: Update assess-rfe {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
-}
 
-bootstrap-assess: |md
-  **Bootstrap assess-rfe**
+  clean: |md
+    **Purge Cached**
 
-  - bootstrap-assess-rfe.sh
-  - Clone / pull repo
-  - Copy skills + agents
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+    - rm .context/assess-rfe
+    - rm .claude/skills/assess-rfe
+    - rm .claude/skills/export-rubric
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  bootstrap: |md
+    **Bootstrap**
+
+    - git clone / pull repo
+    - copy skills + agents
+    - patch PLUGIN_ROOT path
+    - export rubric
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  clean -> bootstrap
 }
 
 # --- Step 2: Update architecture context ---
 
-clean-arch: |md
-  **Clean arch context**
-
-  - rm -rf
-    .context/architecture-context
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
+update-arch: Update arch context {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
-}
 
-fetch-arch: |md
-  **Fetch arch context**
+  clean: |md
+    **Purge Cached**
 
-  - fetch-architecture-context.sh
-  - Detect latest RHOAI version
-  - Sparse checkout
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+    - rm .context/
+      architecture-context
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  fetch: |md
+    **Fetch Latest**
+
+    - detect latest RHOAI
+      version via GitHub API
+    - sparse checkout:
+      architecture/ + overlays/
+    - write LATEST_VERSION
+  | {
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  clean -> fetch
 }
 
 # --- Step 3: Report ---
@@ -80,8 +96,8 @@ fetch-arch: |md
 report: |md
   **Report**
 
-  - List updated deps
-  - Fetched versions
+  - list updated deps
+  - versions fetched
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -92,7 +108,7 @@ report: |md
 # --- External ---
 
 assess-rfe-repo: |md
-  **n1hility/assess-rfe**
+  **opendatahub-io/assess-rfe**
   GitHub
 | {
   shape: rectangle
@@ -114,18 +130,30 @@ arch-repo: |md
   style.stroke-dash: 3
 }
 
-# --- Edges ---
-
-entry -> clean-assess
-clean-assess -> bootstrap-assess
-bootstrap-assess -> clean-arch
-clean-arch -> fetch-arch
-fetch-arch -> report
-
-# External edges
-bootstrap-assess -> assess-rfe-repo: "git clone/pull" {
+github-api: |md
+  **GitHub API**
+  version detection
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
   style.stroke-dash: 3
 }
-fetch-arch -> arch-repo: "sparse checkout" {
+
+# --- Edges ---
+
+entry -> update-assess.clean
+update-assess.bootstrap -> update-arch.clean
+update-arch.fetch -> report
+
+# External edges
+update-assess.bootstrap -> assess-rfe-repo: "git clone/pull" {
+  style.stroke-dash: 3
+}
+update-arch.fetch -> github-api: "latest rhoai-*" {
+  style.stroke-dash: 3
+}
+update-arch.fetch -> arch-repo: "sparse checkout" {
   style.stroke-dash: 3
 }

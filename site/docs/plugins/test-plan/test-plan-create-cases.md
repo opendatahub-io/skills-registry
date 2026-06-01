@@ -22,18 +22,18 @@ Supports regeneration mode for updating existing test cases.
 
 ## Arguments
 
-```
+```bash
 /test-plan-create-cases [FEATURE_SOURCE] [--output-dir PATH]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `FEATURE_SOURCE` |  | `auto-detected from prior /test-plan-create run` | Feature directory path, GitHub branch URL, or GitHub PR URL |
-| `--output-dir` |  | — | Force creation in specified directory (contributor override) |
+| `--output-dir` |  | - | Force creation in specified directory (contributor override) |
 
 ## Usage
 
-```
+```bash
 /test-plan-create-cases
 /test-plan-create-cases mcp_catalog
 /test-plan-create-cases /path/to/feature_dir

@@ -26,17 +26,17 @@ Markdown files, .docx documents, and directories of multiple ADRs.
 
 ## Arguments
 
-```
+```bash
 /adr-review <ADR_PATH>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `ADR_PATH` | :material-check: | — | Path to an ADR file (.md or .docx) or a directory containing multiple ADRs |
+| `ADR_PATH` | :material-check: | - | Path to an ADR file (.md or .docx) or a directory containing multiple ADRs |
 
 ## Usage
 
-```
+```bash
 /adr-review /path/to/adr.md
 /adr-review /path/to/adr-directory/
 ```

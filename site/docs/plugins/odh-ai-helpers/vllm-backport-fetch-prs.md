@@ -22,7 +22,7 @@ Also detects reverted PRs. Outputs a JSON array of PR objects to stdout.
 
 ## Arguments
 
-```
+```bash
 /vllm-backport-fetch-prs [DAYS_BACK]
 ```
 
@@ -32,7 +32,7 @@ Also detects reverted PRs. Outputs a JSON array of PR objects to stdout.
 
 ## Usage
 
-```
+```bash
 /vllm-backport-fetch-prs
 /vllm-backport-fetch-prs 14
 ```

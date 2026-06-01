@@ -70,6 +70,6 @@ Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md in the current w
 
 ## Usage
 
-```
+```bash
 /export-rubric
 ```

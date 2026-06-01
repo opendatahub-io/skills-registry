@@ -1,7 +1,26 @@
 /* ===== Skills Registry Theme ===== */
 /* Developer-focused, terminal-inspired, polished light + dark */
 
+/* ── Self-hosted variable fonts ── */
+@font-face {
+  font-family: 'Google Sans Flex';
+  font-style: normal;
+  font-display: fallback;
+  font-weight: 1 1000;
+  src: url('../fonts/google-sans-flex-variable.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: fallback;
+  font-weight: 100 800;
+  src: url('../fonts/jetbrains-mono-variable.woff2') format('woff2-variations');
+}
+
 :root {
+  --md-text-font: 'Google Sans Flex', -apple-system, blinkmacsystemfont, helvetica, arial, sans-serif;
+  --md-code-font: 'JetBrains Mono', 'SFMono-Regular', consolas, monospace;
   --sr-blue: #2563EB;
   --sr-blue-light: #3B82F6;
   --sr-blue-bright: #60A5FA;
@@ -73,8 +92,12 @@
   max-width: 75rem;
 }
 
+.md-main__inner {
+  margin-top: 0;
+}
+
 .md-content {
-  padding-top: 1.5rem;
+  padding-top: 0.5rem;
 }
 
 /* ── Header ── */
@@ -124,7 +147,7 @@
 .md-tabs__link {
   color: var(--sr-text-dim);
   opacity: 1 !important;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 500;
 }
 
@@ -165,8 +188,8 @@
 
 /* ── Typography ── */
 .md-typeset {
-  font-size: 0.72rem;
-  line-height: 1.8;
+  font-size: 0.8rem;
+  line-height: 1.75;
   color: var(--sr-text);
   font-weight: 400;
 }
@@ -174,9 +197,9 @@
 .md-typeset h1 {
   font-weight: 700;
   letter-spacing: -0.03em;
-  margin-bottom: 1em;
+  margin-bottom: 0.9em;
   color: var(--sr-heading);
-  font-size: 1.6em;
+  font-size: 1.7em;
 }
 
 .md-typeset h1::before {
@@ -186,13 +209,14 @@
 }
 
 .md-typeset h2 {
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
   margin-top: 2.5em;
+  margin-bottom: 0.8em;
   padding-bottom: 0.4em;
   border-bottom: 1px solid var(--sr-border);
   color: var(--sr-heading-h2);
-  font-size: 1.25em;
+  font-size: 1.2em;
 }
 
 .md-typeset h2::before {
@@ -205,13 +229,14 @@
   font-weight: 600;
   letter-spacing: -0.01em;
   margin-top: 2em;
+  margin-bottom: 0.5em;
   color: var(--sr-heading-h3);
   font-size: 1.05em;
 }
 
 .md-typeset h4 {
   font-weight: 600;
-  font-size: 0.95em;
+  font-size: 0.9em;
 }
 
 .md-typeset p {
@@ -229,7 +254,7 @@
 
 .md-typeset strong {
   color: var(--sr-heading);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* ── Horizontal rules ── */
@@ -279,7 +304,7 @@
   overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   width: 100%;
 }
 
@@ -290,7 +315,7 @@
   background: var(--sr-surface);
   color: var(--sr-heading-h2);
   text-align: left;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -298,6 +323,23 @@
 .md-typeset table:not([class]) td {
   padding: 0.7em 1em;
   border-bottom: 1px solid var(--sr-border);
+  font-size: 0.7rem;
+}
+
+.md-typeset table:not([class]) code {
+  font-size: 0.85em;
+  display: inline-block;
+  padding: 0.1em 0.35em;
+  line-height: 1.4;
+}
+
+.md-typeset table:not([class]) td:first-child code {
+  white-space: nowrap;
+}
+
+.md-typeset table:not([class]) td:nth-child(3) code {
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .md-typeset table:not([class]) tr:last-child td {
@@ -321,7 +363,7 @@
   border-left-width: 1px;
   background-color: var(--sr-surface-raised);
   padding: 0.6rem 1rem;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
 
 .md-typeset .admonition .admonition-title,
@@ -331,7 +373,7 @@
   margin: 0 -1rem 0.6rem;
   padding: 0.5rem 1rem 0.5rem 2.5rem;
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
 
 .md-typeset .admonition .admonition-title::before,
@@ -361,7 +403,7 @@
 .md-typeset .admonition.info li {
   padding: 0.3em 0;
   border-bottom: 1px solid var(--sr-border);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
 
 .md-typeset .admonition.info li:last-child {
@@ -370,18 +412,25 @@
 
 /* ── Sidebar ── */
 .md-nav__link {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 400;
 }
 
-.md-nav__item--active > .md-nav__link {
+/* Active page — bold + blue */
+a.md-nav__link--active {
   font-weight: 600;
   color: var(--md-primary-fg-color);
 }
 
+/* Active parent sections — accent blue, not bold */
+.md-nav__item--active > .md-nav__container > .md-nav__link,
+label.md-nav__link--active {
+  color: var(--md-accent-fg-color);
+}
+
 /* Nested nav items (skills under plugins) — smaller only */
 .md-nav__item .md-nav .md-nav__item .md-nav .md-nav__link {
-  font-size: 0.62rem;
+  font-size: 0.7rem;
 }
 
 .md-sidebar {
@@ -411,7 +460,7 @@
 .md-typeset .md-button--primary {
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   letter-spacing: 0;
   padding: 0.7em 1.8em;
   transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
@@ -562,7 +611,7 @@
 
 /* ── TOC (right sidebar) ── */
 .md-nav--secondary .md-nav__link {
-  font-size: 0.68rem;
+  font-size: 0.8rem;
 }
 
 .md-nav--secondary .md-nav__item--active > .md-nav__link {

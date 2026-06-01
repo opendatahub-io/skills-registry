@@ -42,20 +42,20 @@ patterns, secret management, namespace-scoped RBAC).
 
 ## Arguments
 
-```
+```bash
 /security-reviewer <STRAT_KEY> --reviewer <N> --threat-surface <path> --tier <tier>
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `STRAT_KEY` | :material-check: | — | RHAISTRAT Jira key (e.g., RHAISTRAT-400) |
-| `--reviewer` | :material-check: | — | Reviewer number (1, 2, or 3) identifying this instance in the consensus set |
-| `--threat-surface` | :material-check: | — | Path to the threat surface inventory file extracted by the orchestrator |
-| `--tier` | :material-check: | — | Review depth tier: light (minimal surface), standard (1-2 hints), or deep (3+ hints, auth+crypto, agentic/MCP) |
+| `STRAT_KEY` | :material-check: | - | RHAISTRAT Jira key (e.g., RHAISTRAT-400) |
+| `--reviewer` | :material-check: | - | Reviewer number (1, 2, or 3) identifying this instance in the consensus set |
+| `--threat-surface` | :material-check: | - | Path to the threat surface inventory file extracted by the orchestrator |
+| `--tier` | :material-check: | - | Review depth tier: light (minimal surface), standard (1-2 hints), or deep (3+ hints, auth+crypto, agentic/MCP) |
 
 ## Usage
 
-```
+```bash
 /security-reviewer RHAISTRAT-400 --reviewer 1 --threat-surface artifacts/security-reviews/RHAISTRAT-400-threat-surface.md --tier standard
 /security-reviewer RHAISTRAT-400 --reviewer 2 --threat-surface artifacts/security-reviews/RHAISTRAT-400-threat-surface.md --tier deep
 ```

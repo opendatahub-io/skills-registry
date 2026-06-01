@@ -23,6 +23,6 @@ values from TC), Code Quality (clean, no excessive TODOs). Returns verdict
 
 ## Usage
 
-```
+```bash
 /test-plan-score-test-function
 ```

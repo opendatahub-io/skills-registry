@@ -10,8 +10,9 @@ direction: right
 entry: |md
   **/rfe.submit**
 
-  - --dry-run
-  - --artifacts-dir
+  - submit reviewed RFEs
+  - create or update Jira
+  - non-interactive
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -19,14 +20,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Check Credentials ---
+# --- Credential Check ---
 
-creds: |md
+check-creds: |md
   **Check Credentials**
 
   - JIRA_SERVER
   - JIRA_USER
   - JIRA_TOKEN
+  - abort if missing
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -34,20 +36,71 @@ creds: |md
   style.stroke-width: 2
 }
 
-# --- Submit ---
+# --- Submission Container ---
 
-submit: |md
-  **Run Submission**
+submit: Submit {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
-  - submit.py script
-  - create or update tickets
-  - apply labels automatically
-  - conflict detection
+  split: |md
+    **Split Submissions**
+
+    - archived parents first
+    - split_submit.py
+    - archive, create, link
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  create-update: |md
+    **Create / Update**
+
+    - new RFEs: create ticket
+    - existing: update fields
+    - rename RFE-NNN to RHAIRFE
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  labels: |md
+    **Apply Labels**
+
+    - auto-created / auto-revised
+    - split-original / split-result
+    - needs-attention
+    - rubric-pass
+    - feasibility-pass/fail/unknown
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  split -> create-update
+  create-update -> labels
+}
+
+# --- Jira API (external) ---
+
+jira: |md
+  **Jira REST API**
+
+  - RHAIRFE project
+  - Basic Auth
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
 # --- Report ---
@@ -55,9 +108,9 @@ submit: |md
 report: |md
   **Report Results**
 
-  - read artifacts/rfes.md
-  - report created/updated
-  - report errors
+  - rebuild rfes.md index
+  - show created/updated keys
+  - suggest --dry-run on error
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -65,11 +118,10 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- External ---
+# --- Upstream (external) ---
 
-jira: |md
-  **Jira REST API**
-  RHAIRFE project
+rfe-review: |md
+  **/rfe.review**
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -80,12 +132,15 @@ jira: |md
 
 # --- Flow ---
 
-entry -> creds
-
-creds -> submit: "credentials present"
-
-submit -> report
-
-submit -> jira: {
+rfe-review -> entry: "reviewed artifacts" {
   style.stroke-dash: 3
 }
+
+entry -> check-creds
+check-creds -> submit: "credentials set"
+submit -> report: "artifacts/rfes.md"
+
+# Jira connection from submission container
+submit.create-update -> jira: "create / update\ntickets"
+submit.labels -> jira: "add / swap\nlabels"
+submit.split -> jira: "archive, create,\nlink, close"

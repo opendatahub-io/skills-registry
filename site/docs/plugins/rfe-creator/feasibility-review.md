@@ -11,8 +11,10 @@ Internal forked reviewer sub-agent for strat.review. Assesses technical
 feasibility of refined strategies -- whether the proposed approach works,
 whether it delivers what the RFE asks for, whether effort estimates are
 credible, and identifies hidden dependencies or integration challenges.
-Adversarial stance: flags things that are harder than they look and
-optimistic estimates. Runs with model: opus.
+Supports architecture context overlays with filtering by status, release,
+and affected components. Adversarial stance: flags things that are harder
+than they look and optimistic estimates. Runs with model: opus in a fork
+context.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -24,6 +26,6 @@ optimistic estimates. Runs with model: opus.
 
 ## Usage
 
-```
+```bash
 /feasibility-review
 ```

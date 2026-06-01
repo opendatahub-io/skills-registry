@@ -9,42 +9,32 @@ direction: right
 
 entry: |md
   **architecture-review**
-  _(fork sub-agent)_
+  _(fork sub-agent, opus)_
 
-  - Strategy artifacts input
-  - Cross-ref source RFEs
-  - Model: opus
+  - reads strategy artifacts
+  - cross-refs source RFEs
+  - not user-invocable
 | {
-  style.fill: "#dbeafe"
-  style.stroke: "#2563eb"
-  style.stroke-width: 2
-}
-
-# --- Read Strategies ---
-
-read-strats: |md
-  **Read Strategies**
-
-  - `artifacts/strat-tasks/`
-  - Cross-ref `artifacts/rfe-tasks/`
-  - Check `artifacts/strat-reviews/`
-    for prior reviews
-| {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Detect Re-review ---
+# --- Read Inputs ---
 
-re-review-check: |md
-  **Re-review?**
-  strat-reviews/ exists
+read-inputs: |md
+  **Read Inputs**
+
+  - `artifacts/strat-tasks/`
+  - cross-ref `artifacts/rfe-tasks/`
+  - check `artifacts/strat-reviews/`
+    for prior reviews (re-review)
 | {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
 # --- Check Architecture Context ---
@@ -52,11 +42,12 @@ re-review-check: |md
 check-context: |md
   **Check Arch Context**
 
-  `.context/architecture-context/`
-  `architecture/rhoai-*/`
-  Read PLATFORM.md +
-  component docs
+  - `.context/architecture-context/`
+  - `architecture/rhoai-*/`
+  - read PLATFORM.md
+  - read component docs
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
@@ -64,35 +55,55 @@ check-context: |md
 
 # --- Skip (no context) ---
 
-skip: |md
+skip-review: |md
   **Skip Review**
 
-  "Architecture review
-  skipped -- no architecture
-  context available."
+  - "Architecture review
+    skipped -- no architecture
+    context available."
 | {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
   style.stroke-width: 1
   style.stroke-dash: 3
 }
 
-# --- Assess Each Strategy ---
+# --- Check Overlays ---
+
+check-overlays: |md
+  **Check Overlays**
+
+  - `.context/.../overlays/*.md`
+  - filter `status: active`
+  - version bumps, maturity
+    changes, dependency shifts
+  - overlays override arch docs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess Strategies ---
 
 assess: |md
   **Assess Strategies**
+  LLM (per strategy)
 
-  Per strategy, check:
-  1. Dependencies correct?
-  2. Integration patterns valid?
-  3. Component boundaries?
-  4. Deployment model?
-  5. Architectural conflicts?
-  6. Cross-component coord?
+  1. dependencies correct?
+  2. integration patterns valid?
+  3. component boundaries?
+  4. deployment model?
+  5. architectural conflicts?
+  6. cross-component coord?
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.double-border: true
 }
 
 # --- Re-review Delta ---
@@ -100,13 +111,15 @@ assess: |md
 re-review-delta: |md
   **Re-review Delta**
 
-  - Prior concerns addressed?
-  - Concerns remaining?
-  - New issues introduced?
+  - prior concerns addressed?
+  - concerns remaining?
+  - new issues introduced?
 | {
+  shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.double-border: true
   style.stroke-dash: 3
 }
 
@@ -116,44 +129,93 @@ output: |md
   **Output**
 
   Per STRAT-NNN:
-  - Architecture assessment
-  - Missing dependencies
-  - Incorrect assumptions
-  - Cross-component risks
-  - Recommendation
+  - architecture assessment
+  - missing dependencies
+  - incorrect assumptions
+  - cross-component risks
+  - recommendation
 | {
-  style.fill: "#dcfce7"
-  style.stroke: "#16a34a"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
 # --- External: Architecture Docs ---
 
-arch-docs: |md
-  **Architecture Docs**
-  PLATFORM.md
-  Component docs
+arch-context: |md
+  **Architecture Context**
+  _(external repo)_
+
+  - PLATFORM.md
+  - component docs
+  - overlays
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
+# --- Output callout ---
+
+output-callout: |md
+  ### STRAT-NNN: title
+  **Assessment**: sound / concerns / conflicts
+  **Missing deps**: list or "none"
+  **Incorrect assumptions**: list or "none"
+  **Cross-component risks**: list or "none"
+  **Recommendation**: approve / revise / escalate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Overlays applied callout ---
+
+overlays-callout: |md
+  Overlays applied:
+  - 0001: KFP SDK 2.16 in RHOAI 3.4
+  - 0002: dependency shift ...
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
-entry -> read-strats
-read-strats -> re-review-check
-re-review-check -> check-context: "first review"
-re-review-check -> check-context: "re-review (load prior)" {style.stroke-dash: 3}
+entry -> read-inputs
+read-inputs -> check-context
 
-check-context -> skip: "no context" {style.stroke-dash: 3}
-check-context -> assess: "context found"
+check-context -> skip-review: "no context"
+check-context -> check-overlays: "context found"
 
-check-context -> arch-docs: "read" {
+check-context -> arch-context: "read" {
   style.stroke-dash: 3
 }
 
-assess -> re-review-delta: "re-review" {style.stroke-dash: 3}
+check-overlays -> assess
+check-overlays -> overlays-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
 assess -> output: "first review"
+assess -> re-review-delta: "re-review"
 re-review-delta -> output
+
+output -> output-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

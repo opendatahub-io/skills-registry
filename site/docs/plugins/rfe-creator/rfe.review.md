@@ -14,7 +14,8 @@ parallel feasibility checks, synthesizes review files with scored
 criteria, auto-revises failing RFEs, and re-assesses (up to 2 cycles).
 The orchestrator never reads RFE content directly -- all content-heavy
 work is delegated to sub-agents (fetch, assess, feasibility, review,
-revise).
+revise). Uses scripts/check_review_progress.py for polling agent completion
+and scripts/filter_for_revision.py to determine which RFEs need revision.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -26,19 +27,19 @@ revise).
 
 ## Arguments
 
-```
+```bash
 /rfe.review <ID> [ID2 ...] [--headless] [--caller <name>]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `ID` | :material-check: | — | One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) |
-| `--headless` |  | — | Suppress end-of-run summary; used when called from rfe.auto-fix or rfe.split |
+| `ID` | :material-check: | - | One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) |
+| `--headless` |  | - | Suppress end-of-run summary; used when called from rfe.auto-fix or rfe.split |
 | `--caller` |  | `none` | Identifies calling skill for headless return routing |
 
 ## Usage
 
-```
+```bash
 /rfe.review RHAIRFE-1234
 /rfe.review RFE-001 RFE-002 RFE-003
 /rfe.review --headless --caller autofix RHAIRFE-1234 RHAIRFE-5678

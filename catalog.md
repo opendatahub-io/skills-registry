@@ -63,7 +63,7 @@ Skills for evaluating and testing AI agent skills
 
 Assess RFEs against quality criteria using a structured rubric.
 
-v1.0.0 | [n1hility/assess-rfe](https://github.com/n1hility/assess-rfe)
+v1.0.0 | [opendatahub-io/assess-rfe](https://github.com/opendatahub-io/assess-rfe)
 
 Tags: rfe, rubric, quality, assessment
 
@@ -123,7 +123,7 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 
 Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
 
-v0.1.0 | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
+v1.0.0 | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
 
 Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 
@@ -139,6 +139,63 @@ Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 
 ```bash
 /plugin install agent-eval-harness@opendatahub-skills
+```
+
+## Documentation
+
+Skills for generating and maintaining documentation
+
+### knowledge-skills
+
+Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant knowledge using parallel agents, and proposes updates as a git-apply-able patch for human review. Supports GitHub and GitLab.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/knowledge-skills](https://github.com/opendatahub-io/knowledge-skills)
+
+Tags: knowledge, context, claude-md, agents-md, pr-analysis, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/knowledge.repo` | Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch |
+
+```bash
+/plugin install knowledge-skills@opendatahub-skills
+```
+
+## DevOps & CI/CD
+
+Skills for deployment, CI/CD, and infrastructure
+
+### disconnected-readiness-scorer
+
+Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation. Supports automatic detection of image management patterns (env var vs static CSV) and cross-references against the opendatahub-operator manifest.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/disconnected-readiness-scorer](https://github.com/opendatahub-io/disconnected-readiness-scorer)
+
+Tags: disconnected, air-gap, openshift, image-mirroring, readiness, scoring
+
+| Skill | Description |
+|-------|-------------|
+| `/disconnected-score` | Score a repository's readiness for disconnected / air-gapped OpenShift deployments |
+
+```bash
+/plugin install disconnected-readiness-scorer@opendatahub-skills
+```
+
+### aiops-skills
+
+DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/aiops-infra](https://github.com/opendatahub-io/aiops-infra)
+
+Tags: devops, testops, odh, rhoai, konflux, onboarding, ci-cd, release, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/create-component-onboarding-jira` | Interactively collect component onboarding parameters and create/update a Jira ticket |
+| `/validate-component-onboarding-jira` | Pre-flight validation for ODH component onboarding — fetches Jira, downloads YAML, validates against schema |
+
+```bash
+/plugin install aiops-skills@opendatahub-skills
 ```
 
 ## Security Review
@@ -206,6 +263,25 @@ Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automat
 /plugin install odh-ai-helpers@opendatahub-skills
 ```
 
+### autofix-skills
+
+Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic Python scripts for automated bug fixing, CVE remediation, and ticket triage. Designed to run inside a Claude Code container as part of a CI pipeline.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/autofix-skills](https://github.com/opendatahub-io/autofix-skills)
+
+Tags: autofix, jira, cve, bug-fixing, triage, pipeline, ci-cd
+
+| Skill | Description |
+|-------|-------------|
+| `/autofix-resolve` | Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations) |
+| `/autofix-cve-resolve` | CVE remediation across multiple repos with state-machine dispatch |
+| `/autofix-triage` | Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable) |
+| `/autofix-research` | Investigate spike tickets with no associated repository |
+
+```bash
+/plugin install autofix-skills@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy
@@ -216,7 +292,7 @@ Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE J
 
 **Requires:** `assess-rfe`
 
-v0.1.0 | [jwforres/rfe-creator](https://github.com/jwforres/rfe-creator)
+v0.1.0 | [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-creator)
 
 Tags: rfe, jira, review, strategy, pipeline
 
@@ -228,10 +304,6 @@ Tags: rfe, jira, review, strategy, pipeline
 | `/rfe.submit` | Push RFEs to Jira |
 | `/rfe.speedrun` | Execute the full RFE pipeline end-to-end |
 | `/rfe.auto-fix` | Batch review, revise, and split operations |
-| `/strat.create` | Create strategy documents |
-| `/strat.refine` | Refine strategy documents |
-| `/strat.review` | Review strategy documents |
-| `/strat.prioritize` | Prioritize strategy items |
 | `/rfe-creator.update-deps` | Update vendored dependencies |
 | `/architecture-review` | Architecture review skill |
 | `/feasibility-review` | Feasibility review skill |
@@ -243,19 +315,18 @@ Tags: rfe, jira, review, strategy, pipeline
 /plugin install rfe-creator@opendatahub-skills
 ```
 
-### meeting-quality-skills
+### spike-executor
 
-Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, and helping organizers focus meetings on items that actually need discussion.
+Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
 
-v0.1.0 | Apache-2.0 | [ahinek/meeting-quality-skills](https://github.com/ahinek/meeting-quality-skills)
+v0.2.0 | Apache-2.0 | [IKRedHat/SPIKE-executor](https://github.com/IKRedHat/SPIKE-executor)
 
-Tags: meeting, google-workspace, agenda, async-updates, productivity
+Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibility
 
 | Skill | Description |
 |-------|-------------|
-| `/meeting-async-update-check` | Check a shared update doc and identify attendees missing async updates before a status meeting |
-| `/meeting-risk-agenda` | Analyze pre-meeting updates and generate a risk-focused agenda by identifying blocked and at-risk items |
+| `/SPIKE-executor` | Execute RHOAI SPIKE investigations with human-in-the-loop approval gates |
 
 ```bash
-/plugin install meeting-quality-skills@opendatahub-skills
+/plugin install spike-executor@opendatahub-skills
 ```

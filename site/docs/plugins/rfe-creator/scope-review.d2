@@ -1,6 +1,6 @@
-direction: down
+direction: right
 
-# ── Global styles ──
+# -- Global styles --
 *.style.border-radius: 8
 *.style.font-size: 13
 *.style.fill: "#f5f5f5"
@@ -12,12 +12,14 @@ direction: down
 
 entry: |md
   **scope-review**
-  Internal skill (fork)
-  Model: opus
-  Tools: Read, Grep, Glob
+  internal skill (fork)
+
+  - model: opus
+  - tools: Read, Grep, Glob
 | {
-  style.fill: "#dbeafe"
-  style.stroke: "#2563eb"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
@@ -25,173 +27,203 @@ entry: |md
 #  Read Inputs
 # ================================================================
 
-read-strats: |md
-  **Read Strategy Artifacts**
-  `artifacts/strat-tasks/`
-  All strategy files
+read-inputs: |md
+  **Read Inputs**
+
+  - strategy artifacts
+    from strat-tasks/
+  - source RFEs
+    from rfe-tasks/
+  - cross-reference
+    strategies against RFEs
 | {
+  shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
-
-read-rfes: |md
-  **Cross-Reference RFEs**
-  `artifacts/rfe-tasks/`
-  Source RFEs for context
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-check-rereviews: |md
-  **Prior Reviews?**
-  `artifacts/strat-reviews/`
-  exists?
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  shape: diamond
-}
-
-read-prior: |md
-  **Read Prior Reviews**
-  `artifacts/strat-reviews/`
-  Prior review files for
-  strategies being reviewed
-| {
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-}
-
-entry -> read-strats
-entry -> read-rfes
-read-strats -> check-rereviews
-read-rfes -> check-rereviews
-check-rereviews -> read-prior: "exists (re-review)"
-check-rereviews -> assess: "first review" {style.stroke-dash: 3}
-read-prior -> assess
 
 # ================================================================
-#  Assessment (per strategy)
+#  Check for Prior Reviews
+# ================================================================
+
+check-prior: |md
+  **Prior Reviews?**
+
+  - check strat-reviews/
+  - read existing reviews
+    for strategies under
+    review (if re-review)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ================================================================
+#  Assess Each Strategy (LLM)
 # ================================================================
 
 assess: |md
   **Assess Each Strategy**
-  For each STRAT-NNN:
-| {
-  style.fill: "#e0e7ff"
-  style.stroke: "#4338ca"
-  style.stroke-width: 2
-}
+  LLM analysis (opus)
 
-criteria: |md
-  **Scope Criteria**
-
-  1. Right-sized? (feature, not task/bundle)
-  2. Effort matches scope?
-  3. Scope clearly bounded?
-  4. Delivers complete capability?
-  5. Scope risks? (flag traps)
-  6. Strategy vs RFE alignment?
+  - right-sized? (feature
+    scope, not task/bundle)
+  - effort matches scope?
+  - scope clearly bounded?
+  - delivers complete
+    capability?
+  - scope risks? (flag traps
+    like "all necessary")
+  - strategy vs RFE alignment
 | {
-  style.fill: "#f5f5f5"
+  shape: rectangle
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 1
+  style.stroke-width: 2
+  style.double-border: true
 }
+
+# ================================================================
+#  Re-Review Delta (conditional)
+# ================================================================
 
 re-review-delta: |md
   **Re-Review Delta**
-  (if re-review)
+  LLM analysis (opus)
 
-  - Concerns addressed?
-  - Concerns remaining?
-  - New issues introduced?
+  - concerns addressed
+    from prior review?
+  - concerns still
+    remaining?
+  - new issues introduced
+    by revisions?
 | {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-  style.stroke-dash: 3
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
 }
 
-assess -> criteria
-assess -> re-review-delta: "re-review path" {style.stroke-dash: 3}
-
 # ================================================================
-#  Output
+#  Output Report
 # ================================================================
 
 output: |md
-  **Output per Strategy**
+  **Scope Report**
 
-  - Scope assessment
-  - Effort vs scope
+  - scope assessment
+  - effort vs scope
   - RFE coverage
-  - Scope risks
-  - Recommendation
+  - scope risks
+  - recommendation
 | {
-  style.fill: "#dcfce7"
-  style.stroke: "#16a34a"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-split-suggest: |md
-  **Split Suggestion**
-  Concrete boundaries
-  for each resulting
-  strategy (if split)
+# ================================================================
+#  Output Format Callout
+# ================================================================
+
+output-format: |md
+  ### STRAT-NNN: title
+  **Scope**: right-sized / too large / ...
+  **Effort**: matched / under / over
+  **RFE coverage**: full / partial / exceeds
+  **Scope risks**: list or none
+  **Recommendation**: approve / split /
+    tighten scope / expand
 | {
-  style.fill: "#dcfce7"
-  style.stroke: "#16a34a"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
   style.stroke-width: 1
-  style.stroke-dash: 3
+  style.font: mono
+  style.font-size: 10
 }
 
-criteria -> output
-re-review-delta -> output
-output -> split-suggest: "split recommended" {style.stroke-dash: 3}
-
 # ================================================================
-#  Recommendation outcomes
+#  Recommendation Outcomes
 # ================================================================
 
 approve: |md
   **Approve**
+
+  - right-sized
+  - scope bounded
 | {
-  style.fill: "#dcfce7"
-  style.stroke: "#16a34a"
-  style.stroke-width: 1
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
 split: |md
   **Split into N**
+
+  - too large
+  - concrete boundaries
+    for each sub-strategy
 | {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
 tighten: |md
   **Tighten Scope**
+
+  - unbounded scope
+  - flag scope traps
 | {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+expand-rfe: |md
+  **Expand to RFE**
+
+  - partial coverage
+  - gaps vs acceptance
+    criteria listed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# ================================================================
+#  Edges
+# ================================================================
+
+entry -> read-inputs
+read-inputs -> check-prior: "strat-tasks/ + rfe-tasks/"
+check-prior -> assess: "first review"
+check-prior -> re-review-delta: "re-review" {
+  style.stroke-dash: 3
+}
+re-review-delta -> assess
+
+assess -> output
+
+output -> output-format: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
   style.stroke-width: 1
 }
 
-expand: |md
-  **Expand to
-  Deliver RFE**
-| {
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
-}
-
+# Recommendation fan-out
 output -> approve: "right-sized"
 output -> split: "too large"
 output -> tighten: "unbounded"
-output -> expand: "partial RFE"
+output -> expand-rfe: "partial RFE"

@@ -12,8 +12,9 @@ features for architectural correctness -- verifies dependencies against
 architecture docs, validates integration patterns match actual component
 communication, checks component boundaries are respected, verifies
 deployment model correctness, identifies architectural conflicts, and
-flags cross-component coordination needs. Requires architecture context;
-skips if unavailable. Runs with model: opus.
+flags cross-component coordination needs. Supports architecture context
+overlays for human-authored corrections. Requires architecture context;
+skips if unavailable. Runs with model: opus in a fork context.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -25,6 +26,6 @@ skips if unavailable. Runs with model: opus.
 
 ## Usage
 
-```
+```bash
 /architecture-review
 ```

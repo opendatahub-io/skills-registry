@@ -10,10 +10,10 @@ direction: right
 entry: |md
   **testability-review**
 
-  - Fork context (read-only)
-  - Model: opus
-  - Tools: Read, Grep, Glob
-  - Internal (not user-invocable)
+  - fork context (read-only)
+  - model: opus
+  - tools: Read, Grep, Glob
+  - internal (not user-invocable)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,33 +21,19 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read Strategy Artifacts ---
+# --- Read Inputs ---
 
-read-strats: |md
-  **Read Strategy Artifacts**
+read-inputs: |md
+  **Read Inputs**
 
-  - Read artifacts/strat-tasks/
-  - Each RHAISTRAT-NNN.md
-  - Strategy section + criteria
-  - frontmatter metadata
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Read Source RFEs ---
-
-read-rfes: |md
-  **Read Source RFEs**
-
+  - artifacts/strat-tasks/
+  - strategy sections + criteria
   - artifacts/rfe-tasks/
-  - Original acceptance criteria
-  - Cross-reference basis
+  - original acceptance criteria
+  - cross-reference basis
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
@@ -58,133 +44,159 @@ check-prior: |md
   **Check Prior Reviews**
 
   - artifacts/strat-reviews/
-  - Existing review files?
-  - Detect re-review scenario
+  - detect re-review scenario
+  - read prior concerns
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess Testability (container) ---
+
+assess: Assess Testability {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  criteria: |md
+    **Criteria Testability**
+
+    - concrete vs vague tests
+    - "users can do X" = testable
+    - "system is reliable" = not
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  measurable: |md
+    **Success Measurability**
+
+    - baselines defined?
+    - ">80% reduction" — from what?
+    - quantifiable targets
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  edge-cases: |md
+    **Edge Case Analysis**
+
+    - failure modes
+    - boundary conditions
+    - concurrent access
+    - large-scale scenarios
+    - backwards compatibility
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  test-strategy: |md
+    **Test Strategy**
+
+    - unit / integration / e2e
+    - external dependencies
+    - multi-cluster scenarios
+    - non-functional requirements
+    - performance, security
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  criteria -> measurable
+  measurable -> edge-cases
+  edge-cases -> test-strategy
+}
+
+# --- Re-review Delta ---
+
+re-review: |md
+  **Re-review Delta**
+
+  - concerns addressed?
+  - concerns remaining?
+  - new issues introduced?
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.double-border: true
 }
 
-# --- Assess Testability ---
+# --- Output ---
 
-assess-testability: |md
-  **Assess Testability**
-
-  - Are criteria testable?
-  - Concrete vs vague tests
-  - "Users can do X" = ok
-  - "System is reliable" = fail
-| {
-  shape: rectangle
-  style.fill: "#dbeafe"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Assess Measurability ---
-
-assess-measurable: |md
-  **Assess Measurability**
-
-  - Success criteria measurable?
-  - Baselines defined?
-  - ">80% reduction" — from what?
-| {
-  shape: rectangle
-  style.fill: "#dbeafe"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Identify Edge Cases ---
-
-edge-cases: |md
-  **Identify Edge Cases**
-
-  - Failure modes
-  - Boundary conditions
-  - Concurrent access
-  - Large-scale scenarios
-  - Backwards compatibility
-| {
-  shape: rectangle
-  style.fill: "#dbeafe"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Evaluate Test Strategy ---
-
-test-strategy: |md
-  **Evaluate Test Strategy**
-
-  - Unit / integration / e2e
-  - External dependencies
-  - Multi-cluster scenarios
-  - Non-functional requirements
-  - Performance, security
-| {
-  shape: rectangle
-  style.fill: "#dbeafe"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Re-review Delta (conditional) ---
-
-re-review: |md
-  **Re-review Delta**
-  _(if prior reviews exist)_
-
-  - Concerns addressed?
-  - Concerns remaining?
-  - New issues introduced?
-| {
-  shape: rectangle
-  style.fill: "#fef9c3"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-  style.stroke-dash: 3
-}
-
-# --- Write Review Output ---
-
-write-output: |md
+output: |md
   **Write Review**
 
-  - Per-strategy verdict
-  - Testability rating
-  - Missing edge cases
-  - Untestable criteria
-  - Test complexity
-  - Recommendation
+  - per-strategy verdict
+  - testability rating
+  - missing edge cases
+  - untestable criteria list
+  - test complexity rating
+  - recommendation: approve /
+    revise / add test plan
 | {
   shape: rectangle
-  style.fill: "#d1fae5"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+# --- Output Callout ---
+
+output-format: |md
+  STRAT-NNN: title
+  Testability: testable / partial
+  Missing edge cases: [list]
+  Untestable criteria: [list]
+  Test complexity: low / mod / high
+  Recommendation: approve / revise
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-entry -> read-strats
-entry -> read-rfes
+entry -> read-inputs
 entry -> check-prior
 
-read-strats -> assess-testability
-read-rfes -> assess-testability
+read-inputs -> assess
 
-assess-testability -> assess-measurable
-assess-measurable -> edge-cases
-edge-cases -> test-strategy
-
+check-prior -> assess: "first review"
 check-prior -> re-review: "prior reviews exist" {
   style.stroke-dash: 3
 }
 
-test-strategy -> write-output
-re-review -> write-output: "merge findings" {
+assess -> output
+re-review -> output: "merge findings" {
   style.stroke-dash: 3
+}
+
+output -> output-format: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

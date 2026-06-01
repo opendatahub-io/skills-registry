@@ -10,8 +10,8 @@ direction: right
 entry: |md
   **/assess-rfe**
 
-  - Jira key, file, URL,
-    raw text, or wildcard
+  - Jira key, file, URL, text
+  - or wildcard for bulk
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -24,11 +24,10 @@ entry: |md
 detect: |md
   **Detect Input Type**
 
-  - Jira key → MCP or REST
-  - File path → read file
-  - URL → fetch content
-  - Raw text → use directly
-  - Wildcard → bulk mode
+  - Jira key: `KEY-123`
+  - file path or URL
+  - raw text
+  - wildcard: `PROJ-*`
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,102 +35,254 @@ detect: |md
   style.stroke-width: 2
 }
 
-# --- Single Mode ---
+# --- Single Input Path ---
 
-fetch-single: |md
-  **Fetch & Prepare**
-
-  - MCP getJiraIssue first
-  - REST fallback (fetch_single.py)
-  - prep_single.py cleanup
-  - Write to /tmp/rfe-assess/single/
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
+single: Single Input {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
+
+  fetch: Fetch Content {
+    style.fill: "#e4e4e4"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+
+    mcp: |md
+      **Jira MCP**
+
+      - getJiraIssue
+      - extract summary +
+        description
+    | {
+      shape: rectangle
+      style.fill: "#f5f5f5"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+      style.stroke-dash: 3
+    }
+
+    rest-api: |md
+      **Jira REST API**
+      fetch_single.py
+
+      - REST API v3 fallback
+      - ADF to markdown
+      - writes .md directly
+    | {
+      shape: rectangle
+      style.fill: "#f5f5f5"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+      style.stroke-dash: 3
+    }
+
+    read-file: |md
+      **Read File / URL**
+
+      - read file contents
+      - or fetch URL content
+    | {
+      shape: rectangle
+      style.fill: "#f5f5f5"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+    }
+  }
+
+  prep: |md
+    **Prep Single**
+    prep_single.py
+
+    - clean stale .md / .result.md
+    - ensure output dir exists
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  write-content: |md
+    **Write Content**
+
+    - /tmp/rfe-assess/single/{KEY}.md
+    - `# KEY: Title` format
+    - skip if REST API wrote it
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  score-single: |md
+    **Score RFE**
+    LLM agent (Opus)
+
+    - read agent_prompt.md rubric
+    - score against criteria
+    - write {KEY}.result.md
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  present-single: |md
+    **Present Result**
+
+    - read {KEY}.result.md
+    - wrap with header
+    - display to user
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 }
 
-# --- Bulk Mode ---
+# --- Bulk Path ---
 
-preflight: |md
-  **Preflight Checks**
-
-  - Verify JIRA_SERVER,
-    JIRA_USER, JIRA_TOKEN
-  - Check cache state
-  - Resume incomplete runs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
+bulk: Bulk Assessment {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
-}
 
-dump-jira: |md
-  **Dump Jira Project**
+  preflight: |md
+    **Preflight**
+    preflight.py
 
-  - dump_jira.py
-  - All issues → local cache
-  - ADF → markdown conversion
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
+    - check JIRA_SERVER,
+      JIRA_USER, JIRA_TOKEN
+    - detect incomplete runs
+    - report cache state
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 
-setup-run: |md
-  **Setup Run**
+  dump: |md
+    **Fetch All Issues**
+    dump_jira.py
 
-  - setup_run.py
-  - Timestamped run directory
-  - Resume logic + pending list
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
+    - REST API v3 bulk fetch
+    - ADF to markdown
+    - one .md per issue
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 
-# --- Scoring ---
+  setup: |md
+    **Setup Run**
+    setup_run.py
 
-score: |md
-  **Scorer Agents**
-  LLM agents (Opus)
+    - timestamped run dir
+    - resume detection
+    - queue.txt with pending keys
+    - current symlink
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 
-  - 30 concurrent max (bulk)
-  - Rolling pipeline launch
-  - agent_prompt.md rubric
-  - Poll every 30s
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
+  pipeline: Agent Pipeline {
+    style.fill: "#e0e0e0"
+    style.stroke: "#333333"
+    style.stroke-width: 2
 
-# --- Output ---
+    next-batch: |md
+      **Pop Batch**
+      next_batch.py
 
-results: |md
-  **Results & Summary**
+      - pop up to 30 keys
+      - from queue.txt
+      - track remaining
+    | {
+      shape: rectangle
+      style.fill: "#f5f5f5"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+    }
 
-  - parse_results.py → scores.csv
-  - summarize_run.py
-  - Pass/fail rates, averages
-  - What-if analysis, near-misses
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+    spawn: |md
+      **Spawn Scorers**
+      30 concurrent agents (Opus)
+
+      - one agent per key
+      - read agent_prompt.md
+      - score + write .result.md
+    | {
+      shape: rectangle
+      style.fill: "#e8e8e8"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+      style.double-border: true
+    }
+
+    poll: |md
+      **Poll Progress**
+      check_progress.py
+
+      - poll every 30s
+      - completed vs total
+      - 5-min timeout check
+    | {
+      shape: rectangle
+      style.fill: "#f5f5f5"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+    }
+  }
+
+  parse-results: |md
+    **Parse Results**
+    parse_results.py
+
+    - extract scores from
+      .result.md files
+    - generate scores.csv
+    - marks run complete
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  summarize: |md
+    **Summarize**
+    summarize_run.py
+
+    - pass/fail counts
+    - score distribution
+    - criteria averages
+    - what-if analysis
+    - near-miss failures
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
 }
 
 # --- External ---
 
-jira: |md
-  **Jira**
+jira-server: |md
+  **Jira Server**
+
+  - redhat.atlassian.net
+  - REST API v3
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -143,16 +294,17 @@ jira: |md
 # --- Callout: Directory Structure ---
 
 dir-tree: |md
-  assessments/RHAIRFE/
+  assessments/PROJ/
     20260322-143000/
       RHAIRFE-42.result.md
+      queue.txt
       scores.csv
-    current → 20260322-143000
+    current -> 20260322-143000
 
-  /tmp/rfe-assess/RHAIRFE/
-    RHAIRFE-42.md
+  /tmp/rfe-assess/PROJ/
+    RHAIRFE-42.md  (bulk cache)
   /tmp/rfe-assess/single/
-    RHAIRFE-1234.md
+    KEY.md  (single mode)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -162,31 +314,82 @@ dir-tree: |md
   style.font-size: 10
 }
 
-# --- Flow ---
+# --- Callout: Agent Prompt ---
+
+rubric-callout: |md
+  agent_prompt.md
+    scoring rubric
+    calibration examples
+    output format spec
+    single source of truth
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow: Main ---
 
 entry -> detect
 
-detect -> fetch-single: "single"
-detect -> preflight: "RHAIRFE-*"
+# --- Flow: Single ---
 
-fetch-single -> score: "{KEY}.md"
+detect -> single.prep: "single input"
+single.prep -> single.fetch
 
-preflight -> dump-jira
-dump-jira -> setup-run
-setup-run -> score: "pending keys"
+single.fetch.mcp -> single.write-content
+single.fetch.rest-api -> single.write-content: "already written"
+single.fetch.read-file -> single.write-content
 
-score -> results: "*.result.md"
+single.write-content -> single.score-single: "{KEY}.md"
+single.score-single -> single.present-single: "{KEY}.result.md"
 
-# External
-fetch-single -> jira: "MCP / REST" {
+# MCP fallback
+single.fetch.mcp -> single.fetch.rest-api: "MCP fails" {
   style.stroke-dash: 3
 }
-dump-jira -> jira: "REST API" {
+
+# --- Flow: Bulk ---
+
+detect -> bulk.preflight: "wildcard *"
+bulk.preflight -> bulk.dump: "env OK"
+bulk.preflight -> bulk.preflight: "env missing\nprompt user" {
   style.stroke-dash: 3
 }
+bulk.dump -> bulk.setup
+bulk.setup -> bulk.pipeline.next-batch: "queue.txt"
+bulk.pipeline.next-batch -> bulk.pipeline.spawn: "batch of keys"
+bulk.pipeline.spawn -> bulk.pipeline.poll
+bulk.pipeline.poll -> bulk.pipeline.next-batch: "batch done,\nqueue not empty" {
+  style.stroke-dash: 3
+}
+bulk.pipeline.poll -> bulk.parse-results: "queue empty"
+bulk.parse-results -> bulk.summarize: "scores.csv"
 
-# Callout
-results -> dir-tree: {
+# --- External connections ---
+
+single.fetch.mcp -> jira-server
+single.fetch.rest-api -> jira-server
+bulk.dump -> jira-server: "REST API"
+
+# --- Callout connections ---
+
+bulk.setup -> dir-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+single.score-single -> rubric-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+bulk.pipeline.spawn -> rubric-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

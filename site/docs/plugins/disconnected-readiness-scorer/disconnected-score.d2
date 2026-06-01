@@ -1,0 +1,313 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/disconnected-score**
+
+  - --rules csv,tags,...
+  - --fix
+  - --report markdown / json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Detect Pattern ---
+
+detect: |md
+  **Detect Image Pattern**
+
+  - scan Go source for
+    RELATED_IMAGE_* env vars
+  - threshold: 5+ occurrences
+    → env_var pattern
+  - else → static CSV pattern
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 2: Build Manifest (conditional) ---
+
+build-manifest: |md
+  **Build Manifest**
+
+  - clone opendatahub-operator
+    (git clone --depth 1)
+  - operator_manifest.build_manifest()
+  - 100+ RELATED_IMAGE_* vars
+    across 18 components
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: opendatahub-operator ---
+
+operator-repo: |md
+  **opendatahub-operator**
+  GitHub repo
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 3: Run Rules (container) ---
+
+rules: Run Selected Rules {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  csv: |md
+    **csv_relatedimages**
+
+    - image refs in Dockerfiles,
+      Helm, kustomize, Go, YAML
+    - compare against CSV or
+      env var manifest
+    - missing image → blocker
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  tags: |md
+    **no_image_tags**
+
+    - scan for tag-based refs
+      (:latest, :v1.2.3)
+    - require @sha256: digests
+    - production → blocker
+    - test/dev → warning
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  egress: |md
+    **no_runtime_egress**
+
+    - Go, Python, TS, shell
+    - http.Get, requests.get,
+      fetch, curl, wget
+    - hardcoded URL → blocker
+    - configurable → info
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  python: |md
+    **python_imports**
+
+    - requirements.txt,
+      setup.py, pyproject.toml
+    - check vs known mirrors
+    - runtime pip install → blocker
+    - dev dependency → warning
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Step 4: Cross-Reference ---
+
+xref: |md
+  **Cross-Reference Manifest**
+
+  - (A) image var not in
+    operator manifest → blocker
+  - (B) repo var not in
+    manifest → warning (stale)
+  - (C) manifest var not in
+    repo → info
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 5: Compute Score ---
+
+score: |md
+  **Compute Score**
+
+  - aggregate all RuleResults
+  - any blocker → NOT READY
+  - warnings only → WARNING
+  - all pass → READY
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 6: Render Report ---
+
+render: |md
+  **Render Report**
+
+  - templates/report.md (Jinja2)
+  - per-rule status + findings
+  - blocker / warning / pass counts
+  - exit 0 (READY/WARNING)
+  - exit 1 (NOT READY)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: RuleResult ---
+
+rule-result: |md
+  RuleResult
+    rule: "csv-relatedimages"
+    passed: false
+    findings:
+      - severity: blocker
+        file: pkg/controller/images.go
+        line: 42
+        image: quay.io/modh/odh-...
+        message: "not in relatedImages"
+      - severity: warning
+        file: deploy/kustomize/...
+        line: 18
+        message: "stale env var"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: Score Output ---
+
+score-output: |md
+  Disconnected Readiness Score: WARNING
+
+  BLOCKER  csv-relatedimages  2 missing
+  PASS     no-image-tags      14 digests
+  WARNING  no-runtime-egress  1 HTTP call
+  PASS     python-imports     0 unbundled
+
+  Blockers: 1  Warnings: 1  Passed: 2
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: Exclusion Logic ---
+
+exclusions: |md
+  Excluded from blockers:
+    *_test.go, test/, testdata/, e2e/
+    .github/, .tekton/
+    semgrep.yaml
+  → downgraded to info severity
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Config ---
+
+config: |md
+  **Config**
+
+  - config/known_mirrors.yaml
+  - config/exceptions.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> detect
+
+detect -> build-manifest: "env_var pattern"
+detect -> rules: "static CSV\n(skip manifest)" {
+  style.stroke-dash: 3
+}
+
+build-manifest -> operator-repo: "git clone\n--depth 1"
+build-manifest -> rules: "manifest_env_vars"
+
+rules -> xref: "RuleResults"
+
+detect -> xref: "env_var pattern\nonly" {
+  style.stroke-dash: 3
+}
+
+xref -> score
+
+score -> render
+
+config -> rules: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+# --- Callout connections ---
+
+rules -> rule-result: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+render -> score-output: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+rules -> exclusions: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

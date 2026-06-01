@@ -9,70 +9,125 @@ direction: right
 
 entry: |md
   **/feasibility-review**
-  forked sub-agent
+  forked sub-agent (opus)
 
+  - Tools: Read, Grep, Glob
   - `artifacts/strat-tasks/`
   - `artifacts/rfe-tasks/`
-  - Model: opus
-  - Tools: Read, Grep, Glob
-| {style.fill: "#e0e7ff"; style.stroke: "#4338ca"; style.stroke-width: 2}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-# --- Cross-reference RFEs ---
+# --- Read Inputs ---
 
-cross-ref: |md
-  **Cross-reference RFEs**
+read-inputs: |md
+  **Read Strategy & RFE Artifacts**
 
-  - Read source RFEs
-  - Verify strategy delivers
+  - Read strategies from `strat-tasks/`
+  - Read source RFEs from `rfe-tasks/`
+  - Verify strategy delivers the
     stated business need
-  - Match deliverables to
+  - Match deliverables against
     acceptance criteria
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-# --- Check for prior reviews ---
+# --- Check Prior Reviews ---
 
 check-reviews: |md
   **Prior Reviews?**
 
   `strat-reviews/` exists?
 | {
+  shape: diamond
   style.fill: "#fef9c3"
   style.stroke: "#a16207"
   style.stroke-width: 1
-  shape: diamond
 }
 
-# --- Architecture context ---
+# --- Architecture Context ---
 
-arch-context: |md
-  **Architecture Context**
+arch-context: Architecture Context {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
-  `.context/architecture-context/`
-  `PLATFORM.md` + components
-  Ground in real architecture
-| {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 1; style.stroke-dash: 3}
+  platform: |md
+    **Platform Docs**
 
-# --- Initial assessment ---
+    - `.context/architecture-context/`
+    - `rhoai-*/PLATFORM.md`
+    - Component docs
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 1
+    style.stroke-dash: 3
+  }
 
-initial: |md
-  **Initial Assessment**
+  overlays: |md
+    **Architecture Overlays**
+
+    - `overlays/*.md`
+    - Filter: status=active
+    - Filter: release match
+    - Filter: affects components
+    - Overrides platform docs
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 1
+    style.stroke-dash: 3
+  }
+
+  platform -> overlays: "corrections"
+}
+
+# --- Assessment (LLM) ---
+
+assess: |md
+  **Feasibility Assessment**
+  LLM analysis (adversarial)
 
   1. Can we build this?
   2. Does it deliver the RFE?
-  3. Effort estimate credible?
+  3. Is the effort estimate credible?
   4. Hidden dependencies?
   5. What's harder than it looks?
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
 
-# --- Re-review mode ---
+# --- Re-review (LLM) ---
 
 re-review: |md
-  **Re-review Mode**
+  **Re-review Assessment**
+  LLM analysis (adversarial)
 
-  - What concerns addressed?
-  - What concerns remain?
+  - Concerns addressed?
+  - Concerns remaining?
   - New issues from revisions?
-| {style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2}
+  - Plus full assessment
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
 
 # --- Output ---
 
@@ -80,19 +135,53 @@ output: |md
   **Review Output**
   per strategy
 
-  - Feasibility verdict
-  - Effort estimate check
-  - RFE alignment
-  - Key concerns
-  - Recommendation
-| {style.fill: "#dcfce7"; style.stroke: "#16a34a"; style.stroke-width: 2}
+  - Feasibility: feasible / infeasible
+  - Effort: credible / optimistic
+  - RFE alignment: delivers / gaps
+  - Key concerns list
+  - Recommendation: approve /
+    revise / reject
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: output format ---
+
+output-format: |md
+  ### STRAT-NNN: title
+  Feasibility: feasible
+  Effort estimate: optimistic
+  RFE alignment: partial
+  Key concerns: [...]
+  Recommendation: revise
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
 
 # --- Edges ---
 
-entry -> cross-ref
-cross-ref -> check-reviews
-cross-ref -> arch-context: "if available" {style.stroke-dash: 3}
-check-reviews -> initial: "first review"
-check-reviews -> re-review: "re-review"
-initial -> output
+entry -> read-inputs
+read-inputs -> check-reviews
+read-inputs -> arch-context: "if available" {
+  style.stroke-dash: 3
+}
+check-reviews -> assess: "first review"
+check-reviews -> re-review: "re-review\n(prior reviews exist)"
+arch-context -> assess
+arch-context -> re-review
+assess -> output
 re-review -> output
+
+output -> output-format: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

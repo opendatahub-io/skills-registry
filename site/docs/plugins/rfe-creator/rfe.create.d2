@@ -27,7 +27,8 @@ load-rubric: |md
   **Load Rubric**
 
   - check artifacts/rfe-rubric.md
-  - bootstrap assess-rfe plugin
+  - bootstrap assess-rfe if missing
+  - invoke /export-rubric
   - shape questions from criteria
 | {
   shape: rectangle
@@ -38,6 +39,7 @@ load-rubric: |md
 
 export-rubric: |md
   **/export-rubric**
+  (assess-rfe plugin)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -56,6 +58,7 @@ clarify: |md
   - customers, justification
   - user problem, scope
   - success criteria
+  - adapt to rubric criteria
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -70,10 +73,11 @@ generate: |md
   **Generate RFEs**
   LLM
 
-  - apply rfe-template.md
+  - read rfe-template.md
   - WHAT/WHY only, no HOW
   - one RFE per business need
-  - right-size by S/M/L/XL
+  - size by acceptance criteria
+    (S/M/L/XL)
   - Jira priority values
 | {
   shape: rectangle
@@ -88,14 +92,38 @@ generate: |md
 write: |md
   **Write Artifacts**
 
-  - next_rfe_id.py for IDs
-  - frontmatter.py set fields
+  - next_rfe_id.py allocates IDs
+  - write RFE-NNN.md files
+  - frontmatter.py set metadata
   - rebuild-index
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+# --- Artifact callout ---
+
+artifact-tree: |md
+  artifacts/rfe-tasks/RFE-NNN.md
+  ---
+  rfe_id: RFE-001
+  title: "..."
+  priority: Normal
+  size: M
+  status: Draft
+  ---
+  ## Summary
+  ## Business Justification
+  ## Acceptance Criteria
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Output ---
@@ -105,6 +133,7 @@ output: |md
 
   - artifacts/rfe-tasks/RFE-NNN.md
   - suggest /rfe.review
+  - suggest re-run /rfe.create
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -128,16 +157,25 @@ rfe-review: |md
 
 entry -> load-rubric
 
-load-rubric -> export-rubric: "missing" {
+load-rubric -> export-rubric: "rubric missing" {
+  style.stroke-dash: 3
+}
+export-rubric -> load-rubric: "rfe-rubric.md" {
   style.stroke-dash: 3
 }
 
 load-rubric -> clarify
-load-rubric -> generate: "--headless"
+load-rubric -> generate: "--headless\n(skip questions)"
 
-clarify -> generate
+clarify -> generate: "PM answers"
 
-generate -> write: "RFE-NNN.md"
+generate -> write: "RFE-NNN.md\nper business need"
+
+write -> artifact-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
 
 write -> output
 

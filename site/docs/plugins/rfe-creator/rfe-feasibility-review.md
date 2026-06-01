@@ -12,8 +12,10 @@ technical feasibility against platform architecture. Uses three verdicts:
 feasible (can be built), infeasible (platform architecture fundamentally
 conflicts), indeterminate (RFE too ambiguous to assess). Distinguishes
 between capabilities not yet existing (feasible) and architectural
-incompatibilities (infeasible). Reads Jira comment history for additional
-context. Outputs to artifacts/rfe-reviews/{ID}-feasibility.md. Runs
+incompatibilities (infeasible). Named components not in the architecture
+inventory are assessed as strategy considerations, not blockers. Reads
+Jira comment history for additional context. Supports architecture context
+overlays. Outputs to artifacts/rfe-reviews/{ID}-feasibility.md. Runs
 with model: opus.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
@@ -26,6 +28,6 @@ with model: opus.
 
 ## Usage
 
-```
+```bash
 /rfe-feasibility-review
 ```

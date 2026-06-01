@@ -165,8 +165,8 @@ dispatch: Dispatch Loop {
 
     - pipeline_state.py
       wait-for-wave
-    - Exit 0 → complete
-    - Exit 3 → retry wait
+    - Exit 0: complete
+    - Exit 3: retry wait
   | {
     shape: rectangle
     style.fill: "#f5f5f5"
@@ -198,7 +198,7 @@ dispatch: Dispatch Loop {
 # --- Teardown ---
 
 teardown: |md
-  **Teardown & Summary**
+  **Teardown + Summary**
 
   - batch_summary.py
   - --counts-only
@@ -232,6 +232,26 @@ assess-rfe: |md
   style.stroke-dash: 3
 }
 
+# --- Callout: wave YAML example ---
+
+wave-example: |md
+  action: launch_wave
+  phase: ASSESS
+  agents:
+    - subagent_type: rfe-scorer
+      prompt_file: assess-agent.md
+      vars: DATA_FILE=...
+    - prompt_file: SKILL.md
+      vars: ID=RHAIRFE-1234
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
 entry -> init
@@ -242,15 +262,23 @@ ids.reprocess-mode -> bootstrap: "cached IDs"
 ids.explicit-mode -> bootstrap: "explicit IDs"
 
 bootstrap -> batch
-batch -> dispatch
-dispatch.done-check -> teardown: "done" {
-  style.stroke: "#333333"
-}
+batch -> dispatch: "BATCH_START"
+dispatch.done-check -> teardown: "done"
 
 # External edges
 ids.jql-mode -> jira: "JQL query" {
   style.stroke-dash: 3
 }
+ids.reprocess-mode -> jira: "cached snapshots" {
+  style.stroke-dash: 3
+}
 bootstrap -> assess-rfe: "install" {
   style.stroke-dash: 3
+}
+
+# Callout edge
+dispatch.launch-wave -> wave-example: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

@@ -23,6 +23,6 @@ explicitly by the user.
 
 ## Usage
 
-```
+```bash
 /rfe-creator.update-deps
 ```

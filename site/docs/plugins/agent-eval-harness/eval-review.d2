@@ -64,19 +64,18 @@ walk-cases: |md
   - empty feedback = acceptable
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
 }
 
 # --- Check Transcripts ---
 
 check-transcripts: |md
   **Check Transcripts**
-  Agent (sub-agent)
+  Agent delegation
 
-  - read stdout.log per case
+  - spawn Agent on stdout.log
   - multi-approach attempts?
   - unnecessary tool usage?
   - error recovery patterns
@@ -129,9 +128,8 @@ review-yaml: |md
 
 analyze: |md
   **Analyze Patterns**
-  LLM analysis
+  LLM (review-results.md)
 
-  - read review-results.md
   - judge-human alignment
   - systematic vs edge cases
   - new judge candidates
@@ -147,32 +145,19 @@ analyze: |md
 
 propose: |md
   **Propose Changes**
-  LLM analysis
+  LLM
 
-  - find skill's SKILL.md
-  - before/after diffs
+  - find SKILL.md via find_skills.py
+  - show before/after diffs
   - grounded in feedback
-  - propose eval.yaml judges
+  - propose new eval.yaml judges
+  - user approves before apply
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.double-border: true
-}
-
-# --- Apply Changes ---
-
-apply: |md
-  **Apply Changes**
-
-  - edit SKILL.md (approved)
-  - add judges to eval.yaml
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
 }
 
 # --- Next Steps ---
@@ -240,12 +225,19 @@ entry -> load-results
 load-results -> overview: "summary.yaml"
 overview -> walk-cases: "all / failures / filter"
 
-# Walk cases with conditional transcript check
-walk-cases -> check-transcripts: "transcripts exist"
-walk-cases -> save-feedback: "no transcripts" {
+# Case iteration loop
+walk-cases -> walk-cases: "next case" {
   style.stroke-dash: 3
 }
-check-transcripts -> save-feedback
+
+# Transcript check (optional, parallel to main flow)
+walk-cases -> check-transcripts: "if transcripts exist" {
+  style.stroke-dash: 3
+}
+check-transcripts -> save-feedback: "transcript findings"
+
+# Main continuation
+walk-cases -> save-feedback
 
 # Save feedback with callout
 save-feedback -> review-yaml: {
@@ -256,14 +248,10 @@ save-feedback -> review-yaml: {
 
 # Analysis and proposal
 save-feedback -> analyze: "review.yaml"
-analyze -> propose
+analyze -> propose: "pattern analysis"
 
 # Approval gate
-propose -> apply: "approved"
-propose -> next-steps: "declined" {
-  style.stroke-dash: 3
-}
-apply -> next-steps
+propose -> next-steps: "approved edits applied"
 
 # Downstream skill fan-out
 next-steps -> eval-run: "re-run + compare" {

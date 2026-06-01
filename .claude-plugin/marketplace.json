@@ -13,7 +13,7 @@
       },
       "category": "planning",
       "description": "Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.\n",
-      "homepage": "https://github.com/jwforres/rfe-creator",
+      "homepage": "https://github.com/opendatahub-io/rfe-creator",
       "keywords": [
         "rfe",
         "jira",
@@ -22,13 +22,13 @@
         "pipeline"
       ],
       "name": "rfe-creator",
-      "repository": "https://github.com/jwforres/rfe-creator",
+      "repository": "https://github.com/opendatahub-io/rfe-creator",
       "skills": [
         "./.claude/skills"
       ],
       "source": {
         "ref": "main",
-        "repo": "jwforres/rfe-creator",
+        "repo": "opendatahub-io/rfe-creator",
         "source": "github"
       },
       "strict": false,
@@ -40,7 +40,7 @@
       },
       "category": "evaluation",
       "description": "Assess RFEs against quality criteria using a structured rubric.\n",
-      "homepage": "https://github.com/n1hility/assess-rfe",
+      "homepage": "https://github.com/opendatahub-io/assess-rfe",
       "keywords": [
         "rfe",
         "rubric",
@@ -48,10 +48,10 @@
         "assessment"
       ],
       "name": "assess-rfe",
-      "repository": "https://github.com/n1hility/assess-rfe",
+      "repository": "https://github.com/opendatahub-io/assess-rfe",
       "source": {
         "ref": "main",
-        "repo": "n1hility/assess-rfe",
+        "repo": "opendatahub-io/assess-rfe",
         "source": "github"
       },
       "version": "1.0.0"
@@ -192,35 +192,155 @@
       "name": "agent-eval-harness",
       "repository": "https://github.com/opendatahub-io/agent-eval-harness",
       "source": {
-        "ref": "main",
+        "ref": "7d86a7ec657002a27c299fba67f7af1cd8124a6e",
         "repo": "opendatahub-io/agent-eval-harness",
+        "source": "github"
+      },
+      "version": "1.0.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "documentation",
+      "description": "Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, AGENTS.md) up to date. Scans merged PRs, extracts relevant knowledge using parallel agents, and proposes updates as a git-apply-able patch for human review. Supports GitHub and GitLab.\n",
+      "homepage": "https://github.com/opendatahub-io/knowledge-skills",
+      "keywords": [
+        "knowledge",
+        "context",
+        "claude-md",
+        "agents-md",
+        "pr-analysis",
+        "automation"
+      ],
+      "license": "Apache-2.0",
+      "name": "knowledge-skills",
+      "repository": "https://github.com/opendatahub-io/knowledge-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/knowledge-skills",
         "source": "github"
       },
       "version": "0.1.0"
     },
     {
       "author": {
-        "name": "Arjay Hinek"
+        "name": "opendatahub-io"
       },
-      "category": "planning",
-      "description": "Pre-meeting skills for improving meeting quality by checking shared update docs, identifying missing async updates, and helping organizers focus meetings on items that actually need discussion.\n",
-      "homepage": "https://github.com/ahinek/meeting-quality-skills",
+      "category": "development-tools",
+      "description": "Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic Python scripts for automated bug fixing, CVE remediation, and ticket triage. Designed to run inside a Claude Code container as part of a CI pipeline.\n",
+      "homepage": "https://github.com/opendatahub-io/autofix-skills",
       "keywords": [
-        "meeting",
-        "google-workspace",
-        "agenda",
-        "async-updates",
-        "productivity"
+        "autofix",
+        "jira",
+        "cve",
+        "bug-fixing",
+        "triage",
+        "pipeline",
+        "ci-cd"
       ],
       "license": "Apache-2.0",
-      "name": "meeting-quality-skills",
-      "repository": "https://github.com/ahinek/meeting-quality-skills",
+      "name": "autofix-skills",
+      "repository": "https://github.com/opendatahub-io/autofix-skills",
       "source": {
-        "ref": "f39c944a31cad1ec6d57360f56ef28f04dd0ad78",
-        "repo": "ahinek/meeting-quality-skills",
+        "ref": "main",
+        "repo": "opendatahub-io/autofix-skills",
         "source": "github"
       },
       "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "asanzgom"
+      },
+      "category": "devops",
+      "description": "Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation. Supports automatic detection of image management patterns (env var vs static CSV) and cross-references against the opendatahub-operator manifest.\n",
+      "homepage": "https://github.com/opendatahub-io/disconnected-readiness-scorer",
+      "keywords": [
+        "disconnected",
+        "air-gap",
+        "openshift",
+        "image-mirroring",
+        "readiness",
+        "scoring"
+      ],
+      "license": "Apache-2.0",
+      "name": "disconnected-readiness-scorer",
+      "repository": "https://github.com/opendatahub-io/disconnected-readiness-scorer",
+      "skills": [
+        "./skills"
+      ],
+      "source": {
+        "ref": "f8fbba8c8400caeaa1dd9c7455478aad2bf05b4d",
+        "repo": "opendatahub-io/disconnected-readiness-scorer",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "DevOps and TestOps automation skills for ODH/RHOAI \u2014 component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.\n",
+      "homepage": "https://github.com/opendatahub-io/aiops-infra",
+      "keywords": [
+        "devops",
+        "testops",
+        "odh",
+        "rhoai",
+        "konflux",
+        "onboarding",
+        "ci-cd",
+        "release",
+        "automation"
+      ],
+      "license": "Apache-2.0",
+      "name": "aiops-skills",
+      "repository": "https://github.com/opendatahub-io/aiops-infra",
+      "skills": [
+        "./skills"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/aiops-infra",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "IKRedHat"
+      },
+      "category": "planning",
+      "description": "Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.\n",
+      "homepage": "https://github.com/IKRedHat/SPIKE-executor",
+      "keywords": [
+        "spike",
+        "assessment",
+        "jira",
+        "research",
+        "scoring",
+        "rfe",
+        "openshift",
+        "rhoai",
+        "feasibility"
+      ],
+      "license": "Apache-2.0",
+      "name": "spike-executor",
+      "repository": "https://github.com/IKRedHat/SPIKE-executor",
+      "skills": [
+        "./.claude/skills"
+      ],
+      "source": {
+        "ref": "924ec480198b89d42ceb82275938a7859dbf92ff",
+        "repo": "IKRedHat/SPIKE-executor",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.2.0"
     }
   ]
 }

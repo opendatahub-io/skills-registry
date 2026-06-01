@@ -11,8 +11,9 @@ entry: |md
   **rfe-feasibility-review**
   internal sub-agent
 
-  - Receives RFE ID
+  - receives RFE ID
   - model: opus
+  - not user-invocable
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -23,11 +24,12 @@ entry: |md
 # --- Read RFE ---
 
 read-rfe: |md
-  **Read RFE**
+  **Read RFE Task**
 
   - artifacts/rfe-tasks/{ID}.md
   - {ID}-comments.md (if exists)
-  - Stakeholder context
+  - stakeholder context, prior
+    decisions, related work
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -35,31 +37,49 @@ read-rfe: |md
   style.stroke-width: 2
 }
 
-# --- Architecture context ---
+# --- Architecture Context ---
 
 arch-context: |md
-  **Architecture Context**
+  **Load Architecture Context**
 
-  - .context/architecture-context/
-  - PLATFORM.md + components
-  - Skip if unavailable
+  - read LATEST_VERSION for
+    release directory name
+  - PLATFORM.md + component docs
+  - identify which components
+    the RFE touches
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 3
 }
 
-# --- Prior review ---
+# --- Architecture Overlays ---
+
+overlays: |md
+  **Apply Overlays**
+
+  - scan overlays/*.md files
+  - filter: status=active,
+    matching release + components
+  - corrections override
+    generated architecture docs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Prior Review ---
 
 prior-review: |md
-  **Prior Review**
+  **Check Prior Review**
 
   - rfe-review-report.md
-  - What was addressed?
-  - What remains?
-  - New issues from revisions?
+  - what concerns addressed?
+  - what concerns remain?
+  - new issues from revisions?
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -67,17 +87,17 @@ prior-review: |md
   style.stroke-width: 2
 }
 
-# --- Assess ---
+# --- Feasibility Assessment ---
 
 assess: |md
   **Feasibility Assessment**
   LLM (opus)
 
-  - Technically feasible?
-  - Architectural conflicts?
-  - Strategy alignment?
-  - Scope realistic?
-  - Hidden complexities?
+  - technically feasible?
+  - architectural conflicts?
+  - strategy alignment?
+  - scope realistic?
+  - hidden complexities?
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -92,10 +112,11 @@ write-output: |md
   **Write Assessment**
 
   - rfe-reviews/{ID}-feasibility.md
-  - Verdict: feasible /
+  - verdict: feasible /
     infeasible / indeterminate
-  - Strategy considerations
-  - Blockers + scope assessment
+  - strategy considerations
+    for /strat.refine
+  - blockers + scope assessment
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -103,20 +124,61 @@ write-output: |md
   style.stroke-width: 2
 }
 
+# --- Callout: output format ---
+
+output-format: |md
+  {ID}-feasibility.md
+  ────────────────────
+  Feasibility: feasible
+  Strategy: [items]
+  Blockers: none
+  Scope: appropriate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- External: architecture-context repo ---
+
+arch-repo: |md
+  **architecture-context**
+  (external repo)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
 # --- Edges ---
 
-entry -> read-rfe
+entry -> read-rfe: "{ID}"
 
-read-rfe -> arch-context: {
+read-rfe -> arch-context
+read-rfe -> prior-review: "if re-review" {
   style.stroke-dash: 3
 }
 
-read-rfe -> prior-review: "if re-review"
-
-prior-review -> assess
-
-arch-context -> assess: {
+arch-repo -> arch-context: {
   style.stroke-dash: 3
 }
 
-assess -> write-output
+arch-context -> overlays
+overlays -> assess
+
+prior-review -> assess: {
+  style.stroke-dash: 3
+}
+
+assess -> write-output: "verdict"
+
+write-output -> output-format: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

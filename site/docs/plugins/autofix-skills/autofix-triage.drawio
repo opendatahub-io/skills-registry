@@ -1,0 +1,154 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="orchestrator" value="&lt;b&gt;Autofix Orchestrator&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="32" y="100" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="entry" value="&lt;b&gt;/autofix-triage&lt;/b&gt;&lt;br&gt;&lt;br&gt;Jira ticket content&lt;br&gt;cloned target repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="170" width="125" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="parse" value="&lt;b&gt;Parse Ticket&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM extraction&lt;/i&gt;&lt;br&gt;&lt;br&gt;symptom description&lt;br&gt;component / file paths&lt;br&gt;error messages, stack traces&lt;br&gt;repo URLs&lt;br&gt;steps to reproduce" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="185" y="140" width="180" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="orient" value="&lt;b&gt;Orient via Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;ARCHITECTURE.md&lt;br&gt;AGENTS.md / CLAUDE.md&lt;br&gt;README.md (fallback)&lt;br&gt;build repo mental map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="395" y="155" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="explore" value="&lt;b&gt;Explore Code&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="585" y="140" width="450" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="locate" value="&lt;b&gt;Locate Bug Area&lt;/b&gt;&lt;br&gt;&lt;br&gt;grep error messages&lt;br&gt;find functions, CRDs&lt;br&gt;confirm references" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="explore">
+      <mxGeometry x="15" y="40" width="125" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess-repo" value="&lt;b&gt;Assess Repo Readiness&lt;/b&gt;&lt;br&gt;&lt;br&gt;AGENTS.md, CONTRIBUTING&lt;br&gt;Makefile targets&lt;br&gt;CI config&lt;br&gt;lint config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="explore">
+      <mxGeometry x="152" y="40" width="140" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="check-risk" value="&lt;b&gt;Check Risk Factors&lt;/b&gt;&lt;br&gt;&lt;br&gt;test coverage&lt;br&gt;git history / refactors&lt;br&gt;cross-component impact" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="explore">
+      <mxGeometry x="304" y="40" width="130" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="rubric" value="&lt;b&gt;Three-Gate Rubric&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1065" y="135" width="455" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="gate1" value="&lt;b&gt;Gate 1: Can Start?&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;repo URL exists&lt;br&gt;ticket states what&lt;br&gt;is broken" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rubric">
+      <mxGeometry x="15" y="35" width="125" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="gate2" value="&lt;b&gt;Gate 2: Can Find &amp; Fix?&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;code is locatable&lt;br&gt;correct behavior is&lt;br&gt;unambiguous" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rubric">
+      <mxGeometry x="152" y="35" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="gate3" value="&lt;b&gt;Gate 3: Should&lt;br&gt;Agent Fix?&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM&lt;/i&gt;&lt;br&gt;&lt;br&gt;not design decisions&lt;br&gt;not infrastructure&lt;br&gt;not systemic&lt;br&gt;not performance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rubric">
+      <mxGeometry x="304" y="35" width="135" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="ready" value="&lt;b&gt;ready&lt;/b&gt;&lt;br&gt;&lt;br&gt;confidence: high/med/low&lt;br&gt;bias toward ready" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1555" y="50" width="150" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="needs-info" value="&lt;b&gt;needs_info&lt;/b&gt;&lt;br&gt;&lt;br&gt;specific missing items&lt;br&gt;message to ticket opener" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1555" y="175" width="155" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="not-fixable" value="&lt;b&gt;not_fixable&lt;/b&gt;&lt;br&gt;&lt;br&gt;Gate 3 category reason&lt;br&gt;suggest human intervention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1555" y="300" width="155" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict" value="&lt;b&gt;Write Verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;.triage-verdict.json&lt;br&gt;gate results + reasoning&lt;br&gt;repo_readiness, risk_factors&lt;br&gt;message_to_opener" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1745" y="153" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict-schema" value=".triage-verdict.json&lt;br&gt;&lt;br&gt;verdict: ready|needs_info|not_fixable&lt;br&gt;confidence: high|medium|low&lt;br&gt;gate1: { repo_url, bug_description }&lt;br&gt;gate2: { code_locatability, fix_direction }&lt;br&gt;gate3: { pass, not_fixable_reason }&lt;br&gt;repo_readiness: { has_agent_docs,&lt;br&gt;&amp;nbsp;&amp;nbsp;has_build_targets, has_lint_config }&lt;br&gt;risk_factors: [...]&lt;br&gt;missing: [...]&lt;br&gt;message_to_opener, reasoning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1540" y="410" width="220" height="185" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_orch_entry" value="ticket + cloned repo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="orchestrator" target="entry" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_entry_parse" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="parse" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_parse_orient" value="symptom, repo URL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse" target="orient" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_orient_explore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="orient" target="explore" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_locate_assess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="locate" target="assess-repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assess_risk" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess-repo" target="check-risk" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_explore_rubric" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="explore" target="rubric" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gate1_gate2" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gate1" target="gate2" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gate2_gate3" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gate2" target="gate3" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gate1_needsinfo" value="fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gate1" target="needs-info" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1143" y="115"/>
+          <mxPoint x="1540" y="115"/>
+          <mxPoint x="1540" y="212"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gate2_needsinfo" value="fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gate2" target="needs-info" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1287" y="120"/>
+          <mxPoint x="1535" y="120"/>
+          <mxPoint x="1535" y="212"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gate3_ready" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" source="gate3" target="ready" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1440" y="110"/>
+          <mxPoint x="1555" y="110"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gate3_notfixable" value="fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gate3" target="not-fixable" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1440" y="338"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ready_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" source="ready" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1730" y="88"/>
+          <mxPoint x="1730" y="177"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_needsinfo_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="needs-info" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_notfixable_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" source="not-fixable" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1730" y="338"/>
+          <mxPoint x="1730" y="249"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_verdict_schema" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="verdict" target="verdict-schema" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1822" y="395"/>
+          <mxPoint x="1650" y="395"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -41,9 +41,8 @@ repo_name: opendatahub-io/skills-registry
 
 theme:
   name: material
-  font:
-    text: JetBrains Mono
-    code: JetBrains Mono
+  font: false
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -181,7 +180,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
         lines.append("")
         lines.append(f"    {desc}")
         lines.append("")
-        lines.append(f"    **{skill_count} skills** · {cat_name} · v{version}")
+        lines.append(f"    **{skill_count} skills** - {cat_name} - v{version}")
         lines.append("")
 
     lines.append("</div>")
@@ -195,7 +194,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
             continue
         count = len(cat_list)
         lines.append(f"- [{cat_meta['name']}](categories/{cat_key}.md) "
-                     f"— {cat_meta.get('description', '')} ({count} plugin{'s' if count != 1 else ''})")
+                     f"-- {cat_meta.get('description', '')} ({count} plugin{'s' if count != 1 else ''})")
     lines.append("")
 
     return "\n".join(lines)
@@ -572,7 +571,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
                 else:
                     parts.append(f"[{name}]")
             hint = " ".join(parts)
-        lines.append("```")
+        lines.append("```bash")
         lines.append(f"/{sname} {hint}")
         lines.append("```")
         lines.append("")
@@ -581,15 +580,15 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         for arg in enriched_skill["arguments"]:
             aname = f'`{arg["name"]}`'
             req = ":material-check:" if arg.get("required") else ""
-            default = f'`{arg["default"]}`' if arg.get("default") else "—"
-            adesc = arg.get("description", "")
+            default = f'`{arg["default"]}`' if arg.get("default") else "-"
+            adesc = " ".join(arg.get("description", "").split())
             lines.append(f"| {aname} | {req} | {default} | {adesc} |")
         lines.append("")
     elif argument_hint:
         # No enriched arguments but argument-hint exists — parse it as fallback
         lines.append("## Arguments")
         lines.append("")
-        lines.append("```")
+        lines.append("```bash")
         lines.append(f"/{sname} {argument_hint}")
         lines.append("```")
         lines.append("")
@@ -612,7 +611,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     if enriched_skill and enriched_skill.get("usage_examples"):
         lines.append("## Usage")
         lines.append("")
-        lines.append("```")
+        lines.append("```bash")
         for ex in enriched_skill["usage_examples"]:
             lines.append(ex)
         lines.append("```")
@@ -626,7 +625,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         # No arguments, no usage examples — show basic invocation
         lines.append("## Usage")
         lines.append("")
-        lines.append("```")
+        lines.append("```bash")
         lines.append(f"/{sname}")
         lines.append("```")
         lines.append("")
@@ -670,16 +669,14 @@ def generate_category_page(cat_key: str, cat_meta: dict,
         lines.append("")
         for plugin in plugins:
             name = plugin["name"]
-            desc = plugin["description"].strip().split("\n")[0]
-            if len(desc) > 120:
-                desc = desc[:117] + "..."
+            desc = plugin["description"].strip()
             skill_count = len(plugin.get("skills", []))
             version = plugin.get("version", "")
             lines.append(f"### [{name}](../plugins/{name}/index.md)")
             lines.append("")
             lines.append(desc)
             lines.append("")
-            lines.append(f"**{skill_count} skills** · v{version}")
+            lines.append(f"**{skill_count} skills** - v{version}")
             lines.append("")
 
     return "\n".join(lines)
@@ -724,6 +721,118 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
     nav_lines.append("  - Getting Started: getting-started.md")
 
     return MKDOCS_CONFIG_TEMPLATE + "\n".join(nav_lines) + "\n"
+
+
+def generate_llms_txt(registry: dict, site_url: str) -> str:
+    """Generate llms.txt index following the llmstxt.org spec."""
+    plugins = registry.get("plugins", [])
+    lines = ["# OpenDataHub Skills Registry"]
+    lines.append("")
+    lines.append("> Claude Code skills and plugins marketplace for the "
+                 "opendatahub-io organization. Aggregates skills from multiple "
+                 "GitHub repositories into a single discoverable marketplace.")
+    lines.append("")
+    lines.append("## Plugins")
+    lines.append("")
+    for p in plugins:
+        name = p["name"]
+        desc = p["description"].strip().split("\n")[0]
+        lines.append(f"- [{name}]({site_url}/plugins/{name}/): {desc}")
+    lines.append("")
+    lines.append("## Skills")
+    lines.append("")
+    for p in plugins:
+        pname = p["name"]
+        for s in p.get("skills", []):
+            sname = s["name"]
+            sdesc = s.get("description", "").strip()
+            if s.get("user-invocable", True):
+                lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc}")
+    lines.append("")
+    lines.append("## Optional")
+    lines.append("")
+    for p in plugins:
+        pname = p["name"]
+        for s in p.get("skills", []):
+            if not s.get("user-invocable", True):
+                sname = s["name"]
+                sdesc = s.get("description", "").strip()
+                lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc} (internal)")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
+    """Generate llms-full.txt with all skill details inlined."""
+    plugins = registry.get("plugins", [])
+    lines = ["# OpenDataHub Skills Registry"]
+    lines.append("")
+    lines.append("> Claude Code skills and plugins marketplace for the "
+                 "opendatahub-io organization. Aggregates skills from multiple "
+                 "GitHub repositories into a single discoverable marketplace.")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+    for p in plugins:
+        name = p["name"]
+        desc = p["description"].strip()
+        repo = p.get("source", {}).get("repo", "")
+        enrichment = load_enrichment(docs_dir / "plugins" / name)
+        edesc = enrichment.get("description", desc).strip() if enrichment else desc
+        arch = (enrichment.get("architecture_notes", "").strip()
+                if enrichment else "")
+        lines.append(f"## {name}")
+        lines.append("")
+        lines.append(edesc)
+        lines.append("")
+        if repo:
+            lines.append(f"**Repository**: https://github.com/{repo}")
+            lines.append("")
+        if arch:
+            lines.append("### Architecture")
+            lines.append("")
+            lines.append(arch)
+            lines.append("")
+        lines.append("### Skills")
+        lines.append("")
+        eskills = enrichment.get("skills", {}) if enrichment else {}
+        for s in p.get("skills", []):
+            sname = s["name"]
+            sdesc = s.get("description", "").strip()
+            invocable = s.get("user-invocable", True)
+            badge = "" if invocable else " (internal)"
+            es = eskills.get(sname, {})
+            if es.get("description"):
+                sdesc = es["description"].strip()
+            hint = es.get("argument_hint", "")
+            args = es.get("arguments", [])
+            examples = es.get("usage_examples", [])
+            lines.append(f"#### /{sname}{badge}")
+            lines.append("")
+            lines.append(sdesc)
+            lines.append("")
+            if hint:
+                lines.append(f"```\n/{sname} {hint}\n```")
+                lines.append("")
+            if args:
+                lines.append("| Argument | Required | Description |")
+                lines.append("|----------|----------|-------------|")
+                for arg in args:
+                    aname = arg.get("name", "")
+                    req = "yes" if arg.get("required") else ""
+                    adesc = " ".join(arg.get("description", "").split())
+                    lines.append(f"| `{aname}` | {req} | {adesc} |")
+                lines.append("")
+            if examples:
+                lines.append("Examples:")
+                lines.append("```")
+                for ex in examples:
+                    lines.append(ex)
+                lines.append("```")
+                lines.append("")
+        lines.append("---")
+        lines.append("")
+    return "\n".join(lines)
 
 
 def generate_site(registry: dict, output_dir: Path):
@@ -773,6 +882,14 @@ def generate_site(registry: dict, output_dir: Path):
     # mkdocs.yml
     (output_dir / "mkdocs.yml").write_text(
         generate_mkdocs_yml(registry, categories, cat_plugins))
+
+    # llms.txt protocol files — written to docs/ so MkDocs includes them
+    # in the build output (served at /skills-registry/llms.txt)
+    site_url = "https://opendatahub-io.github.io/skills-registry"
+    (docs / "llms.txt").write_text(generate_llms_txt(registry, site_url))
+    (docs / "llms-full.txt").write_text(
+        generate_llms_full_txt(registry, docs))
+
 
 
 def main() -> None:

@@ -5,15 +5,15 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Skills ---
+# --- Entry ---
 
-eval-setup: |md
+setup: |md
   **/eval-setup**
 
-  - Environment configurator
-  - MLflow tracking setup
-  - API key verification
-  - Dependency checks
+  - Install deps into isolated venv
+  - Configure MLflow tracking URI
+  - Verify API keys (Anthropic/Vertex)
+  - Preflight environment checks
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -22,13 +22,15 @@ eval-setup: |md
   style.stroke-dash: 3
 }
 
-eval-analyze: |md
+# --- Analysis ---
+
+analyze: |md
   **/eval-analyze**
 
-  - Deep-read target skill
-  - Generate eval.yaml config
-  - Dataset schema + judges
-  - Produce eval.md analysis
+  - Deep-read skill + sub-skills (LLM agent)
+  - Explore dataset schema and test cases
+  - Generate eval.yaml (judges, models, thresholds)
+  - Cache analysis in eval.md
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -37,13 +39,15 @@ eval-analyze: |md
   style.double-border: true
 }
 
-eval-dataset: |md
+# --- Dataset ---
+
+dataset: |md
   **/eval-dataset**
 
-  - Generate test cases
-  - Bootstrap, expand, or
-    from-traces strategies
-  - Match dataset schema
+  - Bootstrap, expand, or extract from traces
+  - Generate realistic test cases matching schema
+  - Cover simple, complex, and edge scenarios
+  - Validate cases against eval.yaml schema
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -52,54 +56,31 @@ eval-dataset: |md
   style.double-border: true
 }
 
-eval-run: |md
+# --- Execution ---
+
+run: |md
   **/eval-run**
 
-  - Execute skill vs cases
-  - Run judges (inline/LLM)
-  - Detect regressions
-  - Produce summary.yaml
+  - Prepare isolated workspace per case
+  - Execute skill headlessly (case or batch)
+  - Collect artifacts and score with judges
+  - Generate HTML report with analysis
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
 }
 
-eval-review: |md
+# --- Fan-out targets ---
+
+review: |md
   **/eval-review**
 
-  - Human-in-the-loop review
-  - Present scores + outputs
-  - Collect qualitative feedback
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-eval-mlflow: |md
-  **/eval-mlflow**
-
-  - Bidirectional MLflow sync
-  - Log results + datasets
-  - Push/pull feedback
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-eval-optimize: |md
-  **/eval-optimize**
-
-  - Identify judge failures
-  - Edit SKILL.md fixes
-  - Re-run with regression check
-  - Iterative improvement loop
+  - Present judge scores per case
+  - Collect human qualitative feedback
+  - Analyze transcript execution paths
+  - Propose targeted SKILL.md edits
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -108,7 +89,36 @@ eval-optimize: |md
   style.double-border: true
 }
 
-# --- External ---
+optimize: |md
+  **/eval-optimize**
+
+  - Identify failures from judge rationale
+  - Analyze root causes via transcripts (LLM)
+  - Edit SKILL.md with surgical fixes
+  - Re-run and check for regressions
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+mlflow-skill: |md
+  **/eval-mlflow**
+
+  - Sync dataset to MLflow registry
+  - Log params, metrics, and artifacts
+  - Push judge + human feedback to traces
+  - Pull MLflow UI annotations back
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External Service ---
 
 mlflow-server: |md
   **MLflow Server**
@@ -120,34 +130,43 @@ mlflow-server: |md
   style.stroke-dash: 3
 }
 
-# --- Pipeline Flow ---
+# --- Main pipeline flow ---
 
-eval-setup -> eval-analyze: "optional" {
-  style.stroke-dash: 3
-}
-eval-analyze -> eval-dataset: "eval.yaml"
-eval-dataset -> eval-run: "test cases"
-eval-run -> eval-review: "summary.yaml"
-eval-run -> eval-optimize: "summary.yaml"
+setup -> analyze: "environment ready"
+analyze -> dataset: "eval.yaml + eval.md"
+dataset -> run: "test cases"
 
-# Auto-invoke
-eval-dataset -> eval-analyze: "if missing" {
-  style.stroke-dash: 3
-}
-eval-run -> eval-analyze: "if missing" {
-  style.stroke-dash: 3
-}
+# --- Fan-out from eval-run ---
 
-# MLflow integration
-eval-run -> eval-mlflow: "log results"
-eval-mlflow -> mlflow-server: "sync" {
+run -> review: "summary.yaml"
+run -> optimize: "summary.yaml"
+run -> mlflow-skill: "summary.yaml"
+
+# --- eval-optimize invokes eval-run (feedback loop) ---
+
+optimize -> run: "re-run with\n--baseline" {
   style.stroke-dash: 3
 }
 
-# Feedback loops
-eval-optimize -> eval-run: "re-run" {
+# --- eval-review feeds into optimize ---
+
+review -> optimize: "review.yaml"
+
+# --- MLflow connections ---
+
+mlflow-skill -> mlflow-server
+setup -> mlflow-server: "configure\ntracking URI" {
   style.stroke-dash: 3
 }
-eval-review -> eval-optimize: "feedback" {
+
+# --- Fallback: eval-dataset invokes eval-analyze if missing ---
+
+dataset -> analyze: "missing\neval.yaml" {
+  style.stroke-dash: 3
+}
+
+# --- Fallback: eval-run invokes eval-analyze if missing ---
+
+run -> analyze: "missing\nconfig" {
   style.stroke-dash: 3
 }

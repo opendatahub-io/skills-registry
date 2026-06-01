@@ -27,7 +27,7 @@ reasoning effort levels.
 
 ## Arguments
 
-```
+```bash
 /eval-run [--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--case <filter>] [--no-judge] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]
 ```
 
@@ -37,8 +37,8 @@ reasoning effort levels.
 | `--model` |  | `models.skill from config` | Model for skill execution. Required if models.skill is unset in eval.yaml. |
 | `--subagent-model` |  | `models.subagent, falls back to skill model` | Model for subagents (e.g., claude-sonnet-4-6 while main is claude-opus-4-7). |
 | `--run-id` |  | `YYYY-MM-DD-<model>` | Identifier for this run. |
-| `--case` |  | — | Substring match to select specific cases. |
-| `--baseline` |  | — | Previous run to compare against for regression detection via pairwise comparison. |
+| `--case` |  | - | Substring match to select specific cases. |
+| `--baseline` |  | - | Previous run to compare against for regression detection via pairwise comparison. |
 | `--no-judge` |  | `false` | Skip LLM judges, run inline checks only. |
 | `--gold` |  | `false` | Save outputs as gold references after the run. |
 | `--effort` |  | `runner.effort from config` | Claude Code reasoning effort level. |
@@ -46,7 +46,7 @@ reasoning effort levels.
 
 ## Usage
 
-```
+```bash
 /eval-run --model claude-opus-4-6
 /eval-run --model claude-opus-4-6 --baseline 2026-05-01-opus
 /eval-run --case case-001 --no-judge

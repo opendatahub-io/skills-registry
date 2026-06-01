@@ -26,20 +26,20 @@ Verdict, Build compliance, Export compliance, and Notes.
 
 ## Arguments
 
-```
+```bash
 /python-packaging-license-checker <PACKAGE_NAME> [--repo-url] [--source-available] [--upstream-org]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `PACKAGE_NAME` | :material-check: | — | Python package name to check |
-| `--repo-url` |  | — | Source repository URL (skips source-finder step) |
-| `--source-available` |  | — | Whether buildable source exists |
-| `--upstream-org` |  | — | Name and primary country of the maintaining organization |
+| `PACKAGE_NAME` | :material-check: | - | Python package name to check |
+| `--repo-url` |  | - | Source repository URL (skips source-finder step) |
+| `--source-available` |  | - | Whether buildable source exists |
+| `--upstream-org` |  | - | Name and primary country of the maintaining organization |
 
 ## Usage
 
-```
+```bash
 /python-packaging-license-checker requests
 /python-packaging-license-checker some-package --repo-url https://github.com/org/repo
 ```

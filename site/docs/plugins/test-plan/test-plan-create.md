@@ -24,19 +24,19 @@ TestPlan.md, TestPlanGaps.md, TestPlanReview.md, and README.md in a feature dire
 
 ## Arguments
 
-```
+```bash
 /test-plan-create <JIRA_KEY> [ADR_FILE_PATH]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `JIRA_KEY` | :material-check: | — | Jira strategy key (RHAISTRAT-*) or issue key (RHOAIENG-*) to generate the test plan from |
-| `ADR_FILE_PATH` |  | — | Local path to an ADR document (markdown, text, or PDF) for additional technical depth |
-| `--output-dir` |  | — | Override output directory for test plan artifacts (skips validation) |
+| `JIRA_KEY` | :material-check: | - | Jira strategy key (RHAISTRAT-*) or issue key (RHOAIENG-*) to generate the test plan from |
+| `ADR_FILE_PATH` |  | - | Local path to an ADR document (markdown, text, or PDF) for additional technical depth |
+| `--output-dir` |  | - | Override output directory for test plan artifacts (skips validation) |
 
 ## Usage
 
-```
+```bash
 /test-plan-create RHAISTRAT-400
 /test-plan-create RHOAIENG-48676
 /test-plan-create RHAISTRAT-400 /path/to/adr.pdf

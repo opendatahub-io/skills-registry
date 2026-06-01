@@ -3,105 +3,113 @@
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
     <mxCell id="args" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;--skill &lt;name&gt;&lt;br&gt;--config eval.yaml&lt;br&gt;--update" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="30" y="140" width="140" height="120" as="geometry"/>
+      <mxGeometry x="30" y="80" width="140" height="120" as="geometry"/>
     </mxCell>
     <mxCell id="find-skill" value="&lt;b&gt;Find Skill&lt;/b&gt;&lt;br&gt;&lt;br&gt;find_skills.py&lt;br&gt;reads plugin.json paths&lt;br&gt;auto-detect if single&lt;br&gt;ask user if multiple" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="220" y="135" width="170" height="130" as="geometry"/>
+      <mxGeometry x="215" y="75" width="160" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="freshness" value="&lt;b&gt;Freshness Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_eval.py config&lt;br&gt;validate_eval.py memory&lt;br&gt;FRESH + COMPLETE → exit&lt;br&gt;STALE → full analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="440" y="135" width="180" height="130" as="geometry"/>
+    <mxCell id="freshness" value="&lt;b&gt;Freshness Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_eval.py config&lt;br&gt;validate_eval.py memory&lt;br&gt;FRESH → exit early&lt;br&gt;STALE → full analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="420" y="75" width="170" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="deep-read" value="&lt;b&gt;Deep-Read Skill&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM agent (Explore)&lt;/i&gt;&lt;br&gt;&lt;br&gt;read SKILL.md fully&lt;br&gt;follow sub-skill chains&lt;br&gt;(up to 5 levels)&lt;br&gt;identify I/O, pipeline&lt;br&gt;suggest judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="670" y="60" width="210" height="160" as="geometry"/>
+    <mxCell id="deep-read" value="&lt;b&gt;Deep-Read Skill&lt;/b&gt;&lt;br&gt;LLM agent (Explore)&lt;br&gt;&lt;br&gt;read SKILL.md fully&lt;br&gt;follow sub-skill chains&lt;br&gt;(up to 5 levels)&lt;br&gt;read scripts/, prompts/&lt;br&gt;identify I/O, pipeline&lt;br&gt;suggest judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="635" y="55" width="210" height="170" as="geometry"/>
     </mxCell>
     <mxCell id="explore-dataset" value="&lt;b&gt;Explore Dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;Glob for cases dirs&lt;br&gt;read sample case files&lt;br&gt;note field names, formats&lt;br&gt;input vs reference files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="670" y="260" width="180" height="130" as="geometry"/>
+      <mxGeometry x="890" y="75" width="170" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="gen-yaml" value="&lt;b&gt;Generate eval.yaml&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM synthesis&lt;/i&gt;&lt;br&gt;&lt;br&gt;eval-yaml-template.md&lt;br&gt;execution mode + args&lt;br&gt;dataset.schema (observed)&lt;br&gt;output schemas&lt;br&gt;2-4 inline judges&lt;br&gt;1-2 LLM judges&lt;br&gt;models, thresholds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="930" y="50" width="210" height="200" as="geometry"/>
+    <mxCell id="gen-yaml" value="&lt;b&gt;Generate eval.yaml&lt;/b&gt;&lt;br&gt;LLM synthesis&lt;br&gt;&lt;br&gt;eval-yaml-template.md&lt;br&gt;execution mode + args&lt;br&gt;dataset.schema (observed)&lt;br&gt;output schemas&lt;br&gt;2-4 inline judges&lt;br&gt;1-2 LLM judges&lt;br&gt;models, thresholds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="1105" y="50" width="200" height="190" as="geometry"/>
     </mxCell>
     <mxCell id="validate" value="&lt;b&gt;Validate Config&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_eval.py config&lt;br&gt;check paths, references&lt;br&gt;judge code validity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="952" y="290" width="170" height="110" as="geometry"/>
+      <mxGeometry x="1350" y="85" width="170" height="110" as="geometry"/>
     </mxCell>
     <mxCell id="gen-md" value="&lt;b&gt;Generate eval.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;skill hash (SHA256)&lt;br&gt;cached analysis&lt;br&gt;YAML frontmatter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1190" y="145" width="160" height="110" as="geometry"/>
+      <mxGeometry x="1350" y="240" width="170" height="110" as="geometry"/>
     </mxCell>
     <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;eval.yaml created&lt;br&gt;N judges configured&lt;br&gt;next: /eval-dataset&lt;br&gt;or /eval-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1400" y="145" width="170" height="110" as="geometry"/>
+      <mxGeometry x="1565" y="85" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-dataset" value="&lt;b&gt;/eval-dataset&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1565" y="240" width="120" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-run" value="&lt;b&gt;/eval-run&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1565" y="310" width="120" height="45" as="geometry"/>
     </mxCell>
     <mxCell id="eval-yaml-structure" value="&lt;b&gt;eval.yaml&lt;/b&gt;&lt;br&gt;&lt;br&gt;skill: (name)&lt;br&gt;execution:&lt;br&gt;&amp;nbsp;&amp;nbsp;mode: case / batch&lt;br&gt;&amp;nbsp;&amp;nbsp;arguments: &quot;{field}...&quot;&lt;br&gt;dataset:&lt;br&gt;&amp;nbsp;&amp;nbsp;path: eval/cases/&lt;br&gt;&amp;nbsp;&amp;nbsp;schema: &quot;...&quot;&lt;br&gt;outputs: [{path, schema}]&lt;br&gt;judges: [{name, type}]&lt;br&gt;thresholds: {min_pass_rate}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
-      <mxGeometry x="690" y="430" width="210" height="180" as="geometry"/>
+      <mxGeometry x="1105" y="285" width="200" height="210" as="geometry"/>
     </mxCell>
-    <mxCell id="e_args_findskill" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="find-skill" parent="1">
+    <mxCell id="e_args_find" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="find-skill" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_findskill_freshness" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-skill" target="freshness" parent="1">
+    <mxCell id="e_find_fresh" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-skill" target="freshness" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_freshness_report" value="FRESH + COMPLETE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="freshness" target="report" parent="1">
+    <mxCell id="e_fresh_report" value="FRESH + COMPLETE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="freshness" target="report" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="530" y="30"/>
-          <mxPoint x="1485" y="30"/>
+          <mxPoint x="505" y="10"/>
+          <mxPoint x="1642" y="10"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_freshness_deepread" value="STALE / missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.55;entryDx=0;entryDy=0;" edge="1" source="freshness" target="deep-read" parent="1">
+    <mxCell id="e_fresh_deep" value="STALE / missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="freshness" target="deep-read" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_deep_explore" value="analysis YAML" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="deep-read" target="explore-dataset" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_explore_gen" value="case structure" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="explore-dataset" target="gen-yaml" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gen_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.47;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="validate" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="645" y="200"/>
-          <mxPoint x="645" y="148"/>
+          <mxPoint x="1330" y="140"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_deepread_explore" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.43;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="deep-read" target="explore-dataset" parent="1">
+    <mxCell id="e_validate_gen_back" value="errors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate" target="gen-yaml" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="760" y="235"/>
-          <mxPoint x="760" y="260"/>
+          <mxPoint x="1435" y="35"/>
+          <mxPoint x="1205" y="35"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_explore_genyaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="explore-dataset" target="gen-yaml" parent="1">
+    <mxCell id="e_validate_genmd" value="eval.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate" target="gen-md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_genmd_report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" source="gen-md" target="report" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="900" y="325"/>
-          <mxPoint x="900" y="150"/>
+          <mxPoint x="1545" y="295"/>
+          <mxPoint x="1545" y="173"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_genyaml_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="validate" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_validate_genyaml" value="errors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="validate" target="gen-yaml" parent="1">
+    <mxCell id="e_report_dataset" value="no cases" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="eval-dataset" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1155" y="345"/>
-          <mxPoint x="1155" y="150"/>
+          <mxPoint x="1605" y="215"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_validate_genmd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="validate" target="gen-md" parent="1">
+    <mxCell id="e_report_run" value="cases exist" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="eval-run" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1160" y="345"/>
-          <mxPoint x="1160" y="200"/>
+          <mxPoint x="1750" y="195"/>
+          <mxPoint x="1750" y="332"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_genmd_report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-md" target="report" parent="1">
+    <mxCell id="e_gen_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="eval-yaml-structure" parent="1">
       <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_genyaml_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.03;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="eval-yaml-structure" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="936" y="420"/>
-          <mxPoint x="795" y="420"/>
-        </Array>
       </mxGeometry>
     </mxCell>
   </root>

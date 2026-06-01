@@ -1,0 +1,216 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/create-component-onboarding-jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;optional: jira-url" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="205" width="140" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="prereqs" value="&lt;b&gt;Check Prerequisites&lt;/b&gt;&lt;br&gt;&lt;br&gt;parse optional Jira URL&lt;br&gt;validate URL format&lt;br&gt;check uv, jq installed&lt;br&gt;check JIRA_USER_EMAIL&lt;br&gt;check JIRA_API_TOKEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="160" width="160" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="init-workdir" value="&lt;b&gt;Init Working Dir&lt;/b&gt;&lt;br&gt;&lt;br&gt;scripts/init_workdir.sh&lt;br&gt;set YAML_PATH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="430" y="160" width="140" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-jira" value="&lt;b&gt;Fetch Jira Details&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch_jira_details.py&lt;br&gt;extract summary, description&lt;br&gt;read ticket context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="430" y="290" width="140" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="qa" value="&lt;b&gt;Interactive Q&amp;A&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="620" y="90" width="510" height="320" as="geometry"/>
+    </mxCell>
+    <mxCell id="qa.product" value="&lt;b&gt;Product Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;ODH or RHOAI&lt;br&gt;determines downstream&lt;br&gt;questions and behavior" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="qa">
+      <mxGeometry x="20" y="100" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="qa.odh-qs" value="&lt;b&gt;ODH Questions&lt;/b&gt;&lt;br&gt;&lt;br&gt;build type (CI / Release)&lt;br&gt;release tag (if Release)&lt;br&gt;branch (user-specified)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="qa">
+      <mxGeometry x="195" y="35" width="135" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="qa.rhoai-qs" value="&lt;b&gt;RHOAI Questions&lt;/b&gt;&lt;br&gt;&lt;br&gt;target version (x.y[-eaN])&lt;br&gt;CPU architectures&lt;br&gt;release category (GA/TP/DP)&lt;br&gt;descriptions (from README)&lt;br&gt;branch (auto-derived)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="qa">
+      <mxGeometry x="195" y="165" width="135" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="qa.common-qs" value="&lt;b&gt;Common Questions&lt;/b&gt;&lt;br&gt;&lt;br&gt;component name (odh-*)&lt;br&gt;repo URL (github.com)&lt;br&gt;build context path&lt;br&gt;Dockerfile path&lt;br&gt;is operator? (+ manifests)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="qa">
+      <mxGeometry x="365" y="85" width="130" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="github-api" value="&lt;b&gt;GitHub&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="870" y="450" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="confirm" value="&lt;b&gt;Confirm Values&lt;/b&gt;&lt;br&gt;&lt;br&gt;display summary table&lt;br&gt;yes / no / edit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1180" y="200" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-yaml" value="&lt;b&gt;Generate YAML&lt;/b&gt;&lt;br&gt;&lt;br&gt;generate_onboarding_yaml.py&lt;br&gt;product-specific args&lt;br&gt;operator fields if applicable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1375" y="195" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate" value="&lt;b&gt;Validate YAML&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate_yaml_schema.py&lt;br&gt;component_onboarding_details&lt;br&gt;.schema.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1580" y="200" width="160" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="digest-check" value="&lt;b&gt;Dockerfile Digest Check&lt;/b&gt;&lt;br&gt;&lt;br&gt;check_dockerfile_digests.py&lt;br&gt;verify FROM @sha256 pins&lt;br&gt;RHOAI only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1790" y="200" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-int" value="&lt;b&gt;Jira Integration&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1580" y="370" width="500" height="350" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-int.parent-id" value="&lt;b&gt;Parent Feature ID&lt;/b&gt;&lt;br&gt;&lt;br&gt;ask for RHAISTRAT-* ID&lt;br&gt;links &quot;relates to&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira-int">
+      <mxGeometry x="20" y="120" width="130" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-int.attach-existing" value="&lt;b&gt;Attach to Existing&lt;/b&gt;&lt;br&gt;Path A&lt;br&gt;&lt;br&gt;update_jira_issue.py&lt;br&gt;attach YAML file&lt;br&gt;add label, comment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira-int">
+      <mxGeometry x="185" y="40" width="140" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-int.clone-template" value="&lt;b&gt;Clone Template&lt;/b&gt;&lt;br&gt;Path B&lt;br&gt;&lt;br&gt;ODH: RHOAIENG-35683&lt;br&gt;RHOAI: RHOAIENG-17225&lt;br&gt;create new Jira ticket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira-int">
+      <mxGeometry x="185" y="180" width="140" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-int.attach-new" value="&lt;b&gt;Attach to New&lt;/b&gt;&lt;br&gt;Path B (continued)&lt;br&gt;&lt;br&gt;attach YAML to new ticket&lt;br&gt;add label, comment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira-int">
+      <mxGeometry x="350" y="180" width="130" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-int.update-meta" value="&lt;b&gt;Update Metadata&lt;/b&gt;&lt;br&gt;&lt;br&gt;update_onboarding_jira.py&lt;br&gt;title, description table&lt;br&gt;labels" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira-int">
+      <mxGeometry x="350" y="55" width="130" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-api" value="&lt;b&gt;Jira API&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1560" y="760" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Report Completion&lt;/b&gt;&lt;br&gt;&lt;br&gt;YAML path&lt;br&gt;Jira ID + URL&lt;br&gt;parent feature link&lt;br&gt;attachment + comment status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2130" y="420" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate-skill" value="&lt;b&gt;/validate-component-&lt;/b&gt;&lt;br&gt;&lt;b&gt;onboarding-jira&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="2340" y="450" width="155" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="yaml-callout" value="component_onboarding_details.yaml&lt;br&gt;&lt;br&gt;product_context: ODH|RHOAI&lt;br&gt;component_name: odh-*&lt;br&gt;repo_url: github.com/...&lt;br&gt;repo_branch: main|rhoai-x.y&lt;br&gt;context_path: ./&lt;br&gt;dockerfile_path: Dockerfile&lt;br&gt;is_operator: true|false&lt;br&gt;# RHOAI-only:&lt;br&gt;target_rhoai_version: x.y&lt;br&gt;architectures: [x86_64, arm64]&lt;br&gt;release_category: GA|TP|Beta&lt;br&gt;long_description: ...&lt;br&gt;short_description: ..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1210" y="460" width="210" height="280" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_prereqs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="prereqs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_prereqs_init" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.27;exitDx=0;exitDy=0;entryX=0;entryY=0.48;entryDx=0;entryDy=0;" edge="1" source="prereqs" target="init-workdir" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_init_fetch" value="URL provided" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="init-workdir" target="fetch-jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="500" y="260"/>
+          <mxPoint x="500" y="290"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_init_qa" value="no URL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="init-workdir" target="qa.product" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_qa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="fetch-jira" target="qa.product" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_jiraapi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-jira" target="jira-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="430" y="780"/>
+          <mxPoint x="1560" y="780"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_product_odh" value="ODH" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="qa.product" target="qa.odh-qs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_product_rhoai" value="RHOAI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="qa.product" target="qa.rhoai-qs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_odh_common" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="qa.odh-qs" target="qa.common-qs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rhoai_common" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="qa.rhoai-qs" target="qa.common-qs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rhoai_github" value="fetch README" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="qa.rhoai-qs" target="github-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="870" y="435"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_common_confirm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="qa.common-qs" target="confirm" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_confirm_gen" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="confirm" target="gen-yaml" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_confirm_edit" value="edit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="confirm" target="qa.product" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1252" y="60"/>
+          <mxPoint x="710" y="60"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gen_validate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="validate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_digest" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.42;entryDx=0;entryDy=0;" edge="1" source="validate" target="digest-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_errors" value="errors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.6;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate" target="qa.product" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1660" y="35"/>
+          <mxPoint x="710" y="35"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_digest_parentid" value="pass / skip (ODH)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="digest-check" target="jira-int.parent-id" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1867" y="340"/>
+          <mxPoint x="1640" y="340"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_parentid_existing" value="URL provided" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira-int.parent-id" target="jira-int.attach-existing" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_parentid_clone" value="no URL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira-int.parent-id" target="jira-int.clone-template" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_clone_attachnew" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira-int.clone-template" target="jira-int.attach-new" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_existing_meta" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira-int.attach-existing" target="jira-int.update-meta" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_attachnew_meta" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="jira-int.attach-new" target="jira-int.update-meta" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_meta_jiraapi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="jira-int.update-meta" target="jira-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1610" y="740"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_meta_report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira-int.update-meta" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_report_validateskill" value="next step" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="validate-skill" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_gen_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-yaml" target="yaml-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1375" y="430"/>
+          <mxPoint x="1315" y="430"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

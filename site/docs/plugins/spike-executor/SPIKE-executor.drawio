@@ -1,0 +1,192 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/SPIKE-executor&lt;/b&gt;&lt;br&gt;&lt;br&gt;project name (required)&lt;br&gt;--skip-tests&lt;br&gt;--skip-jira" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="80" width="130" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="intake" value="&lt;b&gt;Intake&lt;/b&gt;&lt;br&gt;&lt;br&gt;check Jira credentials&lt;br&gt;check oc CLI + cluster login&lt;br&gt;gather project context&lt;br&gt;community URL, constraints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="80" width="180" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-plan" value="&lt;b&gt;Generate Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor generate-plan&lt;br&gt;3-phase investigation plan&lt;br&gt;community, RHOAI, deliverables&lt;br&gt;BREAKPOINT: &quot;Approve Plan&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="80" width="190" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira" value="&lt;b&gt;Jira Sync&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="680" y="50" width="390" height="185" as="geometry"/>
+    </mxCell>
+    <mxCell id="preview" value="&lt;b&gt;Preview Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor preview-jira&lt;br&gt;epic/story hierarchy&lt;br&gt;no tickets created yet&lt;br&gt;BREAKPOINT: &quot;Create Jiras&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira">
+      <mxGeometry x="15" y="35" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="create" value="&lt;b&gt;Create Tickets&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor sync-jira&lt;br&gt;create epics + stories&lt;br&gt;assign reporter, assignee&lt;br&gt;transition to &quot;In Progress&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="jira">
+      <mxGeometry x="205" y="35" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="research" value="&lt;b&gt;AI Research &amp; Enrichment&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1120" y="30" width="770" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="scaffold" value="&lt;b&gt;Research Scaffold&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor research&lt;br&gt;YAML + MD + prompt files&lt;br&gt;structured research brief" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="research">
+      <mxGeometry x="15" y="35" width="165" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="enrich" value="&lt;b&gt;AI Deep Dive&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM enrichment&lt;/i&gt;&lt;br&gt;&lt;br&gt;web search for real data&lt;br&gt;GitHub stats, CVEs, licenses&lt;br&gt;architecture, UBI, security&lt;br&gt;update YAML + MD findings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="research">
+      <mxGeometry x="200" y="35" width="170" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate-research" value="&lt;b&gt;Validate Research&lt;/b&gt;&lt;br&gt;&lt;br&gt;validate-research&lt;br&gt;URL reachability checks&lt;br&gt;hallucination detection&lt;br&gt;TBD audit, format checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="research">
+      <mxGeometry x="390" y="35" width="170" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="update-jira" value="&lt;b&gt;Update Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;update-jira-tickets&lt;br&gt;targeted comments/story&lt;br&gt;transition to &quot;Review&quot;&lt;br&gt;BREAKPOINT: &quot;Approve&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="research">
+      <mxGeometry x="580" y="35" width="170" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-server" value="&lt;b&gt;Jira Server&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="955" y="280" width="120" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="testing" value="&lt;b&gt;Test Generation&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="430" width="400" height="185" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-plan" value="&lt;b&gt;Generate Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;generate-test-plan-cmd&lt;br&gt;4 suites, 14 checks&lt;br&gt;BREAKPOINT: &quot;Approve&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="testing">
+      <mxGeometry x="15" y="35" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="test-suite" value="&lt;b&gt;Generate Test Suite&lt;/b&gt;&lt;br&gt;&lt;br&gt;generate-test-suite&lt;br&gt;pytest with 4 test classes&lt;br&gt;OCP fixtures&lt;br&gt;BREAKPOINT: &quot;Start&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="testing">
+      <mxGeometry x="210" y="35" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="run-tests" value="&lt;b&gt;Run Tests&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor run-tests&lt;br&gt;pytest against OCP cluster&lt;br&gt;JUnit XML results" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="480" y="495" width="170" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="ocp-cluster" value="&lt;b&gt;OpenShift Cluster&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="500" y="660" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Calculate Score&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor calculate-score&lt;br&gt;rubric 0-3 per check&lt;br&gt;domain weights (UBI/Op/Sec/HW)&lt;br&gt;security gate: 0 blocks GO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="700" y="478" width="195" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="gen-rfe" value="&lt;b&gt;Generate RFE&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor generate-rfe&lt;br&gt;rfe-creator compatible format&lt;br&gt;YAML frontmatter + markdown&lt;br&gt;BREAKPOINT: &quot;Approve RFE&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="945" y="483" width="190" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="complete" value="&lt;b&gt;Complete&lt;/b&gt;&lt;br&gt;&lt;br&gt;spike-executor complete&lt;br&gt;artifact inventory&lt;br&gt;score + decision&lt;br&gt;timeline summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1185" y="483" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="score-rubric" value="Domain Weights:&lt;br&gt;  UBI Feasibility&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;25&lt;br&gt;  Operator Integration 20&lt;br&gt;  Security &amp; Hardening 30&lt;br&gt;  Hardware &amp; MLOps&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;25&lt;br&gt;&lt;br&gt;Decision Bands:&lt;br&gt;  GO&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&gt;= 80&lt;br&gt;  PIVOT&amp;nbsp;&amp;nbsp;&amp;nbsp;55-79&lt;br&gt;  NO-GO&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt; 55" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="693" y="670" width="210" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="artifacts-tree" value="artifacts/&lt;br&gt;  SPIKE-Plan-{project}.md&lt;br&gt;  Jira-Links-{project}-spike.md&lt;br&gt;  Research-Findings-{project}.yaml&lt;br&gt;  Research-Findings-{project}.md&lt;br&gt;  Test-Plan-{project}.md&lt;br&gt;  test_suite_{project}.py&lt;br&gt;  Feasibility-Report-{project}.md&lt;br&gt;  RFE-Input-{project}.md&lt;br&gt;  SPIKE-Summary-{project}.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="660" width="240" height="195" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_intake" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="intake" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_intake_plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="intake" target="gen-plan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_plan_jira" value="plan approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-plan" target="preview" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_plan_skip_jira" value="--skip-jira" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="gen-plan" target="scaffold" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="535" y="10"/>
+          <mxPoint x="1197" y="10"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_preview_create" value="approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preview" target="create" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_create_scaffold" value="Jira-Links.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="create" target="scaffold" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_create_jiraserver" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="create" target="jira-server" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scaffold_enrich" value="Research-Prompt.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="scaffold" target="enrich" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_enrich_validate" value="Research-Findings.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="enrich" target="validate-research" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_updatejira" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="validate-research" target="update-jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_validate_enrich_back" value="errors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="validate-research" target="enrich" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1595" y="260"/>
+          <mxPoint x="1405" y="260"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_updatejira_jiraserver" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="update-jira" target="jira-server" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1785" y="302"/>
+          <mxPoint x="1075" y="302"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_updatejira_testplan" value="research approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="update-jira" target="test-plan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1785" y="370"/>
+          <mxPoint x="132" y="370"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_updatejira_skiptests" value="--skip-tests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="update-jira" target="gen-rfe" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1785" y="455"/>
+          <mxPoint x="1040" y="455"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_testplan_testsuite" value="approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="test-plan" target="test-suite" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_testsuite_runtests" value="test suite ready" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="test-suite" target="run-tests" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_runtests_score" value="Test-Results.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="run-tests" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_runtests_ocp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="run-tests" target="ocp-cluster" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_score_genrfe" value="GO / PIVOT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="gen-rfe" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_score_complete_nogo" value="NO-GO (no RFE)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="score" target="complete" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="798" y="640"/>
+          <mxPoint x="1270" y="640"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_score_rubric" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="score" target="score-rubric" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="798" y="640"/>
+          <mxPoint x="798" y="650"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_genrfe_complete" value="RFE approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="gen-rfe" target="complete" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_complete_artifacts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="complete" target="artifacts-tree" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

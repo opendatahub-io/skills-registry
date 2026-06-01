@@ -30,17 +30,17 @@ following established repository conventions.
 
 ## Arguments
 
-```
+```bash
 /test-rules-generator [repository-url]
 ```
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `repository-url` |  | — | GitHub repository URL to extract test patterns from (prompted if omitted) |
+| `repository-url` |  | - | GitHub repository URL to extract test patterns from (prompted if omitted) |
 
 ## Usage
 
-```
+```bash
 /test-rules-generator https://github.com/opendatahub-io/odh-dashboard
 /test-rules-generator https://github.com/opendatahub-io/kserve
 /test-rules-generator https://github.com/kubeflow/training-operator
