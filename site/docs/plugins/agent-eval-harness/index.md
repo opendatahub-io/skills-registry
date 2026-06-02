@@ -13,12 +13,13 @@ review results with human feedback, sync with MLflow, and iteratively optimize
 skill quality with regression checks.
 
 The framework is schema-driven via eval.yaml, which defines execution mode
-(case-by-case or batch), dataset schemas, output descriptions, judges (inline
-checks, LLM prompts, external modules), model selection per role (skill, subagent,
-judge, hook), thresholds for regression detection, and tool interception handlers.
-Supports AskUserQuestion answering via 3-tier resolution (exact overrides, LLM
-with case context, fallback) and annotation-aware judges that adapt scoring based
-on expected outcomes per test case.
+(case-by-case or batch), dataset schemas, output descriptions, judges (four
+types: builtin reusable judges, inline check scripts, LLM prompts, and external
+modules), model selection per role (skill, subagent, judge, hook), thresholds
+for regression detection, and tool interception handlers. Supports
+AskUserQuestion answering via 3-tier resolution (exact overrides, LLM with case
+context, fallback) and annotation-aware judges that adapt scoring based on
+expected outcomes per test case.
 
 The harness also integrates with EvalHub for running evaluations on Red Hat
 OpenShift AI via a custom provider adapter, supporting S3-hosted datasets and
@@ -62,8 +63,11 @@ containerized execution.
 Seven skills form a linear pipeline with feedback loops: setup (optional) ->
 analyze -> dataset -> run -> review/optimize, with mlflow available at any
 point after run. eval-run is the central hub -- it executes skills headlessly,
-runs judges (inline checks + LLM scoring + pairwise comparison), and produces
-summary.yaml consumed by review, optimize, and mlflow.
+runs judges (builtin + inline checks + LLM scoring + external modules, plus
+pairwise comparison against a baseline), and produces summary.yaml consumed by
+review, optimize, and mlflow. Builtin judges are reusable, versioned judges from
+the agent_eval/judges/ library, parameterizable via an arguments dict and
+listable with list_builtins.py.
 
 eval-optimize creates a closed loop by reading judge rationale and execution
 transcripts, forming hypotheses about SKILL.md deficiencies, making surgical

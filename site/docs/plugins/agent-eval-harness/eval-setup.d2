@@ -36,6 +36,19 @@ install-deps: |md
   style.stroke-width: 2
 }
 
+# --- External: SessionStart hook ---
+
+session-hook: |md
+  **SessionStart Hook**
+  (auto-provisions venv)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
 # --- Preflight ---
 
 preflight: |md
@@ -244,6 +257,9 @@ eval-run: |md
 # --- Flow ---
 
 args -> install-deps
+session-hook -> install-deps: "provisions .eval-venv" {
+  style.stroke-dash: 3
+}
 install-deps -> preflight: "ensure_deps.py"
 
 preflight -> report: "all pass" {

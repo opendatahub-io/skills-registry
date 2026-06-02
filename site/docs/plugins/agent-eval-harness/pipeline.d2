@@ -5,7 +5,7 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry ---
+# --- Entry (optional config) ---
 
 setup: |md
   **/eval-setup**
@@ -130,17 +130,44 @@ mlflow-server: |md
   style.stroke-dash: 3
 }
 
+# --- Callout: eval-run primary artifact (fanned out to 3 skills) ---
+
+summary-out: |md
+  summary.yaml
+    run_id, model, status
+    cases:
+      - case_id
+        judges: {name: score}
+        artifacts/
+    aggregate: pass_rate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Main pipeline flow ---
 
 setup -> analyze: "environment ready"
 analyze -> dataset: "eval.yaml + eval.md"
 dataset -> run: "test cases"
 
-# --- Fan-out from eval-run ---
+# --- Fan-out from eval-run (summary.yaml on callout, edges = action) ---
 
-run -> review: "summary.yaml"
-run -> optimize: "summary.yaml"
-run -> mlflow-skill: "summary.yaml"
+run -> review: "human review"
+run -> optimize: "auto-improve"
+run -> mlflow-skill: "log results"
+
+# --- summary.yaml callout attached to eval-run ---
+
+run -> summary-out: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
 
 # --- eval-optimize invokes eval-run (feedback loop) ---
 

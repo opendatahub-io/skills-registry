@@ -12,7 +12,7 @@ entry: |md
 
   - --run-id \<id\> (required)
   - --config \<path\>
-  - --case \<filter\>
+  - --cases \<name ...\>
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -28,7 +28,7 @@ load-results: |md
   - state.py read summary.yaml
   - read eval.yaml config
   - note skill, dataset, judges
-  - inline checks vs LLM judges
+  - deterministic vs LLM judges
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -41,9 +41,9 @@ load-results: |md
 overview: |md
   **Present Overview**
 
+  - read analysis.md if present
   - link to report.html
   - pass rates per judge
-  - cases all-pass vs failures
   - pairwise win/loss/tie
 | {
   shape: rectangle
@@ -56,17 +56,18 @@ overview: |md
 
 walk-cases: |md
   **Walk Through Cases**
-  interactive review
+  human-in-the-loop
 
-  - present judge scores + rationale
+  - judge scores + rationale
+  - pairwise results
   - summarize output files
   - ask feedback per case
-  - empty feedback = acceptable
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.double-border: true
 }
 
 # --- Check Transcripts ---
@@ -75,11 +76,11 @@ check-transcripts: |md
   **Check Transcripts**
   Agent delegation
 
+  - check execution_mode
+    (case vs batch)
   - spawn Agent on stdout.log
-  - multi-approach attempts?
-  - unnecessary tool usage?
+  - multi-approach? wasted turns?
   - error recovery patterns
-  - wasted turns count
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -93,9 +94,9 @@ check-transcripts: |md
 save-feedback: |md
   **Save Feedback**
 
-  - write review.yaml
-  - run_id, reviewer: "human"
-  - per-case feedback text
+  - Write review.yaml (NOT state.py)
+  - reviewer: "human"
+  - keys = case dir names
   - empty = acceptable
 | {
   shape: rectangle
@@ -145,13 +146,12 @@ analyze: |md
 
 propose: |md
   **Propose Changes**
-  LLM
+  LLM, requires approval
 
   - find SKILL.md via find_skills.py
   - show before/after diffs
   - grounded in feedback
   - propose new eval.yaml judges
-  - user approves before apply
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -190,6 +190,7 @@ eval-run: |md
 
 eval-optimize: |md
   **/eval-optimize**
+  reads review.yaml
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -210,6 +211,7 @@ eval-dataset: |md
 
 eval-mlflow: |md
   **/eval-mlflow**
+  push feedback to traces
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -225,19 +227,14 @@ entry -> load-results
 load-results -> overview: "summary.yaml"
 overview -> walk-cases: "all / failures / filter"
 
-# Case iteration loop
-walk-cases -> walk-cases: "next case" {
-  style.stroke-dash: 3
-}
-
-# Transcript check (optional, parallel to main flow)
+# Transcript check (optional)
 walk-cases -> check-transcripts: "if transcripts exist" {
   style.stroke-dash: 3
 }
 check-transcripts -> save-feedback: "transcript findings"
 
 # Main continuation
-walk-cases -> save-feedback
+walk-cases -> save-feedback: "no transcripts"
 
 # Save feedback with callout
 save-feedback -> review-yaml: {
@@ -264,5 +261,13 @@ next-steps -> eval-dataset: "expand coverage" {
   style.stroke-dash: 3
 }
 next-steps -> eval-mlflow: "push feedback" {
+  style.stroke-dash: 3
+}
+
+# review.yaml consumed directly downstream
+save-feedback -> eval-optimize: "review.yaml" {
+  style.stroke-dash: 3
+}
+save-feedback -> eval-mlflow: "review.yaml" {
   style.stroke-dash: 3
 }
