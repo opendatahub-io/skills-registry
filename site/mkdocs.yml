@@ -153,6 +153,9 @@ nav:
     - spike-executor:
       - plugins/spike-executor/index.md
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
+    - model-serving-skills:
+      - plugins/model-serving-skills/index.md
+      - jira-hygiene: plugins/model-serving-skills/jira-hygiene.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
@@ -162,4 +165,5 @@ nav:
     - Security Review: categories/security.md
     - Development Tools: categories/development-tools.md
     - Product Planning: categories/planning.md
+    - Model Serving: categories/model-serving.md
   - Getting Started: getting-started.md

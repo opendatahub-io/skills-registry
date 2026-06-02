@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-13 plugins registered in the marketplace.
+14 plugins registered in the marketplace.
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
@@ -24,3 +24,4 @@ title: Plugins
 | [aiops-skills](aiops-skills/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
 | [code-review-skills](code-review-skills/index.md) | Code Quality | 1 | v0.1.0 |
 | [spike-executor](spike-executor/index.md) | Product Planning | 1 | v0.2.0 |
+| [model-serving-skills](model-serving-skills/index.md) | Model Serving | 1 | v0.1.0 |

@@ -308,3 +308,23 @@ Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibi
 ```bash
 /plugin install spike-executor@opendatahub-skills
 ```
+
+## Model Serving
+
+Skills for the RHOAI Model Serving team — JIRA hygiene, workflow automation, and team-specific tooling
+
+### model-serving-skills
+
+Claude Code skills for the RHOAI Model Serving team. Includes JIRA hygiene enforcement (story points, team, components, activity type, fix version, labels), workflow automation, and team-specific tooling.
+
+v0.1.0 | Apache-2.0 | [VedantMahabaleshwarkar/model-serving-skills](https://github.com/VedantMahabaleshwarkar/model-serving-skills)
+
+Tags: jira, hygiene, model-serving, kserve, rhoai, workflow
+
+| Skill | Description |
+|-------|-------------|
+| `/jira-hygiene` | Enforce JIRA hygiene standards on one or many issues — sets story points, team, components, activity type, fix version, and labels |
+
+```bash
+/plugin install model-serving-skills@opendatahub-skills
+```

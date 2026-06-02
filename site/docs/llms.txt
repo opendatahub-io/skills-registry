@@ -17,6 +17,7 @@
 - [aiops-skills](https://opendatahub-io.github.io/skills-registry/plugins/aiops-skills/): DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.
 - [code-review-skills](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/): AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
 - [spike-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
+- [model-serving-skills](https://opendatahub-io.github.io/skills-registry/plugins/model-serving-skills/): Claude Code skills for the RHOAI Model Serving team. Includes JIRA hygiene enforcement (story points, team, components, activity type, fix version, labels), workflow automation, and team-specific tooling.
 
 ## Skills
 
@@ -85,6 +86,7 @@
 - [validate-component-onboarding-jira](https://opendatahub-io.github.io/skills-registry/plugins/aiops-skills/validate-component-onboarding-jira/): Pre-flight validation for ODH component onboarding — fetches Jira, downloads YAML, validates against schema
 - [gitlab-code-review](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/gitlab-code-review/): Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
 - [SPIKE-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/SPIKE-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates
+- [jira-hygiene](https://opendatahub-io.github.io/skills-registry/plugins/model-serving-skills/jira-hygiene/): Enforce JIRA hygiene standards on one or many issues — sets story points, team, components, activity type, fix version, and labels
 
 ## Optional
 

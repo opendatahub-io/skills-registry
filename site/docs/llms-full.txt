@@ -2175,3 +2175,17 @@ Examples:
 ```
 
 ---
+
+## model-serving-skills
+
+Claude Code skills for the RHOAI Model Serving team. Includes JIRA hygiene enforcement (story points, team, components, activity type, fix version, labels), workflow automation, and team-specific tooling.
+
+**Repository**: https://github.com/VedantMahabaleshwarkar/model-serving-skills
+
+### Skills
+
+#### /jira-hygiene
+
+Enforce JIRA hygiene standards on one or many issues — sets story points, team, components, activity type, fix version, and labels
+
+---

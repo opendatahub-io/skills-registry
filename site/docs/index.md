@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-13 plugins | 74 skills | 7 categories
+14 plugins | 75 skills | 8 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -124,6 +124,14 @@ hide:
 
     **1 skills** - Product Planning - v0.2.0
 
+-   **[model-serving-skills](plugins/model-serving-skills/index.md)**
+
+    ---
+
+    Claude Code skills for the RHOAI Model Serving team. Includes JIRA hygiene enforcement (story points, team, component...
+
+    **1 skills** - Model Serving - v0.1.0
+
 </div>
 
 ## Categories
@@ -135,3 +143,4 @@ hide:
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (2 plugins)
+- [Model Serving](categories/model-serving.md) -- Skills for the RHOAI Model Serving team — JIRA hygiene, workflow automation, and team-specific tooling (1 plugin)
