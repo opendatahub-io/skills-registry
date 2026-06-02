@@ -99,6 +99,26 @@ Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 /plugin install agent-eval-harness@opendatahub-skills
 ```
 
+## Code Quality
+
+Code review, linting, and quality enforcement
+
+### code-review-skills
+
+AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
+
+Tags: code-review, gitlab, ci, merge-request
+
+| Skill | Description |
+|-------|-------------|
+| `/gitlab-code-review` | Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments |
+
+```bash
+/plugin install code-review-skills@opendatahub-skills
+```
+
 ## Documentation
 
 Skills for generating and maintaining documentation

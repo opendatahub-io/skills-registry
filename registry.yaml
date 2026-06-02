@@ -535,6 +535,34 @@ plugins:
         install: "/plugin install aiops-skills@opendatahub-skills"
     depends_on: []
 
+  - name: code-review-skills
+    description: >
+      AI-powered code review for GitLab merge requests. Reviews all commits
+      since the base branch, produces structured JSON feedback with inline
+      comments, and posts results to the GitLab MR (in CI) or displays them
+      locally for preview. Supports chill mode filtering and comment
+      deduplication.
+    version: "0.1.0"
+    category: code-quality
+    tags: [code-review, gitlab, ci, merge-request]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/code-review-skills
+      ref: main
+    homepage: https://github.com/opendatahub-io/code-review-skills
+    repository: https://github.com/opendatahub-io/code-review-skills
+    skills:
+      - name: gitlab-code-review
+        description: Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install code-review-skills@opendatahub-skills"
+    depends_on: []
+
   - name: spike-executor
     description: >
       Execute RHOAI SPIKE investigations with human-in-the-loop approval gates.

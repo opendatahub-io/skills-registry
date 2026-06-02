@@ -147,12 +147,16 @@ nav:
       - plugins/aiops-skills/index.md
       - create-component-onboarding-jira: plugins/aiops-skills/create-component-onboarding-jira.md
       - validate-component-onboarding-jira: plugins/aiops-skills/validate-component-onboarding-jira.md
+    - code-review-skills:
+      - plugins/code-review-skills/index.md
+      - gitlab-code-review: plugins/code-review-skills/gitlab-code-review.md
     - spike-executor:
       - plugins/spike-executor/index.md
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md
+    - Code Quality: categories/code-quality.md
     - Documentation: categories/documentation.md
     - DevOps & CI/CD: categories/devops.md
     - Security Review: categories/security.md

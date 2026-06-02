@@ -2018,6 +2018,20 @@ Examples:
 
 ---
 
+## code-review-skills
+
+AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
+
+**Repository**: https://github.com/opendatahub-io/code-review-skills
+
+### Skills
+
+#### /gitlab-code-review
+
+Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
+
+---
+
 ## spike-executor
 
 Execute RHOAI SPIKE investigations with human-in-the-loop approval gates on

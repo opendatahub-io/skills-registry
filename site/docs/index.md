@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-12 plugins | 73 skills | 6 categories
+13 plugins | 74 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -108,6 +108,14 @@ hide:
 
     **2 skills** - DevOps & CI/CD - v0.1.0
 
+-   **[code-review-skills](plugins/code-review-skills/index.md)**
+
+    ---
+
+    AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON...
+
+    **1 skills** - Code Quality - v0.1.0
+
 -   **[spike-executor](plugins/spike-executor/index.md)**
 
     ---
@@ -121,6 +129,7 @@ hide:
 ## Categories
 
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (4 plugins)
+- [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (1 plugin)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (2 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)

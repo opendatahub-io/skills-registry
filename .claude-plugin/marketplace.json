@@ -312,6 +312,29 @@
     },
     {
       "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "code-quality",
+      "description": "AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.\n",
+      "homepage": "https://github.com/opendatahub-io/code-review-skills",
+      "keywords": [
+        "code-review",
+        "gitlab",
+        "ci",
+        "merge-request"
+      ],
+      "license": "Apache-2.0",
+      "name": "code-review-skills",
+      "repository": "https://github.com/opendatahub-io/code-review-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/code-review-skills",
+        "source": "github"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
         "name": "IKRedHat"
       },
       "category": "planning",
