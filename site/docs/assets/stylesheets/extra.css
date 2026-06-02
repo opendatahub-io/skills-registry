@@ -442,6 +442,13 @@ label.md-nav__link--active {
 }
 
 /* ── Plugin cards ── */
+/* Use auto-fill so a section with a single card keeps normal card width
+   instead of stretching to fill the entire row (Material's auto-fit default).
+   The grid lives on the .grid div; the inner <ul> is display:contents. */
+.md-typeset .grid.cards {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
 .md-typeset .grid.cards > ul > li {
   border: 1px solid var(--sr-border);
   border-radius: 10px;

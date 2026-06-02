@@ -9,7 +9,7 @@ title: Code Quality
 
 Code review, linting, and quality enforcement
 
-## Plugins
+## SDLC
 
 ### [code-review-skills](../plugins/code-review-skills/index.md)
 

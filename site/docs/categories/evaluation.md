@@ -9,7 +9,7 @@ title: Evaluation & Testing
 
 Skills for evaluating and testing AI agent skills
 
-## Plugins
+## SDLC
 
 ### [assess-rfe](../plugins/assess-rfe/index.md)
 
@@ -28,6 +28,8 @@ End-to-end test planning workflow for RHOAI: generate test plans from strategies
 Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validation, and test pattern extraction.
 
 **5 skills** - v1.0.0
+
+## Generic
 
 ### [agent-eval-harness](../plugins/agent-eval-harness/index.md)
 

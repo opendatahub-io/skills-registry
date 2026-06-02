@@ -81,7 +81,7 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 
 Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
 
-v1.4.0 | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
+v1.4.0 | Generic | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
 
 Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 
@@ -207,7 +207,7 @@ Developer productivity tools for packaging, CI/CD debugging, and workflow automa
 
 Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
 
-v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
 
 Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation
 

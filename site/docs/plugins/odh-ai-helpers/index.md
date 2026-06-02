@@ -33,6 +33,7 @@ with each stage producing JSON artifacts consumed by the next.
     - **Version**: 0.1.0
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
+    - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
     - **Repository**: [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
     - **Tags**: <span class="tag-pill">python-packaging</span> <span class="tag-pill">licensing</span> <span class="tag-pill">dependencies</span> <span class="tag-pill">gitlab</span> <span class="tag-pill">jira</span> <span class="tag-pill">adr</span> <span class="tag-pill">git</span> <span class="tag-pill">automation</span>

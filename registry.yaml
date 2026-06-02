@@ -286,6 +286,7 @@ plugins:
       GitLab pipelines, reviewing ADRs, and more.
     version: "0.1.0"
     category: development-tools
+    scope: generic
     tags: [python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation]
     author:
       name: opendatahub-io
@@ -374,6 +375,7 @@ plugins:
       support for inline, LLM-based, and external judges.
     version: "1.4.0"
     category: evaluation
+    scope: generic
     tags: [evaluation, testing, skills, agents, mlflow, optimization, scoring]
     author:
       name: Antonin Stefanutti

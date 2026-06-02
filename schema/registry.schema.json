@@ -69,6 +69,12 @@
           "type": "string",
           "description": "Category key from the categories map"
         },
+        "scope": {
+          "type": "string",
+          "enum": ["generic", "sdlc", "team"],
+          "default": "sdlc",
+          "description": "Reusability scope. 'generic' works anywhere; 'sdlc' (default) is RHOAI/ODH-wide and reusable across teams; 'team' is hardcoded to a specific team's setup and not generally reusable. The catalog and site label generic and team plugins. Catalog-only metadata — not propagated to marketplace.json."
+        },
         "tags": {
           "type": "array",
           "items": { "type": "string" }

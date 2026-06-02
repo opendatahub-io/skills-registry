@@ -9,7 +9,7 @@ title: Documentation
 
 Skills for generating and maintaining documentation
 
-## Plugins
+## SDLC
 
 ### [knowledge-skills](../plugins/knowledge-skills/index.md)
 

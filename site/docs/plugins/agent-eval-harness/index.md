@@ -30,6 +30,7 @@ containerized execution.
 
     - **Version**: 1.4.0
     - **Author**: Antonin Stefanutti
+    - **Scope**: Generic
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
     - **Tags**: <span class="tag-pill">evaluation</span> <span class="tag-pill">testing</span> <span class="tag-pill">skills</span> <span class="tag-pill">agents</span> <span class="tag-pill">mlflow</span> <span class="tag-pill">optimization</span> <span class="tag-pill">scoring</span>

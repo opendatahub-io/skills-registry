@@ -16,7 +16,7 @@ hide:
 
 ---
 
-## Plugins
+## SDLC
 
 <div class="grid cards" markdown>
 
@@ -59,22 +59,6 @@ hide:
     Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validat...
 
     **5 skills** - Evaluation & Testing - v1.0.0
-
--   **[odh-ai-helpers](plugins/odh-ai-helpers/index.md)**
-
-    ---
-
-    Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
-
-    **19 skills** - Development Tools - v0.1.0
-
--   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
-
-    ---
-
-    Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
-
-    **7 skills** - Evaluation & Testing - v1.4.0
 
 -   **[knowledge-skills](plugins/knowledge-skills/index.md)**
 
@@ -123,6 +107,28 @@ hide:
     Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, ...
 
     **1 skills** - Product Planning - v0.2.0
+
+</div>
+
+## Generic
+
+<div class="grid cards" markdown>
+
+-   **[odh-ai-helpers](plugins/odh-ai-helpers/index.md)**
+
+    ---
+
+    Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
+
+    **19 skills** - Development Tools - v0.1.0
+
+-   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
+
+    ---
+
+    Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
+
+    **7 skills** - Evaluation & Testing - v1.4.0
 
 </div>
 
