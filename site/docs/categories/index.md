@@ -7,7 +7,7 @@ title: Categories
 
 # Categories
 
-7 categories in the marketplace.
+8 categories in the marketplace.
 
 | Category | Plugins | Description |
 |----------|---------|-------------|
@@ -18,3 +18,4 @@ title: Categories
 | [Security Review](security.md) | 1 | Security analysis, threat modeling, and compliance review |
 | [Development Tools](development-tools.md) | 2 | Developer productivity tools for packaging, CI/CD debugging, and workflow automation |
 | [Product Planning](planning.md) | 2 | Skills for requirements, RFEs, and product strategy |
+| [Model Serving](model-serving.md) | 1 | Skills for the RHOAI Model Serving team — JIRA hygiene, workflow automation, and team-specific tooling |

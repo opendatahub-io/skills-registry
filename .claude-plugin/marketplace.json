@@ -364,6 +364,31 @@
       },
       "strict": false,
       "version": "0.2.0"
+    },
+    {
+      "author": {
+        "name": "VedantMahabaleshwarkar"
+      },
+      "category": "model-serving",
+      "description": "Claude Code skills for the RHOAI Model Serving team. Includes JIRA hygiene enforcement (story points, team, components, activity type, fix version, labels), workflow automation, and team-specific tooling.\n",
+      "homepage": "https://github.com/VedantMahabaleshwarkar/model-serving-skills",
+      "keywords": [
+        "jira",
+        "hygiene",
+        "model-serving",
+        "kserve",
+        "rhoai",
+        "workflow"
+      ],
+      "license": "Apache-2.0",
+      "name": "model-serving-skills",
+      "repository": "https://github.com/VedantMahabaleshwarkar/model-serving-skills",
+      "source": {
+        "ref": "main",
+        "repo": "VedantMahabaleshwarkar/model-serving-skills",
+        "source": "github"
+      },
+      "version": "0.1.0"
     }
   ]
 }

@@ -31,6 +31,9 @@ categories:
   planning:
     name: Product Planning
     description: Skills for requirements, RFEs, and product strategy
+  model-serving:
+    name: Model Serving
+    description: Skills for the RHOAI Model Serving team — JIRA hygiene, workflow automation, and team-specific tooling
 
 plugins:
 
@@ -594,4 +597,30 @@ plugins:
     python:
       package: spike-executor
       requires_python: ">=3.10"
+    depends_on: []
+
+  - name: model-serving-skills
+    description: >
+      Claude Code skills for the RHOAI Model Serving team. Includes JIRA
+      hygiene enforcement (story points, team, components, activity type,
+      fix version, labels), workflow automation, and team-specific tooling.
+    version: "0.1.0"
+    category: model-serving
+    tags: [jira, hygiene, model-serving, kserve, rhoai, workflow]
+    author:
+      name: VedantMahabaleshwarkar
+    license: Apache-2.0
+    source:
+      type: github
+      repo: VedantMahabaleshwarkar/model-serving-skills
+      ref: main
+    homepage: https://github.com/VedantMahabaleshwarkar/model-serving-skills
+    repository: https://github.com/VedantMahabaleshwarkar/model-serving-skills
+    skills:
+      - name: jira-hygiene
+        description: Enforce JIRA hygiene standards on one or many issues — sets story points, team, components, activity type, fix version, and labels
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install model-serving-skills@opendatahub-skills"
     depends_on: []
