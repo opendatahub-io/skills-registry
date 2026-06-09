@@ -13,22 +13,31 @@ review results with human feedback, sync with MLflow, and iteratively optimize
 skill quality with regression checks.
 
 The framework is schema-driven via eval.yaml, which defines execution mode
-(case-by-case or batch), dataset schemas, output descriptions, judges (inline
-checks, LLM prompts, external modules), model selection per role (skill, subagent,
-judge, hook), thresholds for regression detection, and tool interception handlers.
-Supports AskUserQuestion answering via 3-tier resolution (exact overrides, LLM
-with case context, fallback) and annotation-aware judges that adapt scoring based
-on expected outcomes per test case.
+(case-by-case or batch), dataset schemas, output descriptions, judges (four
+types: builtin reusable judges, inline check scripts, LLM prompts, and external
+modules), model selection per role (skill, subagent, judge, hook), thresholds
+for regression detection, and tool interception handlers. Supports
+AskUserQuestion answering via 3-tier resolution (exact case_overrides, then an
+LLM call using models.hook with the case's input.yaml + answers.yaml as context,
+then fallback to the first option) and annotation-aware judges that adapt scoring
+based on expected outcomes per test case.
+
+Config auto-discovery (via discover.py) finds eval.yaml configs across
+nested and flat directory layouts, so skills no longer require an explicit
+--config path. A harness health-check skill (eval-check) scans all skills,
+commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues.
 
 The harness also integrates with EvalHub for running evaluations on Red Hat
-OpenShift AI via a custom provider adapter, supporting S3-hosted datasets and
-containerized execution.
+OpenShift AI via a custom provider adapter (FrameworkAdapter from eval-hub-sdk),
+supporting S3-hosted datasets, eval.yaml-to-provider translation, and
+containerized (UBI9) execution.
 
 
 !!! info "Plugin Details"
 
-    - **Version**: 1.0.0
+    - **Version**: 1.9.1
     - **Author**: Antonin Stefanutti
+    - **Scope**: Generic
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
     - **Tags**: <span class="tag-pill">evaluation</span> <span class="tag-pill">testing</span> <span class="tag-pill">skills</span> <span class="tag-pill">agents</span> <span class="tag-pill">mlflow</span> <span class="tag-pill">optimization</span> <span class="tag-pill">scoring</span>
@@ -50,6 +59,7 @@ containerized execution.
 | [`/eval-review`](eval-review.md) | Human-in-the-loop review of scores and outputs with qualitative feedback collection | :material-check: |
 | [`/eval-mlflow`](eval-mlflow.md) | Bidirectional MLflow sync for results, datasets, and feedback | :material-check: |
 | [`/eval-optimize`](eval-optimize.md) | Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks | :material-check: |
+| [`/eval-check`](eval-check.md) | Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues | :material-check: |
 
 ## Installation
 
@@ -59,19 +69,37 @@ containerized execution.
 
 ## Architecture
 
-Seven skills form a linear pipeline with feedback loops: setup (optional) ->
+Eight skills form a linear pipeline with feedback loops: setup (optional) ->
 analyze -> dataset -> run -> review/optimize, with mlflow available at any
-point after run. eval-run is the central hub -- it executes skills headlessly,
-runs judges (inline checks + LLM scoring + pairwise comparison), and produces
-summary.yaml consumed by review, optimize, and mlflow.
+point after run. eval-check operates standalone as a cross-component health
+check. eval-run is the central hub -- it executes skills headlessly,
+runs judges (builtin + inline checks + LLM scoring + external modules, plus
+pairwise comparison against a baseline), and produces summary.yaml consumed by
+review, optimize, and mlflow. Builtin judges are reusable, versioned judges from
+the agent_eval/judges/ library, parameterizable via an arguments dict and
+listable with list_builtins.py.
+
+eval-run orchestrates a chain of helper scripts rather than doing the work
+itself: discover.py (config) -> preflight.py (stale-artifact check) ->
+workspace.py (isolated per-case workspace + batch.yaml + symlinks) -> execute.py
+(headless skill execution via the EvalRunner abstraction, with optional
+parallelism, subagent models, and reasoning effort) -> collect.py (artifact
+distribution into per-case dirs) -> score.py (judges + pairwise) -> report.py
+(HTML report). State persists across context compression via state.py, a
+key-value store. The EvalRunner ABC has a Claude Code implementation
+(claude --print, stream-json capture) and an opaque CLI runner, making the
+harness agent-agnostic.
 
 eval-optimize creates a closed loop by reading judge rationale and execution
-transcripts, forming hypotheses about SKILL.md deficiencies, making surgical
-edits, and re-running eval-run with regression baseline checks. eval-review
-complements this with human-in-the-loop feedback that catches qualitative
-issues judges miss. eval-mlflow provides bidirectional sync -- pushing datasets,
-results, and feedback to MLflow experiment tracking and pulling annotations
-back for optimization.
+transcripts (via Explore sub-agents), forming hypotheses about SKILL.md
+deficiencies, making surgical edits, and re-running eval-run with regression
+baseline checks until judges pass or max iterations is hit. It never edits
+judges, eval.yaml, or builtin judge code -- only the skill under test.
+eval-review complements this with human-in-the-loop feedback that catches
+qualitative issues judges miss (tone, intent, UX), persisting results to
+review.yaml. eval-mlflow provides bidirectional sync -- pushing datasets,
+results, traces, and feedback to MLflow experiment tracking and pulling
+annotations back into review.yaml for optimization.
 
 Scripts live alongside each skill and share the agent_eval Python package
 (auto-installed via SessionStart hook into an isolated venv at .eval-venv/).

@@ -10,9 +10,10 @@ direction: right
 args: |md
   **/eval-dataset**
 
-  - --config \<path\>
-  - --count \<N\> (default 5)
-  - --strategy \<type\>
+  - --config <path>
+  - --count N (5)
+  - --strategy
+  - --run-id <id>
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,29 +21,16 @@ args: |md
   style.stroke-width: 2
 }
 
-# --- Missing Config Decision ---
+# --- Config discovery ---
 
-missing-config: |md
-  **eval.yaml
-  exists?**
-| {
-  shape: diamond
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.font-size: 12
-}
+discover: |md
+  **Discover Config**
 
-# --- Invoke eval-analyze ---
-
-invoke-analyze: |md
-  **/eval-analyze**
-  External skill
-
-  - ask user which skill
-  - Skill tool invocation
-  - wait for completion
-  - re-read eval.yaml
+  - --config → use directly
+  - else discover.py
+  - 1 found → select
+  - many → ask user
+  - none → /eval-analyze
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -51,16 +39,17 @@ invoke-analyze: |md
   style.stroke-dash: 3
 }
 
-# --- Read Context ---
+# --- Read context ---
 
 read-context: |md
   **Read Context**
+  _eval.yaml + eval.md_
 
-  - eval.yaml config
-  - eval.md analysis
-  - dataset.schema + execution.mode
-  - parse judges for criteria
-  - build judge-driven reqs
+  - skill, execution mode
+  - dataset.schema + path
+  - output schemas
+  - extract judges →
+    judge-driven reqs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -68,16 +57,17 @@ read-context: |md
   style.stroke-width: 2
 }
 
-# --- Parse Schema ---
+# --- Parse schema ---
 
 parse-schema: |md
   **Parse Schema**
+  _generation template_
 
-  - required files per case
-  - required + optional fields
+  - required files + fields
+  - optional fields (vary)
   - field semantics
-  - argument {field} placeholders
-  - external-state [EXTERNAL]
+  - {field} arg placeholders
+  - [EXTERNAL] → TODO_
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -85,15 +75,16 @@ parse-schema: |md
   style.stroke-width: 2
 }
 
-# --- Assess State ---
+# --- Assess state ---
 
-assess-state: |md
-  **Assess Current State**
+assess: |md
+  **Assess State**
 
   - ls dataset_path
   - count existing cases
-  - read sample case structure
-  - identify coverage gaps
+  - read one sample
+  - note coverage gaps
+  - check --count vs paths
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -101,63 +92,27 @@ assess-state: |md
   style.stroke-width: 2
 }
 
-# --- Strategy Decision ---
+# --- Strategy decision ---
 
 strategy: |md
-  **Choose
-  Strategy**
+  **Choose Strategy**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.font-size: 12
 }
 
-# --- Bootstrap ---
+# --- Strategy branches (fan-out) ---
 
 bootstrap: |md
-  **Bootstrap**
-  LLM generation
+  **bootstrap**
+  (default, from zero)
 
   - 1 simple case
   - 1 complex case
   - 1 edge case
-  - remaining map to judges
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Expand ---
-
-expand: |md
-  **Expand**
-  LLM generation
-
-  - read all existing cases
-  - compare vs judge criteria
-  - identify untested scenarios
-  - generate gap-filling cases
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- From Traces ---
-
-from-traces: |md
-  **From Traces**
-
-  - from_traces.py extraction
-  - extract real prod inputs
-  - structure into case dirs
+  - rest → judge reqs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -165,10 +120,28 @@ from-traces: |md
   style.stroke-width: 2
 }
 
-# --- MLflow Server ---
+expand: |md
+  **expand**
+  (thin coverage)
 
-mlflow: |md
-  **MLflow Server**
+  - read existing cases
+  - find gaps vs judges
+  - continue numbering
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+from-traces: |md
+  **from-traces**
+  (production usage)
+
+  - from_traces.py
+  - extract real inputs
+  - exit 2 → fall back
+    to expand
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -177,20 +150,18 @@ mlflow: |md
   style.stroke-dash: 3
 }
 
-# --- Generate Cases ---
+# --- Generate (LLM) ---
 
 generate: |md
   **Generate Cases**
-  LLM generation
+  _LLM synthesis_
 
-  - create case-NNN-slug/ dirs
-  - write required files + fields
-  - vary optional fields
-  - realistic domain content
-  - TODO_ for external-state
-  - answers.yaml (interactive)
-  - annotations.yaml (judges)
+  - case-NNN-slug/ dirs
+  - input.yaml (all fields)
+  - answers.yaml (guidance)
+  - annotations.yaml
   - companion files
+  - realistic content
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -201,14 +172,14 @@ generate: |md
 
 # --- Validate ---
 
-validate: |md
+validate-cases: |md
   **Validate**
 
-  - read back generated case
-  - check vs dataset.schema
-  - verify {field} placeholders
-  - verify companion files
-  - check for empty/placeholder
+  - read case back vs schema
+  - count files per case
+  - {field} placeholders set
+  - companion files present
+  - both judge if-branches
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -221,10 +192,10 @@ validate: |md
 report: |md
   **Report**
 
-  - N cases generated
-  - strategy used
-  - coverage summary
-  - TODO_ placeholders listed
+  - N cases at <path>
+  - strategy + coverage
+  - TODO_ placeholders
+  - next: /eval-run
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -232,39 +203,17 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- Downstream Skills ---
+# --- Callout: case dir structure ---
 
-eval-run: |md
-  **/eval-run**
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-eval-dataset-expand: |md
-  **/eval-dataset --expand**
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Callout: Case Structure ---
-
-case-structure: |md
-  case-001-simple-basic/
-  ├── input.yaml
-  │   ├── required fields
-  │   └── {field} placeholders
-  ├── reference.md (optional)
-  ├── answers.yaml (interactive)
-  ├── annotations.yaml (judges)
-  └── companion files
+case-tree: |md
+  dataset.path/
+    case-001-simple/
+      input.yaml
+      answers.yaml
+      annotations.yaml
+      reference.md
+    case-002-complex/
+      ...
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -276,53 +225,27 @@ case-structure: |md
 
 # --- Flow ---
 
-args -> missing-config
+args -> discover
+discover -> read-context
+read-context -> parse-schema
+parse-schema -> assess
+assess -> strategy
 
-missing-config -> read-context: "yes"
-missing-config -> invoke-analyze: "no"
-
-invoke-analyze -> read-context: "eval.yaml"
-
-read-context -> parse-schema: "eval.yaml +\neval.md"
-parse-schema -> assess-state: "generation\ntemplate"
-assess-state -> strategy
-
-strategy -> bootstrap: "bootstrap\n(default / < 5 cases)"
-strategy -> expand: "expand\n(cases exist)"
-strategy -> from-traces: "from-traces"
-
-mlflow -> from-traces: "prod traces" {
-  style.stroke-dash: 3
-}
-
-from-traces -> expand: "no traces\nfound" {
-  style.stroke-dash: 3
-}
+strategy -> bootstrap: "from zero"
+strategy -> expand: "cases exist"
+strategy -> from-traces: "--strategy\nfrom-traces"
 
 bootstrap -> generate
 expand -> generate
 from-traces -> generate
 
-generate -> validate
-validate -> report
-
-validate -> generate: "schema\nmismatch" {
+generate -> validate-cases
+validate-cases -> generate: "schema errors" {
   style.stroke-dash: 3
 }
+validate-cases -> report
 
-# --- Downstream ---
-
-report -> eval-run: "next step" {
-  style.stroke-dash: 3
-}
-
-report -> eval-dataset-expand: "add more\ncases later" {
-  style.stroke-dash: 3
-}
-
-# --- Callout connection ---
-
-generate -> case-structure {
+generate -> case-tree: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

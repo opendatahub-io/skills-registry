@@ -2,135 +2,131 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="args" value="&lt;b&gt;/eval-setup&lt;/b&gt;&lt;br&gt;&lt;br&gt;--tracking-uri &lt;uri&gt;&lt;br&gt;--skip-mlflow&lt;br&gt;--runs-dir &lt;path&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="30" y="240" width="140" height="120" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/eval-setup&lt;/b&gt;&lt;br&gt;&lt;br&gt;--tracking-uri &lt;uri&gt;&lt;br&gt;--skip-mlflow&lt;br&gt;--runs-dir &lt;path&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="70" width="175" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="install-deps" value="&lt;b&gt;Install Dependencies&lt;/b&gt;&lt;br&gt;&lt;i&gt;(fallback for SessionStart)&lt;/i&gt;&lt;br&gt;&lt;br&gt;run ensure_deps.py&lt;br&gt;isolated .eval-venv/&lt;br&gt;uv or pip install" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="220" y="240" width="160" height="120" as="geometry"/>
+    <mxCell id="install-deps" value="&lt;b&gt;Install Dependencies&lt;/b&gt;&lt;br&gt;&lt;br&gt;isolated .eval-venv/&lt;br&gt;re-run ensure_deps.py&lt;br&gt;uv / venv pip fallback&lt;br&gt;mlflow[genai], anthropic[vertex]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="275" y="60" width="245" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="preflight" value="&lt;b&gt;Preflight Checks&lt;/b&gt;&lt;br&gt;&lt;br&gt;check_env.py --fix&lt;br&gt;verify venv, packages&lt;br&gt;auto-fix what it can" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="430" y="250" width="150" height="100" as="geometry"/>
+    <mxCell id="preflight" value="&lt;b&gt;Run Preflight Checks&lt;/b&gt;&lt;br&gt;check_env.py --fix&lt;br&gt;venv / deps / dirs&lt;br&gt;all checks pass?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="580" y="50" width="215" height="160" as="geometry"/>
     </mxCell>
-    <mxCell id="config" value="&lt;b&gt;Configure&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="640" y="70" width="350" height="530" as="geometry"/>
+    <mxCell id="create-exp" value="&lt;b&gt;Create MLflow Experiment&lt;/b&gt;&lt;br&gt;&lt;br&gt;read eval.yaml mlflow&lt;br&gt;setup_experiment()&lt;br&gt;resolve_tracking_uri()&lt;br&gt;skip if no eval.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="855" y="60" width="235" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="mlflow-config" value="&lt;b&gt;MLflow Tracking&lt;/b&gt;&lt;br&gt;&lt;i&gt;(skip if --skip-mlflow)&lt;/i&gt;&lt;br&gt;&lt;br&gt;--tracking-uri flag&lt;br&gt;or ask user:&lt;br&gt;1. Local server (:5000)&lt;br&gt;2. SQLite file store&lt;br&gt;3. Remote (Databricks)&lt;br&gt;per-project pin in eval.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="config">
-      <mxGeometry x="20" y="35" width="310" height="130" as="geometry"/>
+    <mxCell id="verify" value="&lt;b&gt;Final Verification&lt;/b&gt;&lt;br&gt;&lt;br&gt;re-run check_env.py&lt;br&gt;validate eval.yaml&lt;br&gt;confirm all set up" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="70" width="195" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="api-keys" value="&lt;b&gt;API Keys&lt;/b&gt;&lt;br&gt;&lt;br&gt;ANTHROPIC_API_KEY&lt;br&gt;ANTHROPIC_VERTEX_PROJECT_ID&lt;br&gt;needed for execution + judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="config">
-      <mxGeometry x="20" y="185" width="310" height="95" as="geometry"/>
+    <mxCell id="report-out" value="&lt;b&gt;Report + Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;what passed / failed&lt;br&gt;analyze -&gt; dataset&lt;br&gt;run -&gt; review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1410" y="70" width="195" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="runs-dir" value="&lt;b&gt;Runs Directory&lt;/b&gt;&lt;br&gt;&lt;br&gt;AGENT_EVAL_RUNS_DIR&lt;br&gt;default: eval/runs&lt;br&gt;--runs-dir override&lt;br&gt;auto-created by --fix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="config">
-      <mxGeometry x="20" y="300" width="310" height="95" as="geometry"/>
+    <mxCell id="mlflow-config" value="&lt;b&gt;Configure MLflow Tracking&lt;/b&gt;&lt;br&gt;&lt;br&gt;skip if --skip-mlflow&lt;br&gt;local server :5000&lt;br&gt;sqlite file store&lt;br&gt;remote (Databricks)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="575" y="320" width="225" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="env-vars" value="&lt;b&gt;Skill Env Vars&lt;/b&gt;&lt;br&gt;&lt;i&gt;(if eval.yaml exists)&lt;/i&gt;&lt;br&gt;&lt;br&gt;parse execution.env&lt;br&gt;check $VAR references&lt;br&gt;warn if unset&lt;br&gt;e.g. JIRA_SERVER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="config">
-      <mxGeometry x="20" y="415" width="310" height="95" as="geometry"/>
+    <mxCell id="api-keys" value="&lt;b&gt;Configure API Keys&lt;/b&gt;&lt;br&gt;&lt;br&gt;ANTHROPIC_API_KEY&lt;br&gt;ANTHROPIC_VERTEX_PROJECT_ID&lt;br&gt;judges + skill execution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="880" y="325" width="255" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="mlflow-exp" value="&lt;b&gt;Create MLflow Experiment&lt;/b&gt;&lt;br&gt;&lt;i&gt;(skip if --skip-mlflow)&lt;/i&gt;&lt;br&gt;&lt;br&gt;read mlflow.experiment&lt;br&gt;from eval.yaml&lt;br&gt;setup_experiment()&lt;br&gt;resolve tracking URI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1040" y="215" width="175" height="120" as="geometry"/>
+    <mxCell id="runs-dir" value="&lt;b&gt;Configure Runs Dir + Env&lt;/b&gt;&lt;br&gt;&lt;br&gt;AGENT_EVAL_RUNS_DIR&lt;br&gt;default eval/runs&lt;br&gt;check eval.yaml $VAR refs&lt;br&gt;warn if any unset" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="320" width="235" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="verify" value="&lt;b&gt;Final Verification&lt;/b&gt;&lt;br&gt;&lt;br&gt;check_env.py (no --fix)&lt;br&gt;validate eval.yaml&lt;br&gt;(if present)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1265" y="235" width="150" height="90" as="geometry"/>
+    <mxCell id="mlflow-server" value="&lt;b&gt;MLflow Server&lt;/b&gt;&lt;br&gt;external tracking&lt;br&gt;&lt;br&gt;experiment registry&lt;br&gt;traces + metrics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="880.0" y="487.0" width="255" height="115" as="geometry"/>
     </mxCell>
-    <mxCell id="report" value="&lt;b&gt;Report + Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;no eval.yaml: /eval-analyze&lt;br&gt;no dataset: /eval-dataset&lt;br&gt;ready: /eval-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1465" y="230" width="150" height="100" as="geometry"/>
+    <mxCell id="venv-check" value="VENV=.eval-venv/bin/python3&lt;br&gt;test -x $VENV&lt;br&gt;&amp;nbsp;&amp;nbsp;-&gt; venv: OK&lt;br&gt;$VENV -c 'import yaml'&lt;br&gt;&amp;nbsp;&amp;nbsp;-&gt; pyyaml: OK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="90" y="300" width="245" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="mlflow-server" value="&lt;b&gt;MLflow Server&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1070" y="70" width="120" height="45" as="geometry"/>
+    <mxCell id="mlflow-options" value="# local server (recommended)&lt;br&gt;mlflow server --port 5000&lt;br&gt;export MLFLOW_TRACKING_URI=&lt;br&gt;&amp;nbsp;&amp;nbsp;http://127.0.0.1:5000&lt;br&gt;# local file store&lt;br&gt;export MLFLOW_TRACKING_URI=&lt;br&gt;&amp;nbsp;&amp;nbsp;sqlite:///mlflow.db" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="420" y="560" width="275" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="checks-detail" value="check_env.py&lt;br&gt;[+] python&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.11+&lt;br&gt;[+] pyyaml&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&gt;= 6.0&lt;br&gt;[+] mlflow&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&gt;= 3.5&lt;br&gt;[+] agent_eval&amp;nbsp;&amp;nbsp;&amp;nbsp;symlink&lt;br&gt;[+] anthropic&amp;nbsp;&amp;nbsp;&amp;nbsp;(optional)&lt;br&gt;[+] api_keys&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;set&lt;br&gt;[+] mlflow&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;reachable&lt;br&gt;[+] directories&amp;nbsp;present&lt;br&gt;[+] eval_config&amp;nbsp;valid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
-      <mxGeometry x="410" y="610" width="210" height="170" as="geometry"/>
+    <mxCell id="uri-precedence" value="URI resolution order:&lt;br&gt;1. mlflow.tracking_uri&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;(eval.yaml)&lt;br&gt;2. MLFLOW_TRACKING_URI&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;(env var)&lt;br&gt;3. http://127.0.0.1:5000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="100" y="555" width="250" height="145" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-analyze" value="&lt;b&gt;/eval-analyze&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1660" y="195" width="110" height="40" as="geometry"/>
-    </mxCell>
-    <mxCell id="eval-dataset" value="&lt;b&gt;/eval-dataset&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1660" y="255" width="110" height="40" as="geometry"/>
-    </mxCell>
-    <mxCell id="eval-run" value="&lt;b&gt;/eval-run&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1660" y="315" width="110" height="40" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_args_install" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="args" target="install-deps" parent="1">
+    <mxCell id="e-entry-install" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="install-deps" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_install_preflight" value="ensure_deps.py" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="install-deps" target="preflight" parent="1">
+    <mxCell id="e-install-preflight" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="install-deps" target="preflight" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_preflight_report" value="all pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="preflight" target="report" parent="1">
+    <mxCell id="e-preflight-create" value="all pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="create-exp" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-preflight-mlflow" value="checks fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="preflight" target="mlflow-config" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-mlflow-apikeys" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow-config" target="api-keys" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-apikeys-runs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="api-keys" target="runs-dir" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-runs-create" value="re-check" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="runs-dir" target="create-exp" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="505" y="30"/>
-          <mxPoint x="1540" y="30"/>
+          <mxPoint x="1485" y="390"/>
+          <mxPoint x="1485" y="250"/>
+          <mxPoint x="972.5" y="250"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_preflight_config" value="fixes needed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="config" parent="1">
+    <mxCell id="e-create-verify" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create-exp" target="verify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-verify-report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="verify" target="report-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-verify-preflight" value="re-verify" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="verify" target="preflight" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="615" y="300"/>
-          <mxPoint x="615" y="335"/>
+          <mxPoint x="1247.5" y="25"/>
+          <mxPoint x="687.5" y="25"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_config_mlflowexp" value="eval.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="config" target="mlflow-exp" parent="1">
+    <mxCell id="e-mlflow-server" value="connect" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow-config" target="mlflow-server" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1010" y="335"/>
-          <mxPoint x="1010" y="275"/>
+          <mxPoint x="687.5" y="544.5"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_mlflowexp_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow-exp" target="verify" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_mlflowconfig_server" value="connect" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow-config" target="mlflow-server" parent="1">
+    <mxCell id="e-create-server" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create-exp" target="mlflow-server" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1010" y="135"/>
-          <mxPoint x="1010" y="92"/>
+          <mxPoint x="830" y="130.0"/>
+          <mxPoint x="830" y="544.5"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_mlflowexp_server" value="create experiment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="mlflow-exp" target="mlflow-server" parent="1">
+    <mxCell id="e-install-venv" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="install-deps" target="venv-check" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1130" y="215"/>
-          <mxPoint x="1130" y="115"/>
+          <mxPoint x="336.25" y="250"/>
+          <mxPoint x="212.5" y="250"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_verify_report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="verify" target="report" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_report_analyze" value="no eval.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="eval-analyze" parent="1">
+    <mxCell id="e-mlflow-options" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="mlflow-config" target="mlflow-options" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1640" y="260"/>
-          <mxPoint x="1640" y="215"/>
+          <mxPoint x="687.5" y="530"/>
+          <mxPoint x="557.5" y="530"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_report_dataset" value="no dataset" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="eval-dataset" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_report_run" value="ready" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="eval-run" parent="1">
+    <mxCell id="e-mlflow-uri" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="mlflow-config" target="uri-precedence" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1640" y="300"/>
-          <mxPoint x="1640" y="335"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_preflight_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="preflight" target="checks-detail" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="505" y="350"/>
-          <mxPoint x="505" y="610"/>
+          <mxPoint x="380.0" y="390.0"/>
+          <mxPoint x="380.0" y="525.0"/>
+          <mxPoint x="225.0" y="525.0"/>
         </Array>
       </mxGeometry>
     </mxCell>

@@ -184,14 +184,28 @@ def clean_generated(output_dir: Path):
 
 
 def build_category_plugins(registry: dict) -> dict[str, list]:
-    """Group plugins by category key."""
+    """Group plugins by category key. Team-scoped plugins are excluded — they
+    are surfaced in a dedicated Team-Specific section, not function categories."""
     categories = registry.get("categories", {})
     by_cat: dict[str, list] = {k: [] for k in categories}
     for plugin in registry.get("plugins", []):
+        if scope_of(plugin) == "team":
+            continue
         cat = plugin.get("category")
         if cat and cat in by_cat:
             by_cat[cat].append(plugin)
     return by_cat
+
+
+SCOPE_BADGE = {"team": "Team-specific", "generic": "Generic"}
+VALID_SCOPES = {"sdlc", "generic", "team"}
+
+
+def scope_of(plugin: dict) -> str:
+    """Normalized scope. Unknown/missing values fall back to the sdlc default
+    so a plugin is never silently dropped from a scope-grouped section."""
+    scope = plugin.get("scope") or "sdlc"
+    return scope if scope in VALID_SCOPES else "sdlc"
 
 
 def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
@@ -217,12 +231,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
     lines.append("")
     lines.append("---")
     lines.append("")
-    lines.append("## Plugins")
-    lines.append("")
-    lines.append('<div class="grid cards" markdown>')
-    lines.append("")
-
-    for plugin in plugins:
+    def render_card(plugin):
         name = plugin["name"]
         desc = plugin["description"].strip().split("\n")[0]
         if len(desc) > 120:
@@ -241,8 +250,25 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
         lines.append(f"    **{skill_count} skills** - {cat_name} - v{version}")
         lines.append("")
 
-    lines.append("</div>")
-    lines.append("")
+    def render_card_section(title, group):
+        if not group:
+            return
+        lines.append(f"## {title}")
+        lines.append("")
+        lines.append('<div class="grid cards" markdown>')
+        lines.append("")
+        for plugin in group:
+            render_card(plugin)
+        lines.append("</div>")
+        lines.append("")
+
+    sdlc_plugins = [p for p in plugins if scope_of(p) == "sdlc"]
+    generic_plugins = [p for p in plugins if scope_of(p) == "generic"]
+    team_plugins = [p for p in plugins if scope_of(p) == "team"]
+
+    render_card_section("SDLC", sdlc_plugins)
+    render_card_section("Generic", generic_plugins)
+    render_card_section("Teams", team_plugins)
 
     lines.append("## Categories")
     lines.append("")
@@ -267,16 +293,32 @@ def generate_plugins_index(registry: dict) -> str:
     lines.append("")
     lines.append(f"{len(plugins)} plugins registered in the marketplace.")
     lines.append("")
-    lines.append("| Plugin | Category | Skills | Version |")
-    lines.append("|--------|----------|--------|---------|")
-    for plugin in plugins:
+
+    def render_row(plugin):
         name = plugin["name"]
         cat_key = plugin.get("category", "")
         cat_name = categories.get(cat_key, {}).get("name", cat_key)
         skill_count = len(plugin.get("skills", []))
         version = plugin.get("version", "")
         lines.append(f"| [{name}]({name}/index.md) | {cat_name} | {skill_count} | v{version} |")
-    lines.append("")
+
+    # Group into one section per scope: SDLC (default), Generic, Teams
+    sections = [
+        ("SDLC", [p for p in plugins if scope_of(p) == "sdlc"]),
+        ("Generic", [p for p in plugins if scope_of(p) == "generic"]),
+        ("Teams", [p for p in plugins if scope_of(p) == "team"]),
+    ]
+    for title, group in sections:
+        if not group:
+            continue
+        lines.append(f"## {title}")
+        lines.append("")
+        lines.append("| Plugin | Category | Skills | Version |")
+        lines.append("|--------|----------|--------|---------|")
+        for plugin in group:
+            render_row(plugin)
+        lines.append("")
+
     return "\n".join(lines)
 
 
@@ -310,6 +352,7 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     # Metadata
     lines.append('!!! info "Plugin Details"')
     lines.append("")
+    scope = scope_of(plugin)
     meta = []
     if version:
         meta.append(f"    - **Version**: {version}")
@@ -317,6 +360,8 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
         meta.append(f"    - **Author**: {author}")
     if license_str:
         meta.append(f"    - **License**: {license_str}")
+    if scope in SCOPE_BADGE:
+        meta.append(f"    - **Scope**: {SCOPE_BADGE[scope]}")
     if category:
         meta.append(f"    - **Category**: [{cat_name}](../../categories/{category}.md)")
     if repo:
@@ -667,10 +712,8 @@ def generate_category_page(cat_key: str, cat_meta: dict,
     lines.append(cat_meta.get("description", ""))
     lines.append("")
 
-    if plugins:
-        lines.append("## Plugins")
-        lines.append("")
-        for plugin in plugins:
+    def render_plugin_entries(group):
+        for plugin in group:
             name = plugin["name"]
             desc = plugin["description"].strip()
             skill_count = len(plugin.get("skills", []))
@@ -681,6 +724,16 @@ def generate_category_page(cat_key: str, cat_meta: dict,
             lines.append("")
             lines.append(f"**{skill_count} skills** - v{version}")
             lines.append("")
+
+    # Split into SDLC and Generic subsections (team plugins aren't in categories)
+    sdlc_group = [p for p in plugins if scope_of(p) == "sdlc"]
+    generic_group = [p for p in plugins if scope_of(p) == "generic"]
+    for title, group in (("SDLC", sdlc_group), ("Generic", generic_group)):
+        if not group:
+            continue
+        lines.append(f"## {title}")
+        lines.append("")
+        render_plugin_entries(group)
 
     return "\n".join(lines)
 

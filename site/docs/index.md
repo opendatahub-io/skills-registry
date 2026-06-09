@@ -10,13 +10,13 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-12 plugins | 73 skills | 6 categories
+13 plugins | 75 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
 ---
 
-## Plugins
+## SDLC
 
 <div class="grid cards" markdown>
 
@@ -60,22 +60,6 @@ hide:
 
     **5 skills** - Evaluation & Testing - v1.0.0
 
--   **[odh-ai-helpers](plugins/odh-ai-helpers/index.md)**
-
-    ---
-
-    Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
-
-    **19 skills** - Development Tools - v0.1.0
-
--   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
-
-    ---
-
-    Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
-
-    **7 skills** - Evaluation & Testing - v1.0.0
-
 -   **[knowledge-skills](plugins/knowledge-skills/index.md)**
 
     ---
@@ -108,6 +92,14 @@ hide:
 
     **2 skills** - DevOps & CI/CD - v0.1.0
 
+-   **[code-review-skills](plugins/code-review-skills/index.md)**
+
+    ---
+
+    AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON...
+
+    **1 skills** - Code Quality - v0.1.0
+
 -   **[spike-executor](plugins/spike-executor/index.md)**
 
     ---
@@ -118,9 +110,32 @@ hide:
 
 </div>
 
+## Generic
+
+<div class="grid cards" markdown>
+
+-   **[odh-ai-helpers](plugins/odh-ai-helpers/index.md)**
+
+    ---
+
+    Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
+
+    **19 skills** - Development Tools - v0.1.0
+
+-   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
+
+    ---
+
+    Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
+
+    **8 skills** - Evaluation & Testing - v1.9.1
+
+</div>
+
 ## Categories
 
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (4 plugins)
+- [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (1 plugin)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (2 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)

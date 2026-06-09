@@ -9,7 +9,7 @@ title: Evaluation & Testing
 
 Skills for evaluating and testing AI agent skills
 
-## Plugins
+## SDLC
 
 ### [assess-rfe](../plugins/assess-rfe/index.md)
 
@@ -29,8 +29,10 @@ Quality tooling and automation for RHOAI component development. Includes automat
 
 **5 skills** - v1.0.0
 
+## Generic
+
 ### [agent-eval-harness](../plugins/agent-eval-harness/index.md)
 
 Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
 
-**7 skills** - v1.0.0
+**8 skills** - v1.9.1

@@ -1434,34 +1434,60 @@ review results with human feedback, sync with MLflow, and iteratively optimize
 skill quality with regression checks.
 
 The framework is schema-driven via eval.yaml, which defines execution mode
-(case-by-case or batch), dataset schemas, output descriptions, judges (inline
-checks, LLM prompts, external modules), model selection per role (skill, subagent,
-judge, hook), thresholds for regression detection, and tool interception handlers.
-Supports AskUserQuestion answering via 3-tier resolution (exact overrides, LLM
-with case context, fallback) and annotation-aware judges that adapt scoring based
-on expected outcomes per test case.
+(case-by-case or batch), dataset schemas, output descriptions, judges (four
+types: builtin reusable judges, inline check scripts, LLM prompts, and external
+modules), model selection per role (skill, subagent, judge, hook), thresholds
+for regression detection, and tool interception handlers. Supports
+AskUserQuestion answering via 3-tier resolution (exact case_overrides, then an
+LLM call using models.hook with the case's input.yaml + answers.yaml as context,
+then fallback to the first option) and annotation-aware judges that adapt scoring
+based on expected outcomes per test case.
+
+Config auto-discovery (via discover.py) finds eval.yaml configs across
+nested and flat directory layouts, so skills no longer require an explicit
+--config path. A harness health-check skill (eval-check) scans all skills,
+commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues.
 
 The harness also integrates with EvalHub for running evaluations on Red Hat
-OpenShift AI via a custom provider adapter, supporting S3-hosted datasets and
-containerized execution.
+OpenShift AI via a custom provider adapter (FrameworkAdapter from eval-hub-sdk),
+supporting S3-hosted datasets, eval.yaml-to-provider translation, and
+containerized (UBI9) execution.
 
 **Repository**: https://github.com/opendatahub-io/agent-eval-harness
 
 ### Architecture
 
-Seven skills form a linear pipeline with feedback loops: setup (optional) ->
+Eight skills form a linear pipeline with feedback loops: setup (optional) ->
 analyze -> dataset -> run -> review/optimize, with mlflow available at any
-point after run. eval-run is the central hub -- it executes skills headlessly,
-runs judges (inline checks + LLM scoring + pairwise comparison), and produces
-summary.yaml consumed by review, optimize, and mlflow.
+point after run. eval-check operates standalone as a cross-component health
+check. eval-run is the central hub -- it executes skills headlessly,
+runs judges (builtin + inline checks + LLM scoring + external modules, plus
+pairwise comparison against a baseline), and produces summary.yaml consumed by
+review, optimize, and mlflow. Builtin judges are reusable, versioned judges from
+the agent_eval/judges/ library, parameterizable via an arguments dict and
+listable with list_builtins.py.
+
+eval-run orchestrates a chain of helper scripts rather than doing the work
+itself: discover.py (config) -> preflight.py (stale-artifact check) ->
+workspace.py (isolated per-case workspace + batch.yaml + symlinks) -> execute.py
+(headless skill execution via the EvalRunner abstraction, with optional
+parallelism, subagent models, and reasoning effort) -> collect.py (artifact
+distribution into per-case dirs) -> score.py (judges + pairwise) -> report.py
+(HTML report). State persists across context compression via state.py, a
+key-value store. The EvalRunner ABC has a Claude Code implementation
+(claude --print, stream-json capture) and an opaque CLI runner, making the
+harness agent-agnostic.
 
 eval-optimize creates a closed loop by reading judge rationale and execution
-transcripts, forming hypotheses about SKILL.md deficiencies, making surgical
-edits, and re-running eval-run with regression baseline checks. eval-review
-complements this with human-in-the-loop feedback that catches qualitative
-issues judges miss. eval-mlflow provides bidirectional sync -- pushing datasets,
-results, and feedback to MLflow experiment tracking and pulling annotations
-back for optimization.
+transcripts (via Explore sub-agents), forming hypotheses about SKILL.md
+deficiencies, making surgical edits, and re-running eval-run with regression
+baseline checks until judges pass or max iterations is hit. It never edits
+judges, eval.yaml, or builtin judge code -- only the skill under test.
+eval-review complements this with human-in-the-loop feedback that catches
+qualitative issues judges miss (tone, intent, UX), persisting results to
+review.yaml. eval-mlflow provides bidirectional sync -- pushing datasets,
+results, traces, and feedback to MLflow experiment tracking and pulling
+annotations back into review.yaml for optimization.
 
 Scripts live alongside each skill and share the agent_eval Python package
 (auto-installed via SessionStart hook into an isolated venv at .eval-venv/).
@@ -1473,13 +1499,16 @@ summary.yaml + HTML report.
 
 #### /eval-setup
 
-Optional environment configurator for the evaluation harness. Installs
-dependencies into the isolated venv, configures MLflow tracking (local
-server, file store, or remote), verifies API keys (Anthropic or Vertex AI),
-sets up the runs directory, checks skill-specific environment variables
-referenced in eval.yaml, and creates the MLflow experiment. Most users
-can skip this -- dependencies auto-install via the plugin's SessionStart
-hook and agent_eval is available via symlinks.
+Optional, non-destructive environment configurator for the evaluation
+harness. Installs dependencies into the isolated venv (as a fallback for
+mid-session installs or troubleshooting), configures MLflow tracking (local
+server, local file store, or remote/Databricks), verifies API keys
+(Anthropic API or Vertex AI), sets up the runs directory, checks
+skill-specific environment variables referenced in eval.yaml's
+execution.env, and creates the MLflow experiment. Runs check_env.py
+preflight checks (with --fix) and re-verifies at the end. Most users can
+skip this -- dependencies auto-install via the plugin's SessionStart hook
+and agent_eval is available via symlinks.
 
 ```
 /eval-setup [--tracking-uri <uri>] [--skip-mlflow] [--runs-dir <path>]
@@ -1502,11 +1531,15 @@ Examples:
 
 Deep-reads a target skill and generates eval.yaml -- the configuration that
 /eval-run needs. Examines the skill's SKILL.md, follows sub-skill chains
-recursively (up to 5 levels), explores scripts and test cases, and produces
-a complete config with execution mode, dataset schema, output descriptions,
-judges, model defaults, and thresholds. Uses an Explore sub-agent for the
-recursive skill analysis and caches the result in eval.md with a content
-hash for staleness detection.
+recursively (typically 2-5 levels, capped at 5 to avoid circular references)
+until it finds the skills that produce the final artifacts, explores scripts
+and test cases, and produces a complete config with execution mode, dataset
+schema, output descriptions, judges, model defaults, and thresholds. Uses an
+Explore sub-agent for the recursive skill analysis, validates the result with
+validate_eval.py, and caches the analysis in eval.md with a content hash of
+the top-level SKILL.md for staleness detection. The guiding principle is
+"observe, don't assume" -- every field name and path must come from a file
+actually read. Auto-invoked by /eval-run when eval.yaml is missing.
 
 ```
 /eval-analyze [--skill <name>] [--config <path>] [--update]
@@ -1514,9 +1547,9 @@ hash for staleness detection.
 
 | Argument | Required | Description |
 |----------|----------|-------------|
-| `--skill` |  | Which skill to analyze. If omitted, lists all project skills and picks automatically if only one is found. |
-| `--config` |  | Output path for the eval config file. |
-| `--update` |  | Fill in missing sections only, preserving user edits. Useful for upgrading older configs. |
+| `--skill` |  | Which skill to analyze. If omitted, lists all project skills (excluding eval harness skills) and picks automatically if only one is found. |
+| `--config` |  | Output path for the eval config file. If omitted, discovers existing layout and scaffolds at the project root or eval/<skill-name>/eval.yaml. |
+| `--update` |  | Fill in missing sections only, preserving user edits. Useful for upgrading older configs (e.g., adding a models block, migrating check signatures). |
 
 Examples:
 ```
@@ -1528,22 +1561,29 @@ Examples:
 #### /eval-dataset
 
 Generates realistic test cases based on the eval.yaml dataset schema and
-judge criteria. Supports three strategies: bootstrap (from scratch with
+judge criteria. Reads eval.md and eval.yaml to derive judge-driven
+requirements (each case should exercise at least one judge criterion), then
+generates cases via one of three strategies: bootstrap (from scratch with
 simple/complex/edge case coverage), expand (fills gaps in existing datasets
-by analyzing what judges check that no case tests), and from-traces (extracts
-real inputs from MLflow production traces). Handles external-state fields
-with TODO_ placeholders, generates answers.yaml for interactive skills using
-AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
+by analyzing what judges check that no case tests, optionally learning from a
+previous run's failure patterns), and from-traces (extracts real inputs from
+MLflow production traces). Handles external-state fields with TODO_
+placeholders (so it never fabricates Jira keys, repos, or API endpoints),
+generates answers.yaml guidance for interactive skills using AskUserQuestion,
+and creates annotations.yaml for outcome-aware judges (ensuring conditional
+judges are exercised on both branches). Can invoke /eval-analyze first when
+no config exists.
 
 ```
-/eval-dataset [--config <path>] [--count <N>] [--strategy <type>]
+/eval-dataset [--config <path>] [--count <N>] [--strategy <type>] [--run-id <id>]
 ```
 
 | Argument | Required | Description |
 |----------|----------|-------------|
 | `--config` |  | Path to eval config. |
 | `--count` |  | Number of test cases to generate. |
-| `--strategy` |  | Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces. |
+| `--strategy` |  | Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces (falls back to expand if none found). |
+| `--run-id` |  | Previous eval run to learn from when filling coverage gaps (used with the expand strategy to target empirical failure patterns). |
 
 Examples:
 ```
@@ -1556,74 +1596,87 @@ Examples:
 
 Executes a skill against test cases, collects artifacts, scores with judges,
 and generates an HTML report. Orchestrates via scripts: preflight checks for
-stale artifacts, workspace creation with isolated per-case directories, headless
-skill execution (case mode: once per case; batch mode: single invocation),
-artifact collection into per-case dirs, scoring with inline checks and LLM
-judges, optional pairwise comparison against a baseline for regression detection,
-and report generation. Supports concurrent case execution via parallelism setting,
-tool interception for AskUserQuestion and external APIs, and configurable
-reasoning effort levels.
+stale artifacts, workspace creation with isolated per-case directories,
+resolution of tool-interception handlers, headless skill execution (case
+mode: once per case with case-specific arguments; batch mode: single
+invocation via batch.yaml), artifact collection into per-case dirs, scoring
+with four judge types (builtin, inline checks, LLM prompts, external
+modules), optional pairwise comparison against a baseline for regression
+detection, and report generation. Supports concurrent case execution via the
+parallelism setting, tool interception for AskUserQuestion and external APIs,
+configurable reasoning effort, and a --gold flag to save outputs as gold
+references. Background-launches execute.py and monitors progress; persists
+state via state.py and leads its analysis with a decisive recommendation.
 
 ```
-/eval-run [--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--case <filter>] [--no-judge] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]
+/eval-run [--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--cases <id> ...] [--no-llm-judges] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]
 ```
 
 | Argument | Required | Description |
 |----------|----------|-------------|
-| `--config` |  | Path to eval config. |
+| `--config` |  | Path to eval config. If missing, bootstraps via /eval-analyze. |
 | `--model` |  | Model for skill execution. Required if models.skill is unset in eval.yaml. |
 | `--subagent-model` |  | Model for subagents (e.g., claude-sonnet-4-6 while main is claude-opus-4-7). |
 | `--run-id` |  | Identifier for this run. |
-| `--case` |  | Substring match to select specific cases. |
-| `--baseline` |  | Previous run to compare against for regression detection via pairwise comparison. |
-| `--no-judge` |  | Skip LLM judges, run inline checks only. |
-| `--gold` |  | Save outputs as gold references after the run. |
-| `--effort` |  | Claude Code reasoning effort level. |
+| `--cases` |  | Exact case IDs to run (space-separated). Defaults to all cases. |
+| `--baseline` |  | Previous run to compare against for regression detection via pairwise comparison. Must exist under the same eval-name directory. |
+| `--no-llm-judges` |  | Skip LLM judges (prompt, prompt_file, LLM builtins). Run deterministic judges only (check, Python builtins, external code). |
+| `--gold` |  | Save collected outputs as gold reference files in the dataset case dirs after the run. |
+| `--effort` |  | Claude Code reasoning effort level (Claude Code only; ignored by other runners). |
 | `--skill` |  | Override the skill to test. |
 
 Examples:
 ```
 /eval-run --model claude-opus-4-6
 /eval-run --model claude-opus-4-6 --baseline 2026-05-01-opus
-/eval-run --case case-001 --no-judge
+/eval-run --cases case-001 case-002 --no-llm-judges
 /eval-run --gold
 ```
 
 #### /eval-review
 
-Interactive human-in-the-loop review of evaluation results. Presents judge
-scores and skill outputs case by case, collects qualitative feedback, delegates
-transcript analysis to Explore sub-agents to identify inefficiencies (roundabout
-paths, multiple approaches, unnecessary tools), identifies judge-human alignment
-gaps, and proposes targeted SKILL.md improvements grounded in feedback evidence.
-Complements /eval-optimize (automated) by catching tone, intent, and UX issues
-that judges cannot measure.
+Interactive human-in-the-loop review of evaluation results. Loads
+summary.yaml and any /eval-run analysis.md, presents judge scores and skill
+outputs case by case, collects qualitative feedback, and delegates transcript
+analysis to Explore sub-agents to identify inefficiencies (roundabout paths,
+multiple approaches, unnecessary tools, wasted turns). Identifies
+judge-human alignment gaps and suggests new judge candidates, persists
+feedback to review.yaml (keyed by case directory name for /eval-optimize and
+/eval-mlflow to consume), and proposes targeted SKILL.md edits as before/after
+diffs grounded in feedback evidence -- applied only with explicit approval.
+Complements /eval-optimize (automated) by catching tone, intent, and UX
+issues that judges cannot measure.
 
 ```
-/eval-review --run-id <id> [--config <path>] [--case <filter>]
+/eval-review --run-id <id> [--config <path>] [--cases <name> ...]
 ```
 
 | Argument | Required | Description |
 |----------|----------|-------------|
 | `--run-id` | yes | Which eval run to review. |
 | `--config` |  | Path to eval config. |
-| `--case` |  | Substring match to select specific cases for review. |
+| `--cases` |  | Exact case directory names to review (space-separated). Defaults to all cases. |
 
 Examples:
 ```
 /eval-review --run-id 2026-05-01-opus
-/eval-review --run-id 2026-05-01-opus --case case-003
+/eval-review --run-id 2026-05-01-opus --cases case-003 case-005
 ```
 
 #### /eval-mlflow
 
 Bidirectional MLflow integration for evaluation results, datasets, and
-feedback. Syncs test cases to MLflow dataset registry with a schema mapping
-you define (inputs vs expectations), logs run params/metrics/artifacts/traces
-to MLflow experiments, pushes judge scores and human feedback to execution
-traces, and pulls annotations added via the MLflow UI back into review.yaml
-for /eval-optimize to consume. Resolves tracking URI from eval.yaml, then
-MLFLOW_TRACKING_URI env var, then defaults to localhost:5000.
+feedback. Syncs test cases to the MLflow dataset registry using a two-phase
+flow where you produce a schema_mapping.json (inputs vs expectations, mapping
+record fields to source files/field paths) and a script syncs deterministically;
+logs run params, metrics, artifacts, per-case results tables, and traces to
+MLflow experiments; pushes judge scores (source_type=CODE) and human feedback
+(source_type=HUMAN) to execution traces; and pulls annotations added via the
+MLflow UI back into review.yaml (under mlflow_feedback) for /eval-optimize to
+consume. Resolves tracking URI from mlflow.tracking_uri in eval.yaml, then the
+MLFLOW_TRACKING_URI env var, then defaults to http://127.0.0.1:5000. Degrades
+gracefully -- if MLflow is unavailable, scripts exit cleanly and the skill
+reports that it was skipped.
 
 ```
 /eval-mlflow [--action <action>] [--run-id <id>] [--config <path>]
@@ -1644,14 +1697,18 @@ Examples:
 
 #### /eval-optimize
 
-Automated skill improvement loop. Runs evaluation, identifies judge failures
-from summary.yaml, reads execution transcripts via Explore sub-agents to trace
-root causes to specific SKILL.md instructions, makes surgical edits grounded
-in evidence, re-runs evaluation with regression baseline checks, and iterates
-up to a configurable maximum. Also reads human feedback from review.yaml
-(from /eval-review) and MLflow annotations to prioritize issues flagged by
-humans over automated judge failures. Stops when all judges pass or max
-iterations reached.
+Automated skill improvement loop that acts autonomously (no per-case human
+input). Runs evaluation, identifies judge failures from summary.yaml, reads
+execution transcripts and failing case outputs via Explore sub-agents to
+trace root causes to specific SKILL.md instructions, makes surgical edits
+grounded in evidence, re-runs evaluation with regression baseline checks
+(targeting failing cases first, then a full run), handles regressions
+(continue if minor, revert if major), and iterates up to a configurable
+maximum. Also reads human feedback from review.yaml (from /eval-review) and
+MLflow annotations to prioritize issues flagged by humans over automated judge
+failures. Never edits judges, eval.yaml, or builtin judge code -- only the
+skill under test. Stops when all judges pass or max iterations is reached, then
+suggests logging results to MLflow.
 
 ```
 /eval-optimize [--config <path>] [--model <model>] [--max-iterations <N>] [--run-id <id>] [--target-judge <name>]
@@ -1660,7 +1717,7 @@ iterations reached.
 | Argument | Required | Description |
 |----------|----------|-------------|
 | `--config` |  | Path to eval config. |
-| `--model` |  | Model for skill execution across all iterations. |
+| `--model` |  | Model for skill execution. Pass the same model on every iteration for comparable results. |
 | `--max-iterations` |  | Maximum optimization iterations before stopping. |
 | `--run-id` |  | Base run ID. Iterations append -iter-N. |
 | `--target-judge` |  | Focus optimization on a specific failing judge instead of all judges. |
@@ -1670,6 +1727,37 @@ Examples:
 /eval-optimize
 /eval-optimize --max-iterations 5 --model claude-opus-4-6
 /eval-optimize --target-judge completeness
+```
+
+#### /eval-check
+
+Full-harness configuration health check. Inventories all skills, commands,
+CLAUDE.md, and hooks (via harness_inventory.py), reads each skill's full
+SKILL.md plus project CLAUDE.md files, and analyzes the configuration as a
+single system. Produces an informational report with findings across five
+categories: content overlap (duplicated rules between skills), trigger overlap
+(descriptions that activate for the same tasks), CLAUDE.md duplication (rules
+already in CLAUDE.md that are restated in skills), type misclassification
+(skills that should be hooks, commands, or CLAUDE.md rules), and structural
+issues (missing descriptions, overly broad triggers, commands shadowing
+built-ins). Read-only -- modifies no skills/config and writes only the report
+(refusing paths outside the project root). Skips cross-component analysis for
+single-skill projects.
+
+```
+/eval-check [--output <path>] [--include-global]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--output` |  | Where to write the health check report. Must resolve within the project root. |
+| `--include-global` |  | Also scan ~/.claude/CLAUDE.md (user-global config). Opt-in for privacy. |
+
+Examples:
+```
+/eval-check
+/eval-check --include-global
+/eval-check --output eval/health-report.md
 ```
 
 ---
@@ -2014,6 +2102,78 @@ Examples:
 ```
 /validate-component-onboarding-jira https://redhat.atlassian.net/browse/RHOAIENG-12345
 /validate-component-onboarding-jira RHOAIENG-12345
+```
+
+---
+
+## code-review-skills
+
+AI-powered code review for GitLab merge requests. Reviews all commits since the
+base branch, produces structured JSON feedback with severity-tagged inline
+comments, and posts results to the GitLab MR (in CI) or displays them locally
+for preview. Designed to run as a job in a GitLab CI code-review pipeline, but
+also works locally for previewing review output before pushing.
+
+The skill reviews only the committed diff between branches (never uncommitted
+working-tree changes), writes a strict-schema JSON review to
+/tmp/ai-review-output.json, then hands off to a deterministic Python script
+(review.py) that validates the JSON, applies chill-mode filtering, deduplicates
+against previous reviews, deletes prior AI review discussions, and posts inline
+comments plus a summary note to the MR. When no CI platform is detected, it
+falls back to a formatted terminal display.
+
+**Repository**: https://github.com/opendatahub-io/code-review-skills
+
+### Architecture
+
+Single-skill plugin with a clean split between LLM judgment and deterministic
+posting. SKILL.md is the orchestrator: it instructs the agent to inspect the
+git diff (git log / git diff against the base branch, using
+$CI_MERGE_REQUEST_DIFF_BASE_SHA in CI), produce structured JSON output matching
+a fixed schema (summary, positive_aspects, inline_comments with
+file/line/severity/comment, optional fix_prompt), and invoke the posting script.
+
+scripts/review.py handles all deterministic work: JSON parsing and validation,
+chill-mode filtering (CHILL_MODE env var, default true, drops suggestion-level
+comments), platform auto-detection (GitLab CI, GitHub, or local), deduplication
+against previous reviews (skips comments on unchanged code), deletion of prior
+AI review discussions on the MR, and posting inline comments + summary to the
+GitLab MR. It is invoked directly (./scripts/review.py) rather than via python
+so the uv shebang manages dependencies. Requires python3, uv, and git; CI
+posting requires GITLAB_API_TOKEN.
+
+Inline comments must reference new-side line numbers and only target lines in
+the diff. Severity levels: critical (security/build-breaking), major (logic
+errors, pattern violations), minor (style), suggestion (optional). In CI, the
+GitLab CI_* environment variables are set automatically.
+
+### Skills
+
+#### /gitlab-code-review
+
+Perform a structured AI code review of a GitLab merge request. Reviews all
+commits in the branch since the base branch, produces a strict-schema JSON
+review (summary, positive aspects, severity-tagged inline comments, optional
+fix prompt), and posts the results to the GitLab MR via the review.py script
+— or displays them in the terminal when run locally. Reviews only the
+committed diff (ignores uncommitted changes), filters suggestion-level
+comments via chill mode, and deduplicates against previous reviews. Accepts
+optional free-text review instructions that override the default review
+guidelines.
+
+```
+/gitlab-code-review [additional review instructions]
+```
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `additional review instructions` |  | Free-text guidance that overrides the default review guidelines (e.g., focus areas, standards to enforce, severity emphasis). Substituted into the review prompt via $ARGUMENTS. |
+
+Examples:
+```
+/gitlab-code-review
+/gitlab-code-review focus on security and error handling
+/gitlab-code-review only flag critical and major issues
 ```
 
 ---

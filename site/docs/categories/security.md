@@ -9,7 +9,7 @@ title: Security Review
 
 Security analysis, threat modeling, and compliance review
 
-## Plugins
+## SDLC
 
 ### [rhoai-security-reviewer](../plugins/rhoai-security-reviewer/index.md)
 

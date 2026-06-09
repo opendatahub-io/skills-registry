@@ -10,8 +10,8 @@ direction: right
 args: |md
   **/eval-analyze**
 
-  - --skill \<name\>
-  - --config eval.yaml
+  - --skill <name>
+  - --config <path>
   - --update
 | {
   shape: rectangle
@@ -20,15 +20,16 @@ args: |md
   style.stroke-width: 2
 }
 
-# --- Find Skill ---
+# --- Setup / discovery ---
 
-find-skill: |md
-  **Find Skill**
+discover: |md
+  **Discover Layout**
 
-  - find_skills.py
-  - reads plugin.json paths
-  - auto-detect if single
-  - ask user if multiple
+  - state.py init tmp/
+  - discover.py for configs
+  - root vs eval/ layout
+  - resolve config path
+  - set eval.md path
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,34 +37,49 @@ find-skill: |md
   style.stroke-width: 2
 }
 
-# --- Freshness Check ---
+find-skill: |md
+  **Find Target Skill**
+
+  - find_skills.py
+  - reads plugin.json paths
+  - falls back .claude/skills/
+  - auto-detect if single
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Freshness decision ---
 
 freshness: |md
   **Freshness Check**
 
+  - config exists?
   - validate_eval.py config
   - validate_eval.py memory
-  - FRESH → exit early
-  - STALE → full analysis
+  - SKILL.md hash unchanged?
 | {
-  shape: rectangle
+  shape: diamond
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Deep-Read ---
+# --- Deep analysis (LLM) ---
 
 deep-read: |md
   **Deep-Read Skill**
   LLM agent (Explore)
 
+  - read analyze-skill.md
   - read SKILL.md fully
   - follow sub-skill chains
-    (up to 5 levels)
+    (recursive, max 5 levels)
   - read scripts/, prompts/
-  - identify I/O, pipeline
-  - suggest judges
+  - return purpose, I/O,
+    pipeline, judges
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -72,13 +88,12 @@ deep-read: |md
   style.double-border: true
 }
 
-# --- Explore Dataset ---
-
 explore-dataset: |md
   **Explore Dataset**
 
-  - Glob for cases dirs
-  - read sample case files
+  - Glob cases/, fixtures/,
+    eval/, tests/data/
+  - read one full sample case
   - note field names, formats
   - input vs reference files
 | {
@@ -88,17 +103,17 @@ explore-dataset: |md
   style.stroke-width: 2
 }
 
-# --- Generate ---
+# --- Generation (LLM) ---
 
 gen-yaml: |md
   **Generate eval.yaml**
   LLM synthesis
 
-  - eval-yaml-template.md
   - execution mode + args
   - dataset.schema (observed)
   - output schemas
-  - 2-4 inline judges
+  - 1-2 builtin judges
+  - 2-3 inline checks
   - 1-2 LLM judges
   - models, thresholds
 | {
@@ -109,14 +124,26 @@ gen-yaml: |md
   style.double-border: true
 }
 
-# --- Validate ---
+builtins: |md
+  **Builtin Judges**
+
+  - list_builtins.py
+  - reusable check + LLM
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
 
 validate: |md
   **Validate Config**
 
   - validate_eval.py config
-  - check paths, references
-  - judge code validity
+  - dataset path exists
+  - paths relative
+  - judge refs resolve
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -124,13 +151,12 @@ validate: |md
   style.stroke-width: 2
 }
 
-# --- eval.md ---
-
 gen-md: |md
   **Generate eval.md**
 
-  - skill hash (SHA256)
-  - cached analysis
+  - generate-eval-md.md
+  - SKILL.md hash (SHA256)
+  - cache skill analysis
   - YAML frontmatter
 | {
   shape: rectangle
@@ -139,13 +165,14 @@ gen-md: |md
   style.stroke-width: 2
 }
 
-# --- Report ---
+# --- Output ---
 
-report: |md
-  **Report**
+report-out: |md
+  **Report (Outputs)**
 
   - eval.yaml created
-  - N judges configured
+  - eval.md cached
+  - N judges, M cases
   - next: /eval-dataset
     or /eval-run
 | {
@@ -155,82 +182,87 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- Callout: eval.yaml structure ---
+# --- Callouts ---
 
-eval-yaml-structure: |md
-  **eval.yaml**
-
-  - skill: (name)
-  - execution:
-    - mode: case / batch
-    - arguments: "{field}..."
-  - dataset:
-    - path: eval/cases/
-    - schema: "..."
-  - outputs: [{path, schema}]
-  - judges: [{name, type}]
-  - thresholds: {min_pass_rate}
+layout-tree: |md
+  project/
+  eval.yaml          # root layout
+  eval/
+    <skill-a>/
+      eval.yaml
+      eval.md
+      cases/
+        case-001/
+          input.yaml
+          reference.md
+          annotations.yaml
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#bbbbbb"
   style.stroke-width: 1
-  style.font-size: 11
+  style.font: mono
+  style.font-size: 10
 }
 
-# --- Downstream skills (external) ---
-
-eval-dataset: |md
-  **/eval-dataset**
+eval-yaml-schema: |md
+  eval.yaml
+    skill: <name>
+    execution:
+      mode: case|batch
+      arguments: "{field}"
+    runner: {type: claude-code}
+    models: {skill, judge, hook}
+    dataset: {path, schema}
+    inputs: {tools: [match,prompt]}
+    outputs: [{path, schema}]
+    judges:
+      builtin: cost_budget
+      check: <python>
+      prompt: <LLM rubric>
+    thresholds:
+      {judge: {min_pass_rate}}
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-eval-run: |md
-  **/eval-run**
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-args -> find-skill
+args -> discover
+discover -> find-skill
 find-skill -> freshness
 
-freshness -> report: "FRESH + COMPLETE" {
+freshness -> report-out: "FRESH + COMPLETE" {
+  style.stroke-dash: 3
+}
+freshness -> deep-read: "STALE / NO_CONFIG / --update"
+
+deep-read -> explore-dataset
+explore-dataset -> gen-yaml
+builtins -> gen-yaml: "builtin: refs" {
   style.stroke-dash: 3
 }
 
-freshness -> deep-read: "STALE / missing"
-deep-read -> explore-dataset: "analysis YAML"
-explore-dataset -> gen-yaml: "case structure"
 gen-yaml -> validate
-
-validate -> gen-yaml: "errors" {
+validate -> gen-yaml: errors {
   style.stroke-dash: 3
 }
+validate -> gen-md: ok
+gen-md -> report-out
 
-validate -> gen-md: "eval.yaml"
-gen-md -> report
+# --- Callout connectors ---
 
-# Downstream suggestions
-report -> eval-dataset: "no cases" {
-  style.stroke-dash: 3
+discover -> layout-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
-report -> eval-run: "cases exist" {
-  style.stroke-dash: 3
-}
-
-# Callout connection
-gen-yaml -> eval-yaml-structure {
+gen-yaml -> eval-yaml-schema: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

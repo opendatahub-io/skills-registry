@@ -9,7 +9,7 @@ title: DevOps & CI/CD
 
 Skills for deployment, CI/CD, and infrastructure
 
-## Plugins
+## SDLC
 
 ### [disconnected-readiness-scorer](../plugins/disconnected-readiness-scorer/index.md)
 

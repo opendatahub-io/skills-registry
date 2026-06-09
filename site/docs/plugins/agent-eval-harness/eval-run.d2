@@ -5,14 +5,19 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# ─── Entry ────────────────────────────────────────────────────
+# --- Entry ---
 
 entry: |md
   **/eval-run**
 
-  - --config, --model, --skill
-  - --case, --baseline
-  - --no-judge, --gold, --effort
+  - --config <path>
+  - --model / --subagent-model
+  - --skill <name>
+  - --run-id <id>
+  - --cases <id ...>
+  - --baseline <run-id>
+  - --no-llm-judges / --gold
+  - --effort <level>
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,15 +25,17 @@ entry: |md
   style.stroke-width: 2
 }
 
-# ─── Step 0: Load Config ─────────────────────────────────────
+# --- Step 0: Config discovery ---
 
-load-config: |md
-  **Load Config**
+discover: |md
+  **Step 0: Discover Config**
 
-  - read eval.yaml
-  - verify skill, models, judges
-  - check tool interception coverage
-  - persist flags via state.py
+  - run discover.py
+  - 1 found: auto-select
+  - many: ask user
+  - read skill, runner, dataset,
+    judges, models
+  - state.py init flags
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,29 +43,28 @@ load-config: |md
   style.stroke-width: 2
 }
 
-# ─── External: /eval-analyze (bootstrap) ─────────────────────
-
-eval-analyze: |md
+bootstrap: |md
   **/eval-analyze**
 
-  - bootstrap eval.yaml
-  - analyze skill under test
+  - invoked if no config
+  - generates eval.yaml
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# ─── Step 1: Find Dataset ────────────────────────────────────
+# --- Step 1: Find dataset ---
 
 find-dataset: |md
-  **Find Dataset**
+  **Step 1: Find Dataset**
 
-  - read dataset.path from config
-  - verify case subdirectories
-  - apply --case filter
+  - read dataset.path
+  - verify case subdirs
+  - apply --cases filter
+  - empty: suggest /eval-dataset
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -66,14 +72,15 @@ find-dataset: |md
   style.stroke-width: 2
 }
 
-# ─── Step 2: Preflight Check ─────────────────────────────────
+# --- Step 2: Preflight ---
 
 preflight: |md
-  **Preflight Check**
+  **Step 2: Preflight**
 
-  - preflight.py
-  - check tmp/ state files
-  - detect previous run output
+  - preflight.py --config
+  - scan tmp/ state files
+  - check run-id / baseline
+  - detect stale artifacts
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -81,15 +88,27 @@ preflight: |md
   style.stroke-width: 2
 }
 
-# ─── Step 3: Prepare Workspace ───────────────────────────────
+clean-gate: |md
+  **CLEAN / DIRTY /
+  MISSING_BASELINE?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 3: Workspace ---
 
 workspace: |md
-  **Prepare Workspace**
+  **Step 3: Prepare Workspace**
 
-  - workspace.py
-  - isolated /tmp/agent-eval/{id}
-  - symlink project resources
+  - workspace.py --run-id
   - case or batch mode
+  - copy inputs, symlinks
+  - create output dirs
+  - .claude/settings.json
+  - emit WORKSPACE / CASES
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -97,18 +116,187 @@ workspace: |md
   style.stroke-width: 2
 }
 
-# ─── Workspace callout ───────────────────────────────────────
+resolve-tools: |md
+  **Step 3b: Resolve Tools**
+
+  - if inputs.tools set
+  - read tool_handlers.yaml
+  - add input_filters,
+    env_checks, overrides
+  - verify Bash filters
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 4: Execute (LLM runner) ---
+
+execute: |md
+  **Step 4: Execute Skill**
+  LLM runner (headless)
+
+  - execute.py --workspace
+  - claude --print per case
+  - parallelism thread pool
+  - stream-json capture
+  - run_in_background, tail
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+exit-gate: |md
+  **exit_code == 0?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 5: Collect ---
+
+collect: |md
+  **Step 5: Collect Artifacts**
+
+  - collect.py --workspace
+  - map files to cases
+  - git diff -> _modified/
+  - read collection.json
+  - warn on 0 artifacts
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 6: Score (container) ---
+
+scoring: "Step 6: Score" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  judge-builtin: |md
+    **builtin + check**
+
+    - harness library
+    - inline Python snippets
+    - deterministic
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+  judge-llm: |md
+    **LLM prompt / prompt_file**
+    LLM judge
+
+    - Jinja2 rendered
+    - skip if --no-llm-judges
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+  judge-external: |md
+    **external module / function**
+
+    - dotted import path
+    - arguments: params
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  pairwise: |md
+    **pairwise (--baseline)**
+    LLM judge
+
+    - score.py pairwise
+    - regression detect
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+}
+
+# --- Step 7: Interpret (LLM) ---
+
+interpret: |md
+  **Step 7: Interpret**
+  LLM analysis
+
+  - read summary.yaml
+  - analyze-results.md
+  - failure patterns,
+    root causes, cost
+  - write analysis.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+report-out: |md
+  **Report + Next Steps**
+
+  - report.py --open
+  - report.html
+  - --gold: save refs
+  - suggest /eval-review,
+    /eval-optimize
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 8: MLflow (optional external skill) ---
+
+mlflow: |md
+  **/eval-mlflow**
+
+  - if mlflow.experiment
+  - log-results --run-id
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Callouts ---
 
 workspace-tree: |md
   /tmp/agent-eval/{id}/
-  cases/
-    case-001/
-      input.yaml
-      .claude/settings.json
-      hooks/tools.py
-    case-002/
-      ...
   case_order.yaml
+  cases/
+    case-001-name/
+      input.yaml
+      answers.yaml
+      {output_dirs}/
+      .claude/settings.json
+      subagents/
+  batch.yaml  (batch mode)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -118,255 +306,92 @@ workspace-tree: |md
   style.font-size: 10
 }
 
-# ─── Step 3b: Tool Interception ──────────────────────────────
-
-resolve-tools: |md
-  **Resolve Tool Handlers**
-  LLM
-
-  - read tool_handlers.yaml
-  - resolve prompts to runtime checks
-  - add input_filters, env_checks
-  - verify Bash handlers have filters
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# ─── Step 4: Execute Skill ───────────────────────────────────
-
-execute: |md
-  **Execute Skill**
-
-  - execute.py (background)
-  - case mode: once per case
-  - batch mode: single invocation
-  - parallel via thread pool
+handlers-snippet: |md
+  handlers:
+  - patterns: [AskUserQuestion]
+    case_overrides: {...}
+  - patterns: [Bash, mcp__*]
+    input_filters: [jira]
+    env_checks:
+      JIRA_SERVER:
+        must_contain: [test]
+  hook_model: claude-haiku
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
-# ─── External: Claude Code CLI ───────────────────────────────
-
-claude-code: |md
-  **Claude Code CLI**
+summary-snippet: |md
+  summary.yaml:
+    judges:
+      <j>: {mean, pass_rate}
+    per_case:
+      <case>: {value, rationale}
+    pairwise:
+      wins_a, wins_b, ties
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> discover
+discover -> find-dataset: "config found"
+discover -> bootstrap: "no config"
+bootstrap -> find-dataset: "eval.yaml"
+
+find-dataset -> preflight
+preflight -> clean-gate
+clean-gate -> preflight: "DIRTY: --clean --force" {
+  style.stroke-dash: 3
+}
+clean-gate -> preflight: "MISSING_BASELINE" {
+  style.stroke-dash: 3
+}
+clean-gate -> workspace: "CLEAN"
+
+workspace -> resolve-tools: "inputs.tools"
+resolve-tools -> execute
+workspace -> execute: "no tools" {
   style.stroke-dash: 3
 }
 
-# ─── Monitor + Check ─────────────────────────────────────────
-
-monitor: |md
-  **Monitor Progress**
-
-  - poll output file
-  - detect stuck / errors
-  - report to user
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# ─── Step 5: Collect Artifacts ────────────────────────────────
-
-collect: |md
-  **Collect Artifacts**
-
-  - collect.py
-  - distribute outputs per case
-  - write collection.json
-  - warn on 0-artifact cases
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# ─── Step 6: Score (container) ────────────────────────────────
-
-scoring: Score {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  judges: |md
-    **Run Judges**
-    LLM + inline
-
-    - score.py judges
-    - inline checks (Python)
-    - LLM judges (prompt)
-    - external (module/function)
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  pairwise: |md
-    **Pairwise Comparison**
-    LLM
-
-    - score.py pairwise
-    - position-swapped A/B
-    - wins / losses / ties
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  judges -> pairwise: "--baseline"
-}
-
-# ─── External: Anthropic API ─────────────────────────────────
-
-anthropic-api: |md
-  **Anthropic API**
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+execute -> exit-gate
+exit-gate -> collect: "0 (ok)"
+exit-gate -> report-out: "non-zero: abort" {
   style.stroke-dash: 3
 }
 
-# ─── Step 7: Report ──────────────────────────────────────────
-
-report: |md
-  **Analyze & Report**
-  LLM
-
-  - read summary.yaml
-  - analyze-results.md framework
-  - write analysis.md
-  - report.py → report.html
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# ─── Step 7b: Gold References ────────────────────────────────
-
-save-gold: |md
-  **Save Gold References**
-
-  - copy artifacts to dataset
-  - as reference files per case
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# ─── Step 8: MLflow ──────────────────────────────────────────
-
-eval-mlflow: |md
-  **/eval-mlflow**
-
-  - log params, metrics, artifacts
-  - sync dataset to registry
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+collect -> scoring: "collection.json"
+scoring -> interpret: "summary.yaml"
+interpret -> report-out
+report-out -> mlflow: "optional" {
   style.stroke-dash: 3
 }
 
-# ─── Output: Next Steps ──────────────────────────────────────
+# --- Callout connectors ---
 
-next-steps: |md
-  **Next Steps**
-
-  - /eval-review (human review)
-  - /eval-optimize (auto-improve)
-  - /eval-mlflow (tracking)
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# ═══ Edges ════════════════════════════════════════════════════
-
-# Entry → Config
-entry -> load-config
-entry -> eval-analyze: "config missing" {
-  style.stroke-dash: 3
-}
-eval-analyze -> load-config: "eval.yaml"
-
-# Config → Dataset
-load-config -> find-dataset
-
-# Dataset → Preflight
-find-dataset -> preflight: "cases found"
-
-# Preflight → Workspace
-preflight -> workspace: "CLEAN"
-preflight -> workspace: "DIRTY → clean" {
-  style.stroke-dash: 3
-}
-
-# Workspace
 workspace -> workspace-tree: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
 }
-workspace -> resolve-tools: "inputs.tools"
-workspace -> execute: "no tools"
-resolve-tools -> execute: "tool_handlers.yaml"
-
-# Execute
-execute -> claude-code: "claude --print" {
-  style.stroke-dash: 3
+resolve-tools -> handlers-snippet: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
-execute -> monitor
-monitor -> collect: "run_result.json"
-
-# Collect → Score
-collect -> scoring.judges: "collection.json"
-
-# Score → external
-scoring.judges -> anthropic-api: "LLM judges" {
-  style.stroke-dash: 3
+interpret -> summary-snippet: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
-scoring.pairwise -> anthropic-api: "comparison" {
-  style.stroke-dash: 3
-}
-
-# Score → Report
-scoring -> report: "summary.yaml"
-
-# Report → outputs
-report -> save-gold: "--gold" {
-  style.stroke-dash: 3
-}
-report -> eval-mlflow: "mlflow configured" {
-  style.stroke-dash: 3
-}
-report -> next-steps

@@ -353,6 +353,7 @@ plugins:
       GitLab pipelines, reviewing ADRs, and more.
     version: "0.1.0"
     category: development-tools
+    scope: generic
     tags: [python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation]
     author:
       name: opendatahub-io
@@ -439,15 +440,16 @@ plugins:
       iteratively improve agent skills with MLflow support for experiment tracking,
       tracing, and reporting. Schema-driven evaluation via eval.yaml with
       support for inline, LLM-based, and external judges.
-    version: "1.0.0"
+    version: "1.9.1"
     category: evaluation
+    scope: generic
     tags: [evaluation, testing, skills, agents, mlflow, optimization, scoring]
     author:
       name: Antonin Stefanutti
     source:
       type: github
       repo: opendatahub-io/agent-eval-harness
-      ref: 7d86a7ec657002a27c299fba67f7af1cd8124a6e # v1.0.0
+      ref: v1.9.1
     homepage: https://github.com/opendatahub-io/agent-eval-harness
     repository: https://github.com/opendatahub-io/agent-eval-harness
     skills:
@@ -471,6 +473,9 @@ plugins:
         user-invocable: true
       - name: eval-optimize
         description: Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks
+        user-invocable: true
+      - name: eval-check
+        description: Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues
         user-invocable: true
     harnesses:
       claude-code:
@@ -559,7 +564,7 @@ plugins:
     source:
       type: github
       repo: opendatahub-io/disconnected-readiness-scorer
-      ref: f8fbba8c8400caeaa1dd9c7455478aad2bf05b4d
+      ref: main
     strict: false
     skills_dir: skills
     homepage: https://github.com/opendatahub-io/disconnected-readiness-scorer
@@ -602,6 +607,34 @@ plugins:
         install: "/plugin install aiops-skills@opendatahub-skills"
     depends_on: []
 
+  - name: code-review-skills
+    description: >
+      AI-powered code review for GitLab merge requests. Reviews all commits
+      since the base branch, produces structured JSON feedback with inline
+      comments, and posts results to the GitLab MR (in CI) or displays them
+      locally for preview. Supports chill mode filtering and comment
+      deduplication.
+    version: "0.1.0"
+    category: code-quality
+    tags: [code-review, gitlab, ci, merge-request]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/code-review-skills
+      ref: main
+    homepage: https://github.com/opendatahub-io/code-review-skills
+    repository: https://github.com/opendatahub-io/code-review-skills
+    skills:
+      - name: gitlab-code-review
+        description: Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install code-review-skills@opendatahub-skills"
+    depends_on: []
+
   - name: spike-executor
     description: >
       Execute RHOAI SPIKE investigations with human-in-the-loop approval gates.
@@ -618,7 +651,7 @@ plugins:
     source:
       type: github
       repo: IKRedHat/SPIKE-executor
-      ref: 924ec480198b89d42ceb82275938a7859dbf92ff
+      ref: master
     strict: false
     skills_dir: .claude/skills
     homepage: https://github.com/IKRedHat/SPIKE-executor

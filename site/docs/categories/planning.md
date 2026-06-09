@@ -9,7 +9,7 @@ title: Product Planning
 
 Skills for requirements, RFEs, and product strategy
 
-## Plugins
+## SDLC
 
 ### [rfe-creator](../plugins/rfe-creator/index.md)
 

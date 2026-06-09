@@ -192,11 +192,11 @@
       "name": "agent-eval-harness",
       "repository": "https://github.com/opendatahub-io/agent-eval-harness",
       "source": {
-        "ref": "7d86a7ec657002a27c299fba67f7af1cd8124a6e",
+        "ref": "v1.9.1",
         "repo": "opendatahub-io/agent-eval-harness",
         "source": "github"
       },
-      "version": "1.0.0"
+      "version": "1.9.1"
     },
     {
       "author": {
@@ -271,7 +271,7 @@
         "./skills"
       ],
       "source": {
-        "ref": "f8fbba8c8400caeaa1dd9c7455478aad2bf05b4d",
+        "ref": "main",
         "repo": "opendatahub-io/disconnected-readiness-scorer",
         "source": "github"
       },
@@ -312,6 +312,29 @@
     },
     {
       "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "code-quality",
+      "description": "AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.\n",
+      "homepage": "https://github.com/opendatahub-io/code-review-skills",
+      "keywords": [
+        "code-review",
+        "gitlab",
+        "ci",
+        "merge-request"
+      ],
+      "license": "Apache-2.0",
+      "name": "code-review-skills",
+      "repository": "https://github.com/opendatahub-io/code-review-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/code-review-skills",
+        "source": "github"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
         "name": "IKRedHat"
       },
       "category": "planning",
@@ -335,7 +358,7 @@
         "./.claude/skills"
       ],
       "source": {
-        "ref": "924ec480198b89d42ceb82275938a7859dbf92ff",
+        "ref": "master",
         "repo": "IKRedHat/SPIKE-executor",
         "source": "github"
       },

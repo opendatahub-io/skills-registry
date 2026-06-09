@@ -123,7 +123,7 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 
 Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
 
-v1.0.0 | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
+v1.9.1 | Generic | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
 
 Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 
@@ -136,9 +136,30 @@ Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
 | `/eval-review` | Human-in-the-loop review of scores and outputs with qualitative feedback collection |
 | `/eval-mlflow` | Bidirectional MLflow sync for results, datasets, and feedback |
 | `/eval-optimize` | Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks |
+| `/eval-check` | Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues |
 
 ```bash
 /plugin install agent-eval-harness@opendatahub-skills
+```
+
+## Code Quality
+
+Code review, linting, and quality enforcement
+
+### code-review-skills
+
+AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
+
+Tags: code-review, gitlab, ci, merge-request
+
+| Skill | Description |
+|-------|-------------|
+| `/gitlab-code-review` | Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments |
+
+```bash
+/plugin install code-review-skills@opendatahub-skills
 ```
 
 ## Documentation
@@ -229,7 +250,7 @@ Developer productivity tools for packaging, CI/CD debugging, and workflow automa
 
 Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
 
-v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
 
 Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation
 

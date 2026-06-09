@@ -5,30 +5,56 @@ description: |
   skill quality with regression checks.
 
   The framework is schema-driven via eval.yaml, which defines execution mode
-  (case-by-case or batch), dataset schemas, output descriptions, judges (inline
-  checks, LLM prompts, external modules), model selection per role (skill, subagent,
-  judge, hook), thresholds for regression detection, and tool interception handlers.
-  Supports AskUserQuestion answering via 3-tier resolution (exact overrides, LLM
-  with case context, fallback) and annotation-aware judges that adapt scoring based
-  on expected outcomes per test case.
+  (case-by-case or batch), dataset schemas, output descriptions, judges (four
+  types: builtin reusable judges, inline check scripts, LLM prompts, and external
+  modules), model selection per role (skill, subagent, judge, hook), thresholds
+  for regression detection, and tool interception handlers. Supports
+  AskUserQuestion answering via 3-tier resolution (exact case_overrides, then an
+  LLM call using models.hook with the case's input.yaml + answers.yaml as context,
+  then fallback to the first option) and annotation-aware judges that adapt scoring
+  based on expected outcomes per test case.
+
+  Config auto-discovery (via discover.py) finds eval.yaml configs across
+  nested and flat directory layouts, so skills no longer require an explicit
+  --config path. A harness health-check skill (eval-check) scans all skills,
+  commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues.
 
   The harness also integrates with EvalHub for running evaluations on Red Hat
-  OpenShift AI via a custom provider adapter, supporting S3-hosted datasets and
-  containerized execution.
+  OpenShift AI via a custom provider adapter (FrameworkAdapter from eval-hub-sdk),
+  supporting S3-hosted datasets, eval.yaml-to-provider translation, and
+  containerized (UBI9) execution.
 architecture_notes: |
-  Seven skills form a linear pipeline with feedback loops: setup (optional) ->
+  Eight skills form a linear pipeline with feedback loops: setup (optional) ->
   analyze -> dataset -> run -> review/optimize, with mlflow available at any
-  point after run. eval-run is the central hub -- it executes skills headlessly,
-  runs judges (inline checks + LLM scoring + pairwise comparison), and produces
-  summary.yaml consumed by review, optimize, and mlflow.
+  point after run. eval-check operates standalone as a cross-component health
+  check. eval-run is the central hub -- it executes skills headlessly,
+  runs judges (builtin + inline checks + LLM scoring + external modules, plus
+  pairwise comparison against a baseline), and produces summary.yaml consumed by
+  review, optimize, and mlflow. Builtin judges are reusable, versioned judges from
+  the agent_eval/judges/ library, parameterizable via an arguments dict and
+  listable with list_builtins.py.
+
+  eval-run orchestrates a chain of helper scripts rather than doing the work
+  itself: discover.py (config) -> preflight.py (stale-artifact check) ->
+  workspace.py (isolated per-case workspace + batch.yaml + symlinks) -> execute.py
+  (headless skill execution via the EvalRunner abstraction, with optional
+  parallelism, subagent models, and reasoning effort) -> collect.py (artifact
+  distribution into per-case dirs) -> score.py (judges + pairwise) -> report.py
+  (HTML report). State persists across context compression via state.py, a
+  key-value store. The EvalRunner ABC has a Claude Code implementation
+  (claude --print, stream-json capture) and an opaque CLI runner, making the
+  harness agent-agnostic.
 
   eval-optimize creates a closed loop by reading judge rationale and execution
-  transcripts, forming hypotheses about SKILL.md deficiencies, making surgical
-  edits, and re-running eval-run with regression baseline checks. eval-review
-  complements this with human-in-the-loop feedback that catches qualitative
-  issues judges miss. eval-mlflow provides bidirectional sync -- pushing datasets,
-  results, and feedback to MLflow experiment tracking and pulling annotations
-  back for optimization.
+  transcripts (via Explore sub-agents), forming hypotheses about SKILL.md
+  deficiencies, making surgical edits, and re-running eval-run with regression
+  baseline checks until judges pass or max iterations is hit. It never edits
+  judges, eval.yaml, or builtin judge code -- only the skill under test.
+  eval-review complements this with human-in-the-loop feedback that catches
+  qualitative issues judges miss (tone, intent, UX), persisting results to
+  review.yaml. eval-mlflow provides bidirectional sync -- pushing datasets,
+  results, traces, and feedback to MLflow experiment tracking and pulling
+  annotations back into review.yaml for optimization.
 
   Scripts live alongside each skill and share the agent_eval Python package
   (auto-installed via SessionStart hook into an isolated venv at .eval-venv/).
@@ -38,18 +64,22 @@ architecture_notes: |
 skills:
   eval-setup:
     description: |
-      Optional environment configurator for the evaluation harness. Installs
-      dependencies into the isolated venv, configures MLflow tracking (local
-      server, file store, or remote), verifies API keys (Anthropic or Vertex AI),
-      sets up the runs directory, checks skill-specific environment variables
-      referenced in eval.yaml, and creates the MLflow experiment. Most users
-      can skip this -- dependencies auto-install via the plugin's SessionStart
-      hook and agent_eval is available via symlinks.
+      Optional, non-destructive environment configurator for the evaluation
+      harness. Installs dependencies into the isolated venv (as a fallback for
+      mid-session installs or troubleshooting), configures MLflow tracking (local
+      server, local file store, or remote/Databricks), verifies API keys
+      (Anthropic API or Vertex AI), sets up the runs directory, checks
+      skill-specific environment variables referenced in eval.yaml's
+      execution.env, and creates the MLflow experiment. Runs check_env.py
+      preflight checks (with --fix) and re-verifies at the end. Most users can
+      skip this -- dependencies auto-install via the plugin's SessionStart hook
+      and agent_eval is available via symlinks.
     argument_hint: "[--tracking-uri <uri>] [--skip-mlflow] [--runs-dir <path>]"
     arguments:
       - name: "--tracking-uri"
         type: "<uri>"
         required: false
+        default: "auto-detect"
         description: "MLflow tracking URI (skips interactive setup). Accepts local or remote URIs."
       - name: "--skip-mlflow"
         required: false
@@ -68,27 +98,31 @@ skills:
     description: |
       Deep-reads a target skill and generates eval.yaml -- the configuration that
       /eval-run needs. Examines the skill's SKILL.md, follows sub-skill chains
-      recursively (up to 5 levels), explores scripts and test cases, and produces
-      a complete config with execution mode, dataset schema, output descriptions,
-      judges, model defaults, and thresholds. Uses an Explore sub-agent for the
-      recursive skill analysis and caches the result in eval.md with a content
-      hash for staleness detection.
+      recursively (typically 2-5 levels, capped at 5 to avoid circular references)
+      until it finds the skills that produce the final artifacts, explores scripts
+      and test cases, and produces a complete config with execution mode, dataset
+      schema, output descriptions, judges, model defaults, and thresholds. Uses an
+      Explore sub-agent for the recursive skill analysis, validates the result with
+      validate_eval.py, and caches the analysis in eval.md with a content hash of
+      the top-level SKILL.md for staleness detection. The guiding principle is
+      "observe, don't assume" -- every field name and path must come from a file
+      actually read. Auto-invoked by /eval-run when eval.yaml is missing.
     argument_hint: "[--skill <name>] [--config <path>] [--update]"
     arguments:
       - name: "--skill"
         type: "<name>"
         required: false
         default: "auto-detect"
-        description: "Which skill to analyze. If omitted, lists all project skills and picks automatically if only one is found."
+        description: "Which skill to analyze. If omitted, lists all project skills (excluding eval harness skills) and picks automatically if only one is found."
       - name: "--config"
         type: "<path>"
         required: false
-        default: "eval.yaml"
-        description: "Output path for the eval config file."
+        default: "auto-discover"
+        description: "Output path for the eval config file. If omitted, discovers existing layout and scaffolds at the project root or eval/<skill-name>/eval.yaml."
       - name: "--update"
         required: false
         default: "false"
-        description: "Fill in missing sections only, preserving user edits. Useful for upgrading older configs."
+        description: "Fill in missing sections only, preserving user edits. Useful for upgrading older configs (e.g., adding a models block, migrating check signatures)."
     usage_examples:
       - "/eval-analyze --skill my-skill"
       - "/eval-analyze --update"
@@ -96,18 +130,24 @@ skills:
   eval-dataset:
     description: |
       Generates realistic test cases based on the eval.yaml dataset schema and
-      judge criteria. Supports three strategies: bootstrap (from scratch with
+      judge criteria. Reads eval.md and eval.yaml to derive judge-driven
+      requirements (each case should exercise at least one judge criterion), then
+      generates cases via one of three strategies: bootstrap (from scratch with
       simple/complex/edge case coverage), expand (fills gaps in existing datasets
-      by analyzing what judges check that no case tests), and from-traces (extracts
-      real inputs from MLflow production traces). Handles external-state fields
-      with TODO_ placeholders, generates answers.yaml for interactive skills using
-      AskUserQuestion, and creates annotations.yaml for outcome-aware judges.
-    argument_hint: "[--config <path>] [--count <N>] [--strategy <type>]"
+      by analyzing what judges check that no case tests, optionally learning from a
+      previous run's failure patterns), and from-traces (extracts real inputs from
+      MLflow production traces). Handles external-state fields with TODO_
+      placeholders (so it never fabricates Jira keys, repos, or API endpoints),
+      generates answers.yaml guidance for interactive skills using AskUserQuestion,
+      and creates annotations.yaml for outcome-aware judges (ensuring conditional
+      judges are exercised on both branches). Can invoke /eval-analyze first when
+      no config exists.
+    argument_hint: "[--config <path>] [--count <N>] [--strategy <type>] [--run-id <id>]"
     arguments:
       - name: "--config"
         type: "<path>"
         required: false
-        default: "eval.yaml"
+        default: "auto-discover"
         description: "Path to eval config."
       - name: "--count"
         type: "<N>"
@@ -118,7 +158,11 @@ skills:
         type: "bootstrap | expand | from-traces"
         required: false
         default: "bootstrap"
-        description: "Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces."
+        description: "Generation strategy. bootstrap: from scratch. expand: fill gaps in existing dataset. from-traces: extract from MLflow traces (falls back to expand if none found)."
+      - name: "--run-id"
+        type: "<id>"
+        required: false
+        description: "Previous eval run to learn from when filling coverage gaps (used with the expand strategy to target empirical failure patterns)."
     usage_examples:
       - "/eval-dataset"
       - "/eval-dataset --count 10 --strategy expand"
@@ -127,20 +171,24 @@ skills:
     description: |
       Executes a skill against test cases, collects artifacts, scores with judges,
       and generates an HTML report. Orchestrates via scripts: preflight checks for
-      stale artifacts, workspace creation with isolated per-case directories, headless
-      skill execution (case mode: once per case; batch mode: single invocation),
-      artifact collection into per-case dirs, scoring with inline checks and LLM
-      judges, optional pairwise comparison against a baseline for regression detection,
-      and report generation. Supports concurrent case execution via parallelism setting,
-      tool interception for AskUserQuestion and external APIs, and configurable
-      reasoning effort levels.
-    argument_hint: "[--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--case <filter>] [--no-judge] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]"
+      stale artifacts, workspace creation with isolated per-case directories,
+      resolution of tool-interception handlers, headless skill execution (case
+      mode: once per case with case-specific arguments; batch mode: single
+      invocation via batch.yaml), artifact collection into per-case dirs, scoring
+      with four judge types (builtin, inline checks, LLM prompts, external
+      modules), optional pairwise comparison against a baseline for regression
+      detection, and report generation. Supports concurrent case execution via the
+      parallelism setting, tool interception for AskUserQuestion and external APIs,
+      configurable reasoning effort, and a --gold flag to save outputs as gold
+      references. Background-launches execute.py and monitors progress; persists
+      state via state.py and leads its analysis with a decisive recommendation.
+    argument_hint: "[--config <path>] [--model <model>] [--run-id <id>] [--baseline <run-id>] [--cases <id> ...] [--no-llm-judges] [--gold] [--effort <level>] [--subagent-model <model>] [--skill <name>]"
     arguments:
       - name: "--config"
         type: "<path>"
         required: false
-        default: "eval.yaml"
-        description: "Path to eval config."
+        default: "auto-discover"
+        description: "Path to eval config. If missing, bootstraps via /eval-analyze."
       - name: "--model"
         type: "<model>"
         required: false
@@ -156,27 +204,27 @@ skills:
         required: false
         default: "YYYY-MM-DD-<model>"
         description: "Identifier for this run."
-      - name: "--case"
-        type: "<filter>"
+      - name: "--cases"
+        type: "<id> [<id> ...]"
         required: false
-        description: "Substring match to select specific cases."
+        description: "Exact case IDs to run (space-separated). Defaults to all cases."
       - name: "--baseline"
         type: "<run-id>"
         required: false
-        description: "Previous run to compare against for regression detection via pairwise comparison."
-      - name: "--no-judge"
+        description: "Previous run to compare against for regression detection via pairwise comparison. Must exist under the same eval-name directory."
+      - name: "--no-llm-judges"
         required: false
         default: "false"
-        description: "Skip LLM judges, run inline checks only."
+        description: "Skip LLM judges (prompt, prompt_file, LLM builtins). Run deterministic judges only (check, Python builtins, external code)."
       - name: "--gold"
         required: false
         default: "false"
-        description: "Save outputs as gold references after the run."
+        description: "Save collected outputs as gold reference files in the dataset case dirs after the run."
       - name: "--effort"
         type: "low | medium | high | xhigh | max"
         required: false
         default: "runner.effort from config"
-        description: "Claude Code reasoning effort level."
+        description: "Claude Code reasoning effort level (Claude Code only; ignored by other runners)."
       - name: "--skill"
         type: "<name>"
         required: false
@@ -185,18 +233,22 @@ skills:
     usage_examples:
       - "/eval-run --model claude-opus-4-6"
       - "/eval-run --model claude-opus-4-6 --baseline 2026-05-01-opus"
-      - "/eval-run --case case-001 --no-judge"
+      - "/eval-run --cases case-001 case-002 --no-llm-judges"
       - "/eval-run --gold"
   eval-review:
     description: |
-      Interactive human-in-the-loop review of evaluation results. Presents judge
-      scores and skill outputs case by case, collects qualitative feedback, delegates
-      transcript analysis to Explore sub-agents to identify inefficiencies (roundabout
-      paths, multiple approaches, unnecessary tools), identifies judge-human alignment
-      gaps, and proposes targeted SKILL.md improvements grounded in feedback evidence.
-      Complements /eval-optimize (automated) by catching tone, intent, and UX issues
-      that judges cannot measure.
-    argument_hint: "--run-id <id> [--config <path>] [--case <filter>]"
+      Interactive human-in-the-loop review of evaluation results. Loads
+      summary.yaml and any /eval-run analysis.md, presents judge scores and skill
+      outputs case by case, collects qualitative feedback, and delegates transcript
+      analysis to Explore sub-agents to identify inefficiencies (roundabout paths,
+      multiple approaches, unnecessary tools, wasted turns). Identifies
+      judge-human alignment gaps and suggests new judge candidates, persists
+      feedback to review.yaml (keyed by case directory name for /eval-optimize and
+      /eval-mlflow to consume), and proposes targeted SKILL.md edits as before/after
+      diffs grounded in feedback evidence -- applied only with explicit approval.
+      Complements /eval-optimize (automated) by catching tone, intent, and UX
+      issues that judges cannot measure.
+    argument_hint: "--run-id <id> [--config <path>] [--cases <name> ...]"
     arguments:
       - name: "--run-id"
         type: "<id>"
@@ -205,24 +257,29 @@ skills:
       - name: "--config"
         type: "<path>"
         required: false
-        default: "eval.yaml"
+        default: "auto-discover"
         description: "Path to eval config."
-      - name: "--case"
-        type: "<filter>"
+      - name: "--cases"
+        type: "<name> [<name> ...]"
         required: false
-        description: "Substring match to select specific cases for review."
+        description: "Exact case directory names to review (space-separated). Defaults to all cases."
     usage_examples:
       - "/eval-review --run-id 2026-05-01-opus"
-      - "/eval-review --run-id 2026-05-01-opus --case case-003"
+      - "/eval-review --run-id 2026-05-01-opus --cases case-003 case-005"
   eval-mlflow:
     description: |
       Bidirectional MLflow integration for evaluation results, datasets, and
-      feedback. Syncs test cases to MLflow dataset registry with a schema mapping
-      you define (inputs vs expectations), logs run params/metrics/artifacts/traces
-      to MLflow experiments, pushes judge scores and human feedback to execution
-      traces, and pulls annotations added via the MLflow UI back into review.yaml
-      for /eval-optimize to consume. Resolves tracking URI from eval.yaml, then
-      MLFLOW_TRACKING_URI env var, then defaults to localhost:5000.
+      feedback. Syncs test cases to the MLflow dataset registry using a two-phase
+      flow where you produce a schema_mapping.json (inputs vs expectations, mapping
+      record fields to source files/field paths) and a script syncs deterministically;
+      logs run params, metrics, artifacts, per-case results tables, and traces to
+      MLflow experiments; pushes judge scores (source_type=CODE) and human feedback
+      (source_type=HUMAN) to execution traces; and pulls annotations added via the
+      MLflow UI back into review.yaml (under mlflow_feedback) for /eval-optimize to
+      consume. Resolves tracking URI from mlflow.tracking_uri in eval.yaml, then the
+      MLFLOW_TRACKING_URI env var, then defaults to http://127.0.0.1:5000. Degrades
+      gracefully -- if MLflow is unavailable, scripts exit cleanly and the skill
+      reports that it was skipped.
     argument_hint: "[--action <action>] [--run-id <id>] [--config <path>]"
     arguments:
       - name: "--action"
@@ -237,7 +294,7 @@ skills:
       - name: "--config"
         type: "<path>"
         required: false
-        default: "eval.yaml"
+        default: "auto-discover"
         description: "Path to eval config."
     usage_examples:
       - "/eval-mlflow --run-id 2026-05-01-opus"
@@ -245,26 +302,30 @@ skills:
       - "/eval-mlflow --run-id 2026-05-01-opus --action push-feedback"
   eval-optimize:
     description: |
-      Automated skill improvement loop. Runs evaluation, identifies judge failures
-      from summary.yaml, reads execution transcripts via Explore sub-agents to trace
-      root causes to specific SKILL.md instructions, makes surgical edits grounded
-      in evidence, re-runs evaluation with regression baseline checks, and iterates
-      up to a configurable maximum. Also reads human feedback from review.yaml
-      (from /eval-review) and MLflow annotations to prioritize issues flagged by
-      humans over automated judge failures. Stops when all judges pass or max
-      iterations reached.
+      Automated skill improvement loop that acts autonomously (no per-case human
+      input). Runs evaluation, identifies judge failures from summary.yaml, reads
+      execution transcripts and failing case outputs via Explore sub-agents to
+      trace root causes to specific SKILL.md instructions, makes surgical edits
+      grounded in evidence, re-runs evaluation with regression baseline checks
+      (targeting failing cases first, then a full run), handles regressions
+      (continue if minor, revert if major), and iterates up to a configurable
+      maximum. Also reads human feedback from review.yaml (from /eval-review) and
+      MLflow annotations to prioritize issues flagged by humans over automated judge
+      failures. Never edits judges, eval.yaml, or builtin judge code -- only the
+      skill under test. Stops when all judges pass or max iterations is reached, then
+      suggests logging results to MLflow.
     argument_hint: "[--config <path>] [--model <model>] [--max-iterations <N>] [--run-id <id>] [--target-judge <name>]"
     arguments:
       - name: "--config"
         type: "<path>"
         required: false
-        default: "eval.yaml"
+        default: "auto-discover"
         description: "Path to eval config."
       - name: "--model"
         type: "<model>"
         required: false
         default: "models.skill from config"
-        description: "Model for skill execution across all iterations."
+        description: "Model for skill execution. Pass the same model on every iteration for comparable results."
       - name: "--max-iterations"
         type: "<N>"
         required: false
@@ -283,3 +344,32 @@ skills:
       - "/eval-optimize"
       - "/eval-optimize --max-iterations 5 --model claude-opus-4-6"
       - "/eval-optimize --target-judge completeness"
+  eval-check:
+    description: |
+      Full-harness configuration health check. Inventories all skills, commands,
+      CLAUDE.md, and hooks (via harness_inventory.py), reads each skill's full
+      SKILL.md plus project CLAUDE.md files, and analyzes the configuration as a
+      single system. Produces an informational report with findings across five
+      categories: content overlap (duplicated rules between skills), trigger overlap
+      (descriptions that activate for the same tasks), CLAUDE.md duplication (rules
+      already in CLAUDE.md that are restated in skills), type misclassification
+      (skills that should be hooks, commands, or CLAUDE.md rules), and structural
+      issues (missing descriptions, overly broad triggers, commands shadowing
+      built-ins). Read-only -- modifies no skills/config and writes only the report
+      (refusing paths outside the project root). Skips cross-component analysis for
+      single-skill projects.
+    argument_hint: "[--output <path>] [--include-global]"
+    arguments:
+      - name: "--output"
+        type: "<path>"
+        required: false
+        default: "harness-report.md"
+        description: "Where to write the health check report. Must resolve within the project root."
+      - name: "--include-global"
+        required: false
+        default: "false"
+        description: "Also scan ~/.claude/CLAUDE.md (user-global config). Opt-in for privacy."
+    usage_examples:
+      - "/eval-check"
+      - "/eval-check --include-global"
+      - "/eval-check --output eval/health-report.md"

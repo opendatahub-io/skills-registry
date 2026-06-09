@@ -15,6 +15,7 @@
 - [autofix-skills](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/): Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic Python scripts for automated bug fixing, CVE remediation, and ticket triage. Designed to run inside a Claude Code container as part of a CI pipeline.
 - [disconnected-readiness-scorer](https://opendatahub-io.github.io/skills-registry/plugins/disconnected-readiness-scorer/): Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation. Supports automatic detection of image management patterns (env var vs static CSV) and cross-references against the opendatahub-operator manifest.
 - [aiops-skills](https://opendatahub-io.github.io/skills-registry/plugins/aiops-skills/): DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.
+- [code-review-skills](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/): AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
 - [spike-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
 
 ## Skills
@@ -74,6 +75,7 @@
 - [eval-review](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-review/): Human-in-the-loop review of scores and outputs with qualitative feedback collection
 - [eval-mlflow](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-mlflow/): Bidirectional MLflow sync for results, datasets, and feedback
 - [eval-optimize](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-optimize/): Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks
+- [eval-check](https://opendatahub-io.github.io/skills-registry/plugins/agent-eval-harness/eval-check/): Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues
 - [knowledge.repo](https://opendatahub-io.github.io/skills-registry/plugins/knowledge-skills/knowledge.repo/): Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch
 - [autofix-resolve](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/autofix-resolve/): Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations)
 - [autofix-cve-resolve](https://opendatahub-io.github.io/skills-registry/plugins/autofix-skills/autofix-cve-resolve/): CVE remediation across multiple repos with state-machine dispatch
@@ -82,6 +84,7 @@
 - [disconnected-score](https://opendatahub-io.github.io/skills-registry/plugins/disconnected-readiness-scorer/disconnected-score/): Score a repository's readiness for disconnected / air-gapped OpenShift deployments
 - [create-component-onboarding-jira](https://opendatahub-io.github.io/skills-registry/plugins/aiops-skills/create-component-onboarding-jira/): Interactively collect component onboarding parameters and create/update a Jira ticket
 - [validate-component-onboarding-jira](https://opendatahub-io.github.io/skills-registry/plugins/aiops-skills/validate-component-onboarding-jira/): Pre-flight validation for ODH component onboarding — fetches Jira, downloads YAML, validates against schema
+- [gitlab-code-review](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/gitlab-code-review/): Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
 - [SPIKE-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/SPIKE-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates
 
 ## Optional

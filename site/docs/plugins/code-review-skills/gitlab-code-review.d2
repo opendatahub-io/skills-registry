@@ -1,0 +1,208 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/gitlab-code-review**
+
+  - [additional review
+    instructions]
+  - branch checked out in
+    git workspace
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Review (LLM) ---
+
+review-changes: |md
+  **Review Code Changes**
+  LLM analysis
+
+  - git log / diff
+    origin/main..HEAD
+  - committed diff only
+    (no git status)
+  - apply $ARGUMENTS or
+    default guidelines
+  - cite authoritative
+    sources
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 2: Produce JSON (LLM) ---
+
+produce-json: |md
+  **Produce Review JSON**
+  LLM generation
+
+  - write /tmp/ai-review
+    -output.json
+  - summary +
+    positive_aspects
+  - inline_comments
+    (file, line, severity)
+  - optional fix_prompt
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 3: Post (review.py) ---
+
+post: review.py post {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  post.parse: |md
+    **Parse & Validate**
+
+    - strict JSON schema
+    - chill-mode filter
+      (drop suggestions)
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  post.detect: |md
+    **Detect Platform**
+
+    - GitLab CI / GitHub
+      / local
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  post.gitlab: |md
+    **GitLab Post**
+
+    - dedup vs prev SHA
+    - delete old AI
+      discussions
+    - post inline comments
+    - upsert summary note
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  post.local: |md
+    **Local Display**
+    (fallback)
+
+    - formatted terminal
+      output
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  post.parse -> post.detect
+  post.detect -> post.gitlab: "gitlab"
+  post.detect -> post.local: "local / no CI"
+}
+
+# --- External: GitLab MR API ---
+
+gitlab-api: |md
+  **GitLab MR API**
+  /api/v4 (PRIVATE-TOKEN)
+
+  - notes & discussions
+  - inline + summary
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 4: Report ---
+
+report: |md
+  **Report Results**
+
+  - CI: confirm posted
+    to MR
+  - local: shown in
+    terminal
+  - report any failures
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: review JSON schema ---
+
+json-schema: |`md
+  /tmp/ai-review-output.json
+
+  summary
+  positive_aspects[]
+  inline_comments[]
+    file
+    line      (new-side)
+    severity  critical /
+              major / minor /
+              suggestion
+    comment
+  fix_prompt?
+`| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> review-changes
+review-changes -> produce-json
+produce-json -> post.parse: "ai-review-output.json"
+
+post.parse -> produce-json: "JSON parse error" {
+  style.stroke-dash: 3
+}
+
+post.gitlab -> gitlab-api
+post -> report
+
+# --- Callout link ---
+
+produce-json -> json-schema: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

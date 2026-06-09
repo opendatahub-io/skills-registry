@@ -7,14 +7,18 @@ title: eval-optimize
 
 # eval-optimize
 
-Automated skill improvement loop. Runs evaluation, identifies judge failures
-from summary.yaml, reads execution transcripts via Explore sub-agents to trace
-root causes to specific SKILL.md instructions, makes surgical edits grounded
-in evidence, re-runs evaluation with regression baseline checks, and iterates
-up to a configurable maximum. Also reads human feedback from review.yaml
-(from /eval-review) and MLflow annotations to prioritize issues flagged by
-humans over automated judge failures. Stops when all judges pass or max
-iterations reached.
+Automated skill improvement loop that acts autonomously (no per-case human
+input). Runs evaluation, identifies judge failures from summary.yaml, reads
+execution transcripts and failing case outputs via Explore sub-agents to
+trace root causes to specific SKILL.md instructions, makes surgical edits
+grounded in evidence, re-runs evaluation with regression baseline checks
+(targeting failing cases first, then a full run), handles regressions
+(continue if minor, revert if major), and iterates up to a configurable
+maximum. Also reads human feedback from review.yaml (from /eval-review) and
+MLflow annotations to prioritize issues flagged by humans over automated judge
+failures. Never edits judges, eval.yaml, or builtin judge code -- only the
+skill under test. Stops when all judges pass or max iterations is reached, then
+suggests logging results to MLflow.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -32,8 +36,8 @@ iterations reached.
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--config` |  | `eval.yaml` | Path to eval config. |
-| `--model` |  | `models.skill from config` | Model for skill execution across all iterations. |
+| `--config` |  | `auto-discover` | Path to eval config. |
+| `--model` |  | `models.skill from config` | Model for skill execution. Pass the same model on every iteration for comparable results. |
 | `--max-iterations` |  | `3` | Maximum optimization iterations before stopping. |
 | `--run-id` |  | `auto-generated` | Base run ID. Iterations append -iter-N. |
 | `--target-judge` |  | - | Focus optimization on a specific failing judge instead of all judges. |

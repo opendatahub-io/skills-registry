@@ -12,6 +12,7 @@ title: Categories
 | Category | Plugins | Description |
 |----------|---------|-------------|
 | [Evaluation & Testing](evaluation.md) | 4 | Skills for evaluating and testing AI agent skills |
+| [Code Quality](code-quality.md) | 1 | Code review, linting, and quality enforcement |
 | [Documentation](documentation.md) | 1 | Skills for generating and maintaining documentation |
 | [DevOps & CI/CD](devops.md) | 2 | Skills for deployment, CI/CD, and infrastructure |
 | [Security Review](security.md) | 1 | Security analysis, threat modeling, and compliance review |

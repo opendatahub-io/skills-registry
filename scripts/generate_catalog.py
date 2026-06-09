@@ -126,13 +126,18 @@ def generate_catalog(registry: dict) -> str:
     lines.append("")
     lines.extend(render_contract_reference())
 
-    # Group plugins by category
+    # Group plugins by category. Team-scoped plugins are pulled out into a
+    # dedicated section at the end rather than mixed into function categories.
     categories = registry.get("categories", {})
     plugins = registry.get("plugins", [])
     by_category: dict[str, list] = {}
     uncategorized = []
+    team_plugins = []
 
     for plugin in plugins:
+        if plugin.get("scope") == "team":
+            team_plugins.append(plugin)
+            continue
         cat = plugin.get("category")
         if cat and cat in categories:
             by_category.setdefault(cat, []).append(plugin)
@@ -160,6 +165,18 @@ def generate_catalog(registry: dict) -> str:
         for plugin in uncategorized:
             lines.extend(render_plugin(plugin, registry["name"]))
 
+    # Team-specific plugins (scope: team) — listed separately at the end
+    if team_plugins:
+        lines.append("## Team-Specific")
+        lines.append("")
+        lines.append(
+            "Plugins hardcoded to a specific team's setup. Not generally reusable "
+            "by other teams without modification."
+        )
+        lines.append("")
+        for plugin in team_plugins:
+            lines.extend(render_plugin(plugin, registry["name"]))
+
     return "\n".join(lines)
 
 
@@ -171,6 +188,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
     repo = plugin["source"].get("repo", "")
     license_str = plugin.get("license", "")
     tags = plugin.get("tags", [])
+    scope = plugin.get("scope", "sdlc")
 
     lines.append(f"### {name}")
     lines.append("")
@@ -187,6 +205,10 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
     meta_parts = []
     if version:
         meta_parts.append(f"v{version}")
+    if scope == "generic":
+        meta_parts.append("Generic")
+    elif scope == "team":
+        meta_parts.append("Team-Specific")
     if license_str:
         meta_parts.append(license_str)
     if repo:
