@@ -182,6 +182,7 @@ plugins:
       type: github
       repo: opendatahub-io/odh-test-gen
       ref: main
+    strict: true
     homepage: https://github.com/opendatahub-io/odh-test-gen
     repository: https://github.com/opendatahub-io/odh-test-gen
     skills:

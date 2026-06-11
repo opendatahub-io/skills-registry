@@ -54,9 +54,14 @@ def plugin_to_marketplace_entry(plugin: dict) -> dict:
     if "path" in source:
         entry["source"]["path"] = source["path"]
 
+    # Preserve explicit strictness from the registry in generated output.
+    # This keeps marketplace.json faithful to registry.yaml for plugins that
+    # intentionally spell out strict-mode behavior.
+    if "strict" in plugin:
+        entry["strict"] = plugin["strict"]
+
     # Handle strict: false plugins
     if plugin.get("strict") is False:
-        entry["strict"] = False
         if "skills_dir" in plugin:
             skills_dir = plugin["skills_dir"]
             if not skills_dir.startswith("./"):
