@@ -1,37 +1,37 @@
-<mxfile host="Electron">
-  <diagram id="bN96RZ7Ocnfer9D4dwN6" name="pageWithNumber">
-    <mxGraphModel dx="-449" dy="-122" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;No arguments" vertex="1">
-          <mxGeometry height="80" width="130" x="30" y="60" as="geometry"/>
-        </mxCell>
-        <mxCell id="resolve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Resolve Plugin Root&lt;/b&gt;&lt;br&gt;&lt;br&gt;Locate SKILL.md path&lt;br&gt;Navigate two levels up&lt;br&gt;Determine absolute path" vertex="1">
-          <mxGeometry height="120" width="160" x="210" y="40" as="geometry"/>
-        </mxCell>
-        <mxCell id="export" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Run export_rubric.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read agent_prompt.md&lt;br&gt;Extract &quot;Scoring Rubric&quot;&lt;br&gt;section (between headings)&lt;br&gt;Create artifacts/ directory&lt;br&gt;Write rfe-rubric.md" vertex="1">
-          <mxGeometry height="140" width="180" x="420" y="30" as="geometry"/>
-        </mxCell>
-        <mxCell id="confirm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Confirm Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Verify file written&lt;br&gt;Print absolute path" vertex="1">
-          <mxGeometry height="100" width="140" x="650" y="50" as="geometry"/>
-        </mxCell>
-        <mxCell id="rubric-file" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="artifacts/rfe-rubric.md&lt;br&gt;&lt;br&gt;# RFE Assessment Rubric&lt;br&gt;&gt; Exported from assess-rfe&lt;br&gt;&gt; Source: agent_prompt.md&lt;br&gt;## Scoring Rubric&lt;br&gt;...criteria and weights..." vertex="1">
-          <mxGeometry height="160" width="210" x="610" y="190" as="geometry"/>
-        </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="resolve">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e2" edge="1" parent="1" source="resolve" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="export" value="plugin root path">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e3" edge="1" parent="1" source="export" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="confirm" value="artifacts/rfe-rubric.md">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e4" edge="1" parent="1" source="confirm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rubric-file">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;No arguments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="60" width="130" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve" value="&lt;b&gt;Resolve Plugin Root&lt;/b&gt;&lt;br&gt;&lt;br&gt;Locate SKILL.md path&lt;br&gt;Navigate two levels up&lt;br&gt;Determine absolute path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="40" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="export" value="&lt;b&gt;Run export_rubric.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;Read agent_prompt.md&lt;br&gt;Extract &quot;Scoring Rubric&quot;&lt;br&gt;section (between headings)&lt;br&gt;Create artifacts/ directory&lt;br&gt;Write rfe-rubric.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="420" y="30" width="180" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="confirm" value="&lt;b&gt;Confirm Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;Verify file written&lt;br&gt;Print absolute path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="650" y="50" width="140" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="rubric-file" value="artifacts/rfe-rubric.md&lt;br&gt;&lt;br&gt;# RFE Assessment Rubric&lt;br&gt;&gt; Exported from assess-rfe&lt;br&gt;&gt; Source: agent_prompt.md&lt;br&gt;## Scoring Rubric&lt;br&gt;...criteria and weights..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="610" y="190" width="210" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="resolve" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="plugin root path" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve" target="export" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="artifacts/rfe-rubric.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="export" target="confirm" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="confirm" target="rubric-file" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

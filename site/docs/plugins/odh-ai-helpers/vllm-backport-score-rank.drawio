@@ -1,25 +1,23 @@
-<mxfile host="Electron">
-  <diagram id="BZAe2phSbcrPtcuf8_X-" name="pageWithNumber">
-    <mxGraphModel dx="-326" dy="-74" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/vllm-backport-score-rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;--input analyzed.json&lt;br&gt;--output ranked.json" vertex="1">
-          <mxGeometry height="90" width="150" x="30" y="50" as="geometry"/>
-        </mxCell>
-        <mxCell id="score" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Score &amp; Rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;score-and-rank.py&lt;br&gt;Composite formula:&lt;br&gt;verdict, severity, scope,&lt;br&gt;risk, self-containedness&lt;br&gt;Sort descending" vertex="1">
-          <mxGeometry height="130" width="170" x="225" y="30" as="geometry"/>
-        </mxCell>
-        <mxCell id="output-node" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;ranked.json&lt;br&gt;Prioritized candidate list&lt;br&gt;Scores + verdicts" vertex="1">
-          <mxGeometry height="100" width="135" x="440" y="45" as="geometry"/>
-        </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="score" value="analyzed.json">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e2" edge="1" parent="1" source="score" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="output-node" value="ranked.json">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/vllm-backport-score-rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;--input analyzed.json&lt;br&gt;--output ranked.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="150" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="score" value="&lt;b&gt;Score &amp; Rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;score-and-rank.py&lt;br&gt;Composite formula:&lt;br&gt;verdict, severity, scope,&lt;br&gt;risk, self-containedness&lt;br&gt;Sort descending" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="225" y="30" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;ranked.json&lt;br&gt;Prioritized candidate list&lt;br&gt;Scores + verdicts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="440" y="45" width="135" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="analyzed.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="score" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="ranked.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

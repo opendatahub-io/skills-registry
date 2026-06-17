@@ -1,203 +1,216 @@
-<mxfile host="Electron">
-  <diagram id="VD6jKbGWD89v5ekZ-Fz7" name="pageWithNumber">
-    <mxGraphModel dx="-1074" dy="-249" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/python-packaging-license-checker&lt;/b&gt;&lt;br&gt;&lt;br&gt;package_name&lt;br&gt;source_available (optional)&lt;br&gt;upstream_org (optional)" vertex="1">
-          <mxGeometry height="110" width="140" x="30" y="250" as="geometry"/>
-        </mxCell>
-        <mxCell id="find-source" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Find Source Repo&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoke source-finder skill&lt;br&gt;get upstream repo URL&lt;br&gt;confidence scoring" vertex="1">
-          <mxGeometry height="95" width="155" x="220" y="260" as="geometry"/>
-        </mxCell>
-        <mxCell id="clone-repo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Clone Repo&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoke git-shallow-clone skill&lt;br&gt;shallow clone to /tmp/&lt;br&gt;local path for inspection" vertex="1">
-          <mxGeometry height="95" width="155" x="425" y="260" as="geometry"/>
-        </mxCell>
-        <mxCell id="read-license" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Read License File&lt;/b&gt;&lt;br&gt;&lt;br&gt;search LICENSE, COPYING, LICENCE&lt;br&gt;extensions: .txt, .md&lt;br&gt;read up to 128 KB&lt;br&gt;check pyproject.toml / setup.cfg&lt;br&gt;detect PyPI vs repo mismatch" vertex="1">
-          <mxGeometry height="130" width="165" x="630" y="240" as="geometry"/>
-        </mxCell>
-        <mxCell id="normalize-spdx" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=0;" value="&lt;b&gt;Normalise to SPDX&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;exact: Apache 2 &amp;rarr; Apache-2.0&lt;br&gt;fuzzy: MIT License &amp;rarr; MIT&lt;br&gt;ambiguous &amp;rarr; NEEDS-HUMAN-REVIEW&lt;br&gt;handle AND / OR compounds" vertex="1">
-          <mxGeometry height="120" width="170" x="845" y="245" as="geometry"/>
-        </mxCell>
-        <mxCell id="fedora-lookup" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Fedora License Lookup&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch fedora-licenses.json&lt;br&gt;match SPDX ID (case-insensitive)&lt;br&gt;normalise status to array&lt;br&gt;fail-closed logic" vertex="1">
-          <mxGeometry height="110" width="170" x="1065" y="255" as="geometry"/>
-        </mxCell>
-        <mxCell id="verdict" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=10;" value="&lt;b&gt;Verdict Refinement&lt;/b&gt;" vertex="1">
-          <mxGeometry height="470" width="175" x="1300" y="130" as="geometry"/>
-        </mxCell>
-        <mxCell id="rule-a" parent="verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Rule A: Proprietary&lt;/b&gt;&lt;br&gt;&lt;br&gt;check Vendor Agreements&lt;br&gt;RH/IBM-owned &amp;rarr; ESCALATE&lt;br&gt;third-party &amp;rarr; ESCALATE" vertex="1">
-          <mxGeometry height="90" width="145" x="15" y="35" as="geometry"/>
-        </mxCell>
-        <mxCell id="rule-b" parent="verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Rule B: AGPL-3.0&lt;/b&gt;&lt;br&gt;&lt;br&gt;ALLOWED-WITH-CAVEAT&lt;br&gt;dual-licensing risk&lt;br&gt;PM sign-off required" vertex="1">
-          <mxGeometry height="90" width="145" x="15" y="140" as="geometry"/>
-        </mxCell>
-        <mxCell id="rule-c" parent="verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Rule C: Other Allowed&lt;/b&gt;&lt;br&gt;&lt;br&gt;ALLOWED&lt;br&gt;no special caveats" vertex="1">
-          <mxGeometry height="75" width="145" x="15" y="245" as="geometry"/>
-        </mxCell>
-        <mxCell id="rule-d" parent="verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Rule D: Not-Allowed&lt;/b&gt;&lt;br&gt;&lt;br&gt;BLOCKED&lt;br&gt;on Fedora not-allowed list" vertex="1">
-          <mxGeometry height="75" width="145" x="15" y="335" as="geometry"/>
-        </mxCell>
-        <mxCell id="compliance" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=10;" value="&lt;b&gt;Compliance Checks&lt;/b&gt;" vertex="1">
-          <mxGeometry height="155" width="310" x="1530" y="210" as="geometry"/>
-        </mxCell>
-        <mxCell id="build-check" parent="compliance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Build Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;source available?&lt;br&gt;buildable? (setup.py /&lt;br&gt;pyproject.toml)&lt;br&gt;FLAG if no buildable source&lt;br&gt;PSX exception option" vertex="1">
-          <mxGeometry height="105" width="130" x="15" y="35" as="geometry"/>
-        </mxCell>
-        <mxCell id="export-check" parent="compliance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Export Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;US OFAC SDN List&lt;br&gt;EU Consolidated Sanctions&lt;br&gt;RH geopolitical policy&lt;br&gt;2 retries on failure" vertex="1">
-          <mxGeometry height="105" width="130" x="165" y="35" as="geometry"/>
-        </mxCell>
-        <mxCell id="output" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Structured Verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;License:&lt;/i&gt; SPDX expression&lt;br&gt;&lt;i&gt;Source verified:&lt;/i&gt; YES / NO / MISMATCH&lt;br&gt;&lt;i&gt;Verdict:&lt;/i&gt; ALLOWED / CAVEAT / BLOCKED&lt;br&gt;&lt;i&gt;Build compliance:&lt;/i&gt; OK / FLAG&lt;br&gt;&lt;i&gt;Export compliance:&lt;/i&gt; OK / FLAG&lt;br&gt;&lt;i&gt;Notes:&lt;/i&gt; actionable guidance" vertex="1">
-          <mxGeometry height="150" width="175" x="1895" y="230" as="geometry"/>
-        </mxCell>
-        <mxCell id="source-finder" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;python-packaging-source-finder&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="130" x="230" y="400" as="geometry"/>
-        </mxCell>
-        <mxCell id="shallow-clone" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;git-shallow-clone&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="445" y="400" as="geometry"/>
-        </mxCell>
-        <mxCell id="cleanup" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Cleanup Clone&lt;/b&gt;&lt;br&gt;&lt;br&gt;verify path under /tmp/&lt;br&gt;rm -rf clone dir" vertex="1">
-          <mxGeometry height="55" width="120" x="665" y="415" as="geometry"/>
-        </mxCell>
-        <mxCell id="fedora-api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Fedora License Data&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="1090" y="150" as="geometry"/>
-        </mxCell>
-        <mxCell id="fallback-table" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Fallback Table&lt;/b&gt;&lt;br&gt;&lt;br&gt;known allowed: MIT, Apache-2.0, BSD-*&lt;br&gt;known blocked: SSPL-1.0, BUSL-1.1&lt;br&gt;append &amp;ldquo;fallback used&amp;rdquo; note" vertex="1">
-          <mxGeometry height="90" width="155" x="1075" y="420" as="geometry"/>
-        </mxCell>
-        <mxCell id="ofac" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;OFAC SDN List&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="100" x="1615" y="415" as="geometry"/>
-        </mxCell>
-        <mxCell id="eu-sanctions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;EU Sanctions&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="100" x="1740" y="415" as="geometry"/>
-        </mxCell>
-        <mxCell id="output-format" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="&lt;i&gt;License:&lt;/i&gt; Apache-2.0&lt;br&gt;&lt;i&gt;Source verified:&lt;/i&gt; YES&lt;br&gt;&lt;i&gt;Verdict:&lt;/i&gt; ALLOWED&lt;br&gt;&lt;i&gt;Build compliance:&lt;/i&gt; OK&lt;br&gt;&lt;i&gt;Export compliance:&lt;/i&gt; OK&lt;br&gt;&lt;i&gt;Notes:&lt;/i&gt; (none)" vertex="1">
-          <mxGeometry height="115" width="170" x="1900" y="440" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_entry_find" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="find-source" value="package name">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_find_clone" edge="1" parent="1" source="find-source" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="clone-repo" value="repo URL">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_find_sf" edge="1" parent="1" source="find-source" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="source-finder">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_clone_sc" edge="1" parent="1" source="clone-repo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="shallow-clone">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_clone_read" edge="1" parent="1" source="clone-repo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="read-license" value="local clone path">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_read_norm" edge="1" parent="1" source="read-license" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="normalize-spdx" value="license text">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_read_cleanup" edge="1" parent="1" source="read-license" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="cleanup" value="after read">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_norm_output" edge="1" parent="1" source="normalize-spdx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="output" value="ambiguous / missing">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="960" y="100"/>
-              <mxPoint x="1982" y="100"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_norm_fedora" edge="1" parent="1" source="normalize-spdx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="fedora-lookup" value="SPDX ID">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_fapi_fedora" edge="1" parent="1" source="fedora-api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fedora-lookup">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_fedora_fallback" edge="1" parent="1" source="fedora-lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fallback-table" value="fetch fails">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_fallback_verdict" edge="1" parent="1" source="fallback-table" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="verdict">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1260" y="465"/>
-              <mxPoint x="1260" y="365"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_fedora_rulea" edge="1" parent="1" source="fedora-lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="rule-a" value="proprietary / custom">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1265" y="280"/>
-              <mxPoint x="1265" y="210"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_fedora_ruleb" edge="1" parent="1" source="fedora-lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.45;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="rule-b" value="AGPL-3.0">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_fedora_rulec" edge="1" parent="1" source="fedora-lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="rule-c" value="other allowed">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1275" y="330"/>
-              <mxPoint x="1275" y="413"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_fedora_ruled" edge="1" parent="1" source="fedora-lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="rule-d" value="not-allowed">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1280" y="345"/>
-              <mxPoint x="1280" y="503"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_fedora_output" edge="1" parent="1" source="fedora-lookup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="output" value="not found / unknown">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1150" y="130"/>
-              <mxPoint x="1982" y="130"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_rulea_build" edge="1" parent="1" source="rule-a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="build-check">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1500" y="210"/>
-              <mxPoint x="1500" y="290"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_ruleb_build" edge="1" parent="1" source="rule-b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" target="build-check">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_rulec_build" edge="1" parent="1" source="rule-c" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" target="build-check">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1505" y="413"/>
-              <mxPoint x="1505" y="310"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_ruled_output" edge="1" parent="1" source="rule-d" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="output" value="BLOCKED">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1510" y="503"/>
-              <mxPoint x="1510" y="660"/>
-              <mxPoint x="1982" y="660"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_build_export" edge="1" parent="1" source="build-check" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="export-check">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_ofac_export" edge="1" parent="1" source="ofac" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" target="export-check">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_eu_export" edge="1" parent="1" source="eu-sanctions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;" target="export-check">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_export_output" edge="1" parent="1" source="export-check" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="output" value="six-field block">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_output_callout" edge="1" parent="1" source="output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="output-format">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/python-packaging-license-checker&lt;/b&gt;&lt;br&gt;&lt;br&gt;package_name&lt;br&gt;source_available (optional)&lt;br&gt;upstream_org (optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="250" width="140" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="find-source" value="&lt;b&gt;Find Source Repo&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoke source-finder skill&lt;br&gt;get upstream repo URL&lt;br&gt;confidence scoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="260" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="clone-repo" value="&lt;b&gt;Clone Repo&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoke git-shallow-clone skill&lt;br&gt;shallow clone to /tmp/&lt;br&gt;local path for inspection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="425" y="260" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-license" value="&lt;b&gt;Read License File&lt;/b&gt;&lt;br&gt;&lt;br&gt;search LICENSE, COPYING, LICENCE&lt;br&gt;extensions: .txt, .md&lt;br&gt;read up to 128 KB&lt;br&gt;check pyproject.toml / setup.cfg&lt;br&gt;detect PyPI vs repo mismatch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="630" y="240" width="165" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="normalize-spdx" value="&lt;b&gt;Normalise to SPDX&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;exact: Apache 2 &amp;rarr; Apache-2.0&lt;br&gt;fuzzy: MIT License &amp;rarr; MIT&lt;br&gt;ambiguous &amp;rarr; NEEDS-HUMAN-REVIEW&lt;br&gt;handle AND / OR compounds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=0;" vertex="1" parent="1">
+      <mxGeometry x="845" y="245" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="fedora-lookup" value="&lt;b&gt;Fedora License Lookup&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch fedora-licenses.json&lt;br&gt;match SPDX ID (case-insensitive)&lt;br&gt;normalise status to array&lt;br&gt;fail-closed logic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1065" y="255" width="170" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict" value="&lt;b&gt;Verdict Refinement&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="1300" y="130" width="175" height="470" as="geometry"/>
+    </mxCell>
+    <mxCell id="rule-a" value="&lt;b&gt;Rule A: Proprietary&lt;/b&gt;&lt;br&gt;&lt;br&gt;check Vendor Agreements&lt;br&gt;RH/IBM-owned &amp;rarr; ESCALATE&lt;br&gt;third-party &amp;rarr; ESCALATE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="verdict">
+      <mxGeometry x="15" y="35" width="145" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="rule-b" value="&lt;b&gt;Rule B: AGPL-3.0&lt;/b&gt;&lt;br&gt;&lt;br&gt;ALLOWED-WITH-CAVEAT&lt;br&gt;dual-licensing risk&lt;br&gt;PM sign-off required" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="verdict">
+      <mxGeometry x="15" y="140" width="145" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="rule-c" value="&lt;b&gt;Rule C: Other Allowed&lt;/b&gt;&lt;br&gt;&lt;br&gt;ALLOWED&lt;br&gt;no special caveats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="verdict">
+      <mxGeometry x="15" y="245" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="rule-d" value="&lt;b&gt;Rule D: Not-Allowed&lt;/b&gt;&lt;br&gt;&lt;br&gt;BLOCKED&lt;br&gt;on Fedora not-allowed list" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="verdict">
+      <mxGeometry x="15" y="335" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="compliance" value="&lt;b&gt;Compliance Checks&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="1530" y="210" width="310" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="build-check" value="&lt;b&gt;Build Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;source available?&lt;br&gt;buildable? (setup.py /&lt;br&gt;pyproject.toml)&lt;br&gt;FLAG if no buildable source&lt;br&gt;PSX exception option" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="compliance">
+      <mxGeometry x="15" y="35" width="130" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="export-check" value="&lt;b&gt;Export Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;US OFAC SDN List&lt;br&gt;EU Consolidated Sanctions&lt;br&gt;RH geopolitical policy&lt;br&gt;2 retries on failure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="compliance">
+      <mxGeometry x="165" y="35" width="130" height="105" as="geometry"/>
+    </mxCell>
+    <mxCell id="output" value="&lt;b&gt;Structured Verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;License:&lt;/i&gt; SPDX expression&lt;br&gt;&lt;i&gt;Source verified:&lt;/i&gt; YES / NO / MISMATCH&lt;br&gt;&lt;i&gt;Verdict:&lt;/i&gt; ALLOWED / CAVEAT / BLOCKED&lt;br&gt;&lt;i&gt;Build compliance:&lt;/i&gt; OK / FLAG&lt;br&gt;&lt;i&gt;Export compliance:&lt;/i&gt; OK / FLAG&lt;br&gt;&lt;i&gt;Notes:&lt;/i&gt; actionable guidance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1895" y="230" width="175" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="source-finder" value="&lt;b&gt;python-packaging-source-finder&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="400" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="shallow-clone" value="&lt;b&gt;git-shallow-clone&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="445" y="400" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="cleanup" value="&lt;b&gt;Cleanup Clone&lt;/b&gt;&lt;br&gt;&lt;br&gt;verify path under /tmp/&lt;br&gt;rm -rf clone dir" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="665" y="415" width="120" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="fedora-api" value="&lt;b&gt;Fedora License Data&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="150" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="fallback-table" value="&lt;b&gt;Fallback Table&lt;/b&gt;&lt;br&gt;&lt;br&gt;known allowed: MIT, Apache-2.0, BSD-*&lt;br&gt;known blocked: SSPL-1.0, BUSL-1.1&lt;br&gt;append &amp;ldquo;fallback used&amp;rdquo; note" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1075" y="420" width="155" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="ofac" value="&lt;b&gt;OFAC SDN List&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1615" y="415" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="eu-sanctions" value="&lt;b&gt;EU Sanctions&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1740" y="415" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-format" value="&lt;i&gt;License:&lt;/i&gt; Apache-2.0&lt;br&gt;&lt;i&gt;Source verified:&lt;/i&gt; YES&lt;br&gt;&lt;i&gt;Verdict:&lt;/i&gt; ALLOWED&lt;br&gt;&lt;i&gt;Build compliance:&lt;/i&gt; OK&lt;br&gt;&lt;i&gt;Export compliance:&lt;/i&gt; OK&lt;br&gt;&lt;i&gt;Notes:&lt;/i&gt; (none)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1900" y="440" width="170" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_find" value="package name" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="find-source" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_find_clone" value="repo URL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-source" target="clone-repo" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_find_sf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="find-source" target="source-finder" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_clone_sc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="clone-repo" target="shallow-clone" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_clone_read" value="local clone path" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clone-repo" target="read-license" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_read_norm" value="license text" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-license" target="normalize-spdx" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_read_cleanup" value="after read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="read-license" target="cleanup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_norm_output" value="ambiguous / missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="normalize-spdx" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="960" y="100"/>
+          <mxPoint x="1982" y="100"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_norm_fedora" value="SPDX ID" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="normalize-spdx" target="fedora-lookup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fapi_fedora" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="fedora-api" target="fedora-lookup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fedora_fallback" value="fetch fails" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="fedora-lookup" target="fallback-table" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fallback_verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fallback-table" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1260" y="465"/>
+          <mxPoint x="1260" y="365"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fedora_rulea" value="proprietary / custom" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fedora-lookup" target="rule-a" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1265" y="280"/>
+          <mxPoint x="1265" y="210"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fedora_ruleb" value="AGPL-3.0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.45;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fedora-lookup" target="rule-b" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fedora_rulec" value="other allowed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fedora-lookup" target="rule-c" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1275" y="330"/>
+          <mxPoint x="1275" y="413"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fedora_ruled" value="not-allowed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fedora-lookup" target="rule-d" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1280" y="345"/>
+          <mxPoint x="1280" y="503"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fedora_output" value="not found / unknown" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="fedora-lookup" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1150" y="130"/>
+          <mxPoint x="1982" y="130"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rulea_build" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rule-a" target="build-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1500" y="210"/>
+          <mxPoint x="1500" y="290"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ruleb_build" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" source="rule-b" target="build-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rulec_build" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" edge="1" source="rule-c" target="build-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1505" y="413"/>
+          <mxPoint x="1505" y="310"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ruled_output" value="BLOCKED" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="rule-d" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1510" y="503"/>
+          <mxPoint x="1510" y="660"/>
+          <mxPoint x="1982" y="660"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_build_export" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="build-check" target="export-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_ofac_export" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" edge="1" source="ofac" target="export-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_eu_export" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;" edge="1" source="eu-sanctions" target="export-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_export_output" value="six-field block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontStyle=2;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="export-check" target="output" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_output_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output" target="output-format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

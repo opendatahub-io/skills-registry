@@ -1,64 +1,69 @@
-<mxfile host="Electron">
-  <diagram id="FausdA2cHUmmimsOlmlt" name="pageWithNumber">
-    <mxGraphModel dx="-691" dy="-133" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/test-plan-score&lt;/b&gt;&lt;br&gt;&lt;br&gt;feature_dir (required)" vertex="1">
-          <mxGeometry height="80" width="150" x="30" y="100" as="geometry"/>
-        </mxCell>
-        <mxCell id="install" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Install Deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;uv sync --extra dev&lt;br&gt;test-plan package&lt;br&gt;abort if fails" vertex="1">
-          <mxGeometry height="110" width="155" x="230" y="85" as="geometry"/>
-        </mxCell>
-        <mxCell id="read-plan" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Read Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;TestPlan.md content&lt;br&gt;extract source_key&lt;br&gt;from frontmatter" vertex="1">
-          <mxGeometry height="110" width="160" x="435" y="85" as="geometry"/>
-        </mxCell>
-        <mxCell id="jira" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Fetch from Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;MCP getJiraIssue&lt;br&gt;source_key lookup" vertex="1">
-          <mxGeometry height="95" width="155" x="645" y="25" as="geometry"/>
-        </mxCell>
-        <mxCell id="local-strat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Local Strategy&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;{source_key}.md" vertex="1">
-          <mxGeometry height="95" width="155" x="645" y="160" as="geometry"/>
-        </mxCell>
-        <mxCell id="score-agent" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" value="&lt;b&gt;Score Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;5-criteria rubric (0-2 each)&lt;br&gt;calibration examples&lt;br&gt;grounding cross-reference&lt;br&gt;consistency cross-checks" vertex="1">
-          <mxGeometry height="190" width="210" x="850" y="45" as="geometry"/>
-        </mxCell>
-        <mxCell id="verdict" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Present Results&lt;/b&gt;&lt;br&gt;&lt;br&gt;score table with rationale&lt;br&gt;grounding cross-reference&lt;br&gt;verdict: Ready / Revise / Rework" vertex="1">
-          <mxGeometry height="120" width="195" x="1110" y="80" as="geometry"/>
-        </mxCell>
-        <mxCell id="rubric" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="&lt;b&gt;Rubric (0-10)&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Specificity&lt;br&gt;2. Grounding&lt;br&gt;3. Scope Fidelity&lt;br&gt;4. Actionability&lt;br&gt;5. Consistency" vertex="1">
-          <mxGeometry height="140" width="185" x="860" y="270" as="geometry"/>
-        </mxCell>
-        <mxCell id="thresholds" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="&gt;= 8, no zeros: &lt;b&gt;Ready&lt;/b&gt;&lt;br&gt;= 7, no zeros: &lt;b&gt;Revise&lt;/b&gt;&lt;br&gt;&lt; 7 or any zero: &lt;b&gt;Rework&lt;/b&gt;" vertex="1">
-          <mxGeometry height="90" width="185" x="1115" y="270" as="geometry"/>
-        </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="install">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e2" edge="1" parent="1" source="install" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="read-plan">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e3" edge="1" parent="1" source="read-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="jira" value="MCP available">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e4" edge="1" parent="1" source="read-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="local-strat" value="MCP unavailable">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e5" edge="1" parent="1" source="jira" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" target="score-agent" value="strategy text">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e6" edge="1" parent="1" source="local-strat" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" target="score-agent" value="strategy text">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e7" edge="1" parent="1" source="score-agent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="verdict">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_rubric" edge="1" parent="1" source="score-agent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rubric">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e_thresholds" edge="1" parent="1" source="verdict" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="thresholds">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/test-plan-score&lt;/b&gt;&lt;br&gt;&lt;br&gt;feature_dir (required)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="100" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="install" value="&lt;b&gt;Install Deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;uv sync --extra dev&lt;br&gt;test-plan package&lt;br&gt;abort if fails" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="230" y="85" width="155" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-plan" value="&lt;b&gt;Read Test Plan&lt;/b&gt;&lt;br&gt;&lt;br&gt;TestPlan.md content&lt;br&gt;extract source_key&lt;br&gt;from frontmatter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="435" y="85" width="160" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira" value="&lt;b&gt;Fetch from Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;MCP getJiraIssue&lt;br&gt;source_key lookup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="645" y="25" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="local-strat" value="&lt;b&gt;Local Strategy&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;{source_key}.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="645" y="160" width="155" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="score-agent" value="&lt;b&gt;Score Agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;forked LLM agent&lt;/i&gt;&lt;br&gt;&lt;br&gt;5-criteria rubric (0-2 each)&lt;br&gt;calibration examples&lt;br&gt;grounding cross-reference&lt;br&gt;consistency cross-checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;" vertex="1" parent="1">
+      <mxGeometry x="850" y="45" width="210" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict" value="&lt;b&gt;Present Results&lt;/b&gt;&lt;br&gt;&lt;br&gt;score table with rationale&lt;br&gt;grounding cross-reference&lt;br&gt;verdict: Ready / Revise / Rework" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1110" y="80" width="195" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="rubric" value="&lt;b&gt;Rubric (0-10)&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Specificity&lt;br&gt;2. Grounding&lt;br&gt;3. Scope Fidelity&lt;br&gt;4. Actionability&lt;br&gt;5. Consistency" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="860" y="270" width="185" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="thresholds" value="&gt;= 8, no zeros: &lt;b&gt;Ready&lt;/b&gt;&lt;br&gt;= 7, no zeros: &lt;b&gt;Revise&lt;/b&gt;&lt;br&gt;&lt; 7 or any zero: &lt;b&gt;Rework&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="1115" y="270" width="185" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="install" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="install" target="read-plan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="MCP available" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-plan" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="MCP unavailable" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-plan" target="local-strat" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" value="strategy text" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="jira" target="score-agent" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" value="strategy text" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="local-strat" target="score-agent" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="score-agent" target="verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rubric" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="score-agent" target="rubric" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_thresholds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="verdict" target="thresholds" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

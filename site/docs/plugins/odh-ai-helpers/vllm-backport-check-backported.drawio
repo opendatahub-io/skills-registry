@@ -1,25 +1,23 @@
-<mxfile host="Electron">
-  <diagram id="ux3kxbt5buAPtjshcMKR" name="pageWithNumber">
-    <mxGraphModel dx="-321" dy="-77" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/vllm-backport-check-backported&lt;/b&gt;&lt;br&gt;&lt;br&gt;--input filtered.json&lt;br&gt;--downstream, --branch" vertex="1">
-          <mxGeometry height="90" width="160" x="30" y="50" as="geometry"/>
-        </mxCell>
-        <mxCell id="check" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Check Backported&lt;/b&gt;&lt;br&gt;&lt;br&gt;check-backported.sh&lt;br&gt;SHA match via git log&lt;br&gt;Title match fallback&lt;br&gt;Mark already_backported" vertex="1">
-          <mxGeometry height="120" width="155" x="235" y="35" as="geometry"/>
-        </mxCell>
-        <mxCell id="output-node" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;candidates.json&lt;br&gt;already_backported flags" vertex="1">
-          <mxGeometry height="90" width="130" x="435" y="50" as="geometry"/>
-        </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="check" value="filtered.json">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e2" edge="1" parent="1" source="check" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="output-node" value="candidates.json">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/vllm-backport-check-backported&lt;/b&gt;&lt;br&gt;&lt;br&gt;--input filtered.json&lt;br&gt;--downstream, --branch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="50" width="160" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="check" value="&lt;b&gt;Check Backported&lt;/b&gt;&lt;br&gt;&lt;br&gt;check-backported.sh&lt;br&gt;SHA match via git log&lt;br&gt;Title match fallback&lt;br&gt;Mark already_backported" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="235" y="35" width="155" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;candidates.json&lt;br&gt;already_backported flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="435" y="50" width="130" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="filtered.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="candidates.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

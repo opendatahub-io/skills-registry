@@ -1,129 +1,125 @@
-<mxfile host="Electron">
-  <diagram id="njBcupIwfj-zZqZmIBJQ" name="pageWithNumber">
-    <mxGraphModel dx="-689" dy="-189" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;scope-review&lt;/b&gt;&lt;br&gt;internal skill (fork)&lt;br&gt;&lt;br&gt;model: opus&lt;br&gt;tools: Read, Grep, Glob" vertex="1">
-          <mxGeometry height="110" width="140" x="30" y="145" as="geometry"/>
-        </mxCell>
-        <mxCell id="read-inputs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Read Inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;strategy artifacts&lt;br&gt;from strat-tasks/&lt;br&gt;source RFEs&lt;br&gt;from rfe-tasks/&lt;br&gt;cross-reference&lt;br&gt;strategies against RFEs" vertex="1">
-          <mxGeometry height="140" width="180" x="220" y="130" as="geometry"/>
-        </mxCell>
-        <mxCell id="check-prior" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Prior Reviews?&lt;/b&gt;&lt;br&gt;&lt;br&gt;check strat-reviews/&lt;br&gt;read existing reviews&lt;br&gt;for strategies under&lt;br&gt;review (if re-review)" vertex="1">
-          <mxGeometry height="100" width="160" x="450" y="115" as="geometry"/>
-        </mxCell>
-        <mxCell id="re-review-delta" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Re-Review Delta&lt;/b&gt;&lt;br&gt;LLM analysis (opus)&lt;br&gt;&lt;br&gt;concerns addressed&lt;br&gt;from prior review?&lt;br&gt;concerns still remaining?&lt;br&gt;new issues introduced&lt;br&gt;by revisions?" vertex="1">
-          <mxGeometry height="130" width="175" x="450" y="270" as="geometry"/>
-        </mxCell>
-        <mxCell id="assess" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Assess Each Strategy&lt;/b&gt;&lt;br&gt;LLM analysis (opus)&lt;br&gt;&lt;br&gt;right-sized? (feature&lt;br&gt;scope, not task/bundle)&lt;br&gt;effort matches scope?&lt;br&gt;scope clearly bounded?&lt;br&gt;delivers complete&lt;br&gt;capability?&lt;br&gt;scope risks? (flag traps&lt;br&gt;like &quot;all necessary&quot;)&lt;br&gt;strategy vs RFE alignment" vertex="1">
-          <mxGeometry height="220" width="195" x="685" y="85" as="geometry"/>
-        </mxCell>
-        <mxCell id="output-node" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Scope Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;scope assessment&lt;br&gt;effort vs scope&lt;br&gt;RFE coverage&lt;br&gt;scope risks&lt;br&gt;recommendation" vertex="1">
-          <mxGeometry height="140" width="155" x="935" y="110" as="geometry"/>
-        </mxCell>
-        <mxCell id="output-format" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="### STRAT-NNN: title&lt;br&gt;Scope: right-sized / too large / ...&lt;br&gt;Effort: matched / under / over&lt;br&gt;RFE coverage: full / partial / exceeds&lt;br&gt;Scope risks: list or none&lt;br&gt;Recommendation: approve / split /&lt;br&gt;&amp;nbsp;&amp;nbsp;tighten scope / expand" vertex="1">
-          <mxGeometry height="160" width="230" x="685" y="460" as="geometry"/>
-        </mxCell>
-        <mxCell id="approve" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Approve&lt;/b&gt;&lt;br&gt;&lt;br&gt;right-sized&lt;br&gt;scope bounded" vertex="1">
-          <mxGeometry height="70" width="120" x="1150" y="30" as="geometry"/>
-        </mxCell>
-        <mxCell id="split-node" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Split into N&lt;/b&gt;&lt;br&gt;&lt;br&gt;too large&lt;br&gt;concrete boundaries&lt;br&gt;for each sub-strategy" vertex="1">
-          <mxGeometry height="80" width="150" x="1150" y="130" as="geometry"/>
-        </mxCell>
-        <mxCell id="tighten" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Tighten Scope&lt;/b&gt;&lt;br&gt;&lt;br&gt;unbounded scope&lt;br&gt;flag scope traps" vertex="1">
-          <mxGeometry height="70" width="130" x="1150" y="250" as="geometry"/>
-        </mxCell>
-        <mxCell id="expand-rfe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Expand to RFE&lt;/b&gt;&lt;br&gt;&lt;br&gt;partial coverage&lt;br&gt;gaps vs acceptance&lt;br&gt;criteria listed" vertex="1">
-          <mxGeometry height="80" width="145" x="1150" y="380" as="geometry"/>
-        </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="read-inputs">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="195" y="200"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e2" edge="1" parent="1" source="read-inputs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="check-prior" value="strat-tasks/ + rfe-tasks/">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="425" y="200"/>
-              <mxPoint x="425" y="165"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e3" edge="1" parent="1" source="check-prior" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="assess" value="first review">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="660" y="165"/>
-              <mxPoint x="660" y="140"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e4" edge="1" parent="1" source="check-prior" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.54375;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="re-review-delta" value="re-review">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="537" y="240"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e5" edge="1" parent="1" source="re-review-delta" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="assess">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="660" y="335"/>
-              <mxPoint x="660" y="250"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e6" edge="1" parent="1" source="assess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="output-node">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="910" y="195"/>
-              <mxPoint x="910" y="180"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_callout" edge="1" parent="1" source="output-node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="output-format">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1012" y="300"/>
-              <mxPoint x="1012" y="430"/>
-              <mxPoint x="800" y="430"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e7" edge="1" parent="1" source="output-node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="approve" value="right-sized">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1125" y="138"/>
-              <mxPoint x="1125" y="65"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e8" edge="1" parent="1" source="output-node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="split-node" value="too large">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1125" y="166"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e9" edge="1" parent="1" source="output-node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="tighten" value="unbounded">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1125" y="194"/>
-              <mxPoint x="1125" y="285"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e10" edge="1" parent="1" source="output-node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="expand-rfe" value="partial RFE">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1100" y="222"/>
-              <mxPoint x="1100" y="420"/>
-            </Array>
-          </mxGeometry>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;scope-review&lt;/b&gt;&lt;br&gt;internal skill (fork)&lt;br&gt;&lt;br&gt;model: opus&lt;br&gt;tools: Read, Grep, Glob" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="30" y="145" width="140" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-inputs" value="&lt;b&gt;Read Inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;strategy artifacts&lt;br&gt;from strat-tasks/&lt;br&gt;source RFEs&lt;br&gt;from rfe-tasks/&lt;br&gt;cross-reference&lt;br&gt;strategies against RFEs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="220" y="130" width="180" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="check-prior" value="&lt;b&gt;Prior Reviews?&lt;/b&gt;&lt;br&gt;&lt;br&gt;check strat-reviews/&lt;br&gt;read existing reviews&lt;br&gt;for strategies under&lt;br&gt;review (if re-review)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="450" y="115" width="160" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="re-review-delta" value="&lt;b&gt;Re-Review Delta&lt;/b&gt;&lt;br&gt;LLM analysis (opus)&lt;br&gt;&lt;br&gt;concerns addressed&lt;br&gt;from prior review?&lt;br&gt;concerns still remaining?&lt;br&gt;new issues introduced&lt;br&gt;by revisions?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="450" y="270" width="175" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess" value="&lt;b&gt;Assess Each Strategy&lt;/b&gt;&lt;br&gt;LLM analysis (opus)&lt;br&gt;&lt;br&gt;right-sized? (feature&lt;br&gt;scope, not task/bundle)&lt;br&gt;effort matches scope?&lt;br&gt;scope clearly bounded?&lt;br&gt;delivers complete&lt;br&gt;capability?&lt;br&gt;scope risks? (flag traps&lt;br&gt;like &quot;all necessary&quot;)&lt;br&gt;strategy vs RFE alignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="685" y="85" width="195" height="220" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-node" value="&lt;b&gt;Scope Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;scope assessment&lt;br&gt;effort vs scope&lt;br&gt;RFE coverage&lt;br&gt;scope risks&lt;br&gt;recommendation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="935" y="110" width="155" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-format" value="### STRAT-NNN: title&lt;br&gt;Scope: right-sized / too large / ...&lt;br&gt;Effort: matched / under / over&lt;br&gt;RFE coverage: full / partial / exceeds&lt;br&gt;Scope risks: list or none&lt;br&gt;Recommendation: approve / split /&lt;br&gt;&amp;nbsp;&amp;nbsp;tighten scope / expand" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
+      <mxGeometry x="685" y="460" width="230" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="approve" value="&lt;b&gt;Approve&lt;/b&gt;&lt;br&gt;&lt;br&gt;right-sized&lt;br&gt;scope bounded" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="30" width="120" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="split-node" value="&lt;b&gt;Split into N&lt;/b&gt;&lt;br&gt;&lt;br&gt;too large&lt;br&gt;concrete boundaries&lt;br&gt;for each sub-strategy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="130" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="tighten" value="&lt;b&gt;Tighten Scope&lt;/b&gt;&lt;br&gt;&lt;br&gt;unbounded scope&lt;br&gt;flag scope traps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="250" width="130" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="expand-rfe" value="&lt;b&gt;Expand to RFE&lt;/b&gt;&lt;br&gt;&lt;br&gt;partial coverage&lt;br&gt;gaps vs acceptance&lt;br&gt;criteria listed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="380" width="145" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-inputs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="195" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e2" value="strat-tasks/ + rfe-tasks/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="check-prior" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="425" y="200"/>
+          <mxPoint x="425" y="165"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e3" value="first review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="check-prior" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="660" y="165"/>
+          <mxPoint x="660" y="140"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e4" value="re-review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.54375;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="check-prior" target="re-review-delta" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="537" y="240"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="re-review-delta" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="660" y="335"/>
+          <mxPoint x="660" y="250"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="output-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="910" y="195"/>
+          <mxPoint x="910" y="180"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output-node" target="output-format" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1012" y="300"/>
+          <mxPoint x="1012" y="430"/>
+          <mxPoint x="800" y="430"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e7" value="right-sized" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="output-node" target="approve" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1125" y="138"/>
+          <mxPoint x="1125" y="65"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e8" value="too large" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="output-node" target="split-node" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1125" y="166"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e9" value="unbounded" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="output-node" target="tighten" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1125" y="194"/>
+          <mxPoint x="1125" y="285"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e10" value="partial RFE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="output-node" target="expand-rfe" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1100" y="222"/>
+          <mxPoint x="1100" y="420"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
