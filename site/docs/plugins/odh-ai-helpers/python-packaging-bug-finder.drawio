@@ -1,94 +1,95 @@
-<mxGraphModel adaptiveColors="auto">
-  <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/python-packaging-bug-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;package name&lt;br&gt;target version" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="30" y="145" width="140" height="100" as="geometry"/>
-    </mxCell>
-    <mxCell id="source-finder" value="&lt;b&gt;/python-packaging-source-finder&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="235" y="30" width="130" height="50" as="geometry"/>
-    </mxCell>
-    <mxCell id="find-repo" value="&lt;b&gt;Find Repository&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoke source-finder skill&lt;br&gt;receive repo URL + confidence&lt;br&gt;gate on confidence level" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="220" y="125" width="160" height="130" as="geometry"/>
-    </mxCell>
-    <mxCell id="search-issues" value="&lt;b&gt;Search Issues&lt;/b&gt;&lt;br&gt;&lt;br&gt;WebFetch repo issues page&lt;br&gt;filter by packaging keywords&lt;br&gt;build, install, compiler,&lt;br&gt;platform, dependency terms&lt;br&gt;prioritize open issues" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="430" y="80" width="175" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="error-stop" value="&lt;b&gt;Error&lt;/b&gt;&lt;br&gt;&lt;br&gt;low confidence or&lt;br&gt;no repo found" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="430" y="280" width="135" height="80" as="geometry"/>
-    </mxCell>
-    <mxCell id="github" value="&lt;b&gt;GitHub Issues&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="620" y="395" width="120" height="50" as="geometry"/>
-    </mxCell>
-    <mxCell id="analyze" value="&lt;b&gt;Analyze Each Issue&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;fetch full issue + comments&lt;br&gt;extract problem description&lt;br&gt;identify affected versions&lt;br&gt;find fixes, PRs, workarounds&lt;br&gt;check resolution indicators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="655" y="70" width="195" height="175" as="geometry"/>
-    </mxCell>
-    <mxCell id="version-impact" value="&lt;b&gt;Version Impact Assessment&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;compare affected vs target version&lt;br&gt;classify: fixed &amp; included,&lt;br&gt;fixed but pending, workaround&lt;br&gt;available, or unresolved" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="900" y="75" width="200" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;issues found count&lt;br&gt;per-issue status &amp; resolution&lt;br&gt;workarounds listed&lt;br&gt;recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1150" y="90" width="160" height="140" as="geometry"/>
-    </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="find-repo" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="find-repo" target="source-finder" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e3" value="high/medium
-confidence" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.23;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-repo" target="search-issues" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="405" y="155"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e4" value="low/none" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.77;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-repo" target="error-stop" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="405" y="225"/>
-          <mxPoint x="405" y="320"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.97;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="search-issues" target="github" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="600" y="230"/>
-          <mxPoint x="600" y="420"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e6" value="matching issues" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.49;entryDx=0;entryDy=0;" edge="1" source="search-issues" target="analyze" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="630" y="155"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e7" value="fetch details" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.49;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analyze" target="github" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="750" y="245"/>
-          <mxPoint x="750" y="420"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e8" value="per issue" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.46;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analyze" target="version-impact" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="875" y="150"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.43;entryDx=0;entryDy=0;" edge="1" source="version-impact" target="report" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1125" y="150"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-  </root>
-</mxGraphModel>
+<mxfile host="Electron">
+  <diagram id="45HRdnSJVEKzEmhp_j3h" name="pageWithNumber">
+    <mxGraphModel dx="-694" dy="-145" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/python-packaging-bug-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;package name&lt;br&gt;target version" vertex="1">
+          <mxGeometry height="100" width="140" x="30" y="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="source-finder" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/python-packaging-source-finder&lt;/b&gt;" vertex="1">
+          <mxGeometry height="50" width="130" x="235" y="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="find-repo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Find Repository&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoke source-finder skill&lt;br&gt;receive repo URL + confidence&lt;br&gt;gate on confidence level" vertex="1">
+          <mxGeometry height="130" width="160" x="220" y="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="search-issues" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Search Issues&lt;/b&gt;&lt;br&gt;&lt;br&gt;WebFetch repo issues page&lt;br&gt;filter by packaging keywords&lt;br&gt;build, install, compiler,&lt;br&gt;platform, dependency terms&lt;br&gt;prioritize open issues" vertex="1">
+          <mxGeometry height="150" width="175" x="430" y="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="error-stop" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Error&lt;/b&gt;&lt;br&gt;&lt;br&gt;low confidence or&lt;br&gt;no repo found" vertex="1">
+          <mxGeometry height="80" width="135" x="430" y="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="github" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;GitHub Issues&lt;/b&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="620" y="395" as="geometry"/>
+        </mxCell>
+        <mxCell id="analyze" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Analyze Each Issue&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;fetch full issue + comments&lt;br&gt;extract problem description&lt;br&gt;identify affected versions&lt;br&gt;find fixes, PRs, workarounds&lt;br&gt;check resolution indicators" vertex="1">
+          <mxGeometry height="175" width="195" x="655" y="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="version-impact" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Version Impact Assessment&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;compare affected vs target version&lt;br&gt;classify: fixed &amp; included,&lt;br&gt;fixed but pending, workaround&lt;br&gt;available, or unresolved" vertex="1">
+          <mxGeometry height="150" width="200" x="900" y="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="report" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;issues found count&lt;br&gt;per-issue status &amp; resolution&lt;br&gt;workarounds listed&lt;br&gt;recommendations" vertex="1">
+          <mxGeometry height="140" width="160" x="1150" y="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="find-repo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="find-repo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="source-finder">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="find-repo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.23;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="search-issues" value="high/medium confidence">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="155"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="find-repo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.77;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="error-stop" value="low/none">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="405" y="225"/>
+              <mxPoint x="405" y="320"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="search-issues" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.97;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="github">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="230"/>
+              <mxPoint x="600" y="420"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="search-issues" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.49;entryDx=0;entryDy=0;" target="analyze" value="matching issues">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="155"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.49;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="github" value="fetch details">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="245"/>
+              <mxPoint x="750" y="420"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.46;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="version-impact" value="per issue">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="875" y="150"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="version-impact" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.43;entryDx=0;entryDy=0;" target="report">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1125" y="150"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

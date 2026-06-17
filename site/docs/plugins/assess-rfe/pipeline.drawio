@@ -1,34 +1,36 @@
-<mxGraphModel adaptiveColors="auto">
-  <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
-    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;MCP (primary)&lt;br&gt;REST API (fallback)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="55" y="55" width="150" height="90" as="geometry"/>
-    </mxCell>
-    <mxCell id="export-rubric" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;exports scoring rubric to file&lt;br&gt;artifacts/rfe-rubric.md&lt;br&gt;standalone utility" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="30" y="210" width="200" height="110" as="geometry"/>
-    </mxCell>
-    <mxCell id="assess-rfe" value="&lt;b&gt;/assess-rfe&lt;/b&gt;&lt;br&gt;&lt;br&gt;assess RFEs against quality rubric&lt;br&gt;single input: Jira key, file, URL, text&lt;br&gt;bulk mode: wildcard fetches all issues&lt;br&gt;spawns concurrent scoring agents&lt;br&gt;generates scores.csv + summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="280" y="65" width="210" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="rubric" value="&lt;b&gt;agent_prompt.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;shared scoring rubric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
-      <mxGeometry x="550" y="115" width="160" height="70" as="geometry"/>
-    </mxCell>
-    <mxCell id="e1" value="issues" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.233;entryDx=0;entryDy=0;" edge="1" source="jira" target="assess-rfe" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e2" value="reads" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" source="assess-rfe" target="rubric" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e3" value="exports" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" edge="1" source="export-rubric" target="rubric" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="520" y="265"/>
-          <mxPoint x="520" y="161"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-  </root>
-</mxGraphModel>
+<mxfile host="Electron">
+  <diagram id="NVtIbDyqtcaKn1MhibVt" name="pageWithNumber">
+    <mxGraphModel dx="-394" dy="-133" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="jira" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Jira&lt;/b&gt;&lt;br&gt;&lt;br&gt;MCP (primary)&lt;br&gt;REST API (fallback)" vertex="1">
+          <mxGeometry height="90" width="150" x="55" y="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="export-rubric" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;exports scoring rubric to file&lt;br&gt;artifacts/rfe-rubric.md&lt;br&gt;standalone utility" vertex="1">
+          <mxGeometry height="110" width="200" x="30" y="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="assess-rfe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/assess-rfe&lt;/b&gt;&lt;br&gt;&lt;br&gt;assess RFEs against quality rubric&lt;br&gt;single input: Jira key, file, URL, text&lt;br&gt;bulk mode: wildcard fetches all issues&lt;br&gt;spawns concurrent scoring agents&lt;br&gt;generates scores.csv + summary" vertex="1">
+          <mxGeometry height="150" width="210" x="280" y="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="rubric" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="&lt;b&gt;agent_prompt.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;shared scoring rubric" vertex="1">
+          <mxGeometry height="70" width="160" x="550" y="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="jira" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.233;entryDx=0;entryDy=0;" target="assess-rfe" value="issues">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="assess-rfe" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" target="rubric" value="reads">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="export-rubric" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" target="rubric" value="exports">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="265"/>
+              <mxPoint x="520" y="161"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

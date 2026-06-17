@@ -1,147 +1,146 @@
-<mxGraphModel adaptiveColors="auto">
-  <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/adr-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;ADR file path&lt;br&gt;.md, .docx, or directory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="30" y="260" width="130" height="100" as="geometry"/>
-    </mxCell>
-    <mxCell id="clarify" value="&lt;b&gt;Gather Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;ask for ADR location&lt;br&gt;audience &amp; stakes&lt;br&gt;scope emphasis / skip&lt;br&gt;decision status (draft vs final)&lt;br&gt;known concerns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="210" y="235" width="190" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="read-adr" value="&lt;b&gt;Read &amp; Normalize ADR&lt;/b&gt;&lt;br&gt;&lt;br&gt;extract context, decision,&lt;br&gt;alternatives, consequences&lt;br&gt;note missing sections&lt;br&gt;handle MADR / Nygard / custom" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="450" y="250" width="180" height="120" as="geometry"/>
-    </mxCell>
-    <mxCell id="docx-skill" value="&lt;b&gt;document-skills:docx&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="480" y="420" width="160" height="45" as="geometry"/>
-    </mxCell>
-    <mxCell id="panel" value="&lt;b&gt;Reviewer Panel&lt;/b&gt;&lt;br&gt;&lt;i&gt;6 agents in parallel&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=0;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="680" y="80" width="320" height="460" as="geometry"/>
-    </mxCell>
-    <mxCell id="r1" value="&lt;b&gt;Context &amp; Problem&lt;br&gt;Framing&lt;/b&gt;&lt;br&gt;&lt;br&gt;forces articulated?&lt;br&gt;stakeholders named?&lt;br&gt;genuine alternatives?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="panel">
-      <mxGeometry x="20" y="45" width="130" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="r2" value="&lt;b&gt;Technical&lt;br&gt;Soundness&lt;/b&gt;&lt;br&gt;&lt;br&gt;feasibility&lt;br&gt;failure modes&lt;br&gt;anti-patterns" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="panel">
-      <mxGeometry x="170" y="45" width="130" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="r3" value="&lt;b&gt;Operational &amp;&lt;br&gt;Reliability&lt;/b&gt;&lt;br&gt;&lt;br&gt;observability&lt;br&gt;rollback plan&lt;br&gt;SLOs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="panel">
-      <mxGeometry x="20" y="155" width="130" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="r4" value="&lt;b&gt;Security &amp;&lt;br&gt;Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;threat model&lt;br&gt;authN/authZ&lt;br&gt;data handling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="panel">
-      <mxGeometry x="170" y="155" width="130" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="r5" value="&lt;b&gt;Cost &amp;&lt;br&gt;Performance&lt;/b&gt;&lt;br&gt;&lt;br&gt;resource footprint&lt;br&gt;cost at scale&lt;br&gt;latency / throughput" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="panel">
-      <mxGeometry x="20" y="265" width="130" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="r6" value="&lt;b&gt;Consequences &amp;&lt;br&gt;Reversibility&lt;/b&gt;&lt;br&gt;&lt;br&gt;trade-offs honest?&lt;br&gt;lock-in risk&lt;br&gt;migration path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="panel">
-      <mxGeometry x="170" y="265" width="130" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="human-review" value="&lt;b&gt;Human Review&lt;/b&gt;&lt;br&gt;&lt;br&gt;present findings per reviewer&lt;br&gt;collect agree / disagree&lt;br&gt;partially agree / reword&lt;br&gt;already addressed elsewhere&lt;br&gt;apply corrections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1050" y="235" width="180" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="synthesize" value="&lt;b&gt;Synthesize&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM cross-analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;agreements (multi-reviewer)&lt;br&gt;tensions between dimensions&lt;br&gt;gaps (under-addressed areas)&lt;br&gt;top 3-5 risks&lt;br&gt;overall recommendation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1280" y="225" width="200" height="170" as="geometry"/>
-    </mxCell>
-    <mxCell id="reports" value="&lt;b&gt;Generate Reports&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1530" y="160" width="180" height="300" as="geometry"/>
-    </mxCell>
-    <mxCell id="pdf" value="&lt;b&gt;PDF Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;title page + verdict&lt;br&gt;executive summary&lt;br&gt;full reviewer sections&lt;br&gt;What / So what / Fix&lt;br&gt;synthesis section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="reports">
-      <mxGeometry x="20" y="35" width="140" height="115" as="geometry"/>
-    </mxCell>
-    <mxCell id="pptx" value="&lt;b&gt;PPTX Deck&lt;/b&gt;&lt;br&gt;&lt;br&gt;title slide + badge&lt;br&gt;exec summary + top 3&lt;br&gt;1 slide per reviewer&lt;br&gt;synthesis + next steps&lt;br&gt;short-form bullets only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="reports">
-      <mxGeometry x="20" y="165" width="140" height="115" as="geometry"/>
-    </mxCell>
-    <mxCell id="pdf-skill" value="&lt;b&gt;document-skills:pdf&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1530" y="500" width="130" height="45" as="geometry"/>
-    </mxCell>
-    <mxCell id="pptx-skill" value="&lt;b&gt;document-skills:pptx&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1530" y="565" width="135" height="45" as="geometry"/>
-    </mxCell>
-    <mxCell id="output" value="&lt;b&gt;Report Back&lt;/b&gt;&lt;br&gt;&lt;br&gt;output file paths&lt;br&gt;inline summary&lt;br&gt;overall recommendation&lt;br&gt;top risks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1760" y="245" width="180" height="130" as="geometry"/>
-    </mxCell>
-    <mxCell id="concern-structure" value="&lt;b&gt;[severity] Short title&lt;/b&gt;&lt;br&gt;&lt;i&gt;What:&lt;/i&gt; specific gap found&lt;br&gt;&lt;i&gt;So what:&lt;/i&gt; consequence&lt;br&gt;&lt;i&gt;Suggested fix:&lt;/i&gt; action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
-      <mxGeometry x="710" y="580" width="200" height="95" as="geometry"/>
-    </mxCell>
-    <mxCell id="output-tree" value="adr-review/&lt;br&gt;&amp;nbsp;&amp;nbsp;{name}-review.pdf&lt;br&gt;&amp;nbsp;&amp;nbsp;{name}-review.pptx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" vertex="1" parent="1">
-      <mxGeometry x="1780" y="420" width="170" height="70" as="geometry"/>
-    </mxCell>
-    <mxCell id="e_entry_clarify" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="clarify" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_clarify_read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clarify" target="read-adr" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_read_docx" value=".docx input" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="read-adr" target="docx-skill" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="540" y="395"/>
-          <mxPoint x="560" y="395"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_read_panel" value="ADR text" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;" edge="1" source="read-adr" target="panel" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="650" y="310"/>
-          <mxPoint x="650" y="55"/>
-          <mxPoint x="808" y="55"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_panel_human" value="raw findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.6;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="panel" target="human-review" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="872" y="55"/>
-          <mxPoint x="1140" y="55"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_human_synth" value="corrected findings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="human-review" target="synthesize" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_synth_reports" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="synthesize" target="reports" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_reports_output" value="adr-review/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="reports" target="output" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_reports_pdfskill" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.36;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="reports" target="pdf-skill" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1595" y="480"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_reports_pptxskill" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.61;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="reports" target="pptx-skill" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1640" y="480"/>
-          <mxPoint x="1680" y="480"/>
-          <mxPoint x="1680" y="587"/>
-          <mxPoint x="1597" y="587"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_callout_concern" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="panel" target="concern-structure" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="840" y="560"/>
-          <mxPoint x="810" y="560"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e_callout_tree" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="output" target="output-tree" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1850" y="397"/>
-          <mxPoint x="1865" y="397"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-  </root>
-</mxGraphModel>
+<mxfile host="Electron">
+  <diagram id="uBSmKsqCSinZ_rRK9tqH" name="pageWithNumber">
+    <mxGraphModel dx="-1014" dy="-216" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="entry" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;/adr-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;ADR file path&lt;br&gt;.md, .docx, or directory" vertex="1">
+          <mxGeometry height="100" width="130" x="30" y="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="clarify" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Gather Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;ask for ADR location&lt;br&gt;audience &amp; stakes&lt;br&gt;scope emphasis / skip&lt;br&gt;decision status (draft vs final)&lt;br&gt;known concerns" vertex="1">
+          <mxGeometry height="150" width="190" x="210" y="235" as="geometry"/>
+        </mxCell>
+        <mxCell id="read-adr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Read &amp; Normalize ADR&lt;/b&gt;&lt;br&gt;&lt;br&gt;extract context, decision,&lt;br&gt;alternatives, consequences&lt;br&gt;note missing sections&lt;br&gt;handle MADR / Nygard / custom" vertex="1">
+          <mxGeometry height="120" width="180" x="450" y="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="docx-skill" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;document-skills:docx&lt;/b&gt;" vertex="1">
+          <mxGeometry height="45" width="160" x="480" y="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="panel" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=0;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Reviewer Panel&lt;/b&gt;&lt;br&gt;&lt;i&gt;6 agents in parallel&lt;/i&gt;" vertex="1">
+          <mxGeometry height="460" width="320" x="680" y="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="r1" parent="panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Context &amp; Problem&lt;br&gt;Framing&lt;/b&gt;&lt;br&gt;&lt;br&gt;forces articulated?&lt;br&gt;stakeholders named?&lt;br&gt;genuine alternatives?" vertex="1">
+          <mxGeometry height="95" width="130" x="20" y="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="r2" parent="panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Technical&lt;br&gt;Soundness&lt;/b&gt;&lt;br&gt;&lt;br&gt;feasibility&lt;br&gt;failure modes&lt;br&gt;anti-patterns" vertex="1">
+          <mxGeometry height="95" width="130" x="170" y="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="r3" parent="panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Operational &amp;&lt;br&gt;Reliability&lt;/b&gt;&lt;br&gt;&lt;br&gt;observability&lt;br&gt;rollback plan&lt;br&gt;SLOs" vertex="1">
+          <mxGeometry height="95" width="130" x="20" y="155" as="geometry"/>
+        </mxCell>
+        <mxCell id="r4" parent="panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Security &amp;&lt;br&gt;Compliance&lt;/b&gt;&lt;br&gt;&lt;br&gt;threat model&lt;br&gt;authN/authZ&lt;br&gt;data handling" vertex="1">
+          <mxGeometry height="95" width="130" x="170" y="155" as="geometry"/>
+        </mxCell>
+        <mxCell id="r5" parent="panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Cost &amp;&lt;br&gt;Performance&lt;/b&gt;&lt;br&gt;&lt;br&gt;resource footprint&lt;br&gt;cost at scale&lt;br&gt;latency / throughput" vertex="1">
+          <mxGeometry height="95" width="130" x="20" y="265" as="geometry"/>
+        </mxCell>
+        <mxCell id="r6" parent="panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Consequences &amp;&lt;br&gt;Reversibility&lt;/b&gt;&lt;br&gt;&lt;br&gt;trade-offs honest?&lt;br&gt;lock-in risk&lt;br&gt;migration path" vertex="1">
+          <mxGeometry height="95" width="130" x="170" y="265" as="geometry"/>
+        </mxCell>
+        <mxCell id="human-review" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Human Review&lt;/b&gt;&lt;br&gt;&lt;br&gt;present findings per reviewer&lt;br&gt;collect agree / disagree&lt;br&gt;partially agree / reword&lt;br&gt;already addressed elsewhere&lt;br&gt;apply corrections" vertex="1">
+          <mxGeometry height="150" width="180" x="1050" y="235" as="geometry"/>
+        </mxCell>
+        <mxCell id="synthesize" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Synthesize&lt;/b&gt;&lt;br&gt;&lt;i&gt;LLM cross-analysis&lt;/i&gt;&lt;br&gt;&lt;br&gt;agreements (multi-reviewer)&lt;br&gt;tensions between dimensions&lt;br&gt;gaps (under-addressed areas)&lt;br&gt;top 3-5 risks&lt;br&gt;overall recommendation" vertex="1">
+          <mxGeometry height="170" width="200" x="1280" y="225" as="geometry"/>
+        </mxCell>
+        <mxCell id="reports" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Generate Reports&lt;/b&gt;" vertex="1">
+          <mxGeometry height="300" width="180" x="1530" y="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="pdf" parent="reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;PDF Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;title page + verdict&lt;br&gt;executive summary&lt;br&gt;full reviewer sections&lt;br&gt;What / So what / Fix&lt;br&gt;synthesis section" vertex="1">
+          <mxGeometry height="115" width="140" x="20" y="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="pptx" parent="reports" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;PPTX Deck&lt;/b&gt;&lt;br&gt;&lt;br&gt;title slide + badge&lt;br&gt;exec summary + top 3&lt;br&gt;1 slide per reviewer&lt;br&gt;synthesis + next steps&lt;br&gt;short-form bullets only" vertex="1">
+          <mxGeometry height="115" width="140" x="20" y="165" as="geometry"/>
+        </mxCell>
+        <mxCell id="pdf-skill" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;document-skills:pdf&lt;/b&gt;" vertex="1">
+          <mxGeometry height="45" width="130" x="1530" y="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="pptx-skill" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;arcSize=10;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=10;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;document-skills:pptx&lt;/b&gt;" vertex="1">
+          <mxGeometry height="45" width="135" x="1530" y="565" as="geometry"/>
+        </mxCell>
+        <mxCell id="output" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=10;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" value="&lt;b&gt;Report Back&lt;/b&gt;&lt;br&gt;&lt;br&gt;output file paths&lt;br&gt;inline summary&lt;br&gt;overall recommendation&lt;br&gt;top risks" vertex="1">
+          <mxGeometry height="130" width="180" x="1760" y="245" as="geometry"/>
+        </mxCell>
+        <mxCell id="concern-structure" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="&lt;b&gt;[severity] Short title&lt;/b&gt;&lt;br&gt;&lt;i&gt;What:&lt;/i&gt; specific gap found&lt;br&gt;&lt;i&gt;So what:&lt;/i&gt; consequence&lt;br&gt;&lt;i&gt;Suggested fix:&lt;/i&gt; action" vertex="1">
+          <mxGeometry height="95" width="200" x="710" y="580" as="geometry"/>
+        </mxCell>
+        <mxCell id="output-tree" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;arcSize=6;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;" value="adr-review/&lt;br&gt;&amp;nbsp;&amp;nbsp;{name}-review.pdf&lt;br&gt;&amp;nbsp;&amp;nbsp;{name}-review.pptx" vertex="1">
+          <mxGeometry height="70" width="170" x="1780" y="420" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_entry_clarify" edge="1" parent="1" source="entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="clarify">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_clarify_read" edge="1" parent="1" source="clarify" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="read-adr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_read_docx" edge="1" parent="1" source="read-adr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="docx-skill" value=".docx input">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="395"/>
+              <mxPoint x="560" y="395"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_read_panel" edge="1" parent="1" source="read-adr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;" target="panel" value="ADR text">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="310"/>
+              <mxPoint x="650" y="55"/>
+              <mxPoint x="808" y="55"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_panel_human" edge="1" parent="1" source="panel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.6;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="human-review" value="raw findings">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="872" y="55"/>
+              <mxPoint x="1140" y="55"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_human_synth" edge="1" parent="1" source="human-review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="synthesize" value="corrected findings">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_synth_reports" edge="1" parent="1" source="synthesize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="reports">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_reports_output" edge="1" parent="1" source="reports" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontSize=11;fontStyle=2;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="output" value="adr-review/">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_reports_pdfskill" edge="1" parent="1" source="reports" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.36;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="pdf-skill">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1595" y="480"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_reports_pptxskill" edge="1" parent="1" source="reports" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.61;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="pptx-skill">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1640" y="480"/>
+              <mxPoint x="1680" y="480"/>
+              <mxPoint x="1680" y="587"/>
+              <mxPoint x="1597" y="587"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_callout_concern" edge="1" parent="1" source="panel" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="concern-structure">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="840" y="560"/>
+              <mxPoint x="810" y="560"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_callout_tree" edge="1" parent="1" source="output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="output-tree">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1850" y="397"/>
+              <mxPoint x="1865" y="397"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

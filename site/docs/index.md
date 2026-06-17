@@ -50,7 +50,7 @@ hide:
 
     End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
 
-    **17 skills** - Evaluation & Testing - v1.0.0
+    **17 skills** - Evaluation & Testing - v1.0.1
 
 -   **[quality-tooling](plugins/quality-tooling/index.md)**
 
