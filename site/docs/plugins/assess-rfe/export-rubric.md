@@ -52,7 +52,7 @@ understand how RFEs are evaluated.
     **Source Assertions:**
 
     - **Skill Path**: `skills/export-rubric/SKILL.md`
-    - **Supporting Paths**: `scripts/export_rubric.py`
+    - **Supporting Paths**: `skills/export-rubric/scripts/export_rubric.py`
 
 ## Diagram
 
@@ -62,6 +62,4 @@ understand how RFEs are evaluated.
 
 ## Usage
 
-```bash
-/export-rubric
-```
+    /export-rubric

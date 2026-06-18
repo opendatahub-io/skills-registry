@@ -34,9 +34,9 @@ what-if analysis, and near-miss identification).
 
     **Metrics:**
 
-    - `task_success` (`judge`): Whether the skill completes the intended job correctly for the task. Guidance: Prefer deterministic or verifier-backed checks; use judge only as a fallback. References: rubric_ref=`n1hility/assess-rfe@main:scripts/agent_prompt.md`
-    - `evidence_completeness` (`judge`): Whether claims and verdicts are backed by enough concrete evidence. Guidance: Use verifier-backed checks when evidence can be counted; otherwise use a rubric-backed judge. References: rubric_ref=`n1hility/assess-rfe@main:scripts/agent_prompt.md`
-    - `output_quality` (`judge`): Human-judged quality of the final artifact when deterministic checks are insufficient. Guidance: Judge only; always pair it with a stable rubric_ref and, when available, calibration data. References: rubric_ref=`n1hility/assess-rfe@main:scripts/agent_prompt.md`
+    - `task_success` (`judge`): Whether the skill completes the intended job correctly for the task. Guidance: Prefer deterministic or verifier-backed checks; use judge only as a fallback. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
+    - `evidence_completeness` (`judge`): Whether claims and verdicts are backed by enough concrete evidence. Guidance: Use verifier-backed checks when evidence can be counted; otherwise use a rubric-backed judge. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
+    - `output_quality` (`judge`): Human-judged quality of the final artifact when deterministic checks are insufficient. Guidance: Judge only; always pair it with a stable rubric_ref and, when available, calibration data. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
 
     **Success Conditions:**
 
@@ -58,7 +58,7 @@ what-if analysis, and near-miss identification).
     **Source Assertions:**
 
     - **Skill Path**: `skills/assess-rfe/SKILL.md`
-    - **Supporting Paths**: `scripts/agent_prompt.md`
+    - **Supporting Paths**: `skills/assess-rfe/scripts/agent_prompt.md`
 
 ## Diagram
 
@@ -68,9 +68,7 @@ what-if analysis, and near-miss identification).
 
 ## Arguments
 
-```bash
-/assess-rfe <input>
-```
+    /assess-rfe <input>
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
@@ -78,11 +76,9 @@ what-if analysis, and near-miss identification).
 
 ## Usage
 
-```bash
-/assess-rfe RHAIRFE-1234
-/assess-rfe PROJ-99
-/assess-rfe /path/to/document.md
-/assess-rfe https://some-url
-/assess-rfe <paste raw text>
-/assess-rfe RHAIRFE-*
-```
+    /assess-rfe RHAIRFE-1234
+    /assess-rfe PROJ-99
+    /assess-rfe /path/to/document.md
+    /assess-rfe https://some-url
+    /assess-rfe <paste raw text>
+    /assess-rfe RHAIRFE-*

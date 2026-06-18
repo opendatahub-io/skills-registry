@@ -71,3 +71,37 @@ class SiteContractRenderingTests(unittest.TestCase):
         plugin["contract_summary"] = "invalid"
         page = generate_site.generate_plugin_page(plugin, registry, enrichment=None, plugin_dir=None)
         self.assertNotIn("## Contract Summary", page)
+
+    def test_skill_page_can_render_indented_command_examples(self):
+        registry = build_registry_with_contract()
+        plugin = registry["plugins"][0]
+        skill = plugin["skills"][0]
+        enrichment = {
+            "skills": {
+                "example-skill": {
+                    "code_block_style": "indented",
+                    "arguments": [
+                        {
+                            "name": "input",
+                            "required": True,
+                            "description": "Input to review.",
+                        }
+                    ],
+                    "usage_examples": [
+                        "/example-skill foo",
+                        "/example-skill bar",
+                    ],
+                }
+            }
+        }
+
+        page = generate_site.generate_skill_page(
+            skill, plugin, enrichment=enrichment, plugin_dir=None
+        )
+
+        self.assertIn("## Arguments", page)
+        self.assertIn("    /example-skill <input>", page)
+        self.assertIn("## Usage", page)
+        self.assertIn("    /example-skill foo", page)
+        self.assertIn("    /example-skill bar", page)
+        self.assertNotIn("```bash", page)

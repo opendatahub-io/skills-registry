@@ -126,13 +126,13 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: n1hility/assess-rfe@main:scripts/agent_prompt.md
+              rubric_ref: opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md
             - id: evidence_completeness
               measure: judge
-              rubric_ref: n1hility/assess-rfe@main:scripts/agent_prompt.md
+              rubric_ref: opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md
             - id: output_quality
               measure: judge
-              rubric_ref: n1hility/assess-rfe@main:scripts/agent_prompt.md
+              rubric_ref: opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md
           problem_statement: Score an RFE against the published rubric and explain the result.
           success_conditions:
             - Produces a complete rubric-based assessment for the supplied RFE input.
@@ -154,7 +154,7 @@ plugins:
           source_assertions:
             skill_path: skills/assess-rfe/SKILL.md
             supporting_paths:
-              - scripts/agent_prompt.md
+              - skills/assess-rfe/scripts/agent_prompt.md
       - name: export-rubric
         description: Export the assessment rubric
         user-invocable: true
@@ -185,7 +185,7 @@ plugins:
           source_assertions:
             skill_path: skills/export-rubric/SKILL.md
             supporting_paths:
-              - scripts/export_rubric.py
+              - skills/export-rubric/scripts/export_rubric.py
     harnesses:
       claude-code:
         install: "/plugin install assess-rfe@opendatahub-skills"

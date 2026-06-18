@@ -130,6 +130,28 @@ def _append_contract_bullets(
         lines.append("    - —")
 
 
+def _append_code_block(
+    lines: list[str],
+    block_lines: list[str],
+    *,
+    language: str = "bash",
+    style: str | None = None,
+) -> None:
+    normalized_style = (
+        style.strip().lower()
+        if isinstance(style, str) and style.strip()
+        else "fenced"
+    )
+    if normalized_style == "indented":
+        for block_line in block_lines:
+            lines.append(f"    {block_line}" if block_line else "")
+        return
+    fence = f"```{language}" if language else "```"
+    lines.append(fence)
+    lines.extend(block_lines)
+    lines.append("```")
+
+
 def _format_contract_metric(metric: dict) -> str:
     metric_id = str(metric["id"])
     header = f"`{metric_id}`"
@@ -466,9 +488,7 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     # Install
     lines.append("## Installation")
     lines.append("")
-    lines.append("```bash")
-    lines.append(f"/plugin install {name}@{registry_name}")
-    lines.append("```")
+    _append_code_block(lines, [f"/plugin install {name}@{registry_name}"])
     lines.append("")
 
     # Architecture notes from enrichment (very bottom — deep-dive content)
@@ -601,6 +621,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
 
     # Argument hint from enrichment (frontmatter argument-hint)
     argument_hint = enriched_skill.get("argument_hint") if enriched_skill else None
+    code_block_style = enriched_skill.get("code_block_style") if enriched_skill else None
 
     # Arguments from enrichment
     if enriched_skill and enriched_skill.get("arguments"):
@@ -619,9 +640,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
                 else:
                     parts.append(f"[{name}]")
             hint = " ".join(parts)
-        lines.append("```bash")
-        lines.append(f"/{sname} {hint}")
-        lines.append("```")
+        _append_code_block(lines, [f"/{sname} {hint}"], style=code_block_style)
         lines.append("")
         lines.append("| Argument | Required | Default | Description |")
         lines.append("|----------|----------|---------|-------------|")
@@ -636,9 +655,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         # No enriched arguments but argument-hint exists — parse it as fallback
         lines.append("## Arguments")
         lines.append("")
-        lines.append("```bash")
-        lines.append(f"/{sname} {argument_hint}")
-        lines.append("```")
+        _append_code_block(lines, [f"/{sname} {argument_hint}"], style=code_block_style)
         lines.append("")
         lines.append("| Argument | Required | Description |")
         lines.append("|----------|----------|-------------|")
@@ -659,10 +676,11 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     if enriched_skill and enriched_skill.get("usage_examples"):
         lines.append("## Usage")
         lines.append("")
-        lines.append("```bash")
-        for ex in enriched_skill["usage_examples"]:
-            lines.append(ex)
-        lines.append("```")
+        _append_code_block(
+            lines,
+            [str(ex) for ex in enriched_skill["usage_examples"]],
+            style=code_block_style,
+        )
         lines.append("")
     elif enriched_skill and enriched_skill.get("usage"):
         lines.append("## Usage")
@@ -673,9 +691,7 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
         # No arguments, no usage examples — show basic invocation
         lines.append("## Usage")
         lines.append("")
-        lines.append("```bash")
-        lines.append(f"/{sname}")
-        lines.append("```")
+        _append_code_block(lines, [f"/{sname}"], style=code_block_style)
         lines.append("")
 
     return "\n".join(lines)
