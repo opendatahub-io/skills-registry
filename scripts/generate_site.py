@@ -19,8 +19,9 @@ import yaml
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _REPO_ROOT = _SCRIPT_DIR.parent
-if str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
+_REPO_ROOT_STR = str(_REPO_ROOT)
+sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
+sys.path.insert(0, _REPO_ROOT_STR)
 
 from scripts.registry_contracts import (  # noqa: E402
     CANONICAL_FUNCTION_DOCS,
@@ -137,19 +138,26 @@ def _append_code_block(
     language: str = "bash",
     style: str | None = None,
 ) -> None:
+    rendered_lines: list[str] = []
+    for block_line in block_lines:
+        rendered_lines.extend(str(block_line).splitlines() or [""])
+
     normalized_style = (
         style.strip().lower()
         if isinstance(style, str) and style.strip()
         else "fenced"
     )
     if normalized_style == "indented":
-        for block_line in block_lines:
+        for block_line in rendered_lines:
             lines.append(f"    {block_line}" if block_line else "")
         return
-    fence = f"```{language}" if language else "```"
+    fence_ticks = "```"
+    while any(fence_ticks in block_line for block_line in rendered_lines):
+        fence_ticks += "`"
+    fence = f"{fence_ticks}{language}" if language else fence_ticks
     lines.append(fence)
-    lines.extend(block_lines)
-    lines.append("```")
+    lines.extend(rendered_lines)
+    lines.append(fence_ticks)
 
 
 def _format_contract_metric(metric: dict) -> str:

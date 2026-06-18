@@ -16,8 +16,9 @@ import yaml
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _REPO_ROOT = _SCRIPT_DIR.parent
-if str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
+_REPO_ROOT_STR = str(_REPO_ROOT)
+sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
+sys.path.insert(0, _REPO_ROOT_STR)
 
 from scripts.registry_contracts import (  # noqa: E402
     CANONICAL_FUNCTION_DOCS,

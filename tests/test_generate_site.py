@@ -105,3 +105,32 @@ class SiteContractRenderingTests(unittest.TestCase):
         self.assertIn("    /example-skill foo", page)
         self.assertIn("    /example-skill bar", page)
         self.assertNotIn("```bash", page)
+
+    def test_append_code_block_indents_all_physical_lines(self):
+        lines = []
+
+        generate_site._append_code_block(  # pylint: disable=protected-access
+            lines,
+            ["/example-skill ok\n<script>alert(1)</script>"],
+            style="indented",
+        )
+
+        self.assertEqual(
+            lines,
+            [
+                "    /example-skill ok",
+                "    <script>alert(1)</script>",
+            ],
+        )
+
+    def test_append_code_block_uses_longer_fence_when_needed(self):
+        lines = []
+
+        generate_site._append_code_block(  # pylint: disable=protected-access
+            lines,
+            ["/example-skill ok", "```embedded"],
+        )
+
+        self.assertEqual(lines[0], "````bash")
+        self.assertEqual(lines[1:3], ["/example-skill ok", "```embedded"])
+        self.assertEqual(lines[3], "````")
