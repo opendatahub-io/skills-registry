@@ -12,6 +12,7 @@ Usage:
 import argparse
 import base64
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -25,9 +26,17 @@ def load_registry(path: str = "registry.yaml") -> dict:
         return yaml.safe_load(f)
 
 
-def save_registry(registry: dict, path: str = "registry.yaml"):
+def update_version_in_file(path: str, updates: list[tuple[dict, str]]):
+    """Replace version strings in-place without reformatting the file."""
+    with open(path) as f:
+        content = f.read()
+    for plugin, new_version in updates:
+        name = re.escape(plugin["name"])
+        old_version = re.escape(plugin["version"])
+        pattern = rf'(name:\s*{name}\b.*?version:\s*)"?{old_version}"?'
+        content = re.sub(pattern, rf'\g<1>"{new_version}"', content, count=1, flags=re.DOTALL)
     with open(path, "w") as f:
-        yaml.dump(registry, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        f.write(content)
 
 
 def fetch_remote_version(repo: str, ref: str = "main") -> str | None:
@@ -99,11 +108,8 @@ def main():
         print(f"\n{len(updates)} update(s) found (dry run, no changes made)")
         return
 
-    # Apply updates
-    for plugin, new_version in updates:
-        plugin["version"] = new_version
-
-    save_registry(registry, args.registry)
+    # Apply updates (surgical text replacement to preserve formatting)
+    update_version_in_file(args.registry, updates)
     print(f"\nUpdated {len(updates)} plugin(s) in {args.registry}")
 
     # Regenerate marketplace.json
