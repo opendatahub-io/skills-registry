@@ -38,7 +38,7 @@ Tags: rfe, rubric, quality, assessment
 
 End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.
 
-v1.0.0 | [opendatahub-io/odh-test-gen](https://github.com/opendatahub-io/odh-test-gen)
+v1.0.1 | [opendatahub-io/odh-test-gen](https://github.com/opendatahub-io/odh-test-gen)
 
 Tags: test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing
 

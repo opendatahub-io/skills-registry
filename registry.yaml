@@ -173,7 +173,7 @@ plugins:
       UI tests against live clusters via Playwright, publish to GitHub with PR
       creation, resolve review feedback, and score quality with automated rubrics
       using parallel sub-agent analysis.
-    version: "1.0.0"
+    version: "1.0.1"
     category: evaluation
     tags: [test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing]
     author:

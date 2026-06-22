@@ -5,3 +5,4 @@ __pycache__/
 .idea/
 .tmp/
 site/docs/plugins/*/artifacts/
+*.DS_Store
