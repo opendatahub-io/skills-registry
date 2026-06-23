@@ -43,6 +43,238 @@
     }
   },
   "$defs": {
+    "nonEmptyText": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "repoRelativePath": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).*\\S.*$"
+    },
+    "skillSourcePath": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!\\\\)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?:[^/]+/)*SKILL\\.md$"
+    },
+    "evaluationNonEmptyList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyText"
+      }
+    },
+    "canonicalFunction": {
+      "type": "string",
+      "description": "Published job-to-be-done for the skill. Choose the user-visible function, not an implementation detail.",
+      "enum": [
+        "plan",
+        "retrieve",
+        "analyze",
+        "review",
+        "generate",
+        "transform",
+        "verify",
+        "execute",
+        "orchestrate"
+      ]
+    },
+    "canonicalMetric": {
+      "type": "string",
+      "description": "Optimization target for the skill. Choose the smallest metric set that captures what must improve without changing the skill's purpose.",
+      "enum": [
+        "task_success",
+        "tool_correctness",
+        "argument_correctness",
+        "evidence_completeness",
+        "step_efficiency",
+        "latency",
+        "token_efficiency",
+        "context_footprint",
+        "output_quality"
+      ]
+    },
+    "metricMeasure": {
+      "type": "string",
+      "description": "How this metric is currently measured. Contributor-facing contracts must declare the measure explicitly.",
+      "enum": ["deterministic", "verifier_backed", "judge"]
+    },
+    "knowledgeInput": {
+      "type": "object",
+      "required": ["kind", "privacy"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "repository_content",
+            "task_input",
+            "tool_output",
+            "external_reference",
+            "organization_memory"
+          ]
+        },
+        "privacy": {
+          "type": "string",
+          "enum": ["public", "repository_internal", "organization_private", "task_private"]
+        }
+      }
+    },
+    "contractInvariants": {
+      "type": "object",
+      "required": ["must_preserve", "fixed_context"],
+      "additionalProperties": false,
+      "properties": {
+        "must_preserve": { "$ref": "#/$defs/evaluationNonEmptyList" },
+        "fixed_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tools": { "$ref": "#/$defs/evaluationNonEmptyList" },
+            "cli": { "$ref": "#/$defs/evaluationNonEmptyList" },
+            "documents": { "$ref": "#/$defs/evaluationNonEmptyList" },
+            "knowledge_inputs": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/knowledgeInput" }
+            }
+          },
+          "anyOf": [
+            { "required": ["tools"] },
+            { "required": ["cli"] },
+            { "required": ["documents"] },
+            { "required": ["knowledge_inputs"] }
+          ]
+        }
+      }
+    },
+    "sourceAssertions": {
+      "type": "object",
+      "required": ["skill_path"],
+      "additionalProperties": false,
+      "properties": {
+        "skill_path": { "$ref": "#/$defs/skillSourcePath" },
+        "supporting_paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/repoRelativePath" }
+        }
+      }
+    },
+    "contractMetricAssignment": {
+      "type": "object",
+      "required": ["id", "measure"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/canonicalMetric" },
+        "measure": { "$ref": "#/$defs/metricMeasure" },
+        "target_measure": { "$ref": "#/$defs/metricMeasure" },
+        "verifier_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "rubric_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "calibration_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "trials": { "type": "integer", "minimum": 1 },
+        "success_mode": {
+          "type": "string",
+          "enum": ["single_run", "pass_at_k", "pass_all_k"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "enum": ["latency", "token_efficiency", "context_footprint", "step_efficiency"]
+              }
+            },
+            "required": ["id"]
+          },
+          "then": {
+            "properties": {
+              "measure": { "const": "deterministic" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "id": { "const": "output_quality" } }, "required": ["id"] },
+          "then": {
+            "properties": {
+              "measure": { "const": "judge" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "measure": { "const": "judge" } }, "required": ["measure"] },
+          "then": { "required": ["rubric_ref"] }
+        },
+        {
+          "if": { "properties": { "measure": { "const": "verifier_backed" } }, "required": ["measure"] },
+          "then": { "required": ["verifier_ref"] }
+        },
+        {
+          "if": {
+            "properties": { "success_mode": { "enum": ["pass_at_k", "pass_all_k"] } },
+            "required": ["success_mode"]
+          },
+          "then": {
+            "required": ["trials"],
+            "properties": { "trials": { "type": "integer", "minimum": 2 } }
+          }
+        }
+      ]
+    },
+    "contract": {
+      "type": "object",
+      "required": [
+        "version",
+        "functions",
+        "metrics",
+        "problem_statement",
+        "success_conditions",
+        "invariants",
+        "source_assertions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "string", "enum": ["canonical-skill-v1"] },
+        "functions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/canonicalFunction" }
+        },
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/contractMetricAssignment" }
+        },
+        "problem_statement": { "$ref": "#/$defs/nonEmptyText" },
+        "success_conditions": { "$ref": "#/$defs/evaluationNonEmptyList" },
+        "invariants": { "$ref": "#/$defs/contractInvariants" },
+        "source_assertions": { "$ref": "#/$defs/sourceAssertions" }
+      }
+    },
+    "contractSummary": {
+      "type": "object",
+      "required": ["focus_functions", "focus_metrics", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "focus_functions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/canonicalFunction" }
+        },
+        "focus_metrics": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/canonicalMetric" }
+        },
+        "notes": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
     "plugin": {
       "type": "object",
       "required": ["name", "description", "version", "source"],
@@ -149,6 +381,9 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "Names of other plugins in this registry that this plugin depends on"
+        },
+        "contract_summary": {
+          "$ref": "#/$defs/contractSummary"
         }
       }
     },
@@ -198,6 +433,9 @@
           "type": "boolean",
           "default": true,
           "description": "Whether the skill can be invoked directly by the user via /skill-name. Mirrors the native Claude Code SKILL.md frontmatter field — see https://code.claude.com/docs/en/skills#frontmatter-reference. Set to false for internal skills called only by other skills/agents in the background. Note: the registry value is catalog-only; the actual invocation behavior is governed by the SKILL.md in the source repo."
+        },
+        "contract": {
+          "$ref": "#/$defs/contract"
         }
       }
     },

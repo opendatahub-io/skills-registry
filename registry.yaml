@@ -110,15 +110,82 @@ plugins:
       type: github
       repo: opendatahub-io/assess-rfe
       ref: main
+    contract_summary:
+      focus_functions: [review, generate]
+      focus_metrics: [task_success, evidence_completeness, output_quality, latency]
+      notes: "This plugin centers on rubric-based RFE assessment and rubric export."
     homepage: https://github.com/opendatahub-io/assess-rfe
     repository: https://github.com/opendatahub-io/assess-rfe
     skills:
       - name: assess-rfe
         description: Assess RFEs against quality criteria using a structured rubric
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md
+            - id: output_quality
+              measure: judge
+              rubric_ref: opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md
+          problem_statement: Score an RFE against the published rubric and explain the result.
+          success_conditions:
+            - Produces a complete rubric-based assessment for the supplied RFE input.
+            - Includes evidence-backed scoring rationale for each criterion.
+          invariants:
+            must_preserve:
+              - Do not skip rubric criteria or invent unsupported evidence.
+              - Do not change the accepted input modes declared by the skill.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TaskGet, mcp__atlassian__getJiraIssue, mcp__atlassian__searchJiraIssuesUsingJql]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/assess-rfe/SKILL.md
+            supporting_paths:
+              - skills/assess-rfe/scripts/agent_prompt.md
       - name: export-rubric
         description: Export the assessment rubric
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: deterministic
+            - id: latency
+              measure: deterministic
+          problem_statement: Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md in the current working directory.
+          success_conditions:
+            - Writes artifacts/rfe-rubric.md under the current working directory.
+            - Confirms the file was written and prints its path.
+          invariants:
+            must_preserve:
+              - Do not modify the rubric content while exporting it.
+              - Do not redirect the export to a path other than artifacts/rfe-rubric.md under the invocation working directory.
+            fixed_context:
+              tools: [Read, Write, Bash]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/export-rubric/SKILL.md
+            supporting_paths:
+              - skills/export-rubric/scripts/export_rubric.py
     harnesses:
       claude-code:
         install: "/plugin install assess-rfe@opendatahub-skills"

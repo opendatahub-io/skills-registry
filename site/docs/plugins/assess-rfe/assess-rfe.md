@@ -20,6 +20,46 @@ what-if analysis, and near-miss identification).
 
 **Plugin**: [assess-rfe](index.md) | **:material-check: User-invocable**
 
+## Contract
+
+!!! info "Skill Contract"
+
+    **Version**: `canonical-skill-v1`
+
+    **Problem Statement**: Score an RFE against the published rubric and explain the result.
+
+    **Functions:**
+
+    - `review`: Assess an artifact against expectations and identify issues, risks, or fit.
+
+    **Metrics:**
+
+    - `task_success` (`judge`): Whether the skill completes the intended job correctly for the task. Guidance: Prefer deterministic or verifier-backed checks; use judge only as a fallback. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
+    - `evidence_completeness` (`judge`): Whether claims and verdicts are backed by enough concrete evidence. Guidance: Use verifier-backed checks when evidence can be counted; otherwise use a rubric-backed judge. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
+    - `output_quality` (`judge`): Human-judged quality of the final artifact when deterministic checks are insufficient. Guidance: Judge only; always pair it with a stable rubric_ref and, when available, calibration data. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
+
+    **Success Conditions:**
+
+    - Produces a complete rubric-based assessment for the supplied RFE input.
+    - Includes evidence-backed scoring rationale for each criterion.
+
+    **Must Preserve:**
+
+    - Do not skip rubric criteria or invent unsupported evidence.
+    - Do not change the accepted input modes declared by the skill.
+
+    **Fixed Context:**
+
+    - **Tools**: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `Agent`, `TaskGet`, `mcp__atlassian__getJiraIssue`, `mcp__atlassian__searchJiraIssuesUsingJql`
+    - **CLI**: `python3`
+    - **Documents**: —
+    - **Knowledge Inputs**: `repository_content` (public), `task_input` (task_private), `tool_output` (task_private)
+
+    **Source Assertions:**
+
+    - **Skill Path**: `skills/assess-rfe/SKILL.md`
+    - **Supporting Paths**: `skills/assess-rfe/scripts/agent_prompt.md`
+
 ## Diagram
 
 <div class="diagram-container" markdown>
@@ -28,9 +68,7 @@ what-if analysis, and near-miss identification).
 
 ## Arguments
 
-```bash
-/assess-rfe <input>
-```
+    /assess-rfe <input>
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
@@ -38,11 +76,9 @@ what-if analysis, and near-miss identification).
 
 ## Usage
 
-```bash
-/assess-rfe RHAIRFE-1234
-/assess-rfe PROJ-99
-/assess-rfe /path/to/document.md
-/assess-rfe https://some-url
-/assess-rfe <paste raw text>
-/assess-rfe RHAIRFE-*
-```
+    /assess-rfe RHAIRFE-1234
+    /assess-rfe PROJ-99
+    /assess-rfe /path/to/document.md
+    /assess-rfe https://some-url
+    /assess-rfe <paste raw text>
+    /assess-rfe RHAIRFE-*

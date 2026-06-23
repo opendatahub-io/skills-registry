@@ -52,6 +52,7 @@ skills:
       queue-based batch dispatching, and CSV result aggregation with summary
       statistics (pass/fail rates, score distribution, criteria averages,
       what-if analysis, and near-miss identification).
+    code_block_style: indented
     arguments:
       - name: "input"
         type: "Jira key | file path | URL | raw text | wildcard"
@@ -75,5 +76,6 @@ skills:
       calibration examples, and scoring guidelines outside of an assessment
       context, or for sharing the rubric with team members who want to
       understand how RFEs are evaluated.
+    code_block_style: indented
     usage_examples:
       - "/export-rubric"
