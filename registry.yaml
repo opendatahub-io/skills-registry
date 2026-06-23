@@ -667,3 +667,30 @@ plugins:
       package: spike-executor
       requires_python: ">=3.10"
     depends_on: []
+
+  - name: software-catalog
+    description: >
+      Query the software catalog to find mappings between Red Hat products,
+      Jira projects, Jira components, GitHub repos, build artifacts, and scrum teams.
+    version: "1.0.0"
+    category: development-tools
+    scope: sdlc
+    tags: [red-hat, jira, github, catalog, mapping, query]
+    author:
+      name: Kevin Howell
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/software-catalog
+      ref: main
+    skills_dir: .claude/skills
+    skills:
+      - name: software-catalog-query
+        description: Query mappings between Red Hat products, Jira projects/components, GitHub repos, build artifacts, and scrum teams
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install software-catalog@opendatahub-skills"
+    python:
+      requires_python: ">=3.9"
+    depends_on: []

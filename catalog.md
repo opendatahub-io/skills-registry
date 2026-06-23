@@ -303,6 +303,22 @@ Tags: autofix, jira, cve, bug-fixing, triage, pipeline, ci-cd
 /plugin install autofix-skills@opendatahub-skills
 ```
 
+### software-catalog
+
+Query the software catalog to find mappings between Red Hat products, Jira projects, Jira components, GitHub repos, build artifacts, and scrum teams.
+
+v1.0.0 | Apache-2.0 | [opendatahub-io/software-catalog](https://github.com/opendatahub-io/software-catalog)
+
+Tags: red-hat, jira, github, catalog, mapping, query
+
+| Skill | Description |
+|-------|-------------|
+| `/software-catalog-query` | Query mappings between Red Hat products, Jira projects/components, GitHub repos, build artifacts, and scrum teams |
+
+```bash
+/plugin install software-catalog@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy

@@ -364,6 +364,29 @@
       },
       "strict": false,
       "version": "0.2.0"
+    },
+    {
+      "author": {
+        "name": "Kevin Howell"
+      },
+      "category": "development-tools",
+      "description": "Query the software catalog to find mappings between Red Hat products, Jira projects, Jira components, GitHub repos, build artifacts, and scrum teams.\n",
+      "keywords": [
+        "red-hat",
+        "jira",
+        "github",
+        "catalog",
+        "mapping",
+        "query"
+      ],
+      "license": "Apache-2.0",
+      "name": "software-catalog",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/software-catalog",
+        "source": "github"
+      },
+      "version": "1.0.0"
     }
   ]
 }
