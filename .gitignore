@@ -7,3 +7,5 @@ __pycache__/
 .tmp/
 site/docs/plugins/*/artifacts/
 *.DS_Store
+scripts/__pycache__/
+site/docs/plugins/*/_discovered.yaml
