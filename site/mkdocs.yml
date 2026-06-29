@@ -154,6 +154,8 @@ nav:
     - spike-executor:
       - plugins/spike-executor/index.md
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
+    - docs-skills:
+      - plugins/docs-skills/index.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md

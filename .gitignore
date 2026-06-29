@@ -3,5 +3,7 @@ site/_site/
 __pycache__/
 *.pyc
 .idea/
+.cache/skills-registry/
 .tmp/
 site/docs/plugins/*/artifacts/
+*.DS_Store

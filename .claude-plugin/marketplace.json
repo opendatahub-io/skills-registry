@@ -111,7 +111,7 @@
         "source": "github"
       },
       "strict": true,
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     {
       "author": {
@@ -365,6 +365,34 @@
       },
       "strict": false,
       "version": "0.2.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "documentation",
+      "description": "Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.\n",
+      "homepage": "https://github.com/opendatahub-io/docs-skills",
+      "keywords": [
+        "documentation",
+        "asciidoc",
+        "mkdocs",
+        "workflow",
+        "review",
+        "style-guide",
+        "jira",
+        "onboarding",
+        "code-analysis"
+      ],
+      "license": "Apache-2.0",
+      "name": "docs-skills",
+      "repository": "https://github.com/opendatahub-io/docs-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/docs-skills",
+        "source": "github"
+      },
+      "version": "0.3.0"
     }
   ]
 }

@@ -21,7 +21,7 @@ to decide whether tests belong in the component repo or downstream E2E repo.
 
 !!! info "Plugin Details"
 
-    - **Version**: 1.0.0
+    - **Version**: 1.0.1
     - **Author**: Federico Mosca
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/odh-test-gen](https://github.com/opendatahub-io/odh-test-gen)

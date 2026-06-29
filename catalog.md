@@ -13,6 +13,48 @@ claude plugin marketplace add opendatahub-io/skills-registry
 /plugin
 ```
 
+## Canonical Contract System
+
+Contracts are contributor-facing optimization specs: functions describe the published job-to-be-done, metrics describe what should improve, and measures state how each metric is scored today.
+
+### Functions
+
+| Function | Meaning |
+|----------|---------|
+| `plan` | Choose an approach, sequence, or strategy before execution. |
+| `retrieve` | Locate and return source material, facts, or artifacts needed for later work. |
+| `analyze` | Interpret inputs to extract structure, meaning, or implications. |
+| `review` | Assess an artifact against expectations and identify issues, risks, or fit. |
+| `generate` | Produce a new artifact for the user or another tool to consume. |
+| `transform` | Rewrite or convert existing input into a different form while preserving intent. |
+| `verify` | Check whether a claim, artifact, or result satisfies explicit criteria. |
+| `execute` | Carry out a bounded operational task in tools, CLIs, or external systems. |
+| `orchestrate` | Coordinate multiple steps, tools, or subagents into a larger workflow. |
+
+### Metrics
+
+| Metric | What It Optimizes | Measurement Guidance |
+|--------|-------------------|----------------------|
+| `task_success` | Whether the skill completes the intended job correctly for the task. | Prefer deterministic or verifier-backed checks; use judge only as a fallback. |
+| `tool_correctness` | Whether chosen tools and tool calls are valid and appropriate. | Usually deterministic or verifier-backed from tool traces and outcomes. |
+| `argument_correctness` | Whether tool inputs, flags, and parameters are correct. | Usually deterministic or verifier-backed from arguments and downstream results. |
+| `evidence_completeness` | Whether claims and verdicts are backed by enough concrete evidence. | Use verifier-backed checks when evidence can be counted; otherwise use a rubric-backed judge. |
+| `step_efficiency` | Whether the workflow uses a reasonable number of steps for the task. | Deterministic only; count steps against an explicit budget or baseline. |
+| `latency` | How quickly the skill produces the final usable result. | Deterministic only; measure elapsed wall-clock time for the user-visible outcome. |
+| `token_efficiency` | How economically the skill uses model tokens. | Deterministic only; measure prompt/completion token consumption. |
+| `context_footprint` | How much context the skill requires to do the job reliably. | Deterministic only; measure required files, tokens, or supporting artifacts. |
+| `output_quality` | Human-judged quality of the final artifact when deterministic checks are insufficient. | Judge only; always pair it with a stable rubric_ref and, when available, calibration data. |
+
+### Measures
+
+| Measure | When To Use |
+|---------|-------------|
+| `deterministic` | Use when a direct oracle or exact check can score the metric consistently. |
+| `verifier_backed` | Use when a programmatic verifier can judge success, but not by simple exact match. |
+| `judge` | Use rubric-based human or LLM evaluation only when deterministic checks are insufficient. |
+
+Skill tables below show metric ids with the current measure in parentheses.
+
 ## Evaluation & Testing
 
 Skills for evaluating and testing AI agent skills
@@ -25,10 +67,10 @@ v1.0.0 | [opendatahub-io/assess-rfe](https://github.com/opendatahub-io/assess-rf
 
 Tags: rfe, rubric, quality, assessment
 
-| Skill | Description |
-|-------|-------------|
-| `/assess-rfe` | Assess RFEs against quality criteria using a structured rubric |
-| `/export-rubric` | Export the assessment rubric |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/assess-rfe` | Assess RFEs against quality criteria using a structured rubric | `review` | `task_success` (`judge`), `evidence_completeness` (`judge`), `output_quality` (`judge`) |
+| `/export-rubric` | Export the assessment rubric | `generate` | `task_success` (`deterministic`), `latency` (`deterministic`) |
 
 ```bash
 /plugin install assess-rfe@opendatahub-skills
@@ -38,7 +80,7 @@ Tags: rfe, rubric, quality, assessment
 
 End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.
 
-v1.0.0 | [opendatahub-io/odh-test-gen](https://github.com/opendatahub-io/odh-test-gen)
+v1.0.1 | [opendatahub-io/odh-test-gen](https://github.com/opendatahub-io/odh-test-gen)
 
 Tags: test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing
 
@@ -138,6 +180,18 @@ Tags: knowledge, context, claude-md, agents-md, pr-analysis, automation
 
 ```bash
 /plugin install knowledge-skills@opendatahub-skills
+```
+
+### docs-skills
+
+Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
+
+v0.3.0 | Apache-2.0 | [opendatahub-io/docs-skills](https://github.com/opendatahub-io/docs-skills)
+
+Tags: documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onboarding, code-analysis
+
+```bash
+/plugin install docs-skills@opendatahub-skills
 ```
 
 ## DevOps & CI/CD

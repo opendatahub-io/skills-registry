@@ -1,0 +1,6 @@
+{
+  "extends": "recommended",
+  "rules": {
+    "security/no-memory-poisoning": "warning"
+  }
+}

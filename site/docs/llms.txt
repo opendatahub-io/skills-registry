@@ -17,6 +17,7 @@
 - [aiops-skills](https://opendatahub-io.github.io/skills-registry/plugins/aiops-skills/): DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Konflux CI/CD, release management, delivery pipelines, and operational tooling.
 - [code-review-skills](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/): AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
 - [spike-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
+- [docs-skills](https://opendatahub-io.github.io/skills-registry/plugins/docs-skills/): Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
 
 ## Skills
 

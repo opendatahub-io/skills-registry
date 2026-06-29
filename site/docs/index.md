@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-13 plugins | 75 skills | 7 categories
+14 plugins | 75 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -50,7 +50,7 @@ hide:
 
     End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
 
-    **17 skills** - Evaluation & Testing - v1.0.0
+    **17 skills** - Evaluation & Testing - v1.0.1
 
 -   **[quality-tooling](plugins/quality-tooling/index.md)**
 
@@ -108,6 +108,14 @@ hide:
 
     **1 skills** - Product Planning - v0.2.0
 
+-   **[docs-skills](plugins/docs-skills/index.md)**
+
+    ---
+
+    Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated m...
+
+    **0 skills** - Documentation - v0.3.0
+
 </div>
 
 ## Generic
@@ -136,7 +144,7 @@ hide:
 
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (4 plugins)
 - [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
-- [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (1 plugin)
+- [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (2 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)

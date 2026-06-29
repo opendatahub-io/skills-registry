@@ -2258,3 +2258,13 @@ Examples:
 ```
 
 ---
+
+## docs-skills
+
+Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
+
+**Repository**: https://github.com/opendatahub-io/docs-skills
+
+### Skills
+
+---
