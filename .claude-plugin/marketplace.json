@@ -314,6 +314,31 @@
       "author": {
         "name": "opendatahub-io"
       },
+      "category": "devops",
+      "description": "Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocessed error logs, then performs root cause analysis per group with structured findings, section files, and confidence-rated diagnoses. Designed to run inside a Claude Code container as part of the pipeline-failure-analyzer CI pipeline.\n",
+      "homepage": "https://github.com/opendatahub-io/pipeline-skills",
+      "keywords": [
+        "pipeline",
+        "ci-cd",
+        "failure-analysis",
+        "grouping",
+        "root-cause",
+        "gitlab"
+      ],
+      "license": "Apache-2.0",
+      "name": "pipeline-skills",
+      "repository": "https://github.com/opendatahub-io/pipeline-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/pipeline-skills",
+        "source": "github"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
       "category": "code-quality",
       "description": "AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.\n",
       "homepage": "https://github.com/opendatahub-io/code-review-skills",

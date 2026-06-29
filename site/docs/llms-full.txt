@@ -2106,6 +2106,24 @@ Examples:
 
 ---
 
+## pipeline-skills
+
+Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocessed error logs, then performs root cause analysis per group with structured findings, section files, and confidence-rated diagnoses. Designed to run inside a Claude Code container as part of the pipeline-failure-analyzer CI pipeline.
+
+**Repository**: https://github.com/opendatahub-io/pipeline-skills
+
+### Skills
+
+#### /pipeline-grouping (internal)
+
+Group failed CI/CD pipeline jobs by error similarity using log analysis and Jira ticket deduplication
+
+#### /pipeline-rca (internal)
+
+Root cause analysis for a pipeline failure error group with structured findings and section files
+
+---
+
 ## code-review-skills
 
 AI-powered code review for GitLab merge requests. Reviews all commits since the

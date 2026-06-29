@@ -231,6 +231,18 @@ Tags: devops, testops, odh, rhoai, konflux, onboarding, ci-cd, release, automati
 /plugin install aiops-skills@opendatahub-skills
 ```
 
+### pipeline-skills
+
+Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocessed error logs, then performs root cause analysis per group with structured findings, section files, and confidence-rated diagnoses. Designed to run inside a Claude Code container as part of the pipeline-failure-analyzer CI pipeline.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/pipeline-skills](https://github.com/opendatahub-io/pipeline-skills)
+
+Tags: pipeline, ci-cd, failure-analysis, grouping, root-cause, gitlab
+
+```bash
+/plugin install pipeline-skills@opendatahub-skills
+```
+
 ## Security Review
 
 Security analysis, threat modeling, and compliance review

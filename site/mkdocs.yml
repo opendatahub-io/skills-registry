@@ -148,6 +148,10 @@ nav:
       - plugins/aiops-skills/index.md
       - create-component-onboarding-jira: plugins/aiops-skills/create-component-onboarding-jira.md
       - validate-component-onboarding-jira: plugins/aiops-skills/validate-component-onboarding-jira.md
+    - pipeline-skills:
+      - plugins/pipeline-skills/index.md
+      - pipeline-grouping: plugins/pipeline-skills/pipeline-grouping.md
+      - pipeline-rca: plugins/pipeline-skills/pipeline-rca.md
     - code-review-skills:
       - plugins/code-review-skills/index.md
       - gitlab-code-review: plugins/code-review-skills/gitlab-code-review.md

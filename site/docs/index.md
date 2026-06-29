@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-14 plugins | 75 skills | 7 categories
+15 plugins | 77 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -92,6 +92,14 @@ hide:
 
     **2 skills** - DevOps & CI/CD - v0.1.0
 
+-   **[pipeline-skills](plugins/pipeline-skills/index.md)**
+
+    ---
+
+    Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocesse...
+
+    **2 skills** - DevOps & CI/CD - v0.1.0
+
 -   **[code-review-skills](plugins/code-review-skills/index.md)**
 
     ---
@@ -145,7 +153,7 @@ hide:
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (4 plugins)
 - [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
-- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (2 plugins)
+- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (3 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (2 plugins)

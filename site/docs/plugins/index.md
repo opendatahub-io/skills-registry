@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-14 plugins registered in the marketplace.
+15 plugins registered in the marketplace.
 
 ## SDLC
 
@@ -22,6 +22,7 @@ title: Plugins
 | [autofix-skills](autofix-skills/index.md) | Development Tools | 4 | v0.1.0 |
 | [disconnected-readiness-scorer](disconnected-readiness-scorer/index.md) | DevOps & CI/CD | 1 | v0.1.0 |
 | [aiops-skills](aiops-skills/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
+| [pipeline-skills](pipeline-skills/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
 | [code-review-skills](code-review-skills/index.md) | Code Quality | 1 | v0.1.0 |
 | [spike-executor](spike-executor/index.md) | Product Planning | 1 | v0.2.0 |
 | [docs-skills](docs-skills/index.md) | Documentation | 0 | v0.3.0 |

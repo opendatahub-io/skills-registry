@@ -607,6 +607,95 @@ plugins:
         install: "/plugin install aiops-skills@opendatahub-skills"
     depends_on: []
 
+  - name: pipeline-skills
+    description: >
+      Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups
+      failed jobs by shared root cause using preprocessed error logs, then
+      performs root cause analysis per group with structured findings,
+      section files, and confidence-rated diagnoses. Designed to run inside
+      a Claude Code container as part of the pipeline-failure-analyzer CI pipeline.
+    version: "0.1.0"
+    category: devops
+    tags: [pipeline, ci-cd, failure-analysis, grouping, root-cause, gitlab]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/pipeline-skills
+      ref: main
+    homepage: https://github.com/opendatahub-io/pipeline-skills
+    repository: https://github.com/opendatahub-io/pipeline-skills
+    skills:
+      - name: pipeline-grouping
+        description: Group failed CI/CD pipeline jobs by error similarity using log analysis and Jira ticket deduplication
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Read preprocessed error files for all failed jobs, identify distinct
+            failure patterns, and group jobs by shared root cause into grouping.json.
+          success_conditions:
+            - Produces grouping.json with all expected job IDs assigned to groups.
+            - Each group has a human-readable summary and representative error messages.
+          invariants:
+            must_preserve:
+              - Every expected job ID must appear in exactly one group.
+              - Do not modify job trace logs or error files.
+            fixed_context:
+              tools: [Read, Bash, Grep, Glob]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/pipeline-grouping/SKILL.md
+            supporting_paths:
+              - skills/pipeline-grouping/scripts/grouper.py
+      - name: pipeline-rca
+        description: Root cause analysis for a pipeline failure error group with structured findings and section files
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Investigate the root cause of a CI/CD failure group by analyzing
+            trace logs, source code, and build artifacts. Produce structured
+            section files and a finding.json with classification metadata.
+          success_conditions:
+            - Produces finding.json with all required fields valid against the schema.
+            - Produces sections/error-overview.md and sections/root-cause.md.
+          invariants:
+            must_preserve:
+              - Do not fabricate log lines or error messages not present in the evidence.
+              - Redact credentials, tokens, and API keys in all output.
+            fixed_context:
+              tools: [Read, Bash, Grep, Glob]
+              cli: [python3, git, glab]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/pipeline-rca/SKILL.md
+            supporting_paths:
+              - skills/pipeline-rca/references/finding.schema.json
+              - skills/pipeline-rca/references/error-overview-section-template.md
+              - skills/pipeline-rca/references/rca-section-template.md
+              - skills/pipeline-rca/references/resolution-section-template.md
+    harnesses:
+      claude-code:
+        install: "/plugin install pipeline-skills@opendatahub-skills"
+    depends_on: []
+
   - name: code-review-skills
     description: >
       AI-powered code review for GitLab merge requests. Reviews all commits
