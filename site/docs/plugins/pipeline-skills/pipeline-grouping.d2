@@ -1,0 +1,229 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **pipeline-grouping**
+
+  - group failed CI/CD jobs
+  - by shared root cause
+  - allowed: Bash Read Grep Glob
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read context ---
+
+read-context: |md
+  **Read Context**
+
+  - _context/grouping-context.json
+  - job_manifest (failed jobs)
+  - expected_jobs (id list)
+  - jira_url
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read error files (LLM) ---
+
+read-errors: |md
+  **Read Error Files**
+  LLM analysis
+
+  - jobs/(id-name)/errors.txt
+  - read ALL before deciding
+  - handle [Fallback:] files
+  - build error landscape
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Identify root causes (LLM) ---
+
+identify: |md
+  **Identify Root Causes**
+  LLM decision
+
+  - distinct failure patterns
+  - merge across collections
+  - split when errors differ
+  - when uncertain, split
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Build groups (container over grouper.py CLI) ---
+
+build: Build Groups (grouper.py CLI) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  annotation: |md
+    incremental writes to
+    grouping.work.json (--state)
+  | {
+    shape: text
+    style.font-size: 11
+  }
+
+  add-group: |md
+    **add-group**
+
+    - one call per root cause
+    - --summary, --jobs
+    - --error (repeatable)
+    - --expected-jobs (1st call)
+    - rejects dupe / unknown IDs
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  add-job: |md
+    **add-job**
+
+    - straggler corrections
+    - --group, --job, --error
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  status: |md
+    **status**
+
+    - view groups
+    - list unassigned jobs
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  add-group -> add-job: "corrections"
+  add-group -> status: "check progress"
+}
+
+# --- Finalize ---
+
+finalize: |md
+  **finalize**
+
+  - grouper.py finalize
+  - --expected-jobs validated
+  - every job ID assigned?
+  - sort groups, slug IDs
+  - write grouping.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Dedup (optional, LLM) ---
+
+dedup: |md
+  **Dedup vs Jira**
+  LLM, optional
+
+  - read recent-tickets.json
+  - match group root cause
+  - confidence high / medium
+  - skip if file absent
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Outputs ---
+
+grouping-json: |md
+  **grouping.json**
+
+  - groups[] with id, summary
+  - job_ids, error_messages
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dedup-json: |md
+  **dedup-results.json**
+
+  - results[] matched groups
+  - ticket key + url
+  - only if matches found
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External services ---
+
+jira: |md
+  **Jira**
+  recent-tickets.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> read-context
+read-context -> read-errors: "job_manifest"
+read-errors -> identify: "error landscape"
+identify -> build.add-group
+
+build.status -> finalize: "all assigned"
+build.add-job -> finalize
+finalize -> build.add-group: "unassigned jobs" {
+  style.stroke-dash: 3
+}
+
+finalize -> grouping-json
+finalize -> dedup: "review tickets"
+jira -> dedup: "recent-tickets.json" {
+  style.stroke-dash: 3
+}
+dedup -> dedup-json: "matches found"
+dedup -> jira: "browse/<KEY> urls" {
+  style.stroke-dash: 3
+}

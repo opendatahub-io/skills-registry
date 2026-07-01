@@ -1,0 +1,218 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **pipeline-rca**
+  one error group
+
+  - rca-context.json
+  - trace logs + errors
+  - allowed: Bash Read
+    Grep Glob
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Context ---
+
+read-context: |md
+  **Read Context**
+
+  - rca-context.json first
+  - group id, name,
+    collections, actions
+  - pipeline sha + ref
+  - job + file-path tables
+  - dependency versions
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read errors ---
+
+read-errors: |md
+  **Read Errors**
+
+  - preprocessed errors
+    per affected job
+  - Fallback marker:
+    read trace.log tail
+  - compare across jobs
+    for shared root cause
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Clean logs (external tool) ---
+
+log-cleaner: |md
+  **log_cleaner.py**
+  external tool
+
+  - --extract-errors
+  - --patterns
+    aipcc-patterns.txt
+  - context before/after
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Investigate (container: source at SHA) ---
+
+investigate: Investigate Source @ SHA {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  local-git: |md
+    **Local git (first)**
+
+    - git show sha:path
+    - ls-tree, grep at sha
+    - shallow clone (depth 1-20)
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  gitlab-api: |md
+    **GitLab API (fallback)**
+
+    - glab api files/raw?ref=sha
+    - commits history since
+      2-weeks-ago
+    - job artifacts (zip)
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  local-git -> gitlab-api: "bad object /\nbeyond depth" {
+    style.stroke-dash: 3
+  }
+}
+
+# --- Verify (LLM reasoning) ---
+
+verify: |md
+  **Verify Diagnosis**
+  distinguishing check
+
+  - first error = root cause
+  - competing explanation?
+  - run cheapest check
+    (artifact / recent change
+    / compare working run)
+  - lower confidence if
+    unverifiable
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Write sections ---
+
+sections: |md
+  **Write Sections**
+  content fragments
+
+  - error-overview.md
+    (symptom + quoted errors)
+  - root-cause.md
+    (diagnosis + failure chain)
+  - resolution.md (optional)
+  - feedback.md (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Finding (output, schema-validated) ---
+
+finding: |md
+  **Write finding.json**
+
+  - validate vs schema
+  - confidence high/medium/low
+  - cascade, group_consistency
+  - references + resources_used
+  - target_repo (Known Repos)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: finding.json shape ---
+
+finding-shape: |md
+  finding.json
+    group_id, title
+    collections, actions
+    error_summary
+    suggested_resolution_summary
+    has_resolution_file
+    confidence + justification
+    cascade, group_consistency
+    feedback_status
+    references[], resources_used{}
+    target_repo (+ reason)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> read-context
+read-context -> read-errors
+read-errors -> log-cleaner: "trace.log"
+log-cleaner -> investigate: "cleaned errors"
+read-context -> investigate: "sha + repo path"
+
+investigate -> verify: "source evidence"
+verify -> investigate: "contradicts theory /\nrevise" {
+  style.stroke-dash: 3
+}
+
+verify -> sections
+sections -> finding: "has_resolution_file"
+finding -> finding-shape: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

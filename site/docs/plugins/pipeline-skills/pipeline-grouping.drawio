@@ -1,0 +1,104 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;pipeline-grouping&lt;/b&gt;&lt;br&gt;&lt;br&gt;group failed CI/CD jobs&lt;br&gt;by shared root cause&lt;br&gt;allowed: Bash Read Grep Glob" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="250" width="190" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-context" value="&lt;b&gt;Read Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;_context/grouping-context.json&lt;br&gt;job_manifest (failed jobs)&lt;br&gt;expected_jobs (id list)&lt;br&gt;jira_url" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="245" width="210" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-errors" value="&lt;b&gt;Read Error Files&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;jobs/(id-name)/errors.txt&lt;br&gt;read ALL before deciding&lt;br&gt;handle [Fallback:] files&lt;br&gt;build error landscape" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="550" y="240" width="200" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="identify" value="&lt;b&gt;Identify Root Causes&lt;/b&gt;&lt;br&gt;LLM decision&lt;br&gt;&lt;br&gt;distinct failure patterns&lt;br&gt;merge across collections&lt;br&gt;split when errors differ&lt;br&gt;when uncertain, split" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="810" y="242" width="195" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="build" value="&lt;b&gt;Build Groups (grouper.py CLI)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1065" y="100" width="238" height="430" as="geometry"/>
+    </mxCell>
+    <mxCell id="annotation" value="incremental writes to&lt;br&gt;grouping.work.json (--state)" style="text;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;align=center;strokeColor=none;fillColor=none;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="build">
+      <mxGeometry x="20" y="42" width="200" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="add-group" value="&lt;b&gt;add-group&lt;/b&gt;&lt;br&gt;&lt;br&gt;one call per root cause&lt;br&gt;--summary, --jobs&lt;br&gt;--error (repeatable)&lt;br&gt;--expected-jobs (1st call)&lt;br&gt;rejects dupe / unknown IDs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="build">
+      <mxGeometry x="20" y="92" width="200" height="128" as="geometry"/>
+    </mxCell>
+    <mxCell id="add-job" value="&lt;b&gt;add-job&lt;/b&gt;&lt;br&gt;&lt;br&gt;straggler corrections&lt;br&gt;--group, --job, --error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="build">
+      <mxGeometry x="20" y="236" width="200" height="78" as="geometry"/>
+    </mxCell>
+    <mxCell id="status" value="&lt;b&gt;status&lt;/b&gt;&lt;br&gt;&lt;br&gt;view groups&lt;br&gt;list unassigned jobs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="build">
+      <mxGeometry x="20" y="330" width="200" height="78" as="geometry"/>
+    </mxCell>
+    <mxCell id="finalize" value="&lt;b&gt;finalize&lt;/b&gt;&lt;br&gt;&lt;br&gt;grouper.py finalize&lt;br&gt;--expected-jobs validated&lt;br&gt;every job ID assigned?&lt;br&gt;sort groups, slug IDs&lt;br&gt;write grouping.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1370" y="235" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="grouping-json" value="&lt;b&gt;grouping.json&lt;/b&gt;&lt;br&gt;&lt;br&gt;groups[] with id, summary&lt;br&gt;job_ids, error_messages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1650" y="140" width="190" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="dedup" value="&lt;b&gt;Dedup vs Jira&lt;/b&gt;&lt;br&gt;LLM, optional&lt;br&gt;&lt;br&gt;read recent-tickets.json&lt;br&gt;match group root cause&lt;br&gt;confidence high / medium&lt;br&gt;skip if file absent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1650" y="320" width="190" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="dedup-json" value="&lt;b&gt;dedup-results.json&lt;/b&gt;&lt;br&gt;&lt;br&gt;results[] matched groups&lt;br&gt;ticket key + url&lt;br&gt;only if matches found" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;strokeWidth=1;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1900" y="335" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira" value="&lt;b&gt;Jira&lt;/b&gt;&lt;br&gt;recent-tickets.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1655" y="600" width="180" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-entry-ctx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-ctx-errors" value="job_manifest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-context" target="read-errors" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-errors-identify" value="error landscape" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.49642857142857144;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-errors" target="identify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-identify-addgroup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.28888888888888886;exitDx=0;exitDy=0;entryX=0;entryY=0.6953125;entryDx=0;entryDy=0;" edge="1" source="identify" target="add-group" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-addgroup-addjob" value="corrections" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="add-group" target="add-job" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-addgroup-status" value="check progress" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="add-group" target="status" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-status-finalize" value="all assigned" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="status" target="finalize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-addjob-finalize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3141025641025641;exitDx=0;exitDy=0;entryX=0;entryY=0.8366666666666667;entryDx=0;entryDy=0;" edge="1" source="add-job" target="finalize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-finalize-addgroup" value="unassigned jobs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="finalize" target="add-group" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-finalize-grouping" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="finalize" target="grouping-json" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-finalize-dedup" value="review tickets" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7833333333333333;exitDx=0;exitDy=0;entryX=0;entryY=0.23214285714285715;entryDx=0;entryDy=0;" edge="1" source="finalize" target="dedup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-dedup-dedupjson" value="matches found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="dedup" target="dedup-json" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-jira-dedup" value="recent-tickets.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="jira" target="dedup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-dedup-jira" value="browse/KEY urls" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="dedup" target="jira" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
