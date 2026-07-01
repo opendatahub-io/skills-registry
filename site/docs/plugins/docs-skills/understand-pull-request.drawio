@@ -1,0 +1,62 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/understand-pull-request&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;pr-number-or-url&gt;&lt;br&gt;--repo &lt;path&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="60" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="preflight" value="&lt;b&gt;Pre-flight&lt;/b&gt;&lt;br&gt;&lt;br&gt;parse PR ref, resolve repo&lt;br&gt;detect platform (GitHub/GitLab)&lt;br&gt;validate auth token&lt;br&gt;resume checkpoint check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="250" y="45" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="pr-metadata" value="&lt;b&gt;PR Metadata&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch metadata + diff.patch&lt;br&gt;metadata.json&lt;br&gt;step-result.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="510" y="55" width="190" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="git-pr-reader" value="&lt;b&gt;git-pr-reader&lt;/b&gt; (external skill)&lt;br&gt;&lt;br&gt;git_pr_reader.py metadata&lt;br&gt;GitHub / GitLab API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="510" y="300" width="190" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="repo-context" value="&lt;b&gt;Repo Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;detect language + module map&lt;br&gt;reuse ONBOARDING.md, OR&lt;br&gt;dispatch pr-repo-summarizer&lt;br&gt;detection.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="760" y="45" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="change-analysis" value="&lt;b&gt;Change Analysis&lt;/b&gt; &amp;mdash; LLM fan-out (agents)&lt;br&gt;&lt;br&gt;identify affected modules&lt;br&gt;pr-change-analyzer agents&lt;br&gt;batches of &amp;le;10, parallel&lt;br&gt;change-summary.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="750" y="440" width="210" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="synthesis" value="&lt;b&gt;Synthesis&lt;/b&gt; &amp;mdash; LLM agent&lt;br&gt;&lt;br&gt;build context.json&lt;br&gt;pr-synthesis-writer agent&lt;br&gt;PR-&lt;N&gt;-ANALYSIS.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="480" y="445" width="190" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="analysis-doc" value="&lt;b&gt;PR-ANALYSIS.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;repo overview&lt;br&gt;per-module changes&lt;br&gt;risks + breaking changes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="220" y="450" width="190" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="preflight" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="pr-metadata" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" value="fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="pr-metadata" target="git-pr-reader" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="13" value="metadata + diff" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="git-pr-reader" target="pr-metadata" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="14" value="metadata.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pr-metadata" target="repo-context" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" value="detection.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5238095238095238;entryY=0;entryDx=0;entryDy=0;" edge="1" source="repo-context" target="change-analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="16" value="change-summary.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="change-analysis" target="synthesis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="17" value="PR-&lt;N&gt;-ANALYSIS.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="synthesis" target="analysis-doc" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

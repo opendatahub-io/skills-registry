@@ -7,13 +7,18 @@ title: rh-ssg-accessibility
 
 # rh-ssg-accessibility
 
-Review Red Hat documentation for accessibility compliance (WCAG) — alt text for images/icons, color not as sole information carrier, no directional language ("left"/"right"/"above"), descriptive link text (no "click here"), table structure (no irregular headers, no blank header cells), and correct heading nesting. Use this skill whenever checking Red Hat docs for accessibility, screen reader compatibility, alt text, link text, or WCAG compliance. This skill takes precedence over ibm-sg-audience-and-medium for accessibility checks on Red Hat content.
-
+Red Hat Supplementary Style Guide review for accessibility (WCAG): alt text
+for images/icons, color not used as the sole information carrier, no
+directional language ("left"/"right"/"above"), descriptive link text (no
+"click here"), sound table structure (no irregular or blank headers), and
+correct heading nesting. Checklist-driven, no CLI arguments; composed by
+`docs-review-style`. Takes precedence over `ibm-sg-audience-and-medium` for
+accessibility checks on Red Hat content.
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
 
 ## Usage
 
 ```bash
-/rh-ssg-accessibility
+Check this Red Hat doc for accessibility and screen-reader issues
 ```

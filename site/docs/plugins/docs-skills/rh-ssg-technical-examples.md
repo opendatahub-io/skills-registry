@@ -7,13 +7,17 @@ title: rh-ssg-technical-examples
 
 # rh-ssg-technical-examples
 
-Review Red Hat documentation for SSG technical example compliance — root privilege commands, YAML ellipses, IP addresses (RFC 5737 for IPv4, RFC 3849 for IPv6), MAC addresses (RFC 7042), code block quality (accurate, copy-paste friendly), and syntax highlighting. Use this skill when checking Red Hat docs for code examples, IP/MAC addresses in examples, sudo usage, YAML formatting, or source language tags on code blocks. Takes precedence over ibm-sg-technical-elements for Red Hat content.
-
+Red Hat SSG review for technical examples: root-privilege commands, YAML
+ellipses, IP addresses (RFC 5737 for IPv4, RFC 3849 for IPv6), MAC addresses
+(RFC 7042), copy-paste-friendly code-block quality, and syntax highlighting /
+source-language tags. Checklist-driven, no CLI arguments; composed by
+`docs-review-style`. Takes precedence over `ibm-sg-technical-elements` for
+Red Hat content.
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
 
 ## Usage
 
 ```bash
-/rh-ssg-technical-examples
+Check code examples and IP/MAC addresses in this Red Hat doc
 ```

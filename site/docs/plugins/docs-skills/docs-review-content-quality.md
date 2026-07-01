@@ -7,13 +7,26 @@ title: docs-review-content-quality
 
 # docs-review-content-quality
 
-Review documentation for content quality — logical flow, user journey alignment, scannability, conciseness, fluff removal, and customer focus. Use this skill whenever someone asks to check if docs are well-organized, too wordy, have unnecessary content, lack logical flow, or need tightening. Also use for content quality peer reviews, minimalism checks, or when asked to "cut the fluff" or "make it more concise."
-
+Reviews documentation for content quality — logical flow, user-journey
+alignment, content organization, customer/action focus, scannability, and
+conciseness (fluff removal). A checklist-driven reviewer that deliberately
+does NOT duplicate language, grammar, formatting, or accessibility checks
+(those belong to the IBM/Red Hat style-guide skills). It flags unclear or
+missing content as required and shortening/reorganization opportunities as
+suggestions. Composed by `docs-review-style` and the pipeline's style-review
+step; also usable directly on a file.
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![docs-review-content-quality diagram](docs-review-content-quality.svg)
+</div>
 
 ## Usage
 
 ```bash
-/docs-review-content-quality
+Review this file for content quality
+Check the logical flow and conciseness of this procedure
 ```

@@ -1,0 +1,121 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-security-review**
+
+  - <ticket>
+  - --base-path <path>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Determine source files ---
+
+source-files: |md
+  **Determine Source Files**
+
+  - read writing/step-result.json
+  - update-in-place: files[] list
+  - else: glob drafts
+    (.adoc/.md/.dita/.ditamap)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Deterministic scan ---
+
+pii-scan: |md
+  **Run PII Scanner**
+
+  - pii_scanner.py scan <files>
+  - regex: IP, credential,
+    hostname, email, MAC
+  - scanner-results.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+validate-json: |md
+  **Validate JSON**
+
+  - jq empty scanner-results.json
+  - well-formed check
+  - exit 1 on failure
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Agent analysis (Layer 2) ---
+
+agent-checklist: |md
+  **Agent Analysis (Layer 2)**
+  LLM checklist
+
+  - docs-review-security SKILL.md
+  - apply checklist per file
+  - patterns regex can't catch
+  - category: agent-detected
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Outputs ---
+
+report: |md
+  **Write Report**
+
+  - review.md
+  - scanner + agent findings
+  - grouped by severity
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+sidecar: |md
+  **Write Sidecar**
+
+  - step-result.json
+  - counts by category
+  - critical / agent findings
+  - context_size_bytes
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> source-files
+source-files -> pii-scan: "file list / glob"
+pii-scan -> validate-json: "scanner-results.json"
+validate-json -> agent-checklist: "valid JSON"
+agent-checklist -> report: "findings"
+report -> sidecar: "counts"

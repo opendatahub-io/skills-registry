@@ -7,13 +7,17 @@ title: ibm-sg-legal-information
 
 # ibm-sg-legal-information
 
-Review documentation for IBM Style Guide legal issues — unsubstantiated claims, superlatives, trademarks (™/® usage), copyright notices, personal information (PII in examples), and republishing/attribution of external content. Use this skill when checking for legal risks, trademark compliance, PII exposure in examples, unsupported marketing claims, or content attribution issues. For Red Hat docs, the rh-ssg-legal-and-support skill takes precedence on Technology Preview and Developer Preview.
-
+IBM Style Guide review for legal issues: unsubstantiated claims and
+superlatives, trademark usage (™/®), copyright notices, personal information
+in examples, and republishing/attribution of external content. Checklist-
+driven, no CLI arguments; composed by `docs-review-style`. For Red Hat
+content, `rh-ssg-legal-and-support` takes precedence on Technology/Developer
+Preview.
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
 
 ## Usage
 
 ```bash
-/ibm-sg-legal-information
+Check this content for legal, trademark, and PII-in-examples issues
 ```

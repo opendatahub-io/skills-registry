@@ -1,0 +1,114 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-writing**
+
+  - <ticket>
+  - --base-path, --format
+  - --draft, --repo
+  - --repo-path, --fix-from
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Build args ---
+
+build-args: |md
+  **build_writing_args.sh**
+
+  - parse args, validate
+  - mode: update-in-place /
+    draft / fix
+  - format: adoc / mkdocs
+  - resolve input/output +
+    code & pr analysis dirs
+  - emit JSON
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Select prompt ---
+
+select-prompt: |md
+  **Select Prompt**
+
+  - key on mode × format
+  - substitute placeholders
+    (ticket, paths, flags)
+  - see agent-prompts.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Docs writer agent (LLM / agent) ---
+
+docs-writer: |md
+  **docs-writer agent**
+  subagent (isolated)
+
+  - read plan + analysis
+  - write documentation
+  - emit manifest (_index.md)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Verify ---
+
+verify: |md
+  **Verify Output**
+
+  - if verify_output:
+    check output_file exists
+  - fix mode: skipped
+    (edits in place)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Sidecar output ---
+
+sidecar: |md
+  **step-result.json**
+
+  - schema_version, step,
+    ticket, completed_at
+  - files[] from manifest
+  - mode, format
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> build-args
+build-args -> select-prompt: "mode × format\nJSON"
+select-prompt -> docs-writer: "selected prompt"
+docs-writer -> verify: "_index.md manifest"
+verify -> sidecar: "parse files[]"

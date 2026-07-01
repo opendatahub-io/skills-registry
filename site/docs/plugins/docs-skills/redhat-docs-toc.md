@@ -7,13 +7,36 @@ title: redhat-docs-toc
 
 # redhat-docs-toc
 
-Extract distinct article URLs from Red Hat documentation table of contents pages. Parse the TOC navigation to find all separate documentation articles. Useful for crawling and processing multi-page Red Hat documentation.
-
+Extracts distinct article URLs from a Red Hat documentation table-of-contents
+page. Downloads the page, locates the `<nav id="toc">` element, parses all
+links, filters out anchors/section-fragments/index pages, converts relative
+to absolute URLs, deduplicates, and returns an alphabetically sorted list
+(JSON or plain list). Pairs with `article-extractor` to crawl and download a
+whole documentation section. PEP 723 script (requests, BeautifulSoup).
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![redhat-docs-toc diagram](redhat-docs-toc.svg)
+</div>
+
+## Arguments
+
+```bash
+/redhat-docs-toc --url <url> [--output <file>] [--format json|list]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `--url` | :material-check: | - | Red Hat docs TOC/index URL to extract from. |
+| `--output` |  | - | Write to a file instead of stdout. |
+| `--format` |  | `json` | Output format. |
 
 ## Usage
 
 ```bash
-/redhat-docs-toc
+toc_extractor.py --url https://docs.redhat.com/.../guide/index
+toc_extractor.py --url https://docs.redhat.com/.../configure/index --format list
 ```

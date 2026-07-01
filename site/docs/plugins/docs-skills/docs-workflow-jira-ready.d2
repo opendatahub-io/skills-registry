@@ -1,0 +1,120 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-jira-ready**
+
+  - --jql <query>
+  - --base-path / --label
+  - --add-label
+  - --max-results / --dry-run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Query ---
+
+query: |md
+  **Query JIRA**
+
+  - jira_reader.py --jql
+  - fast summary mode
+  - --max-results (default 5)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+jira-reader: |md
+  **JIRA REST API**
+
+  - jira_reader.py
+  - JIRA_API_TOKEN / EMAIL
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Filter ---
+
+filter-tickets: |md
+  **Filter Tickets**
+
+  - drop existing progress
+    file in base-path
+  - drop docs-workflow-started
+    label (via JQL)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+ready-list: |md
+  **Ready List (JSON)**
+
+  - total_matched
+  - filtered_out
+  - ready[] ticket IDs
+  - filtered{} reasons
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Decision ---
+
+add-label: |md
+  **--add-label ?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+stamp: |md
+  **Stamp Tickets**
+
+  - add label to each
+    ready ticket in JIRA
+  - prevents re-processing
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> query
+query -> jira-reader: "--jql" {
+  style.stroke-dash: 4
+}
+query -> filter-tickets: "matched tickets"
+filter-tickets -> ready-list: "actionable IDs"
+ready-list -> add-label
+add-label -> stamp: "yes"
+add-label -> jira-reader: "yes\n(via REST API)" {
+  style.stroke-dash: 4
+}

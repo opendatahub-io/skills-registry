@@ -1,0 +1,244 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+orchestrator: |md
+  **/docs-orchestrator**
+
+  - <ticket> (required)
+  - --pr, --source-code-repo
+  - --mkdocs, --draft
+  - --create-merge-request
+  - reads docs-workflow.yaml step list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Requirements ---
+
+requirements: |md
+  **Requirements**
+
+  - two-pass fanout
+  - pass 1: discovery agent
+  - pass 2: one agent per req
+  - assembles requirements.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Code analysis (conditional) ---
+
+code-analysis: |md
+  **Code Analysis**
+
+  - wraps learn-code subagent
+  - module map, API surface
+  - ONBOARDING.md + registry
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+scope-req-audit: |md
+  **Scope-Req Audit**
+
+  - classify each requirement
+  - grounded / partial / absent
+  - one subagent per req
+  - guards vs hallucination
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+pr-analysis: |md
+  **PR Analysis**
+
+  - wraps understand-pull-request
+  - subagent, isolated context
+  - PR-ANALYSIS.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Planning (llm) ---
+
+planning: |md
+  **Planning**
+
+  - docs-planner agent
+  - synthesize inputs
+  - plan.md (module list)
+  - stop if 0 modules
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Writing (llm) ---
+
+writing: |md
+  **Writing**
+
+  - docs-writer agent
+  - adoc (default) or mkdocs
+  - update-in-place / draft
+  - docs + step manifest
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Technical review (llm) ---
+
+technical-review: |md
+  **Technical Review**
+
+  - claim validation vs code
+  - technical-reviewer agent
+  - HIGH / MEDIUM / LOW
+  - drives fix loop
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Style review ---
+
+style-review: |md
+  **Style Review**
+
+  - docs-reviewer agent
+  - Vale lint
+  - 18+ style-guide skills
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Security review ---
+
+security-review: |md
+  **Security Review**
+
+  - deterministic PII scan
+  - docs-review-security checklist
+  - agent-based analysis
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Quality gate (llm, conditional) ---
+
+quality-gate: |md
+  **Quality Gate**
+
+  - 2 Opus judges (parallel)
+  - doc_quality + intent_alignment
+  - extract AC gaps
+  - pass / fail
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Merge request (conditional) ---
+
+create-merge-request: |md
+  **Create Merge Request**
+
+  - confirmation gate
+  - feature branch if on main
+  - commit + push
+  - open MR (GitLab) / PR (GitHub)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Diagnostics (output) ---
+
+pipeline-diagnostics: |md
+  **Pipeline Diagnostics**
+
+  - run diagnostics script
+  - failures + bottlenecks
+  - context-pressure report
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+orchestrator -> requirements
+requirements -> code-analysis: "requirements.md\nwhen has_source_repo" {
+  style.stroke-dash: 3
+}
+code-analysis -> scope-req-audit: "ONBOARDING.md\nwhen has_source_repo" {
+  style.stroke-dash: 3
+}
+scope-req-audit -> pr-analysis: "when has_pr" {
+  style.stroke-dash: 3
+}
+pr-analysis -> planning: "PR-ANALYSIS.md"
+planning -> writing: "plan.md"
+writing -> technical-review: "docs + manifest"
+technical-review -> style-review: "confidence"
+style-review -> security-review
+security-review -> quality-gate: "when has_many_requirements" {
+  style.stroke-dash: 3
+}
+quality-gate -> create-merge-request: "when --create-merge-request" {
+  style.stroke-dash: 3
+}
+create-merge-request -> pipeline-diagnostics: "MR / PR URL"
+
+# --- Back-edges (fix loops) ---
+
+technical-review -> writing: "fix, ≤3×" {
+  style.stroke-dash: 3
+}
+quality-gate -> writing: "fix, ≤2×" {
+  style.stroke-dash: 3
+}

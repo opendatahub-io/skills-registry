@@ -1,0 +1,146 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **git_pr_reader.py**
+
+  - <subcommand> <url>
+  - read | files | comments
+  - diff | metadata | post
+  - reply | extract | detect
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Detect / setup ---
+
+detect: |md
+  **Detect & Prepare**
+
+  - auto-detect platform
+    (GitHub vs GitLab)
+  - load .env token
+  - apply file filters
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read operations ---
+
+read-ops: Read {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  read: |md
+    **read**
+
+    - PR/MR data + diffs
+    - smart file filtering
+  |
+  files: |md
+    **files**
+
+    - changed files
+    - status, line counts
+  |
+  comments: |md
+    **comments**
+
+    - review comments
+    - filter bots/resolved
+  |
+  diff: |md
+    **diff**
+
+    - unified diff
+  |
+  metadata: |md
+    **metadata**
+
+    - combined PR/MR info
+    - author, labels, commits
+  |
+}
+
+# --- Write operations ---
+
+write-ops: Post / Reply {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  post-comments: |md
+    **post**
+
+    - inline review comments
+    - duplicate detection
+    - PR-level fallback
+  |
+  reply: |md
+    **reply**
+
+    - reply to a thread
+    - GitHub / GitLab
+  |
+}
+
+# --- Locate operations ---
+
+locate-ops: Locate {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  extract: |md
+    **extract**
+
+    - diff line numbers
+    - validate comments
+  |
+  detect-pr: |md
+    **detect**
+
+    - PR/MR for branch
+    - gh CLI / GitLab API
+  |
+}
+
+# --- External APIs ---
+
+api: |md
+  **GitHub API / GitLab API**
+
+  - REST endpoints
+  - gh CLI
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> detect
+
+detect -> read-ops
+detect -> write-ops
+detect -> locate-ops
+
+read-ops -> api
+write-ops -> api
+locate-ops -> api

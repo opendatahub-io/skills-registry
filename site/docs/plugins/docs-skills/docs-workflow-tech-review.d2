@@ -1,0 +1,151 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-tech-review**
+
+  - <ticket>
+  - --base-path <path>
+  - --repo <path>... (optional)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Source files ---
+
+source-files: |md
+  **Determine Source Files**
+
+  - read writing/step-result.json
+  - update-in-place: file list
+  - else: drafts dir
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Decision ---
+
+has-analysis: |md
+  **code-analysis
+  available?**
+
+  - check ONBOARDING.md
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Claim validation (LLM agents) ---
+
+extract-claims: |md
+  **Extract Claims**
+  subagent
+
+  - read draft .adoc/.md
+  - functions, params, APIs
+  - claims-list.json
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+verify-claims: |md
+  **Verify Claims**
+  code-questioner agents
+  (one per doc file, parallel)
+
+  - read learn-code analysis
+  - supported / partially /
+    unsupported / no-evidence
+  - batch-verdict-*.json
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+merge-claims: |md
+  **Merge Verdicts**
+  merge agent
+
+  - fold batch verdicts
+  - fallback no-evidence
+  - claim-validation.json
+  - validation-summary.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Reviewer (LLM agent) ---
+
+reviewer: |md
+  **Technical Reviewer**
+  technical-reviewer agent
+
+  - review each doc file
+  - use claim evidence
+  - review.md
+  - confidence HIGH/MED/LOW
+  - severity counts
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Output ---
+
+sidecar: |md
+  **Write Sidecar**
+
+  - step-result.json
+  - confidence
+  - severity_counts
+  - code_grounded
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> source-files
+source-files -> has-analysis
+
+has-analysis -> extract-claims: "yes"
+has-analysis -> reviewer: "no" {
+  style.stroke-dash: 3
+}
+
+extract-claims -> verify-claims: "claims-list.json"
+verify-claims -> merge-claims: "batch verdicts"
+merge-claims -> reviewer: "validation-summary.md"
+
+reviewer -> sidecar: "review.md"

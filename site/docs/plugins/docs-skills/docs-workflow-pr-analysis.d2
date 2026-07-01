@@ -1,0 +1,130 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-pr-analysis**
+
+  - --pr <url>
+  - --repo <path>
+  - --ticket <TICKET>
+  - --output-dir <path>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate ---
+
+validate: |md
+  **Validate Inputs**
+
+  - PR/MR URL valid
+    (GitHub or GitLab)
+  - --repo dir exists
+  - create output-dir
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Check prior analysis ---
+
+check-analysis: |md
+  **Check code-analysis**
+
+  - look for prior
+    ONBOARDING.md
+  - richer module context
+    if present
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Dispatch (agent) ---
+
+dispatch: |md
+  **Dispatch Subagent**
+  Agent tool (isolated)
+
+  - build agent prompt
+  - keeps 570+ lines out
+    of main context
+  - +ONBOARDING.md context
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Wrapped skill (external) ---
+
+understand-pull-request: |md
+  **understand-pull-request**
+  wrapped skill
+
+  - fetch PR/MR diff
+  - per-module changes
+  - PR-<N>-ANALYSIS.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Copy results ---
+
+copy-results: |md
+  **Copy Results**
+
+  - find PR-<N>-ANALYSIS.md
+  - copy pr-context.json
+  - to output dir
+  - else: mark failed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Sidecar output ---
+
+sidecar: |md
+  **Write step-result.json**
+
+  - pr_number, pr_url
+  - modules_affected
+  - platform (github/gitlab)
+  - print summary
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> validate
+validate -> check-analysis: "inputs OK"
+check-analysis -> dispatch: "ONBOARDING.md\n(optional)"
+dispatch -> understand-pull-request: "PR URL --repo"
+understand-pull-request -> copy-results: "PR-<N>-ANALYSIS.md"
+copy-results -> sidecar: "output files"

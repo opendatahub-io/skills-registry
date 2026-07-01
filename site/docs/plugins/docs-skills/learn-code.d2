@@ -1,0 +1,161 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/learn-code**
+
+  - <repo-path-or-url>
+  - --exclude <glob>...
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight**
+
+  - resolve repo
+    (clone if URL)
+  - set BASE_PATH
+  - resume check
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Detection ---
+
+detection: |md
+  **Detection**
+
+  - detect_language.py
+  - build_module_map.py
+  - read config files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Registry (agent) ---
+
+registry: |md
+  **Module Registry**
+  repo-mapper agent
+
+  - dispatch agent
+  - per-module questions
+  - fallback if invalid
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Classify ---
+
+classify: |md
+  **Classify Tiers**
+  classify_modules.py
+
+  - full (<=3k lines)
+  - api-guided
+  - api-only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Module analysis (agent fan-out) ---
+
+module-analysis: |md
+  **Module Analysis**
+  module-analyzer agents
+
+  - fan out (batches <=10)
+  - parallel dispatch
+  - extract public API
+  - merge results
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Relationships (agent) ---
+
+relationships: |md
+  **Relationships**
+  relationship-analyzer agents
+
+  - build_dep_pairs.py
+  - priority pairs (<=20)
+  - lightweight rest
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Synthesis (agent) ---
+
+synthesis: |md
+  **Synthesis**
+  synthesis-writer agent
+
+  - build_synthesis_context.py
+  - compact to fit
+  - write ONBOARDING.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Output ---
+
+onboarding: |md
+  **Onboarding Guide**
+
+  - ONBOARDING.md
+  - dependency-graph.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> detection
+detection -> registry: "detection.json"
+registry -> classify: "registry.json"
+classify -> module-analysis: "tiers"
+module-analysis -> relationships: "summary.json"
+relationships -> synthesis: "relationships.json"
+synthesis -> onboarding: "ONBOARDING.md"

@@ -1,0 +1,45 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/docs-workflow-writing&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;ticket&gt;&lt;br&gt;--base-path, --format&lt;br&gt;--draft, --repo&lt;br&gt;--repo-path, --fix-from" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="30" width="160" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="build-args" value="&lt;b&gt;build_writing_args.sh&lt;/b&gt;&lt;br&gt;&lt;br&gt;parse args, validate&lt;br&gt;mode: update-in-place / draft / fix&lt;br&gt;format: adoc / mkdocs&lt;br&gt;resolve input/output + code &amp; pr analysis dirs&lt;br&gt;emit JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="30" width="210" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="select-prompt" value="&lt;b&gt;Select Prompt&lt;/b&gt;&lt;br&gt;&lt;br&gt;key on mode × format&lt;br&gt;substitute placeholders (ticket, paths, flags)&lt;br&gt;see agent-prompts.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="30" width="180" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="docs-writer" value="&lt;b&gt;docs-writer agent&lt;/b&gt;&lt;br&gt;subagent (isolated)&lt;br&gt;&lt;br&gt;read plan + analysis&lt;br&gt;write documentation&lt;br&gt;emit manifest (_index.md)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="270" width="180" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="verify" value="&lt;b&gt;Verify Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;if verify_output: check output_file exists&lt;br&gt;fix mode: skipped (edits in place)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="310" y="270" width="180" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="sidecar" value="&lt;b&gt;step-result.json&lt;/b&gt;&lt;br&gt;&lt;br&gt;schema_version, step, ticket, completed_at&lt;br&gt;files[] from manifest&lt;br&gt;mode, format" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="270" width="180" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="build-args" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="9" value="mode × format
+JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="build-args" target="select-prompt" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="10" value="selected prompt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="select-prompt" target="docs-writer" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="11" value="_index.md manifest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="docs-writer" target="verify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" value="parse files[]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="verify" target="sidecar" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
