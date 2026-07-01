@@ -1,0 +1,152 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **jira_writer.py**
+
+  - --issue KEY (repeatable)
+  - --release-note[-file]
+  - --status | --custom-field
+  - --labels-add/-remove
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Approval gate ---
+
+approval: |md
+  **Confirm change?**
+
+  - preview updates
+  - warn: modifies JIRA
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Operation dispatch ---
+
+op: |md
+  **Which write op?**
+
+  - inspect flags
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Operations ---
+
+release-note: |md
+  **Push Release Note**
+
+  - text string or file
+  - -> customfield_10783
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+status: |md
+  **Update Status**
+
+  - Proposed / Approved /
+    Rejected
+  - -> customfield_10807
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+custom-field: |md
+  **Set Custom Field**
+
+  - --custom-field ID
+  - --value content
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+labels: |md
+  **Manage Labels**
+
+  - add / remove / swap
+  - batch across issues
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External service ---
+
+jira-api: |md
+  **Atlassian REST API**
+
+  - redhat.atlassian.net
+  - rate-limited
+    (2 calls / 5s)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Output ---
+
+result: |md
+  **JSON Result**
+
+  - success
+  - updated_fields
+  - issue url
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> approval
+
+approval -> op: "approved"
+approval -> result: "declined" {
+  style.stroke-dash: 3
+}
+
+op -> release-note: "--release-note"
+op -> status: "--status"
+op -> custom-field: "--custom-field"
+op -> labels: "--labels-*"
+
+release-note -> jira-api
+status -> jira-api
+custom-field -> jira-api
+labels -> jira-api
+
+jira-api -> result

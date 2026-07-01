@@ -1,0 +1,55 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/docs-workflow-pipeline-diagnostics&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;ticket&gt;&lt;br&gt;--base-path &lt;path&gt;&lt;br&gt;[--ci-log &lt;path&gt;]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="150" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="run-diagnostics" value="&lt;b&gt;Run Diagnostics&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_diagnostics.py&lt;br&gt;progress file + step sidecars&lt;br&gt;diagnostics.json: summary, context_pressure, failures, bottlenecks, recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="290" y="140" width="210" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="drill-failures" value="&lt;b&gt;Drill Failures&lt;/b&gt;&lt;br&gt;&lt;br&gt;step_failed / missing_output&lt;br&gt;missing_sidecar&lt;br&gt;low_confidence&lt;br&gt;quality_gate_low / empty_plan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="40" width="200" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="ci-log" value="&lt;b&gt;CI Log Analysis&lt;/b&gt;&lt;br&gt;&lt;br&gt;grep errors, aborts&lt;br&gt;compaction markers&lt;br&gt;stop-hook blocks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="280" width="200" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="self-introspect" value="&lt;b&gt;Self-Introspection&lt;/b&gt;&lt;br&gt;&lt;br&gt;schema drift, null results&lt;br&gt;missing sidecars&lt;br&gt;stuck in_progress steps&lt;br&gt;leftover active-workflow marker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="820" y="140" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;report.md&lt;br&gt;run summary, failures&lt;br&gt;bottlenecks, context pressure&lt;br&gt;orchestrator health, recs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="145" width="200" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="sidecar" value="&lt;b&gt;Sidecar&lt;/b&gt;&lt;br&gt;&lt;br&gt;step-result.json&lt;br&gt;pipeline_status&lt;br&gt;context_pressure level+score&lt;br&gt;failure/bottleneck/issue counts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1350" y="145" width="210" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="run-diagnostics" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="10" value="diagnostics.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.11764705882352941;exitDx=0;exitDy=0;entryX=0;entryY=0.8571428571428571;entryDx=0;entryDy=0;" edge="1" source="run-diagnostics" target="drill-failures" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="11" value="when --ci-log" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1;exitY=0.9117647058823529;exitDx=0;exitDy=0;entryX=0;entryY=0.125;entryDx=0;entryDy=0;" edge="1" source="run-diagnostics" target="ci-log" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8571428571428571;exitDx=0;exitDy=0;entryX=0;entryY=0.13333333333333333;entryDx=0;entryDy=0;" edge="1" source="drill-failures" target="self-introspect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="ci-log" target="self-introspect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="self-introspect" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="sidecar" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -1,0 +1,62 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/docs-workflow-jira-ready&lt;/b&gt;&lt;br&gt;&lt;br&gt;--jql &lt;query&gt;&lt;br&gt;--base-path / --label&lt;br&gt;--add-label&lt;br&gt;--max-results / --dry-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="180" width="190" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="query" value="&lt;b&gt;Query JIRA&lt;/b&gt;&lt;br&gt;&lt;br&gt;jira_reader.py --jql&lt;br&gt;fast summary mode&lt;br&gt;--max-results (default 5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="195" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="filter-tickets" value="&lt;b&gt;Filter Tickets&lt;/b&gt;&lt;br&gt;&lt;br&gt;drop existing progress file in base-path&lt;br&gt;drop docs-workflow-started label (via JQL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="520" y="195" width="195" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="ready-list" value="&lt;b&gt;Ready List (JSON)&lt;/b&gt;&lt;br&gt;&lt;br&gt;total_matched&lt;br&gt;filtered_out&lt;br&gt;ready[] ticket IDs&lt;br&gt;filtered{} reasons" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="775" y="185" width="180" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="add-label" value="&lt;b&gt;--add-label ?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1015" y="205" width="150" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="stamp" value="&lt;b&gt;Stamp Tickets&lt;/b&gt;&lt;br&gt;&lt;br&gt;add label to each ready ticket in JIRA&lt;br&gt;prevents re-processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1225" y="195" width="190" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-reader" value="&lt;b&gt;JIRA REST API&lt;/b&gt;&lt;br&gt;&lt;br&gt;jira_reader.py&lt;br&gt;JIRA_API_TOKEN / EMAIL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="490" y="400" width="200" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="query" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="10" value="matched tickets" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="query" target="filter-tickets" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="11" value="actionable IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="filter-tickets" target="ready-list" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="ready-list" target="add-label" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="13" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="add-label" target="stamp" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="14" value="--jql" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="query" target="jira-reader" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="370.0" y="455.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" value="add tracking label" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="stamp" target="jira-reader" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1320" y="540"/>
+          <mxPoint x="590" y="540"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

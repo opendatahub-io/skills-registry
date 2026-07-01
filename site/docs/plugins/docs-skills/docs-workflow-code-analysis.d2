@@ -1,0 +1,133 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-code-analysis**
+
+  - --repo <path>
+  - --ticket <TICKET>
+  - --output-dir <path>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate ---
+
+validate: |md
+  **Validate Inputs**
+
+  - --repo is a git repo
+  - --output-dir parent exists
+  - create output dir if needed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Cache decision ---
+
+cached: |md
+  **learn-code output
+  already exists?**
+
+  - in-repo .agent_workspace
+  - or docs-repo .agent_workspace
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Dispatch subagent ---
+
+dispatch: |md
+  **Dispatch Subagent**
+  Agent tool (isolated)
+
+  - runs learn-code in subagent
+  - keeps 850+ lines out of
+    main context
+  - reports output location
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- learn-code external skill ---
+
+learn-code: |md
+  **learn-code**
+  (external skill)
+
+  - detect language, modules
+  - per-module summaries
+  - cross-module relationships
+  - synthesize ONBOARDING.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Copy results ---
+
+copy-results: |md
+  **Copy Results**
+
+  - ONBOARDING.md
+  - registry.json, detection.json
+  - summaries/, relationships/
+  - → --output-dir
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Sidecar output ---
+
+sidecar: |md
+  **step-result.json**
+
+  - module_count
+  - relationship_count
+  - languages_detected
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> validate
+validate -> cached
+
+cached -> copy-results: "yes (cached)"
+cached -> dispatch: "no"
+
+dispatch -> learn-code: "Skill: learn-code" {
+  style.stroke-dash: 3
+}
+learn-code -> copy-results: "ONBOARDING.md"
+
+copy-results -> sidecar

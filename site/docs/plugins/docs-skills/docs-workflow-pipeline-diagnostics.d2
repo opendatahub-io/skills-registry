@@ -1,0 +1,123 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-pipeline-diagnostics**
+
+  - <ticket>
+  - --base-path <path>
+  - [--ci-log <path>]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Diagnostics ---
+
+run-diagnostics: |md
+  **Run Diagnostics**
+
+  - pipeline_diagnostics.py
+  - progress file + step sidecars
+  - diagnostics.json: summary,
+    context_pressure, failures,
+    bottlenecks, recommendations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analysis phase ---
+
+drill-failures: |md
+  **Drill Failures**
+
+  - step_failed / missing_output
+  - missing_sidecar
+  - low_confidence
+  - quality_gate_low / empty_plan
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+ci-log: |md
+  **CI Log Analysis**
+
+  - grep errors, aborts
+  - compaction markers
+  - stop-hook blocks
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+self-introspect: |md
+  **Self-Introspection**
+
+  - schema drift, null results
+  - missing sidecars
+  - stuck in_progress steps
+  - leftover active-workflow marker
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+report: |md
+  **Report**
+
+  - report.md
+  - run summary, failures
+  - bottlenecks, context pressure
+  - orchestrator health, recs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+sidecar: |md
+  **Sidecar**
+
+  - step-result.json
+  - pipeline_status
+  - context_pressure level+score
+  - failure/bottleneck/issue counts
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> run-diagnostics
+run-diagnostics -> drill-failures: "diagnostics.json"
+run-diagnostics -> ci-log: "when --ci-log" {
+  style.stroke-dash: 3
+}
+drill-failures -> self-introspect
+ci-log -> self-introspect
+self-introspect -> report
+report -> sidecar

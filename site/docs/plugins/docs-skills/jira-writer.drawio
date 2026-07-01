@@ -1,0 +1,88 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;jira_writer.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;--issue KEY (repeatable)&lt;br&gt;--release-note[-file]&lt;br&gt;--status | --custom-field&lt;br&gt;--labels-add/-remove" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="250" width="160" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="approval" value="&lt;b&gt;Confirm change?&lt;/b&gt;&lt;br&gt;&lt;br&gt;preview updates&lt;br&gt;warn: modifies JIRA" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="250" y="250" width="160" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="op" value="&lt;b&gt;Which write op?&lt;/b&gt;&lt;br&gt;&lt;br&gt;inspect flags" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="470" y="255" width="150" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="release-note" value="&lt;b&gt;Push Release Note&lt;/b&gt;&lt;br&gt;&lt;br&gt;text string or file&lt;br&gt;&#8594; customfield_10783" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="680" y="30" width="170" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="status" value="&lt;b&gt;Update Status&lt;/b&gt;&lt;br&gt;&lt;br&gt;Proposed / Approved / Rejected&lt;br&gt;&#8594; customfield_10807" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="680" y="170" width="170" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="custom-field" value="&lt;b&gt;Set Custom Field&lt;/b&gt;&lt;br&gt;&lt;br&gt;--custom-field ID&lt;br&gt;--value content" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="680" y="310" width="170" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="labels" value="&lt;b&gt;Manage Labels&lt;/b&gt;&lt;br&gt;&lt;br&gt;add / remove / swap&lt;br&gt;batch across issues" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="680" y="450" width="170" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira-api" value="&lt;b&gt;Atlassian REST API&lt;/b&gt;&lt;br&gt;&lt;br&gt;redhat.atlassian.net&lt;br&gt;rate-limited (2 calls / 5s)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="920" y="240" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="result" value="&lt;b&gt;JSON Result&lt;/b&gt;&lt;br&gt;&lt;br&gt;success&lt;br&gt;updated_fields&lt;br&gt;issue url" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1130" y="245" width="130" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="approval" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" value="approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="approval" target="op" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="13" value="declined" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="approval" target="result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="330" y="15"/>
+          <mxPoint x="1195" y="15"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="14" value="--release-note" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="op" target="release-note" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="545.0" y="130.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" value="--status" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="op" target="status" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="16" value="--custom-field" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="op" target="custom-field" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="17" value="--labels-*" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="op" target="labels" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="release-note" target="jira-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.125;entryDx=0;entryDy=0;" edge="1" source="status" target="jira-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.7916666666666666;entryDx=0;entryDy=0;" edge="1" source="custom-field" target="jira-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="labels" target="jira-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="jira-api" target="result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

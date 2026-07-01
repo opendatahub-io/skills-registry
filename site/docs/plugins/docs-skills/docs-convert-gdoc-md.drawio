@@ -1,0 +1,76 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="google-api" value="&lt;b&gt;Google APIs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Drive / Docs&lt;br&gt;Slides / Sheets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="460.0" y="207.75" width="210" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="entry" value="&lt;b&gt;gdoc2md.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;[--comments]&lt;br&gt;[--include-resolved]&lt;br&gt;&lt;url&gt; [output]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="320" width="160" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="auth" value="&lt;b&gt;Authenticate&lt;/b&gt;&lt;br&gt;&lt;br&gt;gcloud CLI login&lt;br&gt;or Google ADC&lt;br&gt;GOOGLE_APPLICATION_CREDENTIALS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="250" y="320" width="180" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect-type" value="&lt;b&gt;Detect URL type&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="480" y="335" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="docs-md" value="&lt;b&gt;Docs to Markdown&lt;/b&gt;&lt;br&gt;&lt;br&gt;export .md&lt;br&gt;--comments to footnotes&lt;br&gt;--include-resolved" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="700" y="200" width="200" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="slides-md" value="&lt;b&gt;Slides to Markdown&lt;/b&gt;&lt;br&gt;&lt;br&gt;via PPTX export&lt;br&gt;titles, bullets&lt;br&gt;tables, notes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="700" y="360" width="200" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="sheets-csv" value="&lt;b&gt;Sheets to CSV&lt;/b&gt;&lt;br&gt;&lt;br&gt;export .csv&lt;br&gt;one file per sheet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="700" y="520" width="200" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="result" value="&lt;b&gt;Output file&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;id&gt;.md or .csv&lt;br&gt;read + present" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="960" y="360" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="auth" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="auth" target="detect-type" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" value="credentials" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="auth" target="google-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="340.0" y="257.75"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="13" value="/document/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="detect-type" target="docs-md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="14" value="/presentation/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect-type" target="slides-md" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" value="/spreadsheets/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect-type" target="sheets-csv" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="16" value="fetch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="docs-md" target="google-api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="670.0" y="265.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="docs-md" target="result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="slides-md" target="result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="sheets-csv" target="result" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

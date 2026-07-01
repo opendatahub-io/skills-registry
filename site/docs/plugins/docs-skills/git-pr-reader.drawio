@@ -1,0 +1,74 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;git_pr_reader.py&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;subcommand&gt; &lt;url&gt;&lt;br&gt;read | files | comments&lt;br&gt;diff | metadata | post&lt;br&gt;reply | extract | detect" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="400" width="160" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect" value="&lt;b&gt;Detect &amp; Prepare&lt;/b&gt;&lt;br&gt;&lt;br&gt;auto-detect platform (GitHub vs GitLab)&lt;br&gt;load .env token&lt;br&gt;apply file filters" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="250" y="405" width="170" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="api" value="&lt;b&gt;GitHub API / GitLab API&lt;/b&gt;&lt;br&gt;&lt;br&gt;REST endpoints&lt;br&gt;gh CLI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="744" y="400" width="200" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="group-1" value="&lt;b&gt;Operations&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="464" y="30" width="210" height="1074" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-ops" value="&lt;b&gt;Read&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="36" width="178" height="520" as="geometry"/>
+    </mxCell>
+    <mxCell id="read" value="&lt;b&gt;read&lt;/b&gt;&lt;br&gt;&lt;br&gt;PR/MR data + diffs&lt;br&gt;smart file filtering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="read-ops">
+      <mxGeometry x="14" y="34" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="files" value="&lt;b&gt;files&lt;/b&gt;&lt;br&gt;&lt;br&gt;changed files&lt;br&gt;status, line counts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="read-ops">
+      <mxGeometry x="14" y="132" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="comments" value="&lt;b&gt;comments&lt;/b&gt;&lt;br&gt;&lt;br&gt;review comments&lt;br&gt;filter bots/resolved" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="read-ops">
+      <mxGeometry x="14" y="230" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="diff" value="&lt;b&gt;diff&lt;/b&gt;&lt;br&gt;&lt;br&gt;unified diff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="read-ops">
+      <mxGeometry x="14" y="328" width="150" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="metadata" value="&lt;b&gt;metadata&lt;/b&gt;&lt;br&gt;&lt;br&gt;combined PR/MR info&lt;br&gt;author, labels, commits" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="read-ops">
+      <mxGeometry x="14" y="416" width="150" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="write-ops" value="&lt;b&gt;Post / Reply&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="576" width="178" height="236" as="geometry"/>
+    </mxCell>
+    <mxCell id="post-comments" value="&lt;b&gt;post&lt;/b&gt;&lt;br&gt;&lt;br&gt;inline review comments&lt;br&gt;duplicate detection&lt;br&gt;PR-level fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="write-ops">
+      <mxGeometry x="14" y="34" width="150" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="reply" value="&lt;b&gt;reply&lt;/b&gt;&lt;br&gt;&lt;br&gt;reply to a thread&lt;br&gt;GitHub / GitLab" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="write-ops">
+      <mxGeometry x="14" y="142" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="locate-ops" value="&lt;b&gt;Locate&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="832" width="178" height="226" as="geometry"/>
+    </mxCell>
+    <mxCell id="extract" value="&lt;b&gt;extract&lt;/b&gt;&lt;br&gt;&lt;br&gt;diff line numbers&lt;br&gt;validate comments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="locate-ops">
+      <mxGeometry x="14" y="34" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="detect-pr" value="&lt;b&gt;detect&lt;/b&gt;&lt;br&gt;&lt;br&gt;PR/MR for branch&lt;br&gt;gh CLI / GitLab API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="locate-ops">
+      <mxGeometry x="14" y="132" width="150" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="detect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.7865384615384615;entryDx=0;entryDy=0;" edge="1" source="detect" target="read-ops" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect" target="write-ops" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="detect" target="locate-ops" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_group-1_api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;exitX=1;exitY=0.40502793296089384;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="group-1" target="api" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

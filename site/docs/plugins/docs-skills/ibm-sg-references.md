@@ -7,13 +7,16 @@ title: ibm-sg-references
 
 # ibm-sg-references
 
-Review documentation for IBM Style Guide reference issues — citations, footnotes, geographic locations, product and service names (official capitalization, trademark usage), product version formatting ("version 4.12 and later" not "recent versions"), and name/title conventions. Use this skill when checking product names, version references, citation formatting, geographic references, or footnote usage in documentation.
-
+IBM Style Guide review for references: citations and footnotes, geographic
+locations, product and service names (official capitalization, trademark
+usage), product-version formatting ("version 4.12 and later", not "recent
+versions"), and name/title conventions. Checklist-driven, no CLI arguments;
+composed by `docs-review-style`.
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
 
 ## Usage
 
 ```bash
-/ibm-sg-references
+Check product names and version references in this doc
 ```

@@ -7,13 +7,18 @@ title: ibm-sg-audience-and-medium
 
 # ibm-sg-audience-and-medium
 
-Review documentation for IBM Style Guide audience and medium issues — accessibility (alt text, color, headings), global audience readiness (idioms, date formats, cultural references), tone (active voice, no "please" or "simply"), AI assistant style, marketing claims, and mobile/video content. Use this skill when reviewing docs for accessibility, internationalization, tone problems, or audience appropriateness. For Red Hat docs, prefer the rh-ssg-accessibility skill for accessibility-specific checks.
-
+IBM Style Guide review for audience and medium: accessibility (alt text,
+color not sole carrier, heading structure), global-audience readiness (idioms,
+date formats, cultural references), tone (active voice, no "please"/"simply"),
+AI-assistant style, marketing-claim avoidance, and mobile/video content. A
+checklist-driven reviewer with no CLI arguments — invoked on a file or diff,
+or composed by `docs-review-style`. For Red Hat content, prefer
+`rh-ssg-accessibility` for accessibility-specific checks.
 
 **Plugin**: [docs-skills](index.md) | **:material-check: User-invocable**
 
 ## Usage
 
 ```bash
-/ibm-sg-audience-and-medium
+Review this file for IBM audience and medium issues
 ```

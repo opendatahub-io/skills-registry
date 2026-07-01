@@ -1,0 +1,113 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-workflow-style-review**
+
+  - <ticket>
+  - --base-path <path>
+  - --format <adoc|mkdocs>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Source files ---
+
+source-files: |md
+  **Determine Source Files**
+
+  - read writing/step-result.json
+  - update-in-place: file list
+  - else: drafts dir
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Reviewer (LLM agent) ---
+
+docs-reviewer: |md
+  **Docs Reviewer**
+  docs-reviewer agent
+
+  - Vale lint once per file
+  - fix obvious errors
+  - apply 18+ review skills
+  - edit files in place
+  - write review.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Review skills (external) ---
+
+review-skills: |md
+  **Review Skills**
+
+  - lint-with-vale (CLI)
+  - modular-docs, content-quality
+  - 8x ibm-sg-*
+  - 8x rh-ssg-*
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Verify ---
+
+verify: |md
+  **Verify Output**
+
+  - check review.md exists
+  - at style-review/review.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Output ---
+
+sidecar: |md
+  **Write Sidecar**
+
+  - step-result.json
+  - step, ticket
+  - completed_at
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> source-files
+source-files -> docs-reviewer: "file list / drafts dir"
+
+docs-reviewer -> review-skills: "invoke per file" {
+  style.stroke-dash: 3
+}
+
+docs-reviewer -> verify: "review.md"
+verify -> sidecar

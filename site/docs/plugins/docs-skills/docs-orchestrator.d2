@@ -1,0 +1,187 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/docs-orchestrator**
+
+  - <ticket> (required)
+  - --workflow, --pr
+  - --source-code-repo
+  - --create-merge-request
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-flight ---
+
+preflight: |md
+  **Pre-flight**
+
+  - setup-hooks.sh
+  - install Stop hook
+    (safe to re-run)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Resolve source ---
+
+resolve-source: |md
+  **Resolve Source**
+  resolve_source.py
+
+  - CLI flag → source.yaml
+  - → PR → discovered_repos
+  - → none (defer)
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Load step list ---
+
+load-steps: |md
+  **Load Step List**
+
+  - read workflow YAML
+  - evaluate `when` conditions
+  - validate names + deps
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Progress state ---
+
+progress: |md
+  **Progress State**
+
+  - create/read progress JSON
+  - source of truth
+  - re-read after each step
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Resume decision ---
+
+resume: |md
+  **Existing progress?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Run step ---
+
+run-step: |md
+  **Run Step**
+  Skill tool
+
+  - invoke each step skill
+  - verify output folder
+  - read step-result.json
+  - post-process
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Tech review loop ---
+
+tech-review: |md
+  **Tech confidence HIGH?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Quality loop ---
+
+quality: |md
+  **intent_alignment ≥ 4?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Commit gate ---
+
+commit-gate: |md
+  **Confirm commit?**
+  before create-merge-request
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Completion ---
+
+completion: |md
+  **Completion**
+
+  - status → completed
+  - display summary
+  - delete .active-workflow
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> preflight
+preflight -> resolve-source
+resolve-source -> load-steps
+load-steps -> progress
+progress -> resume
+
+resume -> run-step: "new: step 1"
+resume -> run-step: "resume: first pending/failed"
+
+run-step -> tech-review: "review step"
+tech-review -> quality: "HIGH"
+quality -> commit-gate: "≥ 4"
+commit-gate -> completion: "confirmed / no MR"
+
+# --- Loops (dashed back-edges) ---
+
+tech-review -> run-step: "fix ≤3×" {
+  style.stroke-dash: 3
+}
+quality -> run-step: "fix ≤2×" {
+  style.stroke-dash: 3
+}

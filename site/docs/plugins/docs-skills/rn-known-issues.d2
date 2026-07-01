@@ -1,0 +1,163 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **rn-known-issues** <fix-version>
+
+  - $1 target fix version
+  - --project (RHOAIENG)
+  - --previous (auto-inferred)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Version inference ---
+
+infer-version: |md
+  **Infer Previous GA**
+
+  - z-stream X.Y.Z -> X.Y
+  - GA X.Y -> X.(Y-1)
+  - EA X.Y.EAn -> X.Y
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Queries container ---
+
+queries: 4 JQL Queries {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  q1: |md
+    **Q1 - Target open**
+
+    - new known issues
+    - statusCategory != Done
+    - document these
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+  q2: |md
+    **Q2 - Target resolved**
+
+    - fixed same cycle
+    - statusCategory = Done
+    - maybe omit
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+  q3: |md
+    **Q3 - Prev resolved**
+
+    - previous fixVersion
+    - statusCategory = Done
+    - move to Fixed
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+  q4: |md
+    **Q4 - Prev open**
+
+    - previous fixVersion
+    - statusCategory != Done
+    - carry forward
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- External Jira ---
+
+jira: |md
+  **Atlassian MCP**
+
+  - searchJiraIssuesUsingJql
+  - cloudId redhat.atlassian.net
+  - fallback: jira-reader
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- RN text check ---
+
+rn-text-check: |md
+  **Release Note Text Check**
+
+  - customfield_10783 (ADF)
+  - real content vs skeleton
+  - Cause/Consequence/
+    Workaround/Result
+  - flag empty RN text
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Report ---
+
+report: |md
+  **Categorized Report**
+
+  - document (still open)
+  - move to Fixed Issues
+  - carry-forward
+  - RN text missing: keys
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> infer-version
+infer-version -> queries: "target + previous"
+
+queries.q1 -> jira: "JQL" {
+  style.stroke-dash: 3
+}
+queries.q2 -> jira {
+  style.stroke-dash: 3
+}
+queries.q3 -> jira {
+  style.stroke-dash: 3
+}
+queries.q4 -> jira {
+  style.stroke-dash: 3
+}
+
+queries -> rn-text-check: "issues + fields"
+rn-text-check -> report
