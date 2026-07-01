@@ -27,8 +27,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r site/requirements.txt
 
-      - name: Generate site content with remote skill discovery
-        run: python3 scripts/generate_site.py --fetch-remote-skills
+      - name: Generate site content
+        run: python3 scripts/generate_site.py
 
       - name: Build site
         working-directory: site
