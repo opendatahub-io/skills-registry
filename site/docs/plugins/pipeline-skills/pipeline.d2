@@ -1,0 +1,99 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Shared workspace (external data store) ---
+
+workspace: |md
+  **/workspace/**
+  shared workspace
+
+  - _context/ job manifest,
+    trace logs, errors.txt
+  - pipeline-context.json
+  - _repos/ shallow clones
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Skills (pipeline nodes) ---
+
+grouping: |md
+  **/pipeline-grouping**
+
+  - read job manifest + errors.txt
+  - group jobs by shared root cause
+  - dedup vs open Jira tickets
+  - finalize grouping.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rca: |md
+  **/pipeline-rca**
+  one task per error group
+
+  - read trace logs + errors
+  - investigate root cause
+  - verify diagnosis
+  - emit finding.json + sections
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External services ---
+
+jira: |md
+  **Jira**
+  redhat.atlassian.net
+
+  - recent-tickets.json
+  - dedup existing failures
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+gitlab: |md
+  **GitLab API**
+  via glab
+
+  - files at commit SHA
+  - commit history
+  - job artifacts
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+workspace -> grouping: "manifest + errors.txt"
+grouping -> rca: "grouping.json\n(one group per RCA)"
+rca -> workspace: "finding.json + sections/"
+
+grouping -> jira: "dedup" {
+  style.stroke-dash: 3
+}
+rca -> gitlab: "investigate" {
+  style.stroke-dash: 3
+}
