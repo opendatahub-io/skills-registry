@@ -10,12 +10,9 @@ Usage:
 """
 
 import argparse
-import json
 import os
 import shutil
 import sys
-import urllib.request
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import yaml
@@ -424,7 +421,6 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
 
     # Skills table
     if skills:
-        is_discovered = plugin.get("_discovered", False)
         lines.append("## Skills")
         lines.append("")
         lines.append("| Skill | Description | Invocable |")
@@ -434,13 +430,7 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
             sdesc = " ".join(skill.get("description", "").split())
             invocable = skill.get("user-invocable", True)
             badge = ":material-check:" if invocable else ":material-close: internal"
-            if is_discovered and repo:
-                ref = plugin.get("source", {}).get("ref", "main")
-                skill_path = skill.get("path", sname)
-                link = f"https://github.com/{repo}/tree/{ref}/{skill_path}"
-                lines.append(f"| [`/{sname}`]({link}) | {sdesc} | {badge} |")
-            else:
-                lines.append(f"| [`/{sname}`]({sname}.md) | {sdesc} | {badge} |")
+            lines.append(f"| [`/{sname}`]({sname}.md) | {sdesc} | {badge} |")
         lines.append("")
 
     # Agents table
@@ -780,93 +770,6 @@ def load_enrichment(plugin_dir: Path) -> dict | None:
     return None
 
 
-def _parse_frontmatter(content: str) -> dict:
-    """Parse YAML frontmatter from a SKILL.md file."""
-    content = content.lstrip()
-    if not content.startswith("---"):
-        return {}
-    end = content.find("\n---", 3)
-    if end == -1:
-        return {}
-    try:
-        return yaml.safe_load(content[3:end]) or {}
-    except yaml.YAMLError:
-        return {}
-
-
-def _github_get(url: str) -> bytes:
-    """HTTP GET with optional GitHub token auth."""
-    headers = {}
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return resp.read()
-
-
-def discover_remote_skills(repo: str, ref: str = "main") -> list[dict]:
-    """Discover skills from a GitHub repo by fetching SKILL.md frontmatter."""
-    tree_url = f"https://api.github.com/repos/{repo}/git/trees/{ref}?recursive=1"
-    tree_data = json.loads(_github_get(tree_url))
-
-    if tree_data.get("truncated"):
-        print(f"    Warning: tree for {repo} was truncated, some skills may be missed")
-
-    skill_entries = []
-    for item in tree_data.get("tree", []):
-        if item["type"] == "blob" and item["path"].endswith("/SKILL.md"):
-            parent = item["path"].rsplit("/", 1)[0]
-            skill_name = parent.rsplit("/", 1)[-1]
-            skill_entries.append((skill_name, parent, item["path"]))
-
-    if not skill_entries:
-        return []
-
-    def fetch_one(entry):
-        skill_name, parent_path, full_path = entry
-        raw_url = f"https://raw.githubusercontent.com/{repo}/{ref}/{full_path}"
-        try:
-            content = _github_get(raw_url).decode("utf-8", errors="replace")
-            fm = _parse_frontmatter(content)
-            return {
-                "name": fm.get("name", skill_name),
-                "description": fm.get("description", ""),
-                "user-invocable": fm.get("user-invocable", True),
-                "path": parent_path,
-            }
-        except Exception:
-            return {
-                "name": skill_name,
-                "description": "",
-                "user-invocable": True,
-                "path": parent_path,
-            }
-
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        skills = list(pool.map(fetch_one, sorted(skill_entries)))
-
-    return skills
-
-
-def load_discovered(plugin_dir: Path) -> list[dict] | None:
-    """Load cached discovered skills from _discovered.yaml."""
-    path = plugin_dir / "_discovered.yaml"
-    if path.exists():
-        with open(path) as f:
-            data = yaml.safe_load(f)
-        if isinstance(data, list):
-            return data
-    return None
-
-
-def save_discovered(plugin_dir: Path, skills: list[dict]) -> None:
-    """Write discovered skills cache."""
-    path = plugin_dir / "_discovered.yaml"
-    with open(path, "w") as f:
-        yaml.dump(skills, f, default_flow_style=False, sort_keys=False)
-
-
 def generate_mkdocs_yml(registry: dict, categories: dict,
                         cat_plugins: dict[str, list]) -> str:
     """Generate complete mkdocs.yml with dynamic nav."""
@@ -884,10 +787,9 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
         skills = plugin.get("skills", [])
         nav_lines.append(f"    - {name}:")
         nav_lines.append(f"      - plugins/{name}/index.md")
-        if not plugin.get("_discovered"):
-            for skill in skills:
-                sname = skill["name"]
-                nav_lines.append(f"      - {sname}: plugins/{name}/{sname}.md")
+        for skill in skills:
+            sname = skill["name"]
+            nav_lines.append(f"      - {sname}: plugins/{name}/{sname}.md")
 
     # Categories section — with index page
     nav_lines.append("  - Categories:")
@@ -921,37 +823,21 @@ def generate_llms_txt(registry: dict, site_url: str) -> str:
     lines.append("")
     for p in plugins:
         pname = p["name"]
-        is_discovered = p.get("_discovered", False)
-        repo = p.get("source", {}).get("repo", "")
-        ref = p.get("source", {}).get("ref", "main")
         for s in p.get("skills", []):
             sname = s["name"]
             sdesc = s.get("description", "").strip()
             if s.get("user-invocable", True):
-                if is_discovered and repo:
-                    skill_path = s.get("path", sname)
-                    link = f"https://github.com/{repo}/tree/{ref}/{skill_path}"
-                else:
-                    link = f"{site_url}/plugins/{pname}/{sname}/"
-                lines.append(f"- [{sname}]({link}): {sdesc}")
+                lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc}")
     lines.append("")
     lines.append("## Optional")
     lines.append("")
     for p in plugins:
         pname = p["name"]
-        is_discovered = p.get("_discovered", False)
-        repo = p.get("source", {}).get("repo", "")
-        ref = p.get("source", {}).get("ref", "main")
         for s in p.get("skills", []):
             if not s.get("user-invocable", True):
                 sname = s["name"]
                 sdesc = s.get("description", "").strip()
-                if is_discovered and repo:
-                    skill_path = s.get("path", sname)
-                    link = f"https://github.com/{repo}/tree/{ref}/{skill_path}"
-                else:
-                    link = f"{site_url}/plugins/{pname}/{sname}/"
-                lines.append(f"- [{sname}]({link}): {sdesc} (internal)")
+                lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc} (internal)")
     lines.append("")
     return "\n".join(lines)
 
@@ -1029,37 +915,9 @@ def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
     return "\n".join(lines)
 
 
-def generate_site(registry: dict, output_dir: Path, *,
-                  fetch_remote: bool = False):
+def generate_site(registry: dict, output_dir: Path):
     docs = output_dir / "docs"
     categories = registry.get("categories", {})
-    cat_plugins = build_category_plugins(registry)
-
-    # Auto-discover skills before generating any pages (counts need to be accurate)
-    for plugin in registry.get("plugins", []):
-        if not plugin.get("skills"):
-            name = plugin["name"]
-            plugin_dir = docs / "plugins" / name
-            plugin_dir.mkdir(parents=True, exist_ok=True)
-            repo = plugin.get("source", {}).get("repo", "")
-            ref = plugin.get("source", {}).get("ref", "main")
-            discovered = load_discovered(plugin_dir)
-            if fetch_remote and repo:
-                print(f"  Discovering skills for {name} from {repo}...")
-                try:
-                    discovered = discover_remote_skills(repo, ref)
-                    save_discovered(plugin_dir, discovered)
-                    print(f"    Found {len(discovered)} skills")
-                except Exception as e:
-                    if discovered:
-                        print(f"    Warning: {e}; using cached discovery data")
-                    else:
-                        raise
-            if discovered:
-                plugin["skills"] = discovered
-                plugin["_discovered"] = True
-
-    # Rebuild category groups after discovery so counts are accurate
     cat_plugins = build_category_plugins(registry)
 
     # Clean generated content
@@ -1087,8 +945,6 @@ def generate_site(registry: dict, output_dir: Path, *,
             generate_plugin_page(plugin, registry, enrichment, plugin_dir))
 
         for skill in plugin.get("skills", []):
-            if plugin.get("_discovered"):
-                continue
             sname = skill["name"]
             (plugin_dir / f"{sname}.md").write_text(
                 generate_skill_page(skill, plugin, enrichment, plugin_dir))
@@ -1122,14 +978,11 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--registry", default="registry.yaml")
     parser.add_argument("--output-dir", default="site")
-    parser.add_argument("--fetch-remote-skills", action="store_true",
-                        help="Discover skills from source repos via GitHub API")
     args = parser.parse_args()
 
     registry = load_registry(args.registry)
     output_dir = Path(args.output_dir)
-    generate_site(registry, output_dir,
-                  fetch_remote=args.fetch_remote_skills)
+    generate_site(registry, output_dir)
 
     plugins = registry.get("plugins", [])
     skills = sum(len(p.get("skills", [])) for p in plugins)

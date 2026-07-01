@@ -97,10 +97,10 @@ jobs:
              echo "Run: python3 scripts/generate_catalog.py" && exit 1)
 
       - name: Generate site content
-        run: python3 scripts/generate_site.py --fetch-remote-skills
+        run: python3 scripts/generate_site.py
 
       - name: Check site content is in sync
         run: |
           git diff --exit-code site/docs/ site/mkdocs.yml || \
             (echo "ERROR: site content is out of sync with registry.yaml." && \
-             echo "Run: python3 scripts/generate_site.py --fetch-remote-skills" && exit 1)
+             echo "Run: python3 scripts/generate_site.py" && exit 1)
