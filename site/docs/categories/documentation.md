@@ -21,4 +21,4 @@ Autonomous knowledge management skills for keeping AI context files (CLAUDE.md, 
 
 Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
 
-**49 skills** - v0.3.0
+**1 skills** - v0.3.0

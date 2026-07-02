@@ -25,7 +25,7 @@ title: Plugins
 | [pipeline-skills](pipeline-skills/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
 | [code-review-skills](code-review-skills/index.md) | Code Quality | 1 | v0.1.0 |
 | [spike-executor](spike-executor/index.md) | Product Planning | 1 | v0.2.0 |
-| [docs-skills](docs-skills/index.md) | Documentation | 49 | v0.3.0 |
+| [docs-skills](docs-skills/index.md) | Documentation | 1 | v0.3.0 |
 
 ## Generic
 
