@@ -1,5 +1,6 @@
 import argparse
 import importlib.util
+import subprocess
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -455,6 +456,45 @@ class RemotePluginValidationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.validate_registry = get_validate_registry_module()
+
+    @mock.patch("subprocess.run")
+    def test_check_sources_uses_ls_remote_for_git_type(self, run_mock):
+        run_mock.return_value = subprocess.CompletedProcess(
+            ["git", "ls-remote"], 0, stdout="", stderr=""
+        )
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "https://gitlab.example.com/team/plugin.git",
+        }
+
+        errors = self.validate_registry.check_sources(registry)
+
+        self.assertEqual([], errors)
+        run_mock.assert_called_once()
+        cmd = run_mock.call_args[0][0]
+        self.assertEqual(cmd[0], "git")
+        self.assertIn("ls-remote", cmd)
+
+    @mock.patch("subprocess.run")
+    def test_validate_remote_plugin_accepts_git_type(self, run_mock):
+        run_mock.return_value = subprocess.CompletedProcess(
+            ["git", "clone"], 0, stdout="", stderr=""
+        )
+        plugin = {
+            "name": "git-plugin",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.example.com/team/plugin.git",
+                "ref": "main",
+            },
+        }
+
+        errors = self.validate_registry.validate_remote_plugin(plugin)
+
+        self.assertTrue(run_mock.called)
+        cmd = run_mock.call_args[0][0]
+        self.assertIn("https://gitlab.example.com/team/plugin.git", cmd)
 
     @mock.patch("subprocess.run")
     def test_validate_remote_plugin_rejects_invalid_ref_before_git(self, run_mock):

@@ -251,23 +251,40 @@ def check_skill_contracts(registry: dict, required_skills: set[SkillKey]) -> lis
 
 
 def check_sources(registry: dict) -> list[str]:
-    """Check that GitHub repos are accessible via the GitHub API."""
+    """Check that source repos are accessible."""
+    from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url
+
     errors = []
     for plugin in registry.get("plugins", []):
         source = plugin.get("source")
-        if not source or source.get("type") != "github":
+        if not source:
             continue
-        repo = source.get("repo")
-        if not repo:
+        source_type = source.get("type")
+        if source_type not in GIT_CLONE_TYPES:
             continue
-        result = subprocess.run(
-            ["gh", "api", f"repos/{repo}", "--silent"],
-            capture_output=True, text=True,
-        )
-        if result.returncode != 0:
-            errors.append(f"  Plugin '{plugin['name']}': repo '{repo}' not accessible")
+        name = plugin.get("name", "<unknown>")
+        if source_type == "github":
+            repo = source.get("repo")
+            if not repo:
+                continue
+            result = subprocess.run(
+                ["gh", "api", f"repos/{repo}", "--silent"],
+                capture_output=True, text=True,
+            )
         else:
-            print(f"  OK: {repo}")
+            try:
+                clone_url = source_clone_url(source)
+            except (ValueError, KeyError):
+                errors.append(f"  Plugin '{name}': invalid source configuration")
+                continue
+            result = subprocess.run(
+                ["git", "ls-remote", "--exit-code", "--quiet", clone_url],
+                capture_output=True, text=True,
+            )
+        if result.returncode != 0:
+            errors.append(f"  Plugin '{name}': source not accessible")
+        else:
+            print(f"  OK: {name}")
     return errors
 
 
@@ -287,12 +304,13 @@ def diff_plugins(registry: dict, base_ref: str) -> list[str]:
 
 def validate_remote_plugin(plugin: dict) -> list[str]:
     """Clone a plugin repo and validate its structure."""
+    from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url
+
     errors = []
     source = plugin.get("source")
-    if not source or source.get("type") != "github":
+    if not source or source.get("type") not in GIT_CLONE_TYPES:
         return errors
 
-    repo = source["repo"]
     try:
         ref = normalize_git_ref(source.get("ref", "main"))
     except ValueError:
@@ -301,7 +319,11 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
     strict = plugin.get("strict", True)
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        clone_url = f"https://github.com/{repo}.git"
+        try:
+            clone_url = source_clone_url(source)
+        except (ValueError, KeyError):
+            errors.append(f"  Plugin '{plugin['name']}': invalid source configuration")
+            return errors
         result = subprocess.run(
             ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, tmpdir],
             capture_output=True, text=True,
