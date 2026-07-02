@@ -31,6 +31,20 @@ class CatalogContractRenderingTests(unittest.TestCase):
         self.assertNotIn("| Skill | Description | Functions | Metrics |", content)
 
 
+class CatalogGitSourceTests(unittest.TestCase):
+    def test_catalog_renders_git_source_browse_link(self):
+        registry = build_registry_with_contract()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "https://gitlab.example.com/team/plugin.git",
+        }
+
+        content = generate_catalog.generate_catalog(registry)
+
+        self.assertIn("[gitlab.example.com/team/plugin](https://gitlab.example.com/team/plugin)", content)
+        self.assertNotIn("github.com", content.split("Quick Start")[1])
+
+
 class CatalogMalformedContractRenderingTests(unittest.TestCase):
     def test_catalog_skips_non_dict_contract_for_columns(self):
         registry = build_registry_with_contract()
