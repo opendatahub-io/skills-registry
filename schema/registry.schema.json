@@ -389,17 +389,22 @@
     },
     "source": {
       "type": "object",
-      "required": ["type", "repo"],
+      "required": ["type"],
       "additionalProperties": false,
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["github", "git-subdir", "npm", "local"],
+          "enum": ["github", "git", "git-subdir", "npm", "local"],
           "description": "Source type"
         },
         "repo": {
           "type": "string",
-          "description": "Repository identifier (e.g., owner/repo)"
+          "description": "Repository identifier (e.g., owner/repo) — required for github type"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Clone URL — required for git type"
         },
         "ref": {
           "type": "string",
@@ -414,7 +419,17 @@
           "type": "string",
           "description": "Subdirectory path (for git-subdir type)"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "github" } }, "required": ["type"] },
+          "then": { "required": ["repo"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "git" } }, "required": ["type"] },
+          "then": { "required": ["url"] }
+        }
+      ]
     },
     "skill": {
       "type": "object",
