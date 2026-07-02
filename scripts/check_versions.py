@@ -16,9 +16,13 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 from urllib.parse import quote
 
 import yaml
+
+from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url, normalize_git_ref
 
 
 def load_registry(path: str = "registry.yaml") -> dict:
@@ -62,6 +66,26 @@ def fetch_remote_version(repo: str, ref: str = "main") -> str | None:
         return None
 
 
+def fetch_remote_version_via_clone(clone_url: str, ref: str = "main") -> str | None:
+    """Fetch version from remote plugin.json via shallow clone."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        result = subprocess.run(
+            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, tmpdir],
+            capture_output=True, text=True,
+            timeout=120,
+        )
+        if result.returncode != 0:
+            return None
+        plugin_json = Path(tmpdir) / ".claude-plugin" / "plugin.json"
+        if not plugin_json.exists():
+            return None
+        try:
+            data = json.loads(plugin_json.read_text())
+            return data.get("version")
+        except (json.JSONDecodeError, OSError):
+            return None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -75,21 +99,30 @@ def main():
 
     for plugin in registry.get("plugins", []):
         source = plugin.get("source") or {}
-        if source.get("type") != "github":
+        source_type = source.get("type")
+        if source_type not in GIT_CLONE_TYPES:
             continue
 
         # Only check strict-mode plugins (they have their own plugin.json)
         if plugin.get("strict", True) is False:
             continue
 
+        name = plugin.get("name", "<unknown>")
         repo = source.get("repo")
         if not repo:
-            print(f"  SKIP: {plugin.get('name', '<unknown>')} (missing source.repo)")
+            print(f"  SKIP: {name} (missing source.repo)")
             continue
         current = plugin.get("version", "0.0.0")
-        remote = fetch_remote_version(repo, source.get("ref", "main"))
-
-        name = plugin.get("name", "<unknown>")
+        if source_type == "github":
+            remote = fetch_remote_version(repo, source.get("ref", "main"))
+        else:
+            try:
+                clone_url = source_clone_url(source)
+                ref = normalize_git_ref(source.get("ref", "main"))
+            except (ValueError, KeyError):
+                print(f"  SKIP: {name} (invalid source configuration)")
+                continue
+            remote = fetch_remote_version_via_clone(clone_url, ref)
         if remote is None:
             print(f"  SKIP: {name} (could not fetch remote version)")
             continue
