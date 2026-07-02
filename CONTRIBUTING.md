@@ -70,6 +70,14 @@ For repos without `plugin.json`, add `strict: false` and `skills_dir`:
     skills_dir: .claude/skills
 ```
 
+For plugins hosted on non-GitHub forges (GitLab, Gitea, etc.), use `type: git` with an explicit `url`:
+```yaml
+    source:
+      type: git
+      url: https://gitlab.corp.example.com/team/your-repo.git
+      ref: main
+```
+
 The `user-invocable` field mirrors the [native Claude Code SKILL.md frontmatter field](https://code.claude.com/docs/en/skills#frontmatter-reference). Set it to `false` for internal skills that are called only by other skills/agents in the background — they will be hidden from the generated catalog. The registry value is catalog-only, so to actually hide the skill from the `/` menu in Claude Code you must also set `user-invocable: false` in the SKILL.md frontmatter in your source repo.
 
 ### Plugin scope
