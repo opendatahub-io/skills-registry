@@ -43,16 +43,18 @@ def plugin_to_marketplace_entry(plugin: dict) -> dict:
 
     # Map source
     source = plugin["source"]
-    entry["source"] = {
-        "source": source["type"],
-        "repo": source["repo"],
-    }
+    mapped = {"source": source["type"]}
+    if "repo" in source:
+        mapped["repo"] = source["repo"]
+    if "url" in source:
+        mapped["url"] = source["url"]
     if "ref" in source:
-        entry["source"]["ref"] = source["ref"]
+        mapped["ref"] = source["ref"]
     if "sha" in source:
-        entry["source"]["sha"] = source["sha"]
+        mapped["sha"] = source["sha"]
     if "path" in source:
-        entry["source"]["path"] = source["path"]
+        mapped["path"] = source["path"]
+    entry["source"] = mapped
 
     # Handle strict: false plugins
     if plugin.get("strict") is False:
