@@ -113,6 +113,15 @@ that contains the actual skills:
 Note: `skills_dir` must not be specified without `strict: false`. The schema
 and validation scripts enforce this constraint.
 
+### Source Types
+
+- **`type: github`** — shorthand for GitHub repos. Only requires `repo: owner/name`;
+  clone and browse URLs are derived automatically.
+- **`type: git`** — explicit clone URL for any git forge (GitLab, Gitea, Bitbucket, etc.).
+  Requires `url` (the clone URL). Browse links strip the trailing `.git` suffix.
+- **`type: git-subdir`** — subdirectory within a git repo (uses `path`).
+- **`type: npm`** / **`type: local`** — non-git source types.
+
 ### Dependencies
 
 Plugins can declare `depends_on: [other-plugin]` to express inter-plugin
