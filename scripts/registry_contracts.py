@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re as _re
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -66,6 +67,46 @@ MEASURE_DOCS = {
 CANONICAL_FUNCTIONS = frozenset(CANONICAL_FUNCTION_DOCS)
 CANONICAL_METRICS = frozenset(CANONICAL_METRIC_DOCS)
 PLUGIN_FIELDS_THAT_TOUCH_ALL_SKILLS = {"source", "strict", "skills_dir"}
+
+_SCHEME_RE = _re.compile(r"^https?://")
+GIT_CLONE_TYPES = frozenset({"github", "git"})
+
+
+def source_clone_url(source: dict) -> str:
+    """Return the git clone URL for a plugin source entry."""
+    source_type = source.get("type")
+    if source_type == "github":
+        return f"https://github.com/{source['repo']}.git"
+    if source_type == "git":
+        return source["url"]
+    raise ValueError(f"unsupported source type for cloning: {source_type!r}")
+
+
+def source_display_name(source: dict) -> str:
+    """Return a human-readable display name (scheme-stripped, no trailing .git)."""
+    source_type = source.get("type")
+    if source_type == "github":
+        return source["repo"]
+    if source_type == "git":
+        url = source["url"]
+        name = _SCHEME_RE.sub("", url)
+        if name.endswith(".git"):
+            name = name[:-4]
+        return name
+    return source.get("repo") or source.get("url") or "<unknown>"
+
+
+def source_browse_url(source: dict) -> str:
+    """Return a browsable URL for linking in markdown."""
+    source_type = source.get("type")
+    if source_type == "github":
+        return f"https://github.com/{source['repo']}"
+    if source_type == "git":
+        url = source["url"]
+        if url.endswith(".git"):
+            return url[:-4]
+        return url
+    return source.get("url") or f"https://github.com/{source.get('repo', '')}"
 
 
 def mapping_if_dict(value) -> dict | None:

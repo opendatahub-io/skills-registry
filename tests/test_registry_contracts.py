@@ -7,6 +7,9 @@ from scripts.registry_contracts import (
     detect_touched_skills,
     load_registry_from_ref,
     load_staged_registry,
+    source_browse_url,
+    source_clone_url,
+    source_display_name,
 )
 
 
@@ -109,6 +112,44 @@ class RegistryGitReadTests(unittest.TestCase):
         load_registry_from_ref("HEAD")
         _, kwargs = run_mock.call_args
         self.assertEqual(kwargs["timeout"], 30)
+
+
+class SourceHelperTests(unittest.TestCase):
+    def test_source_clone_url_github(self):
+        source = {"type": "github", "repo": "opendatahub-io/rfe-creator"}
+        self.assertEqual("https://github.com/opendatahub-io/rfe-creator.git", source_clone_url(source))
+
+    def test_source_clone_url_git(self):
+        source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin.git"}
+        self.assertEqual("https://gitlab.corp.example.com/team/my-plugin.git", source_clone_url(source))
+
+    def test_source_clone_url_unsupported_type_raises(self):
+        with self.assertRaises(ValueError):
+            source_clone_url({"type": "npm", "repo": "foo"})
+
+    def test_source_display_name_github(self):
+        source = {"type": "github", "repo": "opendatahub-io/rfe-creator"}
+        self.assertEqual("opendatahub-io/rfe-creator", source_display_name(source))
+
+    def test_source_display_name_git_strips_scheme_and_dotgit(self):
+        source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin.git"}
+        self.assertEqual("gitlab.corp.example.com/team/my-plugin", source_display_name(source))
+
+    def test_source_display_name_git_no_dotgit(self):
+        source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin"}
+        self.assertEqual("gitlab.corp.example.com/team/my-plugin", source_display_name(source))
+
+    def test_source_browse_url_github(self):
+        source = {"type": "github", "repo": "opendatahub-io/rfe-creator"}
+        self.assertEqual("https://github.com/opendatahub-io/rfe-creator", source_browse_url(source))
+
+    def test_source_browse_url_git_strips_dotgit(self):
+        source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin.git"}
+        self.assertEqual("https://gitlab.corp.example.com/team/my-plugin", source_browse_url(source))
+
+    def test_source_browse_url_git_no_dotgit(self):
+        source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin"}
+        self.assertEqual("https://gitlab.corp.example.com/team/my-plugin", source_browse_url(source))
 
 
 if __name__ == "__main__":
