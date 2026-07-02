@@ -123,6 +123,20 @@ class SiteContractRenderingTests(unittest.TestCase):
             ],
         )
 
+    def test_plugin_page_renders_git_source_link(self):
+        registry = build_registry_with_contract()
+        plugin = registry["plugins"][0]
+        plugin["source"] = {
+            "type": "git",
+            "url": "https://gitlab.example.com/team/plugin.git",
+        }
+
+        page = generate_site.generate_plugin_page(plugin, registry, enrichment=None, plugin_dir=None)
+
+        self.assertIn("gitlab.example.com/team/plugin", page)
+        self.assertIn("https://gitlab.example.com/team/plugin", page)
+        self.assertNotIn("https://github.com/", page)
+
     def test_append_code_block_uses_longer_fence_when_needed(self):
         lines = []
 
