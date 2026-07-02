@@ -30,6 +30,8 @@ from scripts.registry_contracts import (  # noqa: E402
     mapping_if_dict,
     sequence_as_list,
     skill_contract_mapping,
+    source_browse_url,
+    source_display_name,
 )
 
 
@@ -361,7 +363,8 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     license_str = plugin.get("license", "")
     category = plugin.get("category", "")
     tags = plugin.get("tags", [])
-    repo = plugin.get("source", {}).get("repo", "")
+    source = plugin.get("source", {})
+    source_type = source.get("type", "")
     deps = plugin.get("depends_on", [])
     skills = plugin.get("skills", [])
     agents = plugin.get("agents", [])
@@ -394,8 +397,10 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
         meta.append(f"    - **Scope**: {SCOPE_BADGE[scope]}")
     if category:
         meta.append(f"    - **Category**: [{cat_name}](../../categories/{category}.md)")
-    if repo:
-        meta.append(f"    - **Repository**: [{repo}](https://github.com/{repo})")
+    if source_type in ("github", "git"):
+        display = source_display_name(source)
+        browse = source_browse_url(source)
+        meta.append(f"    - **Repository**: [{display}]({browse})")
     if tags:
         pills = " ".join(f'<span class="tag-pill">{t}</span>' for t in tags)
         meta.append(f"    - **Tags**: {pills}")
@@ -856,7 +861,8 @@ def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
     for p in plugins:
         name = p["name"]
         desc = p["description"].strip()
-        repo = p.get("source", {}).get("repo", "")
+        source = p.get("source", {})
+        source_type = source.get("type", "")
         enrichment = load_enrichment(docs_dir / "plugins" / name)
         edesc = enrichment.get("description", desc).strip() if enrichment else desc
         arch = (enrichment.get("architecture_notes", "").strip()
@@ -865,8 +871,8 @@ def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
         lines.append("")
         lines.append(edesc)
         lines.append("")
-        if repo:
-            lines.append(f"**Repository**: https://github.com/{repo}")
+        if source_type in ("github", "git"):
+            lines.append(f"**Repository**: {source_browse_url(source)}")
             lines.append("")
         if arch:
             lines.append("### Architecture")
