@@ -26,6 +26,8 @@ from scripts.registry_contracts import (  # noqa: E402
     MEASURE_DOCS,
     contract_metrics_as_dicts,
     skill_contract_mapping,
+    source_browse_url,
+    source_display_name,
 )
 
 
@@ -186,7 +188,8 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
     name = plugin["name"]
     desc = plugin["description"].strip()
     version = plugin.get("version", "")
-    repo = plugin["source"].get("repo", "")
+    source = plugin["source"]
+    source_type = source.get("type", "")
     license_str = plugin.get("license", "")
     tags = plugin.get("tags", [])
     scope = plugin.get("scope", "sdlc")
@@ -212,8 +215,10 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         meta_parts.append("Team-Specific")
     if license_str:
         meta_parts.append(license_str)
-    if repo:
-        meta_parts.append(f"[{repo}](https://github.com/{repo})")
+    if source_type in ("github", "git"):
+        display = source_display_name(source)
+        browse = source_browse_url(source)
+        meta_parts.append(f"[{display}]({browse})")
     if meta_parts:
         lines.append(" | ".join(meta_parts))
         lines.append("")
