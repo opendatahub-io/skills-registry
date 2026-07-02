@@ -108,12 +108,12 @@ def main():
             continue
 
         name = plugin.get("name", "<unknown>")
-        repo = source.get("repo")
-        if not repo:
-            print(f"  SKIP: {name} (missing source.repo)")
-            continue
         current = plugin.get("version", "0.0.0")
         if source_type == "github":
+            repo = source.get("repo")
+            if not repo:
+                print(f"  SKIP: {name} (missing source.repo)")
+                continue
             remote = fetch_remote_version(repo, source.get("ref", "main"))
         else:
             try:
