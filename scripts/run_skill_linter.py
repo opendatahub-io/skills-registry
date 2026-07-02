@@ -20,6 +20,7 @@ sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
 sys.path.insert(0, _REPO_ROOT_STR)
 
 from scripts.registry_contracts import (  # noqa: E402
+    GIT_CLONE_TYPES,
     SKILL_LINTER_VERSION,
     SkillKey,
     detect_touched_skills,
@@ -29,6 +30,8 @@ from scripts.registry_contracts import (  # noqa: E402
     load_registry_from_ref,
     load_staged_registry,
     normalize_git_ref,
+    source_clone_url,
+    source_display_name,
 )
 
 CACHE_ROOT = Path(".cache/skills-registry/repos")
@@ -192,11 +195,19 @@ def skill_is_skill_linter_candidate(plugin: dict, skill: dict) -> bool:
         return False
 
     source = plugin.get("source") or {}
-    if not isinstance(source, dict) or source.get("type") != "github":
+    if not isinstance(source, dict):
         return False
-    repo = source.get("repo")
-    if not isinstance(repo, str) or not repo.strip():
+    source_type = source.get("type")
+    if source_type not in GIT_CLONE_TYPES:
         return False
+    if source_type == "github":
+        repo = source.get("repo")
+        if not isinstance(repo, str) or not repo.strip():
+            return False
+    elif source_type == "git":
+        url = source.get("url")
+        if not isinstance(url, str) or not url.strip():
+            return False
 
     try:
         normalize_git_ref(source.get("ref", "main"))
@@ -211,10 +222,12 @@ def _cache_destination(repo: str, ref: str) -> Path:
     return CACHE_ROOT.resolve() / f"{safe_repo}__{safe_ref}"
 
 
-def _ensure_github_repo(repo: str, ref: str) -> Path:
-    destination = _cache_destination(repo, ref)
+def _ensure_repo(source: dict) -> Path:
+    clone_url = source_clone_url(source)
+    display = source_display_name(source)
+    ref = normalize_git_ref(source.get("ref", "main"))
+    destination = _cache_destination(display, ref)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    clone_url = f"https://github.com/{repo}.git"
 
     if not (destination / ".git").exists():
         shallow = run_captured_command(
@@ -293,18 +306,19 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
         return 0
 
     source = plugin.get("source") or {}
-    if not isinstance(source, dict) or source.get("type") != "github":
+    if not isinstance(source, dict) or source.get("type") not in GIT_CLONE_TYPES:
         print(
             f"ERROR: Plugin '{plug_name}' skill '{ski_name}' "
-            "has contract source_assertions but source is not type 'github'",
+            "has contract source_assertions but source type is not cloneable",
             file=sys.stderr,
         )
         return 1
 
-    repo = source.get("repo")
-    if not isinstance(repo, str) or not repo.strip():
+    try:
+        _ = source_clone_url(source)
+    except (ValueError, KeyError):
         print(
-            f"ERROR: Plugin '{plug_name}' is missing source.repo.",
+            f"ERROR: Plugin '{plug_name}' has invalid source configuration.",
             file=sys.stderr,
         )
         return 1
@@ -320,7 +334,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
 
     supporting = _normalize_supporting_paths(source_assertions)
 
-    repo_root = _ensure_github_repo(repo, plugin_ref)
+    repo_root = _ensure_repo(source)
     try:
         resolved_skill_dir = skill_linter_dir_from_contract_skill_path(repo_root, skill_path_raw)
     except (ValueError, FileNotFoundError) as exc:
@@ -337,7 +351,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
     )
 
     command = build_skill_linter_command(resolved_skill_dir, config_abs)
-    print(f"Running skill-linter for {plug_name}/{ski_name} (repo={repo} ref={plugin_ref})...")
+    print(f"Running skill-linter for {plug_name}/{ski_name} (source={source_display_name(source)})...")
 
     proc = run_captured_command(
         command,

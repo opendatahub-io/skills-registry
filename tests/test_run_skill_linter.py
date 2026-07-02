@@ -218,6 +218,25 @@ class SkillLinterWrapperTests(unittest.TestCase):
         self.assertTrue(any("git ref" in error.lower() or "could not load" in error.lower()
                             for error in errors))
 
+    def test_skill_is_skill_linter_candidate_accepts_git_type(self):
+        plugin_git = {
+            "name": "p",
+            "source": {"type": "git", "url": "https://gitlab.example.com/t/p.git"},
+        }
+        skill_ok = {
+            "name": "t",
+            "contract": {"source_assertions": {"skill_path": ".claude/skills/t/SKILL.md"}},
+        }
+        self.assertTrue(skill_is_skill_linter_candidate(plugin_git, skill_ok))
+
+    def test_skill_is_skill_linter_candidate_rejects_git_without_url(self):
+        plugin_git = {"name": "p", "source": {"type": "git"}}
+        skill_ok = {
+            "name": "t",
+            "contract": {"source_assertions": {"skill_path": ".claude/skills/t/SKILL.md"}},
+        }
+        self.assertFalse(skill_is_skill_linter_candidate(plugin_git, skill_ok))
+
     @mock.patch("scripts.run_skill_linter.subprocess.run")
     def test_run_captured_command_passes_timeout(self, run_mock):
         run_captured_command(["git", "status"], timeout_seconds=123)
