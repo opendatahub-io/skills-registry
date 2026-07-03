@@ -87,7 +87,7 @@ class SchemaTests(unittest.TestCase):
         cls.validate_registry = mod
         cls.schema = mod.load_schema(str(REPO_ROOT / "schema/registry.schema.json"))
 
-    def test_schema_accepts_minimal_contract_block(self):
+    def test_schema_accepts_minimal(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
 
@@ -95,7 +95,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
-    def test_schema_accepts_plugin_contract_summary(self):
+    def test_schema_accepts_plugin(self):
         registry = build_registry()
         registry["plugins"][0]["contract_summary"] = {
             "focus_functions": ["review"],
@@ -107,7 +107,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
-    def test_schema_rejects_unknown_function_value(self):
+    def test_schema_rejects_unknown(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["functions"] = ["rank"]
@@ -116,7 +116,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("rank" in error for error in errors), errors)
 
-    def test_schema_requires_rubric_for_judge_measure(self):
+    def test_schema_requires_rubric_for(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["metrics"] = [
@@ -127,7 +127,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("rubric_ref" in error for error in errors), errors)
 
-    def test_schema_requires_verifier_ref_for_verifier_backed_measure(self):
+    def test_schema_requires_verifier_ref_for_verifier(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["metrics"] = [
@@ -138,7 +138,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("verifier_ref" in error for error in errors), errors)
 
-    def test_schema_rejects_legacy_evaluation_field(self):
+    def test_schema_rejects_legacy(self):
         registry = build_registry()
         registry["plugins"][0]["skills"][0]["evaluation"] = {
             "contract": "canonical-skill-v1",
@@ -148,7 +148,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("evaluation" in error for error in errors), errors)
 
-    def test_schema_rejects_empty_fixed_context(self):
+    def test_schema_rejects_empty(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["invariants"]["fixed_context"] = {}
@@ -162,7 +162,7 @@ class SchemaTests(unittest.TestCase):
             errors,
         )
 
-    def test_schema_rejects_output_quality_with_deterministic_measure(self):
+    def test_schema_rejects_output_quality_with(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["metrics"] = [
@@ -177,7 +177,7 @@ class SchemaTests(unittest.TestCase):
             errors,
         )
 
-    def test_schema_rejects_latency_with_judge_measure(self):
+    def test_schema_rejects_latency_with(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["metrics"] = [
@@ -192,7 +192,7 @@ class SchemaTests(unittest.TestCase):
             errors,
         )
 
-    def test_schema_accepts_step_efficiency_with_deterministic_measure(self):
+    def test_schema_accepts_step_efficiency_with(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["metrics"] = [
@@ -203,7 +203,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
-    def test_schema_requires_measure_for_metric_assignment(self):
+    def test_schema_requires_measure_for(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["metrics"] = [{"id": "latency"}]
@@ -212,7 +212,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("measure" in error for error in errors), errors)
 
-    def test_schema_rejects_traversal_skill_path(self):
+    def test_schema_rejects_traversal(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["source_assertions"]["skill_path"] = (
@@ -224,7 +224,7 @@ class SchemaTests(unittest.TestCase):
         self.assertNotEqual([], errors, errors)
         self.assertTrue(any("skill_path" in error for error in errors), errors)
 
-    def test_schema_rejects_absolute_supporting_path(self):
+    def test_schema_rejects_absolute(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["source_assertions"]["supporting_paths"] = [
@@ -236,7 +236,7 @@ class SchemaTests(unittest.TestCase):
         self.assertNotEqual([], errors, errors)
         self.assertTrue(any("supporting_paths" in error for error in errors), errors)
 
-    def test_schema_accepts_dot_prefixed_skill_path(self):
+    def test_schema_accepts_dot_prefixed(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
         registry["plugins"][0]["skills"][0]["contract"]["source_assertions"]["skill_path"] = (
@@ -253,7 +253,7 @@ class ContractValidatorTests(unittest.TestCase):
     def setUpClass(cls):
         cls.validate_registry = get_validate_registry_module()
 
-    def test_touched_skill_without_contract_fails(self):
+    def test_touched_skill_without(self):
         registry = build_registry()
         errors = self.validate_registry.check_skill_contracts(
             registry,
@@ -261,12 +261,12 @@ class ContractValidatorTests(unittest.TestCase):
         )
         self.assertTrue(any("requires contract" in error for error in errors), errors)
 
-    def test_untouched_skill_without_contract_passes(self):
+    def test_untouched_skill_without(self):
         registry = build_registry()
         errors = self.validate_registry.check_skill_contracts(registry, required_skills=set())
         self.assertEqual([], errors)
 
-    def test_duplicate_metric_ids_fail(self):
+    def test_duplicate_metric(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -279,7 +279,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("duplicate metric" in error.lower() for error in errors), errors)
 
-    def test_judge_measure_requires_rubric_ref(self):
+    def test_judge_measure_requires(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -292,7 +292,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("rubric_ref" in error for error in errors), errors)
 
-    def test_output_quality_requires_rubric_ref_when_measure_omitted(self):
+    def test_output_quality_requires_rubric_ref_when(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -306,7 +306,7 @@ class ContractValidatorTests(unittest.TestCase):
         self.assertTrue(any("output_quality metric requires" in e for e in errors), errors)
         self.assertTrue(any("rubric_ref" in e for e in errors), errors)
 
-    def test_untouched_skill_with_invalid_contract_passes(self):
+    def test_untouched_skill_with_invalid(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -316,7 +316,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
-    def test_touched_skill_whitespace_skill_path_fails(self):
+    def test_touched_skill_whitespace_skill(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -329,7 +329,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("skill_path" in e for e in errors), errors)
 
-    def test_touched_skill_skill_path_must_reference_skill_md(self):
+    def test_touched_skill_skill_path_must_reference(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -347,7 +347,7 @@ class ContractValidatorTests(unittest.TestCase):
             errors,
         )
 
-    def test_touched_skill_verifier_backed_without_verifier_ref_fails(self):
+    def test_touched_skill_verifier_backed_without_verifier(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -360,7 +360,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("verifier_ref" in e for e in errors), errors)
 
-    def test_touched_skill_duplicate_functions_fail(self):
+    def test_touched_skill_duplicate(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -373,7 +373,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("duplicate function" in e.lower() for e in errors), errors)
 
-    def test_touched_skill_placeholder_problem_statement_fails(self):
+    def test_touched_skill_placeholder_problem(self):
         registry = build_registry()
         skill = registry["plugins"][0]["skills"][0]
         add_minimal_contract(skill)
@@ -386,7 +386,7 @@ class ContractValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("placeholder" in e.lower() for e in errors), errors)
 
-    def test_select_required_skills_missing_diff_base_returns_error(self):
+    def test_select_required_skills_missing_diff_base(self):
         args = argparse.Namespace(
             registry="registry.yaml",
             staged=False,
@@ -401,7 +401,7 @@ class ContractValidatorTests(unittest.TestCase):
             errs,
         )
 
-    def test_select_required_skills_invalid_diff_base_returns_error(self):
+    def test_select_required_skills_invalid_diff_base(self):
         args = argparse.Namespace(
             registry="registry.yaml",
             staged=False,
@@ -423,7 +423,7 @@ class RemotePluginValidationTests(unittest.TestCase):
         cls.validate_registry = get_validate_registry_module()
 
     @mock.patch("subprocess.run")
-    def test_validate_remote_plugin_rejects_invalid_ref_before_git(self, run_mock):
+    def test_validate_remote_plugin_rejects_invalid_ref(self, run_mock):
         plugin = {
             "name": "example-plugin",
             "source": {

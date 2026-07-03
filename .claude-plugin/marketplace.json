@@ -110,6 +110,7 @@
         "repo": "opendatahub-io/odh-test-gen",
         "source": "github"
       },
+      "strict": true,
       "version": "1.0.1"
     },
     {

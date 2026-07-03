@@ -6,7 +6,7 @@ from tests.registry_contract_fixtures import build_registry_with_contract
 
 
 class SiteContractRenderingTests(unittest.TestCase):
-    def test_skill_page_renders_contract_section(self):
+    def test_skill_page_renders(self):
         registry = build_registry_with_contract()
         plugin = registry["plugins"][0]
         skill = plugin["skills"][0]
@@ -35,7 +35,7 @@ class SiteContractRenderingTests(unittest.TestCase):
         idx_review = page.index("`review`", idx_contract)
         self.assertGreater(idx_review, idx_contract)
 
-    def test_skill_page_omits_contract_when_contract_is_not_mapping(self):
+    def test_skill_page_omits_contract_when_contract_is(self):
         registry = build_registry_with_contract()
         plugin = registry["plugins"][0]
         skill = plugin["skills"][0]
@@ -47,7 +47,7 @@ class SiteContractRenderingTests(unittest.TestCase):
         page = generate_site.generate_skill_page(skill, plugin, enrichment=None, plugin_dir=None)
         self.assertNotIn("## Contract", page)
 
-    def test_plugin_page_renders_contract_summary(self):
+    def test_plugin_page_renders(self):
         registry = build_registry_with_contract()
         plugin = registry["plugins"][0]
         plugin["contract_summary"] = {
@@ -61,7 +61,7 @@ class SiteContractRenderingTests(unittest.TestCase):
         self.assertIn("## Contract Summary", page)
         self.assertIn("Example summary", page)
 
-    def test_plugin_page_skips_non_mapping_contract_summary(self):
+    def test_plugin_page_skips_non_mapping(self):
         registry = build_registry_with_contract()
         plugin = registry["plugins"][0]
         plugin["contract_summary"] = None
@@ -72,7 +72,7 @@ class SiteContractRenderingTests(unittest.TestCase):
         page = generate_site.generate_plugin_page(plugin, registry, enrichment=None, plugin_dir=None)
         self.assertNotIn("## Contract Summary", page)
 
-    def test_skill_page_can_render_indented_command_examples(self):
+    def test_skill_page_can_render_indented(self):
         registry = build_registry_with_contract()
         plugin = registry["plugins"][0]
         skill = plugin["skills"][0]
@@ -106,7 +106,7 @@ class SiteContractRenderingTests(unittest.TestCase):
         self.assertIn("    /example-skill bar", page)
         self.assertNotIn("```bash", page)
 
-    def test_append_code_block_indents_all_physical_lines(self):
+    def test_append_code_block_indents_all(self):
         lines = []
 
         generate_site._append_code_block(  # pylint: disable=protected-access
@@ -123,7 +123,7 @@ class SiteContractRenderingTests(unittest.TestCase):
             ],
         )
 
-    def test_append_code_block_uses_longer_fence_when_needed(self):
+    def test_append_code_block_uses_longer_fence(self):
         lines = []
 
         generate_site._append_code_block(  # pylint: disable=protected-access

@@ -18,7 +18,7 @@ from scripts.run_skill_linter import (
 
 
 class SkillLinterWrapperTests(unittest.TestCase):
-    def test_build_command_pins_version_and_config(self):
+    def test_build_command_pins_version(self):
         command = build_skill_linter_command(
             Path("/tmp/cache/repo/skills/example-skill"),
             Path("/work/config/skill-linter-registry.json"),
@@ -41,13 +41,13 @@ class SkillLinterWrapperTests(unittest.TestCase):
             command,
         )
 
-    def test_validate_source_assertions_rejects_missing_path(self):
+    def test_validate_source_assertions_rejects(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_root = Path(tmpdir)
             with self.assertRaises(FileNotFoundError):
                 validate_source_assertions(repo_root, "skills/missing/SKILL.md", [])
 
-    def test_validate_source_assertions_rejects_escaping_skill_path(self):
+    def test_validate_source_assertions_rejects_escaping(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             base = Path(tmpdir)
             repo_root = base / "repo"
@@ -58,7 +58,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 validate_source_assertions(repo_root, "../outside/SKILL.md", [])
 
-    def test_validate_source_assertions_rejects_escaping_supporting_path(self):
+    def test_validate_source_assertions_rejects_escaping(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             base = Path(tmpdir)
             repo_root = base / "repo"
@@ -72,7 +72,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 validate_source_assertions(repo_root, "skills/SKILL.md", ["../outside/extra.md"])
 
-    def test_validate_source_assertions_rejects_missing_supporting_path(self):
+    def test_validate_source_assertions_rejects_missing(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_root = Path(tmpdir)
             skills = repo_root / "skills"
@@ -81,7 +81,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 validate_source_assertions(repo_root, "skills/SKILL.md", ["skills/missing-extra.md"])
 
-    def test_validate_source_assertions_rejects_symlinked_skill_path(self):
+    def test_validate_source_assertions_rejects_symlinked(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_root = Path(tmpdir)
             real_skill_dir = repo_root / "real-skill"
@@ -96,7 +96,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 validate_source_assertions(repo_root, "skills/SKILL.md", [])
 
-    def test_validate_source_assertions_rejects_symlinked_supporting_path(self):
+    def test_validate_source_assertions_rejects_symlinked(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_root = Path(tmpdir)
             skills = repo_root / "skills"
@@ -112,15 +112,15 @@ class SkillLinterWrapperTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 validate_source_assertions(repo_root, "skills/SKILL.md", ["skills/guide.md"])
 
-    def test_parse_output_rejects_invalid_json(self):
+    def test_parse_output_rejects(self):
         with self.assertRaises(ValueError):
             parse_skill_linter_output("not-json")
 
-    def test_parse_output_rejects_non_object_json(self):
+    def test_parse_output_rejects_non(self):
         with self.assertRaises(ValueError):
             parse_skill_linter_output("[]")
 
-    def test_skill_linter_dir_requires_skill_md_filename(self):
+    def test_skill_linter_dir_requires_skill(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             (root / "skills" / "foo").mkdir(parents=True)
@@ -129,7 +129,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
                 skill_linter_dir_from_contract_skill_path(root, "skills/foo")
             self.assertIn("SKILL.md", str(ctx.exception))
 
-    def test_skill_linter_dir_returns_parent_of_skill_md(self):
+    def test_skill_linter_dir_returns_parent_of(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             skill_dir = root / "skills" / "foo"
@@ -140,7 +140,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
                 skill_linter_dir_from_contract_skill_path(root, "skills/foo/SKILL.md"),
             )
 
-    def test_skill_linter_dir_rejects_symlinked_skill_md(self):
+    def test_skill_linter_dir_rejects_symlinked(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             real_dir = root / "real"
@@ -155,58 +155,58 @@ class SkillLinterWrapperTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 skill_linter_dir_from_contract_skill_path(root, "skills/foo/SKILL.md")
 
-    def test_interpret_stdout_accepts_empty(self):
+    def test_interpret_stdout(self):
         self.assertEqual(interpret_skill_linter_success_stdout(""), (True, None))
         self.assertEqual(interpret_skill_linter_success_stdout("\n\t  "), (True, None))
 
-    def test_interpret_stdout_accepts_empty_object_json(self):
+    def test_interpret_stdout_accepts_empty(self):
         ok, detail = interpret_skill_linter_success_stdout("{}")
         self.assertTrue(ok)
         self.assertIsNone(detail)
 
-    def test_interpret_stdout_rejects_nonempty_non_json_on_success(self):
+    def test_interpret_stdout_rejects_nonempty_non_json(self):
         ok, detail = interpret_skill_linter_success_stdout("{not json")
         self.assertFalse(ok)
         self.assertIsNotNone(detail)
         self.assertIn("JSON", detail)
 
-    def test_interpret_stdout_rejects_reports_with_errors(self):
+    def test_interpret_stdout_rejects_reports(self):
         payload = '{"errorCount": 1, "violations": []}'
         ok, detail = interpret_skill_linter_success_stdout(payload)
         self.assertFalse(ok)
         self.assertIsNotNone(detail)
         self.assertIn("errorCount", detail)
 
-    def test_interpret_stdout_rejects_nonnumeric_error_count(self):
+    def test_interpret_stdout_rejects_nonnumeric(self):
         ok, detail = interpret_skill_linter_success_stdout('{"errorCount": "oops"}')
         self.assertFalse(ok)
         self.assertIsNotNone(detail)
         self.assertIn("errorCount", detail)
 
-    def test_skill_is_skill_linter_candidate_requires_skill_md_path(self):
+    def test_skill_is_skill_linter_candidate_requires_skill(self):
         plugin_github = {"name": "p", "source": {"type": "github", "repo": "a/b"}, "skills": []}
         skill_bad = {"name": "s", "contract": {"source_assertions": {"skill_path": "x/readme.md"}}}
         skill_ok = {"name": "t", "contract": {"source_assertions": {"skill_path": ".claude/skills/t/SKILL.md"}}}
         self.assertFalse(skill_is_skill_linter_candidate(plugin_github, skill_bad))
         self.assertTrue(skill_is_skill_linter_candidate(plugin_github, skill_ok))
 
-    def test_skill_is_skill_linter_candidate_rejects_invalid_ref(self):
+    def test_skill_is_skill_linter_candidate_rejects(self):
         plugin_github = {"name": "p", "source": {"type": "github", "repo": "a/b", "ref": "-oops"}}
         skill_ok = {"name": "t", "contract": {"source_assertions": {"skill_path": ".claude/skills/t/SKILL.md"}}}
         self.assertFalse(skill_is_skill_linter_candidate(plugin_github, skill_ok))
 
-    def test_normalize_git_ref_defaults_none_to_main(self):
+    def test_normalize_git_ref_defaults_none(self):
         self.assertEqual("main", normalize_git_ref(None))
 
-    def test_normalize_git_ref_rejects_option_like_ref(self):
+    def test_normalize_git_ref_rejects_option(self):
         with self.assertRaises(ValueError):
             normalize_git_ref("-oops")
 
-    def test_normalize_git_ref_rejects_embedded_whitespace(self):
+    def test_normalize_git_ref_rejects(self):
         with self.assertRaises(ValueError):
             normalize_git_ref("feature branch")
 
-    def test_select_touched_skill_keys_invalid_diff_base_returns_error(self):
+    def test_select_touched_skill_keys_invalid_diff_base(self):
         touched, errors = _select_touched_skill_keys(
             "registry.yaml",
             staged=False,
@@ -219,7 +219,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
                             for error in errors))
 
     @mock.patch("scripts.run_skill_linter.subprocess.run")
-    def test_run_captured_command_passes_timeout(self, run_mock):
+    def test_run_captured_command(self, run_mock):
         run_captured_command(["git", "status"], timeout_seconds=123)
         _, kwargs = run_mock.call_args
         self.assertEqual(kwargs["timeout"], 123)
@@ -227,7 +227,7 @@ class SkillLinterWrapperTests(unittest.TestCase):
         self.assertTrue(kwargs["text"])
 
     @mock.patch("scripts.run_skill_linter.subprocess.run")
-    def test_run_captured_command_wraps_timeout(self, run_mock):
+    def test_run_captured_command(self, run_mock):
         run_mock.side_effect = subprocess.TimeoutExpired(["git", "status"], 5)
         with self.assertRaises(RuntimeError):
             run_captured_command(["git", "status"], timeout_seconds=5)
