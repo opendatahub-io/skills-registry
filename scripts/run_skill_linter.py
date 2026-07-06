@@ -30,6 +30,7 @@ from scripts.registry_contracts import (  # noqa: E402
     load_registry_from_ref,
     load_staged_registry,
     normalize_git_ref,
+    shallow_clone,
     source_clone_url,
     source_display_name,
 )
@@ -230,24 +231,10 @@ def _ensure_repo(source: dict) -> Path:
     destination.parent.mkdir(parents=True, exist_ok=True)
 
     if not (destination / ".git").exists():
-        shallow = run_captured_command(
-            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, str(destination)],
-            timeout_seconds=GIT_COMMAND_TIMEOUT_SECONDS,
-        )
-        if shallow.returncode != 0:
-            full = run_captured_command(
-                ["git", "clone", "--depth", "1", "--", clone_url, str(destination)],
-                timeout_seconds=GIT_COMMAND_TIMEOUT_SECONDS,
-            )
-            if full.returncode != 0:
-                raise RuntimeError(f"clone failed for {clone_url}: {full.stderr}".strip())
-
-            chk = run_captured_command(
-                ["git", "-C", str(destination), "checkout", "--detach", ref],
-                timeout_seconds=GIT_COMMAND_TIMEOUT_SECONDS,
-            )
-            if chk.returncode != 0:
-                raise RuntimeError(f"checkout {ref} failed for {clone_url}: {chk.stderr}".strip())
+        result = shallow_clone(clone_url, ref, str(destination),
+                               timeout=GIT_COMMAND_TIMEOUT_SECONDS)
+        if result.returncode != 0:
+            raise RuntimeError(f"clone failed for {clone_url}: {result.stderr}".strip())
     else:
         fetch = run_captured_command(
             ["git", "-C", str(destination), "fetch", "--depth", "1", "origin", ref],
@@ -315,7 +302,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
         return 1
 
     try:
-        _ = source_clone_url(source)
+        source_clone_url(source)
     except (ValueError, KeyError):
         print(
             f"ERROR: Plugin '{plug_name}' has invalid source configuration.",
@@ -324,7 +311,7 @@ def _run_one_skill(plugin: dict, skill: dict, config_abs: Path) -> int:
         return 1
 
     try:
-        plugin_ref = normalize_git_ref(source.get("ref", "main"))
+        normalize_git_ref(source.get("ref", "main"))
     except ValueError:
         print(
             f"ERROR: Plugin '{plug_name}' has invalid source.ref.",

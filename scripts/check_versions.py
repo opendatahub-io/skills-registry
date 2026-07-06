@@ -22,7 +22,13 @@ from urllib.parse import quote
 
 import yaml
 
-from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url, normalize_git_ref
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parent
+_REPO_ROOT_STR = str(_REPO_ROOT)
+sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
+sys.path.insert(0, _REPO_ROOT_STR)
+
+from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url, normalize_git_ref, shallow_clone  # noqa: E402
 
 
 def load_registry(path: str = "registry.yaml") -> dict:
@@ -69,11 +75,10 @@ def fetch_remote_version(repo: str, ref: str = "main") -> str | None:
 def fetch_remote_version_via_clone(clone_url: str, ref: str = "main") -> str | None:
     """Fetch version from remote plugin.json via shallow clone."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        result = subprocess.run(
-            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, tmpdir],
-            capture_output=True, text=True,
-            timeout=120,
-        )
+        try:
+            result = shallow_clone(clone_url, ref, tmpdir)
+        except RuntimeError:
+            return None
         if result.returncode != 0:
             return None
         plugin_json = Path(tmpdir) / ".claude-plugin" / "plugin.json"

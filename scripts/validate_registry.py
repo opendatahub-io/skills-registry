@@ -37,6 +37,7 @@ from scripts.registry_contracts import (  # noqa: E402
     load_registry_from_ref,
     load_staged_registry,
     normalize_git_ref,
+    shallow_clone,
 )
 
 try:
@@ -104,6 +105,23 @@ def check_strict_consistency(registry: dict) -> list[str]:
             errors.append(
                 f"  Plugin '{name}': skills_dir requires strict: false. "
                 "Remove skills_dir or set strict: false"
+            )
+    return errors
+
+
+def check_source_urls(registry: dict) -> list[str]:
+    """Check that git-type source URLs use https:// (not SSH or other schemes)."""
+    errors = []
+    for plugin in registry.get("plugins", []):
+        source = plugin.get("source")
+        if not source or source.get("type") != "git":
+            continue
+        name = plugin.get("name", "<unknown>")
+        url = source.get("url", "")
+        if not url.startswith("https://"):
+            errors.append(
+                f"  Plugin '{name}': git source url must use https:// "
+                f"(got {url!r})"
             )
     return errors
 
@@ -278,8 +296,9 @@ def check_sources(registry: dict) -> list[str]:
                 errors.append(f"  Plugin '{name}': invalid source configuration")
                 continue
             result = subprocess.run(
-                ["git", "ls-remote", "--exit-code", "--quiet", clone_url],
+                ["git", "ls-remote", "--exit-code", "--quiet", "--", clone_url],
                 capture_output=True, text=True,
+                timeout=30,
             )
         if result.returncode != 0:
             errors.append(f"  Plugin '{name}': source not accessible")
@@ -324,10 +343,11 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
         except (ValueError, KeyError):
             errors.append(f"  Plugin '{plugin['name']}': invalid source configuration")
             return errors
-        result = subprocess.run(
-            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, tmpdir],
-            capture_output=True, text=True,
-        )
+        try:
+            result = shallow_clone(clone_url, ref, tmpdir)
+        except RuntimeError as exc:
+            errors.append(f"  Plugin '{plugin['name']}': {exc}")
+            return errors
         if result.returncode != 0:
             errors.append(f"  Plugin '{plugin['name']}': failed to clone {clone_url} (ref={ref})")
             return errors
@@ -431,6 +451,17 @@ def main() -> None:
     all_errors.extend(errors)
     if errors:
         print(f"  FAIL: {len(errors)} consistency error(s)")
+        for e in errors:
+            print(e)
+    else:
+        print("  OK")
+
+    # Source URL validation
+    print("Checking source URLs...")
+    errors = check_source_urls(registry)
+    all_errors.extend(errors)
+    if errors:
+        print(f"  FAIL: {len(errors)} source URL error(s)")
         for e in errors:
             print(e)
     else:

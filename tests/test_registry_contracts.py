@@ -7,6 +7,7 @@ from scripts.registry_contracts import (
     detect_touched_skills,
     load_registry_from_ref,
     load_staged_registry,
+    shallow_clone,
     source_browse_url,
     source_clone_url,
     source_display_name,
@@ -150,6 +151,55 @@ class SourceHelperTests(unittest.TestCase):
     def test_source_browse_url_git_no_dotgit(self):
         source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin"}
         self.assertEqual("https://gitlab.corp.example.com/team/my-plugin", source_browse_url(source))
+
+
+class ShallowCloneTests(unittest.TestCase):
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_succeeds_with_branch(self, run_mock):
+        run_mock.return_value = subprocess.CompletedProcess(
+            ["git", "clone"], 0, stdout="", stderr=""
+        )
+
+        result = shallow_clone("https://example.com/repo.git", "main", "/tmp/dest")
+
+        self.assertEqual(0, result.returncode)
+        run_mock.assert_called_once()
+        cmd = run_mock.call_args[0][0]
+        self.assertIn("--branch", cmd)
+        self.assertIn("main", cmd)
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_falls_back_for_sha(self, run_mock):
+        sha = "abc123" * 7 + "ab"  # 40 hex chars
+        branch_fail = subprocess.CompletedProcess(["git", "clone"], 128, stdout="", stderr="")
+        clone_ok = subprocess.CompletedProcess(["git", "clone"], 0, stdout="", stderr="")
+        checkout_ok = subprocess.CompletedProcess(["git", "checkout"], 0, stdout="", stderr="")
+        run_mock.side_effect = [branch_fail, clone_ok, checkout_ok]
+
+        result = shallow_clone("https://example.com/repo.git", sha, "/tmp/dest")
+
+        self.assertEqual(0, result.returncode)
+        self.assertEqual(3, run_mock.call_count)
+        # Third call should be checkout --detach <sha>
+        checkout_cmd = run_mock.call_args_list[2][0][0]
+        self.assertIn("--detach", checkout_cmd)
+        self.assertIn(sha, checkout_cmd)
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_returns_failure_when_both_fail(self, run_mock):
+        fail = subprocess.CompletedProcess(["git"], 128, stdout="", stderr="fatal")
+        run_mock.return_value = fail
+
+        result = shallow_clone("https://example.com/repo.git", "main", "/tmp/dest")
+
+        self.assertNotEqual(0, result.returncode)
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_raises_on_timeout(self, run_mock):
+        run_mock.side_effect = subprocess.TimeoutExpired(["git"], 120)
+
+        with self.assertRaises(RuntimeError):
+            shallow_clone("https://example.com/repo.git", "main", "/tmp/dest")
 
 
 if __name__ == "__main__":

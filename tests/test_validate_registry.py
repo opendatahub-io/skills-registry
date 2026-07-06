@@ -271,6 +271,32 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("repo" in error for error in errors), errors)
 
+    def test_schema_rejects_git_source_with_repo(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "https://gitlab.example.com/team/plugin.git",
+            "repo": "team/plugin",
+            "ref": "main",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertNotEqual([], errors)
+
+    def test_schema_rejects_github_source_with_url(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "github",
+            "repo": "example-org/example-plugin",
+            "url": "https://github.com/example-org/example-plugin.git",
+            "ref": "main",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertNotEqual([], errors)
+
     def test_schema_accepts_dot_prefixed_skill_path(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
@@ -452,6 +478,41 @@ class ContractValidatorTests(unittest.TestCase):
         )
 
 
+class SourceURLValidationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.validate_registry = get_validate_registry_module()
+
+    def test_check_source_urls_accepts_https(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "https://gitlab.example.com/team/plugin.git",
+        }
+
+        errors = self.validate_registry.check_source_urls(registry)
+
+        self.assertEqual([], errors)
+
+    def test_check_source_urls_rejects_ssh(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "git@gitlab.example.com:team/plugin.git",
+        }
+
+        errors = self.validate_registry.check_source_urls(registry)
+
+        self.assertTrue(any("https://" in e for e in errors), errors)
+
+    def test_check_source_urls_skips_github_type(self):
+        registry = build_registry()
+
+        errors = self.validate_registry.check_source_urls(registry)
+
+        self.assertEqual([], errors)
+
+
 class RemotePluginValidationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -475,9 +536,13 @@ class RemotePluginValidationTests(unittest.TestCase):
         cmd = run_mock.call_args[0][0]
         self.assertEqual(cmd[0], "git")
         self.assertIn("ls-remote", cmd)
+        self.assertIn("--", cmd)
 
     @mock.patch("subprocess.run")
     def test_validate_remote_plugin_accepts_git_type(self, run_mock):
+        import tempfile
+        import os
+
         run_mock.return_value = subprocess.CompletedProcess(
             ["git", "clone"], 0, stdout="", stderr=""
         )
@@ -490,11 +555,31 @@ class RemotePluginValidationTests(unittest.TestCase):
             },
         }
 
-        errors = self.validate_registry.validate_remote_plugin(plugin)
+        real_tmpdir = tempfile.mkdtemp()
+        try:
+            # Set up the directory structure that post-clone validation expects
+            plugin_dir = os.path.join(real_tmpdir, ".claude-plugin")
+            os.makedirs(plugin_dir)
+            with open(os.path.join(plugin_dir, "plugin.json"), "w") as f:
+                f.write('{"name": "git-plugin", "version": "1.0.0"}')
+            skill_dir = os.path.join(real_tmpdir, "skills", "example-skill")
+            os.makedirs(skill_dir)
+            with open(os.path.join(skill_dir, "SKILL.md"), "w") as f:
+                f.write("# Example Skill")
 
-        self.assertTrue(run_mock.called)
-        cmd = run_mock.call_args[0][0]
-        self.assertIn("https://gitlab.example.com/team/plugin.git", cmd)
+            ctx = mock.MagicMock()
+            ctx.__enter__ = mock.Mock(return_value=real_tmpdir)
+            ctx.__exit__ = mock.Mock(return_value=False)
+            with mock.patch("tempfile.TemporaryDirectory", return_value=ctx):
+                errors = self.validate_registry.validate_remote_plugin(plugin)
+
+            self.assertTrue(run_mock.called)
+            cmd = run_mock.call_args[0][0]
+            self.assertIn("https://gitlab.example.com/team/plugin.git", cmd)
+            self.assertEqual([], errors)
+        finally:
+            import shutil
+            shutil.rmtree(real_tmpdir)
 
     @mock.patch("subprocess.run")
     def test_validate_remote_plugin_rejects_invalid_ref_before_git(self, run_mock):
