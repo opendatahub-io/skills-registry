@@ -117,16 +117,20 @@ def shallow_clone(clone_url: str, ref: str, dest: str, *,
     Returns the CompletedProcess of the successful clone (returncode == 0) or the
     last failed attempt.
     """
-    try:
-        result = subprocess.run(
-            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, dest],
-            capture_output=True, text=True,
-            timeout=timeout,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            f"git clone timed out after {timeout}s: {shlex.join(['git', 'clone', '--', clone_url])}"
-        ) from exc
+    def _run(cmd: list[str], timeout_msg: str) -> subprocess.CompletedProcess[str]:
+        try:
+            return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError(timeout_msg) from exc
+
+    clone_timeout_msg = (
+        f"git clone timed out after {timeout}s: {shlex.join(['git', 'clone', '--', clone_url])}"
+    )
+
+    result = _run(
+        ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, dest],
+        clone_timeout_msg,
+    )
     if result.returncode == 0:
         return result
 
@@ -135,29 +139,14 @@ def shallow_clone(clone_url: str, ref: str, dest: str, *,
     # default-branch tip, so `git checkout --detach <sha>` fails for any commit
     # that isn't the tip (fatal: unable to read tree). A full clone contains
     # every reachable commit, so an arbitrary historical SHA can be checked out.
-    try:
-        result = subprocess.run(
-            ["git", "clone", "--", clone_url, dest],
-            capture_output=True, text=True,
-            timeout=timeout,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            f"git clone timed out after {timeout}s: {shlex.join(['git', 'clone', '--', clone_url])}"
-        ) from exc
+    result = _run(["git", "clone", "--", clone_url, dest], clone_timeout_msg)
     if result.returncode != 0:
         return result
 
-    try:
-        checkout = subprocess.run(
-            ["git", "-C", dest, "checkout", "--detach", ref],
-            capture_output=True, text=True,
-            timeout=timeout,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            f"git checkout timed out after {timeout}s for ref {ref}"
-        ) from exc
+    checkout = _run(
+        ["git", "-C", dest, "checkout", "--detach", ref],
+        f"git checkout timed out after {timeout}s for ref {ref}",
+    )
     if checkout.returncode != 0:
         # Return a failed result so the caller sees the error
         return checkout

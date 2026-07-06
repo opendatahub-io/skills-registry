@@ -109,23 +109,6 @@ def check_strict_consistency(registry: dict) -> list[str]:
     return errors
 
 
-def check_source_urls(registry: dict) -> list[str]:
-    """Check that git-type source URLs use https:// (not SSH or other schemes)."""
-    errors = []
-    for plugin in registry.get("plugins", []):
-        source = plugin.get("source")
-        if not source or source.get("type") != "git":
-            continue
-        name = plugin.get("name", "<unknown>")
-        url = source.get("url", "")
-        if not url.startswith("https://"):
-            errors.append(
-                f"  Plugin '{name}': git source url must use https:// "
-                f"(got {url!r})"
-            )
-    return errors
-
-
 _PLACEHOLDER_RE = re.compile(
     r"\b(TODO|TBD|FIXME|PLACEHOLDER|XXX)\b|\{\{[\s\S]*?\}\}|\[insert\b",
     re.IGNORECASE,
@@ -451,17 +434,6 @@ def main() -> None:
     all_errors.extend(errors)
     if errors:
         print(f"  FAIL: {len(errors)} consistency error(s)")
-        for e in errors:
-            print(e)
-    else:
-        print("  OK")
-
-    # Source URL validation
-    print("Checking source URLs...")
-    errors = check_source_urls(registry)
-    all_errors.extend(errors)
-    if errors:
-        print(f"  FAIL: {len(errors)} source URL error(s)")
         for e in errors:
             print(e)
     else:

@@ -202,11 +202,45 @@ class ShallowCloneTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
 
     @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_returns_failed_checkout(self, run_mock):
+        sha = "b" * 40
+        branch_fail = subprocess.CompletedProcess(["git", "clone"], 128, stdout="", stderr="")
+        clone_ok = subprocess.CompletedProcess(["git", "clone"], 0, stdout="", stderr="")
+        checkout_fail = subprocess.CompletedProcess(
+            ["git", "checkout"], 1, stdout="", stderr="fatal: unable to read tree"
+        )
+        run_mock.side_effect = [branch_fail, clone_ok, checkout_fail]
+
+        result = shallow_clone("https://example.com/repo.git", sha, "/tmp/dest")
+
+        # The failed checkout is surfaced to the caller (not masked as clone success).
+        self.assertEqual(3, run_mock.call_count)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("unable to read tree", result.stderr)
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
     def test_shallow_clone_raises_on_timeout(self, run_mock):
         run_mock.side_effect = subprocess.TimeoutExpired(["git"], 120)
 
         with self.assertRaises(RuntimeError):
             shallow_clone("https://example.com/repo.git", "main", "/tmp/dest")
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_raises_on_fallback_clone_timeout(self, run_mock):
+        branch_fail = subprocess.CompletedProcess(["git", "clone"], 128, stdout="", stderr="")
+        run_mock.side_effect = [branch_fail, subprocess.TimeoutExpired(["git"], 120)]
+
+        with self.assertRaises(RuntimeError):
+            shallow_clone("https://example.com/repo.git", "c" * 40, "/tmp/dest")
+
+    @mock.patch("scripts.registry_contracts.subprocess.run")
+    def test_shallow_clone_raises_on_checkout_timeout(self, run_mock):
+        branch_fail = subprocess.CompletedProcess(["git", "clone"], 128, stdout="", stderr="")
+        clone_ok = subprocess.CompletedProcess(["git", "clone"], 0, stdout="", stderr="")
+        run_mock.side_effect = [branch_fail, clone_ok, subprocess.TimeoutExpired(["git"], 120)]
+
+        with self.assertRaises(RuntimeError):
+            shallow_clone("https://example.com/repo.git", "d" * 40, "/tmp/dest")
 
 
 @unittest.skipUnless(shutil.which("git"), "git is required for integration tests")

@@ -297,6 +297,62 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("url" in error for error in errors), errors)
 
+    def test_schema_rejects_non_https_git_url(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "git@gitlab.example.com:team/plugin.git",
+            "ref": "main",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(any("url" in error for error in errors), errors)
+
+    def test_schema_accepts_https_git_url(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "https://gitlab.example.com/team/plugin.git",
+            "ref": "main",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertEqual([], errors)
+
+    def test_schema_requires_url_and_path_for_git_subdir(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {"type": "git-subdir", "ref": "main"}
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(errors)
+
+    def test_schema_accepts_git_subdir_with_url_and_path(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://github.com/acme/monorepo.git",
+            "path": "tools/plugin",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertEqual([], errors)
+
+    def test_schema_rejects_non_https_git_subdir_url(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "git@github.com:acme/monorepo.git",
+            "path": "tools/plugin",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(any("url" in error for error in errors), errors)
+
     def test_schema_accepts_dot_prefixed_skill_path(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
@@ -476,41 +532,6 @@ class ContractValidatorTests(unittest.TestCase):
             any("git ref" in e.lower() or "could not load" in e.lower() for e in errs),
             errs,
         )
-
-
-class SourceURLValidationTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.validate_registry = get_validate_registry_module()
-
-    def test_check_source_urls_accepts_https(self):
-        registry = build_registry()
-        registry["plugins"][0]["source"] = {
-            "type": "git",
-            "url": "https://gitlab.example.com/team/plugin.git",
-        }
-
-        errors = self.validate_registry.check_source_urls(registry)
-
-        self.assertEqual([], errors)
-
-    def test_check_source_urls_rejects_ssh(self):
-        registry = build_registry()
-        registry["plugins"][0]["source"] = {
-            "type": "git",
-            "url": "git@gitlab.example.com:team/plugin.git",
-        }
-
-        errors = self.validate_registry.check_source_urls(registry)
-
-        self.assertTrue(any("https://" in e for e in errors), errors)
-
-    def test_check_source_urls_skips_github_type(self):
-        registry = build_registry()
-
-        errors = self.validate_registry.check_source_urls(registry)
-
-        self.assertEqual([], errors)
 
 
 class RemotePluginValidationTests(unittest.TestCase):
