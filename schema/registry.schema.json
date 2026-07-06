@@ -404,7 +404,8 @@
         "url": {
           "type": "string",
           "format": "uri",
-          "description": "Clone URL — required for git type"
+          "pattern": "^https://",
+          "description": "Clone URL — required for git and git-subdir types; must be https://"
         },
         "ref": {
           "type": "string",
@@ -428,6 +429,10 @@
         {
           "if": { "properties": { "type": { "const": "git" } }, "required": ["type"] },
           "then": { "required": ["url"], "not": { "required": ["repo"] } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "git-subdir" } }, "required": ["type"] },
+          "then": { "required": ["url", "path"], "not": { "required": ["repo"] } }
         }
       ]
     },

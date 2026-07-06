@@ -13,6 +13,7 @@ SCRIPT_PATHS = [
     "scripts/run_skill_linter.py",
     "scripts/generate_catalog.py",
     "scripts/check_versions.py",
+    "scripts/discover_skills.py",
 ]
 POISON_SENTINEL = "poisoned registry_contracts import"
 
