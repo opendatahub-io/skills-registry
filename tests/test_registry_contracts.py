@@ -170,7 +170,7 @@ class ShallowCloneTests(unittest.TestCase):
 
     @mock.patch("scripts.registry_contracts.subprocess.run")
     def test_shallow_clone_falls_back_for_sha(self, run_mock):
-        sha = "abc123" * 7 + "ab"  # 40 hex chars
+        sha = "a" * 40
         branch_fail = subprocess.CompletedProcess(["git", "clone"], 128, stdout="", stderr="")
         clone_ok = subprocess.CompletedProcess(["git", "clone"], 0, stdout="", stderr="")
         checkout_ok = subprocess.CompletedProcess(["git", "checkout"], 0, stdout="", stderr="")

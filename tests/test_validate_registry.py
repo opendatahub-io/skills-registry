@@ -282,7 +282,7 @@ class SchemaTests(unittest.TestCase):
 
         errors = self.validate_registry.validate_schema(registry, self.schema)
 
-        self.assertNotEqual([], errors)
+        self.assertTrue(any("repo" in error for error in errors), errors)
 
     def test_schema_rejects_github_source_with_url(self):
         registry = build_registry()
@@ -295,7 +295,7 @@ class SchemaTests(unittest.TestCase):
 
         errors = self.validate_registry.validate_schema(registry, self.schema)
 
-        self.assertNotEqual([], errors)
+        self.assertTrue(any("url" in error for error in errors), errors)
 
     def test_schema_accepts_dot_prefixed_skill_path(self):
         registry = build_registry()
