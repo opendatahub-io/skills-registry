@@ -130,10 +130,14 @@ def shallow_clone(clone_url: str, ref: str, dest: str, *,
     if result.returncode == 0:
         return result
 
-    # --branch fails for SHA refs; fall back to full clone + checkout --detach
+    # --branch fails for SHA refs; fall back to a full clone + checkout --detach.
+    # The fallback must NOT be shallow: a --depth 1 clone only contains the
+    # default-branch tip, so `git checkout --detach <sha>` fails for any commit
+    # that isn't the tip (fatal: unable to read tree). A full clone contains
+    # every reachable commit, so an arbitrary historical SHA can be checked out.
     try:
         result = subprocess.run(
-            ["git", "clone", "--depth", "1", "--", clone_url, dest],
+            ["git", "clone", "--", clone_url, dest],
             capture_output=True, text=True,
             timeout=timeout,
         )
