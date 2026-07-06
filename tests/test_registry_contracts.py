@@ -1,4 +1,7 @@
+import os
+import shutil
 import subprocess
+import tempfile
 import unittest
 from unittest import mock
 
@@ -180,6 +183,10 @@ class ShallowCloneTests(unittest.TestCase):
 
         self.assertEqual(0, result.returncode)
         self.assertEqual(3, run_mock.call_count)
+        # Second call is the fallback clone: it MUST be a full (non-shallow) clone,
+        # otherwise a historical SHA cannot be checked out (see the integration test).
+        fallback_cmd = run_mock.call_args_list[1][0][0]
+        self.assertNotIn("--depth", fallback_cmd)
         # Third call should be checkout --detach <sha>
         checkout_cmd = run_mock.call_args_list[2][0][0]
         self.assertIn("--detach", checkout_cmd)
@@ -200,6 +207,61 @@ class ShallowCloneTests(unittest.TestCase):
 
         with self.assertRaises(RuntimeError):
             shallow_clone("https://example.com/repo.git", "main", "/tmp/dest")
+
+
+@unittest.skipUnless(shutil.which("git"), "git is required for integration tests")
+class ShallowCloneIntegrationTests(unittest.TestCase):
+    """End-to-end against a real local repo (no mocks) — exercises the SHA fallback."""
+
+    _GIT_ENV = {
+        **os.environ,
+        "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@example.com",
+        "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.com",
+    }
+
+    def _git(self, *args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            ["git", *args], capture_output=True, text=True, check=True, env=self._GIT_ENV
+        )
+
+    def _make_repo(self, path: str) -> str:
+        """Create a repo with three commits; return the SHA of the first (historical) one."""
+        os.makedirs(path)
+        self._git("init", "-q", path)
+        shas = []
+        for msg in ("c1", "c2", "c3"):
+            self._git("-C", path, "commit", "-q", "--allow-empty", "-m", msg)
+            shas.append(self._git("-C", path, "rev-parse", "HEAD").stdout.strip())
+        return shas[0]  # historical commit, NOT the default-branch tip
+
+    def test_checks_out_historical_sha(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "src")
+            historical = self._make_repo(src)
+            dest = os.path.join(tmp, "dest")
+            # Use file:// so git honors --depth. A bare local-path clone silently
+            # ignores --depth (full clone), which would mask a shallow regression.
+            url = f"file://{src}"
+
+            result = shallow_clone(url, historical, dest)
+
+            self.assertEqual(0, result.returncode, result.stderr)
+            head = subprocess.run(
+                ["git", "-C", dest, "rev-parse", "HEAD"],
+                capture_output=True, text=True, check=True,
+            ).stdout.strip()
+            self.assertEqual(historical, head)
+
+    def test_checks_out_branch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "src")
+            self._make_repo(src)
+            branch = self._git("-C", src, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
+            dest = os.path.join(tmp, "dest")
+
+            result = shallow_clone(f"file://{src}", branch, dest)
+
+            self.assertEqual(0, result.returncode, result.stderr)
 
 
 if __name__ == "__main__":
