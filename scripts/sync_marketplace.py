@@ -16,6 +16,10 @@ from pathlib import Path
 import yaml
 
 
+# Map registry source types to marketplace source types.
+# Claude Code's marketplace format uses "url" (not "git") for arbitrary clone URLs.
+_SOURCE_TYPE_MAP = {"git": "url"}
+
 # Fields from registry.yaml plugin entries that map directly to marketplace.json
 DIRECT_FIELDS = {
     "name", "description", "version", "author", "homepage",
@@ -43,7 +47,7 @@ def plugin_to_marketplace_entry(plugin: dict) -> dict:
 
     # Map source
     source = plugin["source"]
-    mapped = {"source": source["type"]}
+    mapped = {"source": _SOURCE_TYPE_MAP.get(source["type"], source["type"])}
     if "repo" in source:
         mapped["repo"] = source["repo"]
     if "url" in source:

@@ -423,11 +423,11 @@
       "allOf": [
         {
           "if": { "properties": { "type": { "const": "github" } }, "required": ["type"] },
-          "then": { "required": ["repo"] }
+          "then": { "required": ["repo"], "not": { "required": ["url"] } }
         },
         {
           "if": { "properties": { "type": { "const": "git" } }, "required": ["type"] },
-          "then": { "required": ["url"] }
+          "then": { "required": ["url"], "not": { "required": ["repo"] } }
         }
       ]
     },

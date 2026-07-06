@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re as _re
+import shlex
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -107,6 +108,56 @@ def source_browse_url(source: dict) -> str:
             return url[:-4]
         return url
     return source.get("url") or f"https://github.com/{source.get('repo', '')}"
+
+
+def shallow_clone(clone_url: str, ref: str, dest: str, *,
+                   timeout: int = 120) -> subprocess.CompletedProcess[str]:
+    """Shallow-clone a repo, falling back to full clone + detached checkout for SHA refs.
+
+    Returns the CompletedProcess of the successful clone (returncode == 0) or the
+    last failed attempt.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "clone", "--depth", "1", "--branch", ref, "--", clone_url, dest],
+            capture_output=True, text=True,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"git clone timed out after {timeout}s: {shlex.join(['git', 'clone', '--', clone_url])}"
+        ) from exc
+    if result.returncode == 0:
+        return result
+
+    # --branch fails for SHA refs; fall back to full clone + checkout --detach
+    try:
+        result = subprocess.run(
+            ["git", "clone", "--depth", "1", "--", clone_url, dest],
+            capture_output=True, text=True,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"git clone timed out after {timeout}s: {shlex.join(['git', 'clone', '--', clone_url])}"
+        ) from exc
+    if result.returncode != 0:
+        return result
+
+    try:
+        checkout = subprocess.run(
+            ["git", "-C", dest, "checkout", "--detach", ref],
+            capture_output=True, text=True,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"git checkout timed out after {timeout}s for ref {ref}"
+        ) from exc
+    if checkout.returncode != 0:
+        # Return a failed result so the caller sees the error
+        return checkout
+    return result
 
 
 def mapping_if_dict(value) -> dict | None:
