@@ -404,8 +404,8 @@
         "url": {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://",
-          "description": "Clone URL — required for git and git-subdir types; must be https://"
+          "pattern": "^https://[^@]+$",
+          "description": "Clone URL — required for git and git-subdir types; must be https:// and must not embed userinfo (credentials)"
         },
         "ref": {
           "type": "string",

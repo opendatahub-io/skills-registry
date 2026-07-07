@@ -271,6 +271,7 @@ def check_sources(registry: dict) -> list[str]:
             result = subprocess.run(
                 ["gh", "api", f"repos/{repo}", "--silent"],
                 capture_output=True, text=True,
+                timeout=30,
             )
         else:
             try:
@@ -306,7 +307,7 @@ def diff_plugins(registry: dict, base_ref: str) -> list[str]:
 
 def validate_remote_plugin(plugin: dict) -> list[str]:
     """Clone a plugin repo and validate its structure."""
-    from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url
+    from scripts.registry_contracts import GIT_CLONE_TYPES, redact_url, source_clone_url
 
     errors = []
     source = plugin.get("source")
@@ -329,10 +330,12 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
         try:
             result = shallow_clone(clone_url, ref, tmpdir)
         except RuntimeError as exc:
-            errors.append(f"  Plugin '{plugin['name']}': {exc}")
+            errors.append(f"  Plugin '{plugin['name']}': {redact_url(str(exc))}")
             return errors
         if result.returncode != 0:
-            errors.append(f"  Plugin '{plugin['name']}': failed to clone {clone_url} (ref={ref})")
+            errors.append(
+                f"  Plugin '{plugin['name']}': failed to clone {redact_url(clone_url)} (ref={ref})"
+            )
             return errors
 
         repo_path = Path(tmpdir)

@@ -30,6 +30,7 @@ from scripts.registry_contracts import (  # noqa: E402
     load_registry_from_ref,
     load_staged_registry,
     normalize_git_ref,
+    redact_url,
     shallow_clone,
     source_clone_url,
     source_display_name,
@@ -234,7 +235,9 @@ def _ensure_repo(source: dict) -> Path:
         result = shallow_clone(clone_url, ref, str(destination),
                                timeout=GIT_COMMAND_TIMEOUT_SECONDS)
         if result.returncode != 0:
-            raise RuntimeError(f"clone failed for {clone_url}: {result.stderr}".strip())
+            raise RuntimeError(
+                f"clone failed for {redact_url(clone_url)}: {redact_url(result.stderr)}".strip()
+            )
     else:
         fetch = run_captured_command(
             ["git", "-C", str(destination), "fetch", "--depth", "1", "origin", ref],

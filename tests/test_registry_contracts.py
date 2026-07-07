@@ -10,6 +10,7 @@ from scripts.registry_contracts import (
     detect_touched_skills,
     load_registry_from_ref,
     load_staged_registry,
+    redact_url,
     shallow_clone,
     source_browse_url,
     source_clone_url,
@@ -154,6 +155,31 @@ class SourceHelperTests(unittest.TestCase):
     def test_source_browse_url_git_no_dotgit(self):
         source = {"type": "git", "url": "https://gitlab.corp.example.com/team/my-plugin"}
         self.assertEqual("https://gitlab.corp.example.com/team/my-plugin", source_browse_url(source))
+
+
+class RedactUrlTests(unittest.TestCase):
+    def test_redacts_user_and_password(self):
+        self.assertEqual(
+            "https://***@host.example.com/x.git",
+            redact_url("https://user:token@host.example.com/x.git"),
+        )
+
+    def test_redacts_bare_user(self):
+        self.assertEqual(
+            "https://***@host/x.git",
+            redact_url("https://user@host/x.git"),
+        )
+
+    def test_preserves_url_without_userinfo(self):
+        self.assertEqual(
+            "https://host.example.com/x.git",
+            redact_url("https://host.example.com/x.git"),
+        )
+
+    def test_redacts_credentials_in_stderr_like_text(self):
+        text = "fatal: unable to access 'https://oauth2:SECRET@gitlab.com/team/x.git/': ..."
+        self.assertNotIn("SECRET", redact_url(text))
+        self.assertIn("https://***@gitlab.com", redact_url(text))
 
 
 class ShallowCloneTests(unittest.TestCase):
