@@ -353,6 +353,19 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("url" in error for error in errors), errors)
 
+    def test_schema_rejects_git_subdir_source_with_repo(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://github.com/acme/monorepo.git",
+            "path": "tools/plugin",
+            "repo": "acme/monorepo",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(any("repo" in error for error in errors), errors)
+
     def test_schema_accepts_dot_prefixed_skill_path(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])

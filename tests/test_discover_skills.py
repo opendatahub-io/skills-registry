@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 import unittest
 
-from scripts.discover_skills import discover_git_skills, parse_frontmatter
+from scripts.discover_skills import _redact_url, discover_git_skills, parse_frontmatter
 
 
 class ParseFrontmatterTests(unittest.TestCase):
@@ -17,6 +17,31 @@ class ParseFrontmatterTests(unittest.TestCase):
         self.assertEqual({}, parse_frontmatter("# just a heading\n"))
 
 
+class RedactUrlTests(unittest.TestCase):
+    def test_redacts_user_and_password(self):
+        self.assertEqual(
+            "https://***@host.example.com/x.git",
+            _redact_url("https://user:token@host.example.com/x.git"),
+        )
+
+    def test_redacts_bare_user(self):
+        self.assertEqual(
+            "https://***@host/x.git",
+            _redact_url("https://user@host/x.git"),
+        )
+
+    def test_preserves_url_without_userinfo(self):
+        self.assertEqual(
+            "https://host.example.com/x.git",
+            _redact_url("https://host.example.com/x.git"),
+        )
+
+    def test_redacts_credentials_in_stderr_like_text(self):
+        text = "fatal: unable to access 'https://oauth2:SECRET@gitlab.com/team/x.git/': ..."
+        self.assertNotIn("SECRET", _redact_url(text))
+        self.assertIn("https://***@gitlab.com", _redact_url(text))
+
+
 @unittest.skipUnless(shutil.which("git"), "git is required for integration tests")
 class DiscoverGitSkillsIntegrationTests(unittest.TestCase):
     _GIT_ENV = {
@@ -25,8 +50,8 @@ class DiscoverGitSkillsIntegrationTests(unittest.TestCase):
         "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.com",
     }
 
-    def _git(self, *args: str) -> None:
-        subprocess.run(
+    def _git(self, *args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
             ["git", *args], capture_output=True, text=True, check=True, env=self._GIT_ENV
         )
 
@@ -48,8 +73,11 @@ class DiscoverGitSkillsIntegrationTests(unittest.TestCase):
             )
             self._git("-C", src, "add", "-A")
             self._git("-C", src, "commit", "-q", "-m", "add skills")
+            # Resolve the real branch name: `git clone --branch HEAD` treats HEAD
+            # as a literal ref, not the default-branch alias.
+            branch = self._git("-C", src, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
 
-            skills = discover_git_skills(f"file://{src}", "HEAD")
+            skills = discover_git_skills(f"file://{src}", branch)
 
             self.assertEqual(["alpha", "beta"], [s["name"] for s in skills])
             self.assertEqual("the alpha skill", skills[0]["description"])

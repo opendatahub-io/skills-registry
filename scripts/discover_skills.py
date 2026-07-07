@@ -30,6 +30,16 @@ sys.path.insert(0, _REPO_ROOT_STR)
 from scripts.registry_contracts import source_clone_url, shallow_clone  # noqa: E402
 
 
+# Strip user[:token]@ credentials from any URL in the given text before logging.
+# Catches both the URL we hold (clone_url) and URLs that git echoes back in
+# stderr / RuntimeError messages. Prevents credential leaks in logs (CWE-532).
+_CREDENTIAL_URL_RE = re.compile(r"(https?://)[^/@\s]*@")
+
+
+def _redact_url(text: str) -> str:
+    return _CREDENTIAL_URL_RE.sub(r"\1***@", text)
+
+
 def load_registry(path: str = "registry.yaml") -> dict:
     with open(path) as f:
         return yaml.safe_load(f)
@@ -111,10 +121,11 @@ def discover_git_skills(clone_url: str, ref: str = "main") -> list[dict]:
         try:
             result = shallow_clone(clone_url, ref, tmpdir)
         except RuntimeError as exc:
-            print(f"  ERROR: {exc}", file=sys.stderr)
+            print(f"  ERROR: {_redact_url(str(exc))}", file=sys.stderr)
             return []
         if result.returncode != 0:
-            print(f"  ERROR: clone failed for {clone_url}: {result.stderr.strip()}",
+            print(f"  ERROR: clone failed for {_redact_url(clone_url)}: "
+                  f"{_redact_url(result.stderr.strip())}",
                   file=sys.stderr)
             return []
 
@@ -240,7 +251,7 @@ def main():
         except (ValueError, KeyError):
             print(f"ERROR: plugin '{args.plugin}' has an invalid git source", file=sys.stderr)
             sys.exit(1)
-        print(f"Discovering skills for {args.plugin} from {clone_url}@{ref}...")
+        print(f"Discovering skills for {args.plugin} from {_redact_url(clone_url)}@{ref}...")
         skills = discover_git_skills(clone_url, ref)
     else:
         print(
