@@ -309,6 +309,30 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("url" in error for error in errors), errors)
 
+    def test_schema_rejects_git_url_with_embedded_credentials(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git",
+            "url": "https://user:token@gitlab.example.com/team/plugin.git",
+            "ref": "main",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(any("url" in error for error in errors), errors)
+
+    def test_schema_rejects_git_subdir_url_with_embedded_credentials(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://oauth2:SECRET@github.com/acme/monorepo.git",
+            "path": "tools/plugin",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(any("url" in error for error in errors), errors)
+
     def test_schema_accepts_https_git_url(self):
         registry = build_registry()
         registry["plugins"][0]["source"] = {

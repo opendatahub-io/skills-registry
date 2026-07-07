@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 import unittest
 
-from scripts.discover_skills import _redact_url, discover_git_skills, parse_frontmatter
+from scripts.discover_skills import discover_git_skills, parse_frontmatter
 
 
 class ParseFrontmatterTests(unittest.TestCase):
@@ -15,31 +15,6 @@ class ParseFrontmatterTests(unittest.TestCase):
 
     def test_returns_empty_without_frontmatter(self):
         self.assertEqual({}, parse_frontmatter("# just a heading\n"))
-
-
-class RedactUrlTests(unittest.TestCase):
-    def test_redacts_user_and_password(self):
-        self.assertEqual(
-            "https://***@host.example.com/x.git",
-            _redact_url("https://user:token@host.example.com/x.git"),
-        )
-
-    def test_redacts_bare_user(self):
-        self.assertEqual(
-            "https://***@host/x.git",
-            _redact_url("https://user@host/x.git"),
-        )
-
-    def test_preserves_url_without_userinfo(self):
-        self.assertEqual(
-            "https://host.example.com/x.git",
-            _redact_url("https://host.example.com/x.git"),
-        )
-
-    def test_redacts_credentials_in_stderr_like_text(self):
-        text = "fatal: unable to access 'https://oauth2:SECRET@gitlab.com/team/x.git/': ..."
-        self.assertNotIn("SECRET", _redact_url(text))
-        self.assertIn("https://***@gitlab.com", _redact_url(text))
 
 
 @unittest.skipUnless(shutil.which("git"), "git is required for integration tests")

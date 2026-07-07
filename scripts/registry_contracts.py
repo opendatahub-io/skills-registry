@@ -72,6 +72,16 @@ PLUGIN_FIELDS_THAT_TOUCH_ALL_SKILLS = {"source", "strict", "skills_dir"}
 _SCHEME_RE = _re.compile(r"^https?://")
 GIT_CLONE_TYPES = frozenset({"github", "git"})
 
+# Strip user[:token]@ credentials from any URL in the given text before logging.
+# Applies to both the URL we hold and URLs that git echoes back in stderr /
+# RuntimeError messages. Prevents credential leaks in logs (CWE-532).
+_CREDENTIAL_URL_RE = _re.compile(r"(https?://)[^/@\s]*@")
+
+
+def redact_url(text: str) -> str:
+    """Replace `user[:token]@` in any URL inside `text` with `***@`."""
+    return _CREDENTIAL_URL_RE.sub(r"\1***@", text)
+
 
 def source_clone_url(source: dict) -> str:
     """Return the git clone URL for a plugin source entry."""
