@@ -67,10 +67,27 @@ nav:
       - rfe-feasibility-review: plugins/rfe-creator/rfe-feasibility-review.md
       - scope-review: plugins/rfe-creator/scope-review.md
       - testability-review: plugins/rfe-creator/testability-review.md
+    - strat-creator:
+      - plugins/strat-creator/index.md
+      - strategy-create: plugins/strat-creator/strategy-create.md
+      - strategy-refine: plugins/strat-creator/strategy-refine.md
+      - strategy-review: plugins/strat-creator/strategy-review.md
+      - strategy-pull: plugins/strat-creator/strategy-pull.md
+      - strategy-push: plugins/strat-creator/strategy-push.md
+      - strategy-signoff: plugins/strat-creator/strategy-signoff.md
+      - export-rubric: plugins/strat-creator/export-rubric.md
+      - strategy-feasibility-review: plugins/strat-creator/strategy-feasibility-review.md
+      - strategy-testability-review: plugins/strat-creator/strategy-testability-review.md
+      - strategy-scope-review: plugins/strat-creator/strategy-scope-review.md
+      - strategy-architecture-review: plugins/strat-creator/strategy-architecture-review.md
     - assess-rfe:
       - plugins/assess-rfe/index.md
       - assess-rfe: plugins/assess-rfe/assess-rfe.md
       - export-rubric: plugins/assess-rfe/export-rubric.md
+    - assess-strat:
+      - plugins/assess-strat/index.md
+      - assess-strat: plugins/assess-strat/assess-strat.md
+      - export-rubric: plugins/assess-strat/export-rubric.md
     - rhoai-security-reviewer:
       - plugins/rhoai-security-reviewer/index.md
       - strat-security-review: plugins/rhoai-security-reviewer/strat-security-review.md

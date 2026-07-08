@@ -7,14 +7,16 @@ title: Plugins
 
 # Plugins
 
-15 plugins registered in the marketplace.
+17 plugins registered in the marketplace.
 
 ## SDLC
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
 | [rfe-creator](rfe-creator/index.md) | Product Planning | 12 | v0.1.0 |
+| [strat-creator](strat-creator/index.md) | Product Planning | 11 | v0.1.0 |
 | [assess-rfe](assess-rfe/index.md) | Evaluation & Testing | 2 | v1.0.0 |
+| [assess-strat](assess-strat/index.md) | Evaluation & Testing | 2 | v1.0.0 |
 | [rhoai-security-reviewer](rhoai-security-reviewer/index.md) | Security Review | 2 | v0.1.0 |
 | [test-plan](test-plan/index.md) | Evaluation & Testing | 17 | v1.0.1 |
 | [quality-tooling](quality-tooling/index.md) | Evaluation & Testing | 5 | v1.0.0 |

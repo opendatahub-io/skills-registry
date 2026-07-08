@@ -76,6 +76,23 @@ Tags: rfe, rubric, quality, assessment
 /plugin install assess-rfe@opendatahub-skills
 ```
 
+### assess-strat
+
+Assess RHAISTRAT strategies against quality criteria using a scored rubric with calibration examples. Scores across four dimensions: feasibility, testability, scope, and architecture.
+
+v1.0.0 | [opendatahub-io/assess-strat](https://github.com/opendatahub-io/assess-strat)
+
+Tags: strategy, strat, rubric, quality, assessment
+
+| Skill | Description |
+|-------|-------------|
+| `/assess-strat` | Assess strategies against quality criteria using a structured rubric |
+| `/export-rubric` | Export the assessment rubric |
+
+```bash
+/plugin install assess-strat@opendatahub-skills
+```
+
 ### test-plan
 
 End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.
@@ -363,6 +380,30 @@ Tags: rfe, jira, review, strategy, pipeline
 
 ```bash
 /plugin install rfe-creator@opendatahub-skills
+```
+
+### strat-creator
+
+Claude Code skills for creating, reviewing, and submitting strategies to the RHAISTRAT Jira project. Provides an automated pipeline from initial creation through refinement, adversarial review with independent reviewers, and human sign-off workflow with pull/push/signoff gates.
+
+**Requires:** `assess-strat`
+
+v0.1.0 | [opendatahub-io/strat-creator](https://github.com/opendatahub-io/strat-creator)
+
+Tags: strategy, strat, jira, review, pipeline
+
+| Skill | Description |
+|-------|-------------|
+| `/strategy-create` | Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira |
+| `/strategy-refine` | Refine a strategy with technical HOW, dependencies, and NFRs |
+| `/strategy-review` | Adversarial review with rubric scoring and independent forked reviewers |
+| `/strategy-pull` | Pull a post-CI strategy from Jira into local workspace for human review |
+| `/strategy-push` | Push a locally-refined strategy back to Jira and resubmit to CI |
+| `/strategy-signoff` | Sign off on a CI-approved strategy with human sign-off label |
+| `/export-rubric` | Export the scoring rubric to artifacts/strat-rubric.md |
+
+```bash
+/plugin install strat-creator@opendatahub-skills
 ```
 
 ### spike-executor

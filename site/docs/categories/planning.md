@@ -17,6 +17,12 @@ Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE J
 
 **12 skills** - v0.1.0
 
+### [strat-creator](../plugins/strat-creator/index.md)
+
+Claude Code skills for creating, reviewing, and submitting strategies to the RHAISTRAT Jira project. Provides an automated pipeline from initial creation through refinement, adversarial review with independent reviewers, and human sign-off workflow with pull/push/signoff gates.
+
+**11 skills** - v0.1.0
+
 ### [spike-executor](../plugins/spike-executor/index.md)
 
 Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.

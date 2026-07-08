@@ -292,6 +292,60 @@ vague criteria.
 
 ---
 
+## strat-creator
+
+Claude Code skills for creating, reviewing, and submitting strategies to the RHAISTRAT Jira project. Provides an automated pipeline from initial creation through refinement, adversarial review with independent reviewers, and human sign-off workflow with pull/push/signoff gates.
+
+**Repository**: https://github.com/opendatahub-io/strat-creator
+
+### Skills
+
+#### /strategy-create
+
+Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira
+
+#### /strategy-refine
+
+Refine a strategy with technical HOW, dependencies, and NFRs
+
+#### /strategy-review
+
+Adversarial review with rubric scoring and independent forked reviewers
+
+#### /strategy-pull
+
+Pull a post-CI strategy from Jira into local workspace for human review
+
+#### /strategy-push
+
+Push a locally-refined strategy back to Jira and resubmit to CI
+
+#### /strategy-signoff
+
+Sign off on a CI-approved strategy with human sign-off label
+
+#### /export-rubric
+
+Export the scoring rubric to artifacts/strat-rubric.md
+
+#### /strategy-feasibility-review (internal)
+
+Reviews strategy for technical feasibility and effort estimate credibility
+
+#### /strategy-testability-review (internal)
+
+Reviews strategy for testability and measurable acceptance criteria
+
+#### /strategy-scope-review (internal)
+
+Reviews strategy for right-sizing and bounded scope
+
+#### /strategy-architecture-review (internal)
+
+Reviews strategy for architectural correctness and integration patterns
+
+---
+
 ## assess-rfe
 
 Structured quality assessment for RFEs (Requests for Enhancement) against
@@ -380,6 +434,24 @@ Examples:
 ```
 /export-rubric
 ```
+
+---
+
+## assess-strat
+
+Assess RHAISTRAT strategies against quality criteria using a scored rubric with calibration examples. Scores across four dimensions: feasibility, testability, scope, and architecture.
+
+**Repository**: https://github.com/opendatahub-io/assess-strat
+
+### Skills
+
+#### /assess-strat
+
+Assess strategies against quality criteria using a structured rubric
+
+#### /export-rubric
+
+Export the assessment rubric
 
 ---
 

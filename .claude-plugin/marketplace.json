@@ -36,6 +36,33 @@
     },
     {
       "author": {
+        "name": "Eder Ignatowicz"
+      },
+      "category": "planning",
+      "description": "Claude Code skills for creating, reviewing, and submitting strategies to the RHAISTRAT Jira project. Provides an automated pipeline from initial creation through refinement, adversarial review with independent reviewers, and human sign-off workflow with pull/push/signoff gates.\n",
+      "homepage": "https://github.com/opendatahub-io/strat-creator",
+      "keywords": [
+        "strategy",
+        "strat",
+        "jira",
+        "review",
+        "pipeline"
+      ],
+      "name": "strat-creator",
+      "repository": "https://github.com/opendatahub-io/strat-creator",
+      "skills": [
+        "./.claude/skills"
+      ],
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/strat-creator",
+        "source": "github"
+      },
+      "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
         "name": "Jason Greene"
       },
       "category": "evaluation",
@@ -52,6 +79,29 @@
       "source": {
         "ref": "main",
         "repo": "opendatahub-io/assess-rfe",
+        "source": "github"
+      },
+      "version": "1.0.0"
+    },
+    {
+      "author": {
+        "name": "Eder Ignatowicz"
+      },
+      "category": "evaluation",
+      "description": "Assess RHAISTRAT strategies against quality criteria using a scored rubric with calibration examples. Scores across four dimensions: feasibility, testability, scope, and architecture.\n",
+      "homepage": "https://github.com/opendatahub-io/assess-strat",
+      "keywords": [
+        "strategy",
+        "strat",
+        "rubric",
+        "quality",
+        "assessment"
+      ],
+      "name": "assess-strat",
+      "repository": "https://github.com/opendatahub-io/assess-strat",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/assess-strat",
         "source": "github"
       },
       "version": "1.0.0"
