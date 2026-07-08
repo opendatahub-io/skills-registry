@@ -17,6 +17,12 @@ Assess RFEs against quality criteria using a structured rubric.
 
 **2 skills** - v1.0.0
 
+### [assess-strat](../plugins/assess-strat/index.md)
+
+Assess RHAISTRAT strategies against quality criteria using a scored rubric with calibration examples. Scores across four dimensions: feasibility, testability, scope, and architecture.
+
+**2 skills** - v1.0.0
+
 ### [test-plan](../plugins/test-plan/index.md)
 
 End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub with PR creation, resolve review feedback, and score quality with automated rubrics using parallel sub-agent analysis.

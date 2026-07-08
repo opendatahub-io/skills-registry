@@ -98,6 +98,67 @@ plugins:
       requires_python: ">=3.11"
     depends_on: [assess-rfe]
 
+  - name: strat-creator
+    description: >
+      Claude Code skills for creating, reviewing, and submitting strategies
+      to the RHAISTRAT Jira project. Provides an automated pipeline from
+      initial creation through refinement, adversarial review with independent
+      reviewers, and human sign-off workflow with pull/push/signoff gates.
+    version: "0.1.0"
+    category: planning
+    tags: [strategy, strat, jira, review, pipeline]
+    author:
+      name: Eder Ignatowicz
+    source:
+      type: github
+      repo: opendatahub-io/strat-creator
+      ref: main
+    strict: false
+    skills_dir: .claude/skills
+    homepage: https://github.com/opendatahub-io/strat-creator
+    repository: https://github.com/opendatahub-io/strat-creator
+    skills:
+      - name: strategy-create
+        description: Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira
+        user-invocable: true
+      - name: strategy-refine
+        description: Refine a strategy with technical HOW, dependencies, and NFRs
+        user-invocable: true
+      - name: strategy-review
+        description: Adversarial review with rubric scoring and independent forked reviewers
+        user-invocable: true
+      - name: strategy-pull
+        description: Pull a post-CI strategy from Jira into local workspace for human review
+        user-invocable: true
+      - name: strategy-push
+        description: Push a locally-refined strategy back to Jira and resubmit to CI
+        user-invocable: true
+      - name: strategy-signoff
+        description: Sign off on a CI-approved strategy with human sign-off label
+        user-invocable: true
+      - name: export-rubric
+        description: Export the scoring rubric to artifacts/strat-rubric.md
+        user-invocable: true
+      - name: strategy-feasibility-review
+        description: Reviews strategy for technical feasibility and effort estimate credibility
+        user-invocable: false
+      - name: strategy-testability-review
+        description: Reviews strategy for testability and measurable acceptance criteria
+        user-invocable: false
+      - name: strategy-scope-review
+        description: Reviews strategy for right-sizing and bounded scope
+        user-invocable: false
+      - name: strategy-architecture-review
+        description: Reviews strategy for architectural correctness and integration patterns
+        user-invocable: false
+    harnesses:
+      claude-code:
+        install: "/plugin install strat-creator@opendatahub-skills"
+    python:
+      package: strat-creator
+      requires_python: ">=3.11"
+    depends_on: [assess-strat]
+
   - name: assess-rfe
     description: >
       Assess RFEs against quality criteria using a structured rubric.
@@ -189,6 +250,34 @@ plugins:
     harnesses:
       claude-code:
         install: "/plugin install assess-rfe@opendatahub-skills"
+    depends_on: []
+
+  - name: assess-strat
+    description: >
+      Assess RHAISTRAT strategies against quality criteria using a scored
+      rubric with calibration examples. Scores across four dimensions:
+      feasibility, testability, scope, and architecture.
+    version: "1.0.0"
+    category: evaluation
+    tags: [strategy, strat, rubric, quality, assessment]
+    author:
+      name: Eder Ignatowicz
+    source:
+      type: github
+      repo: opendatahub-io/assess-strat
+      ref: main
+    homepage: https://github.com/opendatahub-io/assess-strat
+    repository: https://github.com/opendatahub-io/assess-strat
+    skills:
+      - name: assess-strat
+        description: Assess strategies against quality criteria using a structured rubric
+        user-invocable: true
+      - name: export-rubric
+        description: Export the assessment rubric
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install assess-strat@opendatahub-skills"
     depends_on: []
 
   - name: rhoai-security-reviewer
