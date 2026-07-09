@@ -45,7 +45,7 @@ and actions reviewer comments on a PR/MR.
 
 !!! info "Plugin Details"
 
-    - **Version**: 0.3.8
+    - **Version**: 0.3.15
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [Documentation](../../categories/documentation.md)

@@ -763,7 +763,7 @@ plugins:
       Markdown documentation. Includes an orchestrated multi-step pipeline,
       standalone review skills, codebase analysis for onboarding, and
       JIRA/PR integration.
-    version: "0.3.8"
+    version: "0.3.15"
     category: documentation
     tags: [documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onboarding, code-analysis]
     author:

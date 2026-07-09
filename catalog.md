@@ -186,7 +186,7 @@ Tags: knowledge, context, claude-md, agents-md, pr-analysis, automation
 
 Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
 
-v0.3.8 | Apache-2.0 | [opendatahub-io/docs-skills](https://github.com/opendatahub-io/docs-skills)
+v0.3.15 | Apache-2.0 | [opendatahub-io/docs-skills](https://github.com/opendatahub-io/docs-skills)
 
 Tags: documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onboarding, code-analysis
 
