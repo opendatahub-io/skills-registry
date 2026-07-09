@@ -10,6 +10,7 @@ Usage:
 """
 
 import argparse
+import html
 import os
 import shutil
 import sys
@@ -514,6 +515,260 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     return "\n".join(lines)
 
 
+# ─── Contract card helpers ───────────────────────────────────────────
+# The contract renders as a bespoke "spec-sheet" HTML card (§01–§04)
+# with per-section left-spine accents. Templates + CSS live together;
+# markup is emitted here, styles in site/docs/assets/stylesheets/extra.css
+# under the `.skill-contract` block.
+
+
+def _esc(value) -> str:
+    """HTML-escape a value for safe inclusion in generated markup."""
+    return html.escape("" if value is None else str(value), quote=True)
+
+
+def _parse_contract_ref_url(ref: str | None) -> str | None:
+    """Parse `owner/repo@sha:path` into a GitHub blob URL, or None if malformed."""
+    if not isinstance(ref, str):
+        return None
+    ref = ref.strip()
+    if "@" not in ref or ":" not in ref:
+        return None
+    try:
+        repo, rest = ref.split("@", 1)
+        sha, path = rest.split(":", 1)
+    except ValueError:
+        return None
+    if "/" not in repo or not sha or not path:
+        return None
+    return f"https://github.com/{repo}/blob/{sha}/{path}"
+
+
+def _short_contract_ref_label(ref: str | None) -> str:
+    """Compact `filename @ abc1234` label from `owner/repo@sha:path/to/file`."""
+    if not isinstance(ref, str):
+        return ""
+    ref = ref.strip()
+    if "@" not in ref:
+        return ref
+    _repo, rest = ref.split("@", 1)
+    if ":" in rest:
+        sha, path = rest.split(":", 1)
+        filename = path.rsplit("/", 1)[-1] or path
+        return f"{filename} @ {sha[:7]}"
+    return f"@ {rest[:7]}"
+
+
+def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
+    """Return HTML lines for the skill contract card (spec-sheet aesthetic)."""
+
+    lines: list[str] = []
+
+    version = _esc(str(contract.get("version") or "").strip())
+    problem = str(contract.get("problem_statement") or "").strip()
+
+    source = plugin.get("source") or {}
+    base_url: str | None = None
+    ref_name = "main"
+    if isinstance(source, dict) and source.get("type") in ("github", "git"):
+        try:
+            base_url = source_browse_url(source)
+            ref_name = source.get("ref") or "main"
+        except (KeyError, ValueError):
+            base_url = None
+
+    lines.append('<div class="skill-contract">')
+    lines.append('  <header class="skill-contract__header">')
+    lines.append('    <span class="skill-contract__eyebrow">Skill Contract</span>')
+    if version:
+        lines.append(f'    <span class="skill-contract__version">{version}</span>')
+    lines.append('  </header>')
+    if problem:
+        lines.append(
+            f'  <p class="skill-contract__lede">{_esc(problem)}</p>'
+        )
+
+    # §01 IDENTITY — functions + success conditions
+    functions = _string_list(contract.get("functions"))
+    success = _string_list(contract.get("success_conditions"))
+    if functions or success:
+        lines.append('  <section class="skill-contract__section" data-section="01">')
+        lines.append(
+            '    <h3 class="skill-contract__section-title">'
+            '<span class="skill-contract__section-name">Identity</span>'
+            '</h3>'
+        )
+        if functions:
+            lines.append('    <div class="skill-contract__row">')
+            lines.append('      <span class="skill-contract__field">Functions</span>')
+            lines.append('      <div class="skill-contract__inline">')
+            for fn in functions:
+                lines.append(
+                    f'        <span class="skill-contract__chip skill-contract__chip--function">{_esc(fn)}</span>'
+                )
+            lines.append('      </div>')
+            lines.append('    </div>')
+        if success:
+            lines.append('    <div class="skill-contract__row">')
+            lines.append('      <span class="skill-contract__field">Success</span>')
+            lines.append('      <ul class="skill-contract__list">')
+            for cond in success:
+                lines.append(f'        <li>{_esc(cond)}</li>')
+            lines.append('      </ul>')
+            lines.append('    </div>')
+        lines.append('  </section>')
+
+    # §02 OPTIMIZATION TARGETS — metrics as compact spec rows
+    metrics = contract_metrics_as_dicts(contract.get("metrics"))
+    if metrics:
+        lines.append('  <section class="skill-contract__section" data-section="02">')
+        lines.append(
+            '    <h3 class="skill-contract__section-title">'
+            '<span class="skill-contract__section-name">Optimization Targets</span>'
+            '</h3>'
+        )
+        lines.append('    <div class="skill-contract__metrics">')
+        for m in metrics:
+            metric_id = _esc(m.get("id", ""))
+            measure = str(m.get("measure") or "").strip()
+            ref_val = m.get("rubric_ref") or m.get("verifier_ref")
+            lines.append('      <div class="skill-contract__metric">')
+            lines.append(f'        <code class="skill-contract__metric-id">{metric_id}</code>')
+            if measure:
+                lines.append(
+                    f'        <span class="skill-contract__measure skill-contract__measure--{_esc(measure)}">{_esc(measure)}</span>'
+                )
+            else:
+                lines.append('        <span class="skill-contract__measure-placeholder"></span>')
+            if ref_val:
+                url = _parse_contract_ref_url(ref_val)
+                label = _short_contract_ref_label(ref_val)
+                title_attr = _esc(str(ref_val))
+                if url:
+                    lines.append(
+                        f'        <a class="skill-contract__ref" href="{_esc(url)}" title="{title_attr}">'
+                        f'{_esc(label)}<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>'
+                    )
+                else:
+                    lines.append(
+                        f'        <span class="skill-contract__ref" title="{title_attr}">{_esc(label)}</span>'
+                    )
+            else:
+                lines.append('        <span class="skill-contract__ref-placeholder"></span>')
+            lines.append('      </div>')
+        lines.append('    </div>')
+        lines.append('  </section>')
+
+    # §03 INVARIANTS — must_preserve + fixed_context
+    invariants = mapping_if_dict(contract.get("invariants"))
+    if invariants:
+        must = _string_list(invariants.get("must_preserve"))
+        fixed = mapping_if_dict(invariants.get("fixed_context")) or {}
+        tools = _string_list(fixed.get("tools"))
+        cli = _string_list(fixed.get("cli"))
+        documents = _string_list(fixed.get("documents"))
+        kinputs = [
+            item for item in sequence_as_list(fixed.get("knowledge_inputs"))
+            if isinstance(item, dict)
+        ]
+
+        if must or tools or cli or documents or kinputs:
+            lines.append('  <section class="skill-contract__section" data-section="03">')
+            lines.append(
+                '    <h3 class="skill-contract__section-title">'
+                '<span class="skill-contract__section-name">Invariants</span>'
+                '</h3>'
+            )
+            if must:
+                lines.append('    <div class="skill-contract__row">')
+                lines.append('      <span class="skill-contract__field">Must Not</span>')
+                lines.append('      <ul class="skill-contract__list">')
+                for item in must:
+                    lines.append(f'        <li>{_esc(item)}</li>')
+                lines.append('      </ul>')
+                lines.append('    </div>')
+
+            # Fixed context — tools / cli / documents / knowledge rendered as
+            # one recessed code block (config-style), so the literal identifier
+            # lists read as a single contained surface instead of loose tokens.
+            def _code_line(key: str, value_html: str) -> str:
+                return (
+                    '      <div class="skill-contract__code-line">'
+                    f'<span class="skill-contract__code-key">{_esc(key)}</span>'
+                    f'<span class="skill-contract__code-val">{value_html}</span>'
+                    '</div>'
+                )
+
+            code_lines: list[str] = []
+            if tools:
+                code_lines.append(_code_line("tools", ", ".join(_esc(t) for t in tools)))
+            if cli:
+                code_lines.append(_code_line("cli", ", ".join(_esc(c) for c in cli)))
+            if documents:
+                code_lines.append(_code_line("documents", ", ".join(_esc(d) for d in documents)))
+            if kinputs:
+                parts = []
+                for ki in kinputs:
+                    kind = _esc(ki.get("kind", "unknown"))
+                    privacy = str(ki.get("privacy") or "unknown").strip() or "unknown"
+                    parts.append(
+                        f'{kind}<span class="skill-contract__privacy">{_esc(privacy)}</span>'
+                    )
+                code_lines.append(_code_line("knowledge", ", ".join(parts)))
+
+            if code_lines:
+                lines.append('    <div class="skill-contract__row">')
+                lines.append('      <span class="skill-contract__field">Fixed Context</span>')
+                lines.append('      <div class="skill-contract__code">')
+                lines.extend(code_lines)
+                lines.append('      </div>')
+                lines.append('    </div>')
+
+            lines.append('  </section>')
+
+    # §04 TRACEABILITY — source_assertions
+    source_assertions = mapping_if_dict(contract.get("source_assertions"))
+    if source_assertions:
+        skill_path_val = str(source_assertions.get("skill_path") or "").strip()
+        supp = _string_list(source_assertions.get("supporting_paths"))
+        if skill_path_val or supp:
+            lines.append('  <section class="skill-contract__section" data-section="04">')
+            lines.append(
+                '    <h3 class="skill-contract__section-title">'
+                '<span class="skill-contract__section-name">Traceability</span>'
+                '</h3>'
+            )
+
+            def _path_markup(path: str) -> str:
+                path_esc = _esc(path)
+                if base_url:
+                    href = f"{base_url}/blob/{_esc(ref_name)}/{path_esc}"
+                    return (
+                        f'<a class="skill-contract__path" href="{href}">'
+                        '<span class="skill-contract__ref-arrow" aria-hidden="true">↗</span>'
+                        f'<code>{path_esc}</code></a>'
+                    )
+                return f'<code class="skill-contract__mono">{path_esc}</code>'
+
+            if skill_path_val:
+                lines.append('    <div class="skill-contract__row">')
+                lines.append('      <span class="skill-contract__field">Skill</span>')
+                lines.append(f'      <div class="skill-contract__inline">{_path_markup(skill_path_val)}</div>')
+                lines.append('    </div>')
+            if supp:
+                lines.append('    <div class="skill-contract__row">')
+                lines.append('      <span class="skill-contract__field">Supporting</span>')
+                lines.append('      <ul class="skill-contract__paths">')
+                for path in supp:
+                    lines.append(f'        <li>{_path_markup(path)}</li>')
+                lines.append('      </ul>')
+                lines.append('    </div>')
+            lines.append('  </section>')
+
+    lines.append('</div>')
+    return lines
+
+
 def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
                         plugin_dir: Path | None = None) -> str:
     sname = skill["name"]
@@ -544,84 +799,8 @@ def generate_skill_page(skill: dict, plugin: dict, enrichment: dict | None,
     if contract:
         lines.append("## Contract")
         lines.append("")
-        lines.append('!!! info "Skill Contract"')
+        lines.extend(_render_contract_card(contract, plugin))
         lines.append("")
-        version = contract.get("version")
-        version_txt = "" if version is None else str(version)
-        lines.append(f"    **Version**: `{version_txt}`")
-        lines.append("")
-        problem_statement = contract.get("problem_statement")
-        if isinstance(problem_statement, str) and problem_statement.strip():
-            lines.append(f"    **Problem Statement**: {problem_statement.strip()}")
-            lines.append("")
-        functions = _string_list(contract.get("functions"))
-        lines.append("    **Functions:**")
-        lines.append("")
-        _append_contract_bullets(lines, functions, format_item=_format_contract_function)
-        lines.append("")
-        lines.append("    **Metrics:**")
-        lines.append("")
-        metric_entries = contract_metrics_as_dicts(contract.get("metrics"))
-        _append_contract_bullets(
-            lines, metric_entries, format_item=_format_contract_metric
-        )
-        lines.append("")
-        success_conditions = _string_list(contract.get("success_conditions"))
-        lines.append("    **Success Conditions:**")
-        lines.append("")
-        _append_contract_bullets(lines, success_conditions)
-        lines.append("")
-        invariants = mapping_if_dict(contract.get("invariants"))
-        if invariants:
-            lines.append("    **Must Preserve:**")
-            lines.append("")
-            must_preserve = _string_list(invariants.get("must_preserve"))
-            _append_contract_bullets(lines, must_preserve)
-            lines.append("")
-            fixed_context = mapping_if_dict(invariants.get("fixed_context"))
-            if fixed_context:
-                lines.append("    **Fixed Context:**")
-                lines.append("")
-                tools = _string_list(fixed_context.get("tools"))
-                cli = _string_list(fixed_context.get("cli"))
-                documents = _string_list(fixed_context.get("documents"))
-                knowledge_inputs = [
-                    _knowledge_input_label(item)
-                    for item in sequence_as_list(fixed_context.get("knowledge_inputs"))
-                    if isinstance(item, dict)
-                ]
-                lines.append(
-                    "    - **Tools**: "
-                    + (", ".join(f"`{value}`" for value in tools) if tools else "—")
-                )
-                lines.append(
-                    "    - **CLI**: "
-                    + (", ".join(f"`{value}`" for value in cli) if cli else "—")
-                )
-                lines.append(
-                    "    - **Documents**: "
-                    + (", ".join(f"`{value}`" for value in documents) if documents else "—")
-                )
-                lines.append(
-                    "    - **Knowledge Inputs**: "
-                    + (", ".join(knowledge_inputs) if knowledge_inputs else "—")
-                )
-                lines.append("")
-        source_assertions = mapping_if_dict(contract.get("source_assertions"))
-        if source_assertions:
-            lines.append("    **Source Assertions:**")
-            lines.append("")
-            skill_path = source_assertions.get("skill_path")
-            if isinstance(skill_path, str) and skill_path.strip():
-                lines.append(f"    - **Skill Path**: `{skill_path.strip()}`")
-            else:
-                lines.append("    - **Skill Path**: —")
-            supporting_paths = _string_list(source_assertions.get("supporting_paths"))
-            lines.append(
-                "    - **Supporting Paths**: "
-                + (", ".join(f"`{value}`" for value in supporting_paths) if supporting_paths else "—")
-            )
-            lines.append("")
 
     # Skill diagram (only if SVG exists)
     if plugin_dir and (plugin_dir / f"{sname}.svg").exists():

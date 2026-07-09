@@ -17,42 +17,75 @@ understand how RFEs are evaluated.
 
 ## Contract
 
-!!! info "Skill Contract"
-
-    **Version**: `canonical-skill-v1`
-
-    **Problem Statement**: Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md in the current working directory.
-
-    **Functions:**
-
-    - `generate`: Produce a new artifact for the user or another tool to consume.
-
-    **Metrics:**
-
-    - `task_success` (`deterministic`): Whether the skill completes the intended job correctly for the task. Guidance: Prefer deterministic or verifier-backed checks; use judge only as a fallback.
-    - `latency` (`deterministic`): How quickly the skill produces the final usable result. Guidance: Deterministic only; measure elapsed wall-clock time for the user-visible outcome.
-
-    **Success Conditions:**
-
-    - Writes artifacts/rfe-rubric.md under the current working directory.
-    - Confirms the file was written and prints its path.
-
-    **Must Preserve:**
-
-    - Do not modify the rubric content while exporting it.
-    - Do not redirect the export to a path other than artifacts/rfe-rubric.md under the invocation working directory.
-
-    **Fixed Context:**
-
-    - **Tools**: `Read`, `Write`, `Bash`
-    - **CLI**: `python3`
-    - **Documents**: —
-    - **Knowledge Inputs**: `repository_content` (public), `task_input` (task_private)
-
-    **Source Assertions:**
-
-    - **Skill Path**: `skills/export-rubric/SKILL.md`
-    - **Supporting Paths**: `skills/export-rubric/scripts/export_rubric.py`
+<div class="skill-contract">
+  <header class="skill-contract__header">
+    <span class="skill-contract__eyebrow">Skill Contract</span>
+    <span class="skill-contract__version">canonical-skill-v1</span>
+  </header>
+  <p class="skill-contract__lede">Export the assess-rfe scoring rubric to artifacts/rfe-rubric.md in the current working directory.</p>
+  <section class="skill-contract__section" data-section="01">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Functions</span>
+      <div class="skill-contract__inline">
+        <span class="skill-contract__chip skill-contract__chip--function">generate</span>
+      </div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Success</span>
+      <ul class="skill-contract__list">
+        <li>Writes artifacts/rfe-rubric.md under the current working directory.</li>
+        <li>Confirms the file was written and prints its path.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="02">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Optimization Targets</span></h3>
+    <div class="skill-contract__metrics">
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">task_success</code>
+        <span class="skill-contract__measure skill-contract__measure--deterministic">deterministic</span>
+        <span class="skill-contract__ref-placeholder"></span>
+      </div>
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">latency</code>
+        <span class="skill-contract__measure skill-contract__measure--deterministic">deterministic</span>
+        <span class="skill-contract__ref-placeholder"></span>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="03">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Must Not</span>
+      <ul class="skill-contract__list">
+        <li>Do not modify the rubric content while exporting it.</li>
+        <li>Do not redirect the export to a path other than artifacts/rfe-rubric.md under the invocation working directory.</li>
+      </ul>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Fixed Context</span>
+      <div class="skill-contract__code">
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Read, Write, Bash</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">python3</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">repository_content<span class="skill-contract__privacy">public</span>, task_input<span class="skill-contract__privacy">task_private</span></span></div>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="04">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Skill</span>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/export-rubric/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/export-rubric/SKILL.md</code></a></div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Supporting</span>
+      <ul class="skill-contract__paths">
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/export-rubric/scripts/export_rubric.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/export-rubric/scripts/export_rubric.py</code></a></li>
+      </ul>
+    </div>
+  </section>
+</div>
 
 ## Diagram
 
