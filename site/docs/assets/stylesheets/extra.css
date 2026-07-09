@@ -625,3 +625,469 @@ label.md-nav__link--active {
   color: var(--md-primary-fg-color);
   font-weight: 600;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Skill contract card
+ * Aesthetic: technical spec sheet × engineering manifest.
+ * Structured clauses (§01-§04) with left-spine accents per section.
+ * Monospace-forward for identifiers. Semantic measure badges +
+ * short-SHA GitHub links replace walls of text.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+.md-typeset .skill-contract {
+  position: relative;
+  max-width: 62rem;
+  margin: 1.4em 0;
+  padding: 1.1rem 1.4rem 0.9rem;
+  background: var(--sr-surface-raised);
+  border: 1px solid var(--sr-border);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--sr-text);
+}
+
+/* Header */
+.md-typeset .skill-contract__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 0.55rem;
+  margin-bottom: 0.7rem;
+  border-bottom: 1px solid var(--sr-border);
+}
+
+.md-typeset .skill-contract__eyebrow {
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--sr-text-dim);
+  font-weight: 600;
+}
+
+.md-typeset .skill-contract__version {
+  font-family: var(--md-code-font);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--sr-text-dim);
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+/* Problem statement — the "abstract" of the spec */
+.md-typeset .skill-contract__lede {
+  margin: 0 0 0.95rem 0;
+  padding: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--sr-text);
+  font-family: var(--md-text-font);
+  font-weight: 400;
+}
+
+.md-typeset .skill-contract__lede::before {
+  content: "\201C";
+  color: var(--sr-text-dim);
+  font-size: 1.4em;
+  line-height: 0;
+  vertical-align: -0.28em;
+  margin-right: 0.1em;
+  opacity: 0.75;
+}
+
+.md-typeset .skill-contract__lede::after {
+  content: "\201D";
+  color: var(--sr-text-dim);
+  font-size: 1.4em;
+  line-height: 0;
+  vertical-align: -0.28em;
+  margin-left: 0.05em;
+  opacity: 0.75;
+}
+
+/* Sections — no top border; the section title's trailing rule is the divider. */
+.md-typeset .skill-contract__section {
+  position: relative;
+  padding: 0;
+  margin: 1.25rem 0 0 0;
+  background: none;
+}
+
+.md-typeset .skill-contract__section:first-of-type {
+  margin-top: 0.6rem;
+}
+
+/* Section title — editorial clause header: NAME followed by a hairline
+   that runs to the card edge, framing each section across the full width. */
+.md-typeset .skill-contract__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 0.7rem 0;
+  padding: 0;
+  border: none;
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--sr-heading);
+}
+
+.md-typeset .skill-contract__section-title::before {
+  content: none !important;
+}
+
+.md-typeset .skill-contract__section-title::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: color-mix(in oklab, var(--sr-text-dim) 55%, transparent);
+}
+
+.md-typeset .skill-contract__section-name {
+  color: inherit;
+  flex: 0 0 auto;
+}
+
+/* Field row: two-column grid — labels and values align across the whole card.
+   Column 1 fits the longest metric id (evidence_completeness) snugly. */
+.md-typeset .skill-contract__row {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  gap: 1.1rem;
+  padding: 0.15rem 0;
+  align-items: baseline;
+}
+
+.md-typeset .skill-contract__row:first-of-type {
+  padding-top: 0;
+}
+
+.md-typeset .skill-contract__field {
+  font-family: var(--md-code-font);
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--sr-text-dim);
+  padding-top: 0.1rem;
+}
+
+/* Inline value area — chips, code, links */
+/* Inline value area — tokens flow as prose and wrap naturally. Multiple
+   mono tokens (tools, cli, documents) are joined by middot separators so
+   they read as one delimited list, not a loose scatter. */
+.md-typeset .skill-contract__inline {
+  display: block;
+  line-height: 1.9;
+}
+
+.md-typeset .skill-contract__inline .skill-contract__mono:not(:last-child)::after {
+  content: ",";
+  color: var(--sr-text-dim);
+  margin-right: 0.35em;
+  font-weight: 400;
+}
+
+/* Lists inside rows — nuclear reset of Material's default ul/li so
+   bullets and paths align exactly with the value column. Any padding
+   or margin on ul/li inside the contract card is stripped. */
+.md-typeset .skill-contract ul {
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-inline-start: 0 !important;
+  list-style: none !important;
+}
+
+.md-typeset .skill-contract li {
+  margin: 0 !important;
+  padding: 0;
+  list-style: none !important;
+}
+
+.md-typeset .skill-contract li::marker {
+  content: "";
+}
+
+.md-typeset .skill-contract .skill-contract__list li {
+  position: relative;
+  padding-left: 0.9rem !important;
+  margin: 0.1rem 0 !important;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.md-typeset .skill-contract__list li::before {
+  content: "\2022"; /* • bullet */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--sr-text-dim);
+  font-size: 1em;
+}
+
+/* Value tokens — plain monospace text, no box, neutral color. Tools, cli,
+   documents, functions, and knowledge inputs are supporting detail: they
+   read as quiet inline code, not bright-blue attention-grabbers. */
+.md-typeset .skill-contract .skill-contract__mono,
+.md-typeset .skill-contract .skill-contract__knowledge > li {
+  font-family: var(--md-code-font);
+  font-size: 0.72rem;
+  font-weight: 400;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--sr-text);
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+/* Function tag — canonical enum value (the published job). Subtle bordered
+   pill, matching the measure badge, to set it apart from plain tokens. */
+.md-typeset .skill-contract .skill-contract__chip--function {
+  display: inline-block;
+  font-family: var(--md-code-font);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.15em 0.55em;
+  border: 1px solid var(--sr-border);
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--sr-text-dim) 12%, transparent);
+  color: var(--sr-text);
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+/* Metric row — three explicit tracks so the id never wraps:
+   [id: max-content] [measure: auto] [remaining space] [ref right-aligned] */
+.md-typeset .skill-contract__metrics {
+  display: grid;
+  gap: 0.25rem;
+}
+
+/* Metric row — 13rem key column (aligns with FUNCTIONS/SUCCESS/TOOLS
+   labels above), measure column sized to content (max-content so the
+   badge never stretches), ref takes the rest. */
+.md-typeset .skill-contract__metric {
+  display: grid;
+  grid-template-columns: 10.5rem max-content 1fr;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.15rem 0;
+}
+
+/* Never let grid children stretch to fill their track. */
+.md-typeset .skill-contract__metric > * {
+  justify-self: start;
+}
+
+/* Metric ID — same style as field row labels for visual consistency. */
+.md-typeset .skill-contract__metric-id {
+  font-family: var(--md-code-font);
+  font-size: 0.58rem;
+  color: var(--sr-text-dim);
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  white-space: nowrap;
+}
+
+/* Measure badge — the one intentional pill: a subtle bordered tag that
+   marks the metric's measurement method (judge / deterministic / …). */
+.md-typeset .skill-contract .skill-contract__measure {
+  font-family: var(--md-code-font);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border: 1px solid var(--sr-border);
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--sr-text-dim) 12%, transparent);
+  color: var(--sr-text-dim);
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.md-typeset .skill-contract__measure-placeholder {
+  display: inline-block;
+  width: 0;
+}
+
+/* Ref link — right-aligned short-SHA callout */
+.md-typeset .skill-contract__ref {
+  font-family: var(--md-code-font);
+  font-size: 0.7rem;
+  color: var(--sr-text-dim);
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  transition: color 0.15s ease;
+}
+
+.md-typeset .skill-contract__ref:hover {
+  color: var(--sr-blue);
+  text-decoration: none;
+}
+
+.md-typeset .skill-contract__ref-arrow {
+  display: inline-block;
+  opacity: 0.55;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.md-typeset .skill-contract__ref:hover .skill-contract__ref-arrow,
+.md-typeset .skill-contract__path:hover .skill-contract__ref-arrow {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.md-typeset .skill-contract__ref-placeholder {
+  display: inline-block;
+  width: 0;
+}
+
+/* Path link — traceability */
+.md-typeset .skill-contract__path {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  color: var(--sr-text);
+  text-decoration: none;
+  font-size: 0.78rem;
+  transition: color 0.15s ease;
+}
+
+.md-typeset .skill-contract__path:hover {
+  color: var(--sr-blue);
+}
+
+.md-typeset .skill-contract__path code {
+  font-size: 0.72rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.md-typeset .skill-contract .skill-contract__paths li {
+  margin: 0.12rem 0 !important;
+  padding: 0;
+}
+
+/* Fixed context — a single recessed code well holding the literal
+   identifier lists (tools / cli / documents / knowledge) as config lines.
+   Contains the long MCP tool names in one contained surface. */
+.md-typeset .skill-contract__code {
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
+  line-height: 1.7;
+  color: var(--sr-text);
+  background: var(--sr-code-bg);
+  border: 1px solid var(--sr-border);
+  border-radius: 5px;
+  padding: 0.5rem 0.7rem;
+  overflow-wrap: anywhere;
+}
+
+.md-typeset .skill-contract__code-line {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 0.6rem;
+  padding: 0.12rem 0;
+  align-items: baseline;
+}
+
+.md-typeset .skill-contract__code-key {
+  color: var(--sr-text-dim);
+  font-weight: 500;
+}
+
+.md-typeset .skill-contract__code-key::after {
+  content: ":";
+  opacity: 0.5;
+}
+
+.md-typeset .skill-contract__code-val {
+  color: var(--sr-text);
+}
+
+/* Dark mode — lift the pill borders above the near-invisible --sr-border
+   so the function tag and measure badge read as crisp outlined chips. */
+[data-md-color-scheme="slate"] .md-typeset .skill-contract .skill-contract__chip--function,
+[data-md-color-scheme="slate"] .md-typeset .skill-contract .skill-contract__measure {
+  border-color: color-mix(in oklab, var(--sr-text-dim) 55%, transparent);
+}
+
+/* Privacy tag inside a knowledge value — dim uppercase, trailing the kind. */
+.md-typeset .skill-contract__privacy {
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sr-text-dim);
+  margin-left: 0.35em;
+}
+
+/* Fade-up entrance — subtle, once per view */
+@media (prefers-reduced-motion: no-preference) {
+  .md-typeset .skill-contract {
+    animation: sr-contract-fade 0.55s ease-out both;
+  }
+  .md-typeset .skill-contract__section {
+    animation: sr-contract-slide 0.45s ease-out both;
+    animation-delay: calc(0.06s * var(--sr-section-idx, 0) + 0.15s);
+  }
+  .md-typeset .skill-contract__section[data-section="01"] { --sr-section-idx: 1; }
+  .md-typeset .skill-contract__section[data-section="02"] { --sr-section-idx: 2; }
+  .md-typeset .skill-contract__section[data-section="03"] { --sr-section-idx: 3; }
+  .md-typeset .skill-contract__section[data-section="04"] { --sr-section-idx: 4; }
+}
+
+@keyframes sr-contract-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sr-contract-slide {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Responsive: stack row label above value on narrow screens */
+@media (max-width: 42em) {
+  .md-typeset .skill-contract {
+    padding: 1.2rem 1.1rem 1rem;
+  }
+  .md-typeset .skill-contract__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .md-typeset .skill-contract__row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+  .md-typeset .skill-contract__field {
+    padding-top: 0;
+  }
+  .md-typeset .skill-contract__metric {
+    grid-template-columns: 1fr auto;
+    row-gap: 0.4rem;
+  }
+  .md-typeset .skill-contract__ref {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}

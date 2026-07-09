@@ -31,41 +31,70 @@ reuse an existing ticket instead of filing a duplicate.
 
 ## Contract
 
-!!! info "Skill Contract"
-
-    **Version**: `canonical-skill-v1`
-
-    **Problem Statement**: Read preprocessed error files for all failed jobs, identify distinct failure patterns, and group jobs by shared root cause into grouping.json.
-
-    **Functions:**
-
-    - `analyze`: Interpret inputs to extract structure, meaning, or implications.
-
-    **Metrics:**
-
-    - `task_success` (`deterministic`): Whether the skill completes the intended job correctly for the task. Guidance: Prefer deterministic or verifier-backed checks; use judge only as a fallback.
-
-    **Success Conditions:**
-
-    - Produces grouping.json with all expected job IDs assigned to groups.
-    - Each group has a human-readable summary and representative error messages.
-
-    **Must Preserve:**
-
-    - Every expected job ID must appear in exactly one group.
-    - Do not modify job trace logs or error files.
-
-    **Fixed Context:**
-
-    - **Tools**: `Read`, `Bash`, `Grep`, `Glob`
-    - **CLI**: `python3`
-    - **Documents**: —
-    - **Knowledge Inputs**: `task_input` (task_private)
-
-    **Source Assertions:**
-
-    - **Skill Path**: `skills/pipeline-grouping/SKILL.md`
-    - **Supporting Paths**: `skills/pipeline-grouping/scripts/grouper.py`
+<div class="skill-contract">
+  <header class="skill-contract__header">
+    <span class="skill-contract__eyebrow">Skill Contract</span>
+    <span class="skill-contract__version">canonical-skill-v1</span>
+  </header>
+  <p class="skill-contract__lede">Read preprocessed error files for all failed jobs, identify distinct failure patterns, and group jobs by shared root cause into grouping.json.</p>
+  <section class="skill-contract__section" data-section="01">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Functions</span>
+      <div class="skill-contract__inline">
+        <span class="skill-contract__chip skill-contract__chip--function">analyze</span>
+      </div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Success</span>
+      <ul class="skill-contract__list">
+        <li>Produces grouping.json with all expected job IDs assigned to groups.</li>
+        <li>Each group has a human-readable summary and representative error messages.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="02">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Optimization Targets</span></h3>
+    <div class="skill-contract__metrics">
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">task_success</code>
+        <span class="skill-contract__measure skill-contract__measure--deterministic">deterministic</span>
+        <span class="skill-contract__ref-placeholder"></span>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="03">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Must Not</span>
+      <ul class="skill-contract__list">
+        <li>Every expected job ID must appear in exactly one group.</li>
+        <li>Do not modify job trace logs or error files.</li>
+      </ul>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Fixed Context</span>
+      <div class="skill-contract__code">
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Read, Bash, Grep, Glob</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">python3</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">task_input<span class="skill-contract__privacy">task_private</span></span></div>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="04">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Skill</span>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-grouping/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-grouping/SKILL.md</code></a></div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Supporting</span>
+      <ul class="skill-contract__paths">
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-grouping/scripts/grouper.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-grouping/scripts/grouper.py</code></a></li>
+      </ul>
+    </div>
+  </section>
+</div>
 
 ## Diagram
 

@@ -22,43 +22,80 @@ what-if analysis, and near-miss identification).
 
 ## Contract
 
-!!! info "Skill Contract"
-
-    **Version**: `canonical-skill-v1`
-
-    **Problem Statement**: Score an RFE against the published rubric and explain the result.
-
-    **Functions:**
-
-    - `review`: Assess an artifact against expectations and identify issues, risks, or fit.
-
-    **Metrics:**
-
-    - `task_success` (`judge`): Whether the skill completes the intended job correctly for the task. Guidance: Prefer deterministic or verifier-backed checks; use judge only as a fallback. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
-    - `evidence_completeness` (`judge`): Whether claims and verdicts are backed by enough concrete evidence. Guidance: Use verifier-backed checks when evidence can be counted; otherwise use a rubric-backed judge. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
-    - `output_quality` (`judge`): Human-judged quality of the final artifact when deterministic checks are insufficient. Guidance: Judge only; always pair it with a stable rubric_ref and, when available, calibration data. References: rubric_ref=`opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md`
-
-    **Success Conditions:**
-
-    - Produces a complete rubric-based assessment for the supplied RFE input.
-    - Includes evidence-backed scoring rationale for each criterion.
-
-    **Must Preserve:**
-
-    - Do not skip rubric criteria or invent unsupported evidence.
-    - Do not change the accepted input modes declared by the skill.
-
-    **Fixed Context:**
-
-    - **Tools**: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `Agent`, `TaskGet`, `mcp__atlassian__getJiraIssue`, `mcp__atlassian__searchJiraIssuesUsingJql`
-    - **CLI**: `python3`
-    - **Documents**: —
-    - **Knowledge Inputs**: `repository_content` (public), `task_input` (task_private), `tool_output` (task_private)
-
-    **Source Assertions:**
-
-    - **Skill Path**: `skills/assess-rfe/SKILL.md`
-    - **Supporting Paths**: `skills/assess-rfe/scripts/agent_prompt.md`
+<div class="skill-contract">
+  <header class="skill-contract__header">
+    <span class="skill-contract__eyebrow">Skill Contract</span>
+    <span class="skill-contract__version">canonical-skill-v1</span>
+  </header>
+  <p class="skill-contract__lede">Score an RFE against the published rubric and explain the result.</p>
+  <section class="skill-contract__section" data-section="01">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Functions</span>
+      <div class="skill-contract__inline">
+        <span class="skill-contract__chip skill-contract__chip--function">review</span>
+      </div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Success</span>
+      <ul class="skill-contract__list">
+        <li>Produces a complete rubric-based assessment for the supplied RFE input.</li>
+        <li>Includes evidence-backed scoring rationale for each criterion.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="02">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Optimization Targets</span></h3>
+    <div class="skill-contract__metrics">
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">task_success</code>
+        <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+      </div>
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">evidence_completeness</code>
+        <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+      </div>
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">output_quality</code>
+        <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="03">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Must Not</span>
+      <ul class="skill-contract__list">
+        <li>Do not skip rubric criteria or invent unsupported evidence.</li>
+        <li>Do not change the accepted input modes declared by the skill.</li>
+      </ul>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Fixed Context</span>
+      <div class="skill-contract__code">
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Read, Write, Edit, Glob, Grep, Bash, Agent, TaskGet, mcp__atlassian__getJiraIssue, mcp__atlassian__searchJiraIssuesUsingJql</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">python3</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">repository_content<span class="skill-contract__privacy">public</span>, task_input<span class="skill-contract__privacy">task_private</span>, tool_output<span class="skill-contract__privacy">task_private</span></span></div>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="04">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Skill</span>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/assess-rfe/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/SKILL.md</code></a></div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Supporting</span>
+      <ul class="skill-contract__paths">
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/assess-rfe/scripts/agent_prompt.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/scripts/agent_prompt.md</code></a></li>
+      </ul>
+    </div>
+  </section>
+</div>
 
 ## Diagram
 

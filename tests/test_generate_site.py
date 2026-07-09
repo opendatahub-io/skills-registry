@@ -15,24 +15,35 @@ class SiteContractRenderingTests(unittest.TestCase):
 
         for marker in (
             "## Contract",
-            '!!! info "Skill Contract"',
+            'class="skill-contract"',
             "canonical-skill-v1",
+            "Review the artifact.",  # problem_statement rendered as the lede
+            'data-section="01"',
+            'data-section="02"',
+            'data-section="03"',
+            'data-section="04"',
             "task_success",
-            "`review`",
-            "**Problem Statement**",
-            "**Success Conditions:**",
-            "**Metrics:**",
-            "`judge`",
-            "example-org/example-plugin@main:docs/review-rubric.md",
-            "**Must Preserve:**",
-            "**Source Assertions:**",
+            ">review<",  # function chip
+            "skill-contract__measure--judge",
+            "example-org/example-plugin@main:docs/review-rubric.md",  # title attr on ref
+            "review-rubric.md @ main",  # short ref label
+            "Must Not",
+            "Traceability",
             "skills/example-skill/SKILL.md",
         ):
             self.assertIn(marker, page)
-        for old_heading in ("### Problem Statement", "### Metrics"):
-            self.assertNotIn(old_heading, page)
+        # Old admonition/bullet markers should not appear
+        for old_marker in (
+            '!!! info "Skill Contract"',
+            "**Problem Statement**",
+            "**Success Conditions:**",
+            "**Metrics:**",
+            "**Must Preserve:**",
+            "**Source Assertions:**",
+        ):
+            self.assertNotIn(old_marker, page)
         idx_contract = page.index("## Contract")
-        idx_review = page.index("`review`", idx_contract)
+        idx_review = page.index(">review<", idx_contract)
         self.assertGreater(idx_review, idx_contract)
 
     def test_skill_page_omits_contract_when_contract_is_not_mapping(self):
