@@ -122,7 +122,7 @@ hide:
 
     Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated m...
 
-    **1 skills** - Documentation - v0.3.8
+    **1 skills** - Documentation - v0.3.15
 
 </div>
 
