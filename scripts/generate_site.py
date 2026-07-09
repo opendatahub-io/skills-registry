@@ -104,36 +104,6 @@ def _string_list(items) -> list[str]:
     return [item.strip() for item in items if isinstance(item, str) and item.strip()]
 
 
-def _knowledge_input_label(item: dict) -> str:
-    kind = item.get("kind")
-    privacy = item.get("privacy")
-    if kind and privacy:
-        return f"`{kind}` ({privacy})"
-    if kind:
-        return f"`{kind}`"
-    return "`unknown`"
-
-
-def _format_contract_function(value: str) -> str:
-    description = CANONICAL_FUNCTION_DOCS.get(value)
-    if description:
-        return f"`{value}`: {description}"
-    return f"`{value}`"
-
-
-def _append_contract_bullets(
-    lines: list[str],
-    items: list,
-    *,
-    format_item=str,
-) -> None:
-    if items:
-        for item in items:
-            lines.append(f"    - {format_item(item)}")
-    else:
-        lines.append("    - —")
-
-
 def _append_code_block(
     lines: list[str],
     block_lines: list[str],
@@ -161,45 +131,6 @@ def _append_code_block(
     lines.append(fence)
     lines.extend(rendered_lines)
     lines.append(fence_ticks)
-
-
-def _format_contract_metric(metric: dict) -> str:
-    metric_id = str(metric["id"])
-    header = f"`{metric_id}`"
-
-    measure = metric.get("measure")
-    if isinstance(measure, str) and measure.strip():
-        header += f" (`{measure.strip()}`)"
-
-    details: list[str] = []
-    metadata = CANONICAL_METRIC_DOCS.get(metric_id)
-    if metadata:
-        details.append(metadata["summary"])
-        details.append(f"Guidance: {metadata['measure_guidance']}")
-
-    for key, label in (
-        ("target_measure", "Target measure"),
-        ("success_mode", "Success mode"),
-    ):
-        value = metric.get(key)
-        if isinstance(value, str) and value.strip():
-            details.append(f"{label}: `{value.strip()}`")
-
-    references = []
-    for ref_key in ("rubric_ref", "verifier_ref", "calibration_ref"):
-        ref_value = metric.get(ref_key)
-        if isinstance(ref_value, str) and ref_value.strip():
-            references.append(f"{ref_key}=`{ref_value.strip()}`")
-    if references:
-        details.append("References: " + ", ".join(references))
-
-    trials = metric.get("trials")
-    if isinstance(trials, int):
-        details.append(f"Trials: `{trials}`")
-
-    if details:
-        return f"{header}: " + " ".join(details)
-    return header
 
 
 def clean_generated(output_dir: Path):
@@ -742,7 +673,7 @@ def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
             def _path_markup(path: str) -> str:
                 path_esc = _esc(path)
                 if base_url:
-                    href = f"{base_url}/blob/{_esc(ref_name)}/{path_esc}"
+                    href = f"{_esc(base_url)}/blob/{_esc(ref_name)}/{path_esc}"
                     return (
                         f'<a class="skill-contract__path" href="{href}">'
                         '<span class="skill-contract__ref-arrow" aria-hidden="true">↗</span>'
