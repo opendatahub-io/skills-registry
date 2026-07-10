@@ -7,7 +7,15 @@ title: strategy-create
 
 # strategy-create
 
-Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira
+Creates strategies from approved RFEs by cloning them into the RHAISTRAT Jira project
+and setting up local artifacts for refinement. It discovers RFE source data (local
+`artifacts/rfe-tasks/` or Jira), applies a status + required-label gate (must have a
+target-version/`strat-creator-3.x` label plus `rfe-creator-autofix-rubric-pass` or
+`tech-reviewed`), and for each surviving RFE either imports an existing RHAISTRAT clone
+(Path A) or creates a new one (Path B). It freezes an RFE snapshot in
+`strat-originals/`, captures source-RFE comments that carry removed implementation
+detail, writes a strategy stub to `artifacts/strat-tasks/` with the fixed
+three-section skeleton, applies provenance labels, and records the ticket mapping.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -72,8 +80,29 @@ Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-create diagram](strategy-create.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-create [RHAIRFE-NNNN ...] [config-name] [--dry-run]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAIRFE-NNNN` |  | - | One or more source RFE keys to process. If provided, all of them are processed without prompting; if omitted, available RFEs are listed for selection. |
+| `config-name` |  | - | Pipeline config filename (e.g. road-to-production) used as the run identifier recorded in strat-skipped.md; defaults to manual. |
+| `--dry-run` |  | - | Skip all external Jira writes — no cloning or issue edits. Reads still happen and local artifacts are still created (using STRAT-NNN naming with jira_key=null). |
+
 ## Usage
 
 ```bash
 /strategy-create
+/strategy-create RHAIRFE-1458 RHAIRFE-1595
+/strategy-create RHAIRFE-1458 road-to-production
+/strategy-create RHAIRFE-1458 --dry-run
 ```

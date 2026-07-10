@@ -1,0 +1,128 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **strategy-testability-review**
+
+  - [RHAISTRAT-NNNN] or all
+  - context: fork · model opus
+  - invoked by /strategy-review
+  - test-engineer lens (Read/Grep/Glob)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Mode decision ---
+
+mode: |md
+  **Mode?**
+  local/strat-tasks exists?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read inputs (local) ---
+
+read-local: |md
+  **Read inputs (local)**
+
+  - local/strat-tasks/
+  - local/strat-originals/ (RFE)
+  - local/strat-reviews/ (prior)
+  - $ARGUMENTS: one key vs all
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read inputs (CI) ---
+
+read-ci: |md
+  **Read inputs (CI)**
+
+  - artifacts/strat-tasks/
+  - artifacts/rfe-tasks/ (RFE)
+  - artifacts/strat-reviews/ (prior)
+  - $ARGUMENTS: one key vs all
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Cross-reference ---
+
+xref: |md
+  **Cross-ref RFE + prior reviews**
+
+  - map to original acceptance criteria
+  - re-review? addressed / still open
+  - new issues from revisions
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess testability (LLM) ---
+
+assess: |md
+  **Assess testability**
+  test-engineer lens
+
+  - criteria testable &amp; measurable?
+  - missing edge cases / failure modes
+  - test strategy (unit / integ / e2e)
+  - NFRs quantified w/ numeric thresholds
+  - each threshold cites a grounded source
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Structured verdict ---
+
+output-verdict: |md
+  **Structured verdict**
+  per strategy
+
+  - Testability
+  - Missing edge cases
+  - Untestable criteria
+  - Test complexity
+  - Recommendation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> mode
+mode -> read-local: "local"
+mode -> read-ci: "CI (artifacts)"
+read-local -> xref
+read-ci -> xref
+xref -> assess
+assess -> output-verdict

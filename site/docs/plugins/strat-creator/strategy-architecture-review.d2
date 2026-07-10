@@ -1,0 +1,160 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **strategy-architecture-review**
+
+  - $ARGUMENTS: RHAISTRAT-NNNN
+  - context: fork · model opus
+  - invoked by /strategy-review
+  - tools: Read, Grep, Glob
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Mode decision ---
+
+mode: |md
+  **Mode?**
+
+  - local/strat-tasks present?
+  - local vs artifacts (CI)
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Cross-reference ---
+
+xref: |md
+  **Cross-ref RFE + prior reviews**
+
+  - read strategies (tasks dir)
+  - source RFE originals
+  - prior reviews (re-review)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Architecture context gate ---
+
+ctx-check: |md
+  **Arch context available?**
+
+  - .context/architecture-context/
+    architecture/rhoai-*
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Skip branch ---
+
+skip: |md
+  **Skip review**
+
+  - "Architecture review skipped
+    — no context available"
+  - exit cleanly
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read arch context (external) ---
+
+arch: |md
+  **Read arch context**
+
+  - PLATFORM.md
+  - component docs per strategy
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Active overlays (external) ---
+
+overlays: |md
+  **Active overlays**
+
+  - overlays/*.md (status: active)
+  - human-authored corrections
+  - take precedence over docs
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Assess (LLM) ---
+
+assess: |md
+  **Assess architecture**
+
+  - dependencies correct?
+  - integration patterns valid?
+  - component boundaries respected?
+  - deployment model correct?
+  - platform conflicts?
+  - cross-component coordination?
+  - cite arch docs for every finding
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Verdict output ---
+
+output-verdict: |md
+  **Structured verdict**
+
+  - Architecture assessment
+  - Missing dependencies
+  - Incorrect assumptions
+  - Cross-component risks
+  - Recommendation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> mode
+mode -> xref: "local"
+mode -> xref: "CI"
+xref -> ctx-check
+ctx-check -> skip: "none"
+ctx-check -> arch: "available"
+arch -> overlays
+overlays -> assess
+assess -> output-verdict

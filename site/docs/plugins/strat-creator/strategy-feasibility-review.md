@@ -7,7 +7,14 @@ title: strategy-feasibility-review
 
 # strategy-feasibility-review
 
-Reviews strategy for technical feasibility and effort estimate credibility
+An independent, adversarial reviewer (staff-engineer persona) that assesses a refined
+strategy for technical feasibility, RFE alignment, and effort-estimate credibility.
+Invoked by `strategy-review` in an isolated `context: fork`, it auto-detects local vs
+CI mode, optionally grounds itself in architecture context, and checks whether the
+approach can actually be built, whether it delivers what the RFE asks, whether the
+T-shirt size is credible, whether hidden dependencies exist, and whether risks and
+assumptions are properly separated with concrete mitigations. It emits a structured
+per-strategy verdict (feasible / needs revision / infeasible).
 
 **Plugin**: [strat-creator](index.md) | **:material-close: Internal**
 
@@ -71,8 +78,24 @@ Reviews strategy for technical feasibility and effort estimate credibility
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-feasibility-review diagram](strategy-feasibility-review.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-feasibility-review [RHAISTRAT-NNNN]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` |  | - | A strategy key to review only that strategy. If omitted, all strategies in the tasks directory are reviewed. |
+
 ## Usage
 
 ```bash
-/strategy-feasibility-review
+/strategy-feasibility-review RHAISTRAT-1531
 ```

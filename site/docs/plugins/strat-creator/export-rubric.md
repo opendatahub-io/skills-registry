@@ -7,7 +7,10 @@ title: export-rubric
 
 # export-rubric
 
-Export the scoring rubric to artifacts/strat-rubric.md
+Exports the assess-strat scoring rubric to `artifacts/strat-rubric.md` in the current
+working directory. It resolves the plugin root, runs `scripts/export_rubric.py`, and
+confirms the written path. A small utility used to inspect or share the rubric that
+`strategy-review` scores against.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -75,6 +78,12 @@ Export the scoring rubric to artifacts/strat-rubric.md
       <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/strat-creator/blob/main/.claude/skills/export-rubric/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>.claude/skills/export-rubric/SKILL.md</code></a></div>
     </div>
   </section>
+</div>
+
+## Diagram
+
+<div class="diagram-container" markdown>
+![export-rubric diagram](export-rubric.svg)
 </div>
 
 ## Usage

@@ -1,0 +1,231 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strategy-create**
+
+  - [RHAIRFE-NNNN ...]
+  - [config name]
+  - [--dry-run]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: Find RFE source ---
+
+find-sources: |md
+  **Find RFE Source**
+
+  - local artifacts/rfe-tasks/
+  - or Jira (MCP / REST)
+  - ask user if both exist
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2: Select RFEs ---
+
+select: |md
+  **Select RFEs**
+
+  - all if IDs in args
+  - else present table + prompt
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2a: Status + Label Gate ---
+
+gate: |md
+  **Status + Label Gate**
+  Closed/Resolved?
+  required labels?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Skip output ---
+
+skipped: |md
+  **strat-skipped.md**
+
+  - append reason + run id
+  - preserve skip history
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 5a: existing STRAT? ---
+
+check-strat: |md
+  **Existing RHAISTRAT?**
+  find_strat_for_rfe.py
+  Cloners link
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Path A: import existing STRAT ---
+
+import-strat: |md
+  **Path A: Import**
+
+  - fetch STRAT from Jira
+  - filter active / processed
+  - reconstruct Business Need
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Path B: clone RFE (external write) ---
+
+clone: |md
+  **Path B: Clone RFE**
+
+  - clone_issue.py
+  - new RHAISTRAT Feature
+  - Cloners link to RFE
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 4/4a: save originals ---
+
+snapshot: |md
+  **Save Originals**
+
+  - RFE description snapshot
+  - source comments
+  - → strat-originals/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 5: write stub ---
+
+stub: |md
+  **Write Strategy Stub**
+
+  - strat-tasks/*.md
+  - verbatim Business Need
+  - Strategy + SME template
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 6/7: labels + tickets ---
+
+apply-labels: |md
+  **Apply Labels + Tickets**
+
+  - strat-creator-auto-created
+  - write strat-tickets.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira external service ---
+
+jira: |md
+  **Jira (MCP / REST)**
+
+  - getJiraIssue / JQL reads
+  - clone + label writes
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- dry-run callout ---
+
+dry-run-note: |md
+  --dry-run
+  skip Step 3 clone + Step 6 label
+  reads still run
+  STRAT-NNN, jira_key=null
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> find-sources
+find-sources -> select
+select -> gate
+gate -> check-strat: "passes gate"
+gate -> skipped: "fails gate" {
+  style.stroke-dash: 3
+}
+
+check-strat -> import-strat: "clone exists"
+check-strat -> clone: "none"
+
+import-strat -> snapshot
+clone -> snapshot
+snapshot -> stub
+stub -> apply-labels
+
+# --- Jira interactions (dashed) ---
+
+find-sources -> jira: "reads" {
+  style.stroke-dash: 3
+}
+clone -> jira: "clone Feature" {
+  style.stroke-dash: 3
+}
+apply-labels -> jira: "add label" {
+  style.stroke-dash: 3
+}
+jira -> dry-run-note: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

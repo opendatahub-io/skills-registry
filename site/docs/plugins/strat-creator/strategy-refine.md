@@ -7,7 +7,16 @@ title: strategy-refine
 
 # strategy-refine
 
-Refine a strategy with technical HOW, dependencies, and NFRs
+Refines exactly one strategy per invocation — adding the technical approach, affected
+components, impacted teams, high-level requirements, dependencies, non-functional
+requirements, out-of-scope, acceptance criteria, effort estimate, risks, assumptions,
+and open questions using the unified `strat-template.md`. It grounds the *how* in the
+platform's architecture context and follows a strict priority chain of HOW inputs:
+Staff Engineer / SME Input > architecture-context overlays > removed RFE implementation
+context (from source-RFE comments) > generated architecture docs. In revision mode
+(a prior review exists) it addresses each reviewer's concerns rather than regenerating
+from scratch. It only ever writes the `## Strategy` section, updates frontmatter to
+`Refined`, and (outside dry-run) pushes the section to Jira with a provenance label.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -78,8 +87,28 @@ Refine a strategy with technical HOW, dependencies, and NFRs
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-refine diagram](strategy-refine.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-refine <RHAISTRAT-NNNN> [--dry-run] [--architecture-context <path>]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` | :material-check: | - | The strategy key to refine (e.g. RHAISTRAT-1531 or STRAT-001). Exactly one per invocation; the skill errors without it. |
+| `--architecture-context` |  | - | Local path to an architecture-context checkout to link instead of fetching from remote — useful for testing overlay changes locally. |
+| `--dry-run` |  | - | Skip all Jira writes (no push, no labels). Reads and local artifact updates still happen. |
+
 ## Usage
 
 ```bash
-/strategy-refine
+/strategy-refine RHAISTRAT-1531
+/strategy-refine RHAISTRAT-1531 --dry-run
+/strategy-refine RHAISTRAT-1531 --architecture-context ../architecture-context
 ```

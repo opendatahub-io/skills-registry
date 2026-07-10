@@ -7,7 +7,14 @@ title: strategy-scope-review
 
 # strategy-scope-review
 
-Reviews strategy for right-sizing and bounded scope
+An independent, adversarial reviewer (product-owner persona) that assesses whether a
+refined strategy is right-sized. Invoked by `strategy-review` in an isolated
+`context: fork`, it auto-detects local vs CI mode and checks whether the strategy maps
+to a single deliverable feature, whether the effort estimate matches the scope,
+whether scope is explicitly bounded, whether it delivers a complete capability,
+whether it silently expands or shrinks the RFE, and whether requirements are
+prioritized (P0/P1/P2). It flags scope traps ("and related functionality", "full
+support for") and emits a structured per-strategy scope verdict.
 
 **Plugin**: [strat-creator](index.md) | **:material-close: Internal**
 
@@ -71,8 +78,24 @@ Reviews strategy for right-sizing and bounded scope
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-scope-review diagram](strategy-scope-review.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-scope-review [RHAISTRAT-NNNN]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` |  | - | A strategy key to review only that strategy. If omitted, all strategies in the tasks directory are reviewed. |
+
 ## Usage
 
 ```bash
-/strategy-scope-review
+/strategy-scope-review RHAISTRAT-1531
 ```

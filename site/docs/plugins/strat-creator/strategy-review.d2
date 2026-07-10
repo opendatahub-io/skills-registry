@@ -1,0 +1,219 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strategy-review**
+
+  - &lt;RHAISTRAT-NNNN&gt;
+  - --dry-run
+  - --architecture-context &lt;path&gt;
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verify + gate ---
+
+verify: |md
+  **Verify + gate**
+
+  - strategy exists + refined?
+  - pipeline label gate
+    (skip if pass / needs-attention)
+  - local vs CI mode
+  - exactly one strategy per run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch architecture context (external) ---
+
+arch: |md
+  **Fetch arch context**
+
+  - fetch-architecture-context.sh
+  - clone architecture-context
+  - --architecture-context: local path
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Bootstrap assess-strat (external) ---
+
+bootstrap: |md
+  **Bootstrap assess-strat**
+
+  - clone plugin
+    &rarr; .context/assess-strat
+  - copy skills + agents
+  - export rubric &rarr; strat-rubric.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Scorer agent (LLM) ---
+
+scorer: |md
+  **Scorer agent**
+  background opus agent
+
+  - score strategy vs rubric
+  - validate arch claims (Glob/Grep)
+  - writes .result.md files
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Parse scores (deterministic) ---
+
+parse: |md
+  **Parse scores (deterministic)**
+
+  - parse_results.py &rarr; scores.csv
+  - apply_scores.py &rarr; frontmatter
+  - summarize_run.py
+  - verdict APPROVE / REVISE / REJECT
+    from numeric scores only (no LLM)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Forked reviewers (container) ---
+
+reviewers: Forked reviewers (parallel, context: fork) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  rev-feas: |md
+    **Feasibility**
+
+    - buildable approach?
+    - effort estimates credible?
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+  rev-test: |md
+    **Testability**
+
+    - acceptance criteria testable?
+    - missing edge cases?
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+  rev-scope: |md
+    **Scope**
+
+    - right-sized strategy?
+    - effort matches scope?
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+  rev-arch: |md
+    **Architecture**
+
+    - dependencies correct?
+    - integration patterns?
+    - (if arch context available)
+  | {
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+}
+
+# --- Write review file ---
+
+prose: |md
+  **Write review file**
+
+  - assemble 4 prose sections
+  - Agreements / Disagreements
+  - set reviewers.* frontmatter
+  - recommendation from scores only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Jira writes (external) ---
+
+jira: |md
+  **Jira writes**
+
+  - post summary comment
+  - attach full review file
+  - apply verdict label
+  - skipped in --dry-run
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Advise user ---
+
+advise: |md
+  **Advise user**
+
+  - APPROVE: ready for sign-off
+  - REVISE: fix + re-run
+  - REJECT: revisit RFE / refine
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> verify
+verify -> arch
+arch -> bootstrap
+bootstrap -> scorer
+scorer -> parse: ".result.md"
+parse -> reviewers: "verdict + scores"
+reviewers -> prose: "prose per dimension"
+prose -> jira
+jira -> advise

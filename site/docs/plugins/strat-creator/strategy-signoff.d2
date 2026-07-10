@@ -1,0 +1,164 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strategy-signoff**
+
+  - <RHAISTRAT-NNNN>
+  - rubric-pass strategies only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-conditions ---
+
+read-local: |md
+  **Read local file + labels/parent**
+
+  - local/strat-tasks/*.md
+  - fetch_issue.py
+  - --fields labels,parent
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+guard: |md
+  **Guard checks**
+
+  - has needs-attention?
+  - missing rubric-pass?
+  - no local file?
+  - warn if no parent
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Stop branch ---
+
+stop: |md
+  **Stop + advise**
+
+  - needs CI approval first
+  - /strategy-push to resubmit
+  - then /strategy-pull
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Confirm branch ---
+
+confirm: |md
+  **Confirm with user**
+
+  - show title + sections
+  - review score summary
+  - ask to proceed
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Push content (Jira) ---
+
+push-content: |md
+  **Push content**
+
+  - push_strategy.py
+  - Jira ## Strategy section
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+comment: |md
+  **Post review summary**
+
+  - *-review-summary.md
+  - add_comment -> Jira
+  - skip if absent
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+attach: |md
+  **Attach review file**
+
+  - *-review.md
+  - add_attachment -> Jira
+  - skip if absent
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Label + done ---
+
+label: |md
+  **Add human-sign-off**
+
+  - add_labels -> Jira
+  - strat-creator-human-sign-off
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+done: |md
+  **Feature-ready**
+
+  - RHAISTRAT signed off
+  - marked feature-ready
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> read-local
+read-local -> guard
+
+guard -> stop: "guard fails" {
+  style.stroke-dash: 3
+}
+guard -> confirm: "rubric-pass ✓"
+
+confirm -> push-content: "proceed"
+push-content -> comment
+comment -> attach
+attach -> label
+label -> done
