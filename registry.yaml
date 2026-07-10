@@ -121,36 +121,316 @@ plugins:
       - name: strategy-create
         description: Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-create/SKILL.md
+          problem_statement: Clone approved RFEs into the RHAISTRAT Jira project and set up local artifacts for refinement.
+          success_conditions:
+            - Creates RHAISTRAT issues from approved RFEs via Jira clone or manual creation.
+            - Writes local strategy stubs to artifacts/strat-tasks/ with correct frontmatter.
+          invariants:
+            must_preserve:
+              - Do not clone RFEs that have not been approved.
+              - Do not modify the source RFE issue in Jira.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, mcp__atlassian__searchJiraIssuesUsingJql, mcp__atlassian__getJiraIssue]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-create/SKILL.md
       - name: strategy-refine
         description: Refine a strategy with technical HOW, dependencies, and NFRs
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-refine/SKILL.md
+          problem_statement: Refine a strategy stub into a complete strategy with technical approach, dependencies, impacted teams, and NFRs.
+          success_conditions:
+            - Produces a refined strategy with HOW, dependencies, and NFRs grounded in platform architecture.
+            - Updates the local strategy artifact with complete frontmatter and structured sections.
+          invariants:
+            must_preserve:
+              - Do not alter the original RFE scope or acceptance criteria.
+              - Do not fabricate component names or dependencies not present in the architecture context.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-refine/SKILL.md
+            supporting_paths:
+              - .claude/skills/strategy-refine/strat-template.md
       - name: strategy-review
         description: Adversarial review with rubric scoring and independent forked reviewers
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-review/SKILL.md
+            - id: output_quality
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-review/SKILL.md
+          problem_statement: Score a strategy against the rubric and run independent forked reviewers for detailed adversarial prose.
+          success_conditions:
+            - Produces a review file with numeric scores across all rubric dimensions.
+            - Runs independent reviewer agents for feasibility, testability, scope, and architecture.
+          invariants:
+            must_preserve:
+              - Do not skip rubric criteria or invent findings not supported by evidence.
+              - Do not modify the strategy being reviewed.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, Skill, Agent]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-review/SKILL.md
       - name: strategy-pull
         description: Pull a post-CI strategy from Jira into local workspace for human review
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [retrieve]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Pull a RHAISTRAT issue from Jira into local/ workspace for human review and iteration.
+          success_conditions:
+            - Writes the strategy content to local/strat-tasks/ with correct frontmatter.
+            - Pulls associated reviews and RFE originals into local/ subdirectories.
+          invariants:
+            must_preserve:
+              - Do not modify the Jira issue during pull.
+              - Do not overwrite local files without user confirmation.
+            fixed_context:
+              tools: [Read, Write, Bash, Glob, Grep]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-pull/SKILL.md
       - name: strategy-push
         description: Push a locally-refined strategy back to Jira and resubmit to CI
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Push an improved strategy back to Jira and resubmit it to CI for re-evaluation.
+          success_conditions:
+            - Updates the Jira issue description with refined strategy content.
+            - Removes needs-attention label and resubmits for CI processing.
+          invariants:
+            must_preserve:
+              - Only push strategies with strat-creator-needs-attention label.
+              - Do not push strategies that have not been locally modified.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-push/SKILL.md
       - name: strategy-signoff
         description: Sign off on a CI-approved strategy with human sign-off label
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Sign off on a CI-approved strategy by pushing final content and adding the human-sign-off label.
+          success_conditions:
+            - Adds strat-creator-human-sign-off label to the Jira issue.
+            - Confirms the strategy has passed CI rubric before sign-off.
+          invariants:
+            must_preserve:
+              - Do not sign off strategies that have not passed CI review.
+              - Do not remove existing labels during sign-off.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-signoff/SKILL.md
       - name: export-rubric
         description: Export the scoring rubric to artifacts/strat-rubric.md
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: deterministic
+            - id: latency
+              measure: deterministic
+          problem_statement: Export the strat-creator scoring rubric to artifacts/strat-rubric.md in the current working directory.
+          success_conditions:
+            - Writes artifacts/strat-rubric.md under the current working directory.
+            - Confirms the file was written and prints its path.
+          invariants:
+            must_preserve:
+              - Do not modify the rubric content while exporting it.
+              - Do not redirect the export to a path other than artifacts/strat-rubric.md.
+            fixed_context:
+              tools: [Read, Write, Bash]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/export-rubric/SKILL.md
       - name: strategy-feasibility-review
         description: Reviews strategy for technical feasibility and effort estimate credibility
         user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-feasibility-review/SKILL.md
+          problem_statement: Review strategy features for technical feasibility, implementation complexity, and effort estimate credibility.
+          success_conditions:
+            - Produces a feasibility assessment for each strategy with recommendation.
+            - Grounds findings in architecture context when available.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with fundamental technical flaws.
+              - Do not fabricate architecture constraints not present in the docs.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-feasibility-review/SKILL.md
       - name: strategy-testability-review
         description: Reviews strategy for testability and measurable acceptance criteria
         user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-testability-review/SKILL.md
+          problem_statement: Review strategy features for testability — measurable acceptance criteria, edge case coverage, and validation feasibility.
+          success_conditions:
+            - Produces a testability assessment for each strategy with recommendation.
+            - Identifies untestable criteria and missing edge cases.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with unmeasurable acceptance criteria.
+              - Do not invent test scenarios unsupported by the strategy content.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-testability-review/SKILL.md
       - name: strategy-scope-review
         description: Reviews strategy for right-sizing and bounded scope
         user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-scope-review/SKILL.md
+          problem_statement: Review strategy features for scope — right-sizing, bounded deliverables, and effort-to-scope alignment.
+          success_conditions:
+            - Produces a scope assessment for each strategy with recommendation.
+            - Flags strategies that are too large to deliver or too small to warrant a strategy.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with unbounded scope.
+              - Do not split or merge strategies without justification from effort estimates.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-scope-review/SKILL.md
       - name: strategy-architecture-review
         description: Reviews strategy for architectural correctness and integration patterns
         user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/strat-creator@0e102d4d1c4a2747895c267b637cf8a33d5f93fc:.claude/skills/strategy-architecture-review/SKILL.md
+          problem_statement: Review strategy features for architectural correctness — dependencies, integration patterns, and component interactions.
+          success_conditions:
+            - Produces an architecture assessment for each strategy with recommendation.
+            - Grounds every finding in architecture docs with specific component and API citations.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with incorrect dependency assumptions.
+              - Do not flag concerns without citing specific architecture documentation.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/strategy-architecture-review/SKILL.md
     harnesses:
       claude-code:
         install: "/plugin install strat-creator@opendatahub-skills"
@@ -266,15 +546,78 @@ plugins:
       type: github
       repo: opendatahub-io/assess-strat
       ref: main
+    contract_summary:
+      focus_functions: [review, generate]
+      focus_metrics: [task_success, evidence_completeness, output_quality, latency]
+      notes: "Strategy assessment against a scored rubric and rubric export."
     homepage: https://github.com/opendatahub-io/assess-strat
     repository: https://github.com/opendatahub-io/assess-strat
     skills:
       - name: assess-strat
         description: Assess strategies against quality criteria using a structured rubric
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md
+            - id: output_quality
+              measure: judge
+              rubric_ref: opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md
+          problem_statement: Score a strategy against the published rubric and explain the result.
+          success_conditions:
+            - Produces a complete rubric-based assessment for the supplied strategy input.
+            - Includes evidence-backed scoring rationale for each criterion.
+          invariants:
+            must_preserve:
+              - Do not skip rubric criteria or invent unsupported evidence.
+              - Do not change the accepted input modes declared by the skill.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TaskGet, mcp__atlassian__getJiraIssue, mcp__atlassian__searchJiraIssuesUsingJql]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/assess-strat/SKILL.md
       - name: export-rubric
         description: Export the assessment rubric
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: deterministic
+            - id: latency
+              measure: deterministic
+          problem_statement: Export the assess-strat scoring rubric to artifacts/strat-rubric.md in the current working directory.
+          success_conditions:
+            - Writes artifacts/strat-rubric.md under the current working directory.
+            - Confirms the file was written and prints its path.
+          invariants:
+            must_preserve:
+              - Do not modify the rubric content while exporting it.
+              - Do not redirect the export to a path other than artifacts/strat-rubric.md.
+            fixed_context:
+              tools: [Read, Write, Bash]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/export-rubric/SKILL.md
     harnesses:
       claude-code:
         install: "/plugin install assess-strat@opendatahub-skills"

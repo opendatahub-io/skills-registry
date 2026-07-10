@@ -1,6 +1,7 @@
 {
   "extends": "recommended",
   "rules": {
-    "security/no-memory-poisoning": "warning"
+    "security/no-memory-poisoning": "warning",
+    "frontmatter/no-extra-fields": "warning"
   }
 }
