@@ -84,10 +84,10 @@ v1.0.0 | [opendatahub-io/assess-strat](https://github.com/opendatahub-io/assess-
 
 Tags: strategy, strat, rubric, quality, assessment
 
-| Skill | Description |
-|-------|-------------|
-| `/assess-strat` | Assess strategies against quality criteria using a structured rubric |
-| `/export-rubric` | Export the assessment rubric |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/assess-strat` | Assess strategies against quality criteria using a structured rubric | `review` | `task_success` (`judge`), `evidence_completeness` (`judge`), `output_quality` (`judge`) |
+| `/export-rubric` | Export the assessment rubric | `generate` | `task_success` (`deterministic`), `latency` (`deterministic`) |
 
 ```bash
 /plugin install assess-strat@opendatahub-skills
@@ -392,15 +392,15 @@ v0.1.0 | [opendatahub-io/strat-creator](https://github.com/opendatahub-io/strat-
 
 Tags: strategy, strat, jira, review, pipeline
 
-| Skill | Description |
-|-------|-------------|
-| `/strategy-create` | Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira |
-| `/strategy-refine` | Refine a strategy with technical HOW, dependencies, and NFRs |
-| `/strategy-review` | Adversarial review with rubric scoring and independent forked reviewers |
-| `/strategy-pull` | Pull a post-CI strategy from Jira into local workspace for human review |
-| `/strategy-push` | Push a locally-refined strategy back to Jira and resubmit to CI |
-| `/strategy-signoff` | Sign off on a CI-approved strategy with human sign-off label |
-| `/export-rubric` | Export the scoring rubric to artifacts/strat-rubric.md |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/strategy-create` | Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira | `execute` | `task_success` (`judge`) |
+| `/strategy-refine` | Refine a strategy with technical HOW, dependencies, and NFRs | `transform` | `task_success` (`judge`) |
+| `/strategy-review` | Adversarial review with rubric scoring and independent forked reviewers | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
+| `/strategy-pull` | Pull a post-CI strategy from Jira into local workspace for human review | `retrieve` | `task_success` (`deterministic`) |
+| `/strategy-push` | Push a locally-refined strategy back to Jira and resubmit to CI | `execute` | `task_success` (`deterministic`) |
+| `/strategy-signoff` | Sign off on a CI-approved strategy with human sign-off label | `execute` | `task_success` (`deterministic`) |
+| `/export-rubric` | Export the scoring rubric to artifacts/strat-rubric.md | `generate` | `task_success` (`deterministic`), `latency` (`deterministic`) |
 
 ```bash
 /plugin install strat-creator@opendatahub-skills
