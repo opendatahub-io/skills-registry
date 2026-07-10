@@ -1,0 +1,55 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;strategy-feasibility-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;[RHAISTRAT-NNNN]&lt;br&gt;context: fork, opus&lt;br&gt;invoked by /strategy-review&lt;br&gt;staff-engineer lens: find problems" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="115" width="180" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="mode" value="&lt;b&gt;Mode?&lt;/b&gt;&lt;br&gt;local/strat-tasks/ present?&lt;br&gt;else artifacts/ (CI)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="260" y="140" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="xref" value="&lt;b&gt;Cross-ref RFE + prior reviews&lt;/b&gt;&lt;br&gt;&lt;br&gt;read strategies (strat-tasks/)&lt;br&gt;RFE originals (strat-originals/)&lt;br&gt;verify strategy delivers business need&lt;br&gt;re-review? read prior reviews" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="490" y="125" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="arch" value="&lt;b&gt;Arch context&lt;/b&gt;&lt;br&gt;&lt;br&gt;.context/.../rhoai-*&lt;br&gt;PLATFORM.md + component docs&lt;br&gt;ground assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="750" y="130" width="190" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess" value="&lt;b&gt;Assess feasibility&lt;/b&gt;&lt;br&gt;&lt;br&gt;buildable approach? flaws?&lt;br&gt;effort estimate credible?&lt;br&gt;hidden deps / integration&lt;br&gt;RFE scope gaps&lt;br&gt;risks vs assumptions separated&lt;br&gt;concrete mitigations?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1000" y="100" width="220" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-verdict" value="&lt;b&gt;Structured verdict&lt;/b&gt;&lt;br&gt;&lt;br&gt;Feasibility&lt;br&gt;Effort estimate&lt;br&gt;RFE alignment&lt;br&gt;Key concerns&lt;br&gt;Recommendation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="115" width="210" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict-fmt" value="&lt;b&gt;### STRAT-NNN: title&lt;/b&gt;&lt;br&gt;Feasibility: feasible / needs revision&lt;br&gt;Effort: credible / underestimated&lt;br&gt;RFE alignment: delivers / gaps&lt;br&gt;Recommendation: approve / revise / reject" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="345" width="250" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="mode" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="10" value="local/strat-tasks/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="xref" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="11" value="artifacts/ (CI)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="mode" target="xref" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="xref" target="arch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="arch" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="output-verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="output-verdict" target="verdict-fmt" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -7,7 +7,14 @@ title: strategy-pull
 
 # strategy-pull
 
-Pull a post-CI strategy from Jira into local workspace for human review
+Pulls a post-CI RHAISTRAT strategy from Jira into the `local/` workspace so a human
+can review and iterate on it. It validates the issue carries a post-CI label
+(`strat-creator-rubric-pass` or `strat-creator-needs-attention`), then fetches the
+strategy into `local/strat-tasks/` with `workflow: local` frontmatter, the linked RFE
+original and comments into `local/strat-originals/`, and the CI review summary and full
+review attachment into `local/strat-reviews/`. It summarizes the title, priority, CI
+verdict, review highlights, and source RFE, then advises whether to iterate-and-push
+or iterate-and-signoff.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -72,8 +79,24 @@ Pull a post-CI strategy from Jira into local workspace for human review
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-pull diagram](strategy-pull.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-pull <RHAISTRAT-NNNN>
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` | :material-check: | - | The strategy key to pull (e.g. RHAISTRAT-1520). If omitted the skill asks for one. Only post-CI strategies (with a rubric-pass or needs-attention label) can be pulled. |
+
 ## Usage
 
 ```bash
-/strategy-pull
+/strategy-pull RHAISTRAT-1520
 ```

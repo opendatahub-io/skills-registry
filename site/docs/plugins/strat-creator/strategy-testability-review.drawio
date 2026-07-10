@@ -1,0 +1,55 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;strategy-testability-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;[RHAISTRAT-NNNN] or all&lt;br&gt;context: fork · model opus&lt;br&gt;invoked by /strategy-review&lt;br&gt;test-engineer lens (Read/Grep/Glob)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="205" width="160" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="mode" value="&lt;b&gt;Mode?&lt;/b&gt;&lt;br&gt;&lt;br&gt;local/strat-tasks exists?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="240" y="235" width="150" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-local" value="&lt;b&gt;Read inputs (local)&lt;/b&gt;&lt;br&gt;&lt;br&gt;local/strat-tasks/&lt;br&gt;local/strat-originals/ (RFE)&lt;br&gt;local/strat-reviews/ (prior)&lt;br&gt;$ARGUMENTS: one key vs all" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="120" width="175" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-ci" value="&lt;b&gt;Read inputs (CI)&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;artifacts/rfe-tasks/ (RFE)&lt;br&gt;artifacts/strat-reviews/ (prior)&lt;br&gt;$ARGUMENTS: one key vs all" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="305" width="175" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="xref" value="&lt;b&gt;Cross-ref RFE + prior reviews&lt;/b&gt;&lt;br&gt;&lt;br&gt;map to original acceptance criteria&lt;br&gt;re-review? addressed / still open&lt;br&gt;new issues from revisions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="665" y="220" width="185" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess" value="&lt;b&gt;Assess testability&lt;/b&gt;&lt;br&gt;test-engineer lens&lt;br&gt;&lt;br&gt;criteria testable &amp; measurable?&lt;br&gt;missing edge cases / failure modes&lt;br&gt;test strategy (unit / integ / e2e)&lt;br&gt;NFRs quantified w/ numeric thresholds&lt;br&gt;each threshold cites a grounded source" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="900" y="198" width="215" height="164" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-verdict" value="&lt;b&gt;Structured verdict&lt;/b&gt;&lt;br&gt;per strategy&lt;br&gt;&lt;br&gt;Testability&lt;br&gt;Missing edge cases&lt;br&gt;Untestable criteria&lt;br&gt;Test complexity&lt;br&gt;Recommendation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1165" y="205" width="180" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-entry-mode" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="mode" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-mode-local" value="local" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="read-local" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-mode-ci" value="CI (artifacts)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="read-ci" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-local-xref" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8703703703703703;exitDx=0;exitDy=0;entryX=0;entryY=0.14583333333333334;entryDx=0;entryDy=0;" edge="1" source="read-local" target="xref" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-ci-xref" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.12962962962962962;exitDx=0;exitDy=0;entryX=0;entryY=0.8541666666666666;entryDx=0;entryDy=0;" edge="1" source="read-ci" target="xref" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-xref-assess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="xref" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-assess-out" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="output-verdict" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

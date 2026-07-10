@@ -7,7 +7,16 @@ title: strategy-review
 
 # strategy-review
 
-Adversarial review with rubric scoring and independent forked reviewers
+Adversarially reviews one refined strategy: it produces a review file with numeric
+rubric scores and detailed prose. After bootstrapping the `assess-strat` plugin and
+fetching architecture context, it spawns a background scorer agent against the rubric,
+then runs deterministic scripts to parse results, compute the APPROVE/REVISE/REJECT
+verdict (total ≥6 and no zeros → APPROVE; ≥3 and ≤1 zero → REVISE; else REJECT), and
+write scores to the review frontmatter with no LLM judgment. It then invokes the four
+reviewer skills — feasibility, testability, scope, architecture — in parallel, each in
+an isolated `context: fork`, and assembles their prose (plus Agreements/Disagreements)
+into the review file. Outside dry-run it posts a summary comment, attaches the full
+review, and applies the verdict label to the RHAISTRAT issue.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -77,8 +86,27 @@ Adversarial review with rubric scoring and independent forked reviewers
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-review diagram](strategy-review.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-review <RHAISTRAT-NNNN> [--dry-run] [--architecture-context <path>]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` | :material-check: | - | The strategy key to review (e.g. RHAISTRAT-1531). Exactly one per invocation; the skill errors without it. The strategy must already be refined. |
+| `--architecture-context` |  | - | Local path to an architecture-context checkout to use instead of fetching from remote. |
+| `--dry-run` |  | - | Skip all Jira writes — save the review comment to a file instead of posting, and skip attachments/labels. |
+
 ## Usage
 
 ```bash
-/strategy-review
+/strategy-review RHAISTRAT-1531
+/strategy-review RHAISTRAT-1531 --dry-run
 ```

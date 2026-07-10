@@ -7,7 +7,12 @@ title: strategy-signoff
 
 # strategy-signoff
 
-Sign off on a CI-approved strategy with human sign-off label
+Signs off on a CI-approved strategy, marking it feature-ready after human
+confirmation. It is only valid for strategies flagged `strat-creator-rubric-pass`.
+After validating the local file and label state (and warning if no parent Outcome is
+set), it shows a summary and asks for explicit confirmation, then pushes the final
+strategy content, posts the review summary as a comment, attaches the full review file,
+and adds the `strat-creator-human-sign-off` label to the RHAISTRAT issue.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -72,8 +77,24 @@ Sign off on a CI-approved strategy with human sign-off label
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-signoff diagram](strategy-signoff.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-signoff <RHAISTRAT-NNNN>
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` | :material-check: | - | The strategy key to sign off (e.g. RHAISTRAT-1520). If omitted the skill asks for one. Must be CI-approved (strat-creator-rubric-pass) and pulled locally. |
+
 ## Usage
 
 ```bash
-/strategy-signoff
+/strategy-signoff RHAISTRAT-1520
 ```

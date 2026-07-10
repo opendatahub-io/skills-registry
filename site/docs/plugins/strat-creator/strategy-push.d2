@@ -1,0 +1,124 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strategy-push**
+
+  - <RHAISTRAT-NNNN>
+  - needs-attention only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pre-conditions ---
+
+read-local: |md
+  **Read local file**
+
+  - local/strat-tasks/*.md
+  - verify workflow: local
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+fetch-labels: |md
+  **Fetch labels (Jira)**
+
+  - fetch_issue.py
+  - --fields labels
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+guard: |md
+  **Guard checks**
+
+  - has rubric-pass?
+  - missing needs-attention?
+  - no local file?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Stop branch ---
+
+stop: |md
+  **Stop + advise**
+
+  - use /strategy-signoff
+  - or run /strategy-pull first
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Push branch ---
+
+push-content: |md
+  **Push content**
+
+  - push_strategy.py
+  - Jira ## Strategy section
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+remove-label: |md
+  **Remove needs-attention**
+
+  - lets CI re-process
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+advise: |md
+  **Advise**
+
+  - resubmitted
+  - CI re-evaluates next run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> read-local
+read-local -> fetch-labels
+fetch-labels -> guard
+
+guard -> stop: "guard fails"
+guard -> push-content: "needs-attention ✓"
+
+push-content -> remove-label
+remove-label -> advise

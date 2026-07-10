@@ -1,0 +1,137 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **strategy-feasibility-review**
+
+  - [RHAISTRAT-NNNN]
+  - context: fork, opus
+  - invoked by /strategy-review
+  - staff-engineer lens: find problems
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Mode decision ---
+
+mode: |md
+  **Mode?**
+
+  - local/strat-tasks/ present?
+  - else artifacts/ (CI)
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Cross-reference ---
+
+xref: |md
+  **Cross-ref RFE + prior reviews**
+
+  - read strategies (strat-tasks/)
+  - RFE originals (strat-originals/)
+  - verify strategy delivers
+    business need
+  - re-review? read prior reviews
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Architecture context (external) ---
+
+arch: |md
+  **Arch context**
+
+  - .context/.../rhoai-*
+  - PLATFORM.md + component docs
+  - ground assessment
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Assess feasibility (LLM) ---
+
+assess: |md
+  **Assess feasibility**
+
+  - buildable approach? flaws?
+  - effort estimate credible?
+  - hidden deps / integration
+  - RFE scope gaps
+  - risks vs assumptions separated
+  - concrete mitigations?
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Structured verdict (output) ---
+
+output-verdict: |md
+  **Structured verdict**
+
+  - Feasibility
+  - Effort estimate
+  - RFE alignment
+  - Key concerns
+  - Recommendation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Verdict format callout ---
+
+verdict-fmt: |md
+  ### STRAT-NNN: title
+  Feasibility: feasible / needs revision
+  Effort: credible / underestimated
+  RFE alignment: delivers / gaps
+  Recommendation: approve / revise / reject
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> mode
+mode -> xref: "local/strat-tasks/"
+mode -> xref: "artifacts/ (CI)"
+xref -> arch
+arch -> assess
+assess -> output-verdict
+
+output-verdict -> verdict-fmt: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

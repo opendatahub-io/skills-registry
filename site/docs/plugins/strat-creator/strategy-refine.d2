@@ -1,0 +1,200 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strategy-refine**
+
+  - \<RHAISTRAT-NNNN\> (one per run)
+  - --dry-run (skip Jira writes)
+  - --architecture-context \<path\>
+  - error + stop if no key
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Mode decision ---
+
+mode: |md
+  **Mode?**
+  local (human) vs CI (artifacts)
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pipeline label gate (CI only) ---
+
+gate: |md
+  **Pipeline Label Gate**
+  CI mode only
+
+  - fetch_issue.py --fields labels
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Skip terminal ---
+
+skip: |md
+  **[SKIP] Already Processed**
+
+  - rubric-pass label, or
+  - needs-attention label
+  - do NOT refine, stop
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch architecture context (external CLI) ---
+
+arch: |md
+  **Fetch Architecture Context**
+  fetch-architecture-context.sh
+
+  - -> .context/architecture-context/
+  - read PLATFORM.md + rhoai-* docs
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Revision decision ---
+
+revision: |md
+  **Prior review exists?**
+  artifacts/strat-reviews/
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- HOW context sources (priority chain) ---
+
+sources: |md
+  **HOW Context Sources**
+  priority (high -> low)
+
+  1. Staff Engineer / SME Input
+  2. Arch Context Overlays
+  3. Removed RFE Context [RFE Creator]
+  4. Architecture docs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate strategy (LLM) ---
+
+generate: |md
+  **Generate Strategy**
+  LLM · strat-template.md · 13 sections
+
+  - Technical Approach, Components, Teams
+  - Requirements, Dependencies, NFRs
+  - Risks, Assumptions, Open Questions
+  - ground in arch; <= 25K / 30K chars
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Write strategy back to strat-tasks ---
+
+write: |md
+  **Update strat-tasks**
+
+  - write ONLY ## Strategy section
+  - frontmatter status=Refined
+  - Business Need + Staff Input:
+    NEVER modified
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Push to Jira (external, skip in dry-run) ---
+
+push-jira: |md
+  **Push to Jira**
+  skipped in --dry-run / local
+
+  - push_strategy.py RHAISTRAT-NNNN
+  - + strat-creator-auto-refined label
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Callout: section ownership ---
+
+ownership: |md
+  ## Business Need (from RFE)    [NEVER modify]
+  ## Strategy (AI Generated ...)  [regenerate]
+  ## Staff Engineer / SME Input  [read-only]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Forward flow ---
+
+entry -> mode
+mode -> gate: "CI (artifacts)"
+mode -> arch: "local"
+gate -> skip: "has label"
+gate -> arch: "passes"
+arch -> revision
+revision -> sources: "initial refinement"
+sources -> generate
+generate -> write
+write -> push-jira: "real jira_key"
+
+# --- Back-edge: revision mode addresses review feedback ---
+
+revision -> sources: "revision:\naddress feedback" {
+  style.stroke-dash: 3
+}
+
+# --- Callout connector ---
+
+write -> ownership: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

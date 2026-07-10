@@ -1,0 +1,241 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/strategy-pull**
+
+  - RHAISTRAT-NNNN
+  - else ask for key
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Orchestrator script ---
+
+pull-script: |md
+  **pull_strategy.py**
+
+  - orchestrates the fetch
+  - CLAUDE_SKILL_DIR/scripts
+  - $ARGUMENTS = key
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Gate: post-CI label? ---
+
+validate: |md
+  **Post-CI label?**
+
+  - rubric-pass
+  - needs-attention
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Early exit ---
+
+exit-early: |md
+  **Exit**
+
+  - exit 1: missing labels
+    / not found
+  - exit 2: no JIRA creds
+  - only post-CI can pull
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: Jira ---
+
+jira: |md
+  **Jira (REST)**
+  reads
+
+  - MCP or fetch_issue.py
+  - JIRA_SERVER / USER / TOKEN
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Fetch strategy ---
+
+fetch-strat: |md
+  **Fetch strategy**
+
+  - Jira description
+  - local/strat-tasks/*.md
+  - workflow: local
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch RFE original ---
+
+fetch-orig: |md
+  **Fetch RFE original**
+
+  - linked RFE + comments
+  - local/strat-originals/
+  - read-only context
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch CI review ---
+
+fetch-review: |md
+  **Fetch CI review**
+
+  - summary comment
+  - full review attachment
+  - local/strat-reviews/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Summarize for user ---
+
+summarize: |md
+  **Summarize**
+
+  - title + priority
+  - CI verdict
+  - review highlights
+  - source RFE
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Advise next steps (decision) ---
+
+advise: |md
+  **Advise next**
+
+  - by CI verdict
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+signoff-path: |md
+  **Iterate + sign off**
+
+  - /strategy-refine
+  - /strategy-review
+  - /strategy-signoff
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+push-path: |md
+  **Iterate + resubmit**
+
+  - /strategy-refine
+  - /strategy-review
+  - /strategy-push
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: local/ workspace ---
+
+folders-callout: |md
+  local/
+    strat-tasks/
+      RHAISTRAT-NNNN.md
+    strat-originals/
+      RHAIRFE-NNNN.md
+    strat-reviews/
+      *-review-summary.md
+      *-review.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> pull-script
+pull-script -> validate
+
+validate -> fetch-strat: "post-CI"
+validate -> exit-early: "missing labels" {
+  style.stroke-dash: 3
+}
+
+fetch-strat -> fetch-orig
+fetch-orig -> fetch-review
+fetch-review -> summarize
+summarize -> advise
+
+advise -> signoff-path: "rubric-pass"
+advise -> push-path: "needs-attention" {
+  style.stroke-dash: 3
+}
+
+# --- Jira reads (dashed) ---
+
+jira -> fetch-strat: "reads" {
+  style.stroke-dash: 3
+}
+jira -> fetch-orig: {
+  style.stroke-dash: 3
+}
+jira -> fetch-review: {
+  style.stroke-dash: 3
+}
+
+# --- Callout attach ---
+
+summarize -> folders-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

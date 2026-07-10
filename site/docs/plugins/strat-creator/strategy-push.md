@@ -7,7 +7,12 @@ title: strategy-push
 
 # strategy-push
 
-Push a locally-refined strategy back to Jira and resubmit to CI
+Pushes a locally-refined strategy back to Jira and resubmits it to CI for
+re-evaluation. It is only valid for strategies flagged `strat-creator-needs-attention`.
+After verifying the local file exists with `workflow: local` frontmatter and guarding
+the label state (refuses if already rubric-pass, or if never CI-reviewed), it pushes
+the updated `## Strategy` section to the RHAISTRAT issue and removes the
+`strat-creator-needs-attention` label so the pipeline re-processes it on the next run.
 
 **Plugin**: [strat-creator](index.md) | **:material-check: User-invocable**
 
@@ -72,8 +77,24 @@ Push a locally-refined strategy back to Jira and resubmit to CI
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-push diagram](strategy-push.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-push <RHAISTRAT-NNNN>
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` | :material-check: | - | The strategy key to push (e.g. RHAISTRAT-1520). If omitted the skill asks for one. Must have been pulled locally and carry strat-creator-needs-attention. |
+
 ## Usage
 
 ```bash
-/strategy-push
+/strategy-push RHAISTRAT-1520
 ```

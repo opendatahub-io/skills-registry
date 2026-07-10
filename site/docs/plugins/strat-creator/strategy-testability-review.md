@@ -7,7 +7,14 @@ title: strategy-testability-review
 
 # strategy-testability-review
 
-Reviews strategy for testability and measurable acceptance criteria
+An independent, adversarial reviewer (test-engineer persona) that assesses whether a
+refined strategy can be validated. Invoked by `strategy-review` in an isolated
+`context: fork`, it auto-detects local vs CI mode and checks whether acceptance
+criteria are testable and measurable, what edge cases are missing, what the test
+strategy would be, whether NFRs are quantified with numeric thresholds, and whether
+every threshold cites a grounded source (RFE, architecture doc, or SME input) rather
+than being invented. It emits a structured per-strategy verdict with untestable
+criteria and missing edge cases listed.
 
 **Plugin**: [strat-creator](index.md) | **:material-close: Internal**
 
@@ -71,8 +78,24 @@ Reviews strategy for testability and measurable acceptance criteria
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-testability-review diagram](strategy-testability-review.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-testability-review [RHAISTRAT-NNNN]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` |  | - | A strategy key to review only that strategy. If omitted, all strategies in the tasks directory are reviewed. |
+
 ## Usage
 
 ```bash
-/strategy-testability-review
+/strategy-testability-review RHAISTRAT-1531
 ```

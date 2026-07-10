@@ -7,7 +7,15 @@ title: strategy-architecture-review
 
 # strategy-architecture-review
 
-Reviews strategy for architectural correctness and integration patterns
+An independent, adversarial reviewer (platform-architect persona) that verifies a
+refined strategy is architecturally sound. Invoked by `strategy-review` in an isolated
+`context: fork`, it requires architecture context (and skips cleanly if none is
+available), reads `PLATFORM.md`, component docs, and active `overlays/`, then checks
+whether dependencies are correctly identified, integration patterns match how
+components actually communicate, component boundaries are respected, the deployment
+model is correct, and cross-component coordination needs (versioning, rollout order,
+backwards compatibility) are handled. Every finding must cite specific architecture
+docs; it emits a structured per-strategy architecture verdict.
 
 **Plugin**: [strat-creator](index.md) | **:material-close: Internal**
 
@@ -71,8 +79,24 @@ Reviews strategy for architectural correctness and integration patterns
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![strategy-architecture-review diagram](strategy-architecture-review.svg)
+</div>
+
+## Arguments
+
+```bash
+/strategy-architecture-review [RHAISTRAT-NNNN]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `RHAISTRAT-NNNN` |  | - | A strategy key to review only that strategy. If omitted, all strategies in the tasks directory are reviewed. |
+
 ## Usage
 
 ```bash
-/strategy-architecture-review
+/strategy-architecture-review RHAISTRAT-1531
 ```
