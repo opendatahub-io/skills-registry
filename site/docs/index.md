@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-17 plugins | 91 skills | 7 categories
+18 plugins | 100 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -92,6 +92,14 @@ hide:
 
     **4 skills** - Development Tools - v0.1.0
 
+-   **[python-package-skills](plugins/python-package-skills/index.md)**
+
+    ---
+
+    AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigatio...
+
+    **9 skills** - Development Tools - v0.1.0
+
 -   **[disconnected-readiness-scorer](plugins/disconnected-readiness-scorer/index.md)**
 
     ---
@@ -171,5 +179,5 @@ hide:
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (3 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
-- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)
+- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (3 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)

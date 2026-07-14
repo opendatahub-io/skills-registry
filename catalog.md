@@ -349,6 +349,18 @@ Tags: autofix, jira, cve, bug-fixing, triage, pipeline, ci-cd
 /plugin install autofix-skills@opendatahub-skills
 ```
 
+### python-package-skills
+
+AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
+
+v0.1.0 | Apache-2.0 | [opendatahub-io/python-package-skills](https://github.com/opendatahub-io/python-package-skills)
+
+Tags: python-packaging, onboarding, builder, pipeline, rhai, investigation, security, license, testing
+
+```bash
+/plugin install python-package-skills@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy

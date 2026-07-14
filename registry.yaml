@@ -980,6 +980,279 @@ plugins:
         install: "/plugin install autofix-skills@opendatahub-skills"
     depends_on: []
 
+  - name: python-package-skills
+    description: >
+      AI skills for Python package onboarding into the RHAI pipeline.
+      End-to-end automation covering packaging investigation, license
+      checking, security auditing, build failure analysis, builder and
+      pipeline onboarding, probe test creation, Jira context summarization,
+      and executive summary generation. Designed to run inside a Claude Code
+      container as part of the package-onboarding CI pipeline.
+    version: "0.1.0"
+    category: development-tools
+    tags: [python-packaging, onboarding, builder, pipeline, rhai, investigation, security, license, testing]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/python-package-skills
+      ref: main
+    homepage: https://github.com/opendatahub-io/python-package-skills
+    repository: https://github.com/opendatahub-io/python-package-skills
+    skills:
+      - name: builder-onboarding
+        description: Onboard a Python package into the RHAI builder repository with configuration changes, linting, and git commit
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Analyze package information, AI packaging analysis, and build
+            failure details to determine necessary configuration changes
+            for the RHAI builder repository, then create a git commit.
+          success_conditions:
+            - All configuration files for the package are created or modified correctly.
+            - make linter passes with no errors after changes.
+            - A git commit is produced with the correct format and clean working tree.
+          invariants:
+            must_preserve:
+              - Only configure the package from context, not transitive dependencies.
+              - Do not stage the _run/ directory.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob]
+              cli: [python3, git, make]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/builder-onboarding/SKILL.md
+      - name: executive-summary
+        description: Create a concise 2-3 line executive summary of a package onboarding outcome
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Summarize the package onboarding outcome into 2-3 lines of plain
+            prose covering build result, root cause of failure, and key next step.
+          success_conditions:
+            - Produces .executive-summary-output.txt with a 2-3 line summary.
+          invariants:
+            must_preserve:
+              - Output must be plain prose with no headings, bullet lists, or code blocks.
+            fixed_context:
+              tools: [Read]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/executive-summary/SKILL.md
+      - name: failure-analysis
+        description: Analyze a build failure for a Python package in the RHAI pipeline and produce a structured diagnosis report
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Diagnose the root cause of a Python package build failure from
+            log excerpts and package context. Produce a structured analysis
+            report with evidence, recommended fix, and confidence rating.
+          success_conditions:
+            - Produces .failure-analysis-output.md with root cause, evidence, recommended fix, and confidence sections.
+          invariants:
+            must_preserve:
+              - Do not modify the repository or commit any changes.
+              - Focus on source-based build solutions over pre-built shipping.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/failure-analysis/SKILL.md
+      - name: jira-context-summary
+        description: Summarize Jira ticket context for a package onboarding request with actionable requirements and blockers
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Extract actionable packaging requirements, recent decisions, and
+            known blockers from chronological Jira comments into a concise
+            four-section summary.
+          success_conditions:
+            - Produces .jira-context-summary-output.txt with all four required sections.
+          invariants:
+            must_preserve:
+              - Prioritize most recent information when contradictions exist.
+              - Always emit all four section headings even if empty.
+            fixed_context:
+              tools: [Read]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/jira-context-summary/SKILL.md
+      - name: license-check
+        description: Check Python package license compatibility with redistribution in Red Hat AI distribution pipeline
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Determine the license of a Python package and assess whether it
+            is compatible with redistribution in the RHAI pipeline. Produce
+            both a human-readable report and machine-readable verdict.
+          success_conditions:
+            - Produces .license-check-output.txt with license, compatibility, and reason.
+            - Produces .license-verdict.json with valid verdict, license, compatible, and reason fields.
+          invariants:
+            must_preserve:
+              - Only clone HTTPS URLs from public hosts.
+              - Do not execute setup.py or any package code.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/license-check/SKILL.md
+      - name: packaging-investigation
+        description: Investigate a Python package for enterprise packaging and distribution readiness with structured analysis and verdict
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Investigate a Python package for enterprise packaging readiness.
+            Produce a detailed analysis covering build system, native
+            dependencies, platform support, and packaging strategy, along
+            with a machine-readable verdict JSON.
+          success_conditions:
+            - Produces .investigation-output.md with complete structured analysis.
+            - Produces .investigation-verdict.json with valid verdict, complexity_score, and observations.
+          invariants:
+            must_preserve:
+              - Only access HTTPS URLs pointing to public hosts.
+              - Read-only access outside /workspace/.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob, WebFetch, WebSearch]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/packaging-investigation/SKILL.md
+      - name: pipeline-onboarding
+        description: Onboard a Python package into the RHAI pipeline onboarding collection across all variants with git commit
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Add a Python package to the onboarding collection for all
+            variants in the pipeline repository, creating requirements
+            files with correct version pinning and tracking comments.
+          success_conditions:
+            - Requirements files created for all variant directories under collections/onboarding/.
+            - make linter passes with no errors after changes.
+            - A git commit is produced with the correct format and clean working tree.
+          invariants:
+            must_preserve:
+              - Only configure the package from context, not transitive dependencies.
+              - Do not stage the _run/ directory.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob]
+              cli: [python3, git, make]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/pipeline-onboarding/SKILL.md
+      - name: probe-test-onboarding
+        description: Create probe tests for a Python package in the wheels-test repository with git commit
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Analyze package information and AI packaging analysis to create
+            appropriate probe test files in the wheels-test repository,
+            following existing patterns and conventions.
+          success_conditions:
+            - Probe test files created following repository patterns and conventions.
+            - All linters pass (probe_test_linter.py, ruff check, ruff format).
+            - A git commit is produced with the correct format and clean working tree.
+          invariants:
+            must_preserve:
+              - Only create probe tests for the single package from context.
+              - Do not stage the _run/ directory.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob]
+              cli: [python3, git, ruff]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/probe-test-onboarding/SKILL.md
+      - name: security-audit
+        description: Run a security audit on a Python package with risk rating and structured verdict
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Audit a Python package for security risks including
+            vulnerabilities, license concerns, dependency risks, and code
+            quality signals. Produce a detailed report and machine-readable
+            verdict with risk rating.
+          success_conditions:
+            - Produces .security-audit-output.md with findings grouped by category and risk rating.
+            - Produces .security-verdict.json with valid verdict, risk_rating, summary, and findings.
+          invariants:
+            must_preserve:
+              - Only accept HTTPS URLs pointing to github.com or gitlab.com.
+              - Do not execute untrusted package code.
+            fixed_context:
+              tools: [Read, Write, Grep, Glob]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/security-audit/SKILL.md
+    harnesses:
+      claude-code:
+        install: "/plugin install python-package-skills@opendatahub-skills"
+    depends_on: []
+
   - name: disconnected-readiness-scorer
     description: >
       Score a repository's readiness for disconnected / air-gapped OpenShift
