@@ -228,9 +228,9 @@ v0.1.0 | Apache-2.0 | [opendatahub-io/disconnected-readiness-scorer](https://git
 
 Tags: disconnected, air-gap, openshift, image-mirroring, readiness, scoring
 
-| Skill | Description |
-|-------|-------------|
-| `/disconnected-score` | Score a repository's readiness for disconnected / air-gapped OpenShift deployments |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/disconnected-score` | Score a repository's readiness for disconnected / air-gapped OpenShift deployments | `review` | `task_success` (`deterministic`) |
 
 ```bash
 /plugin install disconnected-readiness-scorer@opendatahub-skills
