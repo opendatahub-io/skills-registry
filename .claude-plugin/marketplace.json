@@ -63,6 +63,30 @@
     },
     {
       "author": {
+        "name": "Jessica Forrester"
+      },
+      "category": "planning",
+      "description": "Decompose RHAISTRAT strategies into implementation epic DAGs with adversarial review. Fetches strategies from Jira, builds component graphs from architecture context, generates per-epic files with AI implementability scoring, and runs review/revise cycles.\n",
+      "homepage": "https://github.com/opendatahub-io/epic-creator",
+      "keywords": [
+        "epic",
+        "jira",
+        "decomposition",
+        "rhaistrat",
+        "dag",
+        "strategy"
+      ],
+      "name": "epic-creator",
+      "repository": "https://github.com/opendatahub-io/epic-creator",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/epic-creator",
+        "source": "github"
+      },
+      "version": "1.0.0"
+    },
+    {
+      "author": {
         "name": "Jason Greene"
       },
       "category": "evaluation",

@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-17 plugins | 91 skills | 7 categories
+18 plugins | 92 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -35,6 +35,14 @@ hide:
     Claude Code skills for creating, reviewing, and submitting strategies to the RHAISTRAT Jira project. Provides an auto...
 
     **11 skills** - Product Planning - v0.1.0
+
+-   **[epic-creator](plugins/epic-creator/index.md)**
+
+    ---
+
+    Decompose RHAISTRAT strategies into implementation epic DAGs with adversarial review. Fetches strategies from Jira, b...
+
+    **1 skills** - Product Planning - v1.0.0
 
 -   **[assess-rfe](plugins/assess-rfe/index.md)**
 
@@ -172,4 +180,4 @@ hide:
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (3 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (2 plugins)
-- [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)
+- [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (4 plugins)

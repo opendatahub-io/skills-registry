@@ -6,6 +6,7 @@
 
 - [rfe-creator](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/): Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.
 - [strat-creator](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/): Claude Code skills for creating, reviewing, and submitting strategies to the RHAISTRAT Jira project. Provides an automated pipeline from initial creation through refinement, adversarial review with independent reviewers, and human sign-off workflow with pull/push/signoff gates.
+- [epic-creator](https://opendatahub-io.github.io/skills-registry/plugins/epic-creator/): Decompose RHAISTRAT strategies into implementation epic DAGs with adversarial review. Fetches strategies from Jira, builds component graphs from architecture context, generates per-epic files with AI implementability scoring, and runs review/revise cycles.
 - [assess-rfe](https://opendatahub-io.github.io/skills-registry/plugins/assess-rfe/): Assess RFEs against quality criteria using a structured rubric.
 - [assess-strat](https://opendatahub-io.github.io/skills-registry/plugins/assess-strat/): Assess RHAISTRAT strategies against quality criteria using a scored rubric with calibration examples. Scores across four dimensions: feasibility, testability, scope, and architecture.
 - [rhoai-security-reviewer](https://opendatahub-io.github.io/skills-registry/plugins/rhoai-security-reviewer/): Consensus-based security review for RHOAI strategy documents (STRATs). An orchestrator spawns three independent reviewers to identify security risks, then synthesizes findings with confidence tagging based on cross-reviewer agreement. Covers 39 catalog patterns across auth, data protection, cryptographic compliance, network security, supply chain, and infrastructure.
@@ -43,6 +44,7 @@
 - [strategy-push](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-push/): Push a locally-refined strategy back to Jira and resubmit to CI
 - [strategy-signoff](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-signoff/): Sign off on a CI-approved strategy with human sign-off label
 - [export-rubric](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/export-rubric/): Export the scoring rubric to artifacts/strat-rubric.md
+- [epic-decompose](https://opendatahub-io.github.io/skills-registry/plugins/epic-creator/epic-decompose/): Decompose batches of RHAISTRAT strategies into implementation epic DAGs
 - [assess-rfe](https://opendatahub-io.github.io/skills-registry/plugins/assess-rfe/assess-rfe/): Assess RFEs against quality criteria using a structured rubric
 - [export-rubric](https://opendatahub-io.github.io/skills-registry/plugins/assess-rfe/export-rubric/): Export the assessment rubric
 - [assess-strat](https://opendatahub-io.github.io/skills-registry/plugins/assess-strat/assess-strat/): Assess strategies against quality criteria using a structured rubric

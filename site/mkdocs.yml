@@ -80,6 +80,9 @@ nav:
       - strategy-testability-review: plugins/strat-creator/strategy-testability-review.md
       - strategy-scope-review: plugins/strat-creator/strategy-scope-review.md
       - strategy-architecture-review: plugins/strat-creator/strategy-architecture-review.md
+    - epic-creator:
+      - plugins/epic-creator/index.md
+      - epic-decompose: plugins/epic-creator/epic-decompose.md
     - assess-rfe:
       - plugins/assess-rfe/index.md
       - assess-rfe: plugins/assess-rfe/assess-rfe.md

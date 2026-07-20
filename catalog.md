@@ -406,6 +406,22 @@ Tags: strategy, strat, jira, review, pipeline
 /plugin install strat-creator@opendatahub-skills
 ```
 
+### epic-creator
+
+Decompose RHAISTRAT strategies into implementation epic DAGs with adversarial review. Fetches strategies from Jira, builds component graphs from architecture context, generates per-epic files with AI implementability scoring, and runs review/revise cycles.
+
+v1.0.0 | [opendatahub-io/epic-creator](https://github.com/opendatahub-io/epic-creator)
+
+Tags: epic, jira, decomposition, rhaistrat, dag, strategy
+
+| Skill | Description |
+|-------|-------------|
+| `/epic-decompose` | Decompose batches of RHAISTRAT strategies into implementation epic DAGs |
+
+```bash
+/plugin install epic-creator@opendatahub-skills
+```
+
 ### spike-executor
 
 Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
