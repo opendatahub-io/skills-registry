@@ -317,15 +317,11 @@
       "license": "Apache-2.0",
       "name": "disconnected-readiness-scorer",
       "repository": "https://github.com/opendatahub-io/disconnected-readiness-scorer",
-      "skills": [
-        "./skills"
-      ],
       "source": {
         "ref": "main",
         "repo": "opendatahub-io/disconnected-readiness-scorer",
         "source": "github"
       },
-      "strict": false,
       "version": "0.1.0"
     },
     {

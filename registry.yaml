@@ -997,8 +997,7 @@ plugins:
       type: github
       repo: opendatahub-io/disconnected-readiness-scorer
       ref: main
-    strict: false
-    skills_dir: skills
+    strict: true
     homepage: https://github.com/opendatahub-io/disconnected-readiness-scorer
     repository: https://github.com/opendatahub-io/disconnected-readiness-scorer
     skills:
