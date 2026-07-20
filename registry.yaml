@@ -1004,6 +1004,25 @@ plugins:
       - name: disconnected-score
         description: Score a repository's readiness for disconnected / air-gapped OpenShift deployments
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Score an RHOAI component repository's readiness for disconnected / air-gapped OpenShift deployments by running static-analysis rules for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation.
+          success_conditions:
+            - Runs the selected rules against the target repository and reports findings per rule with severity.
+            - Produces a READY / NOT READY verdict with a markdown or JSON report.
+          invariants:
+            must_preserve:
+              - Do not modify the target repository unless auto-remediation is explicitly requested with --fix.
+              - Exclude test files, CI config, and linting rules from blocker-level findings.
+            fixed_context:
+              tools: [Read, Bash, Glob, Grep]
+              cli: [python3, arch-analyzer]
+          source_assertions:
+            skill_path: skills/disconnected-score/SKILL.md
     harnesses:
       claude-code:
         install: "/plugin install disconnected-readiness-scorer@opendatahub-skills"
