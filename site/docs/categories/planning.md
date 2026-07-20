@@ -23,6 +23,12 @@ Claude Code skills for creating, reviewing, and submitting strategies to the RHA
 
 **11 skills** - v0.1.0
 
+### [epic-creator](../plugins/epic-creator/index.md)
+
+Decompose RHAISTRAT strategies into implementation epic DAGs with adversarial review. Fetches strategies from Jira, builds component graphs from architecture context, generates per-epic files with AI implementability scoring, and runs review/revise cycles.
+
+**1 skills** - v1.0.0
+
 ### [spike-executor](../plugins/spike-executor/index.md)
 
 Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.

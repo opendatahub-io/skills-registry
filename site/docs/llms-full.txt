@@ -630,6 +630,20 @@ Examples:
 
 ---
 
+## epic-creator
+
+Decompose RHAISTRAT strategies into implementation epic DAGs with adversarial review. Fetches strategies from Jira, builds component graphs from architecture context, generates per-epic files with AI implementability scoring, and runs review/revise cycles.
+
+**Repository**: https://github.com/opendatahub-io/epic-creator
+
+### Skills
+
+#### /epic-decompose
+
+Decompose batches of RHAISTRAT strategies into implementation epic DAGs
+
+---
+
 ## assess-rfe
 
 Structured quality assessment for RFEs (Requests for Enhancement) against

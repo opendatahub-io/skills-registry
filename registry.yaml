@@ -439,6 +439,33 @@ plugins:
       requires_python: ">=3.11"
     depends_on: [assess-strat]
 
+  - name: epic-creator
+    description: >
+      Decompose RHAISTRAT strategies into implementation epic DAGs with
+      adversarial review. Fetches strategies from Jira, builds component
+      graphs from architecture context, generates per-epic files with
+      AI implementability scoring, and runs review/revise cycles.
+    version: "1.0.0"
+    category: planning
+    scope: sdlc
+    tags: [epic, jira, decomposition, rhaistrat, dag, strategy]
+    author:
+      name: Jessica Forrester
+    source:
+      type: github
+      repo: opendatahub-io/epic-creator
+      ref: main
+    homepage: https://github.com/opendatahub-io/epic-creator
+    repository: https://github.com/opendatahub-io/epic-creator
+    skills:
+      - name: epic-decompose
+        description: Decompose batches of RHAISTRAT strategies into implementation epic DAGs
+        user-invocable: true
+    harnesses:
+      claude-code:
+        install: "/plugin install epic-creator@opendatahub-skills"
+    depends_on: []
+
   - name: assess-rfe
     description: >
       Assess RFEs against quality criteria using a structured rubric.
