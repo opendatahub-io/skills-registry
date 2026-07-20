@@ -301,6 +301,34 @@
     },
     {
       "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.\n",
+      "homepage": "https://github.com/opendatahub-io/python-package-skills",
+      "keywords": [
+        "python-packaging",
+        "onboarding",
+        "builder",
+        "pipeline",
+        "rhai",
+        "investigation",
+        "security",
+        "license",
+        "testing"
+      ],
+      "license": "Apache-2.0",
+      "name": "python-package-skills",
+      "repository": "https://github.com/opendatahub-io/python-package-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/python-package-skills",
+        "source": "github"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
         "name": "asanzgom"
       },
       "category": "devops",

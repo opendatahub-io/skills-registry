@@ -158,6 +158,17 @@ nav:
       - autofix-cve-resolve: plugins/autofix-skills/autofix-cve-resolve.md
       - autofix-triage: plugins/autofix-skills/autofix-triage.md
       - autofix-research: plugins/autofix-skills/autofix-research.md
+    - python-package-skills:
+      - plugins/python-package-skills/index.md
+      - builder-onboarding: plugins/python-package-skills/builder-onboarding.md
+      - executive-summary: plugins/python-package-skills/executive-summary.md
+      - failure-analysis: plugins/python-package-skills/failure-analysis.md
+      - jira-context-summary: plugins/python-package-skills/jira-context-summary.md
+      - license-check: plugins/python-package-skills/license-check.md
+      - packaging-investigation: plugins/python-package-skills/packaging-investigation.md
+      - pipeline-onboarding: plugins/python-package-skills/pipeline-onboarding.md
+      - probe-test-onboarding: plugins/python-package-skills/probe-test-onboarding.md
+      - security-audit: plugins/python-package-skills/security-audit.md
     - disconnected-readiness-scorer:
       - plugins/disconnected-readiness-scorer/index.md
       - disconnected-score: plugins/disconnected-readiness-scorer/disconnected-score.md
