@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-18 plugins | 100 skills | 7 categories
+19 plugins | 103 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -91,6 +91,14 @@ hide:
     Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, agent prompt files, and deterministic...
 
     **4 skills** - Development Tools - v0.1.0
+
+-   **[autoqa-skills](plugins/autoqa-skills/index.md)**
+
+    ---
+
+    AI skills for AutoQA CI/CD test failure analysis and triage. Covers root cause analysis of test failure logs, matchin...
+
+    **3 skills** - Development Tools - v0.1.0
 
 -   **[python-package-skills](plugins/python-package-skills/index.md)**
 
@@ -179,5 +187,5 @@ hide:
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (3 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
-- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (3 plugins)
+- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (4 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)

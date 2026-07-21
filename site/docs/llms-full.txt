@@ -2274,6 +2274,28 @@ Examples:
 
 ---
 
+## autoqa-skills
+
+AI skills for AutoQA CI/CD test failure analysis and triage. Covers root cause analysis of test failure logs, matching failures against historical Jira tickets, and classifying failures as known infrastructure false alarms. Designed to run inside a Claude Code container as part of the AutoQA CI pipeline.
+
+**Repository**: https://github.com/opendatahub-io/autoqa-skills
+
+### Skills
+
+#### /failure-analysis (internal)
+
+Analyze a CI/CD test failure log to identify the root cause and produce a structured verdict
+
+#### /failure-matching (internal)
+
+Match a test failure against historical Jira tickets to find known issues
+
+#### /false-alarm-detection (internal)
+
+Classify a test failure as a known infrastructure false alarm or genuine bug by comparing against pluggable pattern definitions
+
+---
+
 ## python-package-skills
 
 AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.

@@ -304,6 +304,32 @@
         "name": "opendatahub-io"
       },
       "category": "development-tools",
+      "description": "AI skills for AutoQA CI/CD test failure analysis and triage. Covers root cause analysis of test failure logs, matching failures against historical Jira tickets, and classifying failures as known infrastructure false alarms. Designed to run inside a Claude Code container as part of the AutoQA CI pipeline.\n",
+      "homepage": "https://github.com/opendatahub-io/autoqa-skills",
+      "keywords": [
+        "ci",
+        "test",
+        "failure-analysis",
+        "triage",
+        "jira",
+        "autoqa",
+        "false-alarm"
+      ],
+      "license": "Apache-2.0",
+      "name": "autoqa-skills",
+      "repository": "https://github.com/opendatahub-io/autoqa-skills",
+      "source": {
+        "ref": "main",
+        "repo": "opendatahub-io/autoqa-skills",
+        "source": "github"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
       "description": "AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.\n",
       "homepage": "https://github.com/opendatahub-io/python-package-skills",
       "keywords": [
