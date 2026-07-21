@@ -158,6 +158,11 @@ nav:
       - autofix-cve-resolve: plugins/autofix-skills/autofix-cve-resolve.md
       - autofix-triage: plugins/autofix-skills/autofix-triage.md
       - autofix-research: plugins/autofix-skills/autofix-research.md
+    - autoqa-skills:
+      - plugins/autoqa-skills/index.md
+      - failure-analysis: plugins/autoqa-skills/failure-analysis.md
+      - failure-matching: plugins/autoqa-skills/failure-matching.md
+      - false-alarm-detection: plugins/autoqa-skills/false-alarm-detection.md
     - python-package-skills:
       - plugins/python-package-skills/index.md
       - builder-onboarding: plugins/python-package-skills/builder-onboarding.md

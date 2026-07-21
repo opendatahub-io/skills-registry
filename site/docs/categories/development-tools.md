@@ -17,6 +17,12 @@ Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills, 
 
 **4 skills** - v0.1.0
 
+### [autoqa-skills](../plugins/autoqa-skills/index.md)
+
+AI skills for AutoQA CI/CD test failure analysis and triage. Covers root cause analysis of test failure logs, matching failures against historical Jira tickets, and classifying failures as known infrastructure false alarms. Designed to run inside a Claude Code container as part of the AutoQA CI pipeline.
+
+**3 skills** - v0.1.0
+
 ### [python-package-skills](../plugins/python-package-skills/index.md)
 
 AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
