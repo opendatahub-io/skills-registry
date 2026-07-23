@@ -220,6 +220,22 @@ Tags: documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onbo
 
 Skills for deployment, CI/CD, and infrastructure
 
+### ec-cve-check
+
+Inspect Enterprise Contract CVE scan results from Konflux-built container images and test ECP exception removal. Extracts the full Clair REPORTS data from cosign attestations (the same data EC's cve.cve_blockers rule evaluates), supports human-readable and JSON output, and can drive local or cluster-based EC policy validation to check whether a cve.cve_blockers exception is still needed.
+
+v0.1.0 | Apache-2.0 | [jrusz/ec-cve-check](https://github.com/jrusz/ec-cve-check)
+
+Tags: cve, enterprise-contract, konflux, clair, security, release-gating, cosign
+
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/ec-cve-check` | Inspect CVE scan results and test ECP exception removal for Konflux-built images | `analyze` | `task_success` (`deterministic`) |
+
+```bash
+/plugin install ec-cve-check@opendatahub-skills
+```
+
 ### disconnected-readiness-scorer
 
 Score a repository's readiness for disconnected / air-gapped OpenShift deployments. Scans for image manifest completeness, digest enforcement, runtime egress, and Python dependency validation. Supports automatic detection of image management patterns (env var vs static CSV) and cross-references against the opendatahub-operator manifest.

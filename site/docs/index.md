@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-18 plugins | 100 skills | 7 categories
+19 plugins | 101 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -100,6 +100,14 @@ hide:
 
     **9 skills** - Development Tools - v0.1.0
 
+-   **[ec-cve-check](plugins/ec-cve-check/index.md)**
+
+    ---
+
+    Inspect Enterprise Contract CVE scan results from Konflux-built container images and test ECP exception removal. Extr...
+
+    **1 skills** - DevOps & CI/CD - v0.1.0
+
 -   **[disconnected-readiness-scorer](plugins/disconnected-readiness-scorer/index.md)**
 
     ---
@@ -177,7 +185,7 @@ hide:
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (5 plugins)
 - [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
-- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (3 plugins)
+- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (4 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (3 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)
