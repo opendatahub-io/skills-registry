@@ -1253,6 +1253,65 @@ plugins:
         install: "/plugin install python-package-skills@opendatahub-skills"
     depends_on: []
 
+  - name: ec-cve-check
+    description: >
+      Inspect Enterprise Contract CVE scan results from Konflux-built
+      container images and test ECP exception removal. Extracts the full
+      Clair REPORTS data from cosign attestations (the same data EC's
+      cve.cve_blockers rule evaluates), supports human-readable and JSON
+      output, and can drive local or cluster-based EC policy validation
+      to check whether a cve.cve_blockers exception is still needed.
+    version: "0.1.0"
+    category: devops
+    scope: sdlc
+    tags: [cve, enterprise-contract, konflux, clair, security, release-gating, cosign]
+    author:
+      name: jrusz
+    license: Apache-2.0
+    source:
+      type: github
+      repo: jrusz/ec-cve-check
+      ref: main
+    homepage: https://github.com/jrusz/ec-cve-check
+    repository: https://github.com/jrusz/ec-cve-check
+    skills:
+      - name: ec-cve-check
+        description: Inspect CVE scan results and test ECP exception removal for Konflux-built images
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Extract CVE scan results from a Konflux-built container image's
+            cosign attestation and optionally test whether an Enterprise
+            Contract Policy exception can be safely removed.
+          success_conditions:
+            - Produces a CVE report (table or JSON) from the image's Clair REPORTS attestation blob.
+            - When testing exception removal, reports pass/fail with violation details.
+          invariants:
+            must_preserve:
+              - Do not modify any cluster resources, images, or policies.
+              - Do not skip auth setup before scanning.
+            fixed_context:
+              tools: [Bash, Read]
+              cli: [cosign, skopeo, python3, oc]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/ec-cve-check/SKILL.md
+            supporting_paths:
+              - skills/ec-cve-check/scripts/setup-auth.sh
+              - skills/ec-cve-check/scripts/inspect-clair-cves.sh
+              - skills/ec-cve-check/scripts/test-exception-removal.sh
+    harnesses:
+      claude-code:
+        install: "/plugin install ec-cve-check@opendatahub-skills"
+    depends_on: []
+
   - name: disconnected-readiness-scorer
     description: >
       Score a repository's readiness for disconnected / air-gapped OpenShift

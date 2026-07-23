@@ -2320,6 +2320,20 @@ Run a security audit on a Python package with risk rating and structured verdict
 
 ---
 
+## ec-cve-check
+
+Inspect Enterprise Contract CVE scan results from Konflux-built container images and test ECP exception removal. Extracts the full Clair REPORTS data from cosign attestations (the same data EC's cve.cve_blockers rule evaluates), supports human-readable and JSON output, and can drive local or cluster-based EC policy validation to check whether a cve.cve_blockers exception is still needed.
+
+**Repository**: https://github.com/jrusz/ec-cve-check
+
+### Skills
+
+#### /ec-cve-check
+
+Inspect CVE scan results and test ECP exception removal for Konflux-built images
+
+---
+
 ## disconnected-readiness-scorer
 
 Score a repository's readiness for deployment in disconnected / air-gapped

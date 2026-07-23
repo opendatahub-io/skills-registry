@@ -169,6 +169,9 @@ nav:
       - pipeline-onboarding: plugins/python-package-skills/pipeline-onboarding.md
       - probe-test-onboarding: plugins/python-package-skills/probe-test-onboarding.md
       - security-audit: plugins/python-package-skills/security-audit.md
+    - ec-cve-check:
+      - plugins/ec-cve-check/index.md
+      - ec-cve-check: plugins/ec-cve-check/ec-cve-check.md
     - disconnected-readiness-scorer:
       - plugins/disconnected-readiness-scorer/index.md
       - disconnected-score: plugins/disconnected-readiness-scorer/disconnected-score.md
