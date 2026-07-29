@@ -8,56 +8,79 @@
 
 A comprehensive Claude Code skill suite for the full lifecycle of Requests for
 Enhancement (RFEs) in the RHAIRFE Jira project. Covers creation from problem
-statements, rubric-based review with auto-revision, intelligent splitting of
-oversized RFEs, and submission to Jira. Includes forked reviewer sub-agents
-for architecture, feasibility, scope, and testability assessment.
+statements, multi-phase rubric-based review with technical feasibility checks
+and auto-revision, intelligent splitting of oversized RFEs, batch auto-fix at
+scale, and deterministic submission to Jira. A speedrun skill chains the whole
+pipeline end-to-end (create → auto-fix → submit) for a single idea, a set of
+existing Jira keys, or a YAML batch of ideas.
 
-The plugin uses a shared artifact convention -- all skills read from and write to
-an `artifacts/` directory with YAML frontmatter for structured metadata. Jira
-write operations use deterministic Python scripts rather than LLM tool-calling,
-while read operations support both Atlassian MCP and REST API fallback. A
-dependency on the `assess-rfe` plugin provides the scoring rubric, bootstrapped
+The plugin uses a shared artifact convention -- all skills read from and write
+to an `artifacts/` directory, with YAML frontmatter (managed exclusively via
+`scripts/frontmatter.py`) carrying structured metadata on every task and review
+file. Jira write operations go through deterministic Python scripts (REST API +
+Basic Auth) rather than LLM tool-calling, so the exact sequence of API calls is
+reproducible; read operations prefer the Atlassian MCP server and fall back to
+the REST API. Long-running orchestrators persist state to `tmp/` via
+`scripts/state.py` so they survive context-compression boundaries. A dependency
+on the `assess-rfe` plugin provides the scoring rubric, bootstrapped
 automatically on first use.
 
 **Repository**: https://github.com/opendatahub-io/rfe-creator
 
 ### Architecture
 
-RFE skills (rfe.*) form the requirements pipeline. A speedrun skill
-orchestrates the full end-to-end flow by invoking other skills.
+The RFE skills (rfe.*) form the requirements pipeline. `rfe.speedrun` is the
+top-level orchestrator: it invokes `rfe.create`, `rfe.auto-fix`, and
+`rfe.submit` as sub-skills and never duplicates their work, persisting the ID
+list and flags between phases so the run is resumable.
 
-Review skills use a forked reviewer pattern -- independent sub-agents
-(feasibility, testability, scope, architecture) run in isolated contexts
-and produce separate assessments that are synthesized into a consolidated
-review. The rfe.review skill is the central orchestrator: it launches
-parallel waves of fetch, assess, feasibility, review, and revise agents,
-polling for completion via scripts/check_review_progress.py.
+`rfe.review` is the central review orchestrator and is deliberately
+content-blind -- it never reads RFE bodies into its own context. Instead it
+launches parallel waves of sub-agents (fetch, assess, feasibility, review,
+revise), reads only YAML frontmatter via `scripts/frontmatter.py`, checks file
+existence via Glob, and polls for wave completion with
+`scripts/check_review_progress.py` (sleeping for the reported `NEXT_POLL`
+interval). Rubric assessment is delegated to the `assess-rfe` plugin (a
+dedicated `rfe-scorer` subagent), and per-RFE technical feasibility is delegated
+to the `rfe-feasibility-review` sub-agent. Failing RFEs are auto-revised and
+re-assessed for up to two cycles.
 
-State persistence uses scripts/state.py for long-running operations across
-context compression boundaries, and scripts/frontmatter.py manages YAML
-frontmatter on all artifact files. The rfe.auto-fix skill wraps this into
-a pipeline state machine (scripts/pipeline_state.py) that handles batching,
-resumption, and multi-phase dispatch with launch_wave/wait-for-wave
-synchronization.
+`rfe.auto-fix` wraps the same building blocks into a non-interactive pipeline
+state machine (`scripts/pipeline_state.py`) with phased dispatch (fetch →
+bootstrap → assess → feasibility → review → revise → re-assess → split). It
+drives a strict `next-action` / `launch_wave` / `wait-for-wave` loop, processes
+IDs in configurable batches, and supports snapshot-based incremental fetch
+(`scripts/snapshot_fetch.py`) for resume and reprocessing. `rfe.split`
+decomposes oversized RFEs via parallel split agents, re-reviews the children
+through `rfe.review`, and runs a one-cycle right-sizing self-correction loop.
 
-Architecture context is fetched from opendatahub-io/architecture-context
-into .context/architecture-context/ and used by review and strategy skills
-to ground assessments in actual platform components and APIs. Architecture
-context overlays (.context/architecture-context/overlays/) provide human-authored
-corrections that take precedence over generated docs.
+Review artifacts follow a fixed layout under `artifacts/` (`rfe-tasks/`,
+`rfe-originals/`, `rfe-reviews/`), and `scripts/frontmatter.py rebuild-index`
+regenerates `rfes.md`. Architecture context is fetched from
+opendatahub-io/architecture-context into `.context/architecture-context/` and
+used by the feasibility fork to ground assessments in real platform components
+and APIs; human-authored overlays under `overlays/` take precedence over the
+generated docs. Note that `architecture-review`, `feasibility-review`,
+`scope-review`, and `testability-review` are forked strategy reviewers (they
+read `artifacts/strat-tasks/` and assess refined strategy features) shared with
+the strategy workflow; `rfe-feasibility-review` is the RFE-specific reviewer
+wired into `rfe.review`.
 
 ### Skills
 
 #### /rfe.create
 
-Generate new RFEs from problem statements or ideas. Loads the assess-rfe
-rubric (bootstrapping it if needed), asks 2-5 clarifying questions about
-customers, business justification, user problems, scope, and success
-criteria, then produces well-formed RFEs using a template. Each RFE
-describes WHAT and WHY (business needs), never HOW (implementation).
-Supports headless mode for batch/CI use. Determines t-shirt size from
-acceptance criteria count using the Size Guide (S: 1-2, M: 3-5, L: 5-8,
-XL: 8+). Writes artifacts with YAML frontmatter via scripts/frontmatter.py.
+Generate new RFEs from a problem statement, idea, or need. Loads the
+assess-rfe rubric (bootstrapping it if needed), and unless run headless
+asks 2-5 clarifying questions about affected customers, business
+justification, the user's problem, size, and success criteria. Produces
+well-formed RFEs from a template that describe WHAT and WHY (business
+needs), never HOW (implementation) -- it explicitly avoids loading
+architecture context so it won't prescribe a solution. Determines each
+RFE's t-shirt size from its acceptance-criteria count via the Size Guide
+(S: 1-2, M: 3-5, L: 5-8, XL: 8+), allocates IDs atomically (or uses a
+pre-assigned `--rfe-id`), writes artifacts with YAML frontmatter via
+scripts/frontmatter.py, and rebuilds the index.
 
 ```
 /rfe.create <problem-statement> [--headless] [--priority <value>] [--labels <csv>] [--rfe-id <ID>]
@@ -81,14 +104,17 @@ Examples:
 #### /rfe.review
 
 Score and improve RFEs with a multi-phase agent pipeline. Accepts one or
-more Jira keys (RHAIRFE-NNNN) or local IDs (RFE-NNN). Fetches missing
-RFEs from Jira, runs rubric-based assessment via assess-rfe, launches
-parallel feasibility checks, synthesizes review files with scored
-criteria, auto-revises failing RFEs, and re-assesses (up to 2 cycles).
-The orchestrator never reads RFE content directly -- all content-heavy
-work is delegated to sub-agents (fetch, assess, feasibility, review,
-revise). Uses scripts/check_review_progress.py for polling agent completion
-and scripts/filter_for_revision.py to determine which RFEs need revision.
+more Jira keys (RHAIRFE-NNNN) or local IDs (RFE-NNN); missing RFEs are
+fetched from Jira first. The orchestrator never reads RFE content directly
+-- all content-heavy work is delegated to background sub-agents (fetch,
+assess, feasibility, review, revise) launched in parallel waves and polled
+via scripts/check_review_progress.py. It runs rubric-based assessment
+(assess-rfe / rfe-scorer subagent), launches per-RFE feasibility checks
+(rfe-feasibility-review), synthesizes scored review files, auto-revises
+failing RFEs (filter_for_revision.py), and re-assesses up to 2 cycles,
+preserving cumulative scores and revision history across cycles. Can return
+headlessly to a calling skill (auto-fix or split) or print an interactive
+summary with next-step suggestions.
 
 ```
 /rfe.review <ID> [ID2 ...] [--headless] [--caller <name>]
@@ -109,12 +135,15 @@ Examples:
 
 #### /rfe.split
 
-Decompose oversized RFEs into appropriately-scoped pieces. Launches
-parallel split agents that analyze the parent RFE and generate child
-RFEs, then invokes rfe.review on all children. Includes a self-correction
-loop (1 cycle max) that re-splits children still scoring poorly on
-right-sizing. Validates coverage to ensure all original scope items
-are represented in the children. Archives the parent RFE after splitting.
+Decompose oversized RFEs into appropriately-scoped pieces. Runs
+non-interactively: launches parallel split agents that analyze each parent
+RFE and generate child RFEs, collects the children (collect_children.py),
+then invokes rfe.review on all of them via an inline Skill call. Includes a
+right-sizing self-correction loop (1 cycle max) that re-splits any child
+still scoring below 2/2 on right-sizing, validates that all original scope
+is covered, and archives the parent RFE. Parents assessed as "no-split"
+have their recommendation downgraded to `revise` so downstream consumers
+don't treat them as pending splits.
 
 ```
 /rfe.split <ID> [ID2 ...] [--headless]
@@ -133,15 +162,15 @@ Examples:
 
 #### /rfe.submit
 
-Push RFEs to Jira via deterministic Python scripts using the REST API
-with Basic Auth. Creates new RHAIRFE tickets for new RFEs or updates
-existing tickets for fetched RFEs. Applies labels automatically based
+Push RFEs to Jira via deterministic Python scripts (scripts/submit.py)
+using the REST API with Basic Auth. Creates new RHAIRFE tickets for new
+RFEs or updates existing tickets for fetched RFEs, then rebuilds
+artifacts/rfes.md and reports results. Applies labels automatically based
 on pipeline outcomes (auto-created, auto-revised, split-original,
-split-result, needs-attention, feasibility verdicts). The three
-feasibility labels (pass/fail/unknown) are mutually exclusive and
-managed automatically. Non-interactive -- invoking this skill is the
-confirmation. Requires JIRA_SERVER, JIRA_USER, and JIRA_TOKEN
-environment variables.
+split-result, needs-attention, rubric-pass, and the three mutually
+exclusive feasibility verdicts). Non-interactive by design -- invoking the
+skill is the confirmation, no dry-run approval step. Requires JIRA_SERVER,
+JIRA_USER, and JIRA_TOKEN environment variables.
 
 ```
 /rfe.submit [--dry-run] [--artifacts-dir <path>]
@@ -160,12 +189,17 @@ Examples:
 
 #### /rfe.speedrun
 
-Execute the full RFE pipeline end-to-end: create, auto-fix (review +
-revise + split), and submit. Supports three modes: batch YAML input
-(multiple ideas in a file), existing Jira keys, or a single free-text
-idea. In batch mode, pre-allocates all RFE IDs and launches parallel
-create agents. Orchestrates by invoking rfe.create, rfe.auto-fix, and
-rfe.submit as sub-skills. Persists state between phases to survive
+Execute the full RFE pipeline end-to-end -- create, auto-fix (review +
+revise + split), and submit -- with minimal interaction. Detects one of
+three modes: batch YAML input (multiple ideas in a file), one or more
+existing Jira keys, or a single free-text idea. In batch mode it validates
+the input file with validate_batch_input.py --strict before spending any
+agent budget, pre-allocates all RFE IDs, and launches one parallel
+rfe.create agent per entry. It always passes an explicit --batch-size to
+auto-fix for reproducibility, then verifies completeness with
+check_autofix_complete.py and re-invokes auto-fix on any missing IDs (up to
+3 retries). Orchestrates purely by invoking rfe.create, rfe.auto-fix, and
+rfe.submit, persisting config and IDs to disk between phases to survive
 context compression.
 
 ```
@@ -178,7 +212,7 @@ context compression.
 | `--input` |  | Path to a YAML file with batch entries (prompt, priority, labels per entry) |
 | `--headless` |  | Suppress questions and confirmations (for CI/eval) |
 | `--dry-run` |  | Skip Jira writes in submit phase |
-| `--batch-size` |  | Override batch size for auto-fix phase |
+| `--batch-size` |  | Override batch size for auto-fix phase (always passed through explicitly) |
 | `--announce-complete` |  | Print completion marker when done (for CI/eval harnesses) |
 
 Examples:
@@ -191,13 +225,16 @@ Examples:
 
 #### /rfe.auto-fix
 
-Non-interactive batch pipeline for reviewing, revising, and splitting
-RFEs at scale. Accepts explicit IDs or a JQL query to fetch from Jira.
-Uses a pipeline state machine (pipeline_state.py) with phased dispatch:
-fetch, bootstrap, assess, feasibility, review, revise, re-assess, and
-split. Processes in configurable batch sizes with resume support via
-snapshot-based incremental fetch. Supports reprocessing previously
-handled RFEs and random sampling.
+Non-interactive batch pipeline for reviewing, revising, and splitting RFEs
+at scale. Accepts explicit IDs or a JQL query (with --limit and --random
+sampling) to fetch from Jira. Runs a pipeline state machine
+(pipeline_state.py) with phased dispatch -- fetch, bootstrap, assess,
+feasibility, review, revise, re-assess, and split -- driven by a strict
+next-action / launch_wave / wait-for-wave loop that must run to completion
+(no early exit, context compression handled automatically). Processes IDs in
+configurable batches with snapshot-based incremental fetch
+(snapshot_fetch.py) for resume and --reprocess support, then emits a run
+report and counts summary.
 
 ```
 /rfe.auto-fix <IDs...> | --jql <query> [--limit N] [--batch-size N] [--headless] [--reprocess] [--random N] [--announce-complete] [--data-dir <path>]
@@ -224,11 +261,13 @@ Examples:
 
 #### /rfe-creator.update-deps
 
-Force update all vendored dependencies by removing cached copies and
-re-fetching. Updates the assess-rfe skills (from the assess-rfe plugin)
-and architecture context (from opendatahub-io/architecture-context).
-Has disable-model-invocation set, meaning it can only be triggered
-explicitly by the user.
+Force-update all vendored dependencies by removing cached copies and
+re-fetching. Refreshes the assess-rfe skills (assess-rfe / export-rubric,
+via scripts/bootstrap-assess-rfe.sh) and the architecture context (from
+opendatahub-io/architecture-context, via scripts/fetch-architecture-context.sh),
+then reports what was updated and the versions fetched. Has
+disable-model-invocation set, so it can only be triggered explicitly by the
+user.
 
 Examples:
 ```
@@ -237,58 +276,68 @@ Examples:
 
 #### /architecture-review
 
-Internal forked reviewer sub-agent for strat.review. Checks strategy
-features for architectural correctness -- verifies dependencies against
-architecture docs, validates integration patterns match actual component
-communication, checks component boundaries are respected, verifies
-deployment model correctness, identifies architectural conflicts, and
-flags cross-component coordination needs. Supports architecture context
-overlays for human-authored corrections. Requires architecture context;
-skips if unavailable. Runs with model: opus in a fork context.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a platform architect assessing refined strategy
+features in artifacts/strat-tasks/ (cross-referenced against source RFEs)
+for architectural correctness: verifies every dependency against the
+architecture docs, checks integration patterns match how components actually
+communicate, ensures component boundaries aren't violated, validates the
+deployment model, and flags architectural conflicts and cross-component
+coordination needs (versioning, rollout order, backwards compatibility).
+Applies architecture-context overlays as authoritative corrections, skips
+cleanly when no architecture context is available, and grounds every
+finding in specific docs, components, or APIs.
 
 #### /feasibility-review
 
-Internal forked reviewer sub-agent for strat.review. Assesses technical
-feasibility of refined strategies -- whether the proposed approach works,
-whether it delivers what the RFE asks for, whether effort estimates are
-credible, and identifies hidden dependencies or integration challenges.
-Supports architecture context overlays with filtering by status, release,
-and affected components. Adversarial stance: flags things that are harder
-than they look and optimistic estimates. Runs with model: opus in a fork
-context.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a staff engineer assessing refined strategy
+features in artifacts/strat-tasks/ for technical feasibility: whether the
+proposed approach actually works, whether it delivers what the source RFE
+asks for (flagging silent scope reduction), whether the effort estimate /
+T-shirt size is credible, and what hidden dependencies or integration
+challenges will surface during implementation. Grounds assessments in
+architecture context and overlays, takes an adversarial stance toward
+optimistic estimates, and emits an approve / revise / reject recommendation.
 
 #### /rfe-feasibility-review
 
-Internal sub-agent launched by rfe.review. Reviews individual RFEs for
-technical feasibility against platform architecture. Uses three verdicts:
-feasible (can be built), infeasible (platform architecture fundamentally
-conflicts), indeterminate (RFE too ambiguous to assess). Distinguishes
-between capabilities not yet existing (feasible) and architectural
-incompatibilities (infeasible). Named components not in the architecture
-inventory are assessed as strategy considerations, not blockers. Reads
-Jira comment history for additional context. Supports architecture context
-overlays. Outputs to artifacts/rfe-reviews/{ID}-feasibility.md. Runs
-with model: opus.
+Internal sub-agent (model: opus) launched per RFE by rfe.review. Acts as a
+senior engineer looking for blockers and risks rather than confirming the
+work is good. Reads the RFE task file (and Jira comment history if present),
+grounds its assessment in architecture context (LATEST_VERSION / PLATFORM.md
+plus active overlays filtered by status, release, and affected components),
+and reads any prior review report for re-reviews. Emits one of three
+verdicts -- feasible (can be built), infeasible (platform architecture
+fundamentally conflicts), or indeterminate (RFE too ambiguous to assess) --
+distinguishing "capability doesn't exist yet" (feasible) from
+"architecturally incompatible" (infeasible). Named components absent from
+the architecture inventory are treated as strategy considerations, not
+blockers. Writes to artifacts/rfe-reviews/{ID}-feasibility.md.
 
 #### /scope-review
 
-Internal forked reviewer sub-agent for strat.review. Assesses whether
-each strategy is right-sized -- not too big (needs splitting), not too
-small (just a task), and scoped to match its effort estimate. Checks
-that scope is clearly bounded, deliverables are complete capabilities,
-and flags scope traps like "and related functionality" or "full support
-for". Verifies the strategy neither silently expands nor shrinks the
-original RFE scope. Suggests concrete boundaries when recommending splits.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a product owner assessing whether each refined
+strategy in artifacts/strat-tasks/ is right-sized -- not so big it needs
+splitting, not so small it's just a task -- and scoped to match its effort
+estimate. Checks that scope is explicitly bounded, that the strategy
+delivers a complete capability, and that it neither silently expands nor
+shrinks the source RFE. Flags scope-trap phrasing ("and related
+functionality", "full support for"), and when recommending a split suggests
+concrete boundaries for each resulting strategy.
 
 #### /testability-review
 
-Internal forked reviewer sub-agent for strat.review. Determines whether
-strategy acceptance criteria are testable and measurable, identifies
-missing edge cases (failure modes, boundary conditions, concurrent
-access, large-scale scenarios), assesses test complexity, and evaluates
-whether non-functional requirements (performance, security, scalability)
-can be validated with concrete tests. Suggests specific rewrites for
-vague criteria.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a test engineer determining whether each refined
+strategy in artifacts/strat-tasks/ can be validated: are acceptance criteria
+testable and success criteria measurable (with a baseline), what edge cases
+are missing (failure modes, boundary conditions, concurrent access,
+large-scale, backwards compatibility), what test strategy is needed, and can
+the non-functional requirements (performance, scalability, security) be
+tested. Suggests concrete rewrites for vague criteria and emits an approve /
+revise-criteria / add-test-plan recommendation.
 
 ---
 

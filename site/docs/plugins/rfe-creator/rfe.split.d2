@@ -10,8 +10,9 @@ direction: right
 entry: |md
   **/rfe.split**
 
-  - RFE IDs (1+)
-  - --headless
+  - RHAIRFE-NNNN / RFE-NNN IDs
+  - one or more parents
+  - --headless flag
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -19,15 +20,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 0: Parse ---
+# --- Step 0 ---
 
 parse: |md
-  **Parse & Persist**
+  **Step 0: Parse & Persist**
 
   - strip --headless flag
-  - init split-config.yaml
-  - write IDs to disk
-  - verify task files exist
+  - IDs + flags to disk (state.py)
+  - verify task files exist (Glob)
+  - skip missing artifacts
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -35,205 +36,131 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Step 1: Split Agents ---
+# --- Step 1 (LLM) ---
 
 split-agents: |md
-  **Launch Split Agents**
-  LLM agents (opus, parallel)
+  **Step 1: Split Agents**
 
-  - load RFE + review scores
-  - check right-sized threshold
+  - parallel agents (Opus, bg)
+  - one per parent RFE
   - decompose into children
-  - coverage check + write status
+  - poll check_review_progress
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 2
+  style.stroke-width: 3
   style.double-border: true
 }
 
-# --- Jira (external, referenced by split agent) ---
+# --- Step 2 decision ---
 
-jira: |md
-  **Jira / MCP**
+collect-q: |md
+  **action: split?**
+
+  - collect_children.py
+  - read split-status.yaml
 | {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- assess-rfe (external, rubric source) ---
-
-assess-rfe: |md
-  **assess-rfe**
-  (rubric plugin)
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Step 2: Collect Children ---
-
-collect: |md
-  **Collect Children**
-
-  - re-read parent IDs from disk
-  - read split-status files
-  - no-split -> set revise
-  - collect child IDs
-| {
-  shape: rectangle
+  shape: diamond
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Review (external skill) ---
+# --- Review (other skill) ---
 
-rfe-review: |md
-  **/rfe.review**
+review-children: |md
+  **/rfe.review --caller split**
 
-  - inline Skill invocation
-  - --headless --caller split
   - full review pipeline
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Step 3: Self-Correction ---
-
-correct: |md
-  **Right-sizing Check**
-  (max 1 cycle)
-
-  - read right_sized scores
-  - re-split if score < 2/2
-  - re-review new children
-  - increment cycle counter
+  - all children reviewed
+  - --headless passthrough
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Step 4: Finalize ---
-
-finalize: |md
-  **Finalize**
-
-  - rebuild frontmatter index
-  - re-read flags from disk
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Output: Headless ---
-
-headless-out: |md
-  **Headless Return**
-
-  - return to /rfe.auto-fix
-  - resume batch loop
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Output: Interactive ---
-
-interactive-out: |md
-  **Interactive Summary**
-
-  - parent archived, children listed
-  - coverage report
-  - suggest /rfe.submit
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- External: rfe.auto-fix ---
-
-rfe-autofix: |md
-  **/rfe.auto-fix**
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Split-status callout ---
+# --- Step 3 decision ---
 
-split-status-callout: |md
-  split-status.yaml
-  action: split / no-split
-  reason: "..."
-  children: [RFE-001, ...]
+rightsize-q: |md
+  **child < 2/2 right-sized?**
+
+  - Step 3 self-correction
+  - max 1 cycle
+  - right_sized score only
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 4 container ---
+
+finalize: "Step 4: Finalize" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  headless: |md
+    **Headless Return**
+
+    - rebuild index
+    - return to /rfe.auto-fix
+    - batch loop (no summary)
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  interactive: |md
+    **Interactive Summary**
+
+    - parents archived
+    - list new RFEs + PASS
+    - coverage report
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Output ---
+
+result: |md
+  **artifacts/rfe-tasks/**
+
+  - child RFEs created
+  - parent status=Archived
+  - next: /rfe.submit
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
 # --- Flow ---
 
 entry -> parse
+parse -> split-agents
+split-agents -> collect-q
 
-parse -> split-agents: "per ID"
-
-split-agents -> assess-rfe: "rubric" {
+collect-q -> review-children: "split"
+collect-q -> result: "no-split -> revise" {
   style.stroke-dash: 3
 }
 
-split-agents -> jira: "comments" {
+review-children -> rightsize-q
+rightsize-q -> split-agents: "re-split offending child" {
   style.stroke-dash: 3
 }
-
-split-agents -> collect: "split-status"
-
-split-agents -> split-status-callout: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
-}
-
-collect -> rfe-review: "child IDs"
-
-rfe-review -> correct
-
-correct -> split-agents: "re-split child" {
-  style.stroke-dash: 3
-}
-
-correct -> finalize: "done / max cycles"
-
-finalize -> headless-out: "--headless"
-finalize -> interactive-out: "interactive"
-
-headless-out -> rfe-autofix: "resume" {
-  style.stroke-dash: 3
-}
+rightsize-q -> finalize: "ok or max 1 cycle"
+finalize -> result

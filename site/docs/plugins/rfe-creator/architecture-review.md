@@ -7,14 +7,17 @@ title: architecture-review
 
 # architecture-review
 
-Internal forked reviewer sub-agent for strat.review. Checks strategy
-features for architectural correctness -- verifies dependencies against
-architecture docs, validates integration patterns match actual component
-communication, checks component boundaries are respected, verifies
-deployment model correctness, identifies architectural conflicts, and
-flags cross-component coordination needs. Supports architecture context
-overlays for human-authored corrections. Requires architecture context;
-skips if unavailable. Runs with model: opus in a fork context.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a platform architect assessing refined strategy
+features in artifacts/strat-tasks/ (cross-referenced against source RFEs)
+for architectural correctness: verifies every dependency against the
+architecture docs, checks integration patterns match how components actually
+communicate, ensures component boundaries aren't violated, validates the
+deployment model, and flags architectural conflicts and cross-component
+coordination needs (versioning, rollout order, backwards compatibility).
+Applies architecture-context overlays as authoritative corrections, skips
+cleanly when no architecture context is available, and grounds every
+finding in specific docs, components, or APIs.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

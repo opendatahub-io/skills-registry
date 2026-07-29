@@ -10,9 +10,9 @@ direction: right
 entry: |md
   **/rfe.review**
 
-  - RHAIRFE-NNN IDs
+  - RHAIRFE-NNN / RFE-NNN IDs
   - --headless
-  - --caller \<name\>
+  - --caller <autofix|split>
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -23,12 +23,11 @@ entry: |md
 # --- Step 0: Parse & Persist ---
 
 parse: |md
-  **Parse & Persist**
+  **Step 0: Parse & Persist**
 
-  - extract flags, IDs
-  - state.py init config
-  - write IDs to disk
-  - classify local vs remote
+  - strip --headless / --caller
+  - state.py: flags + IDs to disk
+  - classify local vs remote (Glob)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,16 +35,15 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Step 1: Fetch Missing RFEs ---
+# --- Step 1: Fetch Missing RFEs (LLM) ---
 
 fetch: |md
-  **Fetch Missing RFEs**
-  parallel agents (Opus)
+  **Step 1: Fetch Missing RFEs**
+  parallel fetch agents (Opus)
 
   - one agent per remote ID
-  - poll check_review_progress
-  - verify task files exist
-  - write error if fetch fails
+  - check_review_progress.py poll
+  - write task files to disk
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -57,11 +55,11 @@ fetch: |md
 # --- Step 1.5: Setup ---
 
 setup: |md
-  **Setup**
+  **Step 1.5: Setup**
+  parallel, non-fatal
 
-  - fetch architecture context
-  - bootstrap assess-rfe plugin
-  - parallel, failures non-fatal
+  - fetch-architecture-context.sh
+  - bootstrap-assess-rfe.sh
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -69,46 +67,20 @@ setup: |md
   style.stroke-width: 2
 }
 
-# --- External: Jira ---
+# --- Step 2: Evaluate (container, 2N agents) ---
 
-jira: |md
-  **Jira**
-  RHAIRFE project
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- External: architecture-context ---
-
-arch-ctx: |md
-  **Architecture Context**
-  opendatahub-io repo
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Step 2: Assess + Feasibility (container) ---
-
-evaluate: Evaluate (2N agents) {
+evaluate: "Step 2: Evaluate (2N agents)" {
   style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
 
-  assess: |md
-    **Rubric Assessment**
-    agent (Opus)
+  feasibility: |md
+    **Feasibility Review**
+    rfe-feasibility-review agent
 
-    - prep_assess.py per ID
-    - score against rubric
-    - what/why/how/task/sized
+    - technical fork
+    - verdict: feasible /
+      infeasible / indeterminate
   | {
     shape: rectangle
     style.fill: "#e8e8e8"
@@ -117,13 +89,13 @@ evaluate: Evaluate (2N agents) {
     style.double-border: true
   }
 
-  feasibility: |md
-    **Feasibility Review**
-    agent (Opus)
+  assess: |md
+    **Rubric Assessment**
+    rfe-scorer agent
 
-    - /rfe-feasibility-review
-    - technical viability check
-    - architecture context
+    - prep_assess.py
+    - score what / why / how
+    - not-a-task / right-sized
   | {
     shape: rectangle
     style.fill: "#e8e8e8"
@@ -133,45 +105,41 @@ evaluate: Evaluate (2N agents) {
   }
 }
 
-# --- External: assess-rfe ---
+# --- Step 3: Review Agents (LLM) ---
 
-assess-rfe: |md
-  **/assess-rfe**
-  assess-rfe plugin
+review: |md
+  **Step 3: Review Agents**
+
+  - combine assess + feasibility
+  - scored review file
+  - pass / fail, recommendation
 | {
   shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Decision ---
+
+pass-q: |md
+  **All pass?**
+| {
+  shape: diamond
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 3
 }
 
-# --- Step 3: Review ---
-
-review: |md
-  **Review**
-  parallel agents (Opus)
-
-  - combine assess + feasibility
-  - score, pass/fail, recommend
-  - write review frontmatter
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Step 3.5: Revise ---
+# --- Step 3.5: Auto-Revise (LLM) ---
 
 revise: |md
-  **Auto-Revise**
-  parallel agents (Opus)
+  **Step 3.5: Auto-Revise**
 
   - filter_for_revision.py
   - revise failing RFEs
-  - check_revised.py batch
+  - check_revised.py --batch
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -180,16 +148,15 @@ revise: |md
   style.double-border: true
 }
 
-# --- Step 4: Re-assess Loop ---
+# --- Step 4: Re-assess Cycle (LLM) ---
 
 reassess: |md
-  **Re-assess Cycle**
-  (max 2 iterations)
+  **Step 4: Re-assess Cycle**
+  max 2 cycles
 
-  - save cumulative state
+  - save / restore state
   - re-run assess + review
-  - restore history
-  - re-run revise if needed
+  - re-run revise
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -200,7 +167,7 @@ reassess: |md
 
 # --- Step 5: Finalize (container) ---
 
-finalize: Finalize {
+finalize: "Step 5: Finalize" {
   style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
@@ -209,8 +176,8 @@ finalize: Finalize {
     **Headless Return**
 
     - rebuild index
-    - return to caller skill
-    - /rfe.auto-fix or /rfe.split
+    - return to caller
+      (auto-fix / split)
   | {
     shape: rectangle
     style.fill: "#f5f5f5"
@@ -222,7 +189,6 @@ finalize: Finalize {
     **Interactive Summary**
 
     - batch_summary.py
-    - pass/fail/split/error
     - suggest next steps
   | {
     shape: rectangle
@@ -232,51 +198,59 @@ finalize: Finalize {
   }
 }
 
-# --- External: downstream skills ---
+# --- External services ---
 
-auto-fix: |md
-  **/rfe.auto-fix**
+jira: |md
+  **Jira (RHAIRFE)**
+
+  - REST API / MCP
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-rfe-split: |md
-  **/rfe.split**
+archctx: |md
+  **architecture-context**
+
+  - RHOAI version + docs
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-rfe-submit: |md
-  **/rfe.submit**
+assess-rfe: |md
+  **assess-rfe plugin**
+
+  - rubric reference
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Artifact callout ---
+# --- Callout: review frontmatter ---
 
-artifacts: |md
-  artifacts/rfe-reviews/
-    ID-review.md
-      rfe_id, score, pass
-      recommendation
-      feasibility
-      auto_revised
-      scores.what/why/...
-    ID-feasibility.md
-  artifacts/rfe-tasks/
-    ID.md
+review-fm: |md
+  artifacts/rfe-reviews/{ID}-review.md
+  ---
+  rfe_id: RHAIRFE-NNN
+  score: 0-100
+  pass: true | false
+  recommendation:
+    accept | revise | split
+  feasibility:
+    feasible | infeasible
+  auto_revised: true | false
+  scores.what / why / open_to_how
+  scores.not_a_task / right_sized
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -289,46 +263,34 @@ artifacts: |md
 # --- Flow ---
 
 entry -> parse
-
 parse -> fetch: "remote IDs"
-parse -> setup: "local IDs\n(skip fetch)"
+parse -> setup: "local (skip fetch)"
 fetch -> setup
-
 setup -> evaluate
-
-evaluate -> review: "assess +\nfeasibility results"
-
-review -> revise: "failing IDs"
-review -> finalize: "all pass" {
+evaluate -> review: "assess + feasibility"
+review -> pass-q
+pass-q -> revise: "failing"
+pass-q -> finalize: "all pass" {
   style.stroke-dash: 3
 }
-
 revise -> reassess
-
-reassess -> evaluate: "revised,\nstill failing" {
+reassess -> evaluate: "revised, still failing" {
   style.stroke-dash: 3
 }
-reassess -> finalize: "pass or\nmax cycles"
+reassess -> finalize: "pass or max cycles"
 
-finalize.headless -> auto-fix: "--caller autofix" {
+# --- Dashed external / callout edges ---
+
+fetch -> jira: "REST / MCP" {
   style.stroke-dash: 3
 }
-finalize.headless -> rfe-split: "--caller split" {
+setup -> archctx {
   style.stroke-dash: 3
 }
-finalize.interactive -> rfe-submit: "all pass" {
+evaluate.assess -> assess-rfe: "rubric" {
   style.stroke-dash: 3
 }
-
-# --- External connections ---
-
-fetch -> jira: "REST API / MCP"
-setup -> arch-ctx
-evaluate.assess -> assess-rfe: "rubric prompt"
-
-# --- Artifact callout connection ---
-
-review -> artifacts: {
+review -> review-fm {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

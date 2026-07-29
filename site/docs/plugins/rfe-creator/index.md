@@ -9,15 +9,21 @@ title: rfe-creator
 
 A comprehensive Claude Code skill suite for the full lifecycle of Requests for
 Enhancement (RFEs) in the RHAIRFE Jira project. Covers creation from problem
-statements, rubric-based review with auto-revision, intelligent splitting of
-oversized RFEs, and submission to Jira. Includes forked reviewer sub-agents
-for architecture, feasibility, scope, and testability assessment.
+statements, multi-phase rubric-based review with technical feasibility checks
+and auto-revision, intelligent splitting of oversized RFEs, batch auto-fix at
+scale, and deterministic submission to Jira. A speedrun skill chains the whole
+pipeline end-to-end (create → auto-fix → submit) for a single idea, a set of
+existing Jira keys, or a YAML batch of ideas.
 
-The plugin uses a shared artifact convention -- all skills read from and write to
-an `artifacts/` directory with YAML frontmatter for structured metadata. Jira
-write operations use deterministic Python scripts rather than LLM tool-calling,
-while read operations support both Atlassian MCP and REST API fallback. A
-dependency on the `assess-rfe` plugin provides the scoring rubric, bootstrapped
+The plugin uses a shared artifact convention -- all skills read from and write
+to an `artifacts/` directory, with YAML frontmatter (managed exclusively via
+`scripts/frontmatter.py`) carrying structured metadata on every task and review
+file. Jira write operations go through deterministic Python scripts (REST API +
+Basic Auth) rather than LLM tool-calling, so the exact sequence of API calls is
+reproducible; read operations prefer the Atlassian MCP server and fall back to
+the REST API. Long-running orchestrators persist state to `tmp/` via
+`scripts/state.py` so they survive context-compression boundaries. A dependency
+on the `assess-rfe` plugin provides the scoring rubric, bootstrapped
 automatically on first use.
 
 
@@ -64,25 +70,39 @@ automatically on first use.
 
 ## Architecture
 
-RFE skills (rfe.*) form the requirements pipeline. A speedrun skill
-orchestrates the full end-to-end flow by invoking other skills.
+The RFE skills (rfe.*) form the requirements pipeline. `rfe.speedrun` is the
+top-level orchestrator: it invokes `rfe.create`, `rfe.auto-fix`, and
+`rfe.submit` as sub-skills and never duplicates their work, persisting the ID
+list and flags between phases so the run is resumable.
 
-Review skills use a forked reviewer pattern -- independent sub-agents
-(feasibility, testability, scope, architecture) run in isolated contexts
-and produce separate assessments that are synthesized into a consolidated
-review. The rfe.review skill is the central orchestrator: it launches
-parallel waves of fetch, assess, feasibility, review, and revise agents,
-polling for completion via scripts/check_review_progress.py.
+`rfe.review` is the central review orchestrator and is deliberately
+content-blind -- it never reads RFE bodies into its own context. Instead it
+launches parallel waves of sub-agents (fetch, assess, feasibility, review,
+revise), reads only YAML frontmatter via `scripts/frontmatter.py`, checks file
+existence via Glob, and polls for wave completion with
+`scripts/check_review_progress.py` (sleeping for the reported `NEXT_POLL`
+interval). Rubric assessment is delegated to the `assess-rfe` plugin (a
+dedicated `rfe-scorer` subagent), and per-RFE technical feasibility is delegated
+to the `rfe-feasibility-review` sub-agent. Failing RFEs are auto-revised and
+re-assessed for up to two cycles.
 
-State persistence uses scripts/state.py for long-running operations across
-context compression boundaries, and scripts/frontmatter.py manages YAML
-frontmatter on all artifact files. The rfe.auto-fix skill wraps this into
-a pipeline state machine (scripts/pipeline_state.py) that handles batching,
-resumption, and multi-phase dispatch with launch_wave/wait-for-wave
-synchronization.
+`rfe.auto-fix` wraps the same building blocks into a non-interactive pipeline
+state machine (`scripts/pipeline_state.py`) with phased dispatch (fetch →
+bootstrap → assess → feasibility → review → revise → re-assess → split). It
+drives a strict `next-action` / `launch_wave` / `wait-for-wave` loop, processes
+IDs in configurable batches, and supports snapshot-based incremental fetch
+(`scripts/snapshot_fetch.py`) for resume and reprocessing. `rfe.split`
+decomposes oversized RFEs via parallel split agents, re-reviews the children
+through `rfe.review`, and runs a one-cycle right-sizing self-correction loop.
 
-Architecture context is fetched from opendatahub-io/architecture-context
-into .context/architecture-context/ and used by review and strategy skills
-to ground assessments in actual platform components and APIs. Architecture
-context overlays (.context/architecture-context/overlays/) provide human-authored
-corrections that take precedence over generated docs.
+Review artifacts follow a fixed layout under `artifacts/` (`rfe-tasks/`,
+`rfe-originals/`, `rfe-reviews/`), and `scripts/frontmatter.py rebuild-index`
+regenerates `rfes.md`. Architecture context is fetched from
+opendatahub-io/architecture-context into `.context/architecture-context/` and
+used by the feasibility fork to ground assessments in real platform components
+and APIs; human-authored overlays under `overlays/` take precedence over the
+generated docs. Note that `architecture-review`, `feasibility-review`,
+`scope-review`, and `testability-review` are forked strategy reviewers (they
+read `artifacts/strat-tasks/` and assess refined strategy features) shared with
+the strategy workflow; `rfe-feasibility-review` is the RFE-specific reviewer
+wired into `rfe.review`.

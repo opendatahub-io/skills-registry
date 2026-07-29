@@ -10,9 +10,10 @@ direction: right
 entry: |md
   **/rfe.submit**
 
-  - submit reviewed RFEs
-  - create or update Jira
+  - --dry-run
+  - --artifacts-dir
   - non-interactive
+    (invoking = confirmation)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,15 +21,30 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Credential Check ---
+# --- Credentials gate ---
 
-check-creds: |md
-  **Check Credentials**
+creds-q: |md
+  **JIRA env vars set?**
 
   - JIRA_SERVER
-  - JIRA_USER
-  - JIRA_TOKEN
-  - abort if missing
+  - JIRA_USER / JIRA_TOKEN
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Submission ---
+
+submit-script: |md
+  **Step 1: Run Submission**
+
+  - scripts/submit.py
+  - REST API + Basic Auth
+    (deterministic, not MCP)
+  - create new / update existing
+  - auto-apply labels
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,68 +52,16 @@ check-creds: |md
   style.stroke-width: 2
 }
 
-# --- Submission Container ---
-
-submit: Submit {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  split: |md
-    **Split Submissions**
-
-    - archived parents first
-    - split_submit.py
-    - archive, create, link
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  create-update: |md
-    **Create / Update**
-
-    - new RFEs: create ticket
-    - existing: update fields
-    - rename RFE-NNN to RHAIRFE
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  labels: |md
-    **Apply Labels**
-
-    - auto-created / auto-revised
-    - split-original / split-result
-    - needs-attention
-    - rubric-pass
-    - feasibility-pass/fail/unknown
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  split -> create-update
-  create-update -> labels
-}
-
-# --- Jira API (external) ---
+# --- External Jira ---
 
 jira: |md
-  **Jira REST API**
+  **Jira (RHAIRFE)**
 
-  - RHAIRFE project
-  - Basic Auth
+  - create Feature Request
+  - update existing tickets
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
@@ -106,11 +70,11 @@ jira: |md
 # --- Report ---
 
 report: |md
-  **Report Results**
+  **Step 2: Report**
 
-  - rebuild rfes.md index
-  - show created/updated keys
-  - suggest --dry-run on error
+  - read artifacts/rfes.md
+    (rebuilt by script)
+  - report results
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -118,29 +82,41 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- Upstream (external) ---
+# --- Labels callout ---
 
-rfe-review: |md
-  **/rfe.review**
+labels: |md
+  rfe-creator-auto-created
+  rfe-creator-auto-revised
+  rfe-creator-split-original
+  rfe-creator-split-result
+  rfe-creator-needs-attention
+  rfe-creator-autofix-rubric-pass
+  rfe-creator-feasibility-pass
+  rfe-creator-feasibility-fail
+  rfe-creator-feasibility-unknown
+  (feasibility-* mutually exclusive)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-rfe-review -> entry: "reviewed artifacts" {
+entry -> creds-q
+creds-q -> submit-script: "set"
+creds-q -> report: "missing →\ninstruct & stop" {
   style.stroke-dash: 3
 }
-
-entry -> check-creds
-check-creds -> submit: "credentials set"
-submit -> report: "artifacts/rfes.md"
-
-# Jira connection from submission container
-submit.create-update -> jira: "create / update\ntickets"
-submit.labels -> jira: "add / swap\nlabels"
-submit.split -> jira: "archive, create,\nlink, close"
+submit-script -> jira: "create / update" {
+  style.stroke-dash: 3
+}
+submit-script -> report
+submit-script -> labels: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

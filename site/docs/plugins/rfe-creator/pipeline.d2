@@ -5,79 +5,118 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- RFE Pipeline ---
+# --- Entry ---
 
-rfe-pipeline: RFE Pipeline {
-  style.fill: "#ececec"
+entry: |md
+  **RFE Pipeline**
+
+  - single idea (Mode C)
+  - Jira key(s) (Mode B)
+  - batch YAML (Mode A)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-
-  create: |md
-    **/rfe.create**
-
-    - Problem statement → RFE
-    - Loads assess-rfe rubric
-    - Clarifying questions
-    - Size from acceptance criteria
-    - YAML frontmatter output
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-
-  review: |md
-    **/rfe.review**
-
-    - Parallel assess + feasibility agents
-    - Rubric scoring (5 criteria)
-    - Auto-revise failing RFEs
-    - Re-assess up to 2 cycles
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-
-  split: |md
-    **/rfe.split**
-
-    - Decompose oversized RFEs
-    - Generate child RFEs
-    - Self-correct right-sizing (1 cycle)
-    - Coverage validation
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-
-  submit: |md
-    **/rfe.submit**
-
-    - Deterministic Python scripts
-    - Create or update Jira tickets
-    - Auto-apply pipeline labels
-    - Supports --dry-run
-  | {style.fill: "#f5f5f5"; style.stroke: "#333333"; style.stroke-width: 2}
-
-  create -> review: "rfe-tasks/"
-  review -> split: "oversized"
-  split -> review: "child RFEs" {style.stroke-dash: 3}
-  review -> submit: "passing RFEs"
 }
 
-# --- Orchestrators ---
+# --- Orchestrator ---
 
 speedrun: |md
   **/rfe.speedrun**
+  top-level orchestrator
 
-  - End-to-end orchestrator
-  - Batch YAML, Jira key, or idea
-  - create → auto-fix → submit
-  - --headless, --dry-run
+  - 3 modes (A/B/C)
+  - persists state to tmp/
+  - chains create -> auto-fix -> submit
+  - --headless / --dry-run for CI
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 2
+  style.stroke-width: 3
+  style.double-border: true
 }
 
-auto-fix: |md
+# --- Create ---
+
+create: |md
+  **/rfe.create**
+  author RFE artifacts
+
+  - clarifying questions
+  - RFE template, WHAT/WHY only
+  - size guide (S/M/L)
+  - -> artifacts/rfe-tasks
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Auto-fix ---
+
+autofix: |md
   **/rfe.auto-fix**
+  non-interactive pipeline
 
-  - Pipeline state machine
-  - JQL fetch or explicit IDs
-  - Batched dispatch loop
-  - Resume on interruption
+  - pipeline_state.py machine
+  - batched agent dispatch
+  - assess -> feasibility ->
+    review -> revise -> split
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Review ---
+
+review: |md
+  **/rfe.review**
+  score + revise
+
+  - rubric assess + feasibility
+  - review + auto-revise
+  - re-assess <= 2 cycles
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Split ---
+
+split: |md
+  **/rfe.split**
+  decompose oversized RFEs
+
+  - split into children
+  - re-review children
+  - right-size loop
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Submit ---
+
+submit-skill: |md
+  **/rfe.submit**
+  deterministic REST API
+
+  - passing IDs only
+  - create / update tickets
+  - auto-applied labels
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -85,126 +124,89 @@ auto-fix: |md
   style.stroke-width: 2
 }
 
-speedrun -> rfe-pipeline.create: "Phase 1"
-speedrun -> auto-fix: "Phase 2"
-speedrun -> rfe-pipeline.submit: "Phase 3"
-auto-fix -> rfe-pipeline.review: "batch IDs"
-auto-fix -> rfe-pipeline.split: "oversized RFEs"
+# --- External dependencies ---
 
-# --- Review Sub-Agents ---
+assess-rfe: |md
+  **assess-rfe plugin**
 
-review-agents: Review Sub-Agents {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  rfe-feasibility: |md
-    **rfe-feasibility-review**
-
-    - feasible / infeasible / indeterminate
-    - checks platform architecture
-    - reads Jira comment history
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-}
-
-rfe-pipeline.review -> review-agents.rfe-feasibility: "per-RFE agent"
-
-# --- Strategy Review Sub-Agents ---
-
-strat-reviewers: Strategy Reviewers {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  arch: |md
-    **architecture-review**
-
-    - dependency correctness
-    - integration patterns
-    - component boundaries
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-
-  feasibility-strat: |md
-    **feasibility-review**
-
-    - technical feasibility
-    - effort credibility
-    - hidden dependencies
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-
-  scope: |md
-    **scope-review**
-
-    - right-sizing
-    - effort vs scope match
-    - scope trap detection
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-
-  testability: |md
-    **testability-review**
-
-    - testable criteria
-    - missing edge cases
-    - test complexity
-  | {shape: rectangle; style.fill: "#e8e8e8"; style.stroke: "#333333"; style.stroke-width: 2; style.double-border: true}
-}
-
-# --- Utility ---
-
-update-deps: |md
-  **/rfe-creator.update-deps**
-
-  - Re-fetch assess-rfe skills
-  - Re-fetch architecture context
+  - scoring rubric
+  - bootstrapped on first use
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
-# --- External Services ---
+archctx: |md
+  **architecture-context**
+
+  - platform components / APIs
+  - feasibility grounding
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
 
 jira: |md
-  **Jira**
-  RHAIRFE / RHAISTRAT
+  **Jira (RHAIRFE)**
+
+  - fetch existing RFEs
+  - create + update tickets
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-assess-rfe-plugin: |md
-  **assess-rfe**
-  scoring rubric
+# --- Output ---
+
+result: |md
+  **RHAIRFE tickets**
+
+  - created / updated
+  - labels: auto-created,
+    auto-revised, split-*,
+    feasibility-*
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> speedrun
+
+speedrun -> create: "Mode A/C: new ideas"
+speedrun -> autofix: "existing keys /\nafter create"
+create -> autofix: "artifacts/rfe-tasks"
+
+autofix -> review: "per batch"
+autofix -> split: "oversized"
+split -> review: "review children" {
   style.stroke-dash: 3
 }
 
-arch-context: |md
-  **architecture-context**
-  platform docs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+review -> assess-rfe: "rubric" {
+  style.stroke-dash: 3
+}
+review -> archctx: "feasibility grounding" {
+  style.stroke-dash: 3
+}
+review -> jira: "fetch RFEs" {
   style.stroke-dash: 3
 }
 
-# --- External connections ---
-
-rfe-pipeline.review -> jira: "fetch RFEs"
-rfe-pipeline.submit -> jira: "create / update"
-rfe-pipeline.review -> assess-rfe-plugin: "rubric scoring"
-rfe-pipeline.create -> assess-rfe-plugin: "bootstrap rubric"
-review-agents.rfe-feasibility -> arch-context: "platform context"
-strat-reviewers -> arch-context: "ground in platform"
-update-deps -> assess-rfe-plugin: "re-fetch"
-update-deps -> arch-context: "re-fetch"
+speedrun -> submit-skill: "passing IDs"
+submit-skill -> jira: "create / update" {
+  style.stroke-dash: 3
+}
+jira -> result

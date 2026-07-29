@@ -7,12 +7,15 @@ title: rfe.split
 
 # rfe.split
 
-Decompose oversized RFEs into appropriately-scoped pieces. Launches
-parallel split agents that analyze the parent RFE and generate child
-RFEs, then invokes rfe.review on all children. Includes a self-correction
-loop (1 cycle max) that re-splits children still scoring poorly on
-right-sizing. Validates coverage to ensure all original scope items
-are represented in the children. Archives the parent RFE after splitting.
+Decompose oversized RFEs into appropriately-scoped pieces. Runs
+non-interactively: launches parallel split agents that analyze each parent
+RFE and generate child RFEs, collects the children (collect_children.py),
+then invokes rfe.review on all of them via an inline Skill call. Includes a
+right-sizing self-correction loop (1 cycle max) that re-splits any child
+still scoring below 2/2 on right-sizing, validates that all original scope
+is covered, and archives the parent RFE. Parents assessed as "no-split"
+have their recommendation downgraded to `revise` so downstream consumers
+don't treat them as pending splits.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

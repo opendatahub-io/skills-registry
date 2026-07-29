@@ -8,14 +8,17 @@ title: rfe.review
 # rfe.review
 
 Score and improve RFEs with a multi-phase agent pipeline. Accepts one or
-more Jira keys (RHAIRFE-NNNN) or local IDs (RFE-NNN). Fetches missing
-RFEs from Jira, runs rubric-based assessment via assess-rfe, launches
-parallel feasibility checks, synthesizes review files with scored
-criteria, auto-revises failing RFEs, and re-assesses (up to 2 cycles).
-The orchestrator never reads RFE content directly -- all content-heavy
-work is delegated to sub-agents (fetch, assess, feasibility, review,
-revise). Uses scripts/check_review_progress.py for polling agent completion
-and scripts/filter_for_revision.py to determine which RFEs need revision.
+more Jira keys (RHAIRFE-NNNN) or local IDs (RFE-NNN); missing RFEs are
+fetched from Jira first. The orchestrator never reads RFE content directly
+-- all content-heavy work is delegated to background sub-agents (fetch,
+assess, feasibility, review, revise) launched in parallel waves and polled
+via scripts/check_review_progress.py. It runs rubric-based assessment
+(assess-rfe / rfe-scorer subagent), launches per-RFE feasibility checks
+(rfe-feasibility-review), synthesizes scored review files, auto-revises
+failing RFEs (filter_for_revision.py), and re-assesses up to 2 cycles,
+preserving cumulative scores and revision history across cycles. Can return
+headlessly to a calling skill (auto-fix or split) or print an interactive
+summary with next-step suggestions.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

@@ -9,11 +9,11 @@ direction: right
 
 entry: |md
   **architecture-review**
-  _(fork sub-agent, opus)_
+  fork · model: opus
 
-  - reads strategy artifacts
-  - cross-refs source RFEs
-  - not user-invocable
+  - platform architect
+  - reviews refined
+    strategy features
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,15 +21,16 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read Inputs ---
+# --- Read inputs ---
 
 read-inputs: |md
   **Read Inputs**
 
-  - `artifacts/strat-tasks/`
-  - cross-ref `artifacts/rfe-tasks/`
-  - check `artifacts/strat-reviews/`
-    for prior reviews (re-review)
+  - artifacts/strat-tasks/
+  - cross-ref
+    artifacts/rfe-tasks/
+  - prior strat-reviews/
+    if re-review
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -37,15 +38,28 @@ read-inputs: |md
   style.stroke-width: 2
 }
 
-# --- Check Architecture Context ---
+# --- Decision ---
 
-check-context: |md
-  **Check Arch Context**
+archctx-q: |md
+  **Arch context
+  available?**
 
-  - `.context/architecture-context/`
-  - `architecture/rhoai-*/`
-  - read PLATFORM.md
-  - read component docs
+  rhoai-* dir present?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Load overlays ---
+
+overlays: |md
+  **Load Overlays**
+
+  - active overlays only
+  - override generated docs
+  - e.g. KFP SDK version
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -53,51 +67,18 @@ check-context: |md
   style.stroke-width: 2
 }
 
-# --- Skip (no context) ---
-
-skip-review: |md
-  **Skip Review**
-
-  - "Architecture review
-    skipped -- no architecture
-    context available."
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 1
-  style.stroke-dash: 3
-}
-
-# --- Check Overlays ---
-
-check-overlays: |md
-  **Check Overlays**
-
-  - `.context/.../overlays/*.md`
-  - filter `status: active`
-  - version bumps, maturity
-    changes, dependency shifts
-  - overlays override arch docs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Assess Strategies ---
+# --- Assess (LLM) ---
 
 assess: |md
-  **Assess Strategies**
-  LLM (per strategy)
+  **Assess Architecture**
+  LLM (opus)
 
-  1. dependencies correct?
-  2. integration patterns valid?
-  3. component boundaries?
-  4. deployment model?
-  5. architectural conflicts?
-  6. cross-component coord?
+  - dependencies accurate?
+  - integration patterns valid?
+  - component boundaries?
+  - deployment model correct?
+  - conflicts + cross-component
+    coordination?
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -106,29 +87,11 @@ assess: |md
   style.double-border: true
 }
 
-# --- Re-review Delta ---
+# --- Result ---
 
-re-review-delta: |md
-  **Re-review Delta**
+result: |md
+  **STRAT-NNN assessment**
 
-  - prior concerns addressed?
-  - concerns remaining?
-  - new issues introduced?
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-  style.stroke-dash: 3
-}
-
-# --- Output ---
-
-output: |md
-  **Output**
-
-  Per STRAT-NNN:
   - architecture assessment
   - missing dependencies
   - incorrect assumptions
@@ -141,81 +104,35 @@ output: |md
   style.stroke-width: 2
 }
 
-# --- External: Architecture Docs ---
+# --- External context ---
 
-arch-context: |md
-  **Architecture Context**
-  _(external repo)_
+archctx: |md
+  **architecture-context**
 
   - PLATFORM.md
   - component docs
   - overlays
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Output callout ---
-
-output-callout: |md
-  ### STRAT-NNN: title
-  **Assessment**: sound / concerns / conflicts
-  **Missing deps**: list or "none"
-  **Incorrect assumptions**: list or "none"
-  **Cross-component risks**: list or "none"
-  **Recommendation**: approve / revise / escalate
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
-}
-
-# --- Overlays applied callout ---
-
-overlays-callout: |md
-  Overlays applied:
-  - 0001: KFP SDK 2.16 in RHOAI 3.4
-  - 0002: dependency shift ...
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
-}
-
 # --- Flow ---
 
 entry -> read-inputs
-read-inputs -> check-context
+read-inputs -> archctx-q
 
-check-context -> skip-review: "no context"
-check-context -> check-overlays: "context found"
-
-check-context -> arch-context: "read" {
+archctx-q -> overlays: "available"
+archctx-q -> result: "unavailable\nskipped" {
   style.stroke-dash: 3
 }
 
-check-overlays -> assess
-check-overlays -> overlays-callout: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
-}
+overlays -> assess
+assess -> result
 
-assess -> output: "first review"
-assess -> re-review-delta: "re-review"
-re-review-delta -> output
-
-output -> output-callout: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
+read-inputs -> archctx: {
+  style.stroke-dash: 3
 }

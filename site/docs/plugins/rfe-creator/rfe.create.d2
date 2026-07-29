@@ -10,10 +10,10 @@ direction: right
 entry: |md
   **/rfe.create**
 
+  - problem statement
   - --headless
-  - --priority \<value\>
-  - --labels \<csv\>
-  - --rfe-id \<ID\>
+  - --priority, --labels
+  - --rfe-id
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,15 +21,29 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Load Rubric ---
+# --- Step 0 ---
+
+parse: |md
+  **Step 0: Parse Args**
+
+  - extract flags + problem text
+  - --headless skips Step 2
+  - remaining text = problem
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1 ---
 
 load-rubric: |md
-  **Load Rubric**
+  **Step 1: Load Rubric**
 
-  - check artifacts/rfe-rubric.md
-  - bootstrap assess-rfe if missing
-  - invoke /export-rubric
-  - shape questions from criteria
+  - read artifacts/rfe-rubric.md
+  - if missing: bootstrap
+  - shapes questions + RFEs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -37,48 +51,55 @@ load-rubric: |md
   style.stroke-width: 2
 }
 
-export-rubric: |md
-  **/export-rubric**
-  (assess-rfe plugin)
+assess-rfe: |md
+  **assess-rfe plugin**
+
+  - bootstrap-assess-rfe.sh
+  - /export-rubric
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Clarifying Questions ---
+# --- Decision ---
+
+headless-q: |md
+  **--headless?**
+
+  skip clarifying Q's?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2 ---
 
 clarify: |md
-  **Clarifying Questions**
-  LLM
+  **Step 2: Clarifying Questions**
 
-  - 2-5 targeted questions
-  - customers, justification
-  - user problem, scope
-  - success criteria
-  - adapt to rubric criteria
+  - 2-5 Q's (AskUserQuestion)
+  - customers, business justification
+  - user problem, size, success
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
 }
 
-# --- Generate RFEs ---
+# --- Step 3 (LLM) ---
 
 generate: |md
-  **Generate RFEs**
-  LLM
+  **Step 3: Generate RFEs**
 
-  - read rfe-template.md
-  - WHAT/WHY only, no HOW
+  - WHAT/WHY, never HOW
   - one RFE per business need
-  - size by acceptance criteria
-    (S/M/L/XL)
-  - Jira priority values
+  - size S/M/L/XL from AC count
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -87,14 +108,13 @@ generate: |md
   style.double-border: true
 }
 
-# --- Write Artifacts ---
+# --- Step 4 ---
 
 write: |md
-  **Write Artifacts**
+  **Step 4: Write Artifacts**
 
-  - next_rfe_id.py allocates IDs
-  - write RFE-NNN.md files
-  - frontmatter.py set metadata
+  - next_rfe_id.py or --rfe-id
+  - frontmatter.py set (Draft)
   - rebuild-index
 | {
   shape: rectangle
@@ -103,20 +123,29 @@ write: |md
   style.stroke-width: 2
 }
 
-# --- Artifact callout ---
+# --- Output ---
 
-artifact-tree: |md
-  artifacts/rfe-tasks/RFE-NNN.md
-  ---
-  rfe_id: RFE-001
-  title: "..."
-  priority: Normal
-  size: M
-  status: Draft
-  ---
-  ## Summary
-  ## Business Justification
-  ## Acceptance Criteria
+result: |md
+  **artifacts/rfe-tasks/RFE-NNN.md**
+
+  - Draft + frontmatter
+  - edit or /rfe.review
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout ---
+
+layout-note: |md
+  artifacts/
+    rfe-rubric.md
+    rfe-tasks/RFE-NNN.md
+    rfe-reviews/
+  Size Guide  S:1-2  M:3-5
+              L:5-8  XL:8+
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -126,59 +155,28 @@ artifact-tree: |md
   style.font-size: 10
 }
 
-# --- Output ---
-
-output: |md
-  **Output**
-
-  - artifacts/rfe-tasks/RFE-NNN.md
-  - suggest /rfe.review
-  - suggest re-run /rfe.create
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Downstream ---
-
-rfe-review: |md
-  **/rfe.review**
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
 # --- Flow ---
 
-entry -> load-rubric
+entry -> parse
+parse -> load-rubric
 
-load-rubric -> export-rubric: "rubric missing" {
+load-rubric -> assess-rfe: "bootstrap" {
   style.stroke-dash: 3
 }
-export-rubric -> load-rubric: "rfe-rubric.md" {
+
+load-rubric -> headless-q
+
+headless-q -> clarify: "no"
+headless-q -> generate: "--headless" {
   style.stroke-dash: 3
 }
 
-load-rubric -> clarify
-load-rubric -> generate: "--headless\n(skip questions)"
+clarify -> generate
+generate -> write
+write -> result
 
-clarify -> generate: "PM answers"
-
-generate -> write: "RFE-NNN.md\nper business need"
-
-write -> artifact-tree: {
+write -> layout-note: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
-}
-
-write -> output
-
-output -> rfe-review: "next step" {
-  style.stroke-dash: 3
 }

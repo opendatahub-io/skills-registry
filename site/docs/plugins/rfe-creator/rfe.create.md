@@ -7,14 +7,17 @@ title: rfe.create
 
 # rfe.create
 
-Generate new RFEs from problem statements or ideas. Loads the assess-rfe
-rubric (bootstrapping it if needed), asks 2-5 clarifying questions about
-customers, business justification, user problems, scope, and success
-criteria, then produces well-formed RFEs using a template. Each RFE
-describes WHAT and WHY (business needs), never HOW (implementation).
-Supports headless mode for batch/CI use. Determines t-shirt size from
-acceptance criteria count using the Size Guide (S: 1-2, M: 3-5, L: 5-8,
-XL: 8+). Writes artifacts with YAML frontmatter via scripts/frontmatter.py.
+Generate new RFEs from a problem statement, idea, or need. Loads the
+assess-rfe rubric (bootstrapping it if needed), and unless run headless
+asks 2-5 clarifying questions about affected customers, business
+justification, the user's problem, size, and success criteria. Produces
+well-formed RFEs from a template that describe WHAT and WHY (business
+needs), never HOW (implementation) -- it explicitly avoids loading
+architecture context so it won't prescribe a solution. Determines each
+RFE's t-shirt size from its acceptance-criteria count via the Size Guide
+(S: 1-2, M: 3-5, L: 5-8, XL: 8+), allocates IDs atomically (or uses a
+pre-assigned `--rfe-id`), writes artifacts with YAML frontmatter via
+scripts/frontmatter.py, and rebuilds the index.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

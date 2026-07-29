@@ -7,13 +7,16 @@ title: rfe.auto-fix
 
 # rfe.auto-fix
 
-Non-interactive batch pipeline for reviewing, revising, and splitting
-RFEs at scale. Accepts explicit IDs or a JQL query to fetch from Jira.
-Uses a pipeline state machine (pipeline_state.py) with phased dispatch:
-fetch, bootstrap, assess, feasibility, review, revise, re-assess, and
-split. Processes in configurable batch sizes with resume support via
-snapshot-based incremental fetch. Supports reprocessing previously
-handled RFEs and random sampling.
+Non-interactive batch pipeline for reviewing, revising, and splitting RFEs
+at scale. Accepts explicit IDs or a JQL query (with --limit and --random
+sampling) to fetch from Jira. Runs a pipeline state machine
+(pipeline_state.py) with phased dispatch -- fetch, bootstrap, assess,
+feasibility, review, revise, re-assess, and split -- driven by a strict
+next-action / launch_wave / wait-for-wave loop that must run to completion
+(no early exit, context compression handled automatically). Processes IDs in
+configurable batches with snapshot-based incremental fetch
+(snapshot_fetch.py) for resume and --reprocess support, then emits a run
+report and counts summary.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

@@ -7,14 +7,15 @@ title: feasibility-review
 
 # feasibility-review
 
-Internal forked reviewer sub-agent for strat.review. Assesses technical
-feasibility of refined strategies -- whether the proposed approach works,
-whether it delivers what the RFE asks for, whether effort estimates are
-credible, and identifies hidden dependencies or integration challenges.
-Supports architecture context overlays with filtering by status, release,
-and affected components. Adversarial stance: flags things that are harder
-than they look and optimistic estimates. Runs with model: opus in a fork
-context.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a staff engineer assessing refined strategy
+features in artifacts/strat-tasks/ for technical feasibility: whether the
+proposed approach actually works, whether it delivers what the source RFE
+asks for (flagging silent scope reduction), whether the effort estimate /
+T-shirt size is credible, and what hidden dependencies or integration
+challenges will surface during implementation. Grounds assessments in
+architecture context and overlays, takes an adversarial stance toward
+optimistic estimates, and emits an approve / revise / reject recommendation.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

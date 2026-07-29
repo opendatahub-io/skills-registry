@@ -10,11 +10,10 @@ direction: right
 entry: |md
   **/rfe.speedrun**
 
-  - --input \<YAML\>
-  - --headless
-  - --dry-run
-  - --announce-complete
-  - --batch-size N
+  - single idea / Jira key(s)
+  - --input batch.yaml
+  - --headless, --dry-run
+  - --batch-size, --announce-complete
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -22,15 +21,14 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 0: Parse & Persist ---
+# --- Step 0 ---
 
 parse: |md
-  **Parse & Persist Flags**
+  **Step 0: Parse & Persist**
 
-  - clean temp state
-  - persist config to disk
+  - state.py clean + init
+  - persist flags to config
   - pin batch_size (default 5)
-  - determine mode A/B/C
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -38,65 +36,29 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Phase 1: Create (mode fan-out) ---
+# --- Mode decision ---
 
-create: "Phase 1: Create" {
-  style.fill: "#ececec"
+mode-q: |md
+  **Mode?**
+
+  - A: --input batch
+  - B: existing Jira key
+  - C: single idea
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-
-  mode-a: |md
-    **Batch YAML**
-    (Mode A)
-
-    - read YAML input file
-    - pre-allocate N IDs
-    - launch N agents in parallel
-    - each agent calls /rfe.create
-    - retry any missing
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  mode-b: |md
-    **Existing RFE**
-    (Mode B)
-
-    - Jira key(s) from args
-    - skip creation entirely
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  mode-c: |md
-    **Single Idea**
-    (Mode C)
-
-    - invoke /rfe.create once
-    - clarifying Qs if interactive
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
 }
 
-# --- Persist IDs ---
+# --- Validate batch (Mode A) ---
 
-persist-ids: |md
-  **Persist ID List**
+validate-batch: |md
+  **Validate Batch** (Mode A)
 
-  - write all IDs to disk
-  - survives context compression
+  - validate_batch_input.py --strict
+  - stop on ERROR / duplicate
+  - next_rfe_id.py pre-allocate IDs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -104,48 +66,65 @@ persist-ids: |md
   style.stroke-width: 2
 }
 
-# --- Phase 2: Auto-fix ---
+# --- Phase 1: Create (LLM / agents) ---
+
+create: |md
+  **Phase 1: Create**
+  parallel Agents
+
+  - one Agent per entry / single
+  - each invokes /rfe.create
+  - pass pre-assigned RFE-ID
+  - Mode B skips this phase
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Phase 2: Auto-fix (other skill) ---
 
 autofix: |md
-  **/rfe.auto-fix**
+  **Phase 2: /rfe.auto-fix**
 
-  - re-read config + IDs from disk
-  - assess, review, auto-revise
+  - --batch-size passed explicitly
+  - assess, review, revise
   - split oversized RFEs
-  - retry queue + report
-  - pass --batch-size from config
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Phase 3: Submit ---
+# --- Verify decision ---
 
-collect: |md
-  **Collect Passing IDs**
+verify-q: |md
+  **All processed?**
 
-  - re-read config + IDs
-  - collect_recommendations.py
-  - parse SUBMIT= line
+  - check_autofix_complete.py
+  - MISSING_IDS → retry
 | {
-  shape: rectangle
+  shape: diamond
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-submit: |md
-  **/rfe.submit**
+# --- Phase 3: Submit (other skill) ---
 
-  - create/update in Jira
-  - confirmation table (interactive)
-  - skip confirmation (headless)
+submit-skill: |md
+  **Phase 3: /rfe.submit**
+
+  - collect_recommendations.py SUBMIT=
+  - submit passing IDs
+  - one confirmation gate (interactive)
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
@@ -154,12 +133,11 @@ submit: |md
 # --- Phase 4: Summary ---
 
 summary: |md
-  **Summary**
+  **Phase 4: Summary**
 
-  - created / passed / failed / split
-  - submitted Jira tickets
-  - run report + review report
-  - announce-complete marker (CI)
+  - created / review results
+  - submitted / remaining issues
+  - run + review reports
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -170,22 +148,20 @@ summary: |md
 # --- Flow ---
 
 entry -> parse
+parse -> mode-q
 
-parse -> create.mode-a: "--input"
-parse -> create.mode-b: "Jira key"
-parse -> create.mode-c: "free text"
-
-create.mode-a -> persist-ids
-create.mode-b -> persist-ids
-create.mode-c -> persist-ids
-
-persist-ids -> autofix: "speedrun-all-ids.txt"
-
-autofix -> collect
-
-collect -> submit: "passing IDs"
-collect -> summary: "none pass" {
+mode-q -> validate-batch: "A: batch"
+mode-q -> create: "C: single"
+mode-q -> autofix: "B: existing key" {
   style.stroke-dash: 3
 }
 
-submit -> summary
+validate-batch -> create
+create -> autofix
+autofix -> verify-q
+
+verify-q -> autofix: "missing IDs (retry <=3)" {
+  style.stroke-dash: 3
+}
+verify-q -> submit-skill: "complete"
+submit-skill -> summary

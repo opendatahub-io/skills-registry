@@ -7,15 +7,15 @@ title: rfe.submit
 
 # rfe.submit
 
-Push RFEs to Jira via deterministic Python scripts using the REST API
-with Basic Auth. Creates new RHAIRFE tickets for new RFEs or updates
-existing tickets for fetched RFEs. Applies labels automatically based
+Push RFEs to Jira via deterministic Python scripts (scripts/submit.py)
+using the REST API with Basic Auth. Creates new RHAIRFE tickets for new
+RFEs or updates existing tickets for fetched RFEs, then rebuilds
+artifacts/rfes.md and reports results. Applies labels automatically based
 on pipeline outcomes (auto-created, auto-revised, split-original,
-split-result, needs-attention, feasibility verdicts). The three
-feasibility labels (pass/fail/unknown) are mutually exclusive and
-managed automatically. Non-interactive -- invoking this skill is the
-confirmation. Requires JIRA_SERVER, JIRA_USER, and JIRA_TOKEN
-environment variables.
+split-result, needs-attention, rubric-pass, and the three mutually
+exclusive feasibility verdicts). Non-interactive by design -- invoking the
+skill is the confirmation, no dry-run approval step. Requires JIRA_SERVER,
+JIRA_USER, and JIRA_TOKEN environment variables.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

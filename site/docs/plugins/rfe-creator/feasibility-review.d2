@@ -5,15 +5,16 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry ---
+# --- Entry (forked sub-agent) ---
 
 entry: |md
-  **/feasibility-review**
-  forked sub-agent (opus)
+  **feasibility-review**
+  fork sub-agent (Opus)
 
-  - Tools: Read, Grep, Glob
-  - `artifacts/strat-tasks/`
-  - `artifacts/rfe-tasks/`
+  - staff-engineer reviewer
+  - refined strategy features
+  - Read / Grep / Glob only
+  - find problems, not confirm
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -24,85 +25,48 @@ entry: |md
 # --- Read Inputs ---
 
 read-inputs: |md
-  **Read Strategy & RFE Artifacts**
+  **Read Inputs**
 
-  - Read strategies from `strat-tasks/`
-  - Read source RFEs from `rfe-tasks/`
-  - Verify strategy delivers the
-    stated business need
-  - Match deliverables against
-    acceptance criteria
+  - artifacts/strat-tasks/
+  - cross-ref artifacts/rfe-tasks/
+    (does it deliver the RFE?)
+  - prior strat-reviews/ if re-review
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-}
-
-# --- Check Prior Reviews ---
-
-check-reviews: |md
-  **Prior Reviews?**
-
-  `strat-reviews/` exists?
-| {
-  shape: diamond
-  style.fill: "#fef9c3"
-  style.stroke: "#a16207"
-  style.stroke-width: 1
 }
 
 # --- Architecture Context ---
 
-arch-context: Architecture Context {
-  style.fill: "#ececec"
+archctx: |md
+  **Architecture Context**
+
+  - .context/.../rhoai-* PLATFORM.md
+  - relevant component docs
+  - active overlays (status: active,
+    release match, affects intersects)
+  - overlays override generated docs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-
-  platform: |md
-    **Platform Docs**
-
-    - `.context/architecture-context/`
-    - `rhoai-*/PLATFORM.md`
-    - Component docs
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 1
-    style.stroke-dash: 3
-  }
-
-  overlays: |md
-    **Architecture Overlays**
-
-    - `overlays/*.md`
-    - Filter: status=active
-    - Filter: release match
-    - Filter: affects components
-    - Overrides platform docs
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 1
-    style.stroke-dash: 3
-  }
-
-  platform -> overlays: "corrections"
 }
 
-# --- Assessment (LLM) ---
+# --- Assess Feasibility (LLM) ---
 
 assess: |md
-  **Feasibility Assessment**
-  LLM analysis (adversarial)
+  **Assess Feasibility**
+  adversarial LLM review
 
-  1. Can we build this?
-  2. Does it deliver the RFE?
-  3. Is the effort estimate credible?
-  4. Hidden dependencies?
-  5. What's harder than it looks?
+  - approach works? fundamental flaws?
+  - delivers what RFE asks?
+    (flag silent scope cuts)
+  - effort / T-shirt credible?
+  - hidden deps + integration gaps
+  - what's harder than it looks?
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -111,77 +75,60 @@ assess: |md
   style.double-border: true
 }
 
-# --- Re-review (LLM) ---
+# --- Recommendation (decision) ---
 
-re-review: |md
-  **Re-review Assessment**
-  LLM analysis (adversarial)
+verdict-q: |md
+  **Recommendation**
+  approve / revise / reject
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-  - Concerns addressed?
-  - Concerns remaining?
-  - New issues from revisions?
-  - Plus full assessment
+# --- Result ---
+
+result: |md
+  **STRAT-NNN assessment**
+
+  - Feasibility verdict
+  - Effort estimate credibility
+  - RFE alignment (gaps listed)
+  - Key concerns
+  - Recommendation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External: architecture-context repo ---
+
+archctx-ext: |md
+  **architecture-context**
+
+  - PLATFORM.md + component docs
+  - overlays (human corrections)
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Output ---
-
-output: |md
-  **Review Output**
-  per strategy
-
-  - Feasibility: feasible / infeasible
-  - Effort: credible / optimistic
-  - RFE alignment: delivers / gaps
-  - Key concerns list
-  - Recommendation: approve /
-    revise / reject
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Callout: output format ---
-
-output-format: |md
-  ### STRAT-NNN: title
-  Feasibility: feasible
-  Effort estimate: optimistic
-  RFE alignment: partial
-  Key concerns: [...]
-  Recommendation: revise
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
-}
-
-# --- Edges ---
-
-entry -> read-inputs
-read-inputs -> check-reviews
-read-inputs -> arch-context: "if available" {
   style.stroke-dash: 3
 }
-check-reviews -> assess: "first review"
-check-reviews -> re-review: "re-review\n(prior reviews exist)"
-arch-context -> assess
-arch-context -> re-review
-assess -> output
-re-review -> output
 
-output -> output-format: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
+# --- Flow ---
+
+entry -> read-inputs
+read-inputs -> archctx
+archctx -> assess: "grounded context"
+assess -> verdict-q
+verdict-q -> result: "per strategy"
+
+# --- Dashed external edge ---
+
+archctx -> archctx-ext: "read docs + overlays" {
+  style.stroke-dash: 3
 }

@@ -7,13 +7,15 @@ title: testability-review
 
 # testability-review
 
-Internal forked reviewer sub-agent for strat.review. Determines whether
-strategy acceptance criteria are testable and measurable, identifies
-missing edge cases (failure modes, boundary conditions, concurrent
-access, large-scale scenarios), assesses test complexity, and evaluates
-whether non-functional requirements (performance, security, scalability)
-can be validated with concrete tests. Suggests specific rewrites for
-vague criteria.
+Internal forked reviewer sub-agent (context: fork, model: opus) for the
+strategy workflow. Acts as a test engineer determining whether each refined
+strategy in artifacts/strat-tasks/ can be validated: are acceptance criteria
+testable and success criteria measurable (with a baseline), what edge cases
+are missing (failure modes, boundary conditions, concurrent access,
+large-scale, backwards compatibility), what test strategy is needed, and can
+the non-functional requirements (performance, scalability, security) be
+tested. Suggests concrete rewrites for vague criteria and emits an approve /
+revise-criteria / add-test-plan recommendation.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

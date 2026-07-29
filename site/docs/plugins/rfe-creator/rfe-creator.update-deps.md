@@ -7,11 +7,13 @@ title: rfe-creator.update-deps
 
 # rfe-creator.update-deps
 
-Force update all vendored dependencies by removing cached copies and
-re-fetching. Updates the assess-rfe skills (from the assess-rfe plugin)
-and architecture context (from opendatahub-io/architecture-context).
-Has disable-model-invocation set, meaning it can only be triggered
-explicitly by the user.
+Force-update all vendored dependencies by removing cached copies and
+re-fetching. Refreshes the assess-rfe skills (assess-rfe / export-rubric,
+via scripts/bootstrap-assess-rfe.sh) and the architecture context (from
+opendatahub-io/architecture-context, via scripts/fetch-architecture-context.sh),
+then reports what was updated and the versions fetched. Has
+disable-model-invocation set, so it can only be triggered explicitly by the
+user.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

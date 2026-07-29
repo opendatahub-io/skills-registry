@@ -9,11 +9,12 @@ direction: right
 
 entry: |md
   **testability-review**
+  fork · model: opus
 
-  - fork context (read-only)
-  - model: opus
-  - tools: Read, Grep, Glob
-  - internal (not user-invocable)
+  - test engineer
+  - reviews refined
+    strategy features
+  - can this be validated?
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,16 +22,16 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read Inputs ---
+# --- Read inputs ---
 
 read-inputs: |md
   **Read Inputs**
 
   - artifacts/strat-tasks/
-  - strategy sections + criteria
-  - artifacts/rfe-tasks/
-  - original acceptance criteria
-  - cross-reference basis
+  - cross-ref artifacts/rfe-tasks/
+    (original acceptance criteria)
+  - prior strat-reviews/
+    if re-review
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -38,101 +39,20 @@ read-inputs: |md
   style.stroke-width: 2
 }
 
-# --- Check Prior Reviews ---
+# --- Assess (LLM) ---
 
-check-prior: |md
-  **Check Prior Reviews**
+assess: |md
+  **Assess Testability**
+  LLM (opus)
 
-  - artifacts/strat-reviews/
-  - detect re-review scenario
-  - read prior concerns
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Assess Testability (container) ---
-
-assess: Assess Testability {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  criteria: |md
-    **Criteria Testability**
-
-    - concrete vs vague tests
-    - "users can do X" = testable
-    - "system is reliable" = not
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  measurable: |md
-    **Success Measurability**
-
-    - baselines defined?
-    - ">80% reduction" — from what?
-    - quantifiable targets
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  edge-cases: |md
-    **Edge Case Analysis**
-
-    - failure modes
-    - boundary conditions
-    - concurrent access
-    - large-scale scenarios
-    - backwards compatibility
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  test-strategy: |md
-    **Test Strategy**
-
-    - unit / integration / e2e
-    - external dependencies
-    - multi-cluster scenarios
-    - non-functional requirements
-    - performance, security
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  criteria -> measurable
-  measurable -> edge-cases
-  edge-cases -> test-strategy
-}
-
-# --- Re-review Delta ---
-
-re-review: |md
-  **Re-review Delta**
-
-  - concerns addressed?
-  - concerns remaining?
-  - new issues introduced?
+  - acceptance criteria testable?
+  - success criteria measurable
+    (baseline)?
+  - missing edge cases (failure,
+    boundaries, concurrency,
+    scale, backwards-compat)?
+  - test strategy? NFRs testable
+    (perf / scale / security)?
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -141,18 +61,32 @@ re-review: |md
   style.double-border: true
 }
 
-# --- Output ---
+# --- Decision ---
 
-output: |md
-  **Write Review**
+verdict-q: |md
+  **Recommendation**
 
-  - per-strategy verdict
-  - testability rating
+  approve /
+  revise criteria /
+  add test plan
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Result ---
+
+result: |md
+  **STRAT-NNN assessment**
+
+  - testability
   - missing edge cases
-  - untestable criteria list
-  - test complexity rating
-  - recommendation: approve /
-    revise / add test plan
+  - untestable criteria
+  - test complexity
+  - recommendation (+ concrete
+    rewrites for vague criteria)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -160,43 +94,9 @@ output: |md
   style.stroke-width: 2
 }
 
-# --- Output Callout ---
-
-output-format: |md
-  STRAT-NNN: title
-  Testability: testable / partial
-  Missing edge cases: [list]
-  Untestable criteria: [list]
-  Test complexity: low / mod / high
-  Recommendation: approve / revise
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
-}
-
 # --- Flow ---
 
 entry -> read-inputs
-entry -> check-prior
-
 read-inputs -> assess
-
-check-prior -> assess: "first review"
-check-prior -> re-review: "prior reviews exist" {
-  style.stroke-dash: 3
-}
-
-assess -> output
-re-review -> output: "merge findings" {
-  style.stroke-dash: 3
-}
-
-output -> output-format: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
-}
+assess -> verdict-q
+verdict-q -> result
