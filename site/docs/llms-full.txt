@@ -2503,15 +2503,110 @@ Run a security audit on a Python package with risk rating and structured verdict
 
 ## ec-cve-check
 
-Inspect Enterprise Contract CVE scan results from Konflux-built container images and test ECP exception removal. Extracts the full Clair REPORTS data from cosign attestations (the same data EC's cve.cve_blockers rule evaluates), supports human-readable and JSON output, and can drive local or cluster-based EC policy validation to check whether a cve.cve_blockers exception is still needed.
+Inspect the CVE scan results that Enterprise Contract (EC) actually gates on
+for Konflux-built container images, and test whether an EC policy exception
+can be safely removed. The `clair-scan` Tekton task emits two outputs from a
+single scan: **SCAN_OUTPUT** (RHSA-filtered counts shown in the build UI,
+often 0 for Python/Go) and **REPORTS** (the full Clair report stored as an OCI
+blob — the exact data EC's `cve.cve_blockers` rule evaluates at release time).
+This gap is why a build can look clean while EC blocks the release. This plugin
+reads the REPORTS data directly.
+
+The workflow is auth-then-scan: `setup-auth.sh` pulls the tenant-wide
+`components-namespace-pull` secret (covering every repo under
+`quay.io/redhat-user-workloads/<tenant>/*`) and, optionally, the cosign public
+key for offline use. `inspect-clair-cves.sh` then resolves the image to a
+digest, verifies the cosign attestation, extracts the REPORTS OCI blob, and
+prints a severity-sorted CVE table (or `--json` for scripting). Package names
+reveal the data source — CSAF/VEX feed entries, RPM sub-packages (deduplicate
+by CVE ID), and pip/Python findings from GHSA/PYSEC (watch for PEP 440 local-
+version false positives on downstream-patched packages).
+
+Beyond inspection, the skill supports **layer decomposition** (diff a base
+image scan against a product image scan to separate inherited from
+product-introduced CVEs) and **ECP exception testing**. Exception removal can
+be validated two ways: the preferred local EC CLI path (build a modified policy
+with `cve.cve_blockers` removed, reduce the snapshot to a single component, run
+`ec validate image` in ~30s) or a cluster PipelineRun via
+`test-exception-removal.sh` (slower, subject to Kueue quota). A key caveat runs
+through both paths: only push-pipeline snapshots (`on-push`) carry CVE scan
+data — pull/MR snapshots skip Clair entirely, so `cve.cve_blockers` silently
+passes on them (a false pass, not a real result).
 
 **Repository**: https://github.com/jrusz/ec-cve-check
+
+### Architecture
+
+A single guided skill (`/ec-cve-check`) that orchestrates three bundled bash
+scripts plus an optional local EC CLI path. It is fully deterministic — no LLM
+or agent calls — and read-only against the cluster and registry (it never
+modifies images, snapshots, or policies).
+
+Data flow for inspection:
+1. `setup-auth.sh <tenant>` — `oc` extracts `components-namespace-pull`
+   (dockerconfigjson) to `/tmp/clair-auth/config.json`; `--key` also exports
+   the cosign public key from `openshift-pipelines/public-key`.
+2. `inspect-clair-cves.sh <image> [--json]`:
+   - `skopeo inspect` resolves a tag to a `sha256:` digest (digests pass
+     through unchanged);
+   - `cosign verify-attestation --type slsaprovenance` fetches the SLSA
+     provenance attestation;
+   - a Python pass walks `buildConfig.tasks` for the `clair-scan` task,
+     collecting REPORTS blob digests, the SCAN_OUTPUT summary, and the source
+     repo from IMAGES_PROCESSED;
+   - `skopeo copy` pulls each REPORTS OCI blob (falling back to the
+     `redhat-user-workloads` source repo when the released repo lacks it);
+   - a final Python pass expands `package_vulnerabilities`, dedups by
+     (package, version, CVE), sorts by severity, and prints a table or JSON.
+
+Exception testing shares the same auth. The local EC CLI path edits the ECP
+YAML in memory (drop `cve.cve_blockers`, add `builtin.image.accessible` to
+excludes to silence registry-auth noise), reduces the snapshot to one
+component, and runs `ec validate image` offline (`--ignore-rekor`). The cluster
+path submits an EC PipelineRun from `konflux-ci/build-definitions` and polls up
+to 10 minutes, then greps the verify pod logs for `[Violation] cve.cve_blockers`
+to report the unique blocking CVE IDs and affected images.
+
+Reference docs ship alongside the skill: `references/cve-scanning-architecture.md`
+(the two-output SCAN_OUTPUT/REPORTS split and source-repo links) and
+`references/ecp-exception-testing.md` (result interpretation, push-vs-pull
+snapshots, granular per-CVE exceptions, and PipelineRun troubleshooting).
 
 ### Skills
 
 #### /ec-cve-check
 
-Inspect CVE scan results and test ECP exception removal for Konflux-built images
+Extract the full Clair CVE report from a Konflux-built image's cosign
+attestation (the same REPORTS data EC's `cve.cve_blockers` rule evaluates)
+and optionally test whether an Enterprise Contract Policy exception can be
+removed. Guided, deterministic, and read-only: it runs bundled bash scripts
+(`setup-auth.sh`, `inspect-clair-cves.sh`, `test-exception-removal.sh`)
+and an optional local `ec validate` path, never modifying cluster
+resources, images, or policies.
+
+Produces a severity-sorted CVE table or structured JSON (`image`,
+`total_vulnerabilities`, `summary` counts, `vulnerabilities[]`). Supports
+diffing a base-image scan against a product-image scan to separate
+inherited from product-introduced CVEs, and reports whether an exception is
+still needed (with the blocking CVE IDs) when testing removal. Requires
+`cosign`, `skopeo`, `python3`, and `oc`; the local exception-removal path
+also needs the Conforma `ec` CLI binary and a local clone of
+`konflux-release-data`.
+
+Examples:
+```
+# Guided skill — invoke /ec-cve-check, then it runs the bundled scripts:
+# 1. One-time auth per session (pass your Konflux tenant namespace)
+bash skills/ec-cve-check/scripts/setup-auth.sh <tenant-namespace>
+# 2. Scan an image (tag or digest) — severity-sorted table
+DOCKER_CONFIG=/tmp/clair-auth bash skills/ec-cve-check/scripts/inspect-clair-cves.sh <image-ref>
+# JSON output for scripting / layer diffing
+DOCKER_CONFIG=/tmp/clair-auth bash skills/ec-cve-check/scripts/inspect-clair-cves.sh <image-ref> --json
+# Offline: export the cosign key, then pass --key
+bash skills/ec-cve-check/scripts/setup-auth.sh <tenant-namespace> --key
+# Test ECP exception removal via a cluster PipelineRun (local ec CLI is preferred — see SKILL.md)
+bash skills/ec-cve-check/scripts/test-exception-removal.sh <tenant-namespace> <ecp-policy.yaml> <snapshot-name>
+```
 
 ---
 
