@@ -2539,8 +2539,11 @@ passes on them (a false pass, not a real result).
 
 A single guided skill (`/ec-cve-check`) that orchestrates three bundled bash
 scripts plus an optional local EC CLI path. It is fully deterministic — no LLM
-or agent calls — and read-only against the cluster and registry (it never
-modifies images, snapshots, or policies).
+or agent calls. Inspection (`setup-auth.sh`, `inspect-clair-cves.sh`) and the
+local EC CLI path are read-only and never modify images, snapshots, or ECP
+policies. The one exception is the cluster PipelineRun path
+(`test-exception-removal.sh`), which submits (creates) a temporary Enterprise
+Contract PipelineRun on the cluster to validate exception removal.
 
 Data flow for inspection:
 1. `setup-auth.sh <tenant>` — `oc` extracts `components-namespace-pull`
@@ -2579,10 +2582,12 @@ snapshots, granular per-CVE exceptions, and PipelineRun troubleshooting).
 Extract the full Clair CVE report from a Konflux-built image's cosign
 attestation (the same REPORTS data EC's `cve.cve_blockers` rule evaluates)
 and optionally test whether an Enterprise Contract Policy exception can be
-removed. Guided, deterministic, and read-only: it runs bundled bash scripts
+removed. Guided and deterministic: it runs bundled bash scripts
 (`setup-auth.sh`, `inspect-clair-cves.sh`, `test-exception-removal.sh`)
-and an optional local `ec validate` path, never modifying cluster
-resources, images, or policies.
+and an optional local `ec validate` path. Inspection and local validation
+are read-only and never modify images, snapshots, or ECP policies; the
+alternative cluster PipelineRun path creates a temporary EC PipelineRun on
+the cluster to test exception removal.
 
 Produces a severity-sorted CVE table or structured JSON (`image`,
 `total_vulnerabilities`, `summary` counts, `vulnerabilities[]`). Supports
