@@ -2325,23 +2325,133 @@ Examples:
 
 ## autoqa-skills
 
-AI skills for AutoQA CI/CD test failure analysis and triage. Covers root cause analysis of test failure logs, matching failures against historical Jira tickets, and classifying failures as known infrastructure false alarms. Designed to run inside a Claude Code container as part of the AutoQA CI pipeline.
+A focused suite of AI skills for triaging CI/CD test failures inside the
+AutoQA pipeline. The three skills answer the three questions a human triager
+asks about a red test: *what broke?* (`failure-analysis`), *have we seen this
+before?* (`failure-matching`), and *is this even a real bug, or just flaky
+infrastructure?* (`false-alarm-detection`). Each skill reads a prepared
+workspace, reasons over the evidence, and emits a single structured
+`verdict.json` that downstream automation can act on.
+
+The skills are consumed by the
+[agentic-ci](https://github.com/opendatahub-io/agentic-ci) Claude runner image
+and orchestrated by AutoQA. The orchestrator prepares a `/workspace/_context/`
+directory with a per-skill context JSON (test metadata, the current analysis,
+or candidate Jira tickets) plus the raw `test.log`, then invokes the skill.
+Context is passed exclusively through files, never through template
+substitution, so every skill is model-agnostic and self-contained -- schemas,
+validation scripts, and (for false-alarm detection) pattern definitions all
+ship inside the skill directory and are referenced via `${CLAUDE_SKILL_DIR}`.
+
+Every skill enforces a strict authority boundary: the SKILL.md instructions are
+authoritative, and all logs, ticket descriptions, and pattern files are treated
+as untrusted evidence that must never be interpreted as instructions. Output is
+validated in two stages -- JSON Schema validation via `write_json.py` followed
+by semantic validation via `validate_verdict.py` -- and the skill loops to fix
+and re-validate until both pass. A missing or invalid `verdict.json` is a hard
+failure.
 
 **Repository**: https://github.com/opendatahub-io/autoqa-skills
+
+### Architecture
+
+The three skills are independent, single-shot analysis units rather than a
+chained state machine: AutoQA invokes each one in its own Claude session with
+its own prepared context, and each writes its own `/workspace/verdict.json`.
+Conceptually they compose into a triage funnel. `failure-analysis` runs first
+on the raw log and produces the canonical analysis (summary, likely cause,
+verbatim root-cause snippet, confidence). That analysis becomes the
+`current_analysis` input to `failure-matching`, which compares it against
+historical Jira ticket analyses for the same test label to decide whether the
+failure is a known issue. In parallel, `false-alarm-detection` classifies the
+same log against pluggable infrastructure-failure patterns to separate genuine
+bugs from environmental noise.
+
+All three share the same skeleton: read the context JSON first, reason over the
+evidence, write a minimal JSON verdict, then run the two-stage validation loop
+(schema then semantic) and repair the JSON until it passes. `failure-analysis`
+adds domain-specific heuristics -- read the tail of the log first but keep
+looking earlier because cleanup and log collection run *after* the real
+failure, and specifically surface `TRACE Resolver derivation tree` blocks for
+dependency-resolution failures. `failure-matching` is deliberately conservative:
+it only ever returns a ticket ID drawn from the supplied candidate list (never
+an invented one) and defaults to `null` when nothing clearly matches.
+`false-alarm-detection` is pattern-driven and pluggable -- each pattern is a
+markdown file under `patterns/` describing key signals, an example excerpt, and
+explicit "what this is NOT" exclusions, so new infrastructure false alarms can
+be added without changing the skill logic.
 
 ### Skills
 
 #### /failure-analysis (internal)
 
-Analyze a CI/CD test failure log to identify the root cause and produce a structured verdict
+Read a CI/CD test failure log and identify the root cause, producing a
+structured verdict. Loads `failure-analysis-context.json` (test name, plan,
+result) and the raw `test.log`, then analyzes the log -- starting from the
+last ~100 lines where errors usually appear, but reading earlier because
+tests perform cleanup and log collection *after* the real failure. It looks
+for error messages, stack traces, assertion failures, timeouts, and
+dependency errors, and specifically extracts `TRACE Resolver derivation
+tree after reduction` blocks as critical context for dependency-resolution
+failures. The verdict captures a 1-2 sentence summary, a concise
+`likely_cause` category, a `root_cause_snippet` of verbatim log lines each
+prefixed with its `L<num>:` line number (never paraphrased), and a
+confidence rating of high/medium/low. Output is schema- then
+semantically-validated and repaired until both pass.
+
+Examples:
+```
+# Invoked by the AutoQA orchestrator inside the agentic-ci runner (internal skill)
+# Inputs:  /workspace/_context/failure-analysis-context.json  +  /workspace/_context/test.log
+# Output:  /workspace/verdict.json  { summary, likely_cause, root_cause_snippet, confidence }
+```
 
 #### /failure-matching (internal)
 
-Match a test failure against historical Jira tickets to find known issues
+Match a current test failure against historical Jira tickets to decide
+whether it is a known issue. Loads `failure-matching-context.json`, which
+contains the `current_analysis` (the output of `failure-analysis`) plus a
+list of `historical_tickets` (ticket ID, summary, likely cause) for the same
+test label. It compares the current failure against each candidate,
+deterministically and conservatively -- selecting a ticket only when it is
+clearly the same underlying failure (minor wording differences still count
+as a match) and setting `ticket_id` to JSON `null` when nothing clearly
+matches. It never invents a ticket ID; the answer is always drawn from the
+candidate list or `null`. The verdict is a single `{ "ticket_id": ... }`
+object, schema- and semantically-validated (the semantic check confirms the
+chosen ID exists in the context) and repaired until it passes.
+
+Examples:
+```
+# Invoked by the AutoQA orchestrator inside the agentic-ci runner (internal skill)
+# Input:   /workspace/_context/failure-matching-context.json  { current_analysis, historical_tickets[] }
+# Output:  /workspace/verdict.json  { ticket_id }
+```
 
 #### /false-alarm-detection (internal)
 
-Classify a test failure as a known infrastructure false alarm or genuine bug by comparing against pluggable pattern definitions
+Classify a test failure as a known infrastructure false alarm rather than a
+genuine test bug, by comparing the log against pluggable pattern
+definitions. Loads `false-alarm-detection-context.json` (test metadata) and
+the raw `test.log`, then reads every pattern file under
+`${CLAUDE_SKILL_DIR}/patterns/` -- each describing key signals, an example
+log excerpt, and explicit "what this is NOT" exclusions (e.g.
+`container_pull_failure`, where the container runtime cannot pull the base
+image and the test never runs). Focusing on the actual error and ignoring
+post-failure cleanup, it decides whether the failure is caused by the
+infrastructure problem a pattern describes (a false alarm) or by a real bug.
+The verdict records `matched_pattern` (a pattern filename without the `.md`
+extension, or JSON `null`) and a one-sentence `reasoning`, schema- and
+semantically-validated (the semantic check confirms the named pattern exists
+on disk) and repaired until it passes. New false alarms are added simply by
+dropping in a new pattern file -- no code changes.
+
+Examples:
+```
+# Invoked by the AutoQA orchestrator inside the agentic-ci runner (internal skill)
+# Inputs:  /workspace/_context/false-alarm-detection-context.json  +  /workspace/_context/test.log  +  patterns/*.md
+# Output:  /workspace/verdict.json  { matched_pattern, reasoning }
+```
 
 ---
 

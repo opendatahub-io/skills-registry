@@ -1,0 +1,166 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+invoke: |md
+  **Orchestrator invokes**
+
+  - failure-analysis-context.json
+  - test.log prepared
+  - under /workspace/_context/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read context ---
+
+read-context: |md
+  **Read context first**
+
+  - load context.json
+  - test_name, plan, result
+  - log at _context/test.log
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analyze (LLM) ---
+
+analyze: |md
+  **Analyze the log**
+  LLM analysis
+
+  - read last ~100 lines, then earlier
+  - errors, stack traces, assertions
+  - timeouts, dependency errors
+  - cleanup/log-collection run
+    AFTER the real failure
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Resolver decision ---
+
+resolver: |md
+  **Resolver tree present?**
+
+  TRACE Resolver derivation
+  tree after reduction
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+extract-tree: |md
+  **Extract resolver tree**
+
+  - lines after TRACE marker
+  - resolved dependency graph
+  - into root_cause_snippet
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Write verdict ---
+
+write-verdict: |md
+  **Write verdict.json**
+
+  - summary, likely_cause
+  - root_cause_snippet
+    (verbatim L<num>: lines)
+  - confidence: high/medium/low
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validation (external scripts) ---
+
+schema-val: |md
+  **write_json.py**
+
+  JSON Schema validation
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+sem-val: |md
+  **validate_verdict.py**
+
+  semantic validation
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+valid: |md
+  **Valid?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Final artifact ---
+
+done: |md
+  **verdict.json**
+
+  - final artifact
+  - /workspace/verdict.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+invoke -> read-context
+read-context -> analyze
+analyze -> resolver
+
+resolver -> extract-tree: "yes"
+extract-tree -> write-verdict
+resolver -> write-verdict: "no"
+
+write-verdict -> schema-val
+schema-val -> sem-val
+sem-val -> valid
+
+valid -> done: "pass"
+valid -> write-verdict: "fix & re-validate" {
+  style.stroke-dash: 3
+}

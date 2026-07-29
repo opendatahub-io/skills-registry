@@ -7,7 +7,21 @@ title: false-alarm-detection
 
 # false-alarm-detection
 
-Classify a test failure as a known infrastructure false alarm or genuine bug by comparing against pluggable pattern definitions
+Classify a test failure as a known infrastructure false alarm rather than a
+genuine test bug, by comparing the log against pluggable pattern
+definitions. Loads `false-alarm-detection-context.json` (test metadata) and
+the raw `test.log`, then reads every pattern file under
+`${CLAUDE_SKILL_DIR}/patterns/` -- each describing key signals, an example
+log excerpt, and explicit "what this is NOT" exclusions (e.g.
+`container_pull_failure`, where the container runtime cannot pull the base
+image and the test never runs). Focusing on the actual error and ignoring
+post-failure cleanup, it decides whether the failure is caused by the
+infrastructure problem a pattern describes (a false alarm) or by a real bug.
+The verdict records `matched_pattern` (a pattern filename without the `.md`
+extension, or JSON `null`) and a one-sentence `reasoning`, schema- and
+semantically-validated (the semantic check confirms the named pattern exists
+on disk) and repaired until it passes. New false alarms are added simply by
+dropping in a new pattern file -- no code changes.
 
 **Plugin**: [autoqa-skills](index.md) | **:material-close: Internal**
 
@@ -72,8 +86,16 @@ Classify a test failure as a known infrastructure false alarm or genuine bug by 
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![false-alarm-detection diagram](false-alarm-detection.svg)
+</div>
+
 ## Usage
 
 ```bash
-/false-alarm-detection
+# Invoked by the AutoQA orchestrator inside the agentic-ci runner (internal skill)
+# Inputs:  /workspace/_context/false-alarm-detection-context.json  +  /workspace/_context/test.log  +  patterns/*.md
+# Output:  /workspace/verdict.json  { matched_pattern, reasoning }
 ```

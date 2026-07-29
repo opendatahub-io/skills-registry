@@ -1,0 +1,235 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+invoke: |md
+  **Orchestrator invokes**
+
+  - false-alarm-detection
+  - context.json + test.log
+  - prepared before run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Read context ---
+
+read-context: |md
+  **Read context first**
+
+  - context.json ->
+    test_name, plan, result
+  - log: test.log
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Pattern files (external sidecar) ---
+
+patterns: |md
+  **patterns/*.md**
+
+  - pluggable pattern files
+  - key signals, example
+  - "what this is NOT"
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Load patterns ---
+
+load-patterns: |md
+  **Load known patterns**
+
+  - ls ${CLAUDE_SKILL_DIR}
+    /patterns/*.md
+  - read each pattern file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analyze log (LLM) ---
+
+analyze-log: |md
+  **Read & analyze log**
+  LLM
+
+  - focus on actual error
+  - ignore cleanup &
+    log-collection steps
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Compare (LLM) ---
+
+compare: |md
+  **Compare against patterns**
+  LLM
+
+  - match = infra problem,
+    NOT a real bug
+  - check each pattern
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Decision: matched ---
+
+matched: |md
+  **Matches a
+  pattern?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Branches ---
+
+set-pattern: |md
+  **matched_pattern = <name>**
+
+  - pattern filename
+  - without .md extension
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+set-null: |md
+  **matched_pattern = null**
+
+  - no known pattern matches
+  - actual JSON null
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Write verdict (output) ---
+
+write-verdict: |md
+  **Write verdict.json**
+
+  - { matched_pattern,
+    reasoning }
+  - one-sentence reasoning
+  - JSON only, no fences
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validation (external CLIs) ---
+
+schema-val: |md
+  **write_json.py**
+
+  - JSON Schema validation
+  - false-alarm-detection-
+    verdict.json
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+sem-val: |md
+  **validate_verdict.py**
+
+  - semantic validation
+  - against patterns dir
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Decision: valid ---
+
+valid: |md
+  **Valid?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Final artifact ---
+
+done: |md
+  **verdict.json**
+
+  - final artifact
+  - { matched_pattern,
+    reasoning }
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+invoke -> read-context
+read-context -> load-patterns
+patterns -> load-patterns: "read files"
+
+load-patterns -> analyze-log
+analyze-log -> compare
+compare -> matched
+
+matched -> set-pattern: "yes"
+matched -> set-null: "no"
+
+set-pattern -> write-verdict
+set-null -> write-verdict
+
+write-verdict -> schema-val
+schema-val -> sem-val
+sem-val -> valid
+
+valid -> done: "pass"
+valid -> write-verdict: "fix & re-validate" {
+  style.stroke-dash: 3
+}

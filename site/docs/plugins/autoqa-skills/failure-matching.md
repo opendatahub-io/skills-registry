@@ -7,7 +7,18 @@ title: failure-matching
 
 # failure-matching
 
-Match a test failure against historical Jira tickets to find known issues
+Match a current test failure against historical Jira tickets to decide
+whether it is a known issue. Loads `failure-matching-context.json`, which
+contains the `current_analysis` (the output of `failure-analysis`) plus a
+list of `historical_tickets` (ticket ID, summary, likely cause) for the same
+test label. It compares the current failure against each candidate,
+deterministically and conservatively -- selecting a ticket only when it is
+clearly the same underlying failure (minor wording differences still count
+as a match) and setting `ticket_id` to JSON `null` when nothing clearly
+matches. It never invents a ticket ID; the answer is always drawn from the
+candidate list or `null`. The verdict is a single `{ "ticket_id": ... }`
+object, schema- and semantically-validated (the semantic check confirms the
+chosen ID exists in the context) and repaired until it passes.
 
 **Plugin**: [autoqa-skills](index.md) | **:material-close: Internal**
 
@@ -72,8 +83,16 @@ Match a test failure against historical Jira tickets to find known issues
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![failure-matching diagram](failure-matching.svg)
+</div>
+
 ## Usage
 
 ```bash
-/failure-matching
+# Invoked by the AutoQA orchestrator inside the agentic-ci runner (internal skill)
+# Input:   /workspace/_context/failure-matching-context.json  { current_analysis, historical_tickets[] }
+# Output:  /workspace/verdict.json  { ticket_id }
 ```

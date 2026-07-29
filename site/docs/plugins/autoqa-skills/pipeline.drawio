@@ -1,0 +1,78 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="test-failure" value="&lt;b&gt;CI test failure&lt;/b&gt;&lt;br&gt;&lt;br&gt;a red TMT test&lt;br&gt;test.log captured&lt;br&gt;test metadata available" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="280" width="170" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="orchestrator" value="&lt;b&gt;AutoQA orchestrator&lt;/b&gt;&lt;br&gt;&lt;br&gt;prepares /workspace/_context/&lt;br&gt;stages test.log + metadata&lt;br&gt;selects the model&lt;br&gt;invokes a skill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="280" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="runner" value="&lt;b&gt;agentic-ci Claude runner&lt;/b&gt;&lt;br&gt;&lt;br&gt;container image&lt;br&gt;mounts autoqa-skills as a plugin&lt;br&gt;dispatches each skill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="280" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="patterns" value="&lt;b&gt;patterns/*.md&lt;/b&gt;&lt;br&gt;&lt;br&gt;pluggable false-alarm&lt;br&gt;pattern definitions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="40" width="210" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="jira" value="&lt;b&gt;Historical Jira tickets&lt;/b&gt;&lt;br&gt;&lt;br&gt;candidates for the&lt;br&gt;same test label" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="560" width="210" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="false-alarm" value="&lt;b&gt;false-alarm-detection&lt;/b&gt;&lt;br&gt;&lt;br&gt;matches log vs infra&lt;br&gt;pattern definitions&lt;br&gt;infra false alarm vs bug" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="840" y="60" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="analysis" value="&lt;b&gt;failure-analysis&lt;/b&gt;&lt;br&gt;&lt;br&gt;reads test.log + context&lt;br&gt;finds error / stack trace&lt;br&gt;identifies root cause" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="840" y="280" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="matching" value="&lt;b&gt;failure-matching&lt;/b&gt;&lt;br&gt;&lt;br&gt;current analysis vs&lt;br&gt;historical Jira tickets&lt;br&gt;flags a known issue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="840" y="500" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="verdict-out" value="&lt;b&gt;verdict.json&lt;/b&gt;&lt;br&gt;&lt;br&gt;one structured verdict&lt;br&gt;per skill&lt;br&gt;written to /workspace" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1150" y="280" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-fail-orch" value="red test" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="test-failure" target="orchestrator" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-orch-runner" value="prepare /workspace,
+invoke skill" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="orchestrator" target="runner" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-runner-falsealarm" value="dispatch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="runner" target="false-alarm" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-runner-analysis" value="dispatch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="runner" target="analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-runner-matching" value="dispatch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="runner" target="matching" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-analysis-matching" value="current_analysis" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="analysis" target="matching" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-patterns-falsealarm" value="known patterns" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5909090909090909;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" source="patterns" target="false-alarm" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-jira-matching" value="candidates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.4090909090909091;exitDx=0;exitDy=0;entryX=0;entryY=0.7;entryDx=0;entryDy=0;" edge="1" source="jira" target="matching" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-falsealarm-verdict" value="verdict.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="false-alarm" target="verdict-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-analysis-verdict" value="verdict.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analysis" target="verdict-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-matching-verdict" value="verdict.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;fontSize=11;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="matching" target="verdict-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

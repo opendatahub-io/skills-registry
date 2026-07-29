@@ -7,7 +7,19 @@ title: failure-analysis
 
 # failure-analysis
 
-Analyze a CI/CD test failure log to identify the root cause and produce a structured verdict
+Read a CI/CD test failure log and identify the root cause, producing a
+structured verdict. Loads `failure-analysis-context.json` (test name, plan,
+result) and the raw `test.log`, then analyzes the log -- starting from the
+last ~100 lines where errors usually appear, but reading earlier because
+tests perform cleanup and log collection *after* the real failure. It looks
+for error messages, stack traces, assertion failures, timeouts, and
+dependency errors, and specifically extracts `TRACE Resolver derivation
+tree after reduction` blocks as critical context for dependency-resolution
+failures. The verdict captures a 1-2 sentence summary, a concise
+`likely_cause` category, a `root_cause_snippet` of verbatim log lines each
+prefixed with its `L<num>:` line number (never paraphrased), and a
+confidence rating of high/medium/low. Output is schema- then
+semantically-validated and repaired until both pass.
 
 **Plugin**: [autoqa-skills](index.md) | **:material-close: Internal**
 
@@ -72,8 +84,16 @@ Analyze a CI/CD test failure log to identify the root cause and produce a struct
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![failure-analysis diagram](failure-analysis.svg)
+</div>
+
 ## Usage
 
 ```bash
-/failure-analysis
+# Invoked by the AutoQA orchestrator inside the agentic-ci runner (internal skill)
+# Inputs:  /workspace/_context/failure-analysis-context.json  +  /workspace/_context/test.log
+# Output:  /workspace/verdict.json  { summary, likely_cause, root_cause_snippet, confidence }
 ```

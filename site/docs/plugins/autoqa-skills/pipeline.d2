@@ -1,0 +1,158 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+test-failure: |md
+  **CI test failure**
+
+  - a red TMT test
+  - test.log captured
+  - test metadata available
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Orchestration (external) ---
+
+orchestrator: |md
+  **AutoQA orchestrator**
+
+  - prepares /workspace/_context/
+  - stages test.log + metadata
+  - selects the model
+  - invokes a skill
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+runner: |md
+  **agentic-ci Claude runner**
+
+  - container image
+  - mounts autoqa-skills
+    as a plugin
+  - dispatches each skill
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Triage skills (LLM) ---
+
+analysis: |md
+  **failure-analysis**
+
+  - reads test.log + context
+  - finds error, stack trace
+  - identifies root cause
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+matching: |md
+  **failure-matching**
+
+  - compares current analysis
+    vs historical Jira tickets
+  - flags a known issue
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+false-alarm: |md
+  **false-alarm-detection**
+
+  - matches log vs infra
+    pattern definitions
+  - infra false alarm vs bug
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Side inputs (external) ---
+
+jira: |md
+  **Historical Jira tickets**
+
+  - candidates for the
+    same test label
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+patterns: |md
+  **patterns/*.md**
+
+  - pluggable false-alarm
+    pattern definitions
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Output ---
+
+verdict-out: |md
+  **verdict.json**
+
+  - one structured verdict
+    per skill
+  - written to /workspace
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+test-failure -> orchestrator: "red test"
+orchestrator -> runner: "prepare /workspace,\ninvoke skill"
+
+runner -> analysis: "dispatch"
+runner -> matching: "dispatch"
+runner -> false-alarm: "dispatch"
+
+analysis -> matching: "current_analysis"
+
+jira -> matching: "candidates"
+patterns -> false-alarm: "known patterns"
+
+analysis -> verdict-out: "verdict.json"
+matching -> verdict-out: "verdict.json"
+false-alarm -> verdict-out: "verdict.json"
