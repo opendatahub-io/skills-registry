@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-19 plugins registered in the marketplace.
+20 plugins registered in the marketplace.
 
 ## SDLC
 
@@ -24,6 +24,7 @@ title: Plugins
 | [autofix-skills](autofix-skills/index.md) | Development Tools | 4 | v0.1.0 |
 | [autoqa-skills](autoqa-skills/index.md) | Development Tools | 3 | v0.1.0 |
 | [python-package-skills](python-package-skills/index.md) | Development Tools | 9 | v0.1.0 |
+| [ec-cve-check](ec-cve-check/index.md) | DevOps & CI/CD | 1 | v0.1.0 |
 | [disconnected-readiness-scorer](disconnected-readiness-scorer/index.md) | DevOps & CI/CD | 1 | v0.1.0 |
 | [aiops-skills](aiops-skills/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
 | [pipeline-skills](pipeline-skills/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
