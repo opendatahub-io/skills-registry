@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(.tmp/skill-repos/**)",
+      "Read(.tmp/diagram-work/**)",
+      "Edit(site/docs/plugins/**)",
+      "Edit(.tmp/diagram-work/**)",
+      "Bash(python3 *)",
+      "Bash(d2 *)",
+      "Skill(diagram-skills:skill-diagram:*)",
+      "Skill(diagram-skills:diagram-layout:*)",
+      "Skill(skill-diagram:*)",
+      "Skill(diagram-layout:*)"
+    ]
+  }
+}
