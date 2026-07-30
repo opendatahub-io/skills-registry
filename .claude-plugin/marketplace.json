@@ -228,7 +228,7 @@
         "name": "Antonin Stefanutti"
       },
       "category": "evaluation",
-      "description": "Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.\n",
+      "description": "Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills, plus compare models/configurations and run Design-of-Experiments (ANOVA) sweeps. MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.\n",
       "homepage": "https://github.com/opendatahub-io/agent-eval-harness",
       "keywords": [
         "evaluation",
@@ -237,16 +237,19 @@
         "agents",
         "mlflow",
         "optimization",
-        "scoring"
+        "scoring",
+        "comparison",
+        "doe",
+        "anova"
       ],
       "name": "agent-eval-harness",
       "repository": "https://github.com/opendatahub-io/agent-eval-harness",
       "source": {
-        "ref": "v1.9.1",
+        "ref": "v1.30.0",
         "repo": "opendatahub-io/agent-eval-harness",
         "source": "github"
       },
-      "version": "1.9.1"
+      "version": "1.30.0"
     },
     {
       "author": {

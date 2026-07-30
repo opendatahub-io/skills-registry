@@ -35,12 +35,12 @@ containerized (UBI9) execution.
 
 !!! info "Plugin Details"
 
-    - **Version**: 1.9.1
+    - **Version**: 1.30.0
     - **Author**: Antonin Stefanutti
     - **Scope**: Generic
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
     - **Repository**: [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
-    - **Tags**: <span class="tag-pill">evaluation</span> <span class="tag-pill">testing</span> <span class="tag-pill">skills</span> <span class="tag-pill">agents</span> <span class="tag-pill">mlflow</span> <span class="tag-pill">optimization</span> <span class="tag-pill">scoring</span>
+    - **Tags**: <span class="tag-pill">evaluation</span> <span class="tag-pill">testing</span> <span class="tag-pill">skills</span> <span class="tag-pill">agents</span> <span class="tag-pill">mlflow</span> <span class="tag-pill">optimization</span> <span class="tag-pill">scoring</span> <span class="tag-pill">comparison</span> <span class="tag-pill">doe</span> <span class="tag-pill">anova</span>
 
 ## Pipeline
 
@@ -52,14 +52,16 @@ containerized (UBI9) execution.
 
 | Skill | Description | Invocable |
 |-------|-------------|-----------|
-| [`/eval-setup`](eval-setup.md) | One-time environment setup for evaluation (dependencies, MLflow, API keys) | :material-check: |
-| [`/eval-analyze`](eval-analyze.md) | Deep-read a target skill and generate eval.yaml configuration with dataset schemas and judges | :material-check: |
-| [`/eval-dataset`](eval-dataset.md) | Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-traces) | :material-check: |
-| [`/eval-run`](eval-run.md) | Execute skill against test cases, collect artifacts, run judges, and detect regressions | :material-check: |
-| [`/eval-review`](eval-review.md) | Human-in-the-loop review of scores and outputs with qualitative feedback collection | :material-check: |
-| [`/eval-mlflow`](eval-mlflow.md) | Bidirectional MLflow sync for results, datasets, and feedback | :material-check: |
-| [`/eval-optimize`](eval-optimize.md) | Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks | :material-check: |
-| [`/eval-check`](eval-check.md) | Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues | :material-check: |
+| [`/eval-setup`](eval-setup.md) | Optional environment configurator that verifies dependencies, API keys, and MLflow tracking for the agent-eval-harness and suggests evaluation modes based on repository contents. | :material-check: |
+| [`/eval-analyze`](eval-analyze.md) | Deep-reads a target skill (or runs a custom analysis prompt) and generates a complete, grounded eval.yaml with dataset schema, outputs, judges, models, and thresholds. | :material-check: |
+| [`/eval-dataset`](eval-dataset.md) | Generates evaluation test cases for an eval.yaml — from skill analysis, synthetic LLM generation, or MLflow traces — bootstrapping or augmenting a dataset for /eval-run. | :material-check: |
+| [`/eval-run`](eval-run.md) | Executes an evaluation against test cases in skill or prompt mode, scores outputs with judges, detects regressions against a baseline, and reports results. | :material-check: |
+| [`/eval-compare`](eval-compare.md) | Discovers a directory of eval run artifacts and generates a self-contained tabbed HTML comparison report with model cards, quality/cost tables, per-case breakdowns, and LLM-written analysis. | :material-check: |
+| [`/eval-anova`](eval-anova.md) | Fan a DoE matrix of agent configs across shared cases, then run repeated-measures/mixed-effects ANOVA (F, p, effect size) plus a cost/quality Pareto. | :material-check: |
+| [`/eval-review`](eval-review.md) | Interactive human-in-the-loop review of eval judge scores and skill outputs that captures qualitative feedback and proposes targeted SKILL.md improvements. | :material-check: |
+| [`/eval-mlflow`](eval-mlflow.md) | Bridges the evaluation harness with MLflow: syncs datasets, logs run params/metrics/traces, and pushes/pulls judge and human feedback bidirectionally. | :material-check: |
+| [`/eval-optimize`](eval-optimize.md) | Automated skill-improvement loop: runs evals, diagnoses judge failures from traces, edits the SKILL.md, re-runs, and iterates until judges pass without regressions. | :material-check: |
+| [`/eval-check`](eval-check.md) | Scans a Claude Code harness (skills, commands, CLAUDE.md, hooks) as a system and reports redundancy, trigger overlap, misclassification, and structural issues. | :material-check: |
 
 ## Installation
 

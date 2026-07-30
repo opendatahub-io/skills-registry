@@ -138,22 +138,24 @@ Tags: quality, testing, ci-cd, build-validation, analysis
 
 ### agent-eval-harness
 
-Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills with MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
+Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and iteratively improve agent skills, plus compare models/configurations and run Design-of-Experiments (ANOVA) sweeps. MLflow support for experiment tracking, tracing, and reporting. Schema-driven evaluation via eval.yaml with support for inline, LLM-based, and external judges.
 
-v1.9.1 | Generic | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
+v1.30.0 | Generic | [opendatahub-io/agent-eval-harness](https://github.com/opendatahub-io/agent-eval-harness)
 
-Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring
+Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring, comparison, doe, anova
 
-| Skill | Description |
-|-------|-------------|
-| `/eval-setup` | One-time environment setup for evaluation (dependencies, MLflow, API keys) |
-| `/eval-analyze` | Deep-read a target skill and generate eval.yaml configuration with dataset schemas and judges |
-| `/eval-dataset` | Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-traces) |
-| `/eval-run` | Execute skill against test cases, collect artifacts, run judges, and detect regressions |
-| `/eval-review` | Human-in-the-loop review of scores and outputs with qualitative feedback collection |
-| `/eval-mlflow` | Bidirectional MLflow sync for results, datasets, and feedback |
-| `/eval-optimize` | Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks |
-| `/eval-check` | Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/eval-setup` | Optional environment configurator that verifies dependencies, API keys, and MLflow tracking for the agent-eval-harness and suggests evaluation modes based on repository contents. | `execute` | `task_success` (`verifier_backed`) |
+| `/eval-analyze` | Deep-reads a target skill (or runs a custom analysis prompt) and generates a complete, grounded eval.yaml with dataset schema, outputs, judges, models, and thresholds. | `analyze`, `generate` | `task_success` (`verifier_backed`), `evidence_completeness` (`judge`) |
+| `/eval-dataset` | Generates evaluation test cases for an eval.yaml — from skill analysis, synthetic LLM generation, or MLflow traces — bootstrapping or augmenting a dataset for /eval-run. | `generate` | `task_success` (`judge`) |
+| `/eval-run` | Executes an evaluation against test cases in skill or prompt mode, scores outputs with judges, detects regressions against a baseline, and reports results. | `execute`, `verify` | `task_success` (`verifier_backed`), `evidence_completeness` (`judge`) |
+| `/eval-compare` | Discovers a directory of eval run artifacts and generates a self-contained tabbed HTML comparison report with model cards, quality/cost tables, per-case breakdowns, and LLM-written analysis. | `analyze`, `generate` | `task_success` (`judge`), `evidence_completeness` (`judge`) |
+| `/eval-anova` | Fan a DoE matrix of agent configs across shared cases, then run repeated-measures/mixed-effects ANOVA (F, p, effect size) plus a cost/quality Pareto. | `orchestrate`, `analyze` | `task_success` (`deterministic`) |
+| `/eval-review` | Interactive human-in-the-loop review of eval judge scores and skill outputs that captures qualitative feedback and proposes targeted SKILL.md improvements. | `review` | `task_success` (`judge`), `evidence_completeness` (`judge`) |
+| `/eval-mlflow` | Bridges the evaluation harness with MLflow: syncs datasets, logs run params/metrics/traces, and pushes/pulls judge and human feedback bidirectionally. | `execute` | `task_success` (`deterministic`) |
+| `/eval-optimize` | Automated skill-improvement loop: runs evals, diagnoses judge failures from traces, edits the SKILL.md, re-runs, and iterates until judges pass without regressions. | `orchestrate`, `transform` | `task_success` (`verifier_backed`) |
+| `/eval-check` | Scans a Claude Code harness (skills, commands, CLAUDE.md, hooks) as a system and reports redundancy, trigger overlap, misclassification, and structural issues. | `analyze`, `review` | `task_success` (`judge`), `evidence_completeness` (`judge`) |
 
 ```bash
 /plugin install agent-eval-harness@opendatahub-skills

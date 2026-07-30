@@ -145,6 +145,8 @@ nav:
       - eval-analyze: plugins/agent-eval-harness/eval-analyze.md
       - eval-dataset: plugins/agent-eval-harness/eval-dataset.md
       - eval-run: plugins/agent-eval-harness/eval-run.md
+      - eval-compare: plugins/agent-eval-harness/eval-compare.md
+      - eval-anova: plugins/agent-eval-harness/eval-anova.md
       - eval-review: plugins/agent-eval-harness/eval-review.md
       - eval-mlflow: plugins/agent-eval-harness/eval-mlflow.md
       - eval-optimize: plugins/agent-eval-harness/eval-optimize.md

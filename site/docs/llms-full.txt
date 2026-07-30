@@ -2038,6 +2038,14 @@ Examples:
 /eval-run --gold
 ```
 
+#### /eval-compare
+
+Discovers a directory of eval run artifacts and generates a self-contained tabbed HTML comparison report with model cards, quality/cost tables, per-case breakdowns, and LLM-written analysis.
+
+#### /eval-anova
+
+Fan a DoE matrix of agent configs across shared cases, then run repeated-measures/mixed-effects ANOVA (F, p, effect size) plus a cost/quality Pareto.
+
 #### /eval-review
 
 Interactive human-in-the-loop review of evaluation results. Loads

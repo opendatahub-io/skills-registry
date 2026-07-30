@@ -867,48 +867,446 @@ plugins:
 
   - name: agent-eval-harness
     description: >
-      Generic agentic evaluation for skills and agents.
-      Provides end-to-end skills to analyze, test, score, review, and
-      iteratively improve agent skills with MLflow support for experiment tracking,
-      tracing, and reporting. Schema-driven evaluation via eval.yaml with
-      support for inline, LLM-based, and external judges.
-    version: "1.9.1"
+      Generic agentic evaluation for skills and agents. Provides end-to-end
+      skills to analyze, test, score, review, and iteratively improve agent
+      skills, plus compare models/configurations and run Design-of-Experiments
+      (ANOVA) sweeps. MLflow support for experiment tracking, tracing, and
+      reporting. Schema-driven evaluation via eval.yaml with support for
+      inline, LLM-based, and external judges.
+    version: "1.30.0"
     category: evaluation
     scope: generic
-    tags: [evaluation, testing, skills, agents, mlflow, optimization, scoring]
+    tags: [evaluation, testing, skills, agents, mlflow, optimization, scoring, comparison, doe, anova]
     author:
       name: Antonin Stefanutti
     source:
       type: github
       repo: opendatahub-io/agent-eval-harness
-      ref: v1.9.1
+      ref: v1.30.0
     homepage: https://github.com/opendatahub-io/agent-eval-harness
     repository: https://github.com/opendatahub-io/agent-eval-harness
     skills:
       - name: eval-setup
-        description: One-time environment setup for evaluation (dependencies, MLflow, API keys)
+        description: Optional environment configurator that verifies dependencies, API keys, and MLflow tracking for the agent-eval-harness and suggests evaluation modes based on repository contents.
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: verifier_backed
+              verifier_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-setup/scripts/check_env.py
+          problem_statement: "Verify and optionally configure the agent-eval-harness environment: check Python/dependencies/API keys/MLflow, set up MLflow tracking and the runs directory, and suggest available evaluation modes based on repository contents."
+          success_conditions:
+            - "check_env.py preflight passes: Python >= 3.11, mlflow/pyyaml/agent_eval importable, and API key or Vertex project set."
+            - MLflow tracking is configured (or explicitly skipped) and the runs directory exists.
+            - If eval.yaml exists, it validates and any configured MLflow experiment is created.
+            - Reports final environment status and suggests correct next steps along the analyze → dataset → run → review/optimize → mlflow pipeline.
+          invariants:
+            must_preserve:
+              - "Non-destructive: skip steps already done and do not overwrite existing configuration or env vars."
+              - Treat MLflow as optional — never fail setup when MLflow cannot be configured; fall back to local file store.
+              - "Do not leak credential values: mask literal env values and report API keys only as set/not-set."
+              - Honor --skip-mlflow, --tracking-uri, --runs-dir, and --harbor argument semantics.
+              - Report each check clearly with pass/fail status and a concrete fix for every failure.
+            fixed_context:
+              tools: [Read, Bash, Glob, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: tool_output
+                  privacy: task_private
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-setup/SKILL.md
+            supporting_paths:
+              - skills/eval-setup/scripts/check_env.py
       - name: eval-analyze
-        description: Deep-read a target skill and generate eval.yaml configuration with dataset schemas and judges
+        description: Deep-reads a target skill (or runs a custom analysis prompt) and generates a complete, grounded eval.yaml with dataset schema, outputs, judges, models, and thresholds.
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze, generate]
+          metrics:
+            - id: task_success
+              measure: verifier_backed
+              verifier_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/scripts/validate_eval.py
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/references/eval-yaml-template.md
+          problem_statement: Deep-read a target skill (recursively through its sub-skills and scripts) or execute a custom analysis prompt, explore any existing dataset cases, and emit a complete, structurally valid eval.yaml — dataset schema, outputs, judges, models, thresholds — plus a cached eval.md analysis, where every field is grounded in files actually observed rather than templates or placeholders.
+          success_conditions:
+            - Generates an eval.yaml at the resolved config path that passes validate_eval.py config (relative paths resolve, judge references resolve, execution.skill/prompt set, no template-variable errors).
+            - dataset.schema and every outputs[*].schema use the real file and field names observed in the skill and its sample case, not generic placeholders.
+            - Judges are concrete and runnable — inline check snippets are valid Python and LLM prompts define per-level scoring; models default to the documented roles.
+            - Writes an eval.md caching the analysis with frontmatter (skill, analyzed_at, skill_hash) so freshness checks work.
+            - Correctly selects skill mode vs prompt mode and case vs batch execution from the skill's internal logic, asking the user when the mode is ambiguous.
+          invariants:
+            must_preserve:
+              - "Observe, don't assume: every field name, file pattern, and directory path in the generated eval.yaml must come from files actually read — never invent placeholders like <output-dir> or fabricate sub-skill names, schema fields, or judge code."
+              - Under --update, preserve the existing file — only add missing top-level keys; never overwrite user-modified judges, schemas, thresholds, or permissions.
+              - Keep dataset.path and outputs[*].path project-relative (never absolute, never ".") since absolute paths break under Harbor/EvalHub and "." would be cleaned between runs.
+              - Always validate the generated eval.yaml with validate_eval.py before reporting; fix errors and surface warnings rather than emitting a config full of placeholders.
+              - Fail loudly when skill analysis is incomplete or the dataset cannot be found instead of silently generating a degenerate config.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-analyze/SKILL.md
+            supporting_paths:
+              - skills/eval-analyze/prompts/analyze-skill.md
+              - skills/eval-analyze/references/eval-yaml-template.md
+              - skills/eval-analyze/scripts/validate_eval.py
+              - skills/eval-analyze/scripts/find_skills.py
+              - skills/eval-analyze/scripts/assess_skills.py
+              - skills/eval-analyze/prompts/generate-eval-md.md
       - name: eval-dataset
-        description: Generate realistic test cases from eval.yaml schema (bootstrap, expand, from-traces)
+        description: Generates evaluation test cases for an eval.yaml — from skill analysis, synthetic LLM generation, or MLflow traces — bootstrapping or augmenting a dataset for /eval-run.
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-dataset/references/case-generation.md
+          problem_statement: Produce evaluation test cases for an eval.yaml that match dataset.schema and exercise judge-driven requirements, sourcing them per generation.strategy (agent-authored from skill analysis, synthetic LLM generation from seeds, or extracted from MLflow production traces), either bootstrapping a fresh starter set or augmenting an existing one to close coverage gaps.
+          success_conditions:
+            - Detects generation.strategy from the config (defaulting absent to 'skill') and routes to the matching provenance path (skill authoring, synthetic script, or from-traces extraction).
+            - Writes case directories under dataset.path whose files and fields conform exactly to dataset.schema, including every {field} referenced by execution.arguments in case mode.
+            - Derives fresh-vs-augment from the current dataset state (empty/thin -> fresh starter set; populated -> non-duplicating gap-fillers numbered after the highest existing case).
+            - Designs cases to cover distinct execution paths and judge-driven requirements, including simple, complex, and edge cases for a fresh set.
+            - Validates generated cases against the schema and reports provenance, coverage, remaining gaps, and any TODO_ external-state placeholders that must be replaced before running.
+            - When --harbor is passed, emits self-contained Harbor task packages for the generated cases.
+          invariants:
+            must_preserve:
+              - Match dataset.schema exactly — do not change file names, formats, or field names the schema prescribes.
+              - Do not fabricate gold reference outputs when the correct output is uncertain — omit references rather than include misleading ones.
+              - "Do not invent values for [EXTERNAL: System] fields — emit TODO_<SYSTEM>_<FIELD> placeholders and surface them in the report."
+              - "Preserve provenance semantics: --count applies only to skill/from-traces paths and is ignored for synthetic (seed counts govern); do not override generation.strategy with a flag."
+              - When augmenting, do not duplicate existing cases; continue case numbering from the highest existing case.
+              - Generate realistic, varied content rather than lorem ipsum or obviously templated placeholders.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+                - kind: external_reference
+                  privacy: organization_private
+          source_assertions:
+            skill_path: skills/eval-dataset/SKILL.md
+            supporting_paths:
+              - skills/eval-dataset/references/case-generation.md
+              - skills/eval-dataset/references/synthetic-generation.md
+              - skills/eval-dataset/scripts/generate_synthetic.py
+              - skills/eval-dataset/scripts/harbor.py
+              - skills/eval-dataset/scripts/list_prompts.py
       - name: eval-run
-        description: Execute skill against test cases, collect artifacts, run judges, and detect regressions
+        description: Executes an evaluation against test cases in skill or prompt mode, scores outputs with judges, detects regressions against a baseline, and reports results.
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute, verify]
+          metrics:
+            - id: task_success
+              measure: verifier_backed
+              verifier_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-run/scripts/score.py
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-run/prompts/analyze-results.md
+          problem_statement: "Run a skill or prompt evaluation end-to-end against a configured dataset: preflight-clean state, prepare an isolated workspace, execute cases headlessly, collect artifacts, score them with configured judges (deterministic and LLM), optionally run pairwise comparison against a baseline to detect regressions, and produce a decisive, evidence-backed analysis plus an HTML report. Requires an eval.yaml config produced by /eval-analyze; the skill orchestrates the pipeline scripts rather than reimplementing their work."
+          success_conditions:
+            - Discovers or accepts an eval.yaml config, runs preflight, and sets up an isolated workspace with the resolved test cases before executing.
+            - Executes the eval headlessly in the correct auto-detected mode (skill mode with arguments, or prompt mode) and confirms run_result.json exit_code is zero before scoring.
+            - Collects per-case artifacts and runs every configured judge, honoring --no-llm-judges by skipping LLM judges while still running deterministic ones.
+            - Produces summary.yaml with per-judge means/pass-rates and per-case results, and when --baseline is given adds a pairwise regression comparison.
+            - Writes a decisive analysis.md leading with a self-contained Recommendation and generates the HTML report.
+          invariants:
+            must_preserve:
+              - Orchestrate by calling the pipeline scripts (preflight, workspace, execute, collect, score, report); never duplicate or reimplement their scoring/execution logic.
+              - Launch execute.py in the background with no output redirection (no >, |, tee, or 2>&1) and poll until completion; do not end the turn while it runs.
+              - "Fail fast: if execution produces no artifacts or a non-zero exit_code, report it and stop rather than scoring empty outputs."
+              - Never read large artifact files into context; rely on summary.yaml and delegate content analysis to agents.
+              - When inputs.tools is configured, resolve every tool handler (input_filters for Bash) before executing; do not skip this mandatory step.
+              - "Honor run isolation: do not overwrite a prior run's results without cleaning, and persist state via state.py at each step."
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, Skill, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-run/SKILL.md
+            supporting_paths:
+              - skills/eval-run/scripts/execute.py
+              - skills/eval-run/scripts/score.py
+              - skills/eval-run/scripts/collect.py
+              - skills/eval-run/scripts/report.py
+              - skills/eval-run/scripts/preflight.py
+              - skills/eval-run/prompts/analyze-results.md
+              - skills/eval-run/prompts/comparison-judge.md
+              - skills/eval-run/references/execution-modes.md
+      - name: eval-compare
+        description: Discovers a directory of eval run artifacts and generates a self-contained tabbed HTML comparison report with model cards, quality/cost tables, per-case breakdowns, and LLM-written analysis.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze, generate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-compare/SKILL.md
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-compare/SKILL.md
+          problem_statement: Take a directory of eval run artifacts (summary.yaml, run_result.json, optional report.html and anova.json), discover and aggregate runs per model, and produce a self-contained tabbed HTML comparison report whose LLM-written analysis sections (verdict, badges, strengths, shared weaknesses, recommendations) are grounded in the per-case scores and cost data.
+          success_conditions:
+            - Runs the discover and generate subcommands of compare.py to find every subdirectory containing summary.yaml and emit index.html plus per-run report.html copies for iframe embedding.
+            - Replaces the generated placeholder sections (Bottom Line verdict, Where Each Model Shined, Shared Weaknesses, Recommendations) with analysis grounded in each run's summary.yaml per-case scores, judge breakdowns, and cost data.
+            - Adds Best Value / Highly Variable / Not Viable badges only when they clearly apply, honoring the mutual-exclusivity rules (a highly variable model is never Best Value).
+            - Includes runs with missing run_result.json or report.html via graceful degradation, and aggregates repeated models as averages with min/max ranges.
+          invariants:
+            must_preserve:
+              - Do not modify or write to any input/source file; only write to the output directory.
+              - Do not run evaluations or compute statistics — render pre-computed anova.json numbers only, never import scipy/statsmodels/pingouin.
+              - Do not explore the input directory manually (no ls/find); let compare.py handle all run discovery.
+              - Do not invent findings, badges, or verdicts unsupported by the per-case scores and cost data.
+              - Preserve graceful degradation and per-model aggregation (averages with min/max ranges) so partial or repeated runs are still included.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-compare/SKILL.md
+            supporting_paths:
+              - skills/eval-compare/scripts/compare.py
+      - name: eval-anova
+        description: Fan a DoE matrix of agent configs across shared cases, then run repeated-measures/mixed-effects ANOVA (F, p, effect size) plus a cost/quality Pareto.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [orchestrate, analyze]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Run a full-factorial Design-of-Experiments comparison of agent configurations (models, thinking-effort, prompts, or other factors) across a fixed set of test cases by fanning /eval-run out over the matrix, then analyze the resulting standard runs with repeated-measures / mixed-effects ANOVA (F, p, effect size) and a cost/quality Pareto frontier, and render the comparison and statistics reports.
+          success_conditions:
+            - "Reads the eval.yaml matrix: block, expands the full-factorial grid (conditions x cases x replications), and with --dry-run prints the design and a cost estimate without executing."
+            - Drives /eval-run once per condition x replication so each cell lands as a standard run with its own summary.yaml, stamped with a condition.json recording its factor levels.
+            - Computes each case composite via the canonical harness reward composition (compose_reward) and writes anova.json containing the ANOVA result (method, F, p, effect size, significance), condition summaries, Pareto frontier, and per-case matrix.
+            - Selects repeated-measures ANOVA for single-factor designs and the mixed-effects model for multi-factor designs, restricting the analysis to cases present under every condition.
+            - Renders the /eval-compare comparison report and the statistics-forward report.py deep view from on-disk artifacts; --analyze-only re-analyzes existing runs (including externally produced ones) without re-executing.
+          invariants:
+            must_preserve:
+              - "eval-run stays the single-condition primitive: eval-anova only loops it and must not re-implement workspace/execute/collect/score."
+              - Repeated-measures ANOVA assumes the same cases run under every condition; keep the design balanced by restricting to common cases and recording excluded cases rather than silently dropping them.
+              - Compute case composites via the canonical harness reward composition (compose_reward honouring eval.yaml reward:, else boolean-gate + normalised-numeric average); do not invent a scoring scheme.
+              - Do not auto-select plain one-way ANOVA when cases are reused across conditions.
+              - Report renderers (report.py, /eval-compare) read only on-disk summary.yaml / anova.json artifacts and never re-run the experiment.
+              - A failed matrix cell is logged and skipped so a partial matrix still yields an analysis over the cells that succeeded.
+            fixed_context:
+              tools: [Read, Bash, Write]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-anova/SKILL.md
+            supporting_paths:
+              - skills/eval-anova/scripts/orchestrate.py
+              - skills/eval-anova/scripts/analyze.py
+              - skills/eval-anova/scripts/report.py
+              - skills/eval-anova/scripts/design.py
+              - skills/eval-anova/references/matrix-schema.md
+              - skills/eval-anova/prompts/interpret-anova.md
       - name: eval-review
-        description: Human-in-the-loop review of scores and outputs with qualitative feedback collection
+        description: Interactive human-in-the-loop review of eval judge scores and skill outputs that captures qualitative feedback and proposes targeted SKILL.md improvements.
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-review/prompts/review-results.md
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-review/prompts/review-results.md
+          problem_statement: "Guide an interactive review of an eval run: present judge scores and skill outputs, collect human feedback on what judges missed, persist that feedback as review.yaml, and propose targeted, evidence-grounded improvements to the artifact under test (SKILL.md or a prompt-mode artifact) and to the judge config."
+          success_conditions:
+            - Loads the specified run's summary, eval.yaml, and per-case results, and presents pass rates and case-level judge scores with rationale.
+            - Collects and persists human feedback to $AGENT_EVAL_RUNS_DIR/<eval-name>/<id>/review.yaml with feedback keys matching case directory names exactly.
+            - Identifies judge-human alignment and systematic vs edge-case patterns across the reviewed feedback.
+            - Proposes specific before/after edits to the artifact under test, each grounded in cited case feedback, and applies them only after explicit user approval.
+          invariants:
+            must_preserve:
+              - Do not edit the artifact under test without explicit user approval; propose diffs, do not impose them.
+              - Keep human feedback separate from judge scores; the skill's value is catching what judges miss.
+              - Write review.yaml directly with the Write tool (not state.py) and keep feedback keys identical to case directory names so /eval-optimize and /eval-mlflow can consume them.
+              - "Do not flood context: summarize outputs and delegate large transcript analysis to an Agent rather than loading full files."
+              - Ground every proposed change and finding in concrete case evidence; do not invent issues unsupported by feedback.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, AskUserQuestion, Skill]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: tool_output
+                  privacy: task_private
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-review/SKILL.md
+            supporting_paths:
+              - skills/eval-review/prompts/review-results.md
       - name: eval-mlflow
-        description: Bidirectional MLflow sync for results, datasets, and feedback
+        description: "Bridges the evaluation harness with MLflow: syncs datasets, logs run params/metrics/traces, and pushes/pulls judge and human feedback bidirectionally."
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: "Bidirectionally integrate a file-based evaluation run with an external MLflow tracking server: sync case directories into an MLflow dataset via an agent-produced schema mapping, log a run's params, metrics, artifacts, per-case table, and execution traces, and push/pull judge and human feedback to and from traces so downstream eval-optimize can consume it."
+          success_conditions:
+            - sync-dataset builds MLflow records whose inputs vs expectations follow dataset.schema (not hardcoded field names) and reports RECORDS synced with STATUS synced.
+            - log-results logs params, per-judge and execution metrics, summary artifact, per-case results table, and one trace per case/step (or run) to the resolved experiment for the given --run-id.
+            - push-feedback attaches judge feedback (source_type CODE) and human review feedback (source_type HUMAN) to matching traces; pull-feedback writes external MLflow-UI annotations into review.yaml under mlflow_feedback.
+            - Tracking URI is resolved from eval.yaml mlflow.tracking_uri, then MLFLOW_TRACKING_URI, then the local default, and a reachability check is reported before acting.
+          invariants:
+            must_preserve:
+              - "Graceful degradation: when MLflow is unavailable or unreachable the scripts exit 0 and the skill reports skipping, never failing the pipeline."
+              - "Idempotent operations: re-running is safe (merge_records deduplicates, log_feedback overwrites); do not create duplicate datasets, runs, or feedback."
+              - Determine inputs vs expectations by reading dataset.schema, never by assuming or hardcoding field names.
+              - "Trace feedback is optional: if no traces are found, report 0 and succeed rather than blocking."
+              - Preserve path-traversal guards (validate --run-id, reject absolute/.. paths and symlinks) when resolving run and harbor job directories.
+              - Do not modify the underlying eval case data or source skill being evaluated.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+                - kind: external_reference
+                  privacy: organization_private
+          source_assertions:
+            skill_path: skills/eval-mlflow/SKILL.md
+            supporting_paths:
+              - skills/eval-mlflow/scripts/sync_dataset.py
+              - skills/eval-mlflow/scripts/log_results.py
+              - skills/eval-mlflow/scripts/attach_feedback.py
+              - skills/eval-mlflow/scripts/from_traces.py
+              - skills/eval-mlflow/scripts/trace_from_stdout.py
       - name: eval-optimize
-        description: Automated improvement loop that identifies failures, edits SKILL.md, and re-runs with regression checks
+        description: "Automated skill-improvement loop: runs evals, diagnoses judge failures from traces, edits the SKILL.md, re-runs, and iterates until judges pass without regressions."
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [orchestrate, transform]
+          metrics:
+            - id: task_success
+              measure: verifier_backed
+              verifier_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-run/scripts/score.py
+          problem_statement: "Autonomously improve a skill (or prompt-mode artifact) by looping over eval results: identify which judges failed and why from rationale and transcripts, form grounded hypotheses, apply surgical edits to the SKILL.md under test, re-run the eval, and check for regressions until judges pass or the max-iteration limit is reached."
+          success_conditions:
+            - Diagnoses each failing judge from summary.yaml rationale, transcripts, and case outputs before editing, noting judge_type (builtin/check/llm/code).
+            - Applies surgical, evidence-grounded edits to the target artifact under test (SKILL.md or prompt-mode artifact), not broad rewrites.
+            - Re-runs the eval with a --baseline flag and confirms targeted failures now pass while previously passing cases/judges do not regress.
+            - Iterates until all judges pass or max-iterations is hit, then reports which edits fixed which failures and the final summary.yaml scores.
+          invariants:
+            must_preserve:
+              - Every edit must be grounded in a specific failure with evidence from judge rationale and transcripts — never make broad, generic changes.
+              - "Do not modify test cases, judges, or eval.yaml; the eval harness is ground truth. Never edit builtin judge code — suggest adjusting arguments: instead."
+              - Check for regressions after every edit; a fix that breaks other cases is not a fix, and must be reverted or reframed.
+              - Stop after max-iterations rather than looping forever, and report what could not be fixed.
+              - Only edit the artifact under test (the SKILL.md or prompt-mode artifact); make minimal, surgical changes and do not rewrite working sections.
+            fixed_context:
+              tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, Skill, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: tool_output
+                  privacy: task_private
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-optimize/SKILL.md
       - name: eval-check
-        description: Full-harness configuration health check — scans skills, commands, CLAUDE.md, and hooks for redundancy, overlap, and structural issues
+        description: Scans a Claude Code harness (skills, commands, CLAUDE.md, hooks) as a system and reports redundancy, trigger overlap, misclassification, and structural issues.
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze, review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-check/SKILL.md
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-check/SKILL.md
+          problem_statement: Inventory a Claude Code harness and analyze its skills, commands, CLAUDE.md, and hooks as a single system to surface content overlap, trigger overlap, CLAUDE.md duplication, type misclassification, and structural issues, then produce an informational report with actionable restructuring suggestions without modifying any configuration.
+          success_conditions:
+            - Runs the inventory script and reports the count of skills, commands, hooks, and CLAUDE.md presence with approximate per-skill word counts.
+            - Reads every discovered skill's frontmatter and body plus project CLAUDE.md files (and ~/.claude/CLAUDE.md only when --include-global is passed).
+            - Produces cross-component findings in all five categories (content overlap, trigger overlap, CLAUDE.md duplication, type misclassification, structural issues), stating 'none detected' where applicable.
+            - Writes the report to the --output path only when it resolves inside the project root, and presents a terminal summary with the top actionable suggestions and next steps.
+            - Short-circuits to inventory-only reporting when a single skill is found, noting cross-component analysis is not applicable.
+          invariants:
+            must_preserve:
+              - "Read-only: do not modify any skill, command, CLAUDE.md, hook, or other configuration file; only the report is written."
+              - Keep all findings informational suggestions; the user decides what to act on.
+              - Do not present LLM/qualitative judgments (word counts, overlap) as deterministic or precise measurements.
+              - Scan ~/.claude/CLAUDE.md only when --include-global is explicitly passed; otherwise note it was not scanned.
+              - Refuse to write the report to a path that resolves outside the project root and ask for a valid path.
+              - Skip unreadable files with a note rather than failing the whole report; back findings with concrete component references.
+            fixed_context:
+              tools: [Read, Bash, Glob, Grep, Agent, AskUserQuestion, Write]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/eval-check/SKILL.md
+            supporting_paths:
+              - skills/eval-check/scripts/harness_inventory.py
     harnesses:
       claude-code:
         install: "/plugin install agent-eval-harness@opendatahub-skills"
