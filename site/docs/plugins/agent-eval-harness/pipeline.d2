@@ -5,12 +5,14 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Setup (optional, one-time) ---
+# --- Setup (optional) ---
 
 eval-setup: |md
   **/eval-setup**
 
-  configure MLflow, verify deps + API keys (optional, one-time)
+  - env + credentials
+  - MLflow config
+  - verify harness deps
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -18,12 +20,14 @@ eval-setup: |md
   style.stroke-width: 2
 }
 
-# --- Authoring (LLM) ---
+# --- Analyze (LLM) ---
 
 eval-analyze: |md
   **/eval-analyze**
 
-  read skill, generate eval.yaml + eval.md
+  - deep-read target skill
+  - infer I/O + judges
+  - emit eval.yaml
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -31,11 +35,15 @@ eval-analyze: |md
   style.stroke-width: 2
   style.double-border: true
 }
+
+# --- Dataset (LLM) ---
 
 eval-dataset: |md
   **/eval-dataset**
 
-  generate test cases matching the schema
+  - generate test cases
+  - inputs + expectations
+  - cover edge cases
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -44,12 +52,14 @@ eval-dataset: |md
   style.double-border: true
 }
 
-# --- Execution (central hub) ---
+# --- Run (LLM, central hub) ---
 
 eval-run: |md
   **/eval-run**
 
-  execute cases, score judges, report results (central hub)
+  - headless execution
+  - score with LLM judges
+  - HTML report + summary.yaml
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -58,24 +68,14 @@ eval-run: |md
   style.double-border: true
 }
 
-# --- Improvement (LLM) ---
-
-eval-review: |md
-  **/eval-review**
-
-  human-in-the-loop review, propose SKILL.md edits
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
+# --- Fan-out targets ---
 
 eval-optimize: |md
   **/eval-optimize**
 
-  automated fix loop, re-run until judges pass
+  - automated fix loop
+  - edit skill + re-run
+  - until judges pass
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -84,56 +84,125 @@ eval-optimize: |md
   style.double-border: true
 }
 
-# --- External integrations ---
+eval-review: |md
+  **/eval-review**
+
+  - human-in-the-loop
+  - walk per-case results
+  - collect feedback.yaml
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
 
 eval-mlflow: |md
   **/eval-mlflow**
 
-  sync datasets, log runs, push/pull trace feedback
+  - sync dataset
+  - log results + traces
+  - push / pull feedback
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+eval-compare: |md
+  **/eval-compare**
+
+  - diff multiple runs
+  - tabbed HTML comparison
+  - regressions vs baseline
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 3
+  style.double-border: true
 }
+
+# --- Anova (processing orchestrator) ---
+
+eval-anova: |md
+  **/eval-anova**
+
+  - DoE factor matrix
+  - fan out /eval-run
+  - ANOVA effects
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Check (standalone) ---
 
 eval-check: |md
   **/eval-check**
 
-  harness health check: overlap, redundancy
+  - full-harness health check
+  - deps, MLflow, perms
+  - standalone diagnostic
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 3
+}
+
+# --- Callout: shared eval.yaml schema ---
+
+eval-yaml: |md
+  eval.yaml
+  name / description
+  execution: {mode: case|batch,
+    skill, arguments}
+  runner: {type: claude-code, effort}
+  models: {skill, judge}
+  permissions: {allow, deny}
+  dataset: {path, schema}
+  outputs: [{path, schema}]
+  mlflow: {experiment, tracking_uri}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-eval-setup -> eval-analyze: "environment ready"
+eval-setup -> eval-analyze: "optional" {
+  style.stroke-dash: 3
+}
 eval-analyze -> eval-dataset: "eval.yaml"
 eval-dataset -> eval-run: "test cases"
 
-eval-run -> eval-review: "summary.yaml"
+# eval-run fan-out (central hub)
 eval-run -> eval-optimize: "summary.yaml"
+eval-run -> eval-review: "summary.yaml"
+eval-run -> eval-mlflow: "log results + traces"
+eval-run -> eval-compare: "runs"
 
-eval-optimize -> eval-run: "re-run, SKILL.md edits" {
+# optimize back-edge
+eval-optimize -> eval-run: "re-run until judges pass" {
   style.stroke-dash: 3
 }
 
-# --- External (dashed) ---
+# anova orchestrator
+eval-anova -> eval-run: "fan out /eval-run"
+eval-anova -> eval-compare: "anova.json"
 
-eval-dataset -> eval-mlflow: "sync dataset" {
-  style.stroke-dash: 3
-}
-eval-run -> eval-mlflow: "log results" {
-  style.stroke-dash: 3
-}
-eval-review -> eval-mlflow: "push/pull feedback" {
-  style.stroke-dash: 3
-}
-eval-run -> eval-check: "harness health" {
-  style.stroke-dash: 3
+# callout connector
+eval-analyze -> eval-yaml: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

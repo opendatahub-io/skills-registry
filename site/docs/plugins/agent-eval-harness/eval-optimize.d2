@@ -22,16 +22,16 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 0: discover config + init state ---
+# --- Discover config + init state ---
 
 config-state: |md
   **Discover Config + Init State**
 
   - discover.py finds eval.yaml
-  - 1 -> auto; many -> ask user
-  - read skill field -> eval-name
-  - state.py init optimize-config
-  - model, max_iterations, run_id
+  - 1 -> auto / many -> ask user
+  - read `skill` field -> eval-name
+  - state.py init optimize-config:
+    model / max_iterations / run_id
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -39,11 +39,11 @@ config-state: |md
   style.stroke-width: 2
 }
 
-# --- Step 1: initial eval run (external skill) ---
+# --- Initial run (external skill) ---
 
 initial-run: |md
-  **/eval-run** (iter-0)
-  external skill (Skill tool)
+  **/eval-run — iter-0**
+  (Skill tool)
 
   - run full suite if no results
   - same --model each iteration
@@ -57,15 +57,15 @@ initial-run: |md
   style.stroke-dash: 3
 }
 
-# --- Step 2: identify failures ---
+# --- Identify failures ---
 
 identify: |md
   **Identify Failures**
 
-  - which judges failed, which cases
+  - which judges failed / cases
   - read failure rationale
   - systematic vs input-dependent
-  - check review.yaml (human feedback)
+  - check review.yaml feedback
   - tag judge_type per failure
 | {
   shape: rectangle
@@ -74,15 +74,15 @@ identify: |md
   style.stroke-width: 2
 }
 
-# --- Step 3: analyze root causes (LLM agents) ---
+# --- Analyze root causes (LLM) ---
 
 analyze: |md
   **Analyze Root Causes**
   LLM agents (Explore)
 
-  - read SKILL.md (find_skills.py)
+  - read SKILL.md via find_skills.py
   - trace failing cases stdout.log
-  - examine failing case outputs
+  - examine failing outputs
   - form grounded hypotheses
 | {
   shape: rectangle
@@ -92,15 +92,15 @@ analyze: |md
   style.double-border: true
 }
 
-# --- Step 4: edit the skill (LLM-driven) ---
+# --- Edit the skill (LLM) ---
 
 edit-skill: |md
-  **Edit the SKILL.md**
+  **Edit the Skill**
   LLM-driven targeted edits
 
   - ground each edit in evidence
   - surgical, minimal changes
-  - explain the why, avoid overfit
+  - explain why, avoid overfit
   - show diff before applying
 | {
   shape: rectangle
@@ -110,13 +110,13 @@ edit-skill: |md
   style.double-border: true
 }
 
-# --- Step 5: re-run + verify (external skill) ---
+# --- Re-run (external skill) ---
 
 rerun: |md
-  **/eval-run** (iter-N)
-  external skill (Skill tool)
+  **/eval-run — iter-N**
+  (Skill tool)
 
-  - --cases (targeted) or full
+  - --cases targeted or full
   - --baseline iter-(N-1)
   - --no-llm-judges (structural)
   - state.py read summary.yaml
@@ -128,10 +128,11 @@ rerun: |md
   style.stroke-dash: 3
 }
 
-# --- Step 5/6: verify decision ---
+# --- Decision ---
 
 check: |md
-  **Fixed + no regressions?**
+  **Fixed +
+  no regressions?**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -139,15 +140,15 @@ check: |md
   style.stroke-width: 2
 }
 
-# --- Step 6: handle regression ---
+# --- Report outcome ---
 
-regress: |md
-  **Handle Regression**
+report-out: |md
+  **Report Outcome**
 
-  - assess severity vs original
-  - minor -> keep, net positive
-  - major -> revert, reframe edit
-  - stuck -> report, suggest review
+  - edits -> failures fixed
+  - iterations taken / final scores
+  - persistent failures explained
+  - next: /eval-review, /eval-mlflow
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -155,15 +156,15 @@ regress: |md
   style.stroke-width: 2
 }
 
-# --- Step 7: report outcome ---
+# --- Handle regression ---
 
-report-out: |md
-  **Report Outcome**
+regress: |md
+  **Handle Regression**
 
-  - edits -> failures fixed
-  - iterations taken, final scores
-  - persistent failures explained
-  - next: /eval-review, /eval-mlflow
+  - assess severity vs original
+  - minor -> keep (net positive)
+  - major -> revert, reframe
+  - stuck -> report, suggest review
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -175,15 +176,10 @@ report-out: |md
 
 failure-map: |md
   judge (type) -> cases -> rationale
-
-  cost_budget (builtin)
-    -> [c03] over max_cost_usd
-  ac_present (check)
-    -> [c01,c07] no accept. criteria
-  faithful (llm)
-    -> [c07] output drifts from spec
-  human_review
-    -> [c07] user flagged tone
+  cost_budget (builtin) -> [c03] over max_cost_usd
+  ac_present (check)     -> [c01,c07] no accept. criteria
+  faithful (llm)        -> [c07] output drifts from spec
+  human_review          -> [c07] user flagged tone
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -195,12 +191,11 @@ failure-map: |md
 
 diff-snippet: |md
   hypothesis: Step 4 says
-    "optionally add accept. criteria"
+  "optionally add accept. criteria"
   evidence: transcript skipped Step 4
-
   - optionally add acceptance criteria
-  + add acceptance criteria for each
-  + story so reviewers verify scope
+  + add acceptance criteria for each story
+  + so reviewers verify scope
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -213,29 +208,29 @@ diff-snippet: |md
 # --- Flow ---
 
 entry -> config-state
-config-state -> initial-run
-initial-run -> identify
-identify -> analyze
-analyze -> edit-skill
-edit-skill -> rerun
-rerun -> check
+config-state -> initial-run: "eval.yaml"
+initial-run -> identify: "summary.yaml"
+identify -> analyze: "failure map"
+analyze -> edit-skill: "hypotheses"
+edit-skill -> rerun: "SKILL.md edits"
+rerun -> check: "summary.yaml"
 
 check -> report-out: "all pass"
 check -> regress: "regressions"
 
-# --- Back-edges (iterate loop) ---
+# --- Back-edges (loops) ---
 
-check -> identify: iterate (< max) {
+check -> identify: "iterate (< max)" {
   style.stroke-dash: 3
 }
-regress -> identify: try new approach {
+regress -> identify: "try new approach" {
   style.stroke-dash: 3
 }
-regress -> report-out: max iters {
+regress -> report-out: "max iters" {
   style.stroke-dash: 3
 }
 
-# --- Callout connections ---
+# --- Callout connectors ---
 
 identify -> failure-map: {
   style.stroke: "#bbbbbb"

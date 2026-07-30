@@ -9,8 +9,9 @@ title: agent-eval-harness
 
 Generic agentic evaluation framework for Claude Code skills. Provides an
 end-to-end pipeline to analyze skills, generate test cases, execute evaluations,
-review results with human feedback, sync with MLflow, and iteratively optimize
-skill quality with regression checks.
+review results with human feedback, compare models and configurations, run
+Design-of-Experiments (DoE) sweeps with ANOVA statistics, sync with MLflow, and
+iteratively optimize skill quality with regression checks.
 
 The framework is schema-driven via eval.yaml, which defines execution mode
 (case-by-case or batch), dataset schemas, output descriptions, judges (four
@@ -71,10 +72,15 @@ containerized (UBI9) execution.
 
 ## Architecture
 
-Eight skills form a linear pipeline with feedback loops: setup (optional) ->
+Ten skills form a linear pipeline with feedback loops: setup (optional) ->
 analyze -> dataset -> run -> review/optimize, with mlflow available at any
-point after run. eval-check operates standalone as a cross-component health
-check. eval-run is the central hub -- it executes skills headlessly,
+point after run. eval-compare renders cross-model/cross-run comparison reports
+from a directory of runs, and eval-anova is a Design-of-Experiments orchestrator
+that fans /eval-run out across a matrix of configurations (models, effort,
+prompts) and computes repeated-measures ANOVA + a cost/quality Pareto frontier,
+which eval-compare surfaces automatically. eval-check operates standalone as a
+cross-component health check. eval-run is the central hub -- it executes skills
+headlessly,
 runs judges (builtin + inline checks + LLM scoring + external modules, plus
 pairwise comparison against a baseline), and produces summary.yaml consumed by
 review, optimize, and mlflow. Builtin judges are reusable, versioned judges from

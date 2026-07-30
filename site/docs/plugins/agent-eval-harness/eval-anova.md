@@ -7,7 +7,21 @@ title: eval-anova
 
 # eval-anova
 
-Fan a DoE matrix of agent configs across shared cases, then run repeated-measures/mixed-effects ANOVA (F, p, effect size) plus a cost/quality Pareto.
+Design-of-Experiments (DoE) evaluation with ANOVA. Reads a matrix: block in
+eval.yaml (factors such as model, thinking-effort, or prompt, plus a
+replications count), designs the full-factorial grid with a cost estimate
+(--dry-run), then fans /eval-run out once per matrix cell (condition x
+replication) -- each cell landing as a standard run with its own summary.yaml
+tagged by a condition.json. It is not its own executor: eval-run stays the
+single-condition primitive. analyze.py then computes each case composite via
+the harness's canonical reward composition and runs repeated-measures ANOVA
+(single-factor) or a mixed-effects model (multi-factor), restricted to cases
+present under every condition, plus a cost/quality Pareto frontier, into
+anova.json. /eval-compare renders the cross-condition comparison (surfacing the
+statistics section from anova.json) and report.py gives a statistics-forward
+deep view (condition means, F / p / effect size, per-case matrix). Because the
+stats read standard summary.yaml runs, --analyze-only can re-analyze runs
+produced elsewhere (e.g. a CI fan-out) without re-executing.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -91,8 +105,31 @@ Fan a DoE matrix of agent configs across shared cases, then run repeated-measure
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![eval-anova diagram](eval-anova.svg)
+</div>
+
+## Arguments
+
+```bash
+/eval-anova --config <path> [--dry-run] [--analyze-only] [--cases <id> ...] [--output <dir>] [--no-report]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `--config` | :material-check: | - | Path to the eval.yaml containing the matrix: block. |
+| `--dry-run` |  | `false` | Print the factorial design and a cost estimate without executing any runs. |
+| `--analyze-only` |  | `false` | Skip execution; re-run ANOVA + Pareto over existing runs (including externally produced ones) and re-render the report. |
+| `--cases` |  | - | Restrict the experiment to specific case IDs (space-separated). Defaults to all cases in the dataset. |
+| `--output` |  | - | Override the runs/output directory for this experiment. |
+| `--no-report` |  | `false` | Run and analyze but skip the /eval-compare report render. |
+
 ## Usage
 
 ```bash
-/eval-anova
+/eval-anova --config eval.yaml
+/eval-anova --config eval.yaml --dry-run
+/eval-anova --config eval.yaml --analyze-only
 ```

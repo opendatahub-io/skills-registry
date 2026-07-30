@@ -2,182 +2,111 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/eval-run&lt;/b&gt;&lt;br&gt;&lt;br&gt;--config &lt;path&gt;&lt;br&gt;--model / --subagent-model&lt;br&gt;--skill &lt;name&gt;&lt;br&gt;--run-id &lt;id&gt;&lt;br&gt;--cases &lt;id ...&gt;&lt;br&gt;--baseline &lt;run-id&gt;&lt;br&gt;--no-llm-judges / --gold&lt;br&gt;--effort &lt;level&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="60" width="215" height="200" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/eval-run&lt;/b&gt;&lt;br&gt;&lt;br&gt;--model / --baseline&lt;br&gt;--cases / --run-id&lt;br&gt;--no-llm-judges&lt;br&gt;--runner local | harbor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="297" width="170" height="170" as="geometry"/>
     </mxCell>
-    <mxCell id="discover" value="&lt;b&gt;Step 0: Discover Config&lt;/b&gt;&lt;br&gt;&lt;br&gt;run discover.py&lt;br&gt;1 found: auto-select&lt;br&gt;many: ask user&lt;br&gt;read skill, runner, dataset,&lt;br&gt;judges, models&lt;br&gt;state.py init flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="315" y="80" width="215" height="160" as="geometry"/>
+    <mxCell id="preflight" value="&lt;b&gt;Preflight Check&lt;/b&gt;&lt;br&gt;preflight.py&lt;br&gt;&lt;br&gt;scan tmp/ + runs dir&lt;br&gt;stale artifacts?&lt;br&gt;CLEAN | DIRTY | MISSING_BASELINE&lt;br&gt;--clean --force" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="265" y="300" width="215" height="165" as="geometry"/>
     </mxCell>
-    <mxCell id="bootstrap" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;invoked if no config&lt;br&gt;generates eval.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="322" y="300" width="200" height="90" as="geometry"/>
+    <mxCell id="workspace" value="&lt;b&gt;Prepare Workspace&lt;/b&gt;&lt;br&gt;workspace.py&lt;br&gt;&lt;br&gt;isolated per-case dirs&lt;br&gt;batch.yaml + symlinks&lt;br&gt;.claude/settings.json + hooks&lt;br&gt;git init (diff baseline)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="535" y="299.5" width="225" height="165" as="geometry"/>
     </mxCell>
-    <mxCell id="find-dataset" value="&lt;b&gt;Step 1: Find Dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;read dataset.path&lt;br&gt;verify case subdirs&lt;br&gt;apply --cases filter&lt;br&gt;empty: suggest /eval-dataset" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="590" y="95" width="205" height="130" as="geometry"/>
+    <mxCell id="mode" value="&lt;b&gt;Case or Batch?&lt;/b&gt;&lt;br&gt;&lt;br&gt;execution.mode" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="815" y="322" width="160" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="preflight" value="&lt;b&gt;Step 2: Preflight&lt;/b&gt;&lt;br&gt;&lt;br&gt;preflight.py --config&lt;br&gt;scan tmp/ state files&lt;br&gt;check run-id / baseline&lt;br&gt;detect stale artifacts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="855" y="100" width="200" height="120" as="geometry"/>
+    <mxCell id="execute" value="&lt;b&gt;Execute&lt;/b&gt;&lt;br&gt;execute.py (EvalRunner)&lt;br&gt;&lt;br&gt;headless run per case&lt;br&gt;skill | prompt mode&lt;br&gt;lifecycle hooks (before/after)&lt;br&gt;poll console.log, run_result.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1055" y="300" width="220" height="165" as="geometry"/>
     </mxCell>
-    <mxCell id="clean-gate" value="&lt;b&gt;CLEAN /&lt;br&gt;DIRTY /&lt;br&gt;MISSING_&lt;br&gt;BASELINE?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1115" y="95" width="175" height="130" as="geometry"/>
+    <mxCell id="skill-under-test" value="&lt;b&gt;Skill under test&lt;/b&gt;&lt;br&gt;invoked headlessly&lt;br&gt;&lt;br&gt;claude --print&lt;br&gt;writes to project dir&lt;br&gt;stdout.log + artifacts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1050" y="90" width="220" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="workspace" value="&lt;b&gt;Step 3: Prepare Workspace&lt;/b&gt;&lt;br&gt;&lt;br&gt;workspace.py --run-id&lt;br&gt;case or batch mode&lt;br&gt;copy inputs, symlinks&lt;br&gt;create output dirs&lt;br&gt;.claude/settings.json&lt;br&gt;emit WORKSPACE / CASES" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1095" y="445" width="215" height="165" as="geometry"/>
+    <mxCell id="collect" value="&lt;b&gt;Collect Artifacts&lt;/b&gt;&lt;br&gt;collect.py&lt;br&gt;&lt;br&gt;map outputs to cases&lt;br&gt;per-case dirs + _modified&lt;br&gt;events.json from stdout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1335" y="307" width="205" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="resolve-tools" value="&lt;b&gt;Step 3b: Resolve Tools&lt;/b&gt;&lt;br&gt;&lt;br&gt;if inputs.tools set&lt;br&gt;read tool_handlers.yaml&lt;br&gt;add input_filters,&lt;br&gt;env_checks, overrides&lt;br&gt;verify Bash filters" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="780" y="455" width="205" height="145" as="geometry"/>
+    <mxCell id="scoring" value="&lt;b&gt;Score (score.py)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1600" y="110" width="246" height="545" as="geometry"/>
     </mxCell>
-    <mxCell id="execute" value="&lt;b&gt;Step 4: Execute Skill&lt;/b&gt;&lt;br&gt;LLM runner (headless)&lt;br&gt;&lt;br&gt;execute.py --workspace&lt;br&gt;claude --print per case&lt;br&gt;parallelism thread pool&lt;br&gt;stream-json capture&lt;br&gt;run_in_background, tail" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="460" y="450" width="215" height="160" as="geometry"/>
+    <mxCell id="builtin" value="&lt;b&gt;Builtin Judges&lt;/b&gt;&lt;br&gt;&lt;br&gt;harness library&lt;br&gt;deterministic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
+      <mxGeometry x="18" y="48" width="210" height="95" as="geometry"/>
     </mxCell>
-    <mxCell id="exit-gate" value="&lt;b&gt;exit_code&lt;br&gt;== 0?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="185" y="470" width="155" height="115" as="geometry"/>
+    <mxCell id="checks" value="&lt;b&gt;Inline Checks&lt;/b&gt;&lt;br&gt;&lt;br&gt;Python check snippets&lt;br&gt;external module/function" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
+      <mxGeometry x="18" y="163" width="210" height="95" as="geometry"/>
     </mxCell>
-    <mxCell id="collect" value="&lt;b&gt;Step 5: Collect Artifacts&lt;/b&gt;&lt;br&gt;&lt;br&gt;collect.py --workspace&lt;br&gt;map files to cases&lt;br&gt;git diff -&gt; _modified/&lt;br&gt;read collection.json&lt;br&gt;warn on 0 artifacts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="160" y="850" width="205" height="145" as="geometry"/>
+    <mxCell id="llm-judge" value="&lt;b&gt;LLM Judge&lt;/b&gt;&lt;br&gt;prompt / prompt_file&lt;br&gt;&lt;br&gt;Jinja2 rubric&lt;br&gt;submit_evaluation tool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
+      <mxGeometry x="18" y="278" width="210" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="scoring" value="&lt;b&gt;Step 6: Score&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="455" y="828.5" width="495" height="235" as="geometry"/>
+    <mxCell id="pairwise" value="&lt;b&gt;Pairwise Judge&lt;/b&gt;&lt;br&gt;vs --baseline&lt;br&gt;&lt;br&gt;position-swapped A/B&lt;br&gt;regression thresholds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
+      <mxGeometry x="18" y="408" width="210" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="judge-builtin" value="&lt;b&gt;builtin + check&lt;/b&gt;&lt;br&gt;&lt;br&gt;harness library&lt;br&gt;inline Python snippets&lt;br&gt;deterministic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
-      <mxGeometry x="15" y="48" width="220" height="85" as="geometry"/>
+    <mxCell id="report" value="&lt;b&gt;HTML Report&lt;/b&gt;&lt;br&gt;report.py&lt;br&gt;&lt;br&gt;summary.yaml (by score.py)&lt;br&gt;report.html side-by-side diffs&lt;br&gt;per-case details" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1910" y="305" width="220" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="judge-llm" value="&lt;b&gt;LLM prompt / prompt_file&lt;/b&gt;&lt;br&gt;LLM judge&lt;br&gt;&lt;br&gt;Jinja2 rendered&lt;br&gt;skip if --no-llm-judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
-      <mxGeometry x="258" y="48" width="222" height="85" as="geometry"/>
+    <mxCell id="analyze" value="&lt;b&gt;Analyze Results&lt;/b&gt;&lt;br&gt;analyze-results.md&lt;br&gt;&lt;br&gt;decisive Recommendation&lt;br&gt;analysis.md (frontmatter)&lt;br&gt;suggest next steps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="2190" y="305" width="210" height="155" as="geometry"/>
     </mxCell>
-    <mxCell id="judge-external" value="&lt;b&gt;external module / function&lt;/b&gt;&lt;br&gt;&lt;br&gt;dotted import path&lt;br&gt;arguments: params" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
-      <mxGeometry x="15" y="145" width="220" height="78" as="geometry"/>
+    <mxCell id="summary-yaml" value="runs/&lt;eval&gt;/&lt;run-id&gt;/summary.yaml&lt;br&gt;run_id: 2026-07-31-opus&lt;br&gt;judges:&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# per-judge aggregate&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;name&gt;:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;mean / pass_rate&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;stability: {...}&amp;nbsp;&amp;nbsp;# if samples&gt;1&lt;br&gt;per_case:&amp;nbsp;&amp;nbsp;&amp;nbsp;# value + rationale&lt;br&gt;&amp;nbsp;&amp;nbsp;case-001-slug:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;gate&gt;:&amp;nbsp;&amp;nbsp;{value: true, rationale}&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;score&gt;: {value: 4, rationale}&lt;br&gt;run_metrics:&amp;nbsp;# cost_per_turn_usd,&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# cache_hit_rate&lt;br&gt;pairwise:&amp;nbsp;&amp;nbsp;# only if --baseline&lt;br&gt;&amp;nbsp;&amp;nbsp;wins_a / wins_b / ties" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1860" y="690" width="310" height="250" as="geometry"/>
     </mxCell>
-    <mxCell id="pairwise" value="&lt;b&gt;pairwise (--baseline)&lt;/b&gt;&lt;br&gt;LLM judge&lt;br&gt;&lt;br&gt;score.py pairwise&lt;br&gt;regression detect" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="scoring">
-      <mxGeometry x="258" y="145" width="222" height="78" as="geometry"/>
+    <mxCell id="run-tree" value="runs/&lt;eval&gt;/&lt;run-id&gt;/&lt;br&gt;&amp;nbsp;&amp;nbsp;summary.yaml&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;- judges + per_case&lt;br&gt;&amp;nbsp;&amp;nbsp;report.html&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;- report.py&lt;br&gt;&amp;nbsp;&amp;nbsp;collection.json&amp;nbsp;&amp;nbsp;&lt;- collect.py counts&lt;br&gt;&amp;nbsp;&amp;nbsp;run_result.json&amp;nbsp;&amp;nbsp;&lt;- exit_code, cost_usd&lt;br&gt;&amp;nbsp;&amp;nbsp;analysis.md&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;- recommendation&lt;br&gt;&amp;nbsp;&amp;nbsp;cases/&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;case-001-slug/&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;output dirs&gt;/&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;events.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1285" y="700" width="300" height="185" as="geometry"/>
     </mxCell>
-    <mxCell id="interpret" value="&lt;b&gt;Step 7: Interpret&lt;/b&gt;&lt;br&gt;LLM analysis&lt;br&gt;&lt;br&gt;read summary.yaml&lt;br&gt;analyze-results.md&lt;br&gt;failure patterns,&lt;br&gt;root causes, cost&lt;br&gt;write analysis.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1015" y="850" width="205" height="160" as="geometry"/>
-    </mxCell>
-    <mxCell id="report-out" value="&lt;b&gt;Report + Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;report.py --open&lt;br&gt;report.html&lt;br&gt;--gold: save refs&lt;br&gt;suggest /eval-review,&lt;br&gt;/eval-optimize" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1300" y="850" width="205" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="mlflow" value="&lt;b&gt;/eval-mlflow&lt;/b&gt;&lt;br&gt;&lt;br&gt;if mlflow.experiment&lt;br&gt;log-results --run-id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1310" y="1090" width="190" height="90" as="geometry"/>
-    </mxCell>
-    <mxCell id="workspace-tree" value="/tmp/agent-eval/{id}/&lt;br&gt;case_order.yaml&lt;br&gt;cases/&lt;br&gt;&amp;nbsp;&amp;nbsp;case-001-name/&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;input.yaml&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;answers.yaml&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{output_dirs}/&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;.claude/settings.json&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;subagents/&lt;br&gt;batch.yaml &amp;nbsp;(batch mode)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1095" y="660" width="250" height="175" as="geometry"/>
-    </mxCell>
-    <mxCell id="handlers-snippet" value="handlers:&lt;br&gt;- patterns: [AskUserQuestion]&lt;br&gt;&amp;nbsp;&amp;nbsp;case_overrides: {...}&lt;br&gt;- patterns: [Bash, mcp__*]&lt;br&gt;&amp;nbsp;&amp;nbsp;input_filters: [jira]&lt;br&gt;&amp;nbsp;&amp;nbsp;env_checks:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;JIRA_SERVER:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;must_contain: [test]&lt;br&gt;hook_model: claude-haiku" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="720" y="646.5" width="250" height="170" as="geometry"/>
-    </mxCell>
-    <mxCell id="summary-snippet" value="summary.yaml:&lt;br&gt;&amp;nbsp;&amp;nbsp;judges:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;j&gt;: {mean, pass_rate}&lt;br&gt;&amp;nbsp;&amp;nbsp;per_case:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;case&gt;: {value, rationale}&lt;br&gt;&amp;nbsp;&amp;nbsp;pairwise:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;wins_a, wins_b, ties" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1010" y="1075" width="250" height="150" as="geometry"/>
-    </mxCell>
-    <mxCell id="24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="discover" parent="1">
+    <mxCell id="e-entry-preflight" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5029411764705882;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="preflight" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="25" value="config found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="discover" target="find-dataset" parent="1">
+    <mxCell id="e-preflight-workspace" value="CLEAN" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4984848484848485;exitDx=0;exitDy=0;entryX=0;entryY=0.5015151515151515;entryDx=0;entryDy=0;" edge="1" source="preflight" target="workspace" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="26" value="no config" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.49767441860465117;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="discover" target="bootstrap" parent="1">
+    <mxCell id="e-workspace-mode" value="N cases" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="workspace" target="mode" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="27" value="eval.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="find-dataset" parent="1">
+    <mxCell id="e-mode-execute-case" value="case (default)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.315;entryDx=0;entryDy=0;" edge="1" source="mode" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-mode-execute-batch" value="batch: batch.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-execute-sut" value="invoke headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.48863636363636365;exitY=0;exitDx=0;exitDy=0;entryX=0.5113636363636364;entryY=1;entryDx=0;entryDy=0;" edge="1" source="execute" target="skill-under-test" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-sut-execute" value="stdout + artifacts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5113636363636364;exitY=1;exitDx=0;exitDy=0;entryX=0.48863636363636365;entryY=0;entryDx=0;entryDy=0;" edge="1" source="skill-under-test" target="execute" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-execute-collect" value="workspace outputs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.49696969696969695;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="execute" target="collect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-collect-scoring" value="collection.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4990825688073395;entryDx=0;entryDy=0;" edge="1" source="collect" target="scoring" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-scoring-report" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="scoring" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-report-analyze" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-analyze-entry" value="/eval-optimize iterates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="analyze" target="entry" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="692.5" y="345"/>
+          <mxPoint x="2295" y="45"/>
+          <mxPoint x="125" y="45"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="28" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="find-dataset" target="preflight" parent="1">
+    <mxCell id="e-report-summary" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5161290322580645;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="summary-yaml" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="preflight" target="clean-gate" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="30" value="DIRTY: --clean --force" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="clean-gate" target="preflight" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1202.5" y="55"/>
-          <mxPoint x="955" y="55"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="31" value="MISSING_BASELINE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" source="clean-gate" target="preflight" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1202.5" y="30"/>
-          <mxPoint x="1005" y="30"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="32" value="CLEAN" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="clean-gate" target="workspace" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="33" value="inputs.tools" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="workspace" target="resolve-tools" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="34" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.484375;entryDx=0;entryDy=0;" edge="1" source="resolve-tools" target="execute" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="35" value="no tools" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.2;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="workspace" target="execute" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1138" y="420"/>
-          <mxPoint x="567.5" y="420"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="36" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="execute" target="exit-gate" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="37" value="0 (ok)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="exit-gate" target="collect" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="38" value="non-zero: abort" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="exit-gate" target="report-out" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="90" y="527.5"/>
-          <mxPoint x="90" y="1255"/>
-          <mxPoint x="1560" y="1255"/>
-          <mxPoint x="1560" y="925"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="39" value="collection.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" source="collect" target="scoring" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="40" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4319148936170213;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="scoring" target="interpret" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="41" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.46875;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="interpret" target="report-out" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="42" value="optional" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5121951219512195;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report-out" target="mlflow" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="43" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.43;entryY=0;entryDx=0;entryDy=0;" edge="1" source="workspace" target="workspace-tree" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="44" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="resolve-tools" target="handlers-snippet" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="882.5" y="621.5"/>
-          <mxPoint x="845.0" y="621.5"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="45" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=4 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.43;entryY=0;entryDx=0;entryDy=0;" edge="1" source="interpret" target="summary-snippet" parent="1">
+    <mxCell id="e-collect-runtree" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5083333333333333;entryY=0;entryDx=0;entryDy=0;" edge="1" source="collect" target="run-tree" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>

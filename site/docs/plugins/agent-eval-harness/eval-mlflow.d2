@@ -7,14 +7,14 @@ direction: right
 
 # --- Entry ---
 
-args: |md
+entry: |md
   **/eval-mlflow**
 
-  - --action <action>
-    (sync-dataset | log-results |
-    push-feedback | pull-feedback | all)
-  - --config <path> (auto-discover)
-  - --run-id <id> (log / push / pull)
+  - --action: sync-dataset,
+    log-results, push-feedback,
+    pull-feedback, all
+  - --config eval.yaml (auto)
+  - --run-id (log / push / pull)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -22,29 +22,15 @@ args: |md
   style.stroke-width: 2
 }
 
-# --- Step 0-2: load config + verify ---
+# --- Resolve tracking URI ---
 
-config: |md
-  **Load Config**
-
-  - discover.py eval configs
-  - 1 auto, many ask user
-  - read mlflow.experiment
-  - dataset.path + schema, judges
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-verify: |md
-  **Verify MLflow**
+resolve: |md
+  **Resolve Tracking URI**
 
   - ensure_server() reachable?
-  - URI: eval.yaml > env > :5000
-  - remote set: proceed anyway
-  - else suggest /eval-setup
+  - eval.yaml mlflow.tracking_uri
+  - MLFLOW_TRACKING_URI env
+  - default http://127.0.0.1:5000
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -52,10 +38,26 @@ verify: |md
   style.stroke-width: 2
 }
 
-# --- Dispatch on --action ---
+# --- Graceful degradation (fallback) ---
 
-dispatch: |md
-  **Action?**
+degrade: |md
+  **Graceful Degradation**
+
+  - MLflow unreachable
+  - scripts exit 0 (no fail)
+  - report "not available,
+    skipping"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Action dispatch (decision) ---
+
+action: |md
+  **--action?**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -63,33 +65,35 @@ dispatch: |md
   style.stroke-width: 2
 }
 
-# --- Operations (one per --action) ---
+# --- Sync dataset ---
 
 sync: |md
   **Sync Dataset**
-  two-phase (LLM + script)
+  sync_dataset.py (two-phase)
 
-  - read dataset.schema + sample
-  - interpret -> schema_mapping.json
-  - sync_dataset.py validates + preview
-  - push records to MLflow dataset
+  - interpret dataset.schema +
+    sample case
+  - schema_mapping.json:
+    inputs vs expectations
+  - preview then merge_records
+  - deduplicates
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
-  style.stroke-width: 3
-  style.double-border: true
+  style.stroke-width: 2
 }
+
+# --- Log results ---
 
 log: |md
   **Log Results**
   log_results.py --run-id
 
-  - params: skill, runner, model
-  - metrics: per-judge mean/pass_rate,
-    duration, cost, tokens
-  - artifacts: summary.yaml + table
-  - one trace per case / run
+  - params / metrics / artifacts
+  - per-case results table
+  - traces built from stdout.log
+  - tags regressions / judges
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -97,15 +101,17 @@ log: |md
   style.stroke-width: 2
 }
 
-pushfb: |md
+# --- Push feedback ---
+
+push-fb: |md
   **Push Feedback**
   attach_feedback.py --source all
 
-  - judge: source_type=CODE
-    ({case}/{judge}) from summary.yaml
-  - human: source_type=HUMAN
-    ({case}/human_review) from review.yaml
-  - no traces? report 0, succeed
+  - judge scores to CODE
+    (case/judge) from summary.yaml
+  - human review to HUMAN
+    (case/human_review) review.yaml
+  - skips if no traces
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -113,13 +119,15 @@ pushfb: |md
   style.stroke-width: 2
 }
 
-pullfb: |md
+# --- Pull feedback ---
+
+pull-fb: |md
   **Pull Feedback**
   attach_feedback.py --action pull
 
-  - read UI annotations on traces
-  - write review.yaml mlflow_feedback
-  - separate from local human review
+  - read MLflow UI annotations
+  - write review.yaml
+    mlflow_feedback
   - consumed by /eval-optimize
 | {
   shape: rectangle
@@ -128,16 +136,17 @@ pullfb: |md
   style.stroke-width: 2
 }
 
-# --- External service ---
+# --- MLflow server (external) ---
 
 mlflow: |md
   **MLflow Server**
   external service
 
+  - experiment tracking
   - dataset registry
-  - runs: params, metrics, artifacts
-  - traces + feedback
-  - annotation UI ($MLFLOW_TRACKING_URI)
+  - execution traces
+  - feedback / assessments
+    ($MLFLOW_TRACKING_URI)
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -146,14 +155,14 @@ mlflow: |md
   style.stroke-dash: 3
 }
 
-# --- Output ---
+# --- Report ---
 
 report: |md
   **Report & Next Steps**
 
-  - synced N cases / logged run
-  - pushed N / pulled N feedback
-  - MLflow UI tracking URI
+  - N cases synced / run logged
+  - N feedback pushed / N pulled
+  - MLflow UI link
   - next: /eval-review, /eval-optimize
 | {
   shape: rectangle
@@ -162,20 +171,19 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- Callouts ---
+# --- Callout: MLflow run structure (log_results.py) ---
 
-mapping-tree: |md
-  tmp/schema_mapping.json
-  {
-    "inputs": {
-      "prompt":
-        "input.yaml:prompt"
-    },
-    "expectations": {
-      "ref":
-        "reference.md:__file__"
-    }
-  }
+run-callout: |md
+  MLflow run (log_results.py)
+  params:  skill, eval_name, runner,
+           run_id, model
+  metrics: <judge>/pass_rate,
+           <judge>/mean, cost_usd,
+           duration_s, num_turns
+  tags:    regressions_detected,
+           num_judges, +mlflow.tags
+  artifacts: summary.yaml, inputs/,
+           per_case_results.json
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -185,14 +193,16 @@ mapping-tree: |md
   style.font-size: 10
 }
 
-review-tree: |md
-  review.yaml
-    human_review:
-      case-001: {...}
-    mlflow_feedback:
-      case-001:
-        source: HUMAN
-        value: ...
+# --- Callout: schema_mapping.json (sync_dataset.py) ---
+
+mapping-callout: |md
+  tmp/schema_mapping.json
+    inputs:
+      prompt: input.yaml:prompt
+    expectations:
+      ref: reference.md:__file__
+    (filename:field_path
+     or filename:__file__)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -204,50 +214,34 @@ review-tree: |md
 
 # --- Flow ---
 
-args -> config
-config -> verify
-verify -> dispatch
-
-# --- Dispatch fan-out (one branch per --action) ---
-
-dispatch -> sync: "sync-dataset / all"
-dispatch -> log: "log-results / all"
-dispatch -> pushfb: "push-feedback / all"
-dispatch -> pullfb: "pull-feedback"
-
-# --- Operations push to MLflow ---
-
-sync -> mlflow: "push cases" {
+entry -> resolve
+resolve -> degrade: "unreachable" {
   style.stroke-dash: 3
 }
-log -> mlflow: "push run" {
-  style.stroke-dash: 3
-}
-pushfb -> mlflow: "push feedback" {
+resolve -> action: "server OK"
+
+action -> sync: "sync-dataset | all"
+action -> log: "log-results | all"
+action -> push-fb: "push-feedback | all"
+action -> pull-fb: "pull-feedback"
+
+sync -> mlflow: "dataset records"
+log -> mlflow: "summary.yaml + traces"
+push-fb -> mlflow: "CODE + HUMAN feedback"
+pull-fb -> mlflow: "pull annotations" {
   style.stroke-dash: 3
 }
 
-# --- Pull annotations back from MLflow UI ---
+mlflow -> report: "results + UI link"
 
-mlflow -> pullfb: "pull annotations" {
-  style.stroke-dash: 3
-}
+# --- Callout connectors ---
 
-# --- Converge to report ---
-
-sync -> report
-log -> report
-pushfb -> report
-pullfb -> report
-
-# --- Callout connections ---
-
-sync -> mapping-tree: {
+log -> run-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
 }
-pullfb -> review-tree: {
+sync -> mapping-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

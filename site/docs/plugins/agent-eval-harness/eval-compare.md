@@ -7,7 +7,20 @@ title: eval-compare
 
 # eval-compare
 
-Discovers a directory of eval run artifacts and generates a self-contained tabbed HTML comparison report with model cards, quality/cost tables, per-case breakdowns, and LLM-written analysis.
+Cross-model / cross-run comparison report generator. Takes a directory of
+eval run artifacts (summary.yaml, run_result.json, optional report.html and
+anova.json) and produces a self-contained, tabbed HTML comparison report:
+per-model cards, quality/cost tables, per-case score breakdowns, and embedded
+copies of each run's original report for iframe drill-down. Runs compare.py in
+two phases -- discover (recursively find every subdirectory containing a
+summary.yaml, aggregating repeated models as averages with min/max ranges) and
+generate (emit index.html plus per-run report.html copies) -- then replaces the
+placeholder analysis sections (Bottom Line verdict, Where Each Model Shined,
+Shared Weaknesses, Recommendations) with prose grounded in the per-case scores
+and cost data. Adds Best Value / Highly Variable / Not Viable badges under
+mutual-exclusivity rules, degrades gracefully when run_result.json or
+report.html is missing, and surfaces an ANOVA/Pareto Statistical Significance
+section automatically when an anova.json (written by /eval-anova) is present.
 
 **Plugin**: [agent-eval-harness](index.md) | **:material-check: User-invocable**
 
@@ -89,8 +102,28 @@ Discovers a directory of eval run artifacts and generates a self-contained tabbe
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![eval-compare diagram](eval-compare.svg)
+</div>
+
+## Arguments
+
+```bash
+/eval-compare <input-dir> [--output <path>] [--title <text>] [--overview <text>]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `input-dir` | :material-check: | - | Directory scanned recursively for eval runs -- every subdirectory containing a summary.yaml is discovered and aggregated per model. |
+| `--output` |  | `<input-dir>/comparison-report` | Output directory for the HTML report (index.html + per-run report.html copies). |
+| `--title` |  | `Model Comparison` | Report title. |
+| `--overview` |  | - | Optional context paragraph shown at the top of the report (section omitted if absent). |
+
 ## Usage
 
 ```bash
-/eval-compare
+/eval-compare eval/runs/my-eval
+/eval-compare eval/runs/my-eval --title "Opus vs Sonnet"
 ```

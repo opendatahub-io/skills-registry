@@ -7,13 +7,13 @@ direction: right
 
 # --- Entry ---
 
-args: |md
+entry: |md
   **/eval-dataset**
 
   - --config <path>
-  - --count N (5)
-  - --strategy
-  - --run-id <id>
+  - --count N (default 5)
+  - --run-id (learn from run)
+  - --harbor / --image
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,35 +21,15 @@ args: |md
   style.stroke-width: 2
 }
 
-# --- Config discovery ---
-
-discover: |md
-  **Discover Config**
-
-  - --config → use directly
-  - else discover.py
-  - 1 found → select
-  - many → ask user
-  - none → /eval-analyze
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Read context ---
+# --- Read context + assess ---
 
 read-context: |md
-  **Read Context**
-  _eval.yaml + eval.md_
+  **Read Context & Assess**
 
-  - skill, execution mode
-  - dataset.schema + path
-  - output schemas
-  - extract judges →
-    judge-driven reqs
+  - eval.yaml + eval.md
+  - judge-driven requirements
+  - parse dataset.schema
+  - assess existing cases (fresh?)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -57,45 +37,14 @@ read-context: |md
   style.stroke-width: 2
 }
 
-# --- Parse schema ---
-
-parse-schema: |md
-  **Parse Schema**
-  _generation template_
-
-  - required files + fields
-  - optional fields (vary)
-  - field semantics
-  - {field} arg placeholders
-  - [EXTERNAL] → TODO_
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Assess state ---
-
-assess: |md
-  **Assess State**
-
-  - ls dataset_path
-  - count existing cases
-  - read one sample
-  - note coverage gaps
-  - check --count vs paths
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Strategy decision ---
+# --- Provenance decision ---
 
 strategy: |md
-  **Choose Strategy**
+  **generation.strategy?**
+
+  case provenance
+  skill · from-traces
+  synthetic (script)
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -103,65 +52,30 @@ strategy: |md
   style.stroke-width: 2
 }
 
-# --- Strategy branches (fan-out) ---
+# --- Branches ---
 
-bootstrap: |md
-  **bootstrap**
-  (default, from zero)
+mlflow-traces: |md
+  **MLflow Traces**
+  from_traces.py (external)
 
-  - 1 simple case
-  - 1 complex case
-  - 1 edge case
-  - rest → judge reqs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-expand: |md
-  **expand**
-  (thin coverage)
-
-  - read existing cases
-  - find gaps vs judges
-  - continue numbering
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-from-traces: |md
-  **from-traces**
-  (production usage)
-
-  - from_traces.py
+  - search production traces
   - extract real inputs
-  - exit 2 → fall back
-    to expand
+  - prompt + tool calls
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Generate (LLM) ---
+gap-analysis: |md
+  **Gap Analysis**
+  LLM augment
 
-generate: |md
-  **Generate Cases**
-  _LLM synthesis_
-
-  - case-NNN-slug/ dirs
-  - input.yaml (all fields)
-  - answers.yaml (guidance)
-  - annotations.yaml
-  - companion files
-  - realistic content
+  - read existing cases
+  - judges w/ no covering case
+  - target --run-id failures
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -170,16 +84,31 @@ generate: |md
   style.double-border: true
 }
 
-# --- Validate ---
+case-generation: |md
+  **Case Generation**
+  LLM author (converge)
 
-validate-cases: |md
-  **Validate**
+  - bootstrap simple/complex/edge
+  - + judge-targeted cases
+  - shape trace inputs to schema
+  - realistic, not templated
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
 
-  - read case back vs schema
-  - count files per case
-  - {field} placeholders set
-  - companion files present
-  - both judge if-branches
+# --- External-state fields ---
+
+external-fields: |md
+  **External-State Fields**
+
+  - [EXTERNAL: System] fields
+  - TODO_ placeholder values
+  - never fabricate Jira keys,
+    repos, API endpoints
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -187,14 +116,31 @@ validate-cases: |md
   style.stroke-width: 2
 }
 
-# --- Report ---
+# --- Write cases ---
+
+write-cases: |md
+  **Write Test Cases**
+
+  - case-NNN-slug/ dirs
+  - input.yaml (+ {field} args)
+  - answers.yaml (interactive)
+  - annotations.yaml (judges)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Validate + report ---
 
 report: |md
-  **Report**
+  **Validate & Report**
 
-  - N cases at <path>
-  - strategy + coverage
-  - TODO_ placeholders
+  - re-read case vs schema
+  - both if-branches covered
+  - list TODO_ placeholders
+  - --harbor: task packages
   - next: /eval-run
 | {
   shape: rectangle
@@ -203,17 +149,15 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- Callout: case dir structure ---
+# --- Callout: case directory tree (primary artifact) ---
 
 case-tree: |md
-  dataset.path/
-    case-001-simple/
-      input.yaml
-      answers.yaml
-      annotations.yaml
-      reference.md
-    case-002-complex/
-      ...
+  eval/dataset/cases/
+    case-001-slug/
+      input.yaml       # prompt + context, {field}
+      answers.yaml     # interactive Q&A answers
+      annotations.yaml # per-judge expectations
+      reference.md     # gold-standard output
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -225,27 +169,29 @@ case-tree: |md
 
 # --- Flow ---
 
-args -> discover
-discover -> read-context
-read-context -> parse-schema
-parse-schema -> assess
-assess -> strategy
+entry -> read-context
+read-context -> strategy: "eval.yaml + eval.md"
 
-strategy -> bootstrap: "from zero"
-strategy -> expand: "cases exist"
-strategy -> from-traces: "--strategy\nfrom-traces"
-
-bootstrap -> generate
-expand -> generate
-from-traces -> generate
-
-generate -> validate-cases
-validate-cases -> generate: "schema errors" {
+strategy -> mlflow-traces: "from-traces" {
   style.stroke-dash: 3
 }
-validate-cases -> report
+strategy -> case-generation: "bootstrap (fresh)" {
+  style.stroke-dash: 3
+}
+strategy -> gap-analysis: "expand (augment)" {
+  style.stroke-dash: 3
+}
 
-generate -> case-tree: {
+mlflow-traces -> case-generation: "real inputs" {
+  style.stroke-dash: 3
+}
+gap-analysis -> case-generation: "gap-filling cases"
+
+case-generation -> external-fields
+external-fields -> write-cases: "input.yaml + annotations.yaml"
+write-cases -> report: "case-NNN/"
+
+write-cases -> case-tree: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

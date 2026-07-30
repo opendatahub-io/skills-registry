@@ -1,0 +1,102 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/eval-anova&lt;/b&gt;&lt;br&gt;orchestrate.py&lt;br&gt;&lt;br&gt;• --config eval.yaml&lt;br&gt;• matrix: block in eval.yaml&lt;br&gt;• --dry-run / --analyze-only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="230" width="170" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="design" value="&lt;b&gt;Design&lt;/b&gt;&lt;br&gt;design.py&lt;br&gt;&lt;br&gt;• full-factorial expansion&lt;br&gt;• conditions x cases x reps&lt;br&gt;• cost estimate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="250" y="240" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="dry-run" value="&lt;b&gt;--dry-run?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="470" y="250" width="120" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="dry-run-stop" value="&lt;b&gt;Print Grid + Cost&lt;/b&gt;&lt;br&gt;&lt;br&gt;• condition grid&lt;br&gt;• estimated cost&lt;br&gt;• STOP — no execution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="60" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="matrix-loop" value="&lt;b&gt;Matrix Loop&lt;/b&gt;&lt;br&gt;fan_out()&lt;br&gt;&lt;br&gt;• each condition x replication&lt;br&gt;• set --model / --effort / overrides&lt;br&gt;• tag cell with condition.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="640" y="225" width="190" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-run" value="&lt;b&gt;/eval-run&lt;/b&gt; (per cell)&lt;br&gt;single-condition primitive&lt;br&gt;&lt;br&gt;• workspace → execute&lt;br&gt;• collect → score" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="880" y="240" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="cell-run" value="&lt;b&gt;Standard Run&lt;/b&gt;&lt;br&gt;&lt;br&gt;• summary.yaml&lt;br&gt;• condition.json&lt;br&gt;• under $AGENT_EVAL_RUNS_DIR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1110" y="240" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="analyze" value="&lt;b&gt;Analyze&lt;/b&gt;&lt;br&gt;analyze.py&lt;br&gt;&lt;br&gt;• repeated-measures /&lt;br&gt;&amp;nbsp;&amp;nbsp;mixed-effects ANOVA&lt;br&gt;• cost/quality Pareto frontier&lt;br&gt;• reads runs' summary.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1340" y="225" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="anova-json" value="&lt;b&gt;anova.json&lt;/b&gt;&lt;br&gt;&lt;br&gt;• F / p / significant&lt;br&gt;• eta-squared (effect size)&lt;br&gt;• Pareto frontier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1600" y="240" width="180" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-compare" value="&lt;b&gt;/eval-compare&lt;/b&gt;&lt;br&gt;&lt;br&gt;• leaderboard + heatmap&lt;br&gt;• ANOVA/Pareto stats section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1840" y="140" width="200" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="report" value="&lt;b&gt;Deep View&lt;/b&gt;&lt;br&gt;report.py&lt;br&gt;&lt;br&gt;• condition means&lt;br&gt;• F / p / eta-squared&lt;br&gt;• per-case matrix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1840" y="360" width="190" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="anova-detail" value="anova.json&lt;br&gt;anova:&lt;br&gt;&amp;nbsp;&amp;nbsp;method: repeated-measures /&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;mixed-effects / ANOVA (skipped)&lt;br&gt;&amp;nbsp;&amp;nbsp;factors: [model, effort, ...]&lt;br&gt;&amp;nbsp;&amp;nbsp;f_statistic / p_value / significant&lt;br&gt;&amp;nbsp;&amp;nbsp;alpha: 0.05  details[]: ng2 (eta^2)&lt;br&gt;condition_summaries:&lt;br&gt;&amp;nbsp;&amp;nbsp;[{condition_id, levels, mean}]&lt;br&gt;pareto_frontier:&lt;br&gt;&amp;nbsp;&amp;nbsp;[{condition_id, cost, quality}]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1420" y="470" width="270" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="design" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="design" target="dry-run" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="16" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="dry-run" target="dry-run-stop" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="17" value="no · execute" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="dry-run" target="matrix-loop" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="18" value="per cell" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="matrix-loop" target="eval-run" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="19" value="one run" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="cell-run" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="20" value="next cell" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="cell-run" target="matrix-loop" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1200" y="430"/>
+          <mxPoint x="735" y="430"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="21" value="all summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="cell-run" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="analyze" target="anova-json" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="23" value="+ stats section" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="anova-json" target="eval-compare" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="24" value="F / p / eta-squared" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="anova-json" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="25" value="--analyze-only (existing runs)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="entry" target="analyze" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="125" y="30"/>
+          <mxPoint x="1440" y="30"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="26" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.833;entryY=0;entryDx=0;entryDy=0;" edge="1" source="anova-json" target="anova-detail" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

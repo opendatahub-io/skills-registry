@@ -13,6 +13,7 @@ entry: |md
   - --tracking-uri <uri>
   - --skip-mlflow
   - --runs-dir <path>
+  - --harbor
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,30 +21,28 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 1: dependencies ---
-
-install-deps: |md
-  **Install Dependencies**
-
-  - isolated .eval-venv/
-  - re-run ensure_deps.py
-  - uv / venv pip fallback
-  - mlflow[genai], anthropic[vertex]
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Step 2: preflight (decision) ---
+# --- Preflight ---
 
 preflight: |md
-  **Run Preflight Checks**
+  **Preflight Checks**
+  check_env.py --fix
 
-  - check_env.py --fix
-  - venv / deps / dirs
-  - all checks pass?
+  - python>=3.11, mlflow, pyyaml
+  - agent_eval symlink
+  - anthropic SDK (optional)
+  - create runs/ + tmp/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Decision ---
+
+decision: |md
+  **All checks pass?**
+  deps / API key / MLflow
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -51,15 +50,16 @@ preflight: |md
   style.stroke-width: 2
 }
 
-# --- Steps 3-5: fix branch (config) ---
+# --- Install deps (fallback) ---
 
-mlflow-config: |md
-  **Configure MLflow Tracking**
+install-deps: |md
+  **Install Deps**
+  ensure_deps.py (fallback)
 
-  - skip if --skip-mlflow
-  - local server :5000
-  - sqlite file store
-  - remote (Databricks)
+  - isolated .eval-venv/
+  - uv pip / venv pip
+  - mlflow[genai], anthropic[vertex]
+  - --harbor: harbor + kubernetes
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -67,85 +67,14 @@ mlflow-config: |md
   style.stroke-width: 2
 }
 
-api-keys: |md
-  **Configure API Keys**
-
-  - ANTHROPIC_API_KEY
-  - ANTHROPIC_VERTEX_PROJECT_ID
-  - judges + skill execution
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-runs-dir: |md
-  **Configure Runs Dir + Env**
-
-  - AGENT_EVAL_RUNS_DIR
-  - default eval/runs
-  - check eval.yaml $VAR refs
-  - warn if any unset
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Step 6: create experiment ---
-
-create-exp: |md
-  **Create MLflow Experiment**
-
-  - read eval.yaml mlflow
-  - setup_experiment()
-  - resolve_tracking_uri()
-  - skip if no eval.yaml
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Step 7: verify + report ---
-
-verify: |md
-  **Final Verification**
-
-  - re-run check_env.py
-  - validate eval.yaml
-  - confirm all set up
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-report-out: |md
-  **Report + Next Steps**
-
-  - what passed / failed
-  - analyze -> dataset
-  - run -> review
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- External ---
+# --- External: MLflow server ---
 
 mlflow-server: |md
   **MLflow Server**
-  external tracking
+  external
 
-  - experiment registry
-  - traces + metrics
+  - local server :5000
+  - or remote / Databricks
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -154,47 +83,99 @@ mlflow-server: |md
   style.stroke-dash: 3
 }
 
-# --- Callouts ---
+# --- Configure Environment (container) ---
 
-venv-check: |md
-  VENV=.eval-venv/bin/python3
-  test -x $VENV
-    -> venv: OK
-  $VENV -c 'import yaml'
-    -> pyyaml: OK
+configure: Configure Environment {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  mlflow-config: |md
+    **MLflow Tracking**
+
+    - local server / file store
+      (sqlite) / remote
+    - set MLFLOW_TRACKING_URI
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  verify-keys: |md
+    **API Keys**
+
+    - ANTHROPIC_API_KEY
+    - or ANTHROPIC_VERTEX_PROJECT_ID
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  runs-exp: |md
+    **Runs + Experiment**
+
+    - $AGENT_EVAL_RUNS_DIR
+    - create runs dir
+    - setup_experiment(eval.yaml)
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  mlflow-config -> verify-keys
+  verify-keys -> runs-exp
+}
+
+# --- Re-verify ---
+
+reverify: |md
+  **Re-verify**
+  check_env.py
+
+  - confirm all checks pass
+  - validate eval.yaml
+  - detect CLAUDE.md / AGENTS.md
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-mlflow-options: |md
-  # local server (recommended)
-  mlflow server --port 5000
-  export MLFLOW_TRACKING_URI=
-    http://127.0.0.1:5000
-  # local file store
-  export MLFLOW_TRACKING_URI=
-    sqlite:///mlflow.db
+# --- Environment Ready ---
+
+ready: |md
+  **Environment Ready**
+
+  - report status
+  - next: /eval-analyze
+  - dataset -> run
+  - review / optimize
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
-uri-precedence: |md
-  URI resolution order:
-  1. mlflow.tracking_uri
-     (eval.yaml)
-  2. MLFLOW_TRACKING_URI
-     (env var)
-  3. http://127.0.0.1:5000
+# --- Callout: environment the setup produces ---
+
+env-callout: |md
+  Environment (check_env.py)
+  deps: python>=3.11, mlflow,
+        pyyaml, agent_eval(symlink)
+  ANTHROPIC_API_KEY
+    (or ANTHROPIC_VERTEX_PROJECT_ID)
+  MLFLOW_TRACKING_URI
+    (http://127.0.0.1:5000)
+  AGENT_EVAL_RUNS_DIR (runs/)
+  .eval-venv/  (uv pip install ...)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -206,47 +187,30 @@ uri-precedence: |md
 
 # --- Flow ---
 
-entry -> install-deps
-install-deps -> preflight
+entry -> preflight
+preflight -> decision: "check_env.py --fix"
 
-preflight -> create-exp: "all pass"
-preflight -> mlflow-config: "checks fail"
+decision -> install-deps: "fix / configure"
+install-deps -> configure: "venv ready"
 
-mlflow-config -> api-keys
-api-keys -> runs-dir
-runs-dir -> create-exp: "re-check"
+configure -> reverify: "eval.yaml"
+reverify -> ready
 
-create-exp -> verify
-verify -> report-out
+# --- All-clear fast path ---
 
-# --- Back-edge (re-verify loop) ---
-
-verify -> preflight: re-verify {
+decision -> ready: "all checks pass" {
   style.stroke-dash: 3
 }
 
-# --- External connections ---
+# --- External MLflow server feeds config ---
 
-mlflow-config -> mlflow-server: connect {
-  style.stroke-dash: 3
-}
-create-exp -> mlflow-server {
+mlflow-server -> configure: "MLFLOW_TRACKING_URI" {
   style.stroke-dash: 3
 }
 
-# --- Callout connections ---
+# --- Callout connector ---
 
-install-deps -> venv-check: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
-}
-mlflow-config -> mlflow-options: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
-}
-mlflow-config -> uri-precedence: {
+reverify -> env-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

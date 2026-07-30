@@ -1,0 +1,187 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/eval-compare**
+
+  - <input-dir>
+  - --output <path>
+  - --title <text>
+  - --overview <text>
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Discover ---
+
+discover: |md
+  **Discover Runs**
+  compare.py discover
+
+  - rglob summary.yaml
+  - read run_result.json,
+    report.html per dir
+  - print JSON manifest
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Stats decision ---
+
+has-stats: |md
+  **anova.json?**
+  has_stats
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+anova-input: |md
+  anova.json  (optional)
+  written by /eval-anova
+
+  - ANOVA p-values, F-stat
+  - Pareto cost/quality frontier
+  - render_stats_section()
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+stats-section: |md
+  **Statistical Significance**
+  ANOVA / Pareto
+
+  - render_stats_section()
+  - p-values, F-stat, alpha
+  - cost/quality frontier
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Generate ---
+
+generate: |md
+  **Generate Report**
+  compare.py generate
+
+  - emit index.html
+  - copy report.html ->
+    per-run slug subdirs
+  - iframe embedding by slug
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- LLM analysis ---
+
+analysis: |md
+  **Write Analysis**
+  LLM (reads summary.yaml)
+
+  - per-case scores, judge
+    breakdowns, cost, variance
+  - Bottom Line verdict
+  - Where Each Model Shined
+  - Shared Weaknesses, Recs
+  - badges (mutex): Best Value /
+    Highly Variable / Not Viable
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Output ---
+
+output-report: |md
+  **Comparison Report**
+
+  - self-contained tabbed HTML
+  - model cards + quality/cost
+    tables
+  - per-case breakdowns
+  - embedded original reports
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: discover manifest (primary intermediate) ---
+
+manifest: |md
+  manifest -- compare.py discover
+  (stdout JSON)
+
+  { "runs": [
+      { "name", "dir",
+        "model": "claude-...",
+        "cost_usd": <float>,
+        "judges": {<judge>: mean},
+        "has_html": bool } ],
+    "has_stats": bool }
+
+  # generate aggregates repeated
+  # models: avg + min/max (count)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> discover
+discover -> has-stats: "manifest JSON"
+
+anova-input -> has-stats: "input" {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+has-stats -> stats-section: "yes"
+has-stats -> generate: "no"
+stats-section -> generate
+
+generate -> analysis: "index.html + iframes"
+analysis -> output-report
+
+# --- Callout connector ---
+
+discover -> manifest: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

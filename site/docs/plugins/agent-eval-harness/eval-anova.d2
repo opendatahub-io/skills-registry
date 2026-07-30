@@ -1,0 +1,219 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/eval-anova**
+  orchestrate.py
+
+  - --config eval.yaml
+  - matrix: block in eval.yaml
+  - --dry-run / --analyze-only
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Design ---
+
+design: |md
+  **Design**
+  design.py
+
+  - full-factorial expansion
+  - conditions x cases x reps
+  - cost estimate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Dry-run decision ---
+
+dry-run: |md
+  **--dry-run?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dry-run-stop: |md
+  **Print Grid + Cost**
+
+  - condition grid
+  - estimated cost
+  - STOP — no execution
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Matrix fan-out loop ---
+
+matrix-loop: |md
+  **Matrix Loop**
+  fan_out()
+
+  - each condition x replication
+  - set --model / --effort / overrides
+  - tag cell with condition.json
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+eval-run: |md
+  **/eval-run** (per cell)
+  single-condition primitive
+
+  - workspace -> execute
+  - collect -> score
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+cell-run: |md
+  **Standard Run**
+
+  - summary.yaml
+  - condition.json
+  - under $AGENT_EVAL_RUNS_DIR
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Analysis ---
+
+analyze: |md
+  **Analyze**
+  analyze.py
+
+  - repeated-measures /
+    mixed-effects ANOVA
+  - cost/quality Pareto frontier
+  - reads runs' summary.yaml
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+anova-json: |md
+  **anova.json**
+
+  - F / p / significant
+  - eta-squared (effect size)
+  - Pareto frontier
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Reports (fan-out) ---
+
+eval-compare: |md
+  **/eval-compare**
+
+  - leaderboard + heatmap
+  - ANOVA/Pareto stats section
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+report: |md
+  **Deep View**
+  report.py
+
+  - condition means
+  - F / p / eta-squared
+  - per-case matrix
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: primary output artifact ---
+
+anova-detail: |md
+  anova.json
+  anova:
+    method: repeated-measures /
+      mixed-effects / ANOVA (skipped)
+    factors: [model, effort, ...]
+    f_statistic / p_value / significant
+    alpha: 0.05   details[]: ng2 (eta^2)
+  condition_summaries:
+    [{condition_id, levels, mean}]
+  pareto_frontier:
+    [{condition_id, cost, quality}]
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> design
+design -> dry-run
+
+dry-run -> dry-run-stop: "yes" {
+  style.stroke-dash: 3
+}
+dry-run -> matrix-loop: "no · execute"
+
+matrix-loop -> eval-run: "per cell"
+eval-run -> cell-run: "one run"
+cell-run -> matrix-loop: "next cell" {
+  style.stroke-dash: 3
+}
+
+cell-run -> analyze: "all summary.yaml"
+analyze -> anova-json
+
+anova-json -> eval-compare: "+ stats section"
+anova-json -> report: "F / p / eta-squared"
+
+entry -> analyze: "--analyze-only (existing runs)" {
+  style.stroke-dash: 3
+}
+
+anova-json -> anova-detail: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

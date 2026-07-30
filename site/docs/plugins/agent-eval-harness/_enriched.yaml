@@ -1,8 +1,9 @@
 description: |
   Generic agentic evaluation framework for Claude Code skills. Provides an
   end-to-end pipeline to analyze skills, generate test cases, execute evaluations,
-  review results with human feedback, sync with MLflow, and iteratively optimize
-  skill quality with regression checks.
+  review results with human feedback, compare models and configurations, run
+  Design-of-Experiments (DoE) sweeps with ANOVA statistics, sync with MLflow, and
+  iteratively optimize skill quality with regression checks.
 
   The framework is schema-driven via eval.yaml, which defines execution mode
   (case-by-case or batch), dataset schemas, output descriptions, judges (four
@@ -24,10 +25,15 @@ description: |
   supporting S3-hosted datasets, eval.yaml-to-provider translation, and
   containerized (UBI9) execution.
 architecture_notes: |
-  Eight skills form a linear pipeline with feedback loops: setup (optional) ->
+  Ten skills form a linear pipeline with feedback loops: setup (optional) ->
   analyze -> dataset -> run -> review/optimize, with mlflow available at any
-  point after run. eval-check operates standalone as a cross-component health
-  check. eval-run is the central hub -- it executes skills headlessly,
+  point after run. eval-compare renders cross-model/cross-run comparison reports
+  from a directory of runs, and eval-anova is a Design-of-Experiments orchestrator
+  that fans /eval-run out across a matrix of configurations (models, effort,
+  prompts) and computes repeated-measures ANOVA + a cost/quality Pareto frontier,
+  which eval-compare surfaces automatically. eval-check operates standalone as a
+  cross-component health check. eval-run is the central hub -- it executes skills
+  headlessly,
   runs judges (builtin + inline checks + LLM scoring + external modules, plus
   pairwise comparison against a baseline), and produces summary.yaml consumed by
   review, optimize, and mlflow. Builtin judges are reusable, versioned judges from
@@ -235,6 +241,91 @@ skills:
       - "/eval-run --model claude-opus-4-6 --baseline 2026-05-01-opus"
       - "/eval-run --cases case-001 case-002 --no-llm-judges"
       - "/eval-run --gold"
+  eval-compare:
+    description: |
+      Cross-model / cross-run comparison report generator. Takes a directory of
+      eval run artifacts (summary.yaml, run_result.json, optional report.html and
+      anova.json) and produces a self-contained, tabbed HTML comparison report:
+      per-model cards, quality/cost tables, per-case score breakdowns, and embedded
+      copies of each run's original report for iframe drill-down. Runs compare.py in
+      two phases -- discover (recursively find every subdirectory containing a
+      summary.yaml, aggregating repeated models as averages with min/max ranges) and
+      generate (emit index.html plus per-run report.html copies) -- then replaces the
+      placeholder analysis sections (Bottom Line verdict, Where Each Model Shined,
+      Shared Weaknesses, Recommendations) with prose grounded in the per-case scores
+      and cost data. Adds Best Value / Highly Variable / Not Viable badges under
+      mutual-exclusivity rules, degrades gracefully when run_result.json or
+      report.html is missing, and surfaces an ANOVA/Pareto Statistical Significance
+      section automatically when an anova.json (written by /eval-anova) is present.
+    argument_hint: "<input-dir> [--output <path>] [--title <text>] [--overview <text>]"
+    arguments:
+      - name: "input-dir"
+        required: true
+        description: "Directory scanned recursively for eval runs -- every subdirectory containing a summary.yaml is discovered and aggregated per model."
+      - name: "--output"
+        type: "<path>"
+        required: false
+        default: "<input-dir>/comparison-report"
+        description: "Output directory for the HTML report (index.html + per-run report.html copies)."
+      - name: "--title"
+        type: "<text>"
+        required: false
+        default: "Model Comparison"
+        description: "Report title."
+      - name: "--overview"
+        type: "<text>"
+        required: false
+        description: "Optional context paragraph shown at the top of the report (section omitted if absent)."
+    usage_examples:
+      - "/eval-compare eval/runs/my-eval"
+      - "/eval-compare eval/runs/my-eval --title \"Opus vs Sonnet\""
+  eval-anova:
+    description: |
+      Design-of-Experiments (DoE) evaluation with ANOVA. Reads a matrix: block in
+      eval.yaml (factors such as model, thinking-effort, or prompt, plus a
+      replications count), designs the full-factorial grid with a cost estimate
+      (--dry-run), then fans /eval-run out once per matrix cell (condition x
+      replication) -- each cell landing as a standard run with its own summary.yaml
+      tagged by a condition.json. It is not its own executor: eval-run stays the
+      single-condition primitive. analyze.py then computes each case composite via
+      the harness's canonical reward composition and runs repeated-measures ANOVA
+      (single-factor) or a mixed-effects model (multi-factor), restricted to cases
+      present under every condition, plus a cost/quality Pareto frontier, into
+      anova.json. /eval-compare renders the cross-condition comparison (surfacing the
+      statistics section from anova.json) and report.py gives a statistics-forward
+      deep view (condition means, F / p / effect size, per-case matrix). Because the
+      stats read standard summary.yaml runs, --analyze-only can re-analyze runs
+      produced elsewhere (e.g. a CI fan-out) without re-executing.
+    argument_hint: "--config <path> [--dry-run] [--analyze-only] [--cases <id> ...] [--output <dir>] [--no-report]"
+    arguments:
+      - name: "--config"
+        type: "<path>"
+        required: true
+        description: "Path to the eval.yaml containing the matrix: block."
+      - name: "--dry-run"
+        required: false
+        default: "false"
+        description: "Print the factorial design and a cost estimate without executing any runs."
+      - name: "--analyze-only"
+        required: false
+        default: "false"
+        description: "Skip execution; re-run ANOVA + Pareto over existing runs (including externally produced ones) and re-render the report."
+      - name: "--cases"
+        type: "<id> [<id> ...]"
+        required: false
+        description: "Restrict the experiment to specific case IDs (space-separated). Defaults to all cases in the dataset."
+      - name: "--output"
+        type: "<dir>"
+        required: false
+        description: "Override the runs/output directory for this experiment."
+      - name: "--no-report"
+        required: false
+        default: "false"
+        description: "Run and analyze but skip the /eval-compare report render."
+    usage_examples:
+      - "/eval-anova --config eval.yaml"
+      - "/eval-anova --config eval.yaml --dry-run"
+      - "/eval-anova --config eval.yaml --analyze-only"
   eval-review:
     description: |
       Interactive human-in-the-loop review of evaluation results. Loads

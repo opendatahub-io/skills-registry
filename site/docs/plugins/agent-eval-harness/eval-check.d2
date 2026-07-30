@@ -11,7 +11,10 @@ entry: |md
   **/eval-check**
 
   - --output <path>
+    (default harness-report.md)
   - --include-global
+    (opt-in ~/.claude)
+  - read-only health check
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -19,13 +22,14 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 1: Inventory ---
+# --- Inventory ---
 
 inventory: |md
   **Inventory**
+  harness_inventory.py --root .
 
-  - run harness_inventory.py
-  - count skills, commands, hooks
+  - discover skills / commands
+  - CLAUDE.md, settings hooks
   - word count per skill
   - structural warnings
 | {
@@ -35,24 +39,11 @@ inventory: |md
   style.stroke-width: 2
 }
 
-inventory-script: |md
-  **harness_inventory.py**
-  external script
+# --- Decision: single-skill project? ---
 
-  - --root .
-  - discover artifacts
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Decision: single skill? ---
-
-single-check: |md
-  **Single skill?**
+single: |md
+  **Single-skill
+  project?**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -60,15 +51,15 @@ single-check: |md
   style.stroke-width: 2
 }
 
-# --- Step 2: Read All Skills ---
+# --- Read components ---
 
-read-skills: |md
-  **Read All Skills**
+read-config: |md
+  **Read Components**
 
-  - YAML frontmatter
-  - body rules
-  - cross-skill refs
-  - domain summaries
+  - each SKILL.md frontmatter + body
+  - project CLAUDE.md(s)
+  - opt-in ~/.claude global
+  - cross-skill references
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -76,15 +67,34 @@ read-skills: |md
   style.stroke-width: 2
 }
 
-# --- Step 3: Read CLAUDE.md ---
+# --- Analyze as one system (LLM agent) ---
 
-read-claude: |md
-  **Read CLAUDE.md**
+analyze: |md
+  **Analyze as One System**
+  LLM agent
 
-  - ./CLAUDE.md
-  - ./.claude/CLAUDE.md
-  - ~/.claude (opt-in)
-  - extract rules
+  - compare every skill pair
+  - rules vs CLAUDE.md
+  - qualitative overlap
+  - not deterministic
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Classify findings ---
+
+filter-classify: |md
+  **Classify Findings**
+
+  - content overlap
+  - trigger overlap
+  - CLAUDE.md duplication
+  - type misclassification
+  - structural issues
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -92,88 +102,15 @@ read-claude: |md
   style.stroke-width: 2
 }
 
-# --- Step 4: Cross-Component Analysis (LLM) ---
+# --- Write report ---
 
-analysis: Cross-Component Analysis {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+report: |md
+  **Write Report**
 
-  content-overlap: |md
-    **Content Overlap**
-
-    - same domain
-    - duplicate rules
-    - dup word cost
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 3
-    style.double-border: true
-  }
-  trigger-overlap: |md
-    **Trigger Overlap**
-
-    - description fields
-    - same-task activation
-    - broad triggers
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 3
-    style.double-border: true
-  }
-  claude-dup: |md
-    **CLAUDE.md Dup**
-
-    - rule in CLAUDE.md
-    - skill contradicts
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 3
-    style.double-border: true
-  }
-  misclass: |md
-    **Type Misclass**
-
-    - skill vs hook
-    - skill vs command
-    - CLAUDE.md vs skill
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 3
-    style.double-border: true
-  }
-  structural: |md
-    **Structural Issues**
-
-    - missing description
-    - broad triggers
-    - shadow commands
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 3
-    style.double-border: true
-  }
-}
-
-# --- Step 5: Generate Report ---
-
-gen-report: |md
-  **Generate Report**
-
-  - path-safety check
-  - inventory + findings
-  - numbered suggestions
-  - Write tool
+  - harness-report.md
+  - findings + suggestions
+  - refuses paths outside root
+  - only the report is written
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -181,15 +118,15 @@ gen-report: |md
   style.stroke-width: 2
 }
 
-# --- Step 6: Present Summary ---
+# --- Present summary ---
 
 summary: |md
   **Present Summary**
 
-  - components found
-  - findings per category
+  - counts per category
   - top 3 suggestions
-  - next steps
+  - next: /eval-analyze
+  - next: /eval-run
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -197,35 +134,43 @@ summary: |md
   style.stroke-width: 2
 }
 
-# --- Output ---
+# --- Callout: harness inventory (primary intermediate) ---
 
-report-out: |md
-  **harness-report.md**
-
-  - Inventory table
-  - Findings sections
-  - Suggestions
+inventory-json: |md
+  harness inventory (--format yaml)
+  summary:  {skills, commands,
+             hooks, claude_md,
+             total_word_count}
+  skills:   [{name, path,
+              words, description}]
+  commands: [{name, path, words}]
+  claude_md:{path, words, lines}
+  hooks:    [{type, matcher,
+              command}]
+  warnings: [...]
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
-  style.stroke: "#999999"
+  style.stroke: "#bbbbbb"
   style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
-# --- Callout: report structure ---
+# --- Callout: primary output artifact ---
 
-report-callout: |md
+report-md: |md
+  harness-report.md
   # Harness Health Report
-  ## Inventory
-  - Skills: N (~X words)
-  - Commands / Hooks: N
-  ## Findings
-    Content Overlap
-    Trigger Overlap
-    CLAUDE.md Duplication
-    Type Misclassification
-    Structural Issues
-  ## Suggestions
+  ## Inventory (skills/cmds/hooks)
+  ### Skills by size (table)
+  ## Findings   (5 categories)
+    - Content Overlap
+    - Trigger Overlap
+    - CLAUDE.md Duplication
+    - Type Misclassification
+    - Structural Issues
+  ## Suggestions (numbered)
   ## Notes
 | {
   shape: rectangle
@@ -239,29 +184,29 @@ report-callout: |md
 # --- Flow ---
 
 entry -> inventory
-inventory -> inventory-script: "--root ." {
+inventory -> single: "inventory (skills,\ncmds, CLAUDE.md, hooks)"
+single -> read-config: "multiple skills"
+read-config -> analyze
+analyze -> filter-classify: "raw findings"
+filter-classify -> report: "5 categories"
+report -> summary: "harness-report.md"
+
+# --- Single-skill short-circuit (dashed) ---
+
+single -> report: "single skill\n(skip analysis)" {
   style.stroke-dash: 3
 }
-inventory -> single-check
 
-single-check -> summary: "yes, skip 2-5" {
-  style.stroke-dash: 3
-}
-single-check -> read-skills: "no"
+# --- Callout connectors ---
 
-read-skills -> read-claude
-read-claude -> analysis
-
-analysis -> gen-report: "findings"
-gen-report -> summary
-
-gen-report -> report-out
-gen-report -> report-callout: {
+inventory -> inventory-json: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
 }
 
-summary -> read-skills: "/eval-analyze\nnext steps" {
-  style.stroke-dash: 3
+report -> report-md: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

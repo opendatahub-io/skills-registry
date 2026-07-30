@@ -7,12 +7,13 @@ direction: right
 
 # --- Entry ---
 
-args: |md
+entry: |md
   **/eval-analyze**
 
   - --skill <name>
+  - --prompt <path>
   - --config <path>
-  - --update
+  - --update / --assess
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,30 +21,15 @@ args: |md
   style.stroke-width: 2
 }
 
-# --- Setup / discovery ---
+# --- Discover ---
 
-discover: |md
-  **Discover Layout**
+find-skills: |md
+  **Discover Target & Layout**
 
   - state.py init tmp/
-  - discover.py for configs
-  - root vs eval/ layout
-  - resolve config path
-  - set eval.md path
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-find-skill: |md
-  **Find Target Skill**
-
-  - find_skills.py
+  - discover.py (config path)
+  - find_skills.py --name
   - reads plugin.json paths
-  - falls back .claude/skills/
-  - auto-detect if single
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -51,15 +37,10 @@ find-skill: |md
   style.stroke-width: 2
 }
 
-# --- Freshness decision ---
+# --- Mode decision ---
 
-freshness: |md
-  **Freshness Check**
-
-  - config exists?
-  - validate_eval.py config
-  - validate_eval.py memory
-  - SKILL.md hash unchanged?
+mode-q: |md
+  **Analysis mode?**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -67,19 +48,16 @@ freshness: |md
   style.stroke-width: 2
 }
 
-# --- Deep analysis (LLM) ---
+# --- Skill mode: deep read (LLM) ---
 
-deep-read: |md
+explore: |md
   **Deep-Read Skill**
-  LLM agent (Explore)
+  _LLM sub-agent (Explore)_
 
-  - read analyze-skill.md
-  - read SKILL.md fully
   - follow sub-skill chains
-    (recursive, max 5 levels)
-  - read scripts/, prompts/
-  - return purpose, I/O,
-    pipeline, judges
+  - read scripts + sample cases
+  - observe, don't assume
+  - infer purpose, I/O, judges
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -88,14 +66,14 @@ deep-read: |md
   style.double-border: true
 }
 
-explore-dataset: |md
-  **Explore Dataset**
+# --- Prompt mode: resolve recipe ---
 
-  - Glob cases/, fixtures/,
-    eval/, tests/data/
-  - read one full sample case
-  - note field names, formats
-  - input vs reference files
+resolve-prompt: |md
+  **Resolve Prompt**
+
+  - resolve_prompt.py
+  - load analysis recipe
+  - custom eval criteria
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -103,19 +81,16 @@ explore-dataset: |md
   style.stroke-width: 2
 }
 
-# --- Generation (LLM) ---
+# --- Generate config (LLM) ---
 
 gen-yaml: |md
   **Generate eval.yaml**
-  LLM synthesis
+  _LLM synthesis_
 
-  - execution mode + args
-  - dataset.schema (observed)
-  - output schemas
-  - 1-2 builtin judges
-  - 2-3 inline checks
-  - 1-2 LLM judges
-  - models, thresholds
+  - eval-yaml-template.md
+  - execution mode + schema
+  - outputs, judges, models
+  - thresholds, permissions
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -124,26 +99,14 @@ gen-yaml: |md
   style.double-border: true
 }
 
-builtins: |md
-  **Builtin Judges**
-
-  - list_builtins.py
-  - reusable check + LLM
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
+# --- Validate ---
 
 validate: |md
   **Validate Config**
 
   - validate_eval.py config
-  - dataset path exists
-  - paths relative
-  - judge refs resolve
+  - paths resolve + relative
+  - judge / module refs
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -151,13 +114,26 @@ validate: |md
   style.stroke-width: 2
 }
 
-gen-md: |md
-  **Generate eval.md**
+# --- Valid decision ---
 
-  - generate-eval-md.md
-  - SKILL.md hash (SHA256)
-  - cache skill analysis
-  - YAML frontmatter
+valid-q: |md
+  **Valid?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Cache analysis ---
+
+eval-md: |md
+  **Cache eval.md**
+
+  - skill_hash (sha256)
+  - analyzed_at + narrative
+  - staleness check
+  - next: /eval-dataset, /eval-run
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -165,63 +141,20 @@ gen-md: |md
   style.stroke-width: 2
 }
 
-# --- Output ---
+# --- Callout: primary output artifact ---
 
-report-out: |md
-  **Report (Outputs)**
-
-  - eval.yaml created
-  - eval.md cached
-  - N judges, M cases
-  - next: /eval-dataset
-    or /eval-run
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Callouts ---
-
-layout-tree: |md
-  project/
-  eval.yaml          # root layout
-  eval/
-    <skill-a>/
-      eval.yaml
-      eval.md
-      cases/
-        case-001/
-          input.yaml
-          reference.md
-          annotations.yaml
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
-}
-
-eval-yaml-schema: |md
+eval-yaml-callout: |md
   eval.yaml
-    skill: <name>
-    execution:
-      mode: case|batch
-      arguments: "{field}"
-    runner: {type: claude-code}
-    models: {skill, judge, hook}
-    dataset: {path, schema}
-    inputs: {tools: [match,prompt]}
-    outputs: [{path, schema}]
-    judges:
-      builtin: cost_budget
-      check: <python>
-      prompt: <LLM rubric>
-    thresholds:
-      {judge: {min_pass_rate}}
+  name / description
+  execution: {mode: case|batch,
+    skill, arguments}
+  runner: {type: claude-code, effort}
+  models: {skill, judge}
+  permissions: {allow: [],
+    deny: [mcp__*]}
+  dataset: {path, schema}
+  outputs: [{path, schema}]
+  mlflow: {experiment}
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -233,36 +166,25 @@ eval-yaml-schema: |md
 
 # --- Flow ---
 
-args -> discover
-discover -> find-skill
-find-skill -> freshness
+entry -> find-skills
+find-skills -> mode-q
 
-freshness -> report-out: "FRESH + COMPLETE" {
+mode-q -> explore: "--skill"
+mode-q -> resolve-prompt: "--prompt"
+resolve-prompt -> explore: "prompt content"
+
+explore -> gen-yaml
+gen-yaml -> validate: "eval.yaml"
+validate -> valid-q
+
+valid-q -> eval-md: "valid"
+valid-q -> gen-yaml: "errors -> fix" {
   style.stroke-dash: 3
 }
-freshness -> deep-read: "STALE / NO_CONFIG / --update"
 
-deep-read -> explore-dataset
-explore-dataset -> gen-yaml
-builtins -> gen-yaml: "builtin: refs" {
-  style.stroke-dash: 3
-}
+# --- Callout connector ---
 
-gen-yaml -> validate
-validate -> gen-yaml: errors {
-  style.stroke-dash: 3
-}
-validate -> gen-md: ok
-gen-md -> report-out
-
-# --- Callout connectors ---
-
-discover -> layout-tree: {
-  style.stroke: "#bbbbbb"
-  style.stroke-dash: 4
-  style.stroke-width: 1
-}
-gen-yaml -> eval-yaml-schema: {
+gen-yaml -> eval-yaml-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

@@ -2,88 +2,84 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="eval-setup" value="&lt;b&gt;/eval-setup&lt;/b&gt;&lt;br&gt;&lt;br&gt;configure MLflow, verify deps + API keys (optional, one-time)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="270" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-setup" value="&lt;b&gt;/eval-setup&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;br&gt;&lt;br&gt;env + credentials&lt;br&gt;MLflow config&lt;br&gt;verify harness deps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="272" width="165" height="116" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-analyze" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;read skill, generate eval.yaml + eval.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;double=1;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="320" y="270" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-analyze" value="&lt;b&gt;/eval-analyze&lt;/b&gt;&lt;br&gt;&lt;br&gt;deep-read target skill&lt;br&gt;infer I/O + judges&lt;br&gt;emit eval.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="255" y="262" width="190" height="136" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-dataset" value="&lt;b&gt;/eval-dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;generate test cases matching the schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;double=1;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="600" y="270" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-dataset" value="&lt;b&gt;/eval-dataset&lt;/b&gt;&lt;br&gt;&lt;br&gt;generate test cases&lt;br&gt;inputs + expectations&lt;br&gt;cover edge cases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="505" y="270" width="175" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-run" value="&lt;b&gt;/eval-run&lt;/b&gt;&lt;br&gt;&lt;br&gt;execute cases, score judges, report results (central hub)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;double=1;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="880" y="270" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-run" value="&lt;b&gt;/eval-run&lt;/b&gt;&lt;br&gt;&lt;i&gt;central hub&lt;/i&gt;&lt;br&gt;&lt;br&gt;headless execution&lt;br&gt;score with LLM judges&lt;br&gt;HTML report&lt;br&gt;+ summary.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="740" y="230" width="195" height="200" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-review" value="&lt;b&gt;/eval-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;human-in-the-loop review, propose SKILL.md edits" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;double=1;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1190" y="170" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-optimize" value="&lt;b&gt;/eval-optimize&lt;/b&gt;&lt;br&gt;&lt;br&gt;automated fix loop&lt;br&gt;edit skill + re-run&lt;br&gt;until judges pass" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1010" y="70" width="185" height="125" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-optimize" value="&lt;b&gt;/eval-optimize&lt;/b&gt;&lt;br&gt;&lt;br&gt;automated fix loop, re-run until judges pass" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;double=1;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1190" y="370" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-review" value="&lt;b&gt;/eval-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;human-in-the-loop&lt;br&gt;walk per-case results&lt;br&gt;collect feedback.yaml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1010" y="230" width="185" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-check" value="&lt;b&gt;/eval-check&lt;/b&gt;&lt;br&gt;&lt;br&gt;harness health check: overlap, redundancy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="880" y="60" width="210" height="90" as="geometry"/>
+    <mxCell id="eval-mlflow" value="&lt;b&gt;/eval-mlflow&lt;/b&gt;&lt;br&gt;&lt;br&gt;sync dataset&lt;br&gt;log results + traces&lt;br&gt;push / pull feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1010" y="395" width="185" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="eval-mlflow" value="&lt;b&gt;/eval-mlflow&lt;/b&gt;&lt;br&gt;&lt;br&gt;sync datasets, log runs, push/pull trace feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;spacingTop=8;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="880" y="560" width="210" height="100" as="geometry"/>
+    <mxCell id="eval-compare" value="&lt;b&gt;/eval-compare&lt;/b&gt;&lt;br&gt;&lt;br&gt;diff multiple runs&lt;br&gt;tabbed HTML comparison&lt;br&gt;regressions vs baseline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="784.75" y="580.0" width="185" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="e-setup-analyze" value="environment ready" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-setup" target="eval-analyze" parent="1">
+    <mxCell id="eval-anova" value="&lt;b&gt;/eval-anova&lt;/b&gt;&lt;br&gt;&lt;br&gt;DoE factor matrix&lt;br&gt;fan out /eval-run&lt;br&gt;ANOVA effects" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="580" width="185" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-check" value="&lt;b&gt;/eval-check&lt;/b&gt;&lt;br&gt;&lt;i&gt;standalone&lt;/i&gt;&lt;br&gt;&lt;br&gt;full-harness health check&lt;br&gt;deps, MLflow, perms&lt;br&gt;diagnostic report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="580" width="185" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="eval-yaml" value="eval.yaml&lt;br&gt;name / description&lt;br&gt;execution: {mode: case|batch,&lt;br&gt;&#160;&#160;skill, arguments}&lt;br&gt;runner: {type: claude-code, effort}&lt;br&gt;models: {skill, judge}&lt;br&gt;permissions: {allow, deny}&lt;br&gt;dataset: {path, schema}&lt;br&gt;outputs: [{path, schema}]&lt;br&gt;mlflow: {experiment, tracking_uri}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="250" y="30" width="265" height="185" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_setup_analyze" value="optional" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-setup" target="eval-analyze" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-analyze-dataset" value="eval.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-analyze" target="eval-dataset" parent="1">
+    <mxCell id="e_analyze_dataset" value="eval.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-analyze" target="eval-dataset" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-dataset-run" value="test cases" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-dataset" target="eval-run" parent="1">
+    <mxCell id="e_dataset_run" value="test cases" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-dataset" target="eval-run" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-run-review" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-review" parent="1">
+    <mxCell id="e_run_optimize" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-optimize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_run_review" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_run_mlflow" value="log results + traces" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.9125;exitDx=0;exitDy=0;entryX=0;entryY=0.125;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-mlflow" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_run_compare" value="runs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.6147435897435898;exitY=1;exitDx=0;exitDy=0;entryX=0.4060810810810811;entryY=0;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-compare" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_optimize_run" value="re-run until judges pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="eval-optimize" target="eval-run" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1140" y="300"/>
-          <mxPoint x="1140" y="220"/>
+          <mxPoint x="837.5" y="132.5"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-run-optimize" value="summary.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-optimize" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1140" y="340"/>
-          <mxPoint x="1140" y="420"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e-optimize-run" value="re-run, SKILL.md edits" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;" edge="1" source="eval-optimize" target="eval-run" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1295" y="510"/>
-          <mxPoint x="1027" y="510"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e-run-check" value="harness health" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-check" parent="1">
+    <mxCell id="e_anova_run" value="fan out /eval-run" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.308;entryY=1;entryDx=0;entryDy=0;" edge="1" source="eval-anova" target="eval-run" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-dataset-mlflow" value="sync dataset" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-dataset" target="eval-mlflow" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="705.0" y="610.0"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e-run-mlflow" value="log results" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="eval-run" target="eval-mlflow" parent="1">
+    <mxCell id="e_anova_compare" value="anova.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4482758620689655;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-anova" target="eval-compare" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-review-mlflow" value="push/pull feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eval-review" target="eval-mlflow" parent="1">
+    <mxCell id="e_analyze_yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.37735849056603776;entryY=1;entryDx=0;entryDy=0;" edge="1" source="eval-analyze" target="eval-yaml" parent="1">
       <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1470" y="220"/>
-          <mxPoint x="1470" y="610"/>
-          <mxPoint x="1090" y="610"/>
-        </Array>
       </mxGeometry>
     </mxCell>
   </root>
