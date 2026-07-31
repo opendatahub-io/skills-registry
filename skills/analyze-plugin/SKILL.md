@@ -249,7 +249,7 @@ agents that call `/skill-diagram` as a nested Skill tend to shortcut.
 For each skill AND the pipeline overview, spawn ONE `general-purpose` sub-agent that
 reads the recipe and follows it, passing the inputs the recipe expects:
 
-```
+```text
 Agent({
   subagent_type: "general-purpose",
   run_in_background: false,   // barrier: put all calls of a batch in ONE message
@@ -276,12 +276,17 @@ Agents produce only `<name>.d2` + `<name>.drawio` (no SVG). **You (main thread) 
 export SVGs sequentially** — do NOT let agents export (draw.io desktop contention):
 
 ```bash
+# Verify + recover FIRST (Detail-Floor check and transient-failure recovery below);
+# export only diagrams whose .drawio exists and passed — a missing input would
+# otherwise abort the loop mid-way.
 for name in pipeline <skill-1> <skill-2> ...; do
+  drawio=site/docs/plugins/<plugin-name>/$name.drawio
+  [ -f "$drawio" ] || { echo "SKIP $name — no .drawio yet, recover it first"; continue; }
   python3 <DIAGRAM_SKILLS>/skills/diagram-layout/scripts/export_diagram.py \
-    site/docs/plugins/<plugin-name>/$name.drawio site/docs/plugins/<plugin-name>/$name.svg
+    "$drawio" site/docs/plugins/<plugin-name>/$name.svg
 done
-find site/docs/plugins/<plugin-name> -name '*.drawio.bkp' -delete
-find . -maxdepth 2 -name '.*.drawio.bkp' -delete
+# Clean draw.io backup side-effects, scoped to the plugin output dir (never repo-wide):
+find site/docs/plugins/<plugin-name> \( -name '*.drawio.bkp' -o -name '.*.drawio.bkp' \) -delete
 ```
 
 **Verify every diagram clears the Detail Floor:** `<mxCell` count > 2, `value=""` == 0,

@@ -18,6 +18,9 @@ Your task is NOT complete until `<OUT_DIR>/<name>.drawio` exists, contains MORE 
 grounding the skill's primary output artifact, data-flow labels on artifact-passing
 edges, composite subsystems kept as containers, and ~10–16 boxes for a rich skill.
 A lean, callout-free outline is a FAILURE, not a done diagram. Do not stop early.
+(The one exception is the whole-plugin `pipeline` overview: its callout floor is
+relaxed — a callout is encouraged but not required — since it maps skills to each
+other rather than one skill's internals. Every per-skill diagram still requires it.)
 
 ## Inputs (the orchestrator provides these in your task prompt)
 
@@ -67,7 +70,7 @@ Use absolute paths everywhere. `cd` is allowed but not required.
    - **Keep composite subsystems as containers** (nested if a member is multi-step);
      do NOT flatten a multi-variant step (e.g. a scoring system) into one node.
 4. Parse + analyze:
-   ```
+   ```bash
    python3 <scripts>/parse_input.py <OUT_DIR>/<name>.d2 > <SCRATCH>/graph-spec.json
    python3 <scripts>/graph_analysis.py <SCRATCH>/graph-spec.json > <SCRATCH>/graph-spec.json.tmp && mv <SCRATCH>/graph-spec.json.tmp <SCRATCH>/graph-spec.json
    ```
@@ -81,14 +84,18 @@ Use absolute paths everywhere. `cd` is allowed but not required.
 5. Author the layout plan by hand into `<SCRATCH>/layout-plan.json` following the
    schema and style rules below (grid → pixel coords → edges).
 6. Fix + validate loop (up to 5 rounds), from the scripts dir:
-   ```
+   ```bash
    python3 <scripts>/fix_layout.py <SCRATCH>/layout-plan.json --spec <SCRATCH>/graph-spec.json
    python3 <scripts>/validate_layout.py <SCRATCH>/layout-plan.json
    ```
    Fix reported errors/warnings (edge-through-node, crossings, near-misses,
    avoidable bends, overflow) until it reports **0 errors and 0 warnings**.
-7. Render (do NOT export an image):
-   ```
+   If any errors or warnings REMAIN after 5 rounds, do NOT proceed to render — an
+   invalid layout must never be written to `.drawio`. Report the failure and stop
+   so the orchestrator can recover the diagram.
+7. Render — ONLY after `validate_layout.py` reported exactly 0 errors AND 0 warnings
+   (do NOT export an image):
+   ```bash
    python3 <scripts>/render_drawio.py <SCRATCH>/layout-plan.json <OUT_DIR>/<name>.drawio
    ```
 8. Verify STRUCTURE: `grep -c '<mxCell' <OUT_DIR>/<name>.drawio` must be > 2, and
@@ -96,11 +103,14 @@ Use absolute paths everywhere. `cd` is allowed but not required.
    `label` vs `label_html` bug — fix and re-render).
    Verify DETAIL (the Detail Floor — do not skip): run
    `python3 <DIAGRAM_SKILLS>/skills/skill-diagram/scripts/validate_d2.py <OUT_DIR>/<name>.d2`
-   and clear its `detail_warnings` (ignore the `valid` compile field — this pipeline
-   renders via render_drawio, and `<placeholder>` tokens in callouts false-fail the
-   d2 compile). Confirm in the `.drawio`: at least one monospace callout box
-   (`grep -c 'JetBrains Mono' <OUT_DIR>/<name>.drawio` ≥ 1) and, for diagrams with
-   ≥8 edges, at least one data-flow edge label naming an artifact (e.g. `*.yaml`).
+   and clear its `detail_warnings`. Write placeholders as `{curly}` tokens, NOT
+   `<angle>` tokens — draw.io strips `<...>` as unknown HTML tags, and they also
+   false-fail the d2 compile. With `{curly}` placeholders the d2 should compile, so
+   treat a non-`valid` compile result as a REAL error to fix (escape/replace the
+   offending token), not something to ignore. Confirm in the `.drawio`: at least one
+   monospace callout box (`grep -c 'JetBrains Mono' <OUT_DIR>/<name>.drawio` ≥ 1)
+   and a data-flow label on EVERY edge that carries a named artifact between steps
+   (not only when the diagram has ≥8 edges).
    If a callout is missing, add it (from the real script structure) and re-render.
    Then report a ONE-LINE status:
    `<name>: OK — N mxCells, M callouts, double1=K, topology=<t>` (or the error).

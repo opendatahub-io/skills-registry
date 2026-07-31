@@ -124,7 +124,7 @@ skills:
         type: "<path>"
         required: false
         default: "none"
-        description: "Path to a custom analysis prompt for prompt-based (non-skill) evals — tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill."
+        description: "Path to a custom analysis prompt for prompt-based (non-skill) evals -- tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill."
       - name: "--config"
         type: "<path>"
         required: false

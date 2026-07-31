@@ -55,12 +55,12 @@ actually read. Auto-invoked by /eval-run when eval.yaml is missing.
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--verifier_backed">verifier_backed</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/validate_eval.py" title="opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/scripts/validate_eval.py">validate_eval.py @ 1559af5<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/validate_eval.py" title="opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/scripts/validate_eval.py">validate_eval.py @ 1559af5<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">evidence_completeness</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/references/eval-yaml-template.md" title="opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/references/eval-yaml-template.md">eval-yaml-template.md @ 1559af5<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/references/eval-yaml-template.md" title="opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/references/eval-yaml-template.md">eval-yaml-template.md @ 1559af5<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -89,17 +89,17 @@ actually read. Auto-invoked by /eval-run when eval.yaml is missing.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/prompts/analyze-skill.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/prompts/analyze-skill.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/references/eval-yaml-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/references/eval-yaml-template.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/validate_eval.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/scripts/validate_eval.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/find_skills.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/scripts/find_skills.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/assess_skills.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/scripts/assess_skills.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/prompts/generate-eval-md.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-analyze/prompts/generate-eval-md.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/prompts/analyze-skill.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/prompts/analyze-skill.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/references/eval-yaml-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/references/eval-yaml-template.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/validate_eval.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/scripts/validate_eval.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/find_skills.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/scripts/find_skills.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/scripts/assess_skills.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/scripts/assess_skills.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-analyze/prompts/generate-eval-md.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-analyze/prompts/generate-eval-md.md</code></a></li>
       </ul>
     </div>
   </section>
@@ -120,7 +120,7 @@ actually read. Auto-invoked by /eval-run when eval.yaml is missing.
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `--skill` |  | `auto-detect` | Which skill to analyze. If omitted, lists all project skills (excluding eval harness skills) and picks automatically if only one is found. |
-| `--prompt` |  | `none` | Path to a custom analysis prompt for prompt-based (non-skill) evals — tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill. |
+| `--prompt` |  | `none` | Path to a custom analysis prompt for prompt-based (non-skill) evals -- tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill. |
 | `--config` |  | `auto-discover` | Output path for the eval config file. If omitted, discovers existing layout and scaffolds at the project root or eval/<skill-name>/eval.yaml. |
 | `--update` |  | `false` | Fill in missing sections only, preserving user edits. Useful for upgrading older configs (e.g., adding a models block, migrating check signatures). |
 | `--assess` |  | `false` | Assess all project skills and recommend which ones need evals, instead of generating a config for one skill (skips config discovery; --skill is ignored in this mode). |

@@ -50,17 +50,17 @@ what-if analysis, and near-miss identification).
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">evidence_completeness</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">output_quality</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md" title="opendatahub-io/assess-rfe@a7674fef9a0de4107e3416f05aba2d0b8c019025:skills/assess-rfe/scripts/agent_prompt.md">agent_prompt.md @ a7674fe<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -86,12 +86,12 @@ what-if analysis, and near-miss identification).
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/assess-rfe/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/scripts/agent_prompt.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/assess-rfe/scripts/agent_prompt.md</code></a></li>
       </ul>
     </div>
   </section>

@@ -88,15 +88,15 @@ per-group report.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-rca/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/pipeline-rca/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/finding.schema.json"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-rca/references/finding.schema.json</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/error-overview-section-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-rca/references/error-overview-section-template.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/rca-section-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-rca/references/rca-section-template.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/resolution-section-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/pipeline-rca/references/resolution-section-template.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/finding.schema.json"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/pipeline-rca/references/finding.schema.json</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/error-overview-section-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/pipeline-rca/references/error-overview-section-template.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/rca-section-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/pipeline-rca/references/rca-section-template.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/pipeline-skills/blob/main/skills/pipeline-rca/references/resolution-section-template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/pipeline-rca/references/resolution-section-template.md</code></a></li>
       </ul>
     </div>
   </section>

@@ -76,12 +76,12 @@ understand how RFEs are evaluated.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/export-rubric/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/export-rubric/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/export-rubric/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/export-rubric/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/export-rubric/scripts/export_rubric.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/export-rubric/scripts/export_rubric.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/export-rubric/scripts/export_rubric.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/export-rubric/scripts/export_rubric.py</code></a></li>
       </ul>
     </div>
   </section>

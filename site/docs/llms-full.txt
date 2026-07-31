@@ -1959,7 +1959,7 @@ actually read. Auto-invoked by /eval-run when eval.yaml is missing.
 | Argument | Required | Description |
 |----------|----------|-------------|
 | `--skill` |  | Which skill to analyze. If omitted, lists all project skills (excluding eval harness skills) and picks automatically if only one is found. |
-| `--prompt` |  | Path to a custom analysis prompt for prompt-based (non-skill) evals — tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill. |
+| `--prompt` |  | Path to a custom analysis prompt for prompt-based (non-skill) evals -- tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill. |
 | `--config` |  | Output path for the eval config file. If omitted, discovers existing layout and scaffolds at the project root or eval/<skill-name>/eval.yaml. |
 | `--update` |  | Fill in missing sections only, preserving user edits. Useful for upgrading older configs (e.g., adding a models block, migrating check signatures). |
 | `--assess` |  | Assess all project skills and recommend which ones need evals, instead of generating a config for one skill (skips config discovery; --skill is ignored in this mode). |

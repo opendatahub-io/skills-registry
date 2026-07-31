@@ -41,17 +41,17 @@ Assess strategies against quality criteria using a structured rubric
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md" title="opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md">SKILL.md @ ae44984<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md" title="opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md">SKILL.md @ ae44984<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">evidence_completeness</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md" title="opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md">SKILL.md @ ae44984<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md" title="opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md">SKILL.md @ ae44984<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">output_quality</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md" title="opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md">SKILL.md @ ae44984<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>
+        <a class="skill-contract__ref" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md" title="opendatahub-io/assess-strat@ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b:skills/assess-strat/SKILL.md">SKILL.md @ ae44984<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -77,7 +77,7 @@ Assess strategies against quality criteria using a structured rubric
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-strat/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/assess-strat/SKILL.md</code></a></div>
     </div>
   </section>
 </div>

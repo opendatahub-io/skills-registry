@@ -578,7 +578,7 @@ def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
                 if url:
                     lines.append(
                         f'        <a class="skill-contract__ref" href="{_esc(url)}" title="{title_attr}">'
-                        f'{_esc(label)}<span class="skill-contract__ref-arrow" aria-hidden="true">→</span></a>'
+                        f'{_esc(label)}<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>'
                     )
                 else:
                     lines.append(
@@ -681,8 +681,10 @@ def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
                 for _k in ("verifier_ref", "rubric_ref"):
                     _r = _m.get(_k)
                     if isinstance(_r, str) and "@" in _r and ":" in _r:
-                        _sha = _r.split("@", 1)[1].split(":", 1)[0].strip()
-                        if _sha:
+                        _sha = _r.split("@", 1)[1].split(":", 1)[0].strip().lower()
+                        # Only pin to a full 40-char hex commit SHA; a tag/branch
+                        # (e.g. main) after @ is still mutable, not a real pin.
+                        if len(_sha) == 40 and all(c in "0123456789abcdef" for c in _sha):
                             blob_ref = _sha
                             break
                 if blob_ref != ref_name:
@@ -694,7 +696,7 @@ def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
                     href = f"{_esc(base_url)}/blob/{_esc(blob_ref)}/{path_esc}"
                     return (
                         f'<a class="skill-contract__path" href="{href}">'
-                        '<span class="skill-contract__ref-arrow" aria-hidden="true">↗</span>'
+                        '<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span>'
                         f'<code>{path_esc}</code></a>'
                     )
                 return f'<code class="skill-contract__mono">{path_esc}</code>'

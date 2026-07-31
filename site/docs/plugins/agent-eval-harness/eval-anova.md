@@ -89,17 +89,17 @@ produced elsewhere (e.g. a CI fan-out) without re-executing.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/orchestrate.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/scripts/orchestrate.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/analyze.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/scripts/analyze.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/report.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/scripts/report.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/design.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/scripts/design.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/references/matrix-schema.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/references/matrix-schema.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/prompts/interpret-anova.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-anova/prompts/interpret-anova.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/orchestrate.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/scripts/orchestrate.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/analyze.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/scripts/analyze.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/report.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/scripts/report.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/scripts/design.py"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/scripts/design.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/references/matrix-schema.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/references/matrix-schema.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-anova/prompts/interpret-anova.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/eval-anova/prompts/interpret-anova.md</code></a></li>
       </ul>
     </div>
   </section>
