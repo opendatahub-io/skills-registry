@@ -174,67 +174,134 @@ skills:
 The description should be richer than the one-line registry description — it should
 explain what the plugin does, why, and how. Keep it concise but informative (2-4 paragraphs).
 
-### 5. Generate pipeline diagram
+### 5. Set up diagram generation
+
+**Skip Steps 5-6 if `--no-diagrams` is set.**
+
+Diagrams are authored by parallel sub-agents that each follow the durable recipe at
+`references/diagram-agent-instructions.md` (next to this SKILL.md). Set up once:
+
+1. **Locate diagram-skills.** Find the local `diagram-skills` checkout (the
+   `skill-diagram` + `diagram-layout` skills live there; commonly
+   `~/Development/diagram-skills`). Call its path `<DIAGRAM_SKILLS>`. Sub-agents read
+   its scripts/prompts, so it must be in `permissions.additionalDirectories`.
+2. **Grant sub-agent permissions.** Sub-agents CANNOT get interactive approval — any
+   tool call not on the allow-list is auto-denied and the agent hangs. Ensure
+   `.claude/settings.local.json` allows `Write(.tmp/diagram-work/**)`,
+   `Write(site/docs/plugins/**)`, `Read(.tmp/**)`, the Bash forms
+   (`mkdir`/`mv`/`rm`/`cd`), and `additionalDirectories: [<DIAGRAM_SKILLS>]`. Adding
+   permission rules needs explicit user consent (the self-modification guard blocks
+   silent widening) — ask first. Then run ONE cheap smoke-test agent (Write to
+   `.tmp/diagram-work/` and `site/docs/plugins/`, `python3 --version`) to confirm the
+   perms are live before the expensive batch.
+3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
+   `site/docs/plugins/<plugin-name>/` to `.tmp/diagram-backup/<plugin-name>/`, then
+   delete them from the output dir (so no agent mistakes stale output for "done").
+   Clear stale scratch, including the SHARED `.tmp/diagram-work/pipeline/` dir — its
+   name collides across plugins, and a stale `layout-plan.json` there will render the
+   WRONG plugin's pipeline.
+4. **Derive per-skill flows.** From the SKILL.md files read in Step 3 (and a skim of
+   each skill's `scripts/`), write a brief node/edge **suggested flow** per skill and
+   for the pipeline: ordered nodes with roles pre-assigned (entry / processing /
+   decision / llm / external / output / callout), the expected llm-node count, the
+   **primary output artifact to call out**, and any per-skill reserved-id traps.
+   These outlines are the main quality lever — derive them yourself so agents refine
+   rather than re-derive, and so callouts land on the right artifact.
+
+### 6. Generate the diagrams (parallel agents), export, verify
 
 **Skip this step if `--no-diagrams` is set.**
 
-Invoke `/skill-diagram` to create a pipeline diagram showing all skills in the plugin.
-The `--layout` flag chains to `/diagram-layout` automatically — do not invoke diagram-layout
-separately.
+#### Detail requirements (non-negotiable — this is where diagrams silently regress)
 
-```
-/skill-diagram --skill <path1> --skill <path2> ... --detail low --layout --output site/docs/plugins/<plugin-name>/pipeline
-```
+Every individual skill diagram MUST clear skill-diagram's **Detail Floor**
+(see `skill-diagram/prompts/analysis-guide.md` — read it, not just `d2-conventions.md`,
+which is only the *style* guide). The floor:
 
-This produces a D2 file and a `.drawio` with SVG export. Rename the exported SVG if needed:
+- **≥1 callout detail box** per non-trivial skill — above all the skill's **primary
+  output artifact's structure** (its schema/fields), plus any central file tree or
+  config snippet. Read the actual script that writes it (e.g. `workspace.py`, the
+  config template) to get the *real* structure — do not approximate.
+- **Data-flow edge labels**: name the artifact that flows between steps
+  (`summary.yaml`, `collection.json`) on the edges, not just conditions.
+- **Containers for composite subsystems** (e.g. a scoring system's judge types),
+  nested where a member is itself multi-step — never flatten into one node.
+- **Decision branches and back-edges** preserved (mode branches, retry loops,
+  cache/fast-path short-circuits).
+- **~10-16 boxes** for a rich skill with 2-5 concrete bullets each (real
+  script/flag/file names). A lean 5-9-node outline is the regression signature.
+
+This means each diagram agent must **read the skill's `scripts/` and `references/`**
+(not only its SKILL.md) to source callout content — SKILL.md gives the flow, the
+scripts give the concrete artifacts. Author the `.d2` accordingly, then verify:
 
 ```bash
-# If exported as pipeline.drawio.svg, rename to pipeline.svg
-mv site/docs/plugins/<plugin-name>/pipeline.drawio.svg site/docs/plugins/<plugin-name>/pipeline.svg 2>/dev/null || true
+python3 <diagram-skills>/skills/skill-diagram/scripts/validate_d2.py <output>.d2
 ```
 
-### 6. Generate individual skill diagrams
+and clear the `detail_warnings` (missing callout / no data-flow labels / too few
+nodes) before accepting the diagram.
 
-**Skip this step if `--no-diagrams` is set.**
+The reliable path is to have each agent **author its `.d2` directly following the
+recipe** (`references/diagram-agent-instructions.md`), then run the layout pipeline —
+agents that call `/skill-diagram` as a nested Skill tend to shortcut.
 
-For each skill, invoke `/skill-diagram` to create a detailed architecture diagram.
-Use sub-agents with `run_in_background: true` to generate diagrams **in parallel** —
-sequential execution is too slow for plugins with many skills.
+For each skill AND the pipeline overview, spawn ONE `general-purpose` sub-agent that
+reads the recipe and follows it, passing the inputs the recipe expects:
 
 ```
 Agent({
+  subagent_type: "general-purpose",
+  run_in_background: false,   // barrier: put all calls of a batch in ONE message
   description: "diagram <skill-name>",
-  prompt: "/skill-diagram --skill .tmp/skill-repos/<plugin-name>/<skills_dir>/<dir-name> --output site/docs/plugins/<plugin-name>/<skill-name> --layout",
-  run_in_background: true
+  prompt: `Read <abs>/.claude/skills/analyze-plugin/references/diagram-agent-instructions.md and follow it EXACTLY.
+    name: <skill-name>
+    OUT_DIR: <abs>/site/docs/plugins/<plugin-name>
+    SCRATCH: <abs>/.tmp/diagram-work/<skill-name>/artifacts
+    SKILL_MD: <abs>/.tmp/skill-repos/<plugin-name>/<skills_dir>/<dir-name>/SKILL.md
+    DIAGRAM_SKILLS: <DIAGRAM_SKILLS>
+    Suggested flow: <the per-skill outline from Step 5.4 — roles + llm count>
+    Callout target: <the skill's primary output artifact to ground a callout>
+    Reserved-id traps: <per-skill, e.g. mlflow: push->push-fb; check: filter->filter-classify>`
 })
 ```
 
-Use `<dir-name>` from the name mapping in Step 3 (the actual directory name in the repo).
-Use `<skill-name>` from the registry for the output path (so site files match registry names).
+Use `<dir-name>` from the Step 3 name mapping; `<skill-name>` from the registry for
+output paths (so site files match registry names). Launch in **barrier batches of ~6**
+(all Agent calls in a single message, then wait for the batch). For the pipeline, pass
+`name: pipeline` and a whole-plugin flow (one node per skill, fan-out + feedback
+edges); the per-skill callout floor is relaxed for that overview.
 
-Launch all skill diagram agents at once (or in batches of 6-8 if there are many).
-Wait for all to complete before proceeding.
-
-After all agents complete, rename any `.drawio.svg` files to `.svg`:
-
-```bash
-find site/docs/plugins/<plugin-name> -name "*.drawio.svg" -exec sh -c 'mv "$1" "${1%.drawio.svg}.svg"' _ {} \;
-```
-
-Also clean up any stray files:
+Agents produce only `<name>.d2` + `<name>.drawio` (no SVG). **You (main thread) then
+export SVGs sequentially** — do NOT let agents export (draw.io desktop contention):
 
 ```bash
-find site/docs/plugins/<plugin-name> -name "*.drawio.png" -delete
-find site/docs/plugins/<plugin-name> -name "layout-plan.json" -delete
+for name in pipeline <skill-1> <skill-2> ...; do
+  python3 <DIAGRAM_SKILLS>/skills/diagram-layout/scripts/export_diagram.py \
+    site/docs/plugins/<plugin-name>/$name.drawio site/docs/plugins/<plugin-name>/$name.svg
+done
+find site/docs/plugins/<plugin-name> -name '*.drawio.bkp' -delete
+find . -maxdepth 2 -name '.*.drawio.bkp' -delete
 ```
 
-Skip diagram generation for placeholder skills with no real workflow (e.g., "not yet implemented").
+**Verify every diagram clears the Detail Floor:** `<mxCell` count > 2, `value=""` == 0,
+≥1 callout (`grep -c 'JetBrains Mono' <name>.drawio` ≥ 1), `double=1` count == the
+designed llm-node count and == the `strokeWidth=3` count (no thick-vs-double drift),
+and SVG size in a healthy range (~150k–1.3M). Re-author or fix any diagram that misses
+the floor — an under-detailed diagram is not done.
 
-#### Draw.io reserved cell IDs
+**Recovery for transient failures.** At this fan-out, agents occasionally die on
+`Stream idle timeout` / `Connection closed mid-response` (not a task problem). If an
+agent wrote a fresh `layout-plan.json`, finish it in the main thread
+(`fix_layout.py → validate_layout.py → render_drawio.py`); if it wrote nothing,
+relaunch it. If the skill's SKILL.md is unchanged vs the backed-up baseline and that
+backup already clears the Detail Floor, restore the backup `.d2`/`.drawio` and just
+re-export its SVG.
 
-The draw.io CLI silently fails to export when certain cell IDs are used. Known reserved IDs:
-`filter`, `push`, `output`. If diagram export fails with no error message, check for these
-IDs in the drawio XML and rename them (e.g., `filter` → `filter-classify`).
+Skip diagram generation for placeholder skills with no real workflow (e.g., "not yet
+implemented"). Reserved-id note: draw.io export fails (silently or hard) on cell ids
+`filter`, `push`, `output`, `find` — the recipe handles renaming; surface any per-skill
+occurrence in the agent's task prompt.
 
 ### 7. Regenerate site pages
 
