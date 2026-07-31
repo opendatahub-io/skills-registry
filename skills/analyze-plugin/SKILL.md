@@ -181,19 +181,44 @@ explain what the plugin does, why, and how. Keep it concise but informative (2-4
 Diagrams are authored by parallel sub-agents that each follow the durable recipe at
 `references/diagram-agent-instructions.md` (next to this SKILL.md). Set up once:
 
-1. **Locate diagram-skills.** Find the local `diagram-skills` checkout (the
+1. **Locate AND verify diagram-skills.** Find the local `diagram-skills` checkout (the
    `skill-diagram` + `diagram-layout` skills live there; commonly
    `~/Development/diagram-skills`). Call its path `<DIAGRAM_SKILLS>`. Sub-agents read
-   its scripts/prompts, so it must be in `permissions.additionalDirectories`.
-2. **Grant sub-agent permissions.** Sub-agents CANNOT get interactive approval — any
-   tool call not on the allow-list is auto-denied and the agent hangs. Ensure
-   `.claude/settings.local.json` allows `Write(.tmp/diagram-work/**)`,
-   `Write(site/docs/plugins/**)`, `Read(.tmp/**)`, the Bash forms
-   (`mkdir`/`mv`/`rm`/`cd`), and `additionalDirectories: [<DIAGRAM_SKILLS>]`. Adding
-   permission rules needs explicit user consent (the self-modification guard blocks
-   silent widening) — ask first. Then run ONE cheap smoke-test agent (Write to
-   `.tmp/diagram-work/` and `site/docs/plugins/`, `python3 --version`) to confirm the
-   perms are live before the expensive batch.
+   AND `python3`-execute its scripts, so it is **trusted code** — verify it before use,
+   then add it to `permissions.additionalDirectories`:
+
+   ```bash
+   git -C <DIAGRAM_SKILLS> remote get-url origin   # must be the known diagram-skills repo
+   git -C <DIAGRAM_SKILLS> rev-parse HEAD           # the exact commit whose Python will run
+   ```
+
+   **Fail closed:** if `origin` is not the allowlisted diagram-skills repo, or the path is
+   not a git checkout you can verify, do NOT spawn the diagram agents (they would execute
+   its Python). Otherwise surface the HEAD SHA to the user and proceed only after they
+   confirm it (or it matches a previously-approved SHA). Treat an unverified checkout as
+   untrusted third-party code (CWE-494 / CWE-829 supply-chain execution).
+2. **Grant sub-agents least privilege.** Sub-agents CANNOT get interactive approval — any
+   tool call not on the allow-list is auto-denied and the agent hangs. Because each agent
+   reads a target plugin's SKILL.md/scripts **cloned from an arbitrary URL in
+   `registry.yaml`** (untrusted input — see the recipe's *Trust boundary*), grant them only
+   the minimum they need:
+   - **Agent-facing minimum:** `Write(.tmp/diagram-work/**)`, `Write(site/docs/plugins/**)`,
+     `Read(.tmp/skill-repos/**)`, `Read(.tmp/diagram-work/**)`, `Bash(python3 *)`,
+     `Bash(mkdir *)`, and `additionalDirectories: [<DIAGRAM_SKILLS>]`.
+   - **Main-thread ONLY (never invoked by sub-agents):** `Bash(rm *)`, `Bash(mv *)`,
+     `Bash(find *)`, `git clone`/`git pull`, `Bash(open *)` — the orchestrator uses these
+     for backup, clean-slate, clone, cleanup, and SVG export.
+
+   **Limitation — be honest about it:** `.claude/settings.*.json` permissions are shared by
+   the orchestrator and every sub-agent; the Agent tool has no per-agent ACL, so the
+   destructive forms cannot be technically withheld from agents while the main thread keeps
+   them. The agent restriction is therefore enforced **behaviorally** by the recipe's *Trust
+   boundary* (agents are told never to run `rm`/destructive/network/out-of-scope commands),
+   plus keeping the committed `.claude/settings.json` minimal (no `Write`/`rm`). Adding
+   permission rules needs explicit user consent (the self-modification guard blocks silent
+   widening) — ask first. Then run ONE cheap smoke-test agent (Write to `.tmp/diagram-work/`
+   and `site/docs/plugins/`, `python3 --version`) to confirm the perms are live before the
+   expensive batch.
 3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
    `site/docs/plugins/<plugin-name>/` to `.tmp/diagram-backup/<plugin-name>/`, then
    delete them from the output dir (so no agent mistakes stale output for "done").
