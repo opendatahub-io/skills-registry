@@ -57,39 +57,356 @@ plugins:
       - name: rfe.create
         description: Generate new RFEs from problem statements
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.create/SKILL.md
+          problem_statement: Turn a problem statement or idea into well-formed RFEs describing business needs (WHAT and WHY), sized and ready for review.
+          success_conditions:
+            - Produces well-formed RFEs describing business needs, sized S/M/L/XL from acceptance-criteria count.
+            - Writes artifacts/rfe-tasks/RFE-NNN.md with valid frontmatter and rebuilds the index.
+          invariants:
+            must_preserve:
+              - Describe business needs (WHAT and WHY) only — never prescribe architecture or implementation.
+              - Use Jira priority values (Blocker/Critical/Major/Normal/Minor), never High/Medium/Low.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe.create/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe.create/rfe-template.md
       - name: rfe.review
         description: Score and improve RFEs with auto-revision
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.review/SKILL.md
+            - id: output_quality
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.review/SKILL.md
+          problem_statement: Score RFEs against the rubric, check technical feasibility, and auto-revise failing RFEs across up to two re-assessment cycles.
+          success_conditions:
+            - Produces a review file with rubric scores, a feasibility verdict, and a recommendation per RFE.
+            - Auto-revises failing RFEs and re-assesses up to 2 cycles.
+          invariants:
+            must_preserve:
+              - Never read RFE bodies into orchestrator context — delegate to agents and read only frontmatter.
+              - Do not exceed 2 re-assessment cycles.
+            fixed_context:
+              tools: [Glob, Bash, Agent, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe.review/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe.review/prompts/fetch-agent.md
+              - .claude/skills/rfe.review/prompts/assess-agent.md
+              - .claude/skills/rfe.review/prompts/review-agent.md
+              - .claude/skills/rfe.review/prompts/revise-agent.md
       - name: rfe.split
         description: Decompose oversized RFEs into appropriately-scoped pieces
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.split/SKILL.md
+          problem_statement: Decompose an oversized RFE into appropriately right-sized child RFEs that together cover the original scope.
+          success_conditions:
+            - Decomposes an oversized RFE into right-sized children that cover all of the original scope.
+            - Reviews the children through rfe.review and archives the parent RFE.
+          invariants:
+            must_preserve:
+              - Preserve full coverage of the original RFE scope across the children.
+              - Limit right-sizing self-correction to one cycle, and re-split only for right-sizing.
+            fixed_context:
+              tools: [Glob, Bash, Agent, Skill, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe.split/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe.split/prompts/split-agent.md
       - name: rfe.submit
         description: Push RFEs to Jira
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Create or update RHAIRFE Jira tickets from reviewed RFE artifacts using deterministic REST API calls.
+          success_conditions:
+            - Creates or updates RHAIRFE Jira tickets from the reviewed RFE artifacts.
+            - Applies pipeline-outcome labels and rebuilds artifacts/rfes.md.
+          invariants:
+            must_preserve:
+              - Route all Jira writes through the deterministic Python scripts (REST plus Basic Auth), not LLM tool-calling.
+              - Keep the three feasibility labels mutually exclusive.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe.submit/SKILL.md
       - name: rfe.speedrun
         description: Execute the full RFE pipeline end-to-end
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [orchestrate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.speedrun/SKILL.md
+          problem_statement: Run the full RFE pipeline end-to-end — create, auto-fix, and submit — from an idea, Jira key(s), or a batch file.
+          success_conditions:
+            - Runs create, auto-fix, and submit in sequence, persisting IDs and config between phases.
+            - Verifies completeness and retries missing IDs before submitting.
+          invariants:
+            must_preserve:
+              - Always pass an explicit batch size to auto-fix for reproducibility.
+              - Never emit a text-only response during pipeline execution, which terminates the CI process.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe.speedrun/SKILL.md
       - name: rfe.auto-fix
         description: Batch review, revise, and split operations
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [orchestrate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.auto-fix/SKILL.md
+          problem_statement: Review, revise, and split batches of RFEs non-interactively through a pipeline state machine.
+          success_conditions:
+            - Processes every ID through assess, feasibility, review, revise, re-assess, and split phases until DONE.
+            - Emits a run report and a counts summary.
+          invariants:
+            must_preserve:
+              - Run the dispatch loop to completion — never exit early or skip batches.
+              - After launching a wave of agents, the next call must be wait-for-wave.
+            fixed_context:
+              tools: [Glob, Bash, Agent]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe.auto-fix/SKILL.md
       - name: rfe-creator.update-deps
         description: Update vendored dependencies
         user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Force-refresh the vendored assess-rfe skills and architecture context to their latest versions.
+          success_conditions:
+            - Removes the cached assess-rfe and architecture-context copies, then re-fetches the latest.
+            - Reports what was updated and the versions fetched.
+          invariants:
+            must_preserve:
+              - Only run when explicitly invoked (disable-model-invocation is set).
+              - Re-fetch after removing caches — do not leave dependencies partially removed.
+            fixed_context:
+              tools: [Bash, Glob]
+              cli: [bash]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-creator.update-deps/SKILL.md
       - name: architecture-review
-        description: Architecture review skill
-        user-invocable: true
+        description: Reviews strategy features for architectural correctness — dependencies, integration patterns, component interactions
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/architecture-review/SKILL.md
+          problem_statement: Review strategy features for architectural correctness — dependencies, integration patterns, and component interactions.
+          success_conditions:
+            - Produces an architecture assessment for each strategy with a recommendation.
+            - Grounds every finding in architecture docs with specific component and API citations.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with incorrect dependency assumptions.
+              - Do not flag concerns without citing specific architecture documentation.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/architecture-review/SKILL.md
       - name: feasibility-review
-        description: Feasibility review skill
-        user-invocable: true
+        description: Reviews strategy features for technical feasibility and effort estimate credibility
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/feasibility-review/SKILL.md
+          problem_statement: Review strategy features for technical feasibility, implementation complexity, and effort estimate credibility.
+          success_conditions:
+            - Produces a feasibility assessment for each strategy with a recommendation.
+            - Grounds findings in architecture context when available.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with fundamental technical flaws.
+              - Do not fabricate architecture constraints not present in the docs.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/feasibility-review/SKILL.md
       - name: rfe-feasibility-review
-        description: RFE feasibility review
-        user-invocable: true
+        description: Reviews RFEs for technical feasibility, blockers, and strategy alignment
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe-feasibility-review/SKILL.md
+          problem_statement: Review a single RFE for technical feasibility, blockers, and alignment with technical strategy, and write the verdict.
+          success_conditions:
+            - Produces a feasibility verdict (feasible/infeasible/indeterminate) for the RFE with blockers and a scope assessment.
+            - Writes artifacts/rfe-reviews/{ID}-feasibility.md, grounded in architecture context when available.
+          invariants:
+            must_preserve:
+              - Do not block an RFE for a capability that simply does not exist yet — that is feasible, not infeasible.
+              - Do not suggest implementation approaches — assess feasibility only.
+            fixed_context:
+              tools: [Read, Write, Grep, Glob, Bash]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-feasibility-review/SKILL.md
       - name: scope-review
-        description: Scope review skill
-        user-invocable: true
+        description: Reviews strategy features for right-sizing and bounded scope
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/scope-review/SKILL.md
+          problem_statement: Review strategy features for scope — right-sizing, bounded deliverables, and effort-to-scope alignment.
+          success_conditions:
+            - Produces a scope assessment for each strategy with a recommendation.
+            - Flags strategies that are too large to deliver or too small to warrant a strategy.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with unbounded scope.
+              - Do not split or merge strategies without justification from effort estimates.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/scope-review/SKILL.md
       - name: testability-review
-        description: Testability review skill
-        user-invocable: true
+        description: Reviews strategy features for testability and measurable acceptance criteria
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/testability-review/SKILL.md
+          problem_statement: Review strategy features for testability — measurable acceptance criteria, edge case coverage, and validation feasibility.
+          success_conditions:
+            - Produces a testability assessment for each strategy with a recommendation.
+            - Identifies untestable criteria and missing edge cases.
+          invariants:
+            must_preserve:
+              - Do not approve strategies with unmeasurable acceptance criteria.
+              - Do not invent test scenarios unsupported by the strategy content.
+            fixed_context:
+              tools: [Read, Grep, Glob]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/testability-review/SKILL.md
     harnesses:
       claude-code:
         install: "/plugin install rfe-creator@opendatahub-skills"

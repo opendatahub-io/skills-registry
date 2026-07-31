@@ -3,6 +3,7 @@
   "rules": {
     "security/no-memory-poisoning": "warning",
     "frontmatter/no-extra-fields": "warning",
+    "frontmatter/name-format": "warning",
     "security/no-credential-access": "warning"
   }
 }

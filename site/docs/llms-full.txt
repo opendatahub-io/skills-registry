@@ -274,7 +274,7 @@ Examples:
 /rfe-creator.update-deps
 ```
 
-#### /architecture-review
+#### /architecture-review (internal)
 
 Internal forked reviewer sub-agent (context: fork, model: opus) for the
 strategy workflow. Acts as a platform architect assessing refined strategy
@@ -288,7 +288,7 @@ Applies architecture-context overlays as authoritative corrections, skips
 cleanly when no architecture context is available, and grounds every
 finding in specific docs, components, or APIs.
 
-#### /feasibility-review
+#### /feasibility-review (internal)
 
 Internal forked reviewer sub-agent (context: fork, model: opus) for the
 strategy workflow. Acts as a staff engineer assessing refined strategy
@@ -300,7 +300,7 @@ challenges will surface during implementation. Grounds assessments in
 architecture context and overlays, takes an adversarial stance toward
 optimistic estimates, and emits an approve / revise / reject recommendation.
 
-#### /rfe-feasibility-review
+#### /rfe-feasibility-review (internal)
 
 Internal sub-agent (model: opus) launched per RFE by rfe.review. Acts as a
 senior engineer looking for blockers and risks rather than confirming the
@@ -315,7 +315,7 @@ distinguishing "capability doesn't exist yet" (feasible) from
 the architecture inventory are treated as strategy considerations, not
 blockers. Writes to artifacts/rfe-reviews/{ID}-feasibility.md.
 
-#### /scope-review
+#### /scope-review (internal)
 
 Internal forked reviewer sub-agent (context: fork, model: opus) for the
 strategy workflow. Acts as a product owner assessing whether each refined
@@ -327,7 +327,7 @@ shrinks the source RFE. Flags scope-trap phrasing ("and related
 functionality", "full support for"), and when recommending a split suggests
 concrete boundaries for each resulting strategy.
 
-#### /testability-review
+#### /testability-review (internal)
 
 Internal forked reviewer sub-agent (context: fork, model: opus) for the
 strategy workflow. Acts as a test engineer determining whether each refined

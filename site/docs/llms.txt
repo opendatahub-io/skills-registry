@@ -34,11 +34,6 @@
 - [rfe.speedrun](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.speedrun/): Execute the full RFE pipeline end-to-end
 - [rfe.auto-fix](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe.auto-fix/): Batch review, revise, and split operations
 - [rfe-creator.update-deps](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe-creator.update-deps/): Update vendored dependencies
-- [architecture-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/architecture-review/): Architecture review skill
-- [feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/feasibility-review/): Feasibility review skill
-- [rfe-feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe-feasibility-review/): RFE feasibility review
-- [scope-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/scope-review/): Scope review skill
-- [testability-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/testability-review/): Testability review skill
 - [strategy-create](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-create/): Create strategies from approved RFEs by cloning them to RHAISTRAT in Jira
 - [strategy-refine](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-refine/): Refine a strategy with technical HOW, dependencies, and NFRs
 - [strategy-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-review/): Adversarial review with rubric scoring and independent forked reviewers
@@ -109,6 +104,11 @@
 
 ## Optional
 
+- [architecture-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/architecture-review/): Reviews strategy features for architectural correctness — dependencies, integration patterns, component interactions (internal)
+- [feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/feasibility-review/): Reviews strategy features for technical feasibility and effort estimate credibility (internal)
+- [rfe-feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe-feasibility-review/): Reviews RFEs for technical feasibility, blockers, and strategy alignment (internal)
+- [scope-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/scope-review/): Reviews strategy features for right-sizing and bounded scope (internal)
+- [testability-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/testability-review/): Reviews strategy features for testability and measurable acceptance criteria (internal)
 - [strategy-feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-feasibility-review/): Reviews strategy for technical feasibility and effort estimate credibility (internal)
 - [strategy-testability-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-testability-review/): Reviews strategy for testability and measurable acceptance criteria (internal)
 - [strategy-scope-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-scope-review/): Reviews strategy for right-sizing and bounded scope (internal)

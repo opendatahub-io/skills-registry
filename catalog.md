@@ -405,20 +405,15 @@ v0.1.0 | [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-crea
 
 Tags: rfe, jira, review, strategy, pipeline
 
-| Skill | Description |
-|-------|-------------|
-| `/rfe.create` | Generate new RFEs from problem statements |
-| `/rfe.review` | Score and improve RFEs with auto-revision |
-| `/rfe.split` | Decompose oversized RFEs into appropriately-scoped pieces |
-| `/rfe.submit` | Push RFEs to Jira |
-| `/rfe.speedrun` | Execute the full RFE pipeline end-to-end |
-| `/rfe.auto-fix` | Batch review, revise, and split operations |
-| `/rfe-creator.update-deps` | Update vendored dependencies |
-| `/architecture-review` | Architecture review skill |
-| `/feasibility-review` | Feasibility review skill |
-| `/rfe-feasibility-review` | RFE feasibility review |
-| `/scope-review` | Scope review skill |
-| `/testability-review` | Testability review skill |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/rfe.create` | Generate new RFEs from problem statements | `generate` | `task_success` (`judge`) |
+| `/rfe.review` | Score and improve RFEs with auto-revision | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
+| `/rfe.split` | Decompose oversized RFEs into appropriately-scoped pieces | `transform` | `task_success` (`judge`) |
+| `/rfe.submit` | Push RFEs to Jira | `execute` | `task_success` (`deterministic`) |
+| `/rfe.speedrun` | Execute the full RFE pipeline end-to-end | `orchestrate` | `task_success` (`judge`) |
+| `/rfe.auto-fix` | Batch review, revise, and split operations | `orchestrate` | `task_success` (`judge`) |
+| `/rfe-creator.update-deps` | Update vendored dependencies | `execute` | `task_success` (`deterministic`) |
 
 ```bash
 /plugin install rfe-creator@opendatahub-skills

@@ -56,11 +56,11 @@ automatically on first use.
 | [`/rfe.speedrun`](rfe.speedrun.md) | Execute the full RFE pipeline end-to-end | :material-check: |
 | [`/rfe.auto-fix`](rfe.auto-fix.md) | Batch review, revise, and split operations | :material-check: |
 | [`/rfe-creator.update-deps`](rfe-creator.update-deps.md) | Update vendored dependencies | :material-check: |
-| [`/architecture-review`](architecture-review.md) | Architecture review skill | :material-check: |
-| [`/feasibility-review`](feasibility-review.md) | Feasibility review skill | :material-check: |
-| [`/rfe-feasibility-review`](rfe-feasibility-review.md) | RFE feasibility review | :material-check: |
-| [`/scope-review`](scope-review.md) | Scope review skill | :material-check: |
-| [`/testability-review`](testability-review.md) | Testability review skill | :material-check: |
+| [`/architecture-review`](architecture-review.md) | Reviews strategy features for architectural correctness — dependencies, integration patterns, component interactions | :material-close: internal |
+| [`/feasibility-review`](feasibility-review.md) | Reviews strategy features for technical feasibility and effort estimate credibility | :material-close: internal |
+| [`/rfe-feasibility-review`](rfe-feasibility-review.md) | Reviews RFEs for technical feasibility, blockers, and strategy alignment | :material-close: internal |
+| [`/scope-review`](scope-review.md) | Reviews strategy features for right-sizing and bounded scope | :material-close: internal |
+| [`/testability-review`](testability-review.md) | Reviews strategy features for testability and measurable acceptance criteria | :material-close: internal |
 
 ## Installation
 
