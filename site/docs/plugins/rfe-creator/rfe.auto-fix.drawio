@@ -11,7 +11,7 @@
     <mxCell id="init" value="&lt;b&gt;1. Init&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py init&lt;br&gt;--batch-size / --headless&lt;br&gt;--announce-complete" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
       <mxGeometry x="20" y="55" width="190" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="ids" value="&lt;b&gt;2. Resolve IDs&lt;/b&gt;&lt;br&gt;JQL: snapshot_fetch.py fetch&lt;br&gt;reprocess-only snapshot&lt;br&gt;explicit: state.py write-ids" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="setup">
+    <mxCell id="ids" value="&lt;b&gt;2. Resolve IDs&lt;/b&gt;&lt;br&gt;JQL: snapshot_fetch.py fetch&lt;br&gt;reprocess-only snapshot&lt;br&gt;explicit: state.py write-ids" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;arcSize=16;absoluteArcSize=1;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="setup">
       <mxGeometry x="250" y="45" width="190" height="150" as="geometry"/>
     </mxCell>
     <mxCell id="bootstrap" value="&lt;b&gt;3. Bootstrap&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap-assess-rfe.sh&lt;br&gt;retry once, else stop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
