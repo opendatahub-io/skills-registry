@@ -35,8 +35,9 @@ Stay inside this sandbox:
 
 - **Write ONLY** to `<SCRATCH>` and the two output files `<OUT_DIR>/<name>.d2` and
   `<OUT_DIR>/<name>.drawio`.
-- **Read ONLY** within the target plugin's cloned dir (the tree containing `<SKILL_MD>`),
-  `<DIAGRAM_SKILLS>`, and `<SCRATCH>`.
+- **Read ONLY** within the target plugin's cloned dir (the tree containing `<SKILL_MD>`) —
+  its skill/script/reference files, NOT its `.git/` metadata — plus `<DIAGRAM_SKILLS>` and
+  `<SCRATCH>`. Do not follow symlinks out of these trees.
 - **Execute ONLY** `python3` on the diagram-layout scripts under `<DIAGRAM_SKILLS>`.
 - **NEVER** run destructive or unscoped commands (`rm`, `mv` outside `<SCRATCH>`, `chmod`,
   `curl`/network, `git push`/`git clone`), write outside the two allowed locations, read

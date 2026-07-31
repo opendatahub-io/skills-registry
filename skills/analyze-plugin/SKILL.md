@@ -202,12 +202,15 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
    reads a target plugin's SKILL.md/scripts **cloned from an arbitrary URL in
    `registry.yaml`** (untrusted input — see the recipe's *Trust boundary*), grant them only
    the minimum they need:
-   - **Agent-facing minimum:** `Write(.tmp/diagram-work/**)`, `Write(site/docs/plugins/**)`,
-     `Read(.tmp/skill-repos/**)`, `Read(.tmp/diagram-work/**)`, `Bash(python3 *)`,
-     `Bash(mkdir *)`, and `additionalDirectories: [<DIAGRAM_SKILLS>]`.
-   - **Main-thread ONLY (never invoked by sub-agents):** `Bash(rm *)`, `Bash(mv *)`,
-     `Bash(find *)`, `git clone`/`git pull`, `Bash(open *)` — the orchestrator uses these
-     for backup, clean-slate, clone, cleanup, and SVG export.
+   - **Agent-facing minimum:** `Write(.tmp/diagram-work/**)`,
+     `Write(site/docs/plugins/<plugin-name>/**)` (scope to THIS run's plugin dir — not all
+     of `plugins/**`), `Read(.tmp/skill-repos/**)`, `Read(.tmp/diagram-work/**)`,
+     `Bash(python3 *)`, `Bash(mkdir *)`, `Bash(mv *)` (scratch tmp-renames in Step 4 of the
+     recipe), `Bash(grep *)` (Step 8 verification), and
+     `additionalDirectories: [<DIAGRAM_SKILLS>]`.
+   - **Main-thread ONLY (never invoked by sub-agents):** `Bash(rm *)`, `Bash(find *)`,
+     `git clone`/`git pull`, `Bash(open *)` — the orchestrator uses these for backup,
+     clean-slate, clone, cleanup, and SVG export.
 
    **Limitation — be honest about it:** `.claude/settings.*.json` permissions are shared by
    the orchestrator and every sub-agent; the Agent tool has no per-agent ACL, so the
@@ -219,6 +222,14 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
    widening) — ask first. Then run ONE cheap smoke-test agent (Write to `.tmp/diagram-work/`
    and `site/docs/plugins/`, `python3 --version`) to confirm the perms are live before the
    expensive batch.
+
+   **Sanitize the target clone before spawning agents** (it came from an arbitrary
+   `registry.yaml` URL): (a) reject symlinks — `find .tmp/skill-repos/<plugin-name> -type l`
+   must return nothing, else abort the run (a symlink like `SKILL.md -> ~/.ssh/id_rsa` would
+   let an agent read host files through the allowed read scope); and (b) confirm
+   `<plugin-name>` / `<skill-name>` / `<dir-name>` are plain slugs (no `/`, no `..`) before
+   building any path, so a crafted name cannot escape `.tmp/diagram-work/*` or
+   `site/docs/plugins/*`.
 3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
    `site/docs/plugins/<plugin-name>/` to `.tmp/diagram-backup/<plugin-name>/`, then
    delete them from the output dir (so no agent mistakes stale output for "done").
