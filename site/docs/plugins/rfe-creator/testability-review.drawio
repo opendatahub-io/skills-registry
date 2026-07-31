@@ -46,10 +46,6 @@
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e-inputs-assess" value="rfe-tasks/*.md acceptance criteria" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="inputs" target="assess" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
     <mxCell id="e-rereview-compare" value="re-review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="rereview" target="rereview-compare" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>

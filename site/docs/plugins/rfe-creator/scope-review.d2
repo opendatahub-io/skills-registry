@@ -172,10 +172,10 @@ scope-traps: |md
 
 entry -> inputs: "strat-tasks/*.md"
 inputs -> re-review: "rfe-tasks/*.md cross-ref"
-re-review -> rereview-delta: "strat-reviews/" {
+re-review -> rereview-delta: "re-review" {
   style.stroke-dash: 3
 }
-re-review -> assess: "acceptance criteria"
+re-review -> assess: "first review"
 rereview-delta -> assess
 assess -> assessment-out: "STRAT-NNN block"
 

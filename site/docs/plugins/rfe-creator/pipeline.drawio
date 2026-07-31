@@ -123,7 +123,7 @@ RFE files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;st
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.37;entryY=0;entryDx=0;entryDy=0;" edge="1" source="submit-skill" target="review-file" parent="1">
+    <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.1;entryY=0;entryDx=0;entryDy=0;" edge="1" source="review" target="review-file" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>

@@ -92,13 +92,6 @@ actions: submit.py actions {
     - feasibility-* exclusive
     - needs-attention comment
   |
-  auto-approve: |md
-    **Auto-Approve (opt)**
-
-    - --auto-approve
-    - pass + feasible
-    - transition Approved
-  |
   rename-files: |md
     **Rename + Index**
 
@@ -111,7 +104,6 @@ actions: submit.py actions {
   scan-plan -> update-tickets: "existing RHAIRFE-NNNN"
   create-tickets -> apply-labels
   update-tickets -> apply-labels
-  apply-labels -> auto-approve
   apply-labels -> rename-files
 }
 
@@ -146,7 +138,7 @@ output-final: |md
 
   - Jira RHAIRFE tickets
   - artifacts/rfes.md
-  - labels + (opt) Approved
+  - labels applied
 | {
   shape: rectangle
   style.stroke-width: 2

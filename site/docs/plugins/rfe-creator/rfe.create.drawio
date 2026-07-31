@@ -3,120 +3,114 @@
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
     <mxCell id="entry" value="&lt;b&gt;/rfe.create $ARGUMENTS&lt;/b&gt;&lt;br&gt;&lt;br&gt;problem statement / idea&lt;br&gt;--headless, --priority&lt;br&gt;--labels, --rfe-id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="77" width="155" height="120" as="geometry"/>
+      <mxGeometry x="40" y="75" width="155" height="150" as="geometry"/>
     </mxCell>
     <mxCell id="parse-args" value="&lt;b&gt;Step 0: Parse Arguments&lt;/b&gt;&lt;br&gt;&lt;br&gt;--headless (skip Q&amp;A)&lt;br&gt;--priority {Blocker..Minor}&lt;br&gt;--labels {csv}, --rfe-id {ID}&lt;br&gt;rest = problem statement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="245" y="77" width="185" height="120" as="geometry"/>
+      <mxGeometry x="245" y="75" width="185" height="150" as="geometry"/>
     </mxCell>
     <mxCell id="rubric-check" value="&lt;b&gt;Step 1: Load Rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/rfe-rubric.md&lt;br&gt;exists?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="485" y="85" width="155" height="104" as="geometry"/>
+      <mxGeometry x="485" y="90" width="150" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="loadrubric" value="&lt;b&gt;Load Rubric&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="463" y="300" width="198" height="225" as="geometry"/>
-    </mxCell>
-    <mxCell id="bootstrap" value="&lt;b&gt;bootstrap-assess-rfe.sh&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch assess-rfe skills&lt;br&gt;.context/assess-rfe/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="loadrubric">
-      <mxGeometry x="20" y="48" width="160" height="72" as="geometry"/>
-    </mxCell>
-    <mxCell id="export-rubric" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;assess-rfe plugin&lt;br&gt;write rfe-rubric.md&lt;br&gt;on fail: no rubric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="loadrubric">
-      <mxGeometry x="20" y="140" width="160" height="72" as="geometry"/>
-    </mxCell>
-    <mxCell id="clarify" value="&lt;b&gt;Step 2: Clarifying Questions&lt;/b&gt;&lt;br&gt;LLM · AskUserQuestion&lt;br&gt;&lt;br&gt;2-5 Qs: customers,&lt;br&gt;justification, problem&lt;br&gt;size, success outcome&lt;br&gt;skipped if --headless" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="695" y="67" width="180" height="140" as="geometry"/>
+    <mxCell id="clarify" value="&lt;b&gt;Step 2: Clarifying Questions&lt;/b&gt;&lt;br&gt;LLM &amp;middot; AskUserQuestion&lt;br&gt;&lt;br&gt;2-5 Qs: customers, justification, problem&lt;br&gt;size, success outcome&lt;br&gt;skipped if --headless" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="690" y="65" width="195" height="170" as="geometry"/>
     </mxCell>
     <mxCell id="generate" value="&lt;b&gt;Step 3: Generate RFEs&lt;/b&gt;&lt;br&gt;LLM&lt;br&gt;&lt;br&gt;WHAT / WHY only, no HOW&lt;br&gt;one RFE per business need&lt;br&gt;size from AC count&lt;br&gt;Jira priority value" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="930" y="62" width="195" height="150" as="geometry"/>
+      <mxGeometry x="958" y="65" width="195" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="loadrubric" value="&lt;b&gt;Load Rubric&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="470" y="310" width="430" height="193" as="geometry"/>
+    </mxCell>
+    <mxCell id="bootstrap" value="&lt;b&gt;bootstrap-assess-rfe.sh&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch assess-rfe skills&lt;br&gt;.context/assess-rfe/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="loadrubric">
+      <mxGeometry x="25" y="55" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="export-rubric" value="&lt;b&gt;/export-rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;assess-rfe plugin&lt;br&gt;write rfe-rubric.md&lt;br&gt;on fail: no rubric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="loadrubric">
+      <mxGeometry x="230" y="55" width="180" height="120" as="geometry"/>
     </mxCell>
     <mxCell id="write-artifacts" value="&lt;b&gt;Step 4: Write Artifacts&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="930" y="300" width="196" height="310" as="geometry"/>
+      <mxGeometry x="940" y="310" width="223" height="395" as="geometry"/>
     </mxCell>
     <mxCell id="next-id" value="&lt;b&gt;next_rfe_id.py {count}&lt;/b&gt;&lt;br&gt;&lt;br&gt;allocate RFE-NNN&lt;br&gt;atomic flock&lt;br&gt;or reuse --rfe-id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="write-artifacts">
-      <mxGeometry x="18" y="48" width="160" height="72" as="geometry"/>
+      <mxGeometry x="25" y="55" width="180" height="95" as="geometry"/>
     </mxCell>
     <mxCell id="set-fm" value="&lt;b&gt;frontmatter.py set&lt;/b&gt;&lt;br&gt;&lt;br&gt;rfe_id / title / priority&lt;br&gt;size / status=Draft&lt;br&gt;schema-validated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="write-artifacts">
-      <mxGeometry x="18" y="140" width="160" height="72" as="geometry"/>
+      <mxGeometry x="25" y="165" width="180" height="95" as="geometry"/>
     </mxCell>
     <mxCell id="rebuild" value="&lt;b&gt;frontmatter.py rebuild-index&lt;/b&gt;&lt;br&gt;&lt;br&gt;scan rfe-tasks/&lt;br&gt;write artifacts/rfes.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="write-artifacts">
-      <mxGeometry x="18" y="232" width="160" height="65" as="geometry"/>
+      <mxGeometry x="25" y="275" width="180" height="95" as="geometry"/>
     </mxCell>
     <mxCell id="artifacts-out" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/rfe-tasks/RFE-NNN.md&lt;br&gt;artifacts/rfes.md&lt;br&gt;next: /rfe.review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="930" y="660" width="195" height="90" as="geometry"/>
+      <mxGeometry x="1230" y="555" width="190" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="size-callout" value="Size Guide — by AC count:&lt;br&gt;&lt;br&gt;S&amp;nbsp;&amp;nbsp;: 1-2&amp;nbsp;&amp;nbsp;(Concise)&lt;br&gt;M&amp;nbsp;&amp;nbsp;: 3-5&amp;nbsp;&amp;nbsp;(Standard)&lt;br&gt;L&amp;nbsp;&amp;nbsp;: 5-8&amp;nbsp;&amp;nbsp;(Full)&lt;br&gt;XL : 8+&amp;nbsp;&amp;nbsp;&amp;nbsp;(Full + optional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="700" y="300" width="200" height="150" as="geometry"/>
+    <mxCell id="size-callout" value="Size Guide (by AC count):&lt;br&gt;S&amp;nbsp;&amp;nbsp;&amp;nbsp;1-2&amp;nbsp;&amp;nbsp;&amp;nbsp;Concise format&lt;br&gt;M&amp;nbsp;&amp;nbsp;&amp;nbsp;3-5&amp;nbsp;&amp;nbsp;&amp;nbsp;Standard format&lt;br&gt;L&amp;nbsp;&amp;nbsp;&amp;nbsp;5-8&amp;nbsp;&amp;nbsp;&amp;nbsp;Full format&lt;br&gt;XL&amp;nbsp;&amp;nbsp;8+&amp;nbsp;&amp;nbsp;&amp;nbsp;Full + optional" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1210" y="75" width="240" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="fm-callout" value="rfe-tasks/RFE-NNN.md&lt;br&gt;---&lt;br&gt;rfe_id: RFE-NNN | RHAIRFE-NNNN&lt;br&gt;title: {string}&lt;br&gt;priority: Blocker | Critical |&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Major | Normal | Minor&lt;br&gt;size: S | M | L | XL&lt;br&gt;status: Draft" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="560" y="630" width="290" height="155" as="geometry"/>
+    <mxCell id="fm-callout" value="rfe-tasks/RFE-NNN.md frontmatter:&lt;br&gt;rfe_id:&amp;nbsp;&amp;nbsp;&amp;nbsp;RFE-NNN or RHAIRFE-NNNN&lt;br&gt;title:&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{string}&lt;br&gt;priority:&amp;nbsp;Blocker / Critical / Major&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;/ Normal / Minor&lt;br&gt;size:&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;S / M / L / XL&lt;br&gt;status:&amp;nbsp;&amp;nbsp;Draft" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1200" y="755" width="250" height="170" as="geometry"/>
     </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="parse-args" parent="1">
+    <mxCell id="17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="parse-args" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse-args" target="rubric-check" parent="1">
+    <mxCell id="18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse-args" target="rubric-check" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e3" value="exists" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rubric-check" target="clarify" parent="1">
+    <mxCell id="19" value="exists" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rubric-check" target="clarify" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clarify" target="generate" parent="1">
+    <mxCell id="20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clarify" target="generate" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e5" value="missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="rubric-check" target="loadrubric" parent="1">
+    <mxCell id="21" value="--headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="parse-args" target="generate" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="562.5" y="275"/>
-          <mxPoint x="522.4" y="275"/>
+          <mxPoint x="337" y="150.0"/>
+          <mxPoint x="337" y="35"/>
+          <mxPoint x="1055" y="35"/>
+          <mxPoint x="1055" y="150.0"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e6" value="rfe-rubric.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.7;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="loadrubric" target="clarify" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="e7" value="--headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="rubric-check" target="generate" parent="1">
+    <mxCell id="22" value="missing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="rubric-check" target="bootstrap" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="562.5" y="35"/>
-          <mxPoint x="1027.5" y="35"/>
+          <mxPoint x="560" y="280"/>
+          <mxPoint x="582.5" y="280"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e8" value="assess-rfe skills" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="export-rubric" parent="1">
+    <mxCell id="23" value="rfe-rubric.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.7383720930232558;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="loadrubric" target="clarify" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e9" value="RFEs drafted" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.49744897959183676;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate" target="write-artifacts" parent="1">
+    <mxCell id="24" value="RFEs drafted" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.49743589743589745;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate" target="next-id" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e10" value="RFE-NNN ids" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="next-id" target="set-fm" parent="1">
+    <mxCell id="25" value="assess-rfe skills" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="export-rubric" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="set-fm" target="rebuild" parent="1">
+    <mxCell id="26" value="RFE-NNN ids" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="next-id" target="set-fm" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e12" value="RFE-NNN.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.49744897959183676;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="write-artifacts" target="artifacts-out" parent="1">
+    <mxCell id="27" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="set-fm" target="rebuild" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.2;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="generate" target="size-callout" parent="1">
+    <mxCell id="28" value="RFE-NNN.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.810126582278481;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="write-artifacts" target="artifacts-out" parent="1">
       <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="969" y="255"/>
-          <mxPoint x="800" y="255"/>
-        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="artifacts-out" target="fm-callout" parent="1">
+    <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="generate" target="size-callout" parent="1">
       <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="875" y="705.0"/>
-          <mxPoint x="875" y="707.5"/>
-        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="30" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="artifacts-out" target="fm-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
   </root>

@@ -162,7 +162,8 @@ dispatch: Dispatch loop (until phase=DONE) {
     style.stroke-dash: 3
   }
   launch-wave -> wait-for-wave
-  wait-for-wave -> next-action: "exit 3 (pending)" {
+  wait-for-wave -> next-action: "exit 0 (complete)"
+  wait-for-wave -> wait-for-wave: "exit 3 (pending)" {
     style.stroke-dash: 3
   }
 }

@@ -151,7 +151,7 @@ assess: Assess (adversarial - find blockers) {
 feasibility-out: |md
   **Write feasibility report**
 
-  - mkdir rfe-reviews/
+  - mkdir artifacts/rfe-reviews/
   - Write {ID}-feasibility.md
   - 4 verdict fields
 | {
@@ -213,7 +213,8 @@ overlays -> prior-review: "overlays applied"
 degrade -> prior-review {
   style.stroke-dash: 3
 }
-prior-review -> assess: "if report: re-review"
+prior-review -> assess: "report exists: re-review"
+prior-review -> assess: "no report: first review"
 assess -> feasibility-out: "{ID}-feasibility.md"
 
 # Callout connectors
