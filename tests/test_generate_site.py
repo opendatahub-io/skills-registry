@@ -27,7 +27,7 @@ class SiteContractRenderingTests(unittest.TestCase):
             "skill-contract__measure--judge",
             "example-org/example-plugin@main:docs/review-rubric.md",  # title attr on ref
             "review-rubric.md @ main",  # short ref label
-            "Must Not",
+            "Must Preserve",  # invariants.must_preserve label
             "Traceability",
             "skills/example-skill/SKILL.md",
         ):
