@@ -11,112 +11,181 @@ entry: |md
   **/rfe.submit**
 
   - --dry-run
-  - --artifacts-dir
+  - --artifacts-dir {path}
   - non-interactive
-    (invoking = confirmation)
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Credentials gate ---
+# --- Step 0: credential gate (decision) ---
 
-creds-q: |md
-  **JIRA env vars set?**
+check-creds: |md
+  **Step 0: Check Credentials**
 
   - JIRA_SERVER
-  - JIRA_USER / JIRA_TOKEN
+  - JIRA_USER
+  - JIRA_TOKEN set?
 | {
   shape: diamond
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Submission ---
+setup-stop: |md
+  **Print Setup + STOP**
 
-submit-script: |md
-  **Step 1: Run Submission**
-
-  - scripts/submit.py
-  - REST API + Basic Auth
-    (deterministic, not MCP)
-  - create new / update existing
-  - auto-apply labels
+  - export JIRA_SERVER/USER/TOKEN
+  - create API token
+  - re-run /rfe.submit
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- External Jira ---
+# --- Step 1: run the deterministic script (external) ---
 
-jira: |md
-  **Jira (RHAIRFE)**
+submit-run: |md
+  **Step 1: Run submit.py**
 
-  - create Feature Request
-  - update existing tickets
+  - python3 scripts/submit.py
+  - [--dry-run] [--artifacts-dir]
+  - Jira REST + Basic Auth
+  - deterministic, not MCP
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
 }
 
-# --- Report ---
+# --- submit.py internal actions (container) ---
 
-report: |md
+actions: submit.py actions {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  scan-plan: |md
+    **Scan + Plan**
+
+    - scan_task_files()
+    - classify per RFE
+    - reject / conflict = skip
+  |
+  create-tickets: |md
+    **Create Tickets**
+
+    - create_issue RHAIRFE
+    - Feature Request + priority
+    - status: New
+  |
+  update-tickets: |md
+    **Update Tickets**
+
+    - update_issue desc/title
+    - skip on Jira conflict
+    - label-only if unchanged
+  |
+  apply-labels: |md
+    **Apply Labels**
+
+    - swap_labels by outcome
+    - feasibility-* exclusive
+    - needs-attention comment
+  |
+  auto-approve: |md
+    **Auto-Approve (opt)**
+
+    - --auto-approve
+    - pass + feasible
+    - transition Approved
+  |
+  rename-files: |md
+    **Rename + Index**
+
+    - RFE-NNN.md → RHAIRFE-NNNN.md
+    - update rfe_id
+    - rebuild_index rfes.md
+  |
+
+  scan-plan -> create-tickets: "new RFE-NNN"
+  scan-plan -> update-tickets: "existing RHAIRFE-NNNN"
+  create-tickets -> apply-labels
+  update-tickets -> apply-labels
+  apply-labels -> auto-approve
+  apply-labels -> rename-files
+}
+
+# --- External Jira (dashed) ---
+
+jira: |md
+  **Jira — RHAIRFE project**
+
+  - Feature Request issues
+  - REST + Basic Auth
+| {
+  shape: rectangle
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 2: report + output ---
+
+report-out: |md
   **Step 2: Report**
 
   - read artifacts/rfes.md
-    (rebuilt by script)
-  - report results
+  - created / updated / dry-run
+  - error: check creds / --dry-run
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Labels callout ---
+output-final: |md
+  **Output**
 
-labels: |md
-  rfe-creator-auto-created
-  rfe-creator-auto-revised
-  rfe-creator-split-original
-  rfe-creator-split-result
-  rfe-creator-needs-attention
-  rfe-creator-autofix-rubric-pass
-  rfe-creator-feasibility-pass
-  rfe-creator-feasibility-fail
-  rfe-creator-feasibility-unknown
-  (feasibility-* mutually exclusive)
+  - Jira RHAIRFE tickets
+  - artifacts/rfes.md
+  - labels + (opt) Approved
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
+  style.stroke-width: 2
+}
+
+# --- Callout: automatic labeling scheme ---
+
+labels-callout: |md
+  Labels by pipeline outcome:
+  rfe-creator-auto-created      (new ticket)
+  rfe-creator-auto-revised      (auto_revised)
+  rfe-creator-split-original    (parent)
+  rfe-creator-split-result      (child)
+  rfe-creator-needs-attention   (flagged)
+  rfe-creator-autofix-rubric-pass  (rec=submit)
+  rfe-creator-feasibility-pass / fail / unknown
+    (mutually exclusive)
+| {
+  shape: rectangle
   style.font: mono
   style.font-size: 10
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
 }
 
 # --- Flow ---
 
-entry -> creds-q
-creds-q -> submit-script: "set"
-creds-q -> report: "missing →\ninstruct & stop" {
+entry -> check-creds
+check-creds -> setup-stop: "missing" {
   style.stroke-dash: 3
 }
-submit-script -> jira: "create / update" {
-  style.stroke-dash: 3
-}
-submit-script -> report
-submit-script -> labels: {
+check-creds -> submit-run: "all set"
+submit-run -> actions.scan-plan: "RFE-NNN.md"
+actions -> jira: "REST create / update / label / transition"
+actions -> report-out: "rfes.md"
+report-out -> output-final
+
+# callout connector (dashed light-grey)
+actions.apply-labels -> labels-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
-  style.stroke-width: 1
 }

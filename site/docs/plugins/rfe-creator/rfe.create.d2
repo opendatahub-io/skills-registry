@@ -8,175 +8,203 @@ direction: right
 # --- Entry ---
 
 entry: |md
-  **/rfe.create**
+  **/rfe.create $ARGUMENTS**
 
-  - problem statement
-  - --headless
-  - --priority, --labels
-  - --rfe-id
+  - problem statement / idea
+  - --headless, --priority
+  - --labels, --rfe-id
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Step 0 ---
+# --- Step 0: parse arguments ---
 
-parse: |md
-  **Step 0: Parse Args**
+parse-args: |md
+  **Step 0: Parse Arguments**
 
-  - extract flags + problem text
-  - --headless skips Step 2
-  - remaining text = problem
+  - --headless (skip Q&A)
+  - --priority {Blocker..Minor}
+  - --labels {csv}, --rfe-id {ID}
+  - rest = problem statement
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Step 1 ---
+# --- Step 1: load rubric (decision) ---
 
-load-rubric: |md
+rubric-check: |md
   **Step 1: Load Rubric**
 
-  - read artifacts/rfe-rubric.md
-  - if missing: bootstrap
-  - shapes questions + RFEs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-assess-rfe: |md
-  **assess-rfe plugin**
-
-  - bootstrap-assess-rfe.sh
-  - /export-rubric
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Decision ---
-
-headless-q: |md
-  **--headless?**
-
-  skip clarifying Q's?
+  - artifacts/rfe-rubric.md
+  - exists?
 | {
   shape: diamond
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Step 2 ---
+# --- Load Rubric bootstrap (container) ---
+
+loadrubric: Load Rubric {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  bootstrap: |md
+    **bootstrap-assess-rfe.sh**
+
+    - fetch assess-rfe skills
+    - .context/assess-rfe/
+  |
+  export-rubric: |md
+    **/export-rubric**
+
+    - assess-rfe plugin
+    - write rfe-rubric.md
+    - on fail: no rubric
+  | {
+    style.stroke-dash: 3
+  }
+
+  bootstrap -> export-rubric: "assess-rfe skills"
+}
+
+# --- Step 2: clarifying questions (LLM) ---
 
 clarify: |md
   **Step 2: Clarifying Questions**
+  LLM · AskUserQuestion
 
-  - 2-5 Q's (AskUserQuestion)
-  - customers, business justification
-  - user problem, size, success
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Step 3 (LLM) ---
-
-generate: |md
-  **Step 3: Generate RFEs**
-
-  - WHAT/WHY, never HOW
-  - one RFE per business need
-  - size S/M/L/XL from AC count
+  - 2-5 Qs: customers,
+    justification, problem
+  - size, success outcome
+  - skipped if --headless
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+  style.stroke-width: 3
   style.double-border: true
 }
 
-# --- Step 4 ---
+# --- Step 3: generate RFEs (LLM) ---
 
-write: |md
-  **Step 4: Write Artifacts**
+generate: |md
+  **Step 3: Generate RFEs**
+  LLM
 
-  - next_rfe_id.py or --rfe-id
-  - frontmatter.py set (Draft)
-  - rebuild-index
+  - WHAT / WHY only, no HOW
+  - one RFE per business need
+  - size from AC count
+  - Jira priority value
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
+  style.fill: "#e8e8e8"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Step 4: write artifacts (container) ---
+
+write-artifacts: Step 4: Write Artifacts {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
+
+  next-id: |md
+    **next_rfe_id.py {count}**
+
+    - allocate RFE-NNN
+    - atomic flock
+    - or reuse --rfe-id
+  |
+  set-fm: |md
+    **frontmatter.py set**
+
+    - rfe_id / title / priority
+    - size / status=Draft
+    - schema-validated
+  |
+  rebuild: |md
+    **frontmatter.py rebuild-index**
+
+    - scan rfe-tasks/
+    - write artifacts/rfes.md
+  |
+
+  next-id -> set-fm: "RFE-NNN ids"
+  set-fm -> rebuild
 }
 
 # --- Output ---
 
-result: |md
-  **artifacts/rfe-tasks/RFE-NNN.md**
+artifacts-out: |md
+  **Output**
 
-  - Draft + frontmatter
-  - edit or /rfe.review
+  - artifacts/rfe-tasks/RFE-NNN.md
+  - artifacts/rfes.md
+  - next: /rfe.review
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
   style.stroke-width: 2
 }
 
-# --- Callout ---
+# --- Callout: Size Guide (mono) ---
 
-layout-note: |md
-  artifacts/
-    rfe-rubric.md
-    rfe-tasks/RFE-NNN.md
-    rfe-reviews/
-  Size Guide  S:1-2  M:3-5
-              L:5-8  XL:8+
+size-callout: |md
+  Size Guide (by AC count):
+  S   1-2   Concise format
+  M   3-5   Standard format
+  L   5-8   Full format
+  XL  8+    Full + optional
 | {
   shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
   style.font: mono
   style.font-size: 10
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+}
+
+# --- Callout: rfe-task frontmatter (mono) ---
+
+fm-callout: |md
+  rfe-tasks/RFE-NNN.md frontmatter:
+  rfe_id:   RFE-NNN or RHAIRFE-NNNN
+  title:    {string}
+  priority: Blocker / Critical / Major
+            / Normal / Minor
+  size:     S / M / L / XL
+  status:   Draft
+| {
+  shape: rectangle
+  style.font: mono
+  style.font-size: 10
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
 }
 
 # --- Flow ---
 
-entry -> parse
-parse -> load-rubric
-
-load-rubric -> assess-rfe: "bootstrap" {
+entry -> parse-args
+parse-args -> rubric-check
+rubric-check -> clarify: "exists"
+rubric-check -> loadrubric.bootstrap: "missing" {
   style.stroke-dash: 3
 }
-
-load-rubric -> headless-q
-
-headless-q -> clarify: "no"
-headless-q -> generate: "--headless" {
+rubric-check -> generate: "--headless" {
   style.stroke-dash: 3
 }
-
+loadrubric -> clarify: "rfe-rubric.md"
 clarify -> generate
-generate -> write
-write -> result
+generate -> write-artifacts.next-id: "RFEs drafted"
+write-artifacts -> artifacts-out: "RFE-NNN.md"
 
-write -> layout-note: {
+# callout connectors (dashed light-grey)
+generate -> size-callout: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
-  style.stroke-width: 1
+}
+artifacts-out -> fm-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
 }

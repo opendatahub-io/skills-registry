@@ -7,12 +7,12 @@ direction: right
 
 # --- Entry ---
 
-entry: |md
-  **RFE Pipeline**
+user-input: |md
+  **User input**
 
-  - single idea (Mode C)
-  - Jira key(s) (Mode B)
-  - batch YAML (Mode A)
+  - single idea (free text)
+  - Jira key(s) RHAIRFE-NNNN
+  - batch YAML (--input)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,103 +20,100 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Orchestrator ---
+# --- Orchestrator (LLM) ---
 
 speedrun: |md
   **/rfe.speedrun**
-  top-level orchestrator
+  orchestrator (LLM)
 
-  - 3 modes (A/B/C)
-  - persists state to tmp/
-  - chains create -> auto-fix -> submit
-  - --headless / --dry-run for CI
+  - detect Mode A / B / C
+  - persist config + IDs to tmp/
+  - --headless / --dry-run
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 3
+  style.stroke-width: 2
   style.double-border: true
 }
 
-# --- Create ---
+# --- Phase 1: Create (LLM) ---
 
 create: |md
   **/rfe.create**
-  author RFE artifacts
+  Phase 1 (LLM)
 
-  - clarifying questions
-  - RFE template, WHAT/WHY only
-  - size guide (S/M/L)
-  - -> artifacts/rfe-tasks
+  - clarify need (WHAT/WHY)
+  - size from acceptance criteria
+  - writes rfe-tasks/RFE-NNN.md
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 3
+  style.stroke-width: 2
   style.double-border: true
 }
 
-# --- Auto-fix ---
+# --- Phase 2: Auto-fix (LLM) ---
 
-autofix: |md
+auto-fix: |md
   **/rfe.auto-fix**
-  non-interactive pipeline
+  Phase 2 (LLM)
 
-  - pipeline_state.py machine
-  - batched agent dispatch
-  - assess -> feasibility ->
-    review -> revise -> split
+  - pipeline_state.py state machine
+  - batches, resume, retry queue
+  - non-interactive
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 3
+  style.stroke-width: 2
   style.double-border: true
 }
 
-# --- Review ---
+# --- Review (LLM) ---
 
 review: |md
   **/rfe.review**
-  score + revise
+  review orchestrator (LLM)
 
-  - rubric assess + feasibility
-  - review + auto-revise
-  - re-assess <= 2 cycles
+  - rubric score + feasibility
+  - launches agents (rfe-scorer)
+  - auto-revise + re-assess
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 3
+  style.stroke-width: 2
   style.double-border: true
 }
 
-# --- Split ---
+# --- Split (LLM) ---
 
-split: |md
+split-skill: |md
   **/rfe.split**
-  decompose oversized RFEs
+  decompose (LLM)
 
-  - split into children
-  - re-review children
-  - right-size loop
+  - split oversized RFEs
+  - generate children
+  - coverage self-check
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 3
+  style.stroke-width: 2
   style.double-border: true
 }
 
-# --- Submit ---
+# --- Submit (deterministic) ---
 
 submit-skill: |md
   **/rfe.submit**
-  deterministic REST API
+  deterministic
 
-  - passing IDs only
+  - scripts/submit.py
+  - REST + BasicAuth
   - create / update tickets
-  - auto-applied labels
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -124,13 +121,13 @@ submit-skill: |md
   style.stroke-width: 2
 }
 
-# --- External dependencies ---
+# --- External dependencies (dashed) ---
 
 assess-rfe: |md
   **assess-rfe plugin**
 
-  - scoring rubric
-  - bootstrapped on first use
+  - rubric / export-rubric
+  - rfe-scorer agent
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -139,11 +136,11 @@ assess-rfe: |md
   style.stroke-dash: 3
 }
 
-archctx: |md
+arch-context: |md
   **architecture-context**
 
-  - platform components / APIs
-  - feasibility grounding
+  - repo checkout
+  - feasibility context
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -152,11 +149,10 @@ archctx: |md
   style.stroke-dash: 3
 }
 
-jira: |md
+jira-out: |md
   **Jira (RHAIRFE)**
 
-  - fetch existing RFEs
-  - create + update tickets
+  - Feature Request
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -165,15 +161,13 @@ jira: |md
   style.stroke-dash: 3
 }
 
-# --- Output ---
+# --- Shared store ---
 
-result: |md
-  **RHAIRFE tickets**
+artifacts-store: |md
+  **artifacts/ (shared store)**
 
-  - created / updated
-  - labels: auto-created,
-    auto-revised, split-*,
-    feasibility-*
+  - rfe-tasks/ , rfe-originals/
+  - rfe-reviews/ , rfes.md
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -181,32 +175,80 @@ result: |md
   style.stroke-width: 2
 }
 
+# --- Callouts ---
+
+artifacts-tree: |md
+  artifacts/
+    rfe-tasks/RFE-NNN.md      (task + frontmatter)
+    rfe-originals/RHAIRFE-*.md  (Jira baseline)
+    rfe-reviews/{ID}-review.md (score/pass/rec)
+    rfes.md                    (generated index)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+review-file: |md
+  {ID}-review.md frontmatter:
+    score  pass  recommendation
+    feasibility  auto_revised
+    needs_attention
+    scores: what why open_to_how
+            not_a_task right_sized
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
-entry -> speedrun
+user-input -> speedrun: "idea / keys /\nbatch YAML"
+speedrun -> create: "Mode A/C:\nnew RFEs"
+create -> auto-fix: "RFE-NNN.md"
+auto-fix -> review: "invokes"
+review -> submit-skill: "passing RFEs"
+submit-skill -> jira-out: "REST + BasicAuth"
 
-speedrun -> create: "Mode A/C: new ideas"
-speedrun -> autofix: "existing keys /\nafter create"
-create -> autofix: "artifacts/rfe-tasks"
-
-autofix -> review: "per batch"
-autofix -> split: "oversized"
-split -> review: "review children" {
-  style.stroke-dash: 3
-}
-
-review -> assess-rfe: "rubric" {
-  style.stroke-dash: 3
-}
-review -> archctx: "feasibility grounding" {
-  style.stroke-dash: 3
-}
-review -> jira: "fetch RFEs" {
+# Branch + loops
+auto-fix -> split-skill: "oversized"
+split-skill -> review: "children\n(re-review)"
+review -> review: "auto-revise\n(<=2 cycles)" {
   style.stroke-dash: 3
 }
 
-speedrun -> submit-skill: "passing IDs"
-submit-skill -> jira: "create / update" {
+# External (dashed)
+review -> assess-rfe: "rubric /\nrfe-scorer" {
   style.stroke-dash: 3
 }
-jira -> result
+review -> arch-context: "feasibility\ncontext" {
+  style.stroke-dash: 3
+}
+
+# Orchestration (speedrun drives phases directly)
+speedrun -> auto-fix: "Mode B:\nexisting keys" {
+  style.stroke-dash: 3
+}
+speedrun -> submit-skill: "Phase 3\n(drives)" {
+  style.stroke-dash: 3
+}
+
+# Store + callouts
+create -> artifacts-store: "writes\nRFE files"
+artifacts-store -> artifacts-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+submit-skill -> review-file: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

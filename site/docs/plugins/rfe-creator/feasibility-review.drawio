@@ -2,48 +2,94 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;feasibility-review&lt;/b&gt;&lt;br&gt;fork sub-agent (Opus)&lt;br&gt;&lt;br&gt;staff-engineer reviewer&lt;br&gt;refined strategy features&lt;br&gt;Read / Grep / Glob only&lt;br&gt;find problems, not confirm" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="30" y="210" width="160" height="160" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;Forked review sub-agent&lt;/b&gt;&lt;br&gt;staff engineer (opus)&lt;br&gt;&lt;br&gt;- context: fork&lt;br&gt;- user-invocable: false&lt;br&gt;- allowed-tools: Read, Grep, Glob&lt;br&gt;- find problems, not confirm" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="170" width="200" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="read-inputs" value="&lt;b&gt;Read Inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;cross-ref artifacts/rfe-tasks/ (delivers the RFE?)&lt;br&gt;prior strat-reviews/ if re-review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="240" y="225" width="190" height="130" as="geometry"/>
+    <mxCell id="inputs" value="&lt;b&gt;Read inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- artifacts/strat-tasks/ (refined strategy features)&lt;br&gt;- cross-ref artifacts/rfe-tasks/ (strategy delivers RFE need?)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="300" y="185" width="225" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="archctx" value="&lt;b&gt;Architecture Context&lt;/b&gt;&lt;br&gt;&lt;br&gt;rhoai-* PLATFORM.md + docs&lt;br&gt;active overlays (status: active)&lt;br&gt;release + affects match&lt;br&gt;overlays override generated docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="480" y="215" width="200" height="150" as="geometry"/>
+    <mxCell id="re-review" value="&lt;b&gt;strat-reviews/ has files for these strategies?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="585" y="190" width="190" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="assess" value="&lt;b&gt;Assess Feasibility&lt;/b&gt;&lt;br&gt;adversarial LLM review&lt;br&gt;&lt;br&gt;approach works? fundamental flaws?&lt;br&gt;delivers what RFE asks? (silent scope cuts)&lt;br&gt;effort / T-shirt credible?&lt;br&gt;hidden deps + integration gaps&lt;br&gt;what's harder than it looks?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="730" y="202" width="220" height="176" as="geometry"/>
+    <mxCell id="rereview-delta" value="&lt;b&gt;Re-review delta&lt;/b&gt;&lt;br&gt;&lt;br&gt;- concerns addressed?&lt;br&gt;- concerns remaining?&lt;br&gt;- new issues introduced?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="835.0" y="149.0" width="200" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="verdict-q" value="&lt;b&gt;Recommendation&lt;/b&gt;&lt;br&gt;&lt;br&gt;approve / revise / reject" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="1000" y="220" width="180" height="140" as="geometry"/>
+    <mxCell id="arch-context" value="&lt;b&gt;Architecture context&lt;/b&gt;&lt;br&gt;.context/architecture-context/&lt;br&gt;&lt;br&gt;- architecture/rhoai-*/&lt;br&gt;- PLATFORM.md&lt;br&gt;- relevant component docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="835" y="300" width="215" height="135" as="geometry"/>
     </mxCell>
-    <mxCell id="result" value="&lt;b&gt;STRAT-NNN assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;Feasibility verdict&lt;br&gt;Effort estimate credibility&lt;br&gt;RFE alignment (gaps listed)&lt;br&gt;Key concerns&lt;br&gt;Recommendation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1230" y="213" width="180" height="154" as="geometry"/>
+    <mxCell id="overlays" value="&lt;b&gt;Apply overlays&lt;/b&gt;&lt;br&gt;&lt;br&gt;- overlays/*.md status: active&lt;br&gt;- filter release + affects (platform matches all)&lt;br&gt;- take precedence over docs&lt;br&gt;- print &quot;Overlays applied&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1081.25" y="300.0" width="220" height="135" as="geometry"/>
     </mxCell>
-    <mxCell id="archctx-ext" value="&lt;b&gt;architecture-context&lt;/b&gt;&lt;br&gt;&lt;br&gt;PLATFORM.md + component docs&lt;br&gt;overlays (human corrections)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="490" y="460" width="180" height="110" as="geometry"/>
+    <mxCell id="assess" value="&lt;b&gt;Assess (5 dimensions, adversarial)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="740" y="520" width="610" height="345" as="geometry"/>
     </mxCell>
-    <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-inputs" parent="1">
+    <mxCell id="reason" value="&lt;b&gt;Adversarial reasoning&lt;/b&gt;&lt;br&gt;LLM sub-agent (opus)&lt;br&gt;&lt;br&gt;- staff engineer lens&lt;br&gt;- find flaws, not value&lt;br&gt;- explain optimistic estimates with specifics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="20" y="55" width="190" height="255" as="geometry"/>
+    </mxCell>
+    <mxCell id="d1-buildable" value="&lt;b&gt;1. Buildable?&lt;/b&gt;&lt;br&gt;&lt;br&gt;proposed approach works; fundamental flaws" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="230" y="55" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="d2-rfe-delivery" value="&lt;b&gt;2. Delivers RFE?&lt;/b&gt;&lt;br&gt;&lt;br&gt;vs acceptance criteria; flag silent scope cuts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="230" y="145" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="d3-effort" value="&lt;b&gt;3. Effort credible?&lt;/b&gt;&lt;br&gt;&lt;br&gt;T-shirt vs component count, cross-team coordination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="230" y="235" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="d4-hidden" value="&lt;b&gt;4. Hidden deps?&lt;/b&gt;&lt;br&gt;&lt;br&gt;integration challenges not mentioned" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="420" y="100" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="d5-harder" value="&lt;b&gt;5. Harder than it looks?&lt;/b&gt;&lt;br&gt;&lt;br&gt;&quot;straightforward&quot; that isn't" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="420" y="190" width="170" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="review-out" value="&lt;b&gt;Return assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;- one block per strategy&lt;br&gt;- adversarial; specifics for optimistic estimates&lt;br&gt;- no Write tool: returned to orchestrator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="430" y="595" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess-block" value="### STRAT-NNN: {title}&lt;br&gt;Feasibility:&lt;br&gt;&amp;nbsp;&amp;nbsp;feasible / infeasible /&lt;br&gt;&amp;nbsp;&amp;nbsp;needs revision&lt;br&gt;Effort estimate:&lt;br&gt;&amp;nbsp;&amp;nbsp;credible / optimistic /&lt;br&gt;&amp;nbsp;&amp;nbsp;significantly underestimated&lt;br&gt;RFE alignment:&lt;br&gt;&amp;nbsp;&amp;nbsp;delivers / partial - gaps /&lt;br&gt;&amp;nbsp;&amp;nbsp;diverges&lt;br&gt;Key concerns: [...]&lt;br&gt;Recommendation:&lt;br&gt;&amp;nbsp;&amp;nbsp;approve / revise / reject" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="415" y="800" width="250" height="215" as="geometry"/>
+    </mxCell>
+    <mxCell id="field-glossary" value="Field value semantics&lt;br&gt;Effort estimate&lt;br&gt;&amp;nbsp;&amp;nbsp;optimistic = plausible but risky&lt;br&gt;&amp;nbsp;&amp;nbsp;significantly = misses&lt;br&gt;&amp;nbsp;&amp;nbsp;component count / coordination&lt;br&gt;RFE alignment&lt;br&gt;&amp;nbsp;&amp;nbsp;partial = silent scope reduction&lt;br&gt;&amp;nbsp;&amp;nbsp;diverges = builds a different thing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="760" y="915" width="260" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-entry-inputs" value="strat-tasks/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="inputs" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="archctx" parent="1">
+    <mxCell id="e-inputs-rereview" value="rfe-tasks/ cross-ref" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="inputs" target="re-review" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="11" value="grounded context" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="archctx" target="assess" parent="1">
+    <mxCell id="e-rereview-delta" value="strat-reviews/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="re-review" target="rereview-delta" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="835.0" y="245.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-rereview-arch" value="none: fresh" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="re-review" target="arch-context" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="verdict-q" parent="1">
+    <mxCell id="e-delta-arch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.46511627906976744;entryY=0;entryDx=0;entryDy=0;" edge="1" source="rereview-delta" target="arch-context" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="13" value="per strategy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="verdict-q" target="result" parent="1">
+    <mxCell id="e-arch-overlays" value="PLATFORM.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="arch-context" target="overlays" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="14" value="read docs + overlays" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="archctx" target="archctx-ext" parent="1">
+    <mxCell id="e-overlays-assess" value="overlays" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7397540983606558;entryY=0;entryDx=0;entryDy=0;" edge="1" source="overlays" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-assess-out" value="STRAT-NNN block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.43478260869565216;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="review-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-out-block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.48;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="review-out" target="assess-block" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-assess-glossary" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.213;exitY=1.0;exitDx=0;exitDy=0;entryX=0.423;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="assess" target="field-glossary" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>

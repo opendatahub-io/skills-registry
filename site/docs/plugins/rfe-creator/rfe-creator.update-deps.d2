@@ -5,14 +5,15 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry ---
+# --- Entry (explicit-only maintenance command) ---
 
 entry: |md
   **/rfe-creator.update-deps**
 
+  - explicit-only invoke
+    (disable-model-invocation)
   - force-refresh vendored deps
-  - explicit trigger only
-  - disable-model-invocation
+  - allowed-tools: Bash, Glob
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,45 +21,103 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 1 ---
+# --- Column 1: assess-rfe dependency ---
 
-update-assess: |md
-  **Step 1: Update assess-rfe**
-
-  - rm -rf .context/assess-rfe
-  - rm vendored skills
-    (assess-rfe, export-rubric)
-  - bootstrap-assess-rfe.sh
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
+assess-grp: 1. Update assess-rfe {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
+
+  remove-assess: |md
+    **Remove cached**
+
+    - rm -rf .context/assess-rfe
+    - rm -rf .claude/skills/assess-rfe
+    - rm -rf .claude/skills/export-rubric
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  bootstrap: |md
+    **Re-fetch**
+    bootstrap-assess-rfe.sh
+
+    - git clone/pull assess-rfe
+    - into .context/assess-rfe
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  populate: |md
+    **Repopulate**
+
+    - cp skills to .claude/skills
+    - cp agents/*.md
+    - export_rubric.py to artifacts
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  remove-assess -> bootstrap
+  bootstrap -> populate
 }
 
-# --- Step 2 ---
+# --- Column 2: architecture context dependency ---
 
-update-arch: |md
-  **Step 2: Update Arch Context**
-
-  - rm -rf
-    .context/architecture-context
-  - fetch-architecture-context.sh
-  - detect latest RHOAI version
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
+arch-grp: 2. Update architecture context {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
+
+  remove-arch: |md
+    **Remove cached**
+
+    - rm -rf
+      .context/architecture-context
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  fetch-arch: |md
+    **Re-fetch**
+    fetch-architecture-context.sh
+
+    - detect latest rhoai-{X.Y}
+    - sparse-checkout architecture
+      + overlays
+    - write LATEST_VERSION
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  remove-arch -> fetch-arch
 }
 
-# --- Step 3 ---
+# --- Report + result ---
 
 report: |md
-  **Step 3: Report**
+  **3. Report**
 
   - list what was updated
   - versions fetched
+    (RHOAI rhoai-{X.Y})
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -66,41 +125,51 @@ report: |md
   style.stroke-width: 2
 }
 
-# --- External sources ---
+result: |md
+  **Done**
 
-assess-rfe-ext: |md
-  **assess-rfe plugin**
-
-  - re-fetched source
+  refreshed vendored deps
+  + version report
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.stroke-dash: 3
 }
 
-archctx-ext: |md
-  **architecture-context**
+# --- Callout: vendored dependency layout that is removed then re-fetched ---
 
-  - re-fetched source
+deps-tree: |md
+  vendored deps (rm -rf, then re-fetch):
+  .context/assess-rfe/            git clone
+  .claude/skills/assess-rfe/      cp
+  .claude/skills/export-rubric/   cp
+  .claude/agents/*.md             cp
+  artifacts/rfe-rubric.md         export_rubric
+  .context/architecture-context/  sparse-checkout
+    architecture/rhoai-{X.Y}/     latest
+    LATEST_VERSION
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
-# --- Flow ---
+# --- Flow: two parallel columns converge on Report ---
 
-entry -> update-assess
-update-assess -> update-arch
-update-arch -> report
+entry -> assess-grp.remove-assess
+entry -> arch-grp.remove-arch
 
-update-assess -> assess-rfe-ext: "re-fetch" {
-  style.stroke-dash: 3
-}
-update-arch -> archctx-ext: "re-fetch" {
-  style.stroke-dash: 3
+assess-grp.populate -> report: "artifacts/rfe-rubric.md + skills"
+arch-grp.fetch-arch -> report: ".context/architecture-context"
+
+report -> result
+
+report -> deps-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

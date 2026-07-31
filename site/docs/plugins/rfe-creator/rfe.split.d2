@@ -10,9 +10,8 @@ direction: right
 entry: |md
   **/rfe.split**
 
-  - RHAIRFE-NNNN / RFE-NNN IDs
-  - one or more parents
-  - --headless flag
+  - {IDs} (RHAIRFE / RFE-NNN)
+  - [--headless]
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,15 +19,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 0 ---
+# --- Step 0: Parse + persist ---
 
 parse: |md
-  **Step 0: Parse & Persist**
+  **Step 0 · Parse + Persist**
 
-  - strip --headless flag
-  - IDs + flags to disk (state.py)
-  - verify task files exist (Glob)
-  - skip missing artifacts
+  - state.py init split-config.yaml
+  - state.py write-ids split-all-ids.txt
+  - orchestrator reads only
+    frontmatter + Glob, never bodies
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,30 +35,10 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Step 1 (LLM) ---
+verify: |md
+  **Task file exists?**
 
-split-agents: |md
-  **Step 1: Split Agents**
-
-  - parallel agents (Opus, bg)
-  - one per parent RFE
-  - decompose into children
-  - poll check_review_progress
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 3
-  style.double-border: true
-}
-
-# --- Step 2 decision ---
-
-collect-q: |md
-  **action: split?**
-
-  - collect_children.py
-  - read split-status.yaml
+  - Glob rfe-tasks/{ID}.md
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -67,14 +46,101 @@ collect-q: |md
   style.stroke-width: 2
 }
 
-# --- Review (other skill) ---
+skip-step: |md
+  **Skip Missing**
 
-review-children: |md
-  **/rfe.review --caller split**
+  - report ID, drop it
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
+# --- Step 1: Split agents ---
+
+split: Step 1 · Split Agents {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  agent: |md
+    **Split Agent**
+    opus · background
+
+    - prompts/split-agent.md
+      per parent
+    - reads RFE body, decomposes
+    - writes {ID}-split-status.yaml
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+
+  poll: |md
+    **Poll Progress**
+
+    - check_review_progress.py
+      --phase split
+    - sleep NEXT_POLL
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  agent -> poll
+}
+
+# --- Step 2: Collect children ---
+
+action: |md
+  **action?**
+
+  - read {ID}-split-status.yaml
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+revise: |md
+  **Mark Revise**
+
+  - frontmatter set
+    recommendation=revise
+  - (delivery-coupled)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+collect: |md
+  **Step 2 · Collect Children**
+
+  - collect_children.py
+  - parse child RFE IDs
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+review: |md
+  **/rfe.review**
+  other skill
+
+  - --caller split [--headless]
   - full review pipeline
-  - all children reviewed
-  - --headless passthrough
+    on children
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -83,14 +149,13 @@ review-children: |md
   style.stroke-dash: 3
 }
 
-# --- Step 3 decision ---
+# --- Step 3: Right-sizing self-correction ---
 
-rightsize-q: |md
-  **child < 2/2 right-sized?**
+rightsize: |md
+  **child right_sized < 2/2?**
 
-  - Step 3 self-correction
-  - max 1 cycle
-  - right_sized score only
+  - frontmatter read {child}-review.md
+  - state.py correction_cycle (max 1)
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -98,69 +163,90 @@ rightsize-q: |md
   style.stroke-width: 2
 }
 
-# --- Step 4 container ---
+# --- Step 4: Finalize ---
 
-finalize: "Step 4: Finalize" {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
+finalize: |md
+  **Step 4 · Finalize**
 
-  headless: |md
-    **Headless Return**
-
-    - rebuild index
-    - return to /rfe.auto-fix
-    - batch loop (no summary)
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  interactive: |md
-    **Interactive Summary**
-
-    - parents archived
-    - list new RFEs + PASS
-    - coverage report
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-}
-
-# --- Output ---
-
-result: |md
-  **artifacts/rfe-tasks/**
-
-  - child RFEs created
-  - parent status=Archived
-  - next: /rfe.submit
+  - frontmatter.py rebuild-index
+  - state.py read split-config.yaml
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+summary: |md
+  **Interactive Summary**
+
+  - parent archived
+  - children PASS / FAIL
+  - coverage report
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+autofix: |md
+  **/rfe.auto-fix**
+  other skill
+
+  - Step 3d between-batch
+  - headless return
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Callout ---
+
+status-yaml: |`md
+  rfe-reviews/{ID}-split-status.yaml:
+    status: completed
+    action: split | no-split
+    reason: "split into N children" | "delivery-coupled"
+    children: [RFE-001, RFE-002]
+`| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
 entry -> parse
-parse -> split-agents
-split-agents -> collect-q
+parse -> verify
+verify -> skip-step: "missing"
+verify -> split.agent: "exists"
 
-collect-q -> review-children: "split"
-collect-q -> result: "no-split -> revise" {
+split.poll -> action: "split-status.yaml"
+action -> revise: "no-split"
+action -> collect: "split"
+collect -> review: "child IDs"
+review -> rightsize: "right_sized"
+
+rightsize -> split.agent: "re-split child" {
+  style.stroke-dash: 3
+}
+rightsize -> finalize: "all >= 2/2"
+revise -> finalize
+
+finalize -> summary: "interactive"
+finalize -> autofix: "--headless" {
   style.stroke-dash: 3
 }
 
-review-children -> rightsize-q
-rightsize-q -> split-agents: "re-split offending child" {
-  style.stroke-dash: 3
+collect -> status-yaml: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
-rightsize-q -> finalize: "ok or max 1 cycle"
-finalize -> result

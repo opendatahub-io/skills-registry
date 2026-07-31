@@ -2,98 +2,121 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/rfe.auto-fix&lt;/b&gt;&lt;br&gt;&lt;br&gt;explicit IDs or --jql&lt;br&gt;--limit, --batch-size (50)&lt;br&gt;--random, --reprocess&lt;br&gt;--headless (non-interactive)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="235" width="150" height="170" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe.auto-fix {IDs} | --jql {q}&lt;/b&gt;&lt;br&gt;&lt;br&gt;--limit N, --batch-size N&lt;br&gt;--reprocess, --random N&lt;br&gt;--headless, --announce-complete" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="315" width="180" height="155" as="geometry"/>
     </mxCell>
     <mxCell id="setup" value="&lt;b&gt;Setup&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="210" y="57.5" width="185" height="525" as="geometry"/>
+      <mxGeometry x="250" y="90" width="218" height="555" as="geometry"/>
     </mxCell>
     <mxCell id="init" value="&lt;b&gt;1. Init&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py init&lt;br&gt;--batch-size / --headless&lt;br&gt;--announce-complete" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
-      <mxGeometry x="15" y="50" width="155" height="100" as="geometry"/>
+      <mxGeometry x="20" y="50" width="180" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="ids" value="&lt;b&gt;2. Resolve IDs&lt;/b&gt;&lt;br&gt;&lt;br&gt;snapshot_fetch.py (JQL /&lt;br&gt;--reprocess) or explicit&lt;br&gt;incremental fetch&lt;br&gt;stop if none" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
-      <mxGeometry x="15" y="170" width="155" height="100" as="geometry"/>
+    <mxCell id="ids" value="&lt;b&gt;2. Resolve IDs&lt;/b&gt;&lt;br&gt;&lt;br&gt;JQL: snapshot_fetch.py fetch&lt;br&gt;reprocess-only snapshot&lt;br&gt;explicit: state.py write-ids" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="setup">
+      <mxGeometry x="20" y="175" width="180" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="bootstrap" value="&lt;b&gt;3. Bootstrap&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap-assess-rfe.sh&lt;br&gt;retry once on failure&lt;br&gt;else stop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
-      <mxGeometry x="15" y="290" width="155" height="100" as="geometry"/>
+    <mxCell id="bootstrap" value="&lt;b&gt;3. Bootstrap&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap-assess-rfe.sh&lt;br&gt;retry once, else stop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
+      <mxGeometry x="20" y="310" width="180" height="90" as="geometry"/>
     </mxCell>
-    <mxCell id="batch" value="&lt;b&gt;4. Resume + Batch&lt;/b&gt;&lt;br&gt;&lt;br&gt;check_resume.py&lt;br&gt;split into batch_size chunks&lt;br&gt;set total_batches&lt;br&gt;set-phase BATCH_START" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
-      <mxGeometry x="15" y="410" width="155" height="100" as="geometry"/>
+    <mxCell id="resume-batch" value="&lt;b&gt;4. Resume + Batch&lt;/b&gt;&lt;br&gt;&lt;br&gt;check_resume.py&lt;br&gt;split into batches&lt;br&gt;set total_batches, BATCH_START" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="setup">
+      <mxGeometry x="20" y="425" width="180" height="110" as="geometry"/>
     </mxCell>
-    <mxCell id="next-action" value="&lt;b&gt;next-action&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py next-action&lt;br&gt;parse action / phase / agents&lt;br&gt;loop until phase DONE" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="445" y="250" width="170" height="140" as="geometry"/>
+    <mxCell id="dispatch" value="&lt;b&gt;Dispatch loop (until phase=DONE)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="540" y="110" width="660" height="520" as="geometry"/>
     </mxCell>
-    <mxCell id="run-phase" value="&lt;b&gt;run_script&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py run-phase&lt;br&gt;deterministic phase step&lt;br&gt;phases: fetch, bootstrap,&lt;br&gt;re-assess, split setup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="700" y="45" width="185" height="125" as="geometry"/>
+    <mxCell id="next-action" value="&lt;b&gt;Step 1: next-action&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py next-action&lt;br&gt;parse action / phase / agents" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="dispatch">
+      <mxGeometry x="30" y="205" width="180" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="launch-wave" value="&lt;b&gt;launch_wave&lt;/b&gt;&lt;br&gt;&lt;br&gt;background Agent per item&lt;br&gt;assess / feasibility /&lt;br&gt;review / revise / split&lt;br&gt;one agent per RFE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="700" y="245" width="205" height="150" as="geometry"/>
+    <mxCell id="run-script" value="&lt;b&gt;run_script&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py run-phase&lt;br&gt;advance phase in place" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="260" y="55" width="170" height="100" as="geometry"/>
     </mxCell>
-    <mxCell id="teardown" value="&lt;b&gt;Teardown (DONE)&lt;/b&gt;&lt;br&gt;&lt;br&gt;batch_summary.py&lt;br&gt;--counts-only&lt;br&gt;per-phase counts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="700" y="475" width="185" height="120" as="geometry"/>
+    <mxCell id="launch-wave" value="&lt;b&gt;launch_wave&lt;/b&gt; (agents)&lt;br&gt;&lt;br&gt;one Agent per agents[] entry&lt;br&gt;subagent_type + prompt_file&lt;br&gt;pre-rendered vars ({ID} sub'd)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="255" y="205" width="185" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="wait-wave" value="&lt;b&gt;wait-for-wave&lt;/b&gt;&lt;br&gt;&lt;br&gt;blocking sync barrier&lt;br&gt;reads artifacts on disk&lt;br&gt;exit 0 done / exit 3 re-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="975" y="250" width="185" height="140" as="geometry"/>
+    <mxCell id="done-step" value="&lt;b&gt;done&lt;/b&gt;&lt;br&gt;&lt;br&gt;phase = DONE&lt;br&gt;exit loop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="260" y="385" width="170" height="95" as="geometry"/>
     </mxCell>
-    <mxCell id="e_init_ids" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="init" target="ids" parent="1">
+    <mxCell id="wait-for-wave" value="&lt;b&gt;wait-for-wave&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py wait-for-wave&lt;br&gt;blocking barrier on disk&lt;br&gt;exit 0 continue / exit 3 re-run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="480" y="205" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="teardown" value="&lt;b&gt;Teardown&lt;/b&gt;&lt;br&gt;&lt;br&gt;batch_summary.py --counts-only&lt;br&gt;--ids-file pipeline-all-ids.txt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="300" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="output-report" value="&lt;b&gt;Output&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/rfe-reviews/*&lt;br&gt;run report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1260" y="470" width="180" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="phases-callout" value="pipeline_state.py PHASES:&lt;br&gt;BATCH_START -&gt; FETCH -&gt; SETUP&lt;br&gt;-&gt; ASSESS -&gt; REVIEW -&gt; REVISE&lt;br&gt;-&gt; FIXUP -&gt; REASSESS_CHECK/SAVE&lt;br&gt;&amp;nbsp;&amp;nbsp;/ASSESS/REVIEW/RESTORE/REVISE/FIXUP&lt;br&gt;-&gt; COLLECT -&gt; SPLIT -&gt; SPLIT_COLLECT&lt;br&gt;-&gt; SPLIT_PIPELINE_START&lt;br&gt;-&gt; SPLIT_ASSESS/REVIEW/REVISE/FIXUP&lt;br&gt;&amp;nbsp;&amp;nbsp;/SAVE/REASSESS/RE_REVIEW/RESTORE&lt;br&gt;-&gt; SPLIT_CORRECTION_CHECK&lt;br&gt;-&gt; BATCH_DONE -&gt; ERROR_COLLECT&lt;br&gt;-&gt; REPORT -&gt; DONE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="250" y="730" width="440" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="wave-callout" value="launch_wave (next-action YAML):&lt;br&gt;action: launch_wave&lt;br&gt;phase: ASSESS&lt;br&gt;agents:&lt;br&gt;&amp;nbsp;&amp;nbsp;- subagent_type: rfe-scorer&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;prompt_file: {skill}/prompts/&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;assess-agent.md&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;vars: |&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;DATA_FILE=...RHAIRFE-1234.md&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;RUN_DIR=tmp/rfe-assess/single" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="740" y="730" width="380" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-init-ids" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="init" target="ids" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_ids_bootstrap" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="ids" target="bootstrap" parent="1">
+    <mxCell id="e-ids-bootstrap" value="pipeline-all-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="ids" target="bootstrap" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_bootstrap_batch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="batch" parent="1">
+    <mxCell id="e-bootstrap-resume" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="resume-batch" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_entry_setup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="setup" parent="1">
+    <mxCell id="e-entry-init" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="init" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_setup_na" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="setup" target="next-action" parent="1">
+    <mxCell id="e-resume-next" value="process-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="resume-batch" target="next-action" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_na_run" value="run_script" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="run-phase" parent="1">
+    <mxCell id="e-next-run" value="run_script" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="run-script" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_na_launch" value="launch_wave" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="launch-wave" parent="1">
+    <mxCell id="e-next-launch" value="launch_wave" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="launch-wave" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_na_teardown" value="done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="teardown" parent="1">
+    <mxCell id="e-next-done" value="done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="done-step" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_run_na" value="loop" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="run-phase" target="next-action" parent="1">
+    <mxCell id="e-launch-wait" value="background agents" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="launch-wave" target="wait-for-wave" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-run-next" value="phase advance" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="run-script" target="next-action" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-wait-next" value="exit 3 (pending)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="wait-for-wave" target="next-action" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-done-teardown" value="phase=DONE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="done-step" target="teardown" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="792.5" y="195"/>
-          <mxPoint x="640" y="195"/>
-          <mxPoint x="640" y="320.0"/>
+          <mxPoint x="1220" y="542"/>
+          <mxPoint x="1220" y="355"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_launch_wait" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="launch-wave" target="wait-wave" parent="1">
+    <mxCell id="e-teardown-output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="teardown" target="output-report" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_wait_na" value="wave done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="wait-wave" target="next-action" parent="1">
+    <mxCell id="e-next-phases" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="next-action" target="phases-callout" parent="1">
       <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1067.5" y="225"/>
-          <mxPoint x="680" y="225"/>
-          <mxPoint x="680" y="320.0"/>
-        </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_wait_launch" value="exit 3: pending" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="wait-wave" target="launch-wave" parent="1">
+    <mxCell id="e-launch-wave-callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="launch-wave" target="wave-callout" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="1067.5" y="440"/>
-          <mxPoint x="802.5" y="440"/>
+          <mxPoint x="887" y="470"/>
+          <mxPoint x="990" y="470"/>
+          <mxPoint x="990" y="705"/>
+          <mxPoint x="930.0" y="705"/>
         </Array>
       </mxGeometry>
     </mxCell>

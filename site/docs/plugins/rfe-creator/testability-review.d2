@@ -8,13 +8,13 @@ direction: right
 # --- Entry ---
 
 entry: |md
-  **testability-review**
-  fork · model: opus
+  **Forked review sub-agent**
+  test engineer
 
-  - test engineer
-  - reviews refined
-    strategy features
-  - can this be validated?
+  - context: fork, model opus
+  - question: can this be validated?
+  - allowed-tools: Read, Grep, Glob
+  - no Write (assessment returned)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -22,16 +22,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read inputs ---
+# --- Inputs ---
 
-read-inputs: |md
+inputs: |md
   **Read Inputs**
 
   - artifacts/strat-tasks/
-  - cross-ref artifacts/rfe-tasks/
+    (refined strategy features)
+  - x-ref artifacts/rfe-tasks/
     (original acceptance criteria)
-  - prior strat-reviews/
-    if re-review
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -39,36 +38,13 @@ read-inputs: |md
   style.stroke-width: 2
 }
 
-# --- Assess (LLM) ---
+# --- Re-review gate ---
 
-assess: |md
-  **Assess Testability**
-  LLM (opus)
+rereview: |md
+  **Re-review?**
 
-  - acceptance criteria testable?
-  - success criteria measurable
-    (baseline)?
-  - missing edge cases (failure,
-    boundaries, concurrency,
-    scale, backwards-compat)?
-  - test strategy? NFRs testable
-    (perf / scale / security)?
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Decision ---
-
-verdict-q: |md
-  **Recommendation**
-
-  approve /
-  revise criteria /
-  add test plan
+  - artifacts/strat-reviews/
+    has files for these?
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -76,17 +52,12 @@ verdict-q: |md
   style.stroke-width: 2
 }
 
-# --- Result ---
+rereview-compare: |md
+  **Compare vs prior review**
 
-result: |md
-  **STRAT-NNN assessment**
-
-  - testability
-  - missing edge cases
-  - untestable criteria
-  - test complexity
-  - recommendation (+ concrete
-    rewrites for vague criteria)
+  - concerns addressed?
+  - concerns remaining?
+  - new issues introduced?
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -94,9 +65,126 @@ result: |md
   style.stroke-width: 2
 }
 
+# --- Assess (LLM sub-agent, double border) ---
+
+assess: Assess (5 dimensions) {
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+
+  dim1: |md
+    **1 Acceptance testable**
+
+    - concrete test per criterion
+    - 'users can do X' = testable
+    - 'system is reliable' = not
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  dim2: |md
+    **2 Success measurable**
+
+    - '>80% reduction' has baseline?
+    - metric + target defined?
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  dim3: |md
+    **3 Missing edge cases**
+
+    - failure modes, boundaries
+    - concurrent access, large-scale
+    - backwards-compat w/ deployments
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  dim4: |md
+    **4 Test strategy**
+
+    - unit / integration / e2e
+    - hard-to-test: external deps,
+      multi-cluster scenarios
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  dim5: |md
+    **5 Non-functional testable**
+
+    - performance benchmarks
+    - scalability limits, security
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Output ---
+
+test-out: |md
+  **Testability assessment**
+  returned to orchestrator
+
+  - per-strategy structured block
+  - concrete rewrites for
+    vague / untestable criteria
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: per-strategy output block ---
+
+assessment-block: |md
+  ### STRAT-NNN: {title}
+  Testability: {testable / partially / untestable}
+  Missing edge cases: {list or none}
+  Untestable criteria: {list or none}
+  Test complexity: {straightforward / moderate / infra}
+  Recommendation: {approve / revise criteria / add plan}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
-entry -> read-inputs
-read-inputs -> assess
-assess -> verdict-q
-verdict-q -> result
+entry -> inputs
+inputs -> rereview: "strat-tasks/*.md"
+inputs -> assess: "rfe-tasks/*.md acceptance criteria"
+
+rereview -> rereview-compare: "re-review"
+rereview -> assess: "first review"
+rereview-compare -> assess
+
+assess -> test-out
+
+test-out -> assessment-block: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

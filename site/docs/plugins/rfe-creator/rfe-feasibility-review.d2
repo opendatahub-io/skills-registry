@@ -5,31 +5,32 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry ---
+# --- Entry: launched by /rfe.review (dashed origin) ---
 
 entry: |md
-  **rfe-feasibility-review**
+  **Launched by /rfe.review**
 
-  - input: one RFE ID
-  - model: opus (sub-agent)
-  - launched by /rfe.review
-  - senior-engineer lens
+  - internal sub-agent (opus)
+  - user-invocable: false
+  - 1 of 2N review agents
+  - input: RFE {ID}
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+  style.stroke-dash: 3
 }
 
-# --- Read RFE ---
+# --- Read RFE inputs ---
 
-read-rfe: |md
-  **Read RFE**
+inputs: |md
+  **Read RFE inputs**
 
   - artifacts/rfe-tasks/{ID}.md
-  - {ID}-comments.md
-    (Jira stakeholder history)
-  - prior review report (if any)
+  - {ID}-comments.md (if present)
+  - = Jira stakeholder history
+  - prior decisions, related work
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -37,118 +38,192 @@ read-rfe: |md
   style.stroke-width: 2
 }
 
-# --- Arch context decision ---
+# --- Architecture context (external repo, dashed) ---
 
-archctx-q: |md
-  **Arch context available?**
+arch-context: |md
+  **Architecture context**
+  .context/architecture-context/
 
   - Read LATEST_VERSION
-  - Read PLATFORM.md + docs
-  - error -> RFE content alone
-| {
-  shape: diamond
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Apply overlays ---
-
-overlays: |md
-  **Apply Overlays**
-
-  - read active overlays
-  - filter status/release/affects
-  - overlays override
-    generated docs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Assess feasibility (LLM) ---
-
-assess: |md
-  **Assess Feasibility**
-  adversarial senior-engineer review
-
-  - buildable? barriers?
-  - architectural incompatibilities?
-  - technical-strategy alignment?
-  - scope realistic for one feature?
-  - hidden complexity / cross-team?
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Verdict decision ---
-
-verdict-q: |md
-  **Verdict**
-
-  - feasible / infeasible
-  - indeterminate
-  - capability-not-yet
-    != infeasible
-| {
-  shape: diamond
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Result output ---
-
-result: |md
-  **{ID}-feasibility.md**
-
-  - artifacts/rfe-reviews/
-  - Feasibility verdict
-  - Strategy considerations
-  - Blockers + Scope assessment
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- External: architecture-context ---
-
-archctx: |md
-  **architecture-context**
-
-  - PLATFORM.md
-  - component docs
-  - overlays/*.md
+  - architecture/{ver}/PLATFORM.md
+  - relevant component docs
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
+}
+
+arch-check: |md
+  **LATEST_VERSION readable?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+degrade: |md
+  **Degrade gracefully**
+
+  - Read error = file missing
+  - assess on RFE content alone
+  - state: context unavailable
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Overlays ---
+
+overlays: |md
+  **Apply overlays**
+
+  - overlays/*.md status: active
+  - filter release + affects
+  - (platform matches all)
+  - overlays take precedence
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+prior-review: |md
+  **Prior review report?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess: the single LLM sub-agent reasoning step ---
+
+assess: Assess (adversarial - find blockers) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  reason: |md
+    **Adversarial reasoning**
+    LLM sub-agent (opus)
+
+    - senior engineer lens
+    - find blockers, not value
+    - no implementation design
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+  d1-feasible: |md
+    **1. Feasible?**
+    technical barriers
+  |
+  d2-arch: |md
+    **2. Arch conflict?**
+    not just unbuilt
+  |
+  d3-strategy: |md
+    **3. Strategy fit?**
+    supports direction
+  |
+  d4-scope: |md
+    **4. Scope realistic?**
+    single strategy feature
+  |
+  d5-hidden: |md
+    **5. Hidden complexity?**
+    cross-component, migration,
+    back-compat, multi-tenancy
+  |
+}
+
+# --- Output ---
+
+feasibility-out: |md
+  **Write feasibility report**
+
+  - mkdir rfe-reviews/
+  - Write {ID}-feasibility.md
+  - 4 verdict fields
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callouts ---
+
+report-schema: |md
+  artifacts/rfe-reviews/{ID}-feasibility.md
+  ### RFE-NNN: {title}
+  Feasibility:
+    feasible / infeasible / indeterminate
+  Strategy considerations:
+    none / items for /strat.refine
+  Blockers:
+    none / list
+  Scope assessment:
+    appropriate / needs splitting / unclear
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+verdicts: |md
+  Feasibility verdicts
+  feasible      = can build; arch
+                  decisions are strategy-phase
+  infeasible    = platform architecture
+                  fundamentally conflicts
+                  (not merely unbuilt)
+  indeterminate = RFE too ambiguous to assess
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-entry -> read-rfe
-read-rfe -> archctx-q
-archctx-q -> overlays: "available"
-archctx-q -> assess: "unavailable (RFE only)" {
+entry -> inputs: "RFE {ID}"
+inputs -> arch-context: "{ID}.md + comments"
+arch-context -> arch-check
+arch-check -> overlays: "found: PLATFORM.md"
+arch-check -> degrade: "Read error" {
   style.stroke-dash: 3
 }
-overlays -> assess
-assess -> verdict-q
-verdict-q -> result
-
-# --- Dashed external edge ---
-
-read-rfe -> archctx: "LATEST_VERSION / PLATFORM.md" {
+overlays -> prior-review: "overlays applied"
+degrade -> prior-review {
   style.stroke-dash: 3
+}
+prior-review -> assess: "if report: re-review"
+assess -> feasibility-out: "{ID}-feasibility.md"
+
+# Callout connectors
+feasibility-out -> report-schema {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+assess -> verdicts {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

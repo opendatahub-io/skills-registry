@@ -5,15 +5,16 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry ---
+# --- Entry: forked reviewer sub-agent (STRATEGY workflow) ---
 
 entry: |md
-  **architecture-review**
-  fork · model: opus
+  **Forked review sub-agent**
+  platform architect (opus)
 
-  - platform architect
-  - reviews refined
-    strategy features
+  - context: fork
+  - user-invocable: false
+  - allowed-tools: Read, Grep, Glob
+  - reviews strategy features
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,16 +22,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read inputs ---
+# --- Read strategy inputs, cross-ref source RFEs ---
 
-read-inputs: |md
-  **Read Inputs**
+inputs: |md
+  **Read inputs**
 
-  - artifacts/strat-tasks/
-  - cross-ref
-    artifacts/rfe-tasks/
-  - prior strat-reviews/
-    if re-review
+  - artifacts/strat-tasks/ (refined
+    strategy features)
+  - cross-ref artifacts/rfe-tasks/
+    (source RFEs)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -38,13 +38,11 @@ read-inputs: |md
   style.stroke-width: 2
 }
 
-# --- Decision ---
+# --- Re-review decision ---
 
-archctx-q: |md
-  **Arch context
-  available?**
-
-  rhoai-* dir present?
+re-review: |md
+  **strat-reviews/ has files
+  for these strategies?**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -52,14 +50,12 @@ archctx-q: |md
   style.stroke-width: 2
 }
 
-# --- Load overlays ---
+rereview-delta: |md
+  **Re-review delta**
 
-overlays: |md
-  **Load Overlays**
-
-  - active overlays only
-  - override generated docs
-  - e.g. KFP SDK version
+  - concerns addressed?
+  - concerns remaining?
+  - new issues introduced?
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -67,72 +63,191 @@ overlays: |md
   style.stroke-width: 2
 }
 
-# --- Assess (LLM) ---
+# --- Architecture context (external repo, dashed) ---
 
-assess: |md
-  **Assess Architecture**
-  LLM (opus)
+arch-context: |md
+  **Architecture context**
+  .context/architecture-context/
 
-  - dependencies accurate?
-  - integration patterns valid?
-  - component boundaries?
-  - deployment model correct?
-  - conflicts + cross-component
-    coordination?
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Result ---
-
-result: |md
-  **STRAT-NNN assessment**
-
-  - architecture assessment
-  - missing dependencies
-  - incorrect assumptions
-  - cross-component risks
-  - recommendation
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- External context ---
-
-archctx: |md
-  **architecture-context**
-
+  - architecture/rhoai-*/
   - PLATFORM.md
-  - component docs
-  - overlays
+  - relevant component docs
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
+}
+
+arch-check: |md
+  **rhoai-*/ context
+  available?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+skip-stop: |md
+  **Skip + stop**
+
+  - "Architecture review skipped
+    — no architecture context
+    available."
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Overlays ---
+
+overlays: |md
+  **Apply overlays**
+
+  - overlays/*.md status: active
+  - authoritative corrections
+    (version / maturity / deps)
+  - take precedence over docs
+  - print "Overlays applied"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess: the single LLM sub-agent reasoning step + 6 dimensions ---
+
+assess: Assess (6 dimensions) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  reason: |md
+    **Architect reasoning**
+    LLM sub-agent (opus)
+
+    - ground every finding
+      in arch docs
+    - cite components / APIs
+    - no hypotheticals
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+  d1-deps: |md
+    **1. Dependencies**
+    identified & accurate?
+  |
+  d2-integration: |md
+    **2. Integration patterns**
+    match how components talk?
+  |
+  d3-boundaries: |md
+    **3. Boundaries**
+    respected, no coupling?
+  |
+  d4-deploy: |md
+    **4. Deployment model**
+    Operators / Helm / standalone?
+  |
+  d5-conflict: |md
+    **5. Arch conflicts**
+    vs platform direction?
+  |
+  d6-coord: |md
+    **6. Cross-component**
+    versioning, rollout order,
+    back-compat?
+  |
+}
+
+# --- Output ---
+
+assessment-out: |md
+  **Return assessment**
+
+  - one block per strategy
+  - grounded in arch docs
+  - no Write tool: returned
+    to orchestrator
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callouts ---
+
+assess-block: |md
+  ### STRAT-NNN: {title}
+  Architecture assessment:
+    sound / concerns identified /
+    conflicts with platform
+  Missing dependencies: [...]
+  Incorrect assumptions: [...]
+  Cross-component risks: [...]
+  Recommendation:
+    approve / revise approach /
+    escalate to architecture review
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+reco-glossary: |md
+  Recommendation values
+  approve       = architecturally sound
+  revise        = fixable dependency /
+    approach       integration / boundary issue
+  escalate to   = conflicts with platform
+    arch review    direction; needs architects
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-entry -> read-inputs
-read-inputs -> archctx-q
-
-archctx-q -> overlays: "available"
-archctx-q -> result: "unavailable\nskipped" {
+entry -> inputs: "strat-tasks/"
+inputs -> re-review: "rfe-tasks/ cross-ref"
+re-review -> rereview-delta: "strat-reviews/" {
   style.stroke-dash: 3
 }
-
-overlays -> assess
-assess -> result
-
-read-inputs -> archctx: {
+re-review -> arch-context: "none: fresh"
+rereview-delta -> arch-context
+arch-context -> arch-check: "PLATFORM.md"
+arch-check -> overlays: "rhoai-*/ found"
+arch-check -> skip-stop: "no context" {
   style.stroke-dash: 3
+}
+overlays -> assess: "overlays"
+assess -> assessment-out: "STRAT-NNN block"
+
+# Callout connectors
+assessment-out -> assess-block {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+assess -> reco-glossary {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

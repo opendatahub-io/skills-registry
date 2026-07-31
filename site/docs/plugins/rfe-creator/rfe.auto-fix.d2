@@ -8,12 +8,11 @@ direction: right
 # --- Entry ---
 
 entry: |md
-  **/rfe.auto-fix**
+  **/rfe.auto-fix {IDs} or --jql {q}**
 
-  - explicit IDs or --jql
-  - --limit, --batch-size (50)
-  - --random, --reprocess
-  - --headless (non-interactive)
+  - --limit N, --batch-size N
+  - --reprocess, --random N
+  - --headless, --announce-complete
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,7 +20,7 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Setup container ---
+# --- Setup ---
 
 setup: Setup {
   style.fill: "#ececec"
@@ -44,12 +43,11 @@ setup: Setup {
   ids: |md
     **2. Resolve IDs**
 
-    - snapshot_fetch.py (JQL /
-      --reprocess) or explicit
-    - incremental fetch
-    - stop if none
+    - JQL: snapshot_fetch.py fetch
+    - reprocess-only snapshot
+    - explicit: state.py write-ids
   | {
-    shape: rectangle
+    shape: diamond
     style.fill: "#f5f5f5"
     style.stroke: "#333333"
     style.stroke-width: 2
@@ -59,22 +57,21 @@ setup: Setup {
     **3. Bootstrap**
 
     - bootstrap-assess-rfe.sh
-    - retry once on failure
-    - else stop
+    - retry once, else stop
   | {
     shape: rectangle
-    style.fill: "#f5f5f5"
+    style.fill: "#e8e8e8"
     style.stroke: "#333333"
     style.stroke-width: 2
+    style.stroke-dash: 3
   }
 
-  batch: |md
+  resume-batch: |md
     **4. Resume + Batch**
 
     - check_resume.py
-    - split into batch_size chunks
-    - set total_batches
-    - set-phase BATCH_START
+    - split into batches of batch_size
+    - set total_batches, BATCH_START
   | {
     shape: rectangle
     style.fill: "#f5f5f5"
@@ -83,105 +80,177 @@ setup: Setup {
   }
 
   init -> ids
-  ids -> bootstrap
-  bootstrap -> batch
+  ids -> bootstrap: "pipeline-all-ids.txt"
+  bootstrap -> resume-batch
 }
 
-# --- Dispatch loop hub (decision) ---
+# --- Dispatch loop ---
 
-next-action: |md
-  **next-action**
-
-  - pipeline_state.py next-action
-  - parse action / phase / agents
-  - loop until phase DONE
-| {
-  shape: diamond
-  style.fill: "#f5f5f5"
+dispatch: Dispatch loop (until phase=DONE) {
+  style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
+
+  next-action: |md
+    **Step 1: next-action**
+
+    - pipeline_state.py next-action
+    - parse action / phase / agents
+  | {
+    shape: diamond
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  run-script: |md
+    **run_script**
+
+    - pipeline_state.py run-phase
+    - advance phase in place
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  launch-wave: |md
+    **launch_wave**
+    background Agents
+
+    - one Agent per agents[] entry
+    - subagent_type + prompt_file
+    - pre-rendered vars ({ID} sub'd)
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+
+  wait-for-wave: |md
+    **wait-for-wave**
+
+    - pipeline_state.py wait-for-wave
+    - blocking barrier on disk
+    - exit 0 continue / exit 3 re-run
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  done-step: |md
+    **done**
+
+    - phase = DONE
+    - exit loop
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  next-action -> run-script: "run_script"
+  next-action -> launch-wave: "launch_wave"
+  next-action -> done-step: "done"
+  run-script -> next-action: "phase advance" {
+    style.stroke-dash: 3
+  }
+  launch-wave -> wait-for-wave
+  wait-for-wave -> next-action: "exit 3 (pending)" {
+    style.stroke-dash: 3
+  }
 }
 
-# --- run_script branch ---
-
-run-phase: |md
-  **run_script**
-
-  - pipeline_state.py run-phase
-  - deterministic phase step
-  - phases: fetch, bootstrap,
-    re-assess, split setup
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- launch_wave branch (LLM) ---
-
-launch-wave: |md
-  **launch_wave**
-
-  - background Agent per item
-  - assess / feasibility /
-    review / revise / split
-  - one agent per RFE
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 3
-  style.double-border: true
-}
-
-# --- wait-for-wave barrier ---
-
-wait-wave: |md
-  **wait-for-wave**
-
-  - blocking sync barrier
-  - reads artifacts on disk
-  - exit 0 done / exit 3 re-run
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Teardown / done ---
+# --- Teardown / output ---
 
 teardown: |md
-  **Teardown (DONE)**
+  **Teardown**
 
-  - batch_summary.py
-    --counts-only
-  - per-phase counts
+  - batch_summary.py --counts-only
+  - --ids-file pipeline-all-ids.txt
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
+}
+
+output-report: |md
+  **Output**
+
+  - artifacts/rfe-reviews/*
+  - run report
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callouts ---
+
+phases-callout: |md
+  pipeline_state.py PHASES:
+  BATCH_START -> FETCH -> SETUP
+  -> ASSESS -> REVIEW -> REVISE
+  -> FIXUP -> REASSESS_CHECK/SAVE
+     /ASSESS/REVIEW/RESTORE/REVISE/FIXUP
+  -> COLLECT -> SPLIT -> SPLIT_COLLECT
+  -> SPLIT_PIPELINE_START
+  -> SPLIT_ASSESS/REVIEW/REVISE/FIXUP
+     /SAVE/REASSESS/RE_REVIEW/RESTORE
+  -> SPLIT_CORRECTION_CHECK
+  -> BATCH_DONE -> ERROR_COLLECT
+  -> REPORT -> DONE
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+wave-callout: |md
+  launch_wave (next-action YAML):
+  action: launch_wave
+  phase: ASSESS
+  agents:
+    - subagent_type: rfe-scorer
+      prompt_file: {skill}/prompts/
+                   assess-agent.md
+      vars:
+        DATA_FILE=...RHAIRFE-1234.md
+        RUN_DIR=tmp/rfe-assess/single
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
 # --- Flow ---
 
-entry -> setup
-setup -> next-action
+entry -> setup.init
+setup.resume-batch -> dispatch.next-action: "process-ids.txt"
+dispatch.done-step -> teardown: "phase=DONE"
+teardown -> output-report
 
-next-action -> run-phase: "run_script"
-next-action -> launch-wave: "launch_wave"
-next-action -> teardown: "done"
-
-run-phase -> next-action: "loop" {
-  style.stroke-dash: 3
+dispatch.next-action -> phases-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
-
-launch-wave -> wait-wave
-wait-wave -> next-action: "wave done" {
-  style.stroke-dash: 3
-}
-wait-wave -> launch-wave: "exit 3: pending" {
-  style.stroke-dash: 3
+dispatch.launch-wave -> wave-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }

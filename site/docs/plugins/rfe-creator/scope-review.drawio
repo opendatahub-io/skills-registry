@@ -2,41 +2,85 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;scope-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;context: fork &amp;middot; model opus&lt;br&gt;product-owner reviewer&lt;br&gt;refined strategy features&lt;br&gt;tools: Read, Grep, Glob" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="110" width="190" height="150" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;Forked review sub-agent&lt;/b&gt;&lt;br&gt;product owner &amp;mdash; right-sizing (opus)&lt;br&gt;&lt;br&gt;context: fork&lt;br&gt;user-invocable: false&lt;br&gt;allowed-tools: Read, Grep, Glob&lt;br&gt;reviews strategy features" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="350" width="190" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="read-inputs" value="&lt;b&gt;Read Inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;cross-ref artifacts/rfe-tasks/&lt;br&gt;prior strat-reviews/&lt;br&gt;if re-review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="280" y="110" width="200" height="150" as="geometry"/>
+    <mxCell id="inputs" value="&lt;b&gt;Read inputs&lt;/b&gt;&lt;br&gt;&lt;br&gt;artifacts/strat-tasks/&lt;br&gt;(refined strategy features)&lt;br&gt;cross-ref artifacts/rfe-tasks/&lt;br&gt;(source RFEs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="365" width="200" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="assess" value="&lt;b&gt;Assess Scope&lt;/b&gt;&lt;br&gt;&lt;br&gt;right-sized? (feature, not 3&lt;br&gt;bundled / not a task)&lt;br&gt;effort matches scope?&lt;br&gt;bounded? in / out explicit&lt;br&gt;complete capability?&lt;br&gt;scope traps (&quot;and related&quot;,&lt;br&gt;&quot;full support for&quot;)&lt;br&gt;silently expand / shrink RFE?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="530" y="70" width="260" height="230" as="geometry"/>
+    <mxCell id="re-review" value="&lt;b&gt;strat-reviews/ has files&lt;br&gt;for these strategies?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="540" y="370" width="175" height="140" as="geometry"/>
     </mxCell>
-    <mxCell id="verdict-q" value="&lt;b&gt;Recommendation&lt;/b&gt;&lt;br&gt;&lt;br&gt;approve&lt;br&gt;split into N&lt;br&gt;tighten scope&lt;br&gt;expand to deliver RFE" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="840" y="105" width="190" height="160" as="geometry"/>
+    <mxCell id="rereview-delta" value="&lt;b&gt;Re-review delta&lt;/b&gt;&lt;br&gt;&lt;br&gt;concerns addressed?&lt;br&gt;concerns remaining?&lt;br&gt;new issues introduced?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="522" y="120" width="210" height="120" as="geometry"/>
     </mxCell>
-    <mxCell id="result" value="&lt;b&gt;STRAT-NNN assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;scope assessment&lt;br&gt;effort vs scope&lt;br&gt;RFE coverage&lt;br&gt;scope risks&lt;br&gt;recommendation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1090" y="100" width="200" height="170" as="geometry"/>
+    <mxCell id="assess" value="&lt;b&gt;Assess (6 dimensions)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="774.5" y="225" width="390" height="430" as="geometry"/>
     </mxCell>
-    <mxCell id="out-template" value="### STRAT-NNN: &lt;title&gt;&lt;br&gt;Scope: right-sized / split / small&lt;br&gt;Effort vs scope: matched / under / over&lt;br&gt;RFE coverage: full / partial / exceeds&lt;br&gt;Scope risks: &lt;list&gt;&lt;br&gt;Recommendation: approve / split into N" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1050" y="340" width="280" height="100" as="geometry"/>
+    <mxCell id="reason" value="&lt;b&gt;Product-owner reasoning&lt;/b&gt;&lt;br&gt;LLM sub-agent (opus)&lt;br&gt;&lt;br&gt;right-size each strategy&lt;br&gt;not 3 bundled, not a task&lt;br&gt;deliver the RFE, no more" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="15" y="50" width="160" height="348" as="geometry"/>
     </mxCell>
-    <mxCell id="8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="read-inputs" parent="1">
+    <mxCell id="d1-sized" value="&lt;b&gt;1. Right-sized?&lt;/b&gt;&lt;br&gt;one deliverable feature" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="190" y="50" width="185" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="d2-effort" value="&lt;b&gt;2. Effort vs scope&lt;/b&gt;&lt;br&gt;M but 5 comp / 3 teams = L/XL?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="190" y="110" width="185" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="d3-bounded" value="&lt;b&gt;3. Scope bounded?&lt;/b&gt;&lt;br&gt;in / out of scope explicit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="190" y="170" width="185" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="d4-complete" value="&lt;b&gt;4. Complete capability?&lt;/b&gt;&lt;br&gt;usable, not partial delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="190" y="230" width="185" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="d5-risks" value="&lt;b&gt;5. Scope risks&lt;/b&gt;&lt;br&gt;flag scope-trap phrases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="190" y="290" width="185" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="d6-coverage" value="&lt;b&gt;6. RFE coverage&lt;/b&gt;&lt;br&gt;expands / shrinks vs criteria?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess">
+      <mxGeometry x="190" y="350" width="185" height="48" as="geometry"/>
+    </mxCell>
+    <mxCell id="assessment-out" value="&lt;b&gt;Return assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;one block per strategy&lt;br&gt;split? concrete boundaries&lt;br&gt;no Write tool: returned&lt;br&gt;to orchestrator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1230" y="360" width="210" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="scope-traps" value="&lt;b&gt;Scope-trap phrases (dim 5)&lt;/b&gt;&lt;br&gt;&quot;and related functionality&quot;&lt;br&gt;&quot;all necessary changes&quot;&lt;br&gt;&quot;full support for&quot;&lt;br&gt;=&gt; flag as unbounded scope" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="880" y="60" width="290" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="scope-block" value="### STRAT-NNN: {title}&lt;br&gt;Scope assessment:&lt;br&gt;&amp;nbsp;&amp;nbsp;right-sized / too large - split /&lt;br&gt;&amp;nbsp;&amp;nbsp;too small / unbounded&lt;br&gt;Effort vs scope:&lt;br&gt;&amp;nbsp;&amp;nbsp;matched / underestimated /&lt;br&gt;&amp;nbsp;&amp;nbsp;overestimated&lt;br&gt;RFE coverage:&lt;br&gt;&amp;nbsp;&amp;nbsp;full / partial - gaps listed /&lt;br&gt;&amp;nbsp;&amp;nbsp;exceeds RFE&lt;br&gt;Scope risks: [... or none identified]&lt;br&gt;Recommendation:&lt;br&gt;&amp;nbsp;&amp;nbsp;approve / split into N strategies /&lt;br&gt;&amp;nbsp;&amp;nbsp;tighten scope / expand to deliver RFE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1176.5" y="545" width="320" height="225" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_inputs" value="strat-tasks/*.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="inputs" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-inputs" target="assess" parent="1">
+    <mxCell id="e_inputs_rereview" value="rfe-tasks/*.md cross-ref" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="inputs" target="re-review" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="verdict-q" parent="1">
+    <mxCell id="e_rereview_delta" value="strat-reviews/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="re-review" target="rereview-delta" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="11" value="split → boundaries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="verdict-q" target="result" parent="1">
+    <mxCell id="e_rereview_fresh" value="acceptance criteria" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="re-review" target="assess" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;html=1;dashed=1;dashPattern=8 4;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="result" target="out-template" parent="1">
+    <mxCell id="e_delta_assess" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" source="rereview-delta" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="757" y="180.0"/>
+          <mxPoint x="757" y="200"/>
+          <mxPoint x="891.5" y="200"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assess_out" value="STRAT-NNN block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.4883720930232558;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="assess" target="assessment-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_out_block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.4953125;entryY=0;entryDx=0;entryDy=0;" edge="1" source="assessment-out" target="scope-block" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assess_traps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.6352564102564102;exitY=0;exitDx=0;exitDy=0;entryX=0.49051724137931035;entryY=1;entryDx=0;entryDy=0;" edge="1" source="assess" target="scope-traps" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>

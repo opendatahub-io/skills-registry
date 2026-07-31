@@ -10,9 +10,9 @@ direction: right
 entry: |md
   **/rfe.review**
 
-  - RHAIRFE-NNN / RFE-NNN IDs
+  - RHAIRFE-NNNN ...
   - --headless
-  - --caller <autofix|split>
+  - --caller autofix/split
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -20,14 +20,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 0: Parse & Persist ---
+# --- Step 0: parse + persist ---
 
-parse: |md
-  **Step 0: Parse & Persist**
+parse-args: |md
+  **Step 0 · Parse + Persist**
 
-  - strip --headless / --caller
-  - state.py: flags + IDs to disk
-  - classify local vs remote (Glob)
+  - state.py init review-config.yaml
+  - write-ids review-all-ids.txt
+  - Glob artifacts/rfe-tasks/
+  - never reads RFE bodies
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -35,96 +36,10 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Step 1: Fetch Missing RFEs (LLM) ---
+split-ids: |md
+  **Split IDs**
 
-fetch: |md
-  **Step 1: Fetch Missing RFEs**
-  parallel fetch agents (Opus)
-
-  - one agent per remote ID
-  - check_review_progress.py poll
-  - write task files to disk
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Step 1.5: Setup ---
-
-setup: |md
-  **Step 1.5: Setup**
-  parallel, non-fatal
-
-  - fetch-architecture-context.sh
-  - bootstrap-assess-rfe.sh
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Step 2: Evaluate (container, 2N agents) ---
-
-evaluate: "Step 2: Evaluate (2N agents)" {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  feasibility: |md
-    **Feasibility Review**
-    rfe-feasibility-review agent
-
-    - technical fork
-    - verdict: feasible /
-      infeasible / indeterminate
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-
-  assess: |md
-    **Rubric Assessment**
-    rfe-scorer agent
-
-    - prep_assess.py
-    - score what / why / how
-    - not-a-task / right-sized
-  | {
-    shape: rectangle
-    style.fill: "#e8e8e8"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-    style.double-border: true
-  }
-}
-
-# --- Step 3: Review Agents (LLM) ---
-
-review: |md
-  **Step 3: Review Agents**
-
-  - combine assess + feasibility
-  - scored review file
-  - pass / fail, recommendation
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Decision ---
-
-pass-q: |md
-  **All pass?**
+  Local vs Remote
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -132,78 +47,176 @@ pass-q: |md
   style.stroke-width: 2
 }
 
-# --- Step 3.5: Auto-Revise (LLM) ---
+# --- Step 1: fetch (remote) ---
+
+fetch: |md
+  **Step 1 · Fetch agents**
+  opus · background
+
+  - prompts/fetch-agent.md per ID
+  - fetch_issue.py / MCP fallback
+  - poll check_review_progress.py
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Step 1.5: setup (parallel infra) ---
+
+setup: Step 1.5 · Setup (parallel) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  arch-context: |md
+    **Architecture context**
+    fetch-architecture-context.sh
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  bootstrap: |md
+    **Bootstrap assess-rfe**
+    bootstrap-assess-rfe.sh
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+}
+
+# --- Step 2: assess + feasibility wave ---
+
+assess-wave: Assess + Feasibility wave (per ID · 2N agents) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  assess: |md
+    **Assess agent**
+    rfe-scorer · opus
+
+    - prep_assess.py
+    - assess-agent.md rubric
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+  feasibility: |md
+    **Feasibility agent**
+    opus
+
+    - rfe-feasibility-review
+    - vs architecture context
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+}
+
+# --- Step 3: review ---
+
+review: |md
+  **Step 3 · Review agents**
+  opus · background
+
+  - review-agent.md
+  - merge assess + feasibility
+  - frontmatter.py set scores
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 3
+  style.double-border: true
+}
+
+# --- Step 3.5: filter + revise ---
+
+filter-revise: |md
+  **Step 3.5 · Filter**
+
+  filter_for_revision.py
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
 revise: |md
-  **Step 3.5: Auto-Revise**
+  **Revise agents**
+  opus · background
 
-  - filter_for_revision.py
-  - revise failing RFEs
+  - revise-agent.md (reframe)
+  - check_content_preservation.py
   - check_revised.py --batch
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
-  style.stroke-width: 2
+  style.stroke-width: 3
   style.double-border: true
 }
 
-# --- Step 4: Re-assess Cycle (LLM) ---
+# --- Step 4: re-assess loop ---
 
 reassess: |md
-  **Step 4: Re-assess Cycle**
+  **Step 4 · Re-assess?**
+
+  auto_revised & !pass
   max 2 cycles
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
-  - save / restore state
-  - re-run assess + review
-  - re-run revise
+# --- Step 5: finalize ---
+
+finalize: |md
+  **Step 5 · Finalize**
+
+  rebuild-index
+  headless?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+output-report: |md
+  **Interactive summary**
+
+  - batch_summary.py
+  - {ID}-review.md
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
 }
 
-# --- Step 5: Finalize (container) ---
-
-finalize: "Step 5: Finalize" {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  headless: |md
-    **Headless Return**
-
-    - rebuild index
-    - return to caller
-      (auto-fix / split)
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  interactive: |md
-    **Interactive Summary**
-
-    - batch_summary.py
-    - suggest next steps
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-}
-
-# --- External services ---
-
-jira: |md
-  **Jira (RHAIRFE)**
-
-  - REST API / MCP
+caller-return: |md
+  **Resume caller**
+  /rfe.auto-fix Step 3b
+  /rfe.split Step 3
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -212,45 +225,51 @@ jira: |md
   style.stroke-dash: 3
 }
 
-archctx: |md
-  **architecture-context**
-
-  - RHOAI version + docs
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-assess-rfe: |md
-  **assess-rfe plugin**
-
-  - rubric reference
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Callout: review frontmatter ---
+# --- Callout: rfe-review frontmatter ---
 
 review-fm: |md
-  artifacts/rfe-reviews/{ID}-review.md
+  rfe-reviews/{ID}-review.md
   ---
-  rfe_id: RHAIRFE-NNN
-  score: 0-100
-  pass: true | false
-  recommendation:
-    accept | revise | split
-  feasibility:
-    feasible | infeasible
-  auto_revised: true | false
-  scores.what / why / open_to_how
-  scores.not_a_task / right_sized
+  rfe_id: {ID}
+  score: {int}   pass: {bool}
+  recommendation: submit / revise /
+    split / reject / autorevise_reject
+  feasibility: feasible / infeasible /
+    indeterminate
+  auto_revised: {bool}
+  needs_attention: {bool}
+  scores:
+    what / why / open_to_how /
+    not_a_task / right_sized  (0-2)
+  before_score / before_scores
+  ---
+  ## Assessor Feedback
+  ## Technical Feasibility
+  ## Strategy Considerations
+  ## Revision History
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: artifacts/ tree ---
+
+artifacts-tree: |md
+  artifacts/
+    rfes.md            (index, rebuilt)
+    rfe-tasks/
+      {ID}.md          (frontmatter)
+      {ID}-comments.md
+      {ID}-removed-context.yaml
+    rfe-originals/
+      {ID}.md          (baseline)
+    rfe-reviews/
+      {ID}-review.md
+      {ID}-feasibility.md
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -262,35 +281,42 @@ review-fm: |md
 
 # --- Flow ---
 
-entry -> parse
-parse -> fetch: "remote IDs"
-parse -> setup: "local (skip fetch)"
-fetch -> setup
-setup -> evaluate
-evaluate -> review: "assess + feasibility"
-review -> pass-q
-pass-q -> revise: "failing"
-pass-q -> finalize: "all pass" {
-  style.stroke-dash: 3
-}
-revise -> reassess
-reassess -> evaluate: "revised, still failing" {
-  style.stroke-dash: 3
-}
-reassess -> finalize: "pass or max cycles"
+entry -> parse-args
+parse-args -> split-ids
+parse-args -> setup: "parallel setup"
 
-# --- Dashed external / callout edges ---
+split-ids -> fetch: "Remote"
+split-ids -> assess-wave: "Local: {ID}.md exists"
 
-fetch -> jira: "REST / MCP" {
+fetch -> assess-wave: "{ID}.md"
+setup -> assess-wave: ".context/ rubric + arch"
+
+assess-wave -> review: "result.md + feasibility.md"
+
+review -> filter-revise: "{ID}-review.md"
+filter-revise -> revise: "needs revision"
+filter-revise -> finalize: "none to revise" {
   style.stroke-dash: 3
 }
-setup -> archctx {
+
+revise -> reassess: "auto_revised"
+reassess -> assess-wave: "re-assess cycle\n(poll NEXT_POLL)" {
   style.stroke-dash: 3
 }
-evaluate.assess -> assess-rfe: "rubric" {
+reassess -> finalize: "pass / max cycles"
+
+finalize -> output-report: "interactive"
+finalize -> caller-return: "--headless" {
   style.stroke-dash: 3
 }
-review -> review-fm {
+
+review -> review-fm: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+split-ids -> artifacts-tree: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

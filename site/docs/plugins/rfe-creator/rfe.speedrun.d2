@@ -10,10 +10,11 @@ direction: right
 entry: |md
   **/rfe.speedrun**
 
-  - single idea / Jira key(s)
-  - --input batch.yaml
-  - --headless, --dry-run
-  - --batch-size, --announce-complete
+  - {idea or Jira key}
+  - --input {path}
+  - --headless / --dry-run
+  - --batch-size {N}
+  - --announce-complete
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,14 +22,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Step 0 ---
+# --- Step 0: parse + clean state ---
 
-parse: |md
-  **Step 0: Parse & Persist**
+step0: |md
+  **Step 0: Parse + Clean State**
 
-  - state.py clean + init
-  - persist flags to config
-  - pin batch_size (default 5)
+  - state.py clean
+  - prep_assess.py --clean-all
+  - state.py init speedrun-config.yaml
+  - batch_size defaults to 5
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -36,14 +38,31 @@ parse: |md
   style.stroke-width: 2
 }
 
-# --- Mode decision ---
+config-callout: |md
+  tmp/speedrun-config.yaml
 
-mode-q: |md
-  **Mode?**
+  headless: true / false
+  announce_complete: true / false
+  dry_run: true / false
+  batch_size: 5
+  input_file: {path or null}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
 
-  - A: --input batch
-  - B: existing Jira key
-  - C: single idea
+# --- Mode select ---
+
+mode-select: |md
+  **Select Mode**
+
+  - --input present? (A)
+  - arg = RHAIRFE-NNNN? (B)
+  - else free-text (C)
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -51,14 +70,92 @@ mode-q: |md
   style.stroke-width: 2
 }
 
-# --- Validate batch (Mode A) ---
+# --- Phase 1: Create — Mode A batch (container) ---
 
-validate-batch: |md
-  **Validate Batch** (Mode A)
+createA: Phase 1 - Create (Mode A: Batch) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 
-  - validate_batch_input.py --strict
-  - stop on ERROR / duplicate
-  - next_rfe_id.py pre-allocate IDs
+  validate: |md
+    **Validate Batch**
+
+    - validate_batch_input.py --strict
+    - dup prompt / unknown field block
+    - nonzero exit stops run
+  | {
+    shape: rectangle
+  }
+  alloc: |md
+    **Pre-allocate IDs**
+
+    - next_rfe_id.py --from-batch
+    - one RFE-NNN per entry
+  | {
+    shape: rectangle
+  }
+  fanout: |md
+    **Fan out N Agents**
+    parallel /rfe.create
+
+    - Agent per entry
+    - /rfe.create --headless
+    - --rfe-id RFE-NNN
+    - exactly one RFE each
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+
+  validate -> alloc: "--strict OK"
+  alloc -> fanout: "pre-alloc IDs"
+}
+
+batch-callout: |md
+  --input batch.yaml (Mode A)
+
+  - prompt: "..."        # required, unique
+    priority: Critical   # optional
+    labels: [candidate-3.5]
+    clarifying_context: "..."
+  # priority: Blocker / Critical /
+  #   Major / Normal / Minor / Undefined
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Mode C: single idea (external skill) ---
+
+modec: |md
+  **Mode C: Single Idea**
+  /rfe.create (external skill)
+
+  - /rfe.create --headless {idea}
+  - clarifying Qs if not headless
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Mode B: existing RFE keys ---
+
+modeb: |md
+  **Mode B: Existing RFE**
+
+  - arg is RHAIRFE-NNNN key
+  - skip create
+  - keys become the list
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -66,32 +163,30 @@ validate-batch: |md
   style.stroke-width: 2
 }
 
-# --- Phase 1: Create (LLM / agents) ---
+# --- Persist ID list ---
 
-create: |md
-  **Phase 1: Create**
-  parallel Agents
+persist-ids: |md
+  **Persist ID List**
 
-  - one Agent per entry / single
-  - each invokes /rfe.create
-  - pass pre-assigned RFE-ID
-  - Mode B skips this phase
+  - state.py write-ids
+  - tmp/speedrun-all-ids.txt
+  - dedup, one per line
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
-  style.stroke-width: 3
-  style.double-border: true
+  style.stroke-width: 2
 }
 
-# --- Phase 2: Auto-fix (other skill) ---
+# --- Phase 2: Auto-fix (external skill) + verify loop ---
 
 autofix: |md
-  **Phase 2: /rfe.auto-fix**
+  **Phase 2: Auto-fix**
+  /rfe.auto-fix (external skill)
 
-  - --batch-size passed explicitly
-  - assess, review, revise
-  - split oversized RFEs
+  - --batch-size {N} (always pass)
+  - assess, review, auto-revise
+  - split oversized, retry queue
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -100,13 +195,11 @@ autofix: |md
   style.stroke-dash: 3
 }
 
-# --- Verify decision ---
-
-verify-q: |md
-  **All processed?**
+check: |md
+  **Check Complete**
 
   - check_autofix_complete.py
-  - MISSING_IDS → retry
+  - every RFE reviewed?
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -114,14 +207,38 @@ verify-q: |md
   style.stroke-width: 2
 }
 
-# --- Phase 3: Submit (other skill) ---
+# --- Phase 3: Collect + submit decision ---
+
+collect: |md
+  **Phase 3: Collect**
+
+  - collect_recommendations.py
+  - SUBMIT= / REASSESS= / ERRORS=
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+submit-ready: |md
+  **Ready to Submit?**
+
+  - any SUBMIT= ids?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
 submit-skill: |md
-  **Phase 3: /rfe.submit**
+  **/rfe.submit**
+  external skill
 
-  - collect_recommendations.py SUBMIT=
-  - submit passing IDs
-  - one confirmation gate (interactive)
+  - --dry-run / --headless
+  - confirm table (interactive)
+  - RFE-NNN renamed to RHAIRFE
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -130,14 +247,15 @@ submit-skill: |md
   style.stroke-dash: 3
 }
 
-# --- Phase 4: Summary ---
+# --- Phase 4: Summary (output) ---
 
 summary: |md
   **Phase 4: Summary**
 
-  - created / review results
-  - submitted / remaining issues
-  - run + review reports
+  - created / passed / failed / split
+  - submitted RHAIRFE tickets
+  - artifacts/auto-fix-runs/{ts}.yaml
+  - {ts}-report.html
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -147,21 +265,37 @@ summary: |md
 
 # --- Flow ---
 
-entry -> parse
-parse -> mode-q
-
-mode-q -> validate-batch: "A: batch"
-mode-q -> create: "C: single"
-mode-q -> autofix: "B: existing key" {
-  style.stroke-dash: 3
+entry -> step0
+step0 -> mode-select
+step0 -> config-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
 
-validate-batch -> create
-create -> autofix
-autofix -> verify-q
+mode-select -> createA.validate: "--input"
+mode-select -> modec: "free-text idea"
+mode-select -> modeb: "RHAIRFE-NNNN"
 
-verify-q -> autofix: "missing IDs (retry <=3)" {
+createA.validate -> batch-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+createA.fanout -> persist-ids: "RFE-NNN ids"
+modec -> persist-ids: "RFE id"
+modeb -> persist-ids: "Jira keys"
+
+persist-ids -> autofix: "speedrun-all-ids.txt"
+autofix -> check: "reviews written"
+check -> collect: "COMPLETE"
+check -> autofix: "MISSING_IDS (retry <= 3)" {
   style.stroke-dash: 3
 }
-verify-q -> submit-skill: "complete"
+collect -> submit-ready: "SUBMIT= line"
+submit-ready -> submit-skill: "SUBMIT= ids"
+submit-ready -> summary: "none ready" {
+  style.stroke-dash: 3
+}
 submit-skill -> summary

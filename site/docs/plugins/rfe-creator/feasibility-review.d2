@@ -5,15 +5,15 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry (forked sub-agent) ---
+# --- Entry: forked reviewer sub-agent (STRATEGY workflow) ---
 
 entry: |md
-  **feasibility-review**
-  fork sub-agent (Opus)
+  **Forked review sub-agent**
+  staff engineer (opus)
 
-  - staff-engineer reviewer
-  - refined strategy features
-  - Read / Grep / Glob only
+  - context: fork
+  - user-invocable: false
+  - allowed-tools: Read, Grep, Glob
   - find problems, not confirm
 | {
   shape: rectangle
@@ -22,15 +22,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read Inputs ---
+# --- Read strategy inputs, cross-ref source RFEs ---
 
-read-inputs: |md
-  **Read Inputs**
+inputs: |md
+  **Read inputs**
 
-  - artifacts/strat-tasks/
+  - artifacts/strat-tasks/ (refined
+    strategy features)
   - cross-ref artifacts/rfe-tasks/
-    (does it deliver the RFE?)
-  - prior strat-reviews/ if re-review
+    (strategy delivers RFE need?)
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -38,48 +38,11 @@ read-inputs: |md
   style.stroke-width: 2
 }
 
-# --- Architecture Context ---
+# --- Re-review decision ---
 
-archctx: |md
-  **Architecture Context**
-
-  - .context/.../rhoai-* PLATFORM.md
-  - relevant component docs
-  - active overlays (status: active,
-    release match, affects intersects)
-  - overlays override generated docs
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Assess Feasibility (LLM) ---
-
-assess: |md
-  **Assess Feasibility**
-  adversarial LLM review
-
-  - approach works? fundamental flaws?
-  - delivers what RFE asks?
-    (flag silent scope cuts)
-  - effort / T-shirt credible?
-  - hidden deps + integration gaps
-  - what's harder than it looks?
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Recommendation (decision) ---
-
-verdict-q: |md
-  **Recommendation**
-  approve / revise / reject
+re-review: |md
+  **strat-reviews/ has files
+  for these strategies?**
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -87,16 +50,12 @@ verdict-q: |md
   style.stroke-width: 2
 }
 
-# --- Result ---
+rereview-delta: |md
+  **Re-review delta**
 
-result: |md
-  **STRAT-NNN assessment**
-
-  - Feasibility verdict
-  - Effort estimate credibility
-  - RFE alignment (gaps listed)
-  - Key concerns
-  - Recommendation
+  - concerns addressed?
+  - concerns remaining?
+  - new issues introduced?
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -104,13 +63,15 @@ result: |md
   style.stroke-width: 2
 }
 
-# --- External: architecture-context repo ---
+# --- Architecture context (external repo, dashed) ---
 
-archctx-ext: |md
-  **architecture-context**
+arch-context: |md
+  **Architecture context**
+  .context/architecture-context/
 
-  - PLATFORM.md + component docs
-  - overlays (human corrections)
+  - architecture/rhoai-*/
+  - PLATFORM.md
+  - relevant component docs
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
@@ -119,16 +80,152 @@ archctx-ext: |md
   style.stroke-dash: 3
 }
 
+# --- Overlays ---
+
+overlays: |md
+  **Apply overlays**
+
+  - overlays/*.md status: active
+  - filter release + affects
+    (platform matches all)
+  - take precedence over docs
+  - print "Overlays applied"
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Assess: the single LLM sub-agent reasoning step + 5 dimensions ---
+
+assess: Assess (5 dimensions, adversarial) {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  reason: |md
+    **Adversarial reasoning**
+    LLM sub-agent (opus)
+
+    - staff engineer lens
+    - find flaws, not value
+    - explain optimistic
+      estimates with specifics
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 3
+    style.double-border: true
+  }
+  d1-buildable: |md
+    **1. Buildable?**
+    proposed approach works;
+    fundamental flaws
+  |
+  d2-rfe-delivery: |md
+    **2. Delivers RFE?**
+    vs acceptance criteria;
+    flag silent scope cuts
+  |
+  d3-effort: |md
+    **3. Effort credible?**
+    T-shirt vs component count,
+    cross-team coordination
+  |
+  d4-hidden: |md
+    **4. Hidden deps?**
+    integration challenges
+    not mentioned
+  |
+  d5-harder: |md
+    **5. Harder than it looks?**
+    "straightforward" that isn't
+  |
+}
+
+# --- Output ---
+
+review-out: |md
+  **Return assessment**
+
+  - one block per strategy
+  - adversarial; specifics for
+    optimistic estimates
+  - no Write tool: returned
+    to orchestrator
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callouts ---
+
+assess-block: |md
+  ### STRAT-NNN: {title}
+  Feasibility:
+    feasible / infeasible /
+    needs revision
+  Effort estimate:
+    credible / optimistic /
+    significantly underestimated
+  RFE alignment:
+    delivers / partial - gaps /
+    diverges
+  Key concerns: [...]
+  Recommendation:
+    approve / revise / reject
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+field-glossary: |md
+  Field value semantics
+  Effort estimate
+    optimistic    = plausible but risky
+    significantly = misses component
+    underestimated  count / coordination
+  RFE alignment
+    partial       = silent scope reduction
+    diverges      = builds a different thing
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
 # --- Flow ---
 
-entry -> read-inputs
-read-inputs -> archctx
-archctx -> assess: "grounded context"
-assess -> verdict-q
-verdict-q -> result: "per strategy"
-
-# --- Dashed external edge ---
-
-archctx -> archctx-ext: "read docs + overlays" {
+entry -> inputs: "strat-tasks/"
+inputs -> re-review: "rfe-tasks/ cross-ref"
+re-review -> rereview-delta: "strat-reviews/" {
   style.stroke-dash: 3
+}
+re-review -> arch-context: "none: fresh"
+rereview-delta -> arch-context
+arch-context -> overlays: "PLATFORM.md"
+overlays -> assess: "overlays"
+assess -> review-out: "STRAT-NNN block"
+
+# Callout connectors
+review-out -> assess-block {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+assess -> field-glossary {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
 }
