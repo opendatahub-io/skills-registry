@@ -2,7 +2,7 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/eval-optimize&lt;/b&gt;&lt;br&gt;&lt;br&gt;--config &lt;path&gt;&lt;br&gt;--model &lt;model&gt;&lt;br&gt;--max-iterations N (3)&lt;br&gt;--run-id &lt;id&gt;&lt;br&gt;--target-judge &lt;name&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+    <mxCell id="entry" value="&lt;b&gt;/eval-optimize&lt;/b&gt;&lt;br&gt;&lt;br&gt;--config {path}&lt;br&gt;--model {model}&lt;br&gt;--max-iterations N (3)&lt;br&gt;--run-id {id}&lt;br&gt;--target-judge {name}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="30" y="210" width="170" height="180" as="geometry"/>
     </mxCell>
     <mxCell id="config-state" value="&lt;b&gt;Discover Config + Init State&lt;/b&gt;&lt;br&gt;&lt;br&gt;discover.py finds eval.yaml&lt;br&gt;1 &amp;rarr; auto / many &amp;rarr; ask user&lt;br&gt;read skill field &amp;rarr; eval-name&lt;br&gt;state.py init optimize-config:&lt;br&gt;model / max_iterations / run_id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
@@ -100,6 +100,22 @@
     </mxCell>
     <mxCell id="e_analyze_diffsnippet" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.7368421052631579;exitY=1;exitDx=0;exitDy=0;entryX=0.125;entryY=0;entryDx=0;entryDy=0;" edge="1" source="analyze" target="diff-snippet" parent="1">
       <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_initial_report_early" value="all judges pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="initial-run" target="report-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="565" y="605"/>
+          <mxPoint x="1890" y="605"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_check_report_maxiters" value="max iters" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontStyle=2;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" source="check" target="report-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1765" y="300.0"/>
+          <mxPoint x="1765" y="441.0"/>
+        </Array>
       </mxGeometry>
     </mxCell>
   </root>

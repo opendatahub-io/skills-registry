@@ -3,111 +3,110 @@
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
     <mxCell id="entry" value="&lt;b&gt;/eval-mlflow&lt;/b&gt;&lt;br&gt;&lt;br&gt;--action: sync-dataset,&lt;br&gt;log-results, push-feedback,&lt;br&gt;pull-feedback, all&lt;br&gt;--config eval.yaml (auto)&lt;br&gt;--run-id (log / push / pull)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="340" width="175" height="155" as="geometry"/>
+      <mxGeometry x="40" y="390" width="175" height="155" as="geometry"/>
     </mxCell>
     <mxCell id="resolve" value="&lt;b&gt;Resolve Tracking URI&lt;/b&gt;&lt;br&gt;&lt;br&gt;ensure_server() reachable?&lt;br&gt;eval.yaml mlflow.tracking_uri&lt;br&gt;MLFLOW_TRACKING_URI env&lt;br&gt;default http://127.0.0.1:5000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="275" y="340" width="195" height="155" as="geometry"/>
+      <mxGeometry x="275" y="390" width="195" height="155" as="geometry"/>
     </mxCell>
     <mxCell id="degrade" value="&lt;b&gt;Graceful Degradation&lt;/b&gt;&lt;br&gt;&lt;br&gt;MLflow unreachable&lt;br&gt;scripts exit 0 (no fail)&lt;br&gt;report &quot;not available, skipping&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="545" y="210" width="175" height="125" as="geometry"/>
+      <mxGeometry x="545.0" y="421.15" width="175" height="125" as="geometry"/>
     </mxCell>
     <mxCell id="action" value="&lt;b&gt;--action?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
-      <mxGeometry x="545" y="512" width="140" height="105" as="geometry"/>
-    </mxCell>
-    <mxCell id="sync" value="&lt;b&gt;Sync Dataset&lt;/b&gt;&lt;br&gt;sync_dataset.py (two-phase)&lt;br&gt;&lt;br&gt;interpret dataset.schema + sample case&lt;br&gt;schema_mapping.json: inputs vs expectations&lt;br&gt;preview then merge_records&lt;br&gt;deduplicates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="780" y="210" width="195" height="155" as="geometry"/>
-    </mxCell>
-    <mxCell id="push-fb" value="&lt;b&gt;Push Feedback&lt;/b&gt;&lt;br&gt;attach_feedback.py --source all&lt;br&gt;&lt;br&gt;judge scores to CODE (case/judge) from summary.yaml&lt;br&gt;human review to HUMAN (case/human_review) review.yaml&lt;br&gt;skips if no traces" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="780" y="410" width="195" height="135" as="geometry"/>
-    </mxCell>
-    <mxCell id="pull-fb" value="&lt;b&gt;Pull Feedback&lt;/b&gt;&lt;br&gt;attach_feedback.py --action pull&lt;br&gt;&lt;br&gt;read MLflow UI annotations&lt;br&gt;write review.yaml mlflow_feedback&lt;br&gt;consumed by /eval-optimize" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="780" y="590" width="195" height="135" as="geometry"/>
-    </mxCell>
-    <mxCell id="log" value="&lt;b&gt;Log Results&lt;/b&gt;&lt;br&gt;log_results.py --run-id&lt;br&gt;&lt;br&gt;params / metrics / artifacts&lt;br&gt;per-case results table&lt;br&gt;traces built from stdout.log&lt;br&gt;tags regressions / judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="780" y="770" width="195" height="150" as="geometry"/>
+      <mxGeometry x="545" y="562" width="140" height="105" as="geometry"/>
     </mxCell>
     <mxCell id="mlflow" value="&lt;b&gt;MLflow Server&lt;/b&gt;&lt;br&gt;external service&lt;br&gt;&lt;br&gt;experiment tracking&lt;br&gt;dataset registry&lt;br&gt;execution traces&lt;br&gt;feedback / assessments ($MLFLOW_TRACKING_URI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1085" y="488" width="185" height="155" as="geometry"/>
+      <mxGeometry x="1085" y="538" width="185" height="155" as="geometry"/>
     </mxCell>
     <mxCell id="report" value="&lt;b&gt;Report &amp; Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;N cases synced / run logged&lt;br&gt;N feedback pushed / N pulled&lt;br&gt;MLflow UI link&lt;br&gt;next: /eval-review, /eval-optimize" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1335" y="495.5" width="195" height="140" as="geometry"/>
+      <mxGeometry x="1335" y="545.5" width="195" height="140" as="geometry"/>
     </mxCell>
     <mxCell id="mapping-callout" value="&lt;b&gt;tmp/schema_mapping.json&lt;/b&gt;&lt;br&gt;inputs:&lt;br&gt;&amp;nbsp;&amp;nbsp;prompt: input.yaml:prompt&lt;br&gt;expectations:&lt;br&gt;&amp;nbsp;&amp;nbsp;ref: reference.md:__file__&lt;br&gt;(filename:field_path&lt;br&gt;&amp;nbsp;or filename:__file__)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="752" y="35" width="250" height="150" as="geometry"/>
+      <mxGeometry x="752" y="73.5" width="250" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="run-callout" value="&lt;b&gt;MLflow run (log_results.py)&lt;/b&gt;&lt;br&gt;params: skill, eval_name,&lt;br&gt;runner, run_id, model&lt;br&gt;metrics: &lt;judge&gt;/pass_rate,&lt;br&gt;&lt;judge&gt;/mean, cost_usd,&lt;br&gt;duration_s, num_turns&lt;br&gt;tags: regressions_detected,&lt;br&gt;num_judges, +mlflow.tags&lt;br&gt;artifacts: summary.yaml, inputs/,&lt;br&gt;per_case_results.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="747.5" y="955" width="260" height="180" as="geometry"/>
+    <mxCell id="run-callout" value="&lt;b&gt;MLflow run (log_results.py)&lt;/b&gt;&lt;br&gt;params: skill, eval_name,&lt;br&gt;runner, run_id, model&lt;br&gt;metrics: {judge}/pass_rate,&lt;br&gt;{judge}/mean, cost_usd,&lt;br&gt;duration_s, num_turns&lt;br&gt;tags: regressions_detected,&lt;br&gt;num_judges, +mlflow.tags&lt;br&gt;artifacts: summary.yaml, inputs/,&lt;br&gt;per_case_results.json" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="747.5" y="1005" width="260" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="resolve" parent="1">
+    <mxCell id="group-1" value="&lt;b&gt;Operations&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="764" y="235.5" width="227" height="687" as="geometry"/>
+    </mxCell>
+    <mxCell id="sync" value="&lt;b&gt;Sync Dataset&lt;/b&gt;&lt;br&gt;sync_dataset.py (two-phase)&lt;br&gt;&lt;br&gt;interpret dataset.schema + sample case&lt;br&gt;schema_mapping.json: inputs vs expectations&lt;br&gt;preview then merge_records&lt;br&gt;deduplicates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="36" width="195" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="push-fb" value="&lt;b&gt;Push Feedback&lt;/b&gt;&lt;br&gt;attach_feedback.py --source all&lt;br&gt;&lt;br&gt;judge scores to CODE (case/judge) from summary.yaml&lt;br&gt;human review to HUMAN (case/human_review) review.yaml&lt;br&gt;skips if no traces" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="211" width="195" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="pull-fb" value="&lt;b&gt;Pull Feedback&lt;/b&gt;&lt;br&gt;attach_feedback.py --action pull&lt;br&gt;&lt;br&gt;read MLflow UI annotations&lt;br&gt;write review.yaml mlflow_feedback&lt;br&gt;consumed by /eval-optimize" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="366" width="195" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="log" value="&lt;b&gt;Log Results&lt;/b&gt;&lt;br&gt;log_results.py --run-id&lt;br&gt;&lt;br&gt;params / metrics / artifacts&lt;br&gt;per-case results table&lt;br&gt;traces built from stdout.log&lt;br&gt;tags regressions / judges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="group-1">
+      <mxGeometry x="16" y="521" width="195" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="resolve" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="15" value="unreachable" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve" target="degrade" parent="1">
+    <mxCell id="16" value="unreachable" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1;exitY=0.6004838709677419;exitDx=0;exitDy=0;entryX=0;entryY=0.4954000000000001;entryDx=0;entryDy=0;" edge="1" source="resolve" target="degrade" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="17" value="server OK" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve" target="action" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="18" value="sync-dataset | all" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action" target="sync" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="19" value="push-feedback | all" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action" target="push-fb" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="20" value="pull-feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action" target="pull-fb" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="21" value="log-results | all" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action" target="log" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="22" value="dataset records" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="sync" target="mlflow" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="23" value="CODE + HUMAN feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.8388888888888889;exitDx=0;exitDy=0;entryX=0;entryY=0.1403225806451613;entryDx=0;entryDy=0;" edge="1" source="push-fb" target="mlflow" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="24" value="annotations -&gt; review.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.0;exitY=0.7;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow" target="pull-fb" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="520" y="417.5"/>
-          <mxPoint x="520" y="272.5"/>
+          <mxPoint x="1060" y="646.5"/>
+          <mxPoint x="1060" y="669.0"/>
         </Array>
       </mxGeometry>
     </mxCell>
-    <mxCell id="16" value="server OK" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve" target="action" parent="1">
+    <mxCell id="25" value="summary.yaml + traces" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="log" target="mlflow" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="17" value="sync-dataset | all" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.0;entryDx=0;entryDy=0;" edge="1" source="action" target="sync" parent="1">
+    <mxCell id="26" value="results + UI link" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow" target="report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="27" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.502;entryY=1;entryDx=0;entryDy=0;" edge="1" source="sync" target="mapping-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="28" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="log" target="run-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="29" value="skipped (exit 0)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="degrade" target="report" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="615.0" y="390"/>
-          <mxPoint x="877.5" y="390"/>
+          <mxPoint x="632.5" y="20"/>
+          <mxPoint x="1432.5" y="20"/>
         </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="18" value="push-feedback | all" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action" target="push-fb" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="19" value="pull-feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action" target="pull-fb" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="20" value="log-results | all" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="action" target="log" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="615.0" y="745"/>
-          <mxPoint x="877.5" y="745"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="21" value="dataset records" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="sync" target="mlflow" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="22" value="CODE + HUMAN feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="push-fb" target="mlflow" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="23" value="pull annotations" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pull-fb" target="mlflow" parent="1">
-      <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1060" y="657.5"/>
-          <mxPoint x="1060" y="565.5"/>
-        </Array>
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="24" value="summary.yaml + traces" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="log" target="mlflow" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="25" value="results + UI link" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mlflow" target="report" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="26" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="sync" target="mapping-callout" parent="1">
-      <mxGeometry relative="1" as="geometry">
-      </mxGeometry>
-    </mxCell>
-    <mxCell id="27" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="log" target="run-callout" parent="1">
-      <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
   </root>

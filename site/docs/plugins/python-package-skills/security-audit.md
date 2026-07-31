@@ -48,7 +48,7 @@ Run a security audit on a Python package with risk rating and structured verdict
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Only accept HTTPS URLs pointing to github.com or gitlab.com.</li>
         <li>Do not execute untrusted package code.</li>

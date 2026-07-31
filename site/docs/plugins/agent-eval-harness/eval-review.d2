@@ -10,9 +10,9 @@ direction: right
 entry: |md
   **/eval-review**
 
-  - --run-id <id> (required)
-  - --config <path>
-  - --cases <name>...
+  - --run-id {id} (required)
+  - --config {path}
+  - --cases {name}...
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -148,13 +148,13 @@ apply: |md
 
 review-yaml: |md
   review.yaml
-    run_id: "<id>"
+    run_id: "{id}"
     reviewed_cases: N
     feedback_cases: M
     reviewer: "human"
     feedback:
-      <case-dir>: "reviewer notes"
-      <case-dir>: ""   # empty = OK
+      {case-dir}: "reviewer notes"
+      {case-dir}: ""   # empty = OK
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -178,6 +178,12 @@ decide -> apply: "approved"
 # --- Back-edge (revise loop) ---
 
 decide -> propose: "revise" {
+  style.stroke-dash: 3
+}
+
+# --- Decline (terminal: feedback already saved in Step 5, before propose) ---
+
+decide -> save: "declined (feedback saved)" {
   style.stroke-dash: 3
 }
 

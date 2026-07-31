@@ -56,7 +56,7 @@ three-section skeleton, applies provenance labels, and records the ticket mappin
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not clone RFEs that have not been approved.</li>
         <li>Do not modify the source RFE issue in Jira.</li>
@@ -75,7 +75,7 @@ three-section skeleton, applies provenance labels, and records the ticket mappin
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/strat-creator/blob/main/.claude/skills/strategy-create/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>.claude/skills/strategy-create/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/strat-creator/blob/0e102d4d1c4a2747895c267b637cf8a33d5f93fc/.claude/skills/strategy-create/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>.claude/skills/strategy-create/SKILL.md</code></a></div>
     </div>
   </section>
 </div>

@@ -5,7 +5,7 @@
     <mxCell id="inventory-json" value="harness inventory (--format yaml)&lt;br&gt;summary:  {skills, commands,&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;hooks, claude_md,&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;total_word_count}&lt;br&gt;skills:   [{name, path,&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;words, description}]&lt;br&gt;commands: [{name, path, words}]&lt;br&gt;claude_md:{path, words, lines}&lt;br&gt;hooks:    [{type, matcher, command}]&lt;br&gt;warnings: [...]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="300" y="40" width="280" height="185" as="geometry"/>
     </mxCell>
-    <mxCell id="entry" value="&lt;b&gt;/eval-check&lt;/b&gt;&lt;br&gt;&lt;br&gt;--output &lt;path&gt;&lt;br&gt;(default harness-report.md)&lt;br&gt;--include-global (opt-in ~/.claude)&lt;br&gt;read-only health check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+    <mxCell id="entry" value="&lt;b&gt;/eval-check&lt;/b&gt;&lt;br&gt;&lt;br&gt;--output {path}&lt;br&gt;(default harness-report.md)&lt;br&gt;--include-global (opt-in ~/.claude)&lt;br&gt;read-only health check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="40" y="275" width="195" height="150" as="geometry"/>
     </mxCell>
     <mxCell id="inventory" value="&lt;b&gt;Inventory&lt;/b&gt;&lt;br&gt;harness_inventory.py --root .&lt;br&gt;&lt;br&gt;discover skills / commands&lt;br&gt;CLAUDE.md, settings hooks&lt;br&gt;word count per skill&lt;br&gt;structural warnings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
@@ -61,8 +61,7 @@ CLAUDE.md, hooks)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#3
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e8" value="single skill
-(skip analysis)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="single" target="report" parent="1">
+    <mxCell id="e8" value="single skill (skip analysis)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="single" target="report" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
           <mxPoint x="650" y="480"/>

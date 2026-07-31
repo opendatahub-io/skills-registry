@@ -10,7 +10,7 @@ direction: right
 entry: |md
   **/eval-check**
 
-  - --output <path>
+  - --output {path}
     (default harness-report.md)
   - --include-global
     (opt-in ~/.claude)
@@ -184,7 +184,7 @@ report-md: |md
 # --- Flow ---
 
 entry -> inventory
-inventory -> single: "inventory (skills,\ncmds, CLAUDE.md, hooks)"
+inventory -> single: "inventory (skills, cmds, CLAUDE.md, hooks)"
 single -> read-config: "multiple skills"
 read-config -> analyze
 analyze -> filter-classify: "raw findings"
@@ -193,7 +193,7 @@ report -> summary: "harness-report.md"
 
 # --- Single-skill short-circuit (dashed) ---
 
-single -> report: "single skill\n(skip analysis)" {
+single -> report: "single skill (skip analysis)" {
   style.stroke-dash: 3
 }
 

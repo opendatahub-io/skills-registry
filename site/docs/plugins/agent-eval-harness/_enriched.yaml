@@ -113,13 +113,18 @@ skills:
       the top-level SKILL.md for staleness detection. The guiding principle is
       "observe, don't assume" -- every field name and path must come from a file
       actually read. Auto-invoked by /eval-run when eval.yaml is missing.
-    argument_hint: "[--skill <name>] [--config <path>] [--update]"
+    argument_hint: "[--skill <name>] [--prompt <path>] [--config <path>] [--update] [--assess]"
     arguments:
       - name: "--skill"
         type: "<name>"
         required: false
         default: "auto-detect"
         description: "Which skill to analyze. If omitted, lists all project skills (excluding eval harness skills) and picks automatically if only one is found."
+      - name: "--prompt"
+        type: "<path>"
+        required: false
+        default: "none"
+        description: "Path to a custom analysis prompt for prompt-based (non-skill) evals — tests agent capabilities such as documentation effectiveness, pattern understanding, API usage, or constraint compliance instead of examining a SKILL.md. Mutually exclusive with --skill."
       - name: "--config"
         type: "<path>"
         required: false
@@ -129,9 +134,15 @@ skills:
         required: false
         default: "false"
         description: "Fill in missing sections only, preserving user edits. Useful for upgrading older configs (e.g., adding a models block, migrating check signatures)."
+      - name: "--assess"
+        required: false
+        default: "false"
+        description: "Assess all project skills and recommend which ones need evals, instead of generating a config for one skill (skips config discovery; --skill is ignored in this mode)."
     usage_examples:
       - "/eval-analyze --skill my-skill"
+      - "/eval-analyze --prompt examples/openshift-agentic-docs.md"
       - "/eval-analyze --update"
+      - "/eval-analyze --assess"
       - "/eval-analyze --skill rfe.create --config eval-rfe.yaml"
   eval-dataset:
     description: |

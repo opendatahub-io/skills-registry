@@ -47,7 +47,7 @@ Create a concise 2-3 line executive summary of a package onboarding outcome
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Output must be plain prose with no headings, bullet lists, or code blocks.</li>
       </ul>

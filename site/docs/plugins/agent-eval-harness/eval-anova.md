@@ -66,7 +66,7 @@ produced elsewhere (e.g. a CI fan-out) without re-executing.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>eval-run stays the single-condition primitive: eval-anova only loops it and must not re-implement workspace/execute/collect/score.</li>
         <li>Repeated-measures ANOVA assumes the same cases run under every condition; keep the design balanced by restricting to common cases and recording excluded cases rather than silently dropping them.</li>

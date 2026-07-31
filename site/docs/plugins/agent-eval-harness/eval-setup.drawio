@@ -2,7 +2,7 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/eval-setup&lt;/b&gt;&lt;br&gt;&lt;br&gt;--tracking-uri &lt;uri&gt;&lt;br&gt;--skip-mlflow&lt;br&gt;--runs-dir &lt;path&gt;&lt;br&gt;--harbor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+    <mxCell id="entry" value="&lt;b&gt;/eval-setup&lt;/b&gt;&lt;br&gt;&lt;br&gt;--tracking-uri {uri}&lt;br&gt;--skip-mlflow&lt;br&gt;--runs-dir {path}&lt;br&gt;--harbor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="30" y="210" width="160" height="140" as="geometry"/>
     </mxCell>
     <mxCell id="preflight" value="&lt;b&gt;Preflight Checks&lt;/b&gt;&lt;br&gt;check_env.py --fix&lt;br&gt;&lt;br&gt;python&gt;=3.11, mlflow, pyyaml&lt;br&gt;agent_eval symlink&lt;br&gt;anthropic SDK (optional)&lt;br&gt;create runs/ + tmp/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
@@ -70,11 +70,10 @@
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="22" value="all checks pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="decision" target="ready" parent="1">
+    <mxCell id="22" value="all pass -&gt; Step 6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="decision" target="runs-exp" parent="1">
       <mxGeometry relative="1" as="geometry">
         <Array as="points">
-          <mxPoint x="590" y="45"/>
-          <mxPoint x="1645" y="45"/>
+          <mxPoint x="590" y="399"/>
         </Array>
       </mxGeometry>
     </mxCell>

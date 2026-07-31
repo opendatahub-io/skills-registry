@@ -65,7 +65,7 @@ issues that judges cannot measure.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not edit the artifact under test without explicit user approval; propose diffs, do not impose them.</li>
         <li>Keep human feedback separate from judge scores; the skill&#x27;s value is catching what judges miss.</li>
@@ -87,12 +87,12 @@ issues that judges cannot measure.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-review/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-review/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-review/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-review/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-review/prompts/review-results.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-review/prompts/review-results.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-review/prompts/review-results.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-review/prompts/review-results.md</code></a></li>
       </ul>
     </div>
   </section>

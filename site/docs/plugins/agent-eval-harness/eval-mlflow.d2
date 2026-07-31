@@ -177,8 +177,8 @@ run-callout: |md
   MLflow run (log_results.py)
   params:  skill, eval_name, runner,
            run_id, model
-  metrics: <judge>/pass_rate,
-           <judge>/mean, cost_usd,
+  metrics: {judge}/pass_rate,
+           {judge}/mean, cost_usd,
            duration_s, num_turns
   tags:    regressions_detected,
            num_judges, +mlflow.tags
@@ -218,6 +218,9 @@ entry -> resolve
 resolve -> degrade: "unreachable" {
   style.stroke-dash: 3
 }
+degrade -> report: "skipped (exit 0)" {
+  style.stroke-dash: 3
+}
 resolve -> action: "server OK"
 
 action -> sync: "sync-dataset | all"
@@ -228,7 +231,7 @@ action -> pull-fb: "pull-feedback"
 sync -> mlflow: "dataset records"
 log -> mlflow: "summary.yaml + traces"
 push-fb -> mlflow: "CODE + HUMAN feedback"
-pull-fb -> mlflow: "pull annotations" {
+mlflow -> pull-fb: "annotations -> review.yaml" {
   style.stroke-dash: 3
 }
 

@@ -10,7 +10,7 @@ direction: right
 entry: |md
   **/eval-dataset**
 
-  - --config <path>
+  - --config {path}
   - --count N (default 5)
   - --run-id (learn from run)
   - --harbor / --image
@@ -21,15 +21,15 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Read context + assess ---
+# --- Read context + parse schema ---
 
 read-context: |md
-  **Read Context & Assess**
+  **Read Context & Schema**
 
   - eval.yaml + eval.md
   - judge-driven requirements
   - parse dataset.schema
-  - assess existing cases (fresh?)
+  - {field} placeholders in args
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -37,14 +37,14 @@ read-context: |md
   style.stroke-width: 2
 }
 
-# --- Provenance decision ---
+# --- Provenance decision (generation.strategy) ---
 
 strategy: |md
   **generation.strategy?**
 
   case provenance
-  skill · from-traces
-  synthetic (script)
+  skill (default) · synthetic
+  · from-traces
 | {
   shape: diamond
   style.fill: "#f5f5f5"
@@ -67,6 +67,37 @@ mlflow-traces: |md
   style.stroke: "#333333"
   style.stroke-width: 2
   style.stroke-dash: 3
+}
+
+synthetic-gen: |md
+  **Synthetic Generation**
+  generate_synthetic.py (LLM)
+
+  - resolve seeds: builtin/file/inline
+  - Claude API per seed.count
+  - write input.yaml + annotations.yaml
+  - stamp annotations.category
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Fresh vs augment (derived from dataset state, Step 3) ---
+
+dataset-state: |md
+  **dataset state?**
+
+  Step 3 assessment
+  empty/thin -> fresh
+  populated -> augment
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
 }
 
 gap-analysis: |md
@@ -172,25 +203,32 @@ case-tree: |md
 entry -> read-context
 read-context -> strategy: "eval.yaml + eval.md"
 
+# Three provenance strategies (generation.strategy)
 strategy -> mlflow-traces: "from-traces" {
   style.stroke-dash: 3
 }
-strategy -> case-generation: "bootstrap (fresh)" {
-  style.stroke-dash: 3
-}
-strategy -> gap-analysis: "expand (augment)" {
+strategy -> dataset-state: "skill (default)"
+strategy -> synthetic-gen: "synthetic"
+
+# from-traces rejoins the agent-authored fresh/augment assessment
+mlflow-traces -> dataset-state: "real inputs" {
   style.stroke-dash: 3
 }
 
-mlflow-traces -> case-generation: "real inputs" {
-  style.stroke-dash: 3
-}
+# Fresh vs augment — derived from dataset state (Step 3), a separate axis
+dataset-state -> case-generation: "fresh (empty/thin)"
+dataset-state -> gap-analysis: "augment (populated)"
 gap-analysis -> case-generation: "gap-filling cases"
 
+# Agent-authored write path
 case-generation -> external-fields
 external-fields -> write-cases: "input.yaml + annotations.yaml"
 write-cases -> report: "case-NNN/"
 
+# Synthetic path writes cases directly, joins at validate/report
+synthetic-gen -> report: "case-NNN/ + annotations.yaml"
+
+# Callout connector
 write-cases -> case-tree: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4

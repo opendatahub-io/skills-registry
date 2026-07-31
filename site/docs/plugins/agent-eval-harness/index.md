@@ -55,7 +55,7 @@ containerized (UBI9) execution.
 |-------|-------------|-----------|
 | [`/eval-setup`](eval-setup.md) | Optional environment configurator that verifies dependencies, API keys, and MLflow tracking for the agent-eval-harness and suggests evaluation modes based on repository contents. | :material-check: |
 | [`/eval-analyze`](eval-analyze.md) | Deep-reads a target skill (or runs a custom analysis prompt) and generates a complete, grounded eval.yaml with dataset schema, outputs, judges, models, and thresholds. | :material-check: |
-| [`/eval-dataset`](eval-dataset.md) | Generates evaluation test cases for an eval.yaml — from skill analysis, synthetic LLM generation, or MLflow traces — bootstrapping or augmenting a dataset for /eval-run. | :material-check: |
+| [`/eval-dataset`](eval-dataset.md) | Generates evaluation test cases for an eval.yaml -- from skill analysis, synthetic LLM generation, or MLflow traces -- bootstrapping or augmenting a dataset for /eval-run. | :material-check: |
 | [`/eval-run`](eval-run.md) | Executes an evaluation against test cases in skill or prompt mode, scores outputs with judges, detects regressions against a baseline, and reports results. | :material-check: |
 | [`/eval-compare`](eval-compare.md) | Discovers a directory of eval run artifacts and generates a self-contained tabbed HTML comparison report with model cards, quality/cost tables, per-case breakdowns, and LLM-written analysis. | :material-check: |
 | [`/eval-anova`](eval-anova.md) | Fan a DoE matrix of agent configs across shared cases, then run repeated-measures/mixed-effects ANOVA (F, p, effect size) plus a cost/quality Pareto. | :material-check: |

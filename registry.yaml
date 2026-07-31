@@ -901,11 +901,11 @@ plugins:
             - "check_env.py preflight passes: Python >= 3.11, mlflow/pyyaml/agent_eval importable, and API key or Vertex project set."
             - MLflow tracking is configured (or explicitly skipped) and the runs directory exists.
             - If eval.yaml exists, it validates and any configured MLflow experiment is created.
-            - Reports final environment status and suggests correct next steps along the analyze → dataset → run → review/optimize → mlflow pipeline.
+            - Reports final environment status and suggests correct next steps along the analyze -> dataset -> run -> review/optimize -> mlflow pipeline.
           invariants:
             must_preserve:
               - "Non-destructive: skip steps already done and do not overwrite existing configuration or env vars."
-              - Treat MLflow as optional — never fail setup when MLflow cannot be configured; fall back to local file store.
+              - Treat MLflow as optional -- never fail setup when MLflow cannot be configured; fall back to local file store.
               - "Do not leak credential values: mask literal env values and report API keys only as set/not-set."
               - Honor --skip-mlflow, --tracking-uri, --runs-dir, and --harbor argument semantics.
               - Report each check clearly with pass/fail status and a concrete fix for every failure.
@@ -936,17 +936,17 @@ plugins:
             - id: evidence_completeness
               measure: judge
               rubric_ref: opendatahub-io/agent-eval-harness@1559af5d404128ed3458d1a9bdb4580c76244b01:skills/eval-analyze/references/eval-yaml-template.md
-          problem_statement: Deep-read a target skill (recursively through its sub-skills and scripts) or execute a custom analysis prompt, explore any existing dataset cases, and emit a complete, structurally valid eval.yaml — dataset schema, outputs, judges, models, thresholds — plus a cached eval.md analysis, where every field is grounded in files actually observed rather than templates or placeholders.
+          problem_statement: Deep-read a target skill (recursively through its sub-skills and scripts) or execute a custom analysis prompt, explore any existing dataset cases, and emit a complete, structurally valid eval.yaml -- dataset schema, outputs, judges, models, thresholds -- plus a cached eval.md analysis, where every field is grounded in files actually observed rather than templates or placeholders.
           success_conditions:
             - Generates an eval.yaml at the resolved config path that passes validate_eval.py config (relative paths resolve, judge references resolve, execution.skill/prompt set, no template-variable errors).
             - dataset.schema and every outputs[*].schema use the real file and field names observed in the skill and its sample case, not generic placeholders.
-            - Judges are concrete and runnable — inline check snippets are valid Python and LLM prompts define per-level scoring; models default to the documented roles.
+            - Judges are concrete and runnable -- inline check snippets are valid Python and LLM prompts define per-level scoring; models default to the documented roles.
             - Writes an eval.md caching the analysis with frontmatter (skill, analyzed_at, skill_hash) so freshness checks work.
             - Correctly selects skill mode vs prompt mode and case vs batch execution from the skill's internal logic, asking the user when the mode is ambiguous.
           invariants:
             must_preserve:
-              - "Observe, don't assume: every field name, file pattern, and directory path in the generated eval.yaml must come from files actually read — never invent placeholders like <output-dir> or fabricate sub-skill names, schema fields, or judge code."
-              - Under --update, preserve the existing file — only add missing top-level keys; never overwrite user-modified judges, schemas, thresholds, or permissions.
+              - "Observe, don't assume: every field name, file pattern, and directory path in the generated eval.yaml must come from files actually read -- never invent placeholders like <output-dir> or fabricate sub-skill names, schema fields, or judge code."
+              - Under --update, preserve the existing file -- only add missing top-level keys; never overwrite user-modified judges, schemas, thresholds, or permissions.
               - Keep dataset.path and outputs[*].path project-relative (never absolute, never ".") since absolute paths break under Harbor/EvalHub and "." would be cleaned between runs.
               - Always validate the generated eval.yaml with validate_eval.py before reporting; fix errors and surface warnings rather than emitting a config full of placeholders.
               - Fail loudly when skill analysis is incomplete or the dataset cannot be found instead of silently generating a degenerate config.
@@ -970,7 +970,7 @@ plugins:
               - skills/eval-analyze/scripts/assess_skills.py
               - skills/eval-analyze/prompts/generate-eval-md.md
       - name: eval-dataset
-        description: Generates evaluation test cases for an eval.yaml — from skill analysis, synthetic LLM generation, or MLflow traces — bootstrapping or augmenting a dataset for /eval-run.
+        description: Generates evaluation test cases for an eval.yaml -- from skill analysis, synthetic LLM generation, or MLflow traces -- bootstrapping or augmenting a dataset for /eval-run.
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -989,9 +989,9 @@ plugins:
             - When --harbor is passed, emits self-contained Harbor task packages for the generated cases.
           invariants:
             must_preserve:
-              - Match dataset.schema exactly — do not change file names, formats, or field names the schema prescribes.
-              - Do not fabricate gold reference outputs when the correct output is uncertain — omit references rather than include misleading ones.
-              - "Do not invent values for [EXTERNAL: System] fields — emit TODO_<SYSTEM>_<FIELD> placeholders and surface them in the report."
+              - Match dataset.schema exactly -- do not change file names, formats, or field names the schema prescribes.
+              - Do not fabricate gold reference outputs when the correct output is uncertain -- omit references rather than include misleading ones.
+              - "Do not invent values for [EXTERNAL: System] fields -- emit TODO_<SYSTEM>_<FIELD> placeholders and surface them in the report."
               - "Preserve provenance semantics: --count applies only to skill/from-traces paths and is ignored for synthetic (seed counts govern); do not override generation.strategy with a flag."
               - When augmenting, do not duplicate existing cases; continue case numbering from the highest existing case.
               - Generate realistic, varied content rather than lorem ipsum or obviously templated placeholders.
@@ -1086,7 +1086,7 @@ plugins:
           invariants:
             must_preserve:
               - Do not modify or write to any input/source file; only write to the output directory.
-              - Do not run evaluations or compute statistics — render pre-computed anova.json numbers only, never import scipy/statsmodels/pingouin.
+              - Do not run evaluations or compute statistics -- render pre-computed anova.json numbers only, never import scipy/statsmodels/pingouin.
               - Do not explore the input directory manually (no ls/find); let compare.py handle all run discovery.
               - Do not invent findings, badges, or verdicts unsupported by the per-case scores and cost data.
               - Preserve graceful degradation and per-model aggregation (averages with min/max ranges) so partial or repeated runs are still included.
@@ -1248,8 +1248,8 @@ plugins:
             - Iterates until all judges pass or max-iterations is hit, then reports which edits fixed which failures and the final summary.yaml scores.
           invariants:
             must_preserve:
-              - Every edit must be grounded in a specific failure with evidence from judge rationale and transcripts — never make broad, generic changes.
-              - "Do not modify test cases, judges, or eval.yaml; the eval harness is ground truth. Never edit builtin judge code — suggest adjusting arguments: instead."
+              - Every edit must be grounded in a specific failure with evidence from judge rationale and transcripts -- never make broad, generic changes.
+              - "Do not modify test cases, judges, or eval.yaml; the eval harness is ground truth. Never edit builtin judge code -- suggest adjusting arguments: instead."
               - Check for regressions after every edit; a fix that breaks other cases is not a fix, and must be reverted or reframed.
               - Stop after max-iterations rather than looping forever, and report what could not be fixed.
               - Only edit the artifact under test (the SKILL.md or prompt-mode artifact); make minimal, surgical changes and do not rewrite working sections.

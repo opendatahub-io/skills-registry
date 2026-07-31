@@ -62,10 +62,10 @@ suggests logging results to MLflow.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Every edit must be grounded in a specific failure with evidence from judge rationale and transcripts — never make broad, generic changes.</li>
-        <li>Do not modify test cases, judges, or eval.yaml; the eval harness is ground truth. Never edit builtin judge code — suggest adjusting arguments: instead.</li>
+        <li>Every edit must be grounded in a specific failure with evidence from judge rationale and transcripts -- never make broad, generic changes.</li>
+        <li>Do not modify test cases, judges, or eval.yaml; the eval harness is ground truth. Never edit builtin judge code -- suggest adjusting arguments: instead.</li>
         <li>Check for regressions after every edit; a fix that breaks other cases is not a fix, and must be reverted or reframed.</li>
         <li>Stop after max-iterations rather than looping forever, and report what could not be fixed.</li>
         <li>Only edit the artifact under test (the SKILL.md or prompt-mode artifact); make minimal, surgical changes and do not rewrite working sections.</li>
@@ -84,7 +84,7 @@ suggests logging results to MLflow.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-optimize/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-optimize/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-optimize/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-optimize/SKILL.md</code></a></div>
     </div>
   </section>
 </div>

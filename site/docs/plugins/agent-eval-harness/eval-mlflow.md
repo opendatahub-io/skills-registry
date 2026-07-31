@@ -61,7 +61,7 @@ reports that it was skipped.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Graceful degradation: when MLflow is unavailable or unreachable the scripts exit 0 and the skill reports skipping, never failing the pipeline.</li>
         <li>Idempotent operations: re-running is safe (merge_records deduplicates, log_feedback overwrites); do not create duplicate datasets, runs, or feedback.</li>

@@ -2,7 +2,7 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/eval-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;--run-id &lt;id&gt; (required)&lt;br&gt;--config &lt;path&gt;&lt;br&gt;--cases &lt;name&gt;..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+    <mxCell id="entry" value="&lt;b&gt;/eval-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;--run-id {id} (required)&lt;br&gt;--config {path}&lt;br&gt;--cases {name}..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="60" y="90" width="230" height="150" as="geometry"/>
     </mxCell>
     <mxCell id="load" value="&lt;b&gt;Load Results&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py read summary.yaml&lt;br&gt;eval.yaml (judges, schema)&lt;br&gt;analysis.md (if present)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
@@ -29,7 +29,7 @@
     <mxCell id="apply" value="&lt;b&gt;Apply + Next Steps&lt;/b&gt;&lt;br&gt;&lt;br&gt;edit SKILL.md / eval.yaml&lt;br&gt;/eval-run --baseline&lt;br&gt;/eval-optimize&lt;br&gt;/eval-mlflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="55" y="595" width="250" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="review-yaml" value="review.yaml&lt;br&gt;&amp;nbsp;&amp;nbsp;run_id: &quot;&lt;id&gt;&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;reviewed_cases: N&lt;br&gt;&amp;nbsp;&amp;nbsp;feedback_cases: M&lt;br&gt;&amp;nbsp;&amp;nbsp;reviewer: &quot;human&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;feedback:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;case-dir&gt;: &quot;reviewer notes&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;case-dir&gt;: &quot;&quot;&amp;nbsp;&amp;nbsp;# empty = OK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+    <mxCell id="review-yaml" value="review.yaml&lt;br&gt;&amp;nbsp;&amp;nbsp;run_id: &quot;{id}&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;reviewed_cases: N&lt;br&gt;&amp;nbsp;&amp;nbsp;feedback_cases: M&lt;br&gt;&amp;nbsp;&amp;nbsp;reviewer: &quot;human&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;feedback:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{case-dir}: &quot;reviewer notes&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{case-dir}: &quot;&quot;&amp;nbsp;&amp;nbsp;# empty = OK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
       <mxGeometry x="735" y="595" width="290" height="210" as="geometry"/>
     </mxCell>
     <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="load" parent="1">
@@ -69,6 +69,14 @@
         <Array as="points">
           <mxPoint x="180" y="285"/>
           <mxPoint x="515" y="285"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e11" value="declined (feedback saved)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" edge="1" source="decide" target="save" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="180" y="560"/>
+          <mxPoint x="826.0" y="560"/>
         </Array>
       </mxGeometry>
     </mxCell>

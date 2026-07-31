@@ -64,11 +64,11 @@ no config exists.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Match dataset.schema exactly — do not change file names, formats, or field names the schema prescribes.</li>
-        <li>Do not fabricate gold reference outputs when the correct output is uncertain — omit references rather than include misleading ones.</li>
-        <li>Do not invent values for [EXTERNAL: System] fields — emit TODO_&lt;SYSTEM&gt;_&lt;FIELD&gt; placeholders and surface them in the report.</li>
+        <li>Match dataset.schema exactly -- do not change file names, formats, or field names the schema prescribes.</li>
+        <li>Do not fabricate gold reference outputs when the correct output is uncertain -- omit references rather than include misleading ones.</li>
+        <li>Do not invent values for [EXTERNAL: System] fields -- emit TODO_&lt;SYSTEM&gt;_&lt;FIELD&gt; placeholders and surface them in the report.</li>
         <li>Preserve provenance semantics: --count applies only to skill/from-traces paths and is ignored for synthetic (seed counts govern); do not override generation.strategy with a flag.</li>
         <li>When augmenting, do not duplicate existing cases; continue case numbering from the highest existing case.</li>
         <li>Generate realistic, varied content rather than lorem ipsum or obviously templated placeholders.</li>
@@ -87,16 +87,16 @@ no config exists.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-dataset/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-dataset/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-dataset/references/case-generation.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/references/case-generation.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-dataset/references/synthetic-generation.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/references/synthetic-generation.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-dataset/scripts/generate_synthetic.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/scripts/generate_synthetic.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-dataset/scripts/harbor.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/scripts/harbor.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-dataset/scripts/list_prompts.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/scripts/list_prompts.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-dataset/references/case-generation.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/references/case-generation.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-dataset/references/synthetic-generation.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/references/synthetic-generation.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-dataset/scripts/generate_synthetic.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/scripts/generate_synthetic.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-dataset/scripts/harbor.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/scripts/harbor.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-dataset/scripts/list_prompts.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-dataset/scripts/list_prompts.py</code></a></li>
       </ul>
     </div>
   </section>

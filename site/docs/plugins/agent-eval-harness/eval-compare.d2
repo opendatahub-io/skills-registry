@@ -10,10 +10,10 @@ direction: right
 entry: |md
   **/eval-compare**
 
-  - <input-dir>
-  - --output <path>
-  - --title <text>
-  - --overview <text>
+  - {input-dir}
+  - --output {path}
+  - --title {text}
+  - --overview {text}
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -144,8 +144,8 @@ manifest: |md
   { "runs": [
       { "name", "dir",
         "model": "claude-...",
-        "cost_usd": <float>,
-        "judges": {<judge>: mean},
+        "cost_usd": {float},
+        "judges": {{judge}: mean},
         "has_html": bool } ],
     "has_stats": bool }
 

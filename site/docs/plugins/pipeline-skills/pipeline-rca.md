@@ -69,7 +69,7 @@ per-group report.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not fabricate log lines or error messages not present in the evidence.</li>
         <li>Redact credentials, tokens, and API keys in all output.</li>

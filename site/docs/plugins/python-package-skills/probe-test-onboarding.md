@@ -49,7 +49,7 @@ Create probe tests for a Python package in the wheels-test repository with git c
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Only create probe tests for the single package from context.</li>
         <li>Do not stage the _run/ directory.</li>

@@ -49,7 +49,7 @@ Onboard a Python package into the RHAI builder repository with configuration cha
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Only configure the package from context, not transitive dependencies.</li>
         <li>Do not stage the _run/ directory.</li>

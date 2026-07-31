@@ -67,7 +67,7 @@ what-if analysis, and near-miss identification).
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not skip rubric criteria or invent unsupported evidence.</li>
         <li>Do not change the accepted input modes declared by the skill.</li>
@@ -86,12 +86,12 @@ what-if analysis, and near-miss identification).
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/assess-rfe/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/main/skills/assess-rfe/scripts/agent_prompt.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/scripts/agent_prompt.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-rfe/blob/a7674fef9a0de4107e3416f05aba2d0b8c019025/skills/assess-rfe/scripts/agent_prompt.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-rfe/scripts/agent_prompt.md</code></a></li>
       </ul>
     </div>
   </section>

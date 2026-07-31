@@ -612,7 +612,7 @@ def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
             )
             if must:
                 lines.append('    <div class="skill-contract__row">')
-                lines.append('      <span class="skill-contract__field">Must Not</span>')
+                lines.append('      <span class="skill-contract__field">Must Preserve</span>')
                 lines.append('      <ul class="skill-contract__list">')
                 for item in must:
                     lines.append(f'        <li>{_esc(item)}</li>')
@@ -670,10 +670,28 @@ def _render_contract_card(contract: dict, plugin: dict) -> list[str]:
                 '</h3>'
             )
 
+            # Pin traceability links to a resolved commit SHA when the contract's
+            # metric refs carry one (repo@<sha>:path). Tags are re-pointable, so a
+            # blob/<tag>/ href is not an integrity-verified provenance link; fall
+            # back to the source ref only when no pinned SHA is available.
+            blob_ref = ref_name
+            for _m in sequence_as_list(contract.get("metrics")):
+                if not isinstance(_m, dict):
+                    continue
+                for _k in ("verifier_ref", "rubric_ref"):
+                    _r = _m.get(_k)
+                    if isinstance(_r, str) and "@" in _r and ":" in _r:
+                        _sha = _r.split("@", 1)[1].split(":", 1)[0].strip()
+                        if _sha:
+                            blob_ref = _sha
+                            break
+                if blob_ref != ref_name:
+                    break
+
             def _path_markup(path: str) -> str:
                 path_esc = _esc(path)
                 if base_url:
-                    href = f"{_esc(base_url)}/blob/{_esc(ref_name)}/{path_esc}"
+                    href = f"{_esc(base_url)}/blob/{_esc(blob_ref)}/{path_esc}"
                     return (
                         f'<a class="skill-contract__path" href="{href}">'
                         '<span class="skill-contract__ref-arrow" aria-hidden="true">↗</span>'

@@ -69,10 +69,10 @@ section automatically when an anova.json (written by /eval-anova) is present.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not modify or write to any input/source file; only write to the output directory.</li>
-        <li>Do not run evaluations or compute statistics — render pre-computed anova.json numbers only, never import scipy/statsmodels/pingouin.</li>
+        <li>Do not run evaluations or compute statistics -- render pre-computed anova.json numbers only, never import scipy/statsmodels/pingouin.</li>
         <li>Do not explore the input directory manually (no ls/find); let compare.py handle all run discovery.</li>
         <li>Do not invent findings, badges, or verdicts unsupported by the per-case scores and cost data.</li>
         <li>Preserve graceful degradation and per-model aggregation (averages with min/max ranges) so partial or repeated runs are still included.</li>
@@ -91,12 +91,12 @@ section automatically when an anova.json (written by /eval-anova) is present.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-compare/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-compare/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-compare/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-compare/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-compare/scripts/compare.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-compare/scripts/compare.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-compare/scripts/compare.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-compare/scripts/compare.py</code></a></li>
       </ul>
     </div>
   </section>

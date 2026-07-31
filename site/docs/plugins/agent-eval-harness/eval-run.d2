@@ -192,19 +192,35 @@ analyze: |md
   style.double-border: true
 }
 
+# --- Preflight abort (MISSING_BASELINE) ---
+
+abort: |md
+  **Abort: baseline missing**
+  exit 2
+
+  - runs/{eval}/{baseline} absent
+  - lists nearby run-ids
+  - confirm --baseline, retry
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
 # --- Callouts ---
 
 summary-yaml: |md
-  runs/<eval>/<run-id>/summary.yaml
+  runs/{eval}/{run-id}/summary.yaml
   run_id: 2026-07-31-opus
   judges:              # per-judge aggregate
-    <name>:
+    {name}:
       mean / pass_rate
       stability: {...}   # if samples>1
   per_case:            # value + rationale
     case-001-slug:
-      <gate>:  {value: true, rationale}
-      <score>: {value: 4,    rationale}
+      {gate}:  {value: true, rationale}
+      {score}: {value: 4,    rationale}
   run_metrics:         # cost_per_turn_usd,
                        # cache_hit_rate
   pairwise:            # only if --baseline
@@ -219,7 +235,7 @@ summary-yaml: |md
 }
 
 run-tree: |md
-  runs/<eval>/<run-id>/
+  runs/{eval}/{run-id}/
     summary.yaml     <- judges + per_case
     report.html      <- report.py
     collection.json  <- collect.py counts
@@ -227,7 +243,7 @@ run-tree: |md
     analysis.md      <- recommendation
     cases/
       case-001-slug/
-        <output dirs>/
+        {output dirs}/
         events.json
 | {
   shape: rectangle
@@ -242,6 +258,12 @@ run-tree: |md
 
 entry -> preflight
 preflight -> workspace: "CLEAN"
+preflight -> preflight: "DIRTY: --clean --force" {
+  style.stroke-dash: 3
+}
+preflight -> abort: "MISSING_BASELINE (exit 2)" {
+  style.stroke-dash: 3
+}
 workspace -> mode: "N cases"
 
 mode -> execute: "case (default)"

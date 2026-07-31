@@ -53,7 +53,7 @@ Export the assessment rubric
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not modify the rubric content while exporting it.</li>
         <li>Do not redirect the export to a path other than artifacts/strat-rubric.md.</li>

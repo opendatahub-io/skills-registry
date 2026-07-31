@@ -53,7 +53,7 @@ the updated `## Strategy` section to the RHAISTRAT issue and removes the
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Only push strategies with strat-creator-needs-attention label.</li>
         <li>Do not push strategies that have not been locally modified.</li>

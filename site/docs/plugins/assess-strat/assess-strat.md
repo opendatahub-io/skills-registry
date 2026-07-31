@@ -58,7 +58,7 @@ Assess strategies against quality criteria using a structured rubric
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Do not skip rubric criteria or invent unsupported evidence.</li>
         <li>Do not change the accepted input modes declared by the skill.</li>
@@ -77,7 +77,7 @@ Assess strategies against quality criteria using a structured rubric
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-strat/blob/main/skills/assess-strat/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-strat/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/assess-strat/blob/ae449845b2c8bde238ba7cd6ecd536b2c83f4a8b/skills/assess-strat/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/assess-strat/SKILL.md</code></a></div>
     </div>
   </section>
 </div>

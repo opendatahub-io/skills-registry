@@ -104,6 +104,17 @@ cell-run: |md
   style.stroke-width: 2
 }
 
+# --- Matrix-completion barrier ---
+
+more-cells: |md
+  **More cells?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
 # --- Analysis ---
 
 analyze: |md
@@ -198,11 +209,12 @@ dry-run -> matrix-loop: "no · execute"
 
 matrix-loop -> eval-run: "per cell"
 eval-run -> cell-run: "one run"
-cell-run -> matrix-loop: "next cell" {
+cell-run -> more-cells
+
+more-cells -> matrix-loop: "yes · next cell" {
   style.stroke-dash: 3
 }
-
-cell-run -> analyze: "all summary.yaml"
+more-cells -> analyze: "no · all summary.yaml"
 analyze -> anova-json
 
 anova-json -> eval-compare: "+ stats section"

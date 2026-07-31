@@ -69,7 +69,7 @@ state via state.py and leads its analysis with a decisive recommendation.
   <section class="skill-contract__section" data-section="03">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
     <div class="skill-contract__row">
-      <span class="skill-contract__field">Must Not</span>
+      <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Orchestrate by calling the pipeline scripts (preflight, workspace, execute, collect, score, report); never duplicate or reimplement their scoring/execution logic.</li>
         <li>Launch execute.py in the background with no output redirection (no &gt;, |, tee, or 2&gt;&amp;1) and poll until completion; do not end the turn while it runs.</li>
@@ -92,19 +92,19 @@ state via state.py and leads its analysis with a decisive recommendation.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/scripts/execute.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/execute.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/scripts/score.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/score.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/scripts/collect.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/collect.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/scripts/report.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/report.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/scripts/preflight.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/preflight.py</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/prompts/analyze-results.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/prompts/analyze-results.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/prompts/comparison-judge.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/prompts/comparison-judge.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/v1.30.0/skills/eval-run/references/execution-modes.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/references/execution-modes.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/scripts/execute.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/execute.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/scripts/score.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/score.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/scripts/collect.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/collect.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/scripts/report.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/report.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/scripts/preflight.py"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/scripts/preflight.py</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/prompts/analyze-results.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/prompts/analyze-results.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/prompts/comparison-judge.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/prompts/comparison-judge.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/agent-eval-harness/blob/1559af5d404128ed3458d1a9bdb4580c76244b01/skills/eval-run/references/execution-modes.md"><span class="skill-contract__ref-arrow" aria-hidden="true">↗</span><code>skills/eval-run/references/execution-modes.md</code></a></li>
       </ul>
     </div>
   </section>
