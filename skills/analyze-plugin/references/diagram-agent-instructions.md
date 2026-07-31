@@ -67,7 +67,12 @@ Use absolute paths everywhere. `cd` is allowed but not required.
 1. Read `<SKILL_MD>` for the FLOW, AND read the skill's `scripts/` + `references/`
    that produce its **primary output artifact** and any central data structures —
    you need these for callout content (SKILL.md gives the flow; the scripts give the
-   concrete schema/file-tree). Also read the analysis guide
+   concrete schema/file-tree). **Diagram the skill's DOCUMENTED interface** — a
+   flag/option/behavior only counts as user-facing if it appears in `<SKILL_MD>`
+   (frontmatter, usage, or body); use the scripts ONLY to source artifact
+   *structure* (schemas, file-trees), never to surface a script-internal flag or
+   side-effect (e.g. an `argparse` option absent from the SKILL.md, like a
+   `--auto-approve` that transitions state) as part of the skill's interface. Also read the analysis guide
    (`<DIAGRAM_SKILLS>/skills/skill-diagram/prompts/analysis-guide.md`, the Detail
    Floor + §6b callouts, §8 data-flow, §6 containers) — not just `d2-conventions.md`,
    which is only the style guide. Use the suggested flow as the backbone, refine it
@@ -87,13 +92,23 @@ Use absolute paths everywhere. `cd` is allowed but not required.
    - **≥1 callout detail box** — a monospace box (`style.font: mono`,
      `style.stroke: "#bbbbbb"`, `style.font-size: 10`) holding the concrete
      structure of the skill's **primary output artifact** (its schema/fields) or a
-     central file tree / config snippet, connected to its anchor node by a dashed
-     light-grey edge. Take the content from the script you read in Step 1 — real
+     central file tree / config snippet, connected by a dashed light-grey edge to
+     the node that PRODUCES it (the step that writes the file, not a downstream
+     consumer). Take the content from the script you read in Step 1 — real
      field/file names, not a sketch. Add more callouts for other central artifacts.
    - **Data-flow edge labels**: when a step produces a named artifact the next step
      consumes, label that edge with the artifact (`summary.yaml`, `collection.json`).
    - **Keep composite subsystems as containers** (nested if a member is multi-step);
      do NOT flatten a multi-variant step (e.g. a scoring system) into one node.
+   - **Decisions fan out**: a `shape: diamond` node needs ≥2 outgoing edges, each
+     labeled with the CONDITION that selects it (not the artifact that flows). A
+     one-exit diamond should be a plain node; a flag bypass (`--headless`) starts
+     from arg-parsing, not as a third exit off an unrelated decision. (`validate_d2.py`
+     flags one-exit and unlabeled-branch decisions — clear those in Step 8.)
+   - **Be consistent + truthful**: reference each artifact by ONE canonical
+     (absolute) path across the diagram; don't split a term across callout lines
+     (`significantly` / `underestimated`); and a callout's claim must match the
+     actual command (don't list `rm -rf` targets a step doesn't delete).
 4. Parse + analyze:
    ```bash
    python3 <scripts>/parse_input.py <OUT_DIR>/<name>.d2 > <SCRATCH>/graph-spec.json

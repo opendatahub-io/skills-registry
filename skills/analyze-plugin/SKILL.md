@@ -331,6 +331,20 @@ designed llm-node count and == the `strokeWidth=3` count (no thick-vs-double dri
 and SVG size in a healthy range (~150k–1.3M). Re-author or fix any diagram that misses
 the floor — an under-detailed diagram is not done.
 
+**Verify SEMANTICS, not just density** (the mechanical floor above is necessary but
+not sufficient — it catches style/density regressions, not accuracy). Run
+`validate_d2.py` (it now also flags one-exit and unlabeled-branch decisions) and clear
+its `detail_warnings`, then check each diagram against its SKILL.md for the classes a
+linter can't see: (a) each output-artifact callout is anchored to the node that
+PRODUCES it, not a downstream consumer; (b) every decision fans out to ≥2
+condition-labeled branches; (c) no script-internal flag/behavior absent from the
+SKILL.md is shown as user-facing (read the *documented* interface, use scripts only for
+artifact structure); (d) each artifact uses one canonical path and callout claims match
+the actual commands. For a thorough run, spawn a cheap per-diagram verify agent (or a
+workflow adversarial-verify pass) that reads the diagram + its SKILL.md and reports
+these — then fix what it finds. This is the class of defect that otherwise surfaces
+only in downstream code review.
+
 **Recovery for transient failures.** At this fan-out, agents occasionally die on
 `Stream idle timeout` / `Connection closed mid-response` (not a task problem). If an
 agent wrote a fresh `layout-plan.json`, finish it in the main thread
