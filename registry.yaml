@@ -2365,6 +2365,31 @@ plugins:
       requires_python: ">=3.10"
     depends_on: []
 
+  - name: patternfly
+    description: >
+      Everything you need for PatternFly development -- React components,
+      design guidance, migration, and MCP docs. Installs all PatternFly
+      sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+    version: "0.1.0"
+    skill_count: 22
+    category: development-tools
+    scope: generic
+    tags: [patternfly, react, uxd, design, mcp, components, migration]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: github
+      repo: rh-uxd/ai-helpers
+      path: plugins/patternfly
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    harnesses:
+      claude-code:
+        install: "/plugin install patternfly@opendatahub-skills"
+    depends_on: []
+
   - name: docs-skills
     description: >
       Documentation review, writing, and workflow tools for AsciiDoc and

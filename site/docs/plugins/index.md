@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-20 plugins registered in the marketplace.
+21 plugins registered in the marketplace.
 
 ## SDLC
 
@@ -38,3 +38,4 @@ title: Plugins
 |--------|----------|--------|---------|
 | [odh-ai-helpers](odh-ai-helpers/index.md) | Development Tools | 19 | v0.1.0 |
 | [agent-eval-harness](agent-eval-harness/index.md) | Evaluation & Testing | 10 | v1.30.0 |
+| [patternfly](patternfly/index.md) | Development Tools | 22 | v0.1.0 |
