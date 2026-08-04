@@ -36,3 +36,9 @@ AI skills for Python package onboarding into the RHAI distribution pipeline. End
 Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
 
 **19 skills** - v0.1.0
+
+### [patternfly](../plugins/patternfly/index.md)
+
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+
+**22 skills** - v0.1.0

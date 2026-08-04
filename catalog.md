@@ -392,6 +392,18 @@ Tags: python-packaging, onboarding, fondue, investigation, security, license, te
 /plugin install python-package-skills@opendatahub-skills
 ```
 
+### patternfly
+
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers](https://github.com/rh-uxd/ai-helpers)
+
+Tags: patternfly, react, uxd, design, mcp, components, migration
+
+```bash
+/plugin install patternfly@opendatahub-skills
+```
+
 ## Product Planning
 
 Skills for requirements, RFEs, and product strategy

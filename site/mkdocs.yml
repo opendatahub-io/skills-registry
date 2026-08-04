@@ -196,6 +196,8 @@ nav:
     - spike-executor:
       - plugins/spike-executor/index.md
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
+    - patternfly:
+      - plugins/patternfly/index.md
     - docs-skills:
       - plugins/docs-skills/index.md
       - docs-orchestrator: plugins/docs-skills/docs-orchestrator.md

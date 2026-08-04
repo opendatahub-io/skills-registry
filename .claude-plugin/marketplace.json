@@ -519,6 +519,33 @@
     },
     {
       "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "react",
+        "uxd",
+        "design",
+        "mcp",
+        "components",
+        "migration"
+      ],
+      "license": "MIT",
+      "name": "patternfly",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly",
+        "ref": "main",
+        "repo": "rh-uxd/ai-helpers",
+        "source": "github"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
         "name": "opendatahub-io"
       },
       "category": "documentation",

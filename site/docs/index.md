@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-21 plugins | 124 skills | 7 categories
+22 plugins | 146 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -186,6 +186,14 @@ hide:
 
     **10 skills** - Evaluation & Testing - v1.30.0
 
+-   **[patternfly](plugins/patternfly/index.md)**
+
+    ---
+
+    Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Install...
+
+    **22 skills** - Development Tools - v0.1.0
+
 </div>
 
 ## Teams
@@ -209,5 +217,5 @@ hide:
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (4 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
-- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (4 plugins)
+- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (5 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)

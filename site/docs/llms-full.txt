@@ -3163,6 +3163,16 @@ Examples:
 
 ---
 
+## patternfly
+
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+
+**Repository**: https://github.com/rh-uxd/ai-helpers
+
+### Skills
+
+---
+
 ## docs-skills
 
 A comprehensive toolkit for technical documentation work on AsciiDoc and
