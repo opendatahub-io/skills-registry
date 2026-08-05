@@ -167,13 +167,12 @@ nav:
       - false-alarm-detection: plugins/autoqa-skills/false-alarm-detection.md
     - python-package-skills:
       - plugins/python-package-skills/index.md
-      - builder-onboarding: plugins/python-package-skills/builder-onboarding.md
       - executive-summary: plugins/python-package-skills/executive-summary.md
       - failure-analysis: plugins/python-package-skills/failure-analysis.md
+      - fondue-onboarding: plugins/python-package-skills/fondue-onboarding.md
       - jira-context-summary: plugins/python-package-skills/jira-context-summary.md
       - license-check: plugins/python-package-skills/license-check.md
       - packaging-investigation: plugins/python-package-skills/packaging-investigation.md
-      - pipeline-onboarding: plugins/python-package-skills/pipeline-onboarding.md
       - probe-test-onboarding: plugins/python-package-skills/probe-test-onboarding.md
       - security-audit: plugins/python-package-skills/security-audit.md
     - ec-cve-check:

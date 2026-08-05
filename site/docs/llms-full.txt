@@ -2539,15 +2539,11 @@ Examples:
 
 ## python-package-skills
 
-AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
+AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, fondue monorepo onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
 
 **Repository**: https://github.com/opendatahub-io/python-package-skills
 
 ### Skills
-
-#### /builder-onboarding (internal)
-
-Onboard a Python package into the RHAI builder repository with configuration changes, linting, and git commit
 
 #### /executive-summary (internal)
 
@@ -2556,6 +2552,10 @@ Create a concise 2-3 line executive summary of a package onboarding outcome
 #### /failure-analysis (internal)
 
 Analyze a build failure for a Python package in the RHAI pipeline and produce a structured diagnosis report
+
+#### /fondue-onboarding (internal)
+
+Onboard a Python package into the fondue monorepo (builder/ and/or rhai-pipeline/) with configuration changes, linting, and git commit(s)
 
 #### /jira-context-summary (internal)
 
@@ -2568,10 +2568,6 @@ Check Python package license compatibility with redistribution in Red Hat AI dis
 #### /packaging-investigation (internal)
 
 Investigate a Python package for enterprise packaging and distribution readiness with structured analysis and verdict
-
-#### /pipeline-onboarding (internal)
-
-Onboard a Python package into the RHAI pipeline onboarding collection across all variants with git commit
 
 #### /probe-test-onboarding (internal)
 

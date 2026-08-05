@@ -1808,15 +1808,15 @@ plugins:
 
   - name: python-package-skills
     description: >
-      AI skills for Python package onboarding into the RHAI pipeline.
-      End-to-end automation covering packaging investigation, license
-      checking, security auditing, build failure analysis, builder and
-      pipeline onboarding, probe test creation, Jira context summarization,
-      and executive summary generation. Designed to run inside a Claude Code
-      container as part of the package-onboarding CI pipeline.
+      AI skills for Python package onboarding into the RHAI distribution
+      pipeline. End-to-end automation covering packaging investigation,
+      license checking, security auditing, build failure analysis, fondue
+      monorepo onboarding, probe test creation, Jira context summarization,
+      and executive summary generation. Designed to run inside a Claude
+      Code container as part of the package-onboarding CI pipeline.
     version: "0.1.0"
     category: development-tools
-    tags: [python-packaging, onboarding, builder, pipeline, rhai, investigation, security, license, testing]
+    tags: [python-packaging, onboarding, fondue, investigation, security, license, testing]
     author:
       name: opendatahub-io
     license: Apache-2.0
@@ -1827,35 +1827,6 @@ plugins:
     homepage: https://github.com/opendatahub-io/python-package-skills
     repository: https://github.com/opendatahub-io/python-package-skills
     skills:
-      - name: builder-onboarding
-        description: Onboard a Python package into the RHAI builder repository with configuration changes, linting, and git commit
-        user-invocable: false
-        contract:
-          version: canonical-skill-v1
-          functions: [transform]
-          metrics:
-            - id: task_success
-              measure: deterministic
-          problem_statement: >
-            Analyze package information, AI packaging analysis, and build
-            failure details to determine necessary configuration changes
-            for the RHAI builder repository, then create a git commit.
-          success_conditions:
-            - All configuration files for the package are created or modified correctly.
-            - make linter passes with no errors after changes.
-            - A git commit is produced with the correct format and clean working tree.
-          invariants:
-            must_preserve:
-              - Only configure the package from context, not transitive dependencies.
-              - Do not stage the _run/ directory.
-            fixed_context:
-              tools: [Bash, Read, Grep, Glob]
-              cli: [python3, git, make]
-              knowledge_inputs:
-                - kind: task_input
-                  privacy: task_private
-          source_assertions:
-            skill_path: skills/builder-onboarding/SKILL.md
       - name: executive-summary
         description: Create a concise 2-3 line executive summary of a package onboarding outcome
         user-invocable: false
@@ -1906,6 +1877,41 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: skills/failure-analysis/SKILL.md
+      - name: fondue-onboarding
+        description: >
+          Onboard a Python package into the fondue monorepo (builder/ and/or
+          rhai-pipeline/) with configuration changes, linting, and git commit(s)
+        user-invocable: false
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: >
+            Analyze package information, AI packaging analysis, and optional
+            build failure details to configure a Python package in the fondue
+            monorepo (builder/ and/or rhai-pipeline/) based on mode
+            (combined or pipeline-only), then create the required git commit(s).
+          success_conditions:
+            - Commit count matches mode (1 for pipeline-only, 2 for combined).
+            - Requirements files created for all variant directories under rhai-pipeline/collections/onboarding/.
+            - In combined mode, builder configuration is created and .gitlab-triggers.yaml is included in the builder commit.
+            - make linter passes with no errors before every commit.
+            - Working tree is clean after the final commit.
+          invariants:
+            must_preserve:
+              - Only configure the package from context, not transitive dependencies.
+              - Do not stage the _run/ directory.
+              - In combined mode, builder and rhai-pipeline changes must be in separate commits.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob]
+              cli: [python3, git, make]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/fondue-onboarding/SKILL.md
       - name: jira-context-summary
         description: Summarize Jira ticket context for a package onboarding request with actionable requirements and blockers
         user-invocable: false
@@ -1988,35 +1994,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: skills/packaging-investigation/SKILL.md
-      - name: pipeline-onboarding
-        description: Onboard a Python package into the RHAI pipeline onboarding collection across all variants with git commit
-        user-invocable: false
-        contract:
-          version: canonical-skill-v1
-          functions: [transform]
-          metrics:
-            - id: task_success
-              measure: deterministic
-          problem_statement: >
-            Add a Python package to the onboarding collection for all
-            variants in the pipeline repository, creating requirements
-            files with correct version pinning and tracking comments.
-          success_conditions:
-            - Requirements files created for all variant directories under collections/onboarding/.
-            - make linter passes with no errors after changes.
-            - A git commit is produced with the correct format and clean working tree.
-          invariants:
-            must_preserve:
-              - Only configure the package from context, not transitive dependencies.
-              - Do not stage the _run/ directory.
-            fixed_context:
-              tools: [Bash, Read, Grep, Glob]
-              cli: [python3, git, make]
-              knowledge_inputs:
-                - kind: task_input
-                  privacy: task_private
-          source_assertions:
-            skill_path: skills/pipeline-onboarding/SKILL.md
       - name: probe-test-onboarding
         description: Create probe tests for a Python package in the wheels-test repository with git commit
         user-invocable: false

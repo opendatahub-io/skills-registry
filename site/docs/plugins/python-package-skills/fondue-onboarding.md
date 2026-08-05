@@ -1,13 +1,14 @@
 ---
-title: builder-onboarding
+title: fondue-onboarding
 ---
 
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 
-# builder-onboarding
+# fondue-onboarding
 
-Onboard a Python package into the RHAI builder repository with configuration changes, linting, and git commit
+Onboard a Python package into the fondue monorepo (builder/ and/or rhai-pipeline/) with configuration changes, linting, and git commit(s)
+
 
 **Plugin**: [python-package-skills](index.md) | **:material-close: Internal**
 
@@ -18,7 +19,7 @@ Onboard a Python package into the RHAI builder repository with configuration cha
     <span class="skill-contract__eyebrow">Skill Contract</span>
     <span class="skill-contract__version">canonical-skill-v1</span>
   </header>
-  <p class="skill-contract__lede">Analyze package information, AI packaging analysis, and build failure details to determine necessary configuration changes for the RHAI builder repository, then create a git commit.</p>
+  <p class="skill-contract__lede">Analyze package information, AI packaging analysis, and optional build failure details to configure a Python package in the fondue monorepo (builder/ and/or rhai-pipeline/) based on mode (combined or pipeline-only), then create the required git commit(s).</p>
   <section class="skill-contract__section" data-section="01">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
     <div class="skill-contract__row">
@@ -30,9 +31,11 @@ Onboard a Python package into the RHAI builder repository with configuration cha
     <div class="skill-contract__row">
       <span class="skill-contract__field">Success</span>
       <ul class="skill-contract__list">
-        <li>All configuration files for the package are created or modified correctly.</li>
-        <li>make linter passes with no errors after changes.</li>
-        <li>A git commit is produced with the correct format and clean working tree.</li>
+        <li>Commit count matches mode (1 for pipeline-only, 2 for combined).</li>
+        <li>Requirements files created for all variant directories under rhai-pipeline/collections/onboarding/.</li>
+        <li>In combined mode, builder configuration is created and .gitlab-triggers.yaml is included in the builder commit.</li>
+        <li>make linter passes with no errors before every commit.</li>
+        <li>Working tree is clean after the final commit.</li>
       </ul>
     </div>
   </section>
@@ -53,6 +56,7 @@ Onboard a Python package into the RHAI builder repository with configuration cha
       <ul class="skill-contract__list">
         <li>Only configure the package from context, not transitive dependencies.</li>
         <li>Do not stage the _run/ directory.</li>
+        <li>In combined mode, builder and rhai-pipeline changes must be in separate commits.</li>
       </ul>
     </div>
     <div class="skill-contract__row">
@@ -68,7 +72,7 @@ Onboard a Python package into the RHAI builder repository with configuration cha
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/python-package-skills/blob/main/skills/builder-onboarding/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/builder-onboarding/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/python-package-skills/blob/main/skills/fondue-onboarding/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/fondue-onboarding/SKILL.md</code></a></div>
     </div>
   </section>
 </div>
@@ -76,5 +80,5 @@ Onboard a Python package into the RHAI builder repository with configuration cha
 ## Usage
 
 ```bash
-/builder-onboarding
+/fondue-onboarding
 ```

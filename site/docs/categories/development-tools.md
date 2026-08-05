@@ -25,9 +25,9 @@ AI skills for AutoQA CI/CD test failure analysis and triage. Covers root cause a
 
 ### [python-package-skills](../plugins/python-package-skills/index.md)
 
-AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, builder and pipeline onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
+AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, fondue monorepo onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
 
-**9 skills** - v0.1.0
+**8 skills** - v0.1.0
 
 ## Generic
 

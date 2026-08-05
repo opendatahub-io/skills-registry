@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-20 plugins | 106 skills | 7 categories
+20 plugins | 105 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -104,9 +104,9 @@ hide:
 
     ---
 
-    AI skills for Python package onboarding into the RHAI pipeline. End-to-end automation covering packaging investigatio...
+    AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging...
 
-    **9 skills** - Development Tools - v0.1.0
+    **8 skills** - Development Tools - v0.1.0
 
 -   **[ec-cve-check](plugins/ec-cve-check/index.md)**
 
