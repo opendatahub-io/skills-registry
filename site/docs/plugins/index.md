@@ -20,7 +20,7 @@ title: Plugins
 | [rhoai-security-reviewer](rhoai-security-reviewer/index.md) | Security Review | 2 | v0.1.0 |
 | [test-plan](test-plan/index.md) | Evaluation & Testing | 17 | v1.0.1 |
 | [quality-tooling](quality-tooling/index.md) | Evaluation & Testing | 5 | v1.0.0 |
-| [knowledge-skills](knowledge-skills/index.md) | Documentation | 1 | v0.1.0 |
+| [knowledge-skills](knowledge-skills/index.md) | Documentation | 2 | v0.1.0 |
 | [autofix-skills](autofix-skills/index.md) | Development Tools | 4 | v0.1.0 |
 | [autoqa-skills](autoqa-skills/index.md) | Development Tools | 3 | v0.1.0 |
 | [python-package-skills](python-package-skills/index.md) | Development Tools | 8 | v0.1.0 |

@@ -2308,6 +2308,10 @@ Examples:
 /knowledge-repo --days 30
 ```
 
+#### /enrich-reports
+
+Enrich case study skeletons with error signatures, fix types, lessons, and prevention advice via validated Python script output
+
 ---
 
 ## autofix-skills
