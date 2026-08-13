@@ -243,6 +243,26 @@ class SkillLinterWrapperTests(unittest.TestCase):
         self.assertIsNotNone(detail)
         self.assertIn("summary.errorCount", detail)
 
+    def test_interpret_stdout_rejects_malformed_counts_at_every_location(self):
+        # int() would read every one of these as zero errors and pass the report.
+        for raw in ("false", "0.5", "-1"):
+            for payload in (
+                '{"errorCount": %s}' % raw,
+                '{"summary": {"errorCount": %s}}' % raw,
+                '{"summary": {"errorCount": 0}, "skills": [{"errorCount": %s}]}' % raw,
+            ):
+                with self.subTest(payload=payload):
+                    ok, detail = interpret_skill_linter_success_stdout(payload)
+                    self.assertFalse(ok)
+                    self.assertIsNotNone(detail)
+                    self.assertIn("errorCount", detail)
+
+    def test_extract_error_count_requires_non_negative_integers(self):
+        for raw in (False, True, 0.5, 2.0, -1, "3", None, [], {}):
+            with self.subTest(raw=raw):
+                with self.assertRaises(ValueError):
+                    extract_skill_linter_error_count({"summary": {"errorCount": raw}})
+
     def test_extract_error_count_reads_every_reported_location(self):
         self.assertEqual(extract_skill_linter_error_count({}), 0)
         self.assertEqual(extract_skill_linter_error_count({"errorCount": 4}), 4)

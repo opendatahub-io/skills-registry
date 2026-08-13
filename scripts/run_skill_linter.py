@@ -147,18 +147,21 @@ def extract_skill_linter_error_count(report: dict) -> int:
     skill-linter nests counts under ``summary`` and repeats them per entry in
     ``skills``; a bare top-level ``errorCount`` is still honoured so the check keeps
     working if the pinned version changes shape. Reading only the top level made this
-    check a no-op against real output. Raises ValueError when a count is present but
-    not an integer so the caller can fail closed.
+    check a no-op against real output.
+
+    Every count must be a non-negative JSON integer. Raises ValueError otherwise so the
+    caller can fail closed. Coercing with ``int()`` instead would quietly read ``false``,
+    ``0.5`` and ``-1`` as zero errors, which is the opposite of what this guard is for.
     """
     highest = 0
     for label, raw in _iter_reported_error_counts(report):
-        try:
-            value = int(raw)
-        except (TypeError, ValueError) as exc:
+        # bool is a subclass of int, so reject it explicitly.
+        if isinstance(raw, bool) or not isinstance(raw, int) or raw < 0:
             raise ValueError(
-                f"skill-linter output has non-numeric {label}: {raw!r}"
-            ) from exc
-        highest = max(highest, value)
+                f"skill-linter output has an invalid {label}: {raw!r} "
+                "(expected a non-negative integer)"
+            )
+        highest = max(highest, raw)
     return highest
 
 
