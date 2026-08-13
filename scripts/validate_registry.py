@@ -8,6 +8,7 @@ Usage:
     python3 scripts/validate_registry.py --validate-remote-plugins  # Clone and validate new plugins
     python3 scripts/validate_registry.py --staged               # Require contracts for skills changed vs HEAD (staged registry)
     python3 scripts/validate_registry.py --diff-base REF        # Require contracts for skills changed since REF
+    python3 scripts/validate_registry.py --check-skill-names    # Check skill names against upstream SKILL.md
 """
 
 import argparse
@@ -376,6 +377,144 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
     return errors
 
 
+def _iter_upstream_skill_files(plugin: dict, repo_path: Path) -> list[Path]:
+    """SKILL.md files in a cloned plugin repo, from the first skills directory that has any.
+
+    Mirrors the first-match lookup in validate_remote_plugin() rather than taking the union.
+    A repo can ship its published skills in skills/ while also keeping its own tooling in
+    .claude/skills/; unioning the two would report that tooling as missing from the registry.
+    """
+    root = repo_path.resolve()
+    locations = [
+        repo_path / plugin.get("skills_dir", "skills"),
+        repo_path / ".claude" / "skills",
+        repo_path / "skills",
+    ]
+    for location in locations:
+        try:
+            resolved = location.resolve()
+        except OSError:
+            continue
+        if not resolved.is_relative_to(root) or not resolved.is_dir():
+            continue
+        found = sorted(resolved.glob("*/SKILL.md"))
+        if found:
+            return found
+    return []
+
+
+def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[list[str], list[str]]:
+    """Compare registry skill names with the upstream SKILL.md frontmatter in a cloned repo.
+
+    Returns (errors, warnings). A registry skill with no upstream SKILL.md is an error:
+    the catalog publishes a slash command that resolves to nothing. Upstream skills the
+    registry omits, and user-invocable disagreements, are warnings — they misdescribe the
+    plugin without inventing a command, and several are known upstream-side gaps.
+    """
+    from scripts.discover_skills import parse_frontmatter
+
+    name = get_plugin_label(plugin)
+    upstream: dict[str, bool] = {}
+    for skill_md in _iter_upstream_skill_files(plugin, repo_path):
+        try:
+            frontmatter = parse_frontmatter(skill_md.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError):
+            continue
+        if not isinstance(frontmatter, dict):
+            continue
+        declared = frontmatter.get("name")
+        skill_name = declared.strip() if isinstance(declared, str) and declared.strip() \
+            else skill_md.parent.name
+        # Absent user-invocable means the Claude Code default, which is true.
+        upstream[skill_name] = frontmatter.get("user-invocable", True) is not False
+
+    if not upstream:
+        # validate_remote_plugin already reports "no SKILL.md found"; don't double-report.
+        return [], []
+
+    errors = []
+    warnings = []
+    registered = set()
+    for skill in iter_skills(plugin):
+        skill_name = skill.get("name")
+        if not isinstance(skill_name, str):
+            continue
+        registered.add(skill_name)
+        if skill_name not in upstream:
+            errors.append(
+                f"  Plugin '{name}' skill '{skill_name}': no upstream SKILL.md declares this name "
+                f"(found: {', '.join(sorted(upstream)) or 'none'}). "
+                "The catalog would publish a command that does not exist."
+            )
+            continue
+        registry_invocable = skill.get("user-invocable", True) is not False
+        if registry_invocable != upstream[skill_name]:
+            warnings.append(
+                f"  Plugin '{name}' skill '{skill_name}': registry says "
+                f"user-invocable={registry_invocable}, upstream SKILL.md resolves to "
+                f"{upstream[skill_name]}. Set user-invocable in the source SKILL.md to match."
+            )
+
+    # Only flag unlisted upstream skills for strict: false plugins. There the whole
+    # skills_dir is installed, so anything missing from registry.yaml is a live command
+    # with no documentation. A strict: true registry list is a curated subset by design.
+    if plugin.get("strict", True) is False:
+        unlisted = sorted(set(upstream) - registered)
+        if unlisted:
+            shown = ", ".join(unlisted[:5])
+            more = f", +{len(unlisted) - 5} more" if len(unlisted) > 5 else ""
+            warnings.append(
+                f"  Plugin '{name}': {len(unlisted)} upstream skill(s) not listed in "
+                f"registry.yaml ({shown}{more}). strict: false installs the whole "
+                "skills_dir, so these are undocumented commands."
+            )
+
+    return errors, warnings
+
+
+def diff_touched_plugins(registry: dict, base_ref: str) -> list[str] | None:
+    """Plugin names whose registry entry differs from base_ref, or None if base is unreadable."""
+    try:
+        base_registry = load_registry_from_ref(base_ref)
+    except (subprocess.CalledProcessError, RuntimeError, ValueError):
+        return None
+    base_by_name = {p.get("name"): p for p in base_registry.get("plugins", [])}
+    return sorted(
+        p.get("name")
+        for p in registry.get("plugins", [])
+        if base_by_name.get(p.get("name")) != p
+    )
+
+
+def check_remote_skill_names(plugin: dict) -> tuple[list[str], list[str]]:
+    """Clone a plugin repo and compare its SKILL.md names with the registry entry."""
+    from scripts.registry_contracts import GIT_CLONE_TYPES, redact_url, source_clone_url
+
+    name = get_plugin_label(plugin)
+    source = plugin.get("source")
+    if not source or source.get("type") not in GIT_CLONE_TYPES:
+        return [], []
+
+    try:
+        ref = normalize_git_ref(source.get("ref", "main"))
+        clone_url = source_clone_url(source)
+    except (ValueError, KeyError):
+        # validate_remote_plugin reports malformed sources; nothing to add here.
+        return [], []
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        try:
+            result = shallow_clone(clone_url, ref, tmpdir)
+        except RuntimeError as exc:
+            return [], [f"  Plugin '{name}': could not clone to check skill names: {redact_url(str(exc))}"]
+        if result.returncode != 0:
+            return [], [
+                f"  Plugin '{name}': could not clone {redact_url(clone_url)} (ref={ref}) "
+                "to check skill names"
+            ]
+        return check_skill_names_against_source(plugin, Path(tmpdir))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -387,6 +526,10 @@ def main() -> None:
                         help="Show plugins added since BASE_REF")
     parser.add_argument("--validate-remote-plugins", action="store_true",
                         help="Clone and validate plugin repos")
+    parser.add_argument("--check-skill-names", action="store_true",
+                        help="Clone plugin repos and check registry skill names against "
+                             "upstream SKILL.md frontmatter (scoped to plugins touched "
+                             "since --diff-base, if given)")
     parser.add_argument("--staged", action="store_true",
                         help="Require contracts for skills changed between HEAD and staged registry.yaml")
     parser.add_argument("--diff-base", metavar="REF",
@@ -491,6 +634,38 @@ def main() -> None:
                     print(e)
             else:
                 print("    OK")
+
+    # Registry skill names vs upstream SKILL.md frontmatter
+    if args.check_skill_names:
+        plugins_to_check = registry.get("plugins", [])
+        scope = "all"
+        if args.diff_base:
+            touched_names = diff_touched_plugins(registry, args.diff_base)
+            if touched_names is None:
+                print(f"WARNING: could not read registry.yaml from {args.diff_base}, "
+                      "checking every plugin", file=sys.stderr)
+            else:
+                plugins_to_check = [p for p in plugins_to_check
+                                    if p.get("name") in set(touched_names)]
+                scope = f"touched since {args.diff_base}"
+
+        print(f"Checking skill names against source ({len(plugins_to_check)} plugin(s), {scope})...")
+        name_errors: list[str] = []
+        name_warnings: list[str] = []
+        for plugin in plugins_to_check:
+            errors, warnings = check_remote_skill_names(plugin)
+            name_errors.extend(errors)
+            name_warnings.extend(warnings)
+
+        for w in name_warnings:
+            print(f"  WARNING:{w.lstrip(' ')}")
+        all_errors.extend(name_errors)
+        if name_errors:
+            print(f"  FAIL: {len(name_errors)} skill name error(s)")
+            for e in name_errors:
+                print(e)
+        else:
+            print("  OK")
 
     # Summary
     print()

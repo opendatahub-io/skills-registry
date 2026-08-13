@@ -75,6 +75,9 @@ jobs:
       - name: Run skill-linter for touched skills
         run: python3 scripts/run_skill_linter.py --diff-base "${{ env.DIFF_BASE }}"
 
+      - name: Check skill names against source for touched plugins
+        run: python3 scripts/validate_registry.py --diff-base "${{ env.DIFF_BASE }}" --check-skill-names
+
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -p 'test_*.py'
 

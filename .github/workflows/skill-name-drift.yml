@@ -1,0 +1,29 @@
+name: Skill Name Drift
+
+# The PR-scoped check in validate.yml only sees plugins whose registry entry changed.
+# Most drift starts upstream — a skill is renamed or deleted in its own repo and the
+# registry silently keeps advertising the old command. This sweep catches that.
+
+on:
+  schedule:
+    # Mondays at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-skill-names:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml==6.0.3 jsonschema==4.26.0
+
+      - name: Check every plugin's skill names against its source repo
+        run: python3 scripts/validate_registry.py --check-skill-names
