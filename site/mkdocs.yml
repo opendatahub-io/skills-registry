@@ -198,6 +198,22 @@ nav:
     - docs-skills:
       - plugins/docs-skills/index.md
       - docs-orchestrator: plugins/docs-skills/docs-orchestrator.md
+    - sheltons-toolkit:
+      - plugins/sheltons-toolkit/index.md
+      - create-dsc: plugins/sheltons-toolkit/create-dsc.md
+      - install-operator: plugins/sheltons-toolkit/install-operator.md
+      - install-dependencies: plugins/sheltons-toolkit/install-dependencies.md
+      - install-rhoai-nightly: plugins/sheltons-toolkit/install-rhoai-nightly.md
+      - cleanup-rhoai: plugins/sheltons-toolkit/cleanup-rhoai.md
+      - patch-operator-image: plugins/sheltons-toolkit/patch-operator-image.md
+      - deploy-component-manifests: plugins/sheltons-toolkit/deploy-component-manifests.md
+      - configure-disconnected: plugins/sheltons-toolkit/configure-disconnected.md
+      - configure-gateway: plugins/sheltons-toolkit/configure-gateway.md
+      - verify-install: plugins/sheltons-toolkit/verify-install.md
+      - regression-test-runner: plugins/sheltons-toolkit/regression-test-runner.md
+      - review: plugins/sheltons-toolkit/review.md
+      - jira-hygiene-check: plugins/sheltons-toolkit/jira-hygiene-check.md
+      - jira-hygiene-setup: plugins/sheltons-toolkit/jira-hygiene-setup.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md

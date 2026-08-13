@@ -458,3 +458,36 @@ Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibi
 ```bash
 /plugin install spike-executor@opendatahub-skills
 ```
+
+## Team-Specific
+
+Plugins hardcoded to a specific team's setup. Not generally reusable by other teams without modification.
+
+### sheltons-toolkit
+
+OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var — they are usable by anyone with olminstall access, not just one team.
+
+v1.0.0 | Team-Specific | MIT | [sheltoncyril/sheltons-toolkit](https://github.com/sheltoncyril/sheltons-toolkit)
+
+Tags: openshift, kubernetes, rhoai, cluster-lifecycle, olm, jira, pr-review, regression-testing
+
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/create-dsc` | Create a DataScienceCluster (DSC) on an OpenShift cluster with RHOAI, waiting for Ready state | `execute` | `task_success` (`judge`) |
+| `/install-operator` | Install any individual RHOAI dependency operator on an OpenShift cluster using install-operator.sh | `execute` | `task_success` (`judge`) |
+| `/install-dependencies` | Install all RHOAI dependency operators via GitOps or Helm mode using setup-dependencies.sh or setup-helm.sh | `execute` | `task_success` (`judge`) |
+| `/install-rhoai-nightly` | Install a RHOAI nightly build from an FBC fragment image, including cluster-type detection, pull-secret workarounds, dependency operators, and DSC creation | `orchestrate`, `execute` | `task_success` (`judge`) |
+| `/cleanup-rhoai` | Uninstall RHOAI operator and optionally all dependency operators/CRDs from an OpenShift cluster | `execute` | `task_success` (`judge`) |
+| `/patch-operator-image` | Patch the TrustyAI service operator deployment to use a candidate image for testing, with automatic revert | `execute` | `task_success` (`judge`) |
+| `/deploy-component-manifests` | Deploy custom component manifests into an OLM-deployed ODH/RHOAI operator via a kustomize overlay and PVC mount, with revert support | `execute` | `task_success` (`judge`) |
+| `/configure-disconnected` | Configure the RHCL operator for disconnected/air-gapped OpenShift environments (WASM shim patching, pull secret propagation, mirror registry) | `execute` | `task_success` (`judge`) |
+| `/configure-gateway` | Configure the MaaS or llm-d inference gateway (or MaaS PostgreSQL) on an OpenShift/RHOAI cluster, in connected or disconnected mode | `execute` | `task_success` (`judge`) |
+| `/verify-install` | Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC status, dependency operators, pod health, routes, and common issues | `verify` | `task_success` (`judge`) |
+| `/regression-test-runner` | End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira | `orchestrate` | `task_success` (`judge`) |
+| `/review` | Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
+| `/jira-hygiene-check` | Check Jira tickets against team hygiene rules, user-scoped by default or team-wide with --team, reporting rule-ID-referenced violations | `verify` | `task_success` (`judge`) |
+| `/jira-hygiene-setup` | Configure Jira Hygiene Checker with project key, team component, code repos, workflow statuses, and enforcement preferences | `generate` | `task_success` (`judge`) |
+
+```bash
+/plugin install sheltons-toolkit@opendatahub-skills
+```

@@ -4,6 +4,7 @@
     "security/no-memory-poisoning": "warning",
     "frontmatter/no-extra-fields": "warning",
     "frontmatter/name-format": "warning",
-    "security/no-credential-access": "warning"
+    "security/no-credential-access": "warning",
+    "security/no-base64-payloads": "warning"
   }
 }
