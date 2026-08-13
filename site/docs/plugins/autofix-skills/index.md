@@ -8,8 +8,9 @@ title: autofix-skills
 # autofix-skills
 
 Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills
-for automated bug fixing, CVE remediation, ticket triage, and spike research.
-Designed to run inside a Claude Code container as part of a CI pipeline.
+for automated bug fixing, CVE remediation, ticket triage, and repo
+disambiguation. Designed to run inside a Claude Code container as part of a
+CI pipeline.
 
 The plugin implements the inner layer of the autofix pipeline — orchestrator
 skills dispatch to sub-agents via prompt files and delegate deterministic work
@@ -39,7 +40,7 @@ launch, verdict reading) lives in separate repos (jira-autofix, ai-agentic-lib).
 | [`/autofix-resolve`](autofix-resolve.md) | Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations) | :material-check: |
 | [`/autofix-cve-resolve`](autofix-cve-resolve.md) | CVE remediation across multiple repos with state-machine dispatch | :material-check: |
 | [`/autofix-triage`](autofix-triage.md) | Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable) | :material-check: |
-| [`/autofix-research`](autofix-research.md) | Investigate spike tickets with no associated repository | :material-check: |
+| [`/autofix-repo-resolve`](autofix-repo-resolve.md) | Disambiguate which repository a Jira ticket targets when it mentions several, and write a verdict with confidence | :material-check: |
 
 ## Installation
 
@@ -50,7 +51,7 @@ launch, verdict reading) lives in separate repos (jira-autofix, ai-agentic-lib).
 ## Architecture
 
 Four skills form two tiers: orchestrators (autofix-resolve, autofix-cve-resolve)
-and standalone assessors (autofix-triage, autofix-research).
+and standalone assessors (autofix-triage, autofix-repo-resolve).
 
 autofix-resolve uses an implement → review → evaluate loop (max 3 iterations)
 with state.py for persistence across context compression. Extension skills are
