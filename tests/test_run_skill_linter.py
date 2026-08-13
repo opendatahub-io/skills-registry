@@ -1,12 +1,15 @@
+import json
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
+from scripts.registry_contracts import SKILL_LINTER_VERSION
 from scripts.run_skill_linter import (
     _select_touched_skill_keys,
     build_skill_linter_command,
+    extract_skill_linter_error_count,
     interpret_skill_linter_success_stdout,
     normalize_git_ref,
     parse_skill_linter_output,
@@ -182,6 +185,79 @@ class SkillLinterWrapperTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIsNotNone(detail)
         self.assertIn("errorCount", detail)
+
+    def test_interpret_stdout_rejects_errors_nested_under_summary(self):
+        # Real skill-linter output shape: counts live under "summary", never at top level.
+        payload = json.dumps(
+            {
+                "version": SKILL_LINTER_VERSION,
+                "summary": {
+                    "skillCount": 1,
+                    "errorCount": 2,
+                    "warningCount": 0,
+                    "infoCount": 0,
+                    "fixableCount": 0,
+                },
+                "skills": [{"path": "/tmp/skills/example", "errorCount": 2, "diagnostics": []}],
+            }
+        )
+        ok, detail = interpret_skill_linter_success_stdout(payload)
+        self.assertFalse(ok)
+        self.assertIsNotNone(detail)
+        self.assertIn("errorCount", detail)
+
+    def test_interpret_stdout_rejects_errors_reported_only_per_skill(self):
+        payload = json.dumps(
+            {
+                "version": SKILL_LINTER_VERSION,
+                "summary": {"skillCount": 1, "errorCount": 0},
+                "skills": [{"path": "/tmp/skills/example", "errorCount": 3}],
+            }
+        )
+        ok, detail = interpret_skill_linter_success_stdout(payload)
+        self.assertFalse(ok)
+        self.assertIsNotNone(detail)
+
+    def test_interpret_stdout_accepts_clean_real_report(self):
+        payload = json.dumps(
+            {
+                "version": SKILL_LINTER_VERSION,
+                "summary": {
+                    "skillCount": 1,
+                    "errorCount": 0,
+                    "warningCount": 1,
+                    "infoCount": 3,
+                    "fixableCount": 0,
+                },
+                "skills": [{"path": "/tmp/skills/example", "errorCount": 0, "diagnostics": []}],
+            }
+        )
+        ok, detail = interpret_skill_linter_success_stdout(payload)
+        self.assertTrue(ok)
+        self.assertIsNone(detail)
+
+    def test_interpret_stdout_rejects_nonnumeric_summary_error_count(self):
+        payload = '{"summary": {"errorCount": "oops"}}'
+        ok, detail = interpret_skill_linter_success_stdout(payload)
+        self.assertFalse(ok)
+        self.assertIsNotNone(detail)
+        self.assertIn("summary.errorCount", detail)
+
+    def test_extract_error_count_reads_every_reported_location(self):
+        self.assertEqual(extract_skill_linter_error_count({}), 0)
+        self.assertEqual(extract_skill_linter_error_count({"errorCount": 4}), 4)
+        self.assertEqual(extract_skill_linter_error_count({"summary": {"errorCount": 5}}), 5)
+        self.assertEqual(
+            extract_skill_linter_error_count({"skills": [{"errorCount": 0}, {"errorCount": 6}]}),
+            6,
+        )
+        # summary already totals the per-skill counts, so take the highest rather than the sum.
+        self.assertEqual(
+            extract_skill_linter_error_count(
+                {"summary": {"errorCount": 2}, "skills": [{"errorCount": 1}, {"errorCount": 1}]}
+            ),
+            2,
+        )
 
     def test_skill_is_skill_linter_candidate_requires_skill_md_path(self):
         plugin_github = {"name": "p", "source": {"type": "github", "repo": "a/b"}, "skills": []}
