@@ -9,7 +9,7 @@ title: regression-test-runner
 
 End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 

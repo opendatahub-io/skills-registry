@@ -9,7 +9,7 @@ title: deploy-component-manifests
 
 Deploy custom component manifests into an OLM-deployed ODH/RHOAI operator via a kustomize overlay and PVC mount, with revert support
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 

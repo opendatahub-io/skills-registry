@@ -9,7 +9,7 @@ title: review
 
 Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 

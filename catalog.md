@@ -463,7 +463,7 @@ Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibi
 
 Plugins hardcoded to a specific team's setup. Not generally reusable by other teams without modification.
 
-### sheltons-toolkit
+### ai-safety-skills
 
 OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var — they are usable by anyone with olminstall access, not just one team.
 
@@ -489,5 +489,5 @@ Tags: openshift, kubernetes, rhoai, cluster-lifecycle, olm, jira, pr-review, reg
 | `/jira-hygiene-setup` | Configure Jira Hygiene Checker with project key, team component, code repos, workflow statuses, and enforcement preferences | `generate` | `task_success` (`judge`) |
 
 ```bash
-/plugin install sheltons-toolkit@opendatahub-skills
+/plugin install ai-safety-skills@opendatahub-skills
 ```

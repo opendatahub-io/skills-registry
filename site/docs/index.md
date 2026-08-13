@@ -192,7 +192,7 @@ hide:
 
 <div class="grid cards" markdown>
 
--   **[sheltons-toolkit](plugins/sheltons-toolkit/index.md)**
+-   **[ai-safety-skills](plugins/ai-safety-skills/index.md)**
 
     ---
 

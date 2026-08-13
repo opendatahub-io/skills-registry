@@ -9,7 +9,7 @@ title: install-rhoai-nightly
 
 Install a RHOAI nightly build from an FBC fragment image, including cluster-type detection, pull-secret workarounds, dependency operators, and DSC creation
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 

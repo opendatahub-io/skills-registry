@@ -563,7 +563,7 @@
         "regression-testing"
       ],
       "license": "MIT",
-      "name": "sheltons-toolkit",
+      "name": "ai-safety-skills",
       "repository": "https://github.com/sheltoncyril/sheltons-toolkit",
       "source": {
         "ref": "main",

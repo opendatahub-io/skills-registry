@@ -1,15 +1,15 @@
 ---
-title: install-dependencies
+title: configure-disconnected
 ---
 
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 
-# install-dependencies
+# configure-disconnected
 
-Install all RHOAI dependency operators via GitOps or Helm mode using setup-dependencies.sh or setup-helm.sh
+Configure the RHCL operator for disconnected/air-gapped OpenShift environments (WASM shim patching, pull secret propagation, mirror registry)
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 
@@ -18,7 +18,7 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
     <span class="skill-contract__eyebrow">Skill Contract</span>
     <span class="skill-contract__version">canonical-skill-v1</span>
   </header>
-  <p class="skill-contract__lede">Bulk-install RHOAI&#x27;s dependency operators (serverless, service mesh, authorino, RHCL, kueue, jobset, and more) via GitOps or Helm mode, then confirm their CSVs are healthy.</p>
+  <p class="skill-contract__lede">Point the RHCL operator&#x27;s WASM shim and pull secret at a disconnected environment&#x27;s mirror registry, then verify the subscription env vars, pull secret, and operator pods reflect the change.</p>
   <section class="skill-contract__section" data-section="01">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
     <div class="skill-contract__row">
@@ -30,8 +30,8 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
     <div class="skill-contract__row">
       <span class="skill-contract__field">Success</span>
       <ul class="skill-contract__list">
-        <li>All requested dependency operator CSVs reach Succeeded phase.</li>
-        <li>The --local flag is only used when the odh-gitops directory actually exists locally.</li>
+        <li>The subscription&#x27;s RELATED_IMAGE_WASMSHIM and PROTECTED_REGISTRY reflect the mirror registry after the script runs.</li>
+        <li>The mirror registry URL is always used without a scheme prefix.</li>
       </ul>
     </div>
   </section>
@@ -41,7 +41,7 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/sheltoncyril/sheltons-toolkit/blob/cec313e2f38d493acf8c8ad65bddb110903fb70a/skills/install-dependencies/SKILL.md" title="sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/install-dependencies/SKILL.md">SKILL.md @ cec313e<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
+        <a class="skill-contract__ref" href="https://github.com/sheltoncyril/sheltons-toolkit/blob/cec313e2f38d493acf8c8ad65bddb110903fb70a/skills/configure-disconnected/SKILL.md" title="sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/configure-disconnected/SKILL.md">SKILL.md @ cec313e<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -50,15 +50,15 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Both scripts must run from the olminstall directory — they use paths relative to it.</li>
-        <li>Never run the install as a bounded foreground call — installing 16 operators sequentially can exceed typical foreground timeouts.</li>
+        <li>Never assume the Subscription&#x27;s namespace equals the CSV&#x27;s namespace — resolve it directly.</li>
+        <li>Never include http:// or https:// in the mirror registry value passed to the script.</li>
       </ul>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Fixed Context</span>
       <div class="skill-contract__code">
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Bash, Read, Write, AskUserQuestion</span></div>
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">oc, git, make</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Bash, Read, AskUserQuestion</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">oc, jq</span></div>
       </div>
     </div>
   </section>
@@ -66,7 +66,7 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/sheltoncyril/sheltons-toolkit/blob/cec313e2f38d493acf8c8ad65bddb110903fb70a/skills/install-dependencies/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/install-dependencies/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/sheltoncyril/sheltons-toolkit/blob/cec313e2f38d493acf8c8ad65bddb110903fb70a/skills/configure-disconnected/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/configure-disconnected/SKILL.md</code></a></div>
     </div>
   </section>
 </div>
@@ -74,5 +74,5 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
 ## Usage
 
 ```bash
-/install-dependencies
+/configure-disconnected
 ```

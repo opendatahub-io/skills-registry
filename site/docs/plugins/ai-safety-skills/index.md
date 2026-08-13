@@ -1,11 +1,11 @@
 ---
-title: sheltons-toolkit
+title: ai-safety-skills
 ---
 
 <!-- Auto-generated from registry.yaml. Do not edit directly. -->
 
 
-# sheltons-toolkit
+# ai-safety-skills
 
 OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var — they are usable by anyone with olminstall access, not just one team.
 
@@ -41,5 +41,5 @@ OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, im
 ## Installation
 
 ```bash
-/plugin install sheltons-toolkit@opendatahub-skills
+/plugin install ai-safety-skills@opendatahub-skills
 ```

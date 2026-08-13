@@ -2372,7 +2372,7 @@ plugins:
         install: "/plugin install docs-skills@opendatahub-skills"
     depends_on: []
 
-  - name: sheltons-toolkit
+  - name: ai-safety-skills
     description: >
       OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation,
       cleanup, image patching, manifest deploy, gateway/disconnected config),
@@ -2731,5 +2731,5 @@ plugins:
             skill_path: skills/jira-hygiene-setup/SKILL.md
     harnesses:
       claude-code:
-        install: "/plugin install sheltons-toolkit@opendatahub-skills"
+        install: "/plugin install ai-safety-skills@opendatahub-skills"
     depends_on: []

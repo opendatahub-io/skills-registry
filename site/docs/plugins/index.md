@@ -43,4 +43,4 @@ title: Plugins
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
-| [sheltons-toolkit](sheltons-toolkit/index.md) | DevOps & CI/CD | 14 | v1.0.0 |
+| [ai-safety-skills](ai-safety-skills/index.md) | DevOps & CI/CD | 14 | v1.0.0 |

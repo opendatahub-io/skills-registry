@@ -9,7 +9,7 @@ title: jira-hygiene-check
 
 Check Jira tickets against team hygiene rules, user-scoped by default or team-wide with --team, reporting rule-ID-referenced violations
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 

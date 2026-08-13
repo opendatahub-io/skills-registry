@@ -9,7 +9,7 @@ title: patch-operator-image
 
 Patch the TrustyAI service operator deployment to use a candidate image for testing, with automatic revert
 
-**Plugin**: [sheltons-toolkit](index.md) | **:material-check: User-invocable**
+**Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
 ## Contract
 
