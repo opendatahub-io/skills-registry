@@ -2283,7 +2283,7 @@ Key architectural patterns:
 
 ### Skills
 
-#### /knowledge.repo
+#### /knowledge-repo
 
 Scan merged PRs from the last N days, extract knowledge relevant to AI
 agent context, and propose updates to context files (CLAUDE.md, AGENTS.md)
@@ -2294,7 +2294,7 @@ review (adversarial opus agent checks quality), revise (conditional fix pass),
 and artifacts (patch file, run report). Non-interactive — designed for CI.
 
 ```
-/knowledge.repo [--days N]
+/knowledge-repo [--days N]
 ```
 
 | Argument | Required | Description |
@@ -2303,18 +2303,23 @@ and artifacts (patch file, run report). Non-interactive — designed for CI.
 
 Examples:
 ```
-/knowledge.repo
-/knowledge.repo --days 14
-/knowledge.repo --days 30
+/knowledge-repo
+/knowledge-repo --days 14
+/knowledge-repo --days 30
 ```
+
+#### /enrich-reports
+
+Enrich case study skeletons with error signatures, fix types, lessons, and prevention advice via validated Python script output
 
 ---
 
 ## autofix-skills
 
 Claude Code plugin for the Jira autofix pipeline. Provides orchestrator skills
-for automated bug fixing, CVE remediation, ticket triage, and spike research.
-Designed to run inside a Claude Code container as part of a CI pipeline.
+for automated bug fixing, CVE remediation, ticket triage, and repo
+disambiguation. Designed to run inside a Claude Code container as part of a
+CI pipeline.
 
 The plugin implements the inner layer of the autofix pipeline — orchestrator
 skills dispatch to sub-agents via prompt files and delegate deterministic work
@@ -2326,7 +2331,7 @@ launch, verdict reading) lives in separate repos (jira-autofix, ai-agentic-lib).
 ### Architecture
 
 Four skills form two tiers: orchestrators (autofix-resolve, autofix-cve-resolve)
-and standalone assessors (autofix-triage, autofix-research).
+and standalone assessors (autofix-triage, autofix-repo-resolve).
 
 autofix-resolve uses an implement → review → evaluate loop (max 3 iterations)
 with state.py for persistence across context compression. Extension skills are
@@ -2390,17 +2395,19 @@ Examples:
 /autofix-triage
 ```
 
-#### /autofix-research
+#### /autofix-repo-resolve
 
-Investigate a Jira spike ticket with no associated repository. Reads the
-ticket context, researches the topic using available files and codebase
-search, and writes structured findings to autofix-output/.autofix-verdict.json.
-Limited to read-only investigation (no Bash) — notes limitations in
-observations if external access would be needed.
+Decide which repository a Jira bug ticket is actually about when its
+description and comments mention several. Reads .autofix-context/ticket.json
+and .autofix-context/repo-candidates.json, classifies every candidate URL as
+target, contextual, negative, or unclear, then writes a verdict with the
+chosen target, a confidence level, and the reasoning behind it. Text analysis
+only — never clones or otherwise accesses a candidate repository. The verdict
+is schema-validated by write_json.py and validate_verdict.py.
 
 Examples:
 ```
-/autofix-research
+/autofix-repo-resolve
 ```
 
 ---

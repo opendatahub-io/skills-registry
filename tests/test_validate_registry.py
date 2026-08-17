@@ -656,5 +656,128 @@ class RemotePluginValidationTests(unittest.TestCase):
         run_mock.assert_not_called()
 
 
+class SkillNameDriftTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.validate_registry = get_validate_registry_module()
+
+    @staticmethod
+    def write_skill(root: Path, relative_dir: str, name: str, user_invocable=None):
+        skill_dir = root / relative_dir / name
+        skill_dir.mkdir(parents=True, exist_ok=True)
+        lines = ["---", f"name: {name}", "description: A skill."]
+        if user_invocable is not None:
+            lines.append(f"user-invocable: {str(user_invocable).lower()}")
+        lines += ["---", "", f"# {name}", ""]
+        (skill_dir / "SKILL.md").write_text("\n".join(lines), encoding="utf-8")
+
+    def check(self, plugin, build):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            build(root)
+            return self.validate_registry.check_skill_names_against_source(plugin, root)
+
+    def test_registry_name_without_upstream_skill_is_an_error(self):
+        plugin = {"name": "p", "skills": [{"name": "knowledge.repo"}]}
+        errors, _ = self.check(
+            plugin, lambda root: self.write_skill(root, "skills", "knowledge-repo")
+        )
+
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("knowledge.repo", errors[0])
+        self.assertIn("knowledge-repo", errors[0])
+
+    def test_matching_names_produce_nothing(self):
+        plugin = {"name": "p", "skills": [{"name": "alpha"}, {"name": "beta"}]}
+        errors, warnings = self.check(
+            plugin,
+            lambda root: [
+                self.write_skill(root, "skills", "alpha"),
+                self.write_skill(root, "skills", "beta"),
+            ],
+        )
+
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_user_invocable_disagreement_warns_but_does_not_fail(self):
+        plugin = {"name": "p", "skills": [{"name": "alpha", "user-invocable": False}]}
+        # Upstream omits the key, so it resolves to the Claude Code default of true.
+        errors, warnings = self.check(
+            plugin, lambda root: self.write_skill(root, "skills", "alpha")
+        )
+
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+        self.assertIn("user-invocable", warnings[0])
+
+    def test_unlisted_upstream_skills_warn_only_for_non_strict_plugins(self):
+        def build(root):
+            self.write_skill(root, "skills", "alpha")
+            self.write_skill(root, "skills", "extra")
+
+        strict_plugin = {"name": "p", "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(strict_plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings, "strict: true registry lists are curated subsets")
+
+        loose_plugin = {"name": "p", "strict": False, "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(loose_plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+        self.assertIn("extra", warnings[0])
+
+    def test_only_the_first_populated_skills_dir_is_used(self):
+        # A repo can publish skills/ while keeping its own tooling in .claude/skills/.
+        def build(root):
+            self.write_skill(root, "skills", "alpha")
+            self.write_skill(root, ".claude/skills", "repo-local-tooling")
+
+        plugin = {"name": "p", "strict": False, "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(plugin, build)
+
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings, "tooling in .claude/skills must not be reported")
+
+    def test_directory_name_is_the_fallback_when_frontmatter_omits_name(self):
+        def build(root):
+            skill_dir = root / "skills" / "alpha"
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text(
+                "---\ndescription: No name key.\n---\n\n# alpha\n", encoding="utf-8"
+            )
+
+        plugin = {"name": "p", "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(plugin, build)
+
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_repo_without_any_skill_md_is_left_to_remote_validation(self):
+        plugin = {"name": "p", "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(plugin, lambda root: None)
+
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_diff_touched_plugins_lists_changed_entries(self):
+        base = {"plugins": [{"name": "a", "version": "1"}, {"name": "b", "version": "1"}]}
+        current = {"plugins": [{"name": "a", "version": "2"}, {"name": "b", "version": "1"}]}
+
+        with mock.patch.object(self.validate_registry, "load_registry_from_ref",
+                               return_value=base):
+            self.assertEqual(["a"],
+                             self.validate_registry.diff_touched_plugins(current, "origin/main"))
+
+    def test_diff_touched_plugins_returns_none_when_base_is_unreadable(self):
+        with mock.patch.object(self.validate_registry, "load_registry_from_ref",
+                               side_effect=ValueError("no such ref")):
+            self.assertIsNone(
+                self.validate_registry.diff_touched_plugins({"plugins": []}, "origin/nope")
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

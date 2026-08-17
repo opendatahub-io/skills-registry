@@ -125,6 +125,46 @@ def skill_linter_dir_from_contract_skill_path(repo_root: Path, skill_path_relati
     return artifact.parent
 
 
+def _iter_reported_error_counts(report: dict):
+    """Yield (label, raw value) for every error count skill-linter may report."""
+    if "errorCount" in report:
+        yield "errorCount", report["errorCount"]
+
+    summary = report.get("summary")
+    if isinstance(summary, dict) and "errorCount" in summary:
+        yield "summary.errorCount", summary["errorCount"]
+
+    skills = report.get("skills")
+    if isinstance(skills, list):
+        for index, entry in enumerate(skills):
+            if isinstance(entry, dict) and "errorCount" in entry:
+                yield f"skills[{index}].errorCount", entry["errorCount"]
+
+
+def extract_skill_linter_error_count(report: dict) -> int:
+    """Highest error count in a skill-linter report, across every shape it emits.
+
+    skill-linter nests counts under ``summary`` and repeats them per entry in
+    ``skills``; a bare top-level ``errorCount`` is still honoured so the check keeps
+    working if the pinned version changes shape. Reading only the top level made this
+    check a no-op against real output.
+
+    Every count must be a non-negative JSON integer. Raises ValueError otherwise so the
+    caller can fail closed. Coercing with ``int()`` instead would quietly read ``false``,
+    ``0.5`` and ``-1`` as zero errors, which is the opposite of what this guard is for.
+    """
+    highest = 0
+    for label, raw in _iter_reported_error_counts(report):
+        # bool is a subclass of int, so reject it explicitly.
+        if isinstance(raw, bool) or not isinstance(raw, int) or raw < 0:
+            raise ValueError(
+                f"skill-linter output has an invalid {label}: {raw!r} "
+                "(expected a non-negative integer)"
+            )
+        highest = max(highest, raw)
+    return highest
+
+
 def interpret_skill_linter_success_stdout(stdout: str) -> tuple[bool, str | None]:
     """Interpret stdout when skill-linter exits 0. Fail-closed when non-empty and not JSON object."""
     trimmed = stdout.strip()
@@ -136,11 +176,10 @@ def interpret_skill_linter_success_stdout(stdout: str) -> tuple[bool, str | None
     except ValueError as exc:
         return False, str(exc)
 
-    error_count_raw = report.get("errorCount", 0)
     try:
-        error_count = int(error_count_raw)
-    except (TypeError, ValueError):
-        return False, f"skill-linter output has non-numeric errorCount: {error_count_raw!r}"
+        error_count = extract_skill_linter_error_count(report)
+    except ValueError as exc:
+        return False, str(exc)
 
     if error_count > 0 or report.get("errors"):
         return False, json.dumps(report, indent=2)

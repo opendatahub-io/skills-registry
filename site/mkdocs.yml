@@ -153,13 +153,14 @@ nav:
       - eval-check: plugins/agent-eval-harness/eval-check.md
     - knowledge-skills:
       - plugins/knowledge-skills/index.md
-      - knowledge.repo: plugins/knowledge-skills/knowledge.repo.md
+      - knowledge-repo: plugins/knowledge-skills/knowledge-repo.md
+      - enrich-reports: plugins/knowledge-skills/enrich-reports.md
     - autofix-skills:
       - plugins/autofix-skills/index.md
       - autofix-resolve: plugins/autofix-skills/autofix-resolve.md
       - autofix-cve-resolve: plugins/autofix-skills/autofix-cve-resolve.md
       - autofix-triage: plugins/autofix-skills/autofix-triage.md
-      - autofix-research: plugins/autofix-skills/autofix-research.md
+      - autofix-repo-resolve: plugins/autofix-skills/autofix-repo-resolve.md
     - autoqa-skills:
       - plugins/autoqa-skills/index.md
       - failure-analysis: plugins/autoqa-skills/failure-analysis.md

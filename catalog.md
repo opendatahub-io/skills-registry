@@ -193,9 +193,10 @@ v0.1.0 | Apache-2.0 | [opendatahub-io/knowledge-skills](https://github.com/opend
 
 Tags: knowledge, context, claude-md, agents-md, pr-analysis, automation
 
-| Skill | Description |
-|-------|-------------|
-| `/knowledge.repo` | Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) as a git-apply-able patch |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/knowledge-repo` | Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) and skill files as a git-apply-able patch | `orchestrate`, `generate` | `task_success` (`judge`) |
+| `/enrich-reports` | Enrich case study skeletons with error signatures, fix types, lessons, and prevention advice via validated Python script output | `transform` | `task_success` (`judge`) |
 
 ```bash
 /plugin install knowledge-skills@opendatahub-skills
@@ -356,12 +357,12 @@ v0.1.0 | Apache-2.0 | [opendatahub-io/autofix-skills](https://github.com/opendat
 
 Tags: autofix, jira, cve, bug-fixing, triage, pipeline, ci-cd
 
-| Skill | Description |
-|-------|-------------|
-| `/autofix-resolve` | Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations) |
-| `/autofix-cve-resolve` | CVE remediation across multiple repos with state-machine dispatch |
-| `/autofix-triage` | Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable) |
-| `/autofix-research` | Investigate spike tickets with no associated repository |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/autofix-resolve` | Orchestrate end-to-end bug fixing via implement and review agent loop (max 3 iterations) | — | — |
+| `/autofix-cve-resolve` | CVE remediation across multiple repos with state-machine dispatch | — | — |
+| `/autofix-triage` | Assess bug tickets for AI autofix readiness (ready/needs_info/not_fixable) | — | — |
+| `/autofix-repo-resolve` | Disambiguate which repository a Jira ticket targets when it mentions several, and write a verdict with confidence | `analyze` | `task_success` (`verifier_backed`) |
 
 ```bash
 /plugin install autofix-skills@opendatahub-skills

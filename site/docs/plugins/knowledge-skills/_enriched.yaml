@@ -25,7 +25,7 @@ architecture_notes: |
   - Per-PR extraction: each PR gets its own agent context to avoid
     overflow, dispatched in parallel waves
 skills:
-  knowledge.repo:
+  knowledge-repo:
     description: |
       Scan merged PRs from the last N days, extract knowledge relevant to AI
       agent context, and propose updates to context files (CLAUDE.md, AGENTS.md)
@@ -42,6 +42,6 @@ skills:
         default: "7"
         description: "How far back to scan merged PRs"
     usage_examples:
-      - "/knowledge.repo"
-      - "/knowledge.repo --days 14"
-      - "/knowledge.repo --days 30"
+      - "/knowledge-repo"
+      - "/knowledge-repo --days 14"
+      - "/knowledge-repo --days 30"

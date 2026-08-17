@@ -142,6 +142,24 @@ CI runs on pull requests and pushes to `main`. It automatically:
 - Validates `registry.yaml` against the JSON Schema and touched-skill contract rules (diff-aware vs the PR base branch or prior push commit).
 - Runs pinned `skill-linter` on skills you changed when they declare GitHub `source` and `contract.source_assertions`.
 - Checks that referenced GitHub repos are reachable and that expected manifests or paths resolve as validated by `scripts/validate_registry.py`.
+- Clones the plugins you touched and checks each registry skill `name` against the upstream `SKILL.md` frontmatter.
+
+### Skill name drift
+
+A registry skill `name` must match the `name` in that skill's upstream `SKILL.md` frontmatter — that is the value Claude Code registers as the slash command. If they disagree, the catalog and site publish a command that resolves to nothing.
+
+`scripts/validate_registry.py --check-skill-names` clones each plugin's source and compares. Run it yourself with `--diff-base origin/main` to check only the plugins you touched:
+
+```bash
+python3 scripts/validate_registry.py --diff-base origin/main --check-skill-names
+```
+
+It **fails** when a registry skill has no upstream `SKILL.md` declaring that name. It **warns**, without failing, when:
+
+- the registry and the upstream frontmatter disagree on `user-invocable` (remember the registry value is catalog-only — the source `SKILL.md` is what controls the `/` menu);
+- a `strict: false` plugin has upstream skills missing from `registry.yaml`. Those install anyway, since the whole `skills_dir` is loaded, so they are live but undocumented commands. For `strict: true` plugins the registry list is a curated subset by design and is not flagged.
+
+Most drift starts upstream, where no registry PR is involved, so the same sweep runs weekly across every plugin via the `Skill Name Drift` workflow.
 
 ### 5. Review and Merge
 
