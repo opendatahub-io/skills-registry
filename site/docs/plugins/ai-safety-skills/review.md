@@ -7,7 +7,7 @@ title: review
 
 # review
 
-Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
+Multi-persona PR review; spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
 
 **Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 

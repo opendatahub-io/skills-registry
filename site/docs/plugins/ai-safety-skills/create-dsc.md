@@ -50,7 +50,7 @@ Create a DataScienceCluster (DSC) on an OpenShift cluster with RHOAI, waiting fo
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Never apply a second DSC without deleting the existing one first — concurrent DSCs cause reconciliation conflicts.</li>
+        <li>Never apply a second DSC without deleting the existing one first; concurrent DSCs cause reconciliation conflicts.</li>
         <li>A custom DSC not named default-dsc must be flagged, since the wait logic looks for that exact name.</li>
       </ul>
     </div>

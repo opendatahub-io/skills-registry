@@ -50,7 +50,7 @@ Check Jira tickets against team hygiene rules, user-scoped by default or team-wi
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>All evaluation logic lives in the checked-in Python scripts — the agent only handles MCP calls and presenting results.</li>
+        <li>All evaluation logic lives in the checked-in Python scripts; the agent only handles MCP calls and presenting results.</li>
       </ul>
     </div>
     <div class="skill-contract__row">

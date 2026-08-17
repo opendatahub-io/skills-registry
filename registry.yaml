@@ -2487,7 +2487,7 @@ plugins:
       an AI Safety regression test runner, a multi-persona PR reviewer, and
       Jira hygiene checking. The cluster-lifecycle skills drive an internal
       Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL
-      env var — they are usable by anyone with olminstall access, not just
+      env var; they are usable by anyone with olminstall access, not just
       one team.
     version: "1.0.0"
     category: devops
@@ -2519,7 +2519,7 @@ plugins:
             - A pre-existing DSC is never overwritten without explicit user confirmation.
           invariants:
             must_preserve:
-              - Never apply a second DSC without deleting the existing one first — concurrent DSCs cause reconciliation conflicts.
+              - Never apply a second DSC without deleting the existing one first; concurrent DSCs cause reconciliation conflicts.
               - A custom DSC not named default-dsc must be flagged, since the wait logic looks for that exact name.
             fixed_context:
               tools: [Bash, Read, AskUserQuestion]
@@ -2542,8 +2542,8 @@ plugins:
             - Positional script arguments are built correctly even when only a subset of channel/source/version overrides is given.
           invariants:
             must_preserve:
-              - Never reorder or flag-ify the script's positional arguments — it only accepts NAME CHANNEL SOURCE VERSION in that order.
-              - Never run the install as a bounded foreground call — Manual-approval installs can exceed typical foreground timeouts.
+              - Never reorder or flag-ify the script's positional arguments; it only accepts NAME CHANNEL SOURCE VERSION in that order.
+              - Never run the install as a bounded foreground call; Manual-approval installs can exceed typical foreground timeouts.
             fixed_context:
               tools: [Bash, Read, AskUserQuestion]
               cli: [oc, git]
@@ -2565,8 +2565,8 @@ plugins:
             - The --local flag is only used when the odh-gitops directory actually exists locally.
           invariants:
             must_preserve:
-              - Both scripts must run from the olminstall directory — they use paths relative to it.
-              - Never run the install as a bounded foreground call — installing 16 operators sequentially can exceed typical foreground timeouts.
+              - Both scripts must run from the olminstall directory; they use paths relative to it.
+              - Never run the install as a bounded foreground call; installing 16 operators sequentially can exceed typical foreground timeouts.
             fixed_context:
               tools: [Bash, Read, Write, AskUserQuestion]
               cli: [oc, git, make]
@@ -2582,14 +2582,14 @@ plugins:
             - id: task_success
               measure: judge
               rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/install-rhoai-nightly/SKILL.md
-          problem_statement: Drive an end-to-end RHOAI nightly install from an FBC fragment image URI — channel resolution, ROSA pull-secret workaround, dependency operators, and DSC creation — and confirm the resulting cluster is healthy.
+          problem_statement: Drive an end-to-end RHOAI nightly install from an FBC fragment image URI (channel resolution, ROSA pull-secret workaround, dependency operators, and DSC creation) and confirm the resulting cluster is healthy.
           success_conditions:
             - The subscription channel is confirmed against the fragment's actual catalog data, not guessed from the image tag alone.
             - The RHOAI CSV, dependency operator CSVs, and DSC all reach a healthy state, or the run stops with a clear diagnostic.
           invariants:
             must_preserve:
               - Never trust tag-based channel inference as ground truth when the fragment's own catalog can be read.
-              - Never poll indefinitely for a CSV to appear — retries must be capped with a clear failure path.
+              - Never poll indefinitely for a CSV to appear; retries must be capped with a clear failure path.
             fixed_context:
               tools: [Bash, Read, Write, AskUserQuestion, Skill]
               cli: [oc, git, jq, yq, python3]
@@ -2659,7 +2659,7 @@ plugins:
             - fsGroup is derived from the namespace's actual supplemental-groups range rather than a fixed value, so it works under restricted SCCs (e.g. ROSA).
           invariants:
             must_preserve:
-              - Never apply the CSV volumeMount patch if it is already present — duplicate mounts crash the pod.
+              - Never apply the CSV volumeMount patch if it is already present; duplicate mounts crash the pod.
               - Revert must remove JSON-patch indices in descending order to avoid index-shift corruption.
             fixed_context:
               tools: [Bash, Read, Write, AskUserQuestion]
@@ -2684,7 +2684,7 @@ plugins:
             - The mirror registry URL is always used without a scheme prefix.
           invariants:
             must_preserve:
-              - Never assume the Subscription's namespace equals the CSV's namespace — resolve it directly.
+              - Never assume the Subscription's namespace equals the CSV's namespace; resolve it directly.
               - Never include http:// or https:// in the mirror registry value passed to the script.
             fixed_context:
               tools: [Bash, Read, AskUserQuestion]
@@ -2707,7 +2707,7 @@ plugins:
             - Disconnected mode is verified via its own ConfigMap, Route, and ClusterIP Service, not assumed from the connected-mode checks.
           invariants:
             must_preserve:
-              - Never apply --disconnected to the postgres component — it has no disconnected mode.
+              - Never apply --disconnected to the postgres component; it has no disconnected mode.
               - Never run the configuration script without RHOAI already installed.
             fixed_context:
               tools: [Bash, Read, AskUserQuestion]
@@ -2715,7 +2715,7 @@ plugins:
           source_assertions:
             skill_path: skills/configure-gateway/SKILL.md
       - name: verify-install
-        description: Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC status, dependency operators, pod health, routes, and common issues
+        description: Verify RHOAI installation status on an OpenShift cluster; operator CSV, DSC status, dependency operators, pod health, routes, and common issues
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -2724,13 +2724,13 @@ plugins:
             - id: task_success
               measure: judge
               rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/verify-install/SKILL.md
-          problem_statement: Produce an accurate, read-only health report for a RHOAI installation — operator/DSC status, pod health, and (in full mode) dependency operators, routes, gateways, webhooks, CRDs, and recent warning events.
+          problem_statement: Produce an accurate, read-only health report for a RHOAI installation; operator/DSC status, pod health, and (in full mode) dependency operators, routes, gateways, webhooks, CRDs, and recent warning events.
           success_conditions:
             - The report never references a value (like the console URL) before it has actually been fetched.
             - Truncated output (e.g. tailed warning events) always states the total count alongside the sample shown.
           invariants:
             must_preserve:
-              - This skill is read-only — it must never mutate cluster state.
+              - This skill is read-only; it must never mutate cluster state.
               - The DSC name used in status checks must come from the cluster's actual DSC, not an assumed default-dsc literal.
             fixed_context:
               tools: [Bash, Read, AskUserQuestion]
@@ -2738,7 +2738,7 @@ plugins:
           source_assertions:
             skill_path: skills/verify-install/SKILL.md
       - name: regression-test-runner
-        description: End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
+        description: End-to-end regression testing workflow for TrustyAI/AI Safety components; patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -2754,7 +2754,7 @@ plugins:
           invariants:
             must_preserve:
               - Never auto-transition the Jira ticket to Resolved if any product_bug failures were found.
-              - Never read the full pytest log into the main agent context — always delegate that to a subagent.
+              - Never read the full pytest log into the main agent context; always delegate that to a subagent.
               - If more failures exist than the analysis cap, report how many were skipped rather than dropping them silently.
             fixed_context:
               tools: [Bash, Read, Write, Grep, Glob, Agent, AskUserQuestion, Skill]
@@ -2764,7 +2764,7 @@ plugins:
             supporting_paths:
               - skills/regression-test-runner/resources/component-test-map.json
       - name: review
-        description: Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
+        description: Multi-persona PR review; spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -2804,7 +2804,7 @@ plugins:
             - Every reported violation cites the specific rule ID it violates.
           invariants:
             must_preserve:
-              - All evaluation logic lives in the checked-in Python scripts — the agent only handles MCP calls and presenting results.
+              - All evaluation logic lives in the checked-in Python scripts; the agent only handles MCP calls and presenting results.
             fixed_context:
               tools: [Bash, Read, Write, Grep, Glob, Agent, AskUserQuestion]
               cli: [python3]
@@ -2829,7 +2829,7 @@ plugins:
             - Code-freeze dates are auto-fetched from Product Pages when available rather than requiring manual entry.
           invariants:
             must_preserve:
-              - Never write partial/inconsistent config — either the full setup completes or config.env is left untouched.
+              - Never write partial/inconsistent config; either the full setup completes or config.env is left untouched.
             fixed_context:
               tools: [Bash, Read, Write, AskUserQuestion]
               knowledge_inputs:

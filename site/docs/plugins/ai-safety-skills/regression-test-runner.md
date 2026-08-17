@@ -7,7 +7,7 @@ title: regression-test-runner
 
 # regression-test-runner
 
-End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
+End-to-end regression testing workflow for TrustyAI/AI Safety components; patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
 
 **Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
@@ -51,7 +51,7 @@ End-to-end regression testing workflow for TrustyAI/AI Safety components — pat
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Never auto-transition the Jira ticket to Resolved if any product_bug failures were found.</li>
-        <li>Never read the full pytest log into the main agent context — always delegate that to a subagent.</li>
+        <li>Never read the full pytest log into the main agent context; always delegate that to a subagent.</li>
         <li>If more failures exist than the analysis cap, report how many were skipped rather than dropping them silently.</li>
       </ul>
     </div>

@@ -50,7 +50,7 @@ Deploy custom component manifests into an OLM-deployed ODH/RHOAI operator via a 
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Never apply the CSV volumeMount patch if it is already present — duplicate mounts crash the pod.</li>
+        <li>Never apply the CSV volumeMount patch if it is already present; duplicate mounts crash the pod.</li>
         <li>Revert must remove JSON-patch indices in descending order to avoid index-shift corruption.</li>
       </ul>
     </div>

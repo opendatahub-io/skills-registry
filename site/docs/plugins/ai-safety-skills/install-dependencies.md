@@ -50,8 +50,8 @@ Install all RHOAI dependency operators via GitOps or Helm mode using setup-depen
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Both scripts must run from the olminstall directory — they use paths relative to it.</li>
-        <li>Never run the install as a bounded foreground call — installing 16 operators sequentially can exceed typical foreground timeouts.</li>
+        <li>Both scripts must run from the olminstall directory; they use paths relative to it.</li>
+        <li>Never run the install as a bounded foreground call; installing 16 operators sequentially can exceed typical foreground timeouts.</li>
       </ul>
     </div>
     <div class="skill-contract__row">

@@ -50,7 +50,7 @@ Configure Jira Hygiene Checker with project key, team component, code repos, wor
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Never write partial/inconsistent config — either the full setup completes or config.env is left untouched.</li>
+        <li>Never write partial/inconsistent config; either the full setup completes or config.env is left untouched.</li>
       </ul>
     </div>
     <div class="skill-contract__row">

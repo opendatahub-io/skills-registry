@@ -50,7 +50,7 @@ Configure the MaaS or llm-d inference gateway (or MaaS PostgreSQL) on an OpenShi
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Never apply --disconnected to the postgres component — it has no disconnected mode.</li>
+        <li>Never apply --disconnected to the postgres component; it has no disconnected mode.</li>
         <li>Never run the configuration script without RHOAI already installed.</li>
       </ul>
     </div>

@@ -18,7 +18,7 @@ Install a RHOAI nightly build from an FBC fragment image, including cluster-type
     <span class="skill-contract__eyebrow">Skill Contract</span>
     <span class="skill-contract__version">canonical-skill-v1</span>
   </header>
-  <p class="skill-contract__lede">Drive an end-to-end RHOAI nightly install from an FBC fragment image URI — channel resolution, ROSA pull-secret workaround, dependency operators, and DSC creation — and confirm the resulting cluster is healthy.</p>
+  <p class="skill-contract__lede">Drive an end-to-end RHOAI nightly install from an FBC fragment image URI (channel resolution, ROSA pull-secret workaround, dependency operators, and DSC creation) and confirm the resulting cluster is healthy.</p>
   <section class="skill-contract__section" data-section="01">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
     <div class="skill-contract__row">
@@ -52,7 +52,7 @@ Install a RHOAI nightly build from an FBC fragment image, including cluster-type
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Never trust tag-based channel inference as ground truth when the fragment&#x27;s own catalog can be read.</li>
-        <li>Never poll indefinitely for a CSV to appear — retries must be capped with a clear failure path.</li>
+        <li>Never poll indefinitely for a CSV to appear; retries must be capped with a clear failure path.</li>
       </ul>
     </div>
     <div class="skill-contract__row">

@@ -3296,7 +3296,7 @@ Examples:
 
 ## ai-safety-skills
 
-OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var — they are usable by anyone with olminstall access, not just one team.
+OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var; they are usable by anyone with olminstall access, not just one team.
 
 **Repository**: https://github.com/sheltoncyril/sheltons-toolkit
 
@@ -3340,15 +3340,15 @@ Configure the MaaS or llm-d inference gateway (or MaaS PostgreSQL) on an OpenShi
 
 #### /verify-install
 
-Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC status, dependency operators, pod health, routes, and common issues
+Verify RHOAI installation status on an OpenShift cluster; operator CSV, DSC status, dependency operators, pod health, routes, and common issues
 
 #### /regression-test-runner
 
-End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
+End-to-end regression testing workflow for TrustyAI/AI Safety components; patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira
 
 #### /review
 
-Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
+Multi-persona PR review; spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring
 
 #### /jira-hygiene-check
 

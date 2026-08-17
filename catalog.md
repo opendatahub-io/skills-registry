@@ -466,7 +466,7 @@ Plugins hardcoded to a specific team's setup. Not generally reusable by other te
 
 ### ai-safety-skills
 
-OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var — they are usable by anyone with olminstall access, not just one team.
+OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var; they are usable by anyone with olminstall access, not just one team.
 
 v1.0.0 | Team-Specific | MIT | [sheltoncyril/sheltons-toolkit](https://github.com/sheltoncyril/sheltons-toolkit)
 
@@ -483,9 +483,9 @@ Tags: openshift, kubernetes, rhoai, cluster-lifecycle, olm, jira, pr-review, reg
 | `/deploy-component-manifests` | Deploy custom component manifests into an OLM-deployed ODH/RHOAI operator via a kustomize overlay and PVC mount, with revert support | `execute` | `task_success` (`judge`) |
 | `/configure-disconnected` | Configure the RHCL operator for disconnected/air-gapped OpenShift environments (WASM shim patching, pull secret propagation, mirror registry) | `execute` | `task_success` (`judge`) |
 | `/configure-gateway` | Configure the MaaS or llm-d inference gateway (or MaaS PostgreSQL) on an OpenShift/RHOAI cluster, in connected or disconnected mode | `execute` | `task_success` (`judge`) |
-| `/verify-install` | Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC status, dependency operators, pod health, routes, and common issues | `verify` | `task_success` (`judge`) |
-| `/regression-test-runner` | End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira | `orchestrate` | `task_success` (`judge`) |
-| `/review` | Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
+| `/verify-install` | Verify RHOAI installation status on an OpenShift cluster; operator CSV, DSC status, dependency operators, pod health, routes, and common issues | `verify` | `task_success` (`judge`) |
+| `/regression-test-runner` | End-to-end regression testing workflow for TrustyAI/AI Safety components; patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira | `orchestrate` | `task_success` (`judge`) |
+| `/review` | Multi-persona PR review; spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
 | `/jira-hygiene-check` | Check Jira tickets against team hygiene rules, user-scoped by default or team-wide with --team, reporting rule-ID-referenced violations | `verify` | `task_success` (`judge`) |
 | `/jira-hygiene-setup` | Configure Jira Hygiene Checker with project key, team component, code repos, workflow statuses, and enforcement preferences | `generate` | `task_success` (`judge`) |
 

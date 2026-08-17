@@ -7,7 +7,7 @@ title: verify-install
 
 # verify-install
 
-Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC status, dependency operators, pod health, routes, and common issues
+Verify RHOAI installation status on an OpenShift cluster; operator CSV, DSC status, dependency operators, pod health, routes, and common issues
 
 **Plugin**: [ai-safety-skills](index.md) | **:material-check: User-invocable**
 
@@ -18,7 +18,7 @@ Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC s
     <span class="skill-contract__eyebrow">Skill Contract</span>
     <span class="skill-contract__version">canonical-skill-v1</span>
   </header>
-  <p class="skill-contract__lede">Produce an accurate, read-only health report for a RHOAI installation — operator/DSC status, pod health, and (in full mode) dependency operators, routes, gateways, webhooks, CRDs, and recent warning events.</p>
+  <p class="skill-contract__lede">Produce an accurate, read-only health report for a RHOAI installation; operator/DSC status, pod health, and (in full mode) dependency operators, routes, gateways, webhooks, CRDs, and recent warning events.</p>
   <section class="skill-contract__section" data-section="01">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
     <div class="skill-contract__row">
@@ -50,7 +50,7 @@ Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC s
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>This skill is read-only — it must never mutate cluster state.</li>
+        <li>This skill is read-only; it must never mutate cluster state.</li>
         <li>The DSC name used in status checks must come from the cluster&#x27;s actual DSC, not an assumed default-dsc literal.</li>
       </ul>
     </div>

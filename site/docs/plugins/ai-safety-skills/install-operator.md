@@ -50,8 +50,8 @@ Install any individual RHOAI dependency operator on an OpenShift cluster using i
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Never reorder or flag-ify the script&#x27;s positional arguments — it only accepts NAME CHANNEL SOURCE VERSION in that order.</li>
-        <li>Never run the install as a bounded foreground call — Manual-approval installs can exceed typical foreground timeouts.</li>
+        <li>Never reorder or flag-ify the script&#x27;s positional arguments; it only accepts NAME CHANNEL SOURCE VERSION in that order.</li>
+        <li>Never run the install as a bounded foreground call; Manual-approval installs can exceed typical foreground timeouts.</li>
       </ul>
     </div>
     <div class="skill-contract__row">

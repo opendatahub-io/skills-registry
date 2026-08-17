@@ -50,7 +50,7 @@ Configure the RHCL operator for disconnected/air-gapped OpenShift environments (
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Never assume the Subscription&#x27;s namespace equals the CSV&#x27;s namespace — resolve it directly.</li>
+        <li>Never assume the Subscription&#x27;s namespace equals the CSV&#x27;s namespace; resolve it directly.</li>
         <li>Never include http:// or https:// in the mirror registry value passed to the script.</li>
       </ul>
     </div>

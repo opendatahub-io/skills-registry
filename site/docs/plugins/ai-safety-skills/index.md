@@ -7,7 +7,7 @@ title: ai-safety-skills
 
 # ai-safety-skills
 
-OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var — they are usable by anyone with olminstall access, not just one team.
+OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var; they are usable by anyone with olminstall access, not just one team.
 
 !!! info "Plugin Details"
 
@@ -32,9 +32,9 @@ OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, im
 | [`/deploy-component-manifests`](deploy-component-manifests.md) | Deploy custom component manifests into an OLM-deployed ODH/RHOAI operator via a kustomize overlay and PVC mount, with revert support | :material-check: |
 | [`/configure-disconnected`](configure-disconnected.md) | Configure the RHCL operator for disconnected/air-gapped OpenShift environments (WASM shim patching, pull secret propagation, mirror registry) | :material-check: |
 | [`/configure-gateway`](configure-gateway.md) | Configure the MaaS or llm-d inference gateway (or MaaS PostgreSQL) on an OpenShift/RHOAI cluster, in connected or disconnected mode | :material-check: |
-| [`/verify-install`](verify-install.md) | Verify RHOAI installation status on an OpenShift cluster — operator CSV, DSC status, dependency operators, pod health, routes, and common issues | :material-check: |
-| [`/regression-test-runner`](regression-test-runner.md) | End-to-end regression testing workflow for TrustyAI/AI Safety components — patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira | :material-check: |
-| [`/review`](review.md) | Multi-persona PR review — spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring | :material-check: |
+| [`/verify-install`](verify-install.md) | Verify RHOAI installation status on an OpenShift cluster; operator CSV, DSC status, dependency operators, pod health, routes, and common issues | :material-check: |
+| [`/regression-test-runner`](regression-test-runner.md) | End-to-end regression testing workflow for TrustyAI/AI Safety components; patches images, runs pytest as on-cluster Jobs, analyzes failures, creates fix PRs, and updates Jira | :material-check: |
+| [`/review`](review.md) | Multi-persona PR review; spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring | :material-check: |
 | [`/jira-hygiene-check`](jira-hygiene-check.md) | Check Jira tickets against team hygiene rules, user-scoped by default or team-wide with --team, reporting rule-ID-referenced violations | :material-check: |
 | [`/jira-hygiene-setup`](jira-hygiene-setup.md) | Configure Jira Hygiene Checker with project key, team component, code repos, workflow statuses, and enforcement preferences | :material-check: |
 
