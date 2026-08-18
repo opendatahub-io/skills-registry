@@ -2310,7 +2310,7 @@ Examples:
 
 #### /enrich-reports
 
-Enrich case study skeletons with error signatures, fix types, lessons, and prevention advice via validated Python script output
+Complete case studies with AI-derived error signatures, fix types, lessons, and prevention advice
 
 ---
 

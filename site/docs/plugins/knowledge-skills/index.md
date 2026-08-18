@@ -33,7 +33,7 @@ tooling handles forge interactions.
 | Skill | Description | Invocable |
 |-------|-------------|-----------|
 | [`/knowledge-repo`](knowledge-repo.md) | Scan merged PRs and propose updates to AI context files (CLAUDE.md, AGENTS.md) and skill files as a git-apply-able patch | :material-check: |
-| [`/enrich-reports`](enrich-reports.md) | Enrich case study skeletons with error signatures, fix types, lessons, and prevention advice via validated Python script output | :material-check: |
+| [`/enrich-reports`](enrich-reports.md) | Complete case studies with AI-derived error signatures, fix types, lessons, and prevention advice | :material-check: |
 
 ## Installation
 
