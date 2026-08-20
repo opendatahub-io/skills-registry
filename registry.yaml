@@ -2489,7 +2489,7 @@ plugins:
       Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL
       env var; they are usable by anyone with olminstall access, not just
       one team.
-    version: "1.0.0"
+    version: "1.1.0"
     category: devops
     scope: team
     tags: [openshift, kubernetes, rhoai, cluster-lifecycle, olm, jira, pr-review, regression-testing]

@@ -468,7 +468,7 @@ Plugins hardcoded to a specific team's setup. Not generally reusable by other te
 
 OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var; they are usable by anyone with olminstall access, not just one team.
 
-v1.0.0 | Team-Specific | MIT | [sheltoncyril/sheltons-toolkit](https://github.com/sheltoncyril/sheltons-toolkit)
+v1.1.0 | Team-Specific | MIT | [sheltoncyril/sheltons-toolkit](https://github.com/sheltoncyril/sheltons-toolkit)
 
 Tags: openshift, kubernetes, rhoai, cluster-lifecycle, olm, jira, pr-review, regression-testing
 
