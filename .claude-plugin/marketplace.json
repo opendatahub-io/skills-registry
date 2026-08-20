@@ -544,6 +544,33 @@
         "source": "github"
       },
       "version": "0.3.15"
+    },
+    {
+      "author": {
+        "name": "Shelton Cyril"
+      },
+      "category": "devops",
+      "description": "OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gateway/disconnected config), an AI Safety regression test runner, a multi-persona PR reviewer, and Jira hygiene checking. The cluster-lifecycle skills drive an internal Red Hat installer (olminstall) via a user-supplied OLMINSTALL_REPO_URL env var; they are usable by anyone with olminstall access, not just one team.\n",
+      "homepage": "https://github.com/sheltoncyril/sheltons-toolkit",
+      "keywords": [
+        "openshift",
+        "kubernetes",
+        "rhoai",
+        "cluster-lifecycle",
+        "olm",
+        "jira",
+        "pr-review",
+        "regression-testing"
+      ],
+      "license": "MIT",
+      "name": "ai-safety-skills",
+      "repository": "https://github.com/sheltoncyril/sheltons-toolkit",
+      "source": {
+        "ref": "main",
+        "repo": "sheltoncyril/sheltons-toolkit",
+        "source": "github"
+      },
+      "version": "1.0.0"
     }
   ]
 }

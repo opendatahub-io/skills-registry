@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-20 plugins | 106 skills | 7 categories
+21 plugins | 119 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -185,6 +185,20 @@ hide:
     Generic agentic evaluation for skills and agents. Provides end-to-end skills to analyze, test, score, review, and ite...
 
     **10 skills** - Evaluation & Testing - v1.30.0
+
+</div>
+
+## Teams
+
+<div class="grid cards" markdown>
+
+-   **[ai-safety-skills](plugins/ai-safety-skills/index.md)**
+
+    ---
+
+    OpenShift/RHOAI cluster-lifecycle automation (install, DSC creation, cleanup, image patching, manifest deploy, gatewa...
+
+    **14 skills** - DevOps & CI/CD - v1.0.0
 
 </div>
 
