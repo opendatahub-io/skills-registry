@@ -2512,7 +2512,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/create-dsc/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/create-dsc/SKILL.md
           problem_statement: Create a DataScienceCluster resource on an OpenShift/RHOAI cluster, either from a custom YAML or auto-extracted from the operator CSV, and confirm it and all its component pods reach a healthy state.
           success_conditions:
             - The DSC reaches Ready phase and redhat-ods-applications pods are Running/Completed.
@@ -2535,7 +2535,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/install-operator/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/install-operator/SKILL.md
           problem_statement: Install one of 16 supported RHOAI dependency operators via OLM, with optional channel/source/version overrides, and confirm its CSV reaches Succeeded.
           success_conditions:
             - The requested operator's CSV reaches Succeeded phase in its expected namespace.
@@ -2558,7 +2558,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/install-dependencies/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/install-dependencies/SKILL.md
           problem_statement: Bulk-install RHOAI's dependency operators (serverless, service mesh, authorino, RHCL, kueue, jobset, and more) via GitOps or Helm mode, then confirm their CSVs are healthy.
           success_conditions:
             - All requested dependency operator CSVs reach Succeeded phase.
@@ -2581,7 +2581,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/install-rhoai-nightly/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/install-rhoai-nightly/SKILL.md
           problem_statement: Drive an end-to-end RHOAI nightly install from an FBC fragment image URI (channel resolution, ROSA pull-secret workaround, dependency operators, and DSC creation) and confirm the resulting cluster is healthy.
           success_conditions:
             - The subscription channel is confirmed against the fragment's actual catalog data, not guessed from the image tag alone.
@@ -2604,7 +2604,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/cleanup-rhoai/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/cleanup-rhoai/SKILL.md
           problem_statement: Tear down a RHOAI install (operator-only, or a full "nuke" of RHOAI plus dependency operators and CRDs) and confirm no leftover resources remain.
           success_conditions:
             - Standard and nuke modes both leave the cluster with no RHOAI/dependency CSVs, DSC/DSCI instances, or stuck Terminating namespaces.
@@ -2627,7 +2627,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/patch-operator-image/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/patch-operator-image/SKILL.md
           problem_statement: Swap a TrustyAI operator's image for a hermetic/candidate build (by URI or by resolving a GitHub PR's Konflux build), verify the image exists first, and support a clean revert to the original state.
           success_conditions:
             - The image is verified to exist on the registry, for the correct architecture, before any patch is applied.
@@ -2652,7 +2652,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/deploy-component-manifests/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/deploy-component-manifests/SKILL.md
           problem_statement: Mount a component's local manifests into the running ODH/RHOAI operator pod via a PVC and CSV patch, so the operator manages a developer's custom manifests instead of its built-in ones.
           success_conditions:
             - The operator pod comes back healthy after the CSV patch and manifest copy, running the custom manifests.
@@ -2662,7 +2662,7 @@ plugins:
               - Never apply the CSV volumeMount patch if it is already present; duplicate mounts crash the pod.
               - Revert must remove JSON-patch indices in descending order to avoid index-shift corruption.
             fixed_context:
-              tools: [Bash, Read, Write, AskUserQuestion]
+              tools: [Bash, Read, Write, Edit, AskUserQuestion]
               cli: [oc]
           source_assertions:
             skill_path: skills/deploy-component-manifests/SKILL.md
@@ -2677,7 +2677,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/configure-disconnected/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/configure-disconnected/SKILL.md
           problem_statement: Point the RHCL operator's WASM shim and pull secret at a disconnected environment's mirror registry, then verify the subscription env vars, pull secret, and operator pods reflect the change.
           success_conditions:
             - The subscription's RELATED_IMAGE_WASMSHIM and PROTECTED_REGISTRY reflect the mirror registry after the script runs.
@@ -2700,7 +2700,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/configure-gateway/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/configure-gateway/SKILL.md
           problem_statement: Configure the MaaS gateway, llm-d inference gateway, or MaaS PostgreSQL on a cluster, in either connected (LoadBalancer) or disconnected (ClusterIP + Route) mode, and verify the resulting Gateway/Service/Route resources.
           success_conditions:
             - The Gateway reports a Programmed condition of True after configuration.
@@ -2708,10 +2708,10 @@ plugins:
           invariants:
             must_preserve:
               - Never apply --disconnected to the postgres component; it has no disconnected mode.
-              - Never run the configuration script without RHOAI already installed.
+              - Warn and require confirmation before running the configuration script when RHOAI is not already installed.
             fixed_context:
               tools: [Bash, Read, AskUserQuestion]
-              cli: [oc, git]
+              cli: [oc, git, python3]
           source_assertions:
             skill_path: skills/configure-gateway/SKILL.md
       - name: verify-install
@@ -2723,7 +2723,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/verify-install/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/verify-install/SKILL.md
           problem_statement: Produce an accurate, read-only health report for a RHOAI installation; operator/DSC status, pod health, and (in full mode) dependency operators, routes, gateways, webhooks, CRDs, and recent warning events.
           success_conditions:
             - The report never references a value (like the console URL) before it has actually been fetched.
@@ -2746,7 +2746,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/regression-test-runner/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/regression-test-runner/SKILL.md
           problem_statement: Run a component's regression suite as sequential on-cluster Jobs across pytest tiers, classify failures (product bug / test bug / infra / flaky / environment), optionally fix and PR test bugs, and report structured results to Jira.
           success_conditions:
             - Every tier that has matching tests is run, and results are aggregated across all tiers even when some fail.
@@ -2758,7 +2758,7 @@ plugins:
               - If more failures exist than the analysis cap, report how many were skipped rather than dropping them silently.
             fixed_context:
               tools: [Bash, Read, Write, Grep, Glob, Agent, AskUserQuestion, Skill]
-              cli: [oc, git, gh, python3, uv]
+              cli: [oc, git, gh, python3, uv, pre-commit]
           source_assertions:
             skill_path: skills/regression-test-runner/SKILL.md
             supporting_paths:
@@ -2772,10 +2772,10 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/review/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/review/SKILL.md
             - id: output_quality
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/review/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/review/SKILL.md
           problem_statement: Review a PR from three independent stylistic angles in parallel, then merge overlapping findings with a confidence score so issues flagged by multiple reviewers surface first and single-persona noise is de-emphasized.
           success_conditions:
             - Findings flagged by 2 or more personas are surfaced as high-confidence.
@@ -2797,7 +2797,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/jira-hygiene-check/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/jira-hygiene-check/SKILL.md
           problem_statement: Evaluate a user's (or team's) Jira tickets against a deterministic, code-evaluated rule set and report violations with rule-ID references, minimizing LLM judgment calls.
           success_conditions:
             - Rule evaluation is deterministic (run_check.py/evaluate_rules.py), not left to LLM judgment.
@@ -2822,7 +2822,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: sheltoncyril/sheltons-toolkit@cec313e2f38d493acf8c8ad65bddb110903fb70a:skills/jira-hygiene-setup/SKILL.md
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/jira-hygiene-setup/SKILL.md
           problem_statement: Walk a user through configuring the Jira Hygiene Checker (project, team component, repos, workflow statuses, enforcement mode) and write the result to config.env for jira-hygiene-check to read.
           success_conditions:
             - config.env contains all fields jira-hygiene-check actually reads, in the format it expects.
@@ -2832,11 +2832,39 @@ plugins:
               - Never write partial/inconsistent config; either the full setup completes or config.env is left untouched.
             fixed_context:
               tools: [Bash, Read, Write, AskUserQuestion]
+              cli: [gh, glab, git]
               knowledge_inputs:
                 - kind: task_input
                   privacy: task_private
           source_assertions:
             skill_path: skills/jira-hygiene-setup/SKILL.md
+      - name: jenkins-ci-triage
+        description: Fetch and classify RHOAI/ODH Jenkins CI regression run failures (known / version-mismatch / cascading-infra / genuine) and cross-reference opendatahub-tests history to offer cherry-pick-bot backports
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [verify, orchestrate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: sheltoncyril/sheltons-toolkit@259752b54482ec0f04324dd5d1c794c75ea33605:skills/jenkins-ci-triage/SKILL.md
+          problem_statement: Fetch a RHOAI/ODH Jenkins CI regression run via the Jenkins REST API and classify each failure as a persistent known issue, a version mismatch (component pinned to main/latest instead of the branch under test), cascading infra (one shared cluster/operator fault surfacing across many suites), or a genuine new regression, then cross-reference opendatahub-tests git history to find an existing fix and offer to trigger a cherry-pick-bot backport.
+          success_conditions:
+            - Each failure is placed in a single classification bucket, with cascading-infra failures traced back to one root cause rather than reported as many independent failures.
+            - A backport is proposed only when a merged fix is confirmed absent from the branch under test, and the cherry-pick comment is never posted without explicit user confirmation.
+          invariants:
+            must_preserve:
+              - Never hardcode or write a Jenkins hostname, username, or API token to any file; read the token from the environment and use it for the session only.
+              - Never post a /cherry-pick comment on a shared PR without explicit user confirmation.
+              - Never hand-cherry-pick a duplicate backport PR when the cherry-pick bot convention applies.
+            fixed_context:
+              tools: [Bash, Read, AskUserQuestion]
+              cli: [curl, gh, git]
+          source_assertions:
+            skill_path: skills/jenkins-ci-triage/SKILL.md
+            supporting_paths:
+              - skills/jenkins-ci-triage/resources/jenkins-structure.md
+              - skills/jenkins-ci-triage/resources/job-hierarchy.md
     harnesses:
       claude-code:
         install: "/plugin install ai-safety-skills@opendatahub-skills"

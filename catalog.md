@@ -488,6 +488,7 @@ Tags: openshift, kubernetes, rhoai, cluster-lifecycle, olm, jira, pr-review, reg
 | `/review` | Multi-persona PR review; spawns 3 parallel agents (chill, grumpy, unhinged) that each review from a different angle, merging findings with confidence scoring | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
 | `/jira-hygiene-check` | Check Jira tickets against team hygiene rules, user-scoped by default or team-wide with --team, reporting rule-ID-referenced violations | `verify` | `task_success` (`judge`) |
 | `/jira-hygiene-setup` | Configure Jira Hygiene Checker with project key, team component, code repos, workflow statuses, and enforcement preferences | `generate` | `task_success` (`judge`) |
+| `/jenkins-ci-triage` | Fetch and classify RHOAI/ODH Jenkins CI regression run failures (known / version-mismatch / cascading-infra / genuine) and cross-reference opendatahub-tests history to offer cherry-pick-bot backports | `verify`, `orchestrate` | `task_success` (`judge`) |
 
 ```bash
 /plugin install ai-safety-skills@opendatahub-skills
