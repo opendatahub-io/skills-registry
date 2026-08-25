@@ -3293,3 +3293,85 @@ Examples:
 ```
 
 ---
+
+## productization-skills
+
+Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.
+
+**Repository**: https://github.com/opendatahub-io/productization-skills
+
+### Skills
+
+#### /gitlab-job-analyzer
+
+Analyze GitLab CI/CD job failures with structured scripts and error pattern recognition
+
+#### /aws-log-analyzer
+
+Troubleshoot and analyze AWS CloudWatch Logs for debugging and monitoring
+
+#### /slack-utilities
+
+Search messages, post updates, and interact with Slack workspaces
+
+#### /gitlab-branch-manager
+
+Create and protect GitLab branches with configurable protection rules
+
+#### /jira-utilities
+
+Manage Jira issues with JQL search, create/update issues, link issues, and sprint info
+
+#### /jira-cve-tracker
+
+CVE deduplication and release-date clustering for Jira issues
+
+#### /jira-release-setup
+
+Set up Jira release versions and manage release workflows
+
+#### /jira-sprint-manager
+
+Create sprints and assign issues to sprints on Jira boards
+
+#### /jira-gap-audit
+
+Audit Jira releases for gaps in issue coverage
+
+#### /mapt-provisioner
+
+Provision and manage cloud VMs on AWS and Azure using mapt
+
+#### /konflux-its-analyzer
+
+Analyze Konflux integration test scenario failures
+
+#### /gitlab-code-review
+
+Structured GitLab merge request code review
+
+#### /slack-webhook
+
+Post messages to Slack channels via incoming webhooks
+
+#### /weekly-status
+
+Generate weekly status reports from project activity
+
+#### /gws-calendar-reader
+
+Read Google Calendar events and check free/busy status
+
+#### /gws-doc-action-extractor
+
+Extract action items from Google Docs
+
+#### /gws-drive-reader
+
+List, search, and read files from Google Drive
+
+#### /gws-slides-analyzer
+
+Read, search, and create Google Slides presentations
+
+---

@@ -34,3 +34,9 @@ DevOps and TestOps automation skills for ODH/RHOAI — component onboarding, Kon
 Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocessed error logs, then performs root cause analysis per group with structured findings, section files, and confidence-rated diagnoses. Designed to run inside a Claude Code container as part of the pipeline-failure-analyzer CI pipeline.
 
 **2 skills** - v0.1.0
+
+### [productization-skills](../plugins/productization-skills/index.md)
+
+Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.
+
+**18 skills** - v0.8.1

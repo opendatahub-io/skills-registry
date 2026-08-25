@@ -544,6 +544,36 @@
         "source": "github"
       },
       "version": "0.3.15"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.\n",
+      "homepage": "https://github.com/opendatahub-io/productization-skills",
+      "keywords": [
+        "gitlab",
+        "aws",
+        "slack",
+        "jira",
+        "konflux",
+        "mapt",
+        "devops",
+        "ci-cd",
+        "cloud",
+        "provisioning"
+      ],
+      "license": "Apache-2.0",
+      "name": "productization-skills",
+      "repository": "https://github.com/opendatahub-io/productization-skills",
+      "source": {
+        "ref": "v0.8.1",
+        "repo": "opendatahub-io/productization-skills",
+        "sha": "86f0ce3f1697bcbe2b849b2770d235deddb16abe",
+        "source": "github"
+      },
+      "version": "0.8.1"
     }
   ]
 }

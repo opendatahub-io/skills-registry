@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-20 plugins registered in the marketplace.
+21 plugins registered in the marketplace.
 
 ## SDLC
 
@@ -31,6 +31,7 @@ title: Plugins
 | [code-review-skills](code-review-skills/index.md) | Code Quality | 1 | v0.1.0 |
 | [spike-executor](spike-executor/index.md) | Product Planning | 1 | v0.2.0 |
 | [docs-skills](docs-skills/index.md) | Documentation | 1 | v0.3.15 |
+| [productization-skills](productization-skills/index.md) | DevOps & CI/CD | 18 | v0.8.1 |
 
 ## Generic
 

@@ -24,6 +24,7 @@
 - [code-review-skills](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/): AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
 - [spike-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
 - [docs-skills](https://opendatahub-io.github.io/skills-registry/plugins/docs-skills/): Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
+- [productization-skills](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/): Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.
 
 ## Skills
 
@@ -102,6 +103,24 @@
 - [gitlab-code-review](https://opendatahub-io.github.io/skills-registry/plugins/code-review-skills/gitlab-code-review/): Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
 - [SPIKE-executor](https://opendatahub-io.github.io/skills-registry/plugins/spike-executor/SPIKE-executor/): Execute RHOAI SPIKE investigations with human-in-the-loop approval gates
 - [docs-orchestrator](https://opendatahub-io.github.io/skills-registry/plugins/docs-skills/docs-orchestrator/): Documentation workflow orchestrator. Reads the step list from .agent_workspace/docs-workflow.yaml (or the plugin default). Runs steps sequentially, manages progress state, handles iteration and confirmation gates. Claude is the orchestrator — the YAML is a step list, not a workflow engine.
+- [gitlab-job-analyzer](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gitlab-job-analyzer/): Analyze GitLab CI/CD job failures with structured scripts and error pattern recognition
+- [aws-log-analyzer](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/aws-log-analyzer/): Troubleshoot and analyze AWS CloudWatch Logs for debugging and monitoring
+- [slack-utilities](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/slack-utilities/): Search messages, post updates, and interact with Slack workspaces
+- [gitlab-branch-manager](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gitlab-branch-manager/): Create and protect GitLab branches with configurable protection rules
+- [jira-utilities](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/jira-utilities/): Manage Jira issues with JQL search, create/update issues, link issues, and sprint info
+- [jira-cve-tracker](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/jira-cve-tracker/): CVE deduplication and release-date clustering for Jira issues
+- [jira-release-setup](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/jira-release-setup/): Set up Jira release versions and manage release workflows
+- [jira-sprint-manager](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/jira-sprint-manager/): Create sprints and assign issues to sprints on Jira boards
+- [jira-gap-audit](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/jira-gap-audit/): Audit Jira releases for gaps in issue coverage
+- [mapt-provisioner](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/mapt-provisioner/): Provision and manage cloud VMs on AWS and Azure using mapt
+- [konflux-its-analyzer](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/konflux-its-analyzer/): Analyze Konflux integration test scenario failures
+- [gitlab-code-review](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gitlab-code-review/): Structured GitLab merge request code review
+- [slack-webhook](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/slack-webhook/): Post messages to Slack channels via incoming webhooks
+- [weekly-status](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/weekly-status/): Generate weekly status reports from project activity
+- [gws-calendar-reader](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-calendar-reader/): Read Google Calendar events and check free/busy status
+- [gws-doc-action-extractor](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-doc-action-extractor/): Extract action items from Google Docs
+- [gws-drive-reader](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-drive-reader/): List, search, and read files from Google Drive
+- [gws-slides-analyzer](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-slides-analyzer/): Read, search, and create Google Slides presentations
 
 ## Optional
 

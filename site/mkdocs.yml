@@ -199,6 +199,26 @@ nav:
     - docs-skills:
       - plugins/docs-skills/index.md
       - docs-orchestrator: plugins/docs-skills/docs-orchestrator.md
+    - productization-skills:
+      - plugins/productization-skills/index.md
+      - gitlab-job-analyzer: plugins/productization-skills/gitlab-job-analyzer.md
+      - aws-log-analyzer: plugins/productization-skills/aws-log-analyzer.md
+      - slack-utilities: plugins/productization-skills/slack-utilities.md
+      - gitlab-branch-manager: plugins/productization-skills/gitlab-branch-manager.md
+      - jira-utilities: plugins/productization-skills/jira-utilities.md
+      - jira-cve-tracker: plugins/productization-skills/jira-cve-tracker.md
+      - jira-release-setup: plugins/productization-skills/jira-release-setup.md
+      - jira-sprint-manager: plugins/productization-skills/jira-sprint-manager.md
+      - jira-gap-audit: plugins/productization-skills/jira-gap-audit.md
+      - mapt-provisioner: plugins/productization-skills/mapt-provisioner.md
+      - konflux-its-analyzer: plugins/productization-skills/konflux-its-analyzer.md
+      - gitlab-code-review: plugins/productization-skills/gitlab-code-review.md
+      - slack-webhook: plugins/productization-skills/slack-webhook.md
+      - weekly-status: plugins/productization-skills/weekly-status.md
+      - gws-calendar-reader: plugins/productization-skills/gws-calendar-reader.md
+      - gws-doc-action-extractor: plugins/productization-skills/gws-doc-action-extractor.md
+      - gws-drive-reader: plugins/productization-skills/gws-drive-reader.md
+      - gws-slides-analyzer: plugins/productization-skills/gws-slides-analyzer.md
   - Categories:
     - categories/index.md
     - Evaluation & Testing: categories/evaluation.md

@@ -2479,3 +2479,539 @@ plugins:
       claude-code:
         install: "/plugin install docs-skills@opendatahub-skills"
     depends_on: []
+
+  - name: productization-skills
+    description: >
+      Claude Code plugin with specialized skills for DevOps and cloud-native
+      development workflows. Provides skills for GitLab CI/CD analysis,
+      AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch
+      management, Jira utilities, Konflux ITS analysis, cloud infrastructure
+      provisioning via mapt, and Google Workspace integration.
+    version: "0.8.1"
+    category: devops
+    tags: [gitlab, aws, slack, jira, konflux, mapt, devops, ci-cd, cloud, provisioning]
+    author:
+      name: opendatahub-io
+    license: Apache-2.0
+    source:
+      type: github
+      repo: opendatahub-io/productization-skills
+      ref: v0.8.1
+      sha: 86f0ce3f1697bcbe2b849b2770d235deddb16abe
+    homepage: https://github.com/opendatahub-io/productization-skills
+    repository: https://github.com/opendatahub-io/productization-skills
+    skills:
+      - name: gitlab-job-analyzer
+        description: Analyze GitLab CI/CD job failures with structured scripts and error pattern recognition
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gitlab-job-analyzer/SKILL.md
+          problem_statement: >
+            Analyze GitLab CI/CD job failures by parsing logs, identifying error patterns,
+            and providing structured root-cause analysis to speed up pipeline troubleshooting.
+          success_conditions:
+            - Identifies the root cause of the CI/CD job failure from logs
+            - Produces structured error analysis with actionable remediation steps
+          invariants:
+            must_preserve:
+              - Use glab CLI for all GitLab API interactions
+              - Never modify pipeline configuration or retry jobs without user confirmation
+            fixed_context:
+              tools: [Bash]
+              cli: [glab]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gitlab-job-analyzer/SKILL.md
+      - name: aws-log-analyzer
+        description: Troubleshoot and analyze AWS CloudWatch Logs for debugging and monitoring
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/aws-log-analyzer/SKILL.md
+          problem_statement: >
+            Troubleshoot and analyze AWS CloudWatch Logs to identify error patterns,
+            severity distributions, and trends for debugging and monitoring.
+          success_conditions:
+            - Retrieves and analyzes logs from the correct CloudWatch log group
+            - Produces structured error analysis with severity classification and pattern grouping
+          invariants:
+            must_preserve:
+              - Use AWS CLI for all CloudWatch Logs operations
+              - Never modify or delete log data
+            fixed_context:
+              tools: [Bash]
+              cli: [aws]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/aws-log-analyzer/SKILL.md
+      - name: slack-utilities
+        description: Search messages, post updates, and interact with Slack workspaces
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [retrieve, execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/slack-utilities/SKILL.md
+          problem_statement: >
+            Search messages, fetch thread replies, post updates, and interact with
+            Slack workspaces programmatically.
+          success_conditions:
+            - Retrieves or posts Slack messages as requested
+            - Correctly handles channel resolution and thread context
+          invariants:
+            must_preserve:
+              - Never post messages without user confirmation
+              - Use Slack API tokens from environment, never hardcode credentials
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/slack-utilities/SKILL.md
+      - name: gitlab-branch-manager
+        description: Create and protect GitLab branches with configurable protection rules
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gitlab-branch-manager/SKILL.md
+          problem_statement: >
+            Create and protect GitLab branches with configurable protection rules
+            for release and development workflows.
+          success_conditions:
+            - Creates branches from the correct source ref
+            - Applies requested protection rules correctly
+          invariants:
+            must_preserve:
+              - Use glab CLI for all GitLab API interactions
+              - Never delete branches without explicit user confirmation
+            fixed_context:
+              tools: [Bash]
+              cli: [glab]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gitlab-branch-manager/SKILL.md
+      - name: jira-utilities
+        description: Manage Jira issues with JQL search, create/update issues, link issues, and sprint info
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/jira-utilities/SKILL.md
+          problem_statement: >
+            Manage Jira issues with JQL search, create and update issues, link issues,
+            and retrieve sprint information.
+          success_conditions:
+            - Executes the requested Jira operation correctly
+            - Returns structured results for search and read operations
+          invariants:
+            must_preserve:
+              - Never delete issues without explicit user confirmation
+              - Use Jira MCP tools or REST API, never modify Jira data without confirmation
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/jira-utilities/SKILL.md
+      - name: jira-cve-tracker
+        description: CVE deduplication and release-date clustering for Jira issues
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/jira-cve-tracker/SKILL.md
+          problem_statement: >
+            Query a Jira project for open CVE vulnerability issues, deduplicate across
+            container variants, and cluster by release date for triage prioritization.
+          success_conditions:
+            - Retrieves and deduplicates CVE issues correctly
+            - Clusters CVEs by release date for actionable triage output
+          invariants:
+            must_preserve:
+              - Never modify CVE issues without explicit user confirmation
+              - Preserve original CVE identifiers and severity ratings
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/jira-cve-tracker/SKILL.md
+      - name: jira-release-setup
+        description: Set up Jira release versions and manage release workflows
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/jira-release-setup/SKILL.md
+          problem_statement: >
+            Create the complete Jira card structure for a product release milestone,
+            encoding the release card template as epics, tasks, and subtasks.
+          success_conditions:
+            - Creates the full release card hierarchy per the template
+            - Links all created issues correctly to epics and parent issues
+          invariants:
+            must_preserve:
+              - Follow the encoded release card template structure exactly
+              - Never skip required epics or tasks from the template
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/jira-release-setup/SKILL.md
+      - name: jira-sprint-manager
+        description: Create sprints and assign issues to sprints on Jira boards
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/jira-sprint-manager/SKILL.md
+          problem_statement: >
+            Create sprints and assign issues to sprints on Jira boards for
+            sprint planning and management workflows.
+          success_conditions:
+            - Creates sprints with correct dates and board association
+            - Moves issues to the correct sprint
+          invariants:
+            must_preserve:
+              - Never close or delete sprints without user confirmation
+              - Preserve existing sprint assignments unless explicitly asked to change
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/jira-sprint-manager/SKILL.md
+      - name: jira-gap-audit
+        description: Audit Jira releases for gaps in issue coverage
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/jira-gap-audit/SKILL.md
+          problem_statement: >
+            Audit existing Jira cards for a release against the expected card template,
+            reporting missing epics, excess cards, and coverage gaps.
+          success_conditions:
+            - Compares actual release cards against the template
+            - Reports all missing and excess items with clear categorization
+          invariants:
+            must_preserve:
+              - Never create or modify Jira issues during audit, only report findings
+              - Use the canonical release template as the source of truth
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/jira-gap-audit/SKILL.md
+      - name: mapt-provisioner
+        description: Provision and manage cloud VMs on AWS and Azure using mapt
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/mapt-provisioner/SKILL.md
+          problem_statement: >
+            Provision and manage cloud VMs on AWS and Azure using mapt for
+            development, testing, and CI/CD environments.
+          success_conditions:
+            - Provisions the requested VM with correct specs and cloud provider
+            - Returns connection details for the provisioned machine
+          invariants:
+            must_preserve:
+              - Never destroy machines without explicit user confirmation
+              - Always use mapt CLI, never call cloud provider APIs directly
+            fixed_context:
+              tools: [Bash]
+              cli: [mapt]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/mapt-provisioner/SKILL.md
+      - name: konflux-its-analyzer
+        description: Analyze Konflux integration test scenario failures
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [analyze]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/konflux-its-analyzer/SKILL.md
+          problem_statement: >
+            Analyze failed Konflux integration test scenario PipelineRuns using
+            KubeArchive to identify test failure root causes.
+          success_conditions:
+            - Retrieves the correct PipelineRun logs from KubeArchive
+            - Identifies the root cause of the integration test failure
+          invariants:
+            must_preserve:
+              - Use KubeArchive API for log retrieval, never access clusters directly
+              - Never modify or rerun pipelines without user confirmation
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/konflux-its-analyzer/SKILL.md
+      - name: gitlab-code-review
+        description: Structured GitLab merge request code review
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gitlab-code-review/SKILL.md
+          problem_statement: >
+            Perform structured code review of GitLab merge requests using multiple
+            specialized review dimensions with confidence-based scoring.
+          success_conditions:
+            - Reviews the MR diff across all configured dimensions
+            - Produces findings with confidence scores and actionable feedback
+          invariants:
+            must_preserve:
+              - Use glab CLI for all GitLab API interactions
+              - Never approve or merge MRs without explicit user confirmation
+            fixed_context:
+              tools: [Bash]
+              cli: [glab]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gitlab-code-review/SKILL.md
+      - name: slack-webhook
+        description: Post messages to Slack channels via incoming webhooks
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/slack-webhook/SKILL.md
+          problem_statement: >
+            Post messages to Slack channels via incoming webhook URLs, supporting
+            plain text and Slack Block Kit JSON payloads.
+          success_conditions:
+            - Posts the message to the correct Slack webhook
+            - Formats Block Kit payloads correctly when requested
+          invariants:
+            must_preserve:
+              - Never post without user confirmation of the message content
+              - Use webhook URLs from environment or user input, never hardcode
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: task_input
+                  privacy: task_private
+          source_assertions:
+            skill_path: productization-plugin/skills/slack-webhook/SKILL.md
+      - name: weekly-status
+        description: Generate weekly status reports from project activity
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/weekly-status/SKILL.md
+          problem_statement: >
+            Generate a weekly project status update paragraph for stakeholders from
+            project activity across git, Jira, and other sources.
+          success_conditions:
+            - Gathers activity from the correct time period
+            - Produces a concise stakeholder-ready status paragraph
+          invariants:
+            must_preserve:
+              - Report only factual activity, never fabricate accomplishments
+              - Use the user's configured sources for activity data
+            fixed_context:
+              tools: [Bash]
+              cli: [git, curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/weekly-status/SKILL.md
+      - name: gws-calendar-reader
+        description: Read Google Calendar events and check free/busy status
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [retrieve]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gws-calendar-reader/SKILL.md
+          problem_statement: >
+            Read Google Calendar events and check free/busy status for team
+            availability and scheduling.
+          success_conditions:
+            - Retrieves events for the requested time range and calendar
+            - Correctly reports free/busy availability
+          invariants:
+            must_preserve:
+              - Read-only access to calendar data, never create or modify events
+              - Use Google Workspace API via authenticated scripts only
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gws-calendar-reader/SKILL.md
+      - name: gws-doc-action-extractor
+        description: Extract action items from Google Docs
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [retrieve, analyze]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gws-doc-action-extractor/SKILL.md
+          problem_statement: >
+            Scan Google Docs for action patterns and extract action items
+            for tracking and follow-up.
+          success_conditions:
+            - Scans the correct Google Docs
+            - Extracts action items with assignees and context
+          invariants:
+            must_preserve:
+              - Read-only access to documents, never modify content
+              - Use Google Workspace API via authenticated scripts only
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gws-doc-action-extractor/SKILL.md
+      - name: gws-drive-reader
+        description: List, search, and read files from Google Drive
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [retrieve]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gws-drive-reader/SKILL.md
+          problem_statement: >
+            List, search, and read files from Google Drive including Docs,
+            Sheets, Slides, and plain files.
+          success_conditions:
+            - Finds and retrieves the requested files from Google Drive
+            - Returns content in a usable format for the requested file type
+          invariants:
+            must_preserve:
+              - Read-only access to Drive files, never upload or modify
+              - Use Google Workspace API via authenticated scripts only
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gws-drive-reader/SKILL.md
+      - name: gws-slides-analyzer
+        description: Read, search, and create Google Slides presentations
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [retrieve, generate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/productization-skills@86f0ce3f1697bcbe2b849b2770d235deddb16abe:productization-plugin/skills/gws-slides-analyzer/SKILL.md
+          problem_statement: >
+            Search, read, create, and add diagrams to Google Slides presentations
+            for documentation and reporting workflows.
+          success_conditions:
+            - Retrieves or creates presentations as requested
+            - Formats slide content correctly with proper layout
+          invariants:
+            must_preserve:
+              - Never modify existing presentations without user confirmation
+              - Use Google Workspace API via authenticated scripts only
+            fixed_context:
+              tools: [Bash]
+              cli: [curl]
+              knowledge_inputs:
+                - kind: tool_output
+                  privacy: organization_private
+          source_assertions:
+            skill_path: productization-plugin/skills/gws-slides-analyzer/SKILL.md
+    harnesses:
+      claude-code:
+        install: "/plugin install productization-skills@opendatahub-skills"
+    depends_on: []
