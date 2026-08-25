@@ -94,6 +94,77 @@ def check_categories(registry: dict) -> list[str]:
     return errors
 
 
+def _detect_bundle_cycles(by_name: dict) -> list[str]:
+    """Report cycles in the bundle_members graph (each cycle once)."""
+    errors: list[str] = []
+    reported: set[frozenset] = set()
+
+    def dfs(name: str, path: list[str]) -> None:
+        if name in path:
+            cycle = path[path.index(name):]
+            if len(cycle) >= 2:  # self-reference is reported by the caller
+                key = frozenset(cycle)
+                if key not in reported:
+                    reported.add(key)
+                    errors.append(
+                        "  bundle_members cycle detected: "
+                        + " -> ".join(cycle + [name]))
+            return
+        members = (by_name.get(name) or {}).get("bundle_members") or []
+        for member in members:
+            if member in by_name:
+                dfs(member, path + [name])
+
+    for name, plugin in by_name.items():
+        if plugin.get("bundle_members"):
+            dfs(name, [])
+    return errors
+
+
+def check_bundles(registry: dict) -> list[str]:
+    """Validate bundle (meta-plugin) entries.
+
+    A bundle declares ``bundle_members`` naming other registry plugins. Because
+    a bundle's displayed skill count is derived from its members (and it is
+    excluded from registry-wide totals), it must not also carry its own count:
+    no ``skills`` array and no ``skill_count``. Members must resolve to defined
+    plugins, a bundle may not list itself, and the graph must be acyclic. For a
+    leaf plugin, ``skill_count`` is a substitute for a ``skills`` array, so the
+    two are mutually exclusive there as well.
+    """
+    plugins = registry.get("plugins", [])
+    names = {p.get("name") for p in plugins}
+    by_name = {p.get("name"): p for p in plugins}
+    errors = []
+    for plugin in plugins:
+        name = plugin.get("name")
+        members = plugin.get("bundle_members")
+        if not members:
+            if "skill_count" in plugin and plugin.get("skills"):
+                errors.append(
+                    f"  Plugin '{name}' declares both skill_count and a "
+                    "non-empty skills list; use one (skill_count is for "
+                    "plugins that carry no skills array)")
+            continue
+        if plugin.get("skills"):
+            errors.append(
+                f"  Plugin '{name}' declares bundle_members and a non-empty "
+                "skills list; a bundle must not carry its own skills")
+        if "skill_count" in plugin:
+            errors.append(
+                f"  Plugin '{name}' declares bundle_members and skill_count; a "
+                "bundle's count is derived from its members, remove skill_count")
+        for member in members:
+            if member == name:
+                errors.append(f"  Plugin '{name}' lists itself in bundle_members")
+            elif member not in names:
+                errors.append(
+                    f"  Plugin '{name}' bundle_members references undefined "
+                    f"plugin '{member}'")
+    errors.extend(_detect_bundle_cycles(by_name))
+    return errors
+
+
 def check_strict_consistency(registry: dict) -> list[str]:
     """Check that skills_dir is only used with strict: false."""
     errors = []
@@ -574,6 +645,17 @@ def main() -> None:
     else:
         print("  OK")
 
+    # Bundle (meta-plugin) check
+    print("Checking bundles...")
+    errors = check_bundles(registry)
+    all_errors.extend(errors)
+    if errors:
+        print(f"  FAIL: {len(errors)} bundle error(s)")
+        for e in errors:
+            print(e)
+    else:
+        print("  OK")
+
     # Strict/skills_dir consistency
     print("Checking strict/skills_dir consistency...")
     errors = check_strict_consistency(registry)
@@ -670,7 +752,13 @@ def main() -> None:
     # Summary
     print()
     plugin_count = len(registry.get("plugins", []))
-    skill_count = sum(len(p.get("skills", [])) for p in registry.get("plugins", []))
+    # Count each skill once: leaf plugins by their skill_count (or listed
+    # skills); bundles are excluded since their members are counted individually.
+    skill_count = sum(
+        p.get("skill_count", len(p.get("skills", [])))
+        for p in registry.get("plugins", [])
+        if not p.get("bundle_members")
+    )
     print(f"Registry: {plugin_count} plugin(s), {skill_count} skill(s)")
 
     if all_errors:

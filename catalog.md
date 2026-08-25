@@ -396,6 +396,8 @@ Tags: python-packaging, onboarding, fondue, investigation, security, license, te
 
 Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
+**Includes:** `pf-react`, `pf-design-guide`, `pf-design-audit`, `pf-a11y`, `pf-migration`, `pf-code-review`, `pf-mcp`
+
 v0.1.0 | Generic | MIT
 
 Tags: patternfly, react, uxd, design, mcp, components, migration

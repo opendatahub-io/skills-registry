@@ -2459,6 +2459,7 @@ plugins:
     category: development-tools
     scope: generic
     tags: [patternfly, react, uxd, design, mcp, components, migration]
+    bundle_members: [pf-react, pf-design-guide, pf-design-audit, pf-a11y, pf-migration, pf-code-review, pf-mcp]
     author:
       name: UXD Team
     license: MIT
@@ -2478,6 +2479,7 @@ plugins:
     description: >
       React component development -- coding standards, testing, and structure
     version: "0.1.0"
+    skill_count: 10
     category: development-tools
     scope: generic
     tags: [patternfly, react]
@@ -2497,6 +2499,7 @@ plugins:
     description: >
       Design guide -- component selection, interaction patterns, AI experience patterns
     version: "0.1.0"
+    skill_count: 2
     category: development-tools
     scope: generic
     tags: [patternfly, design]
@@ -2516,6 +2519,7 @@ plugins:
     description: >
       Design audit -- validate existing code and designs against PatternFly standards
     version: "0.1.0"
+    skill_count: 6
     category: development-tools
     scope: generic
     tags: [patternfly, design, audit]
@@ -2535,6 +2539,7 @@ plugins:
     description: >
       Accessibility auditing, reporting, and documentation
     version: "0.1.0"
+    skill_count: 2
     category: development-tools
     scope: generic
     tags: [patternfly, accessibility, a11y]
@@ -2554,6 +2559,7 @@ plugins:
     description: >
       PF version migration -- breaking change detection, class scanning, upgrade planning
     version: "0.1.0"
+    skill_count: 3
     category: development-tools
     scope: generic
     tags: [patternfly, migration]
@@ -2573,6 +2579,7 @@ plugins:
     description: >
       Code review and quality -- adversarial review, security patterns
     version: "0.1.0"
+    skill_count: 2
     category: development-tools
     scope: generic
     tags: [patternfly, code-review]
@@ -2593,6 +2600,7 @@ plugins:
       PatternFly MCP server -- component documentation, design token lookup,
       and accessibility guidance via the Model Context Protocol
     version: "0.1.0"
+    skill_count: 0
     category: development-tools
     scope: generic
     tags: [patternfly, mcp]

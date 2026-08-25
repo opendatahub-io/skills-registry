@@ -348,6 +348,17 @@
             "$ref": "#/$defs/skill"
           }
         },
+        "skill_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Cached count of skills for a plugin that delegates discovery to its plugin.json and carries no 'skills' array (e.g. a git-subdir sub-plugin). Read by the catalog/site generators for display; not propagated to marketplace.json."
+        },
+        "bundle_members": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "Names of other registry plugins this plugin bundles together (a meta-plugin). A non-empty value marks this entry as a bundle: its displayed skill count is derived by summing its members' counts, and it is excluded from registry-wide skill totals so members (also top-level entries) are counted once. Distinct from 'depends_on', which only records a required peer plugin."
+        },
         "agents": {
           "type": "array",
           "items": {

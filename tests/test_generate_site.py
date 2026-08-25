@@ -159,3 +159,63 @@ class SiteContractRenderingTests(unittest.TestCase):
         self.assertEqual(lines[0], "````bash")
         self.assertEqual(lines[1:3], ["/example-skill ok", "```embedded"])
         self.assertEqual(lines[3], "````")
+
+
+class SkillCountTests(unittest.TestCase):
+    def _registry(self):
+        return {
+            "plugins": [
+                {"name": "bundle", "bundle_members": ["leaf-a", "leaf-b"]},
+                {"name": "leaf-a", "skill_count": 10},
+                {"name": "leaf-b", "skill_count": 5},
+                {"name": "listed", "skills": [{"name": "x"}, {"name": "y"}]},
+            ]
+        }
+
+    def test_get_skill_count_leaf_uses_skill_count_or_listed(self):
+        by_name = generate_site.build_plugin_index(self._registry())
+        self.assertEqual(10, generate_site.get_skill_count(by_name["leaf-a"], by_name))
+        self.assertEqual(2, generate_site.get_skill_count(by_name["listed"], by_name))
+
+    def test_get_skill_count_bundle_aggregates_members(self):
+        by_name = generate_site.build_plugin_index(self._registry())
+        self.assertEqual(15, generate_site.get_skill_count(by_name["bundle"], by_name))
+
+    def test_total_skill_count_excludes_bundles(self):
+        # 10 (leaf-a) + 5 (leaf-b) + 2 (listed) = 17; the bundle's 15 is NOT added.
+        self.assertEqual(17, generate_site.total_skill_count(self._registry()))
+
+    def test_get_skill_count_survives_member_cycle(self):
+        # A malformed mutual cycle must not recurse forever (check_bundles
+        # rejects it separately); get_skill_count returns 0 for the cycle.
+        registry = {"plugins": [
+            {"name": "a", "bundle_members": ["b"]},
+            {"name": "b", "bundle_members": ["a"]},
+        ]}
+        by_name = generate_site.build_plugin_index(registry)
+        self.assertEqual(0, generate_site.get_skill_count(by_name["a"], by_name))
+
+    def test_get_skill_count_handles_diamond_without_dropping_members(self):
+        # A bundles B and C; both bundle the same leaf D. The per-path visited
+        # set must not treat the second D as a cycle.
+        registry = {"plugins": [
+            {"name": "a", "bundle_members": ["b", "c"]},
+            {"name": "b", "bundle_members": ["d"]},
+            {"name": "c", "bundle_members": ["d"]},
+            {"name": "d", "skill_count": 4},
+        ]}
+        by_name = generate_site.build_plugin_index(registry)
+        self.assertEqual(8, generate_site.get_skill_count(by_name["a"], by_name))
+
+    def test_plugin_page_renders_includes_for_bundle(self):
+        plugin = {
+            "name": "bundle", "description": "A bundle plugin", "version": "0.1.0",
+            "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+            "bundle_members": ["leaf-a", "leaf-b"],
+        }
+        registry = {"name": "opendatahub-skills", "plugins": [plugin], "categories": {}}
+        page = generate_site.generate_plugin_page(
+            plugin, registry, enrichment=None, plugin_dir=None)
+        self.assertIn("## Includes", page)
+        self.assertIn("[`leaf-a`](../leaf-a/index.md)", page)
+        self.assertIn("[`leaf-b`](../leaf-b/index.md)", page)

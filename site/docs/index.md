@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-29 plugins | 124 skills | 7 categories
+29 plugins | 149 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -192,7 +192,7 @@ hide:
 
     Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Install...
 
-    **0 skills** - Development Tools - v0.1.0
+    **25 skills** - Development Tools - v0.1.0
 
 -   **[pf-react](plugins/pf-react/index.md)**
 
@@ -200,7 +200,7 @@ hide:
 
     React component development -- coding standards, testing, and structure
 
-    **0 skills** - Development Tools - v0.1.0
+    **10 skills** - Development Tools - v0.1.0
 
 -   **[pf-design-guide](plugins/pf-design-guide/index.md)**
 
@@ -208,7 +208,7 @@ hide:
 
     Design guide -- component selection, interaction patterns, AI experience patterns
 
-    **0 skills** - Development Tools - v0.1.0
+    **2 skills** - Development Tools - v0.1.0
 
 -   **[pf-design-audit](plugins/pf-design-audit/index.md)**
 
@@ -216,7 +216,7 @@ hide:
 
     Design audit -- validate existing code and designs against PatternFly standards
 
-    **0 skills** - Development Tools - v0.1.0
+    **6 skills** - Development Tools - v0.1.0
 
 -   **[pf-a11y](plugins/pf-a11y/index.md)**
 
@@ -224,7 +224,7 @@ hide:
 
     Accessibility auditing, reporting, and documentation
 
-    **0 skills** - Development Tools - v0.1.0
+    **2 skills** - Development Tools - v0.1.0
 
 -   **[pf-migration](plugins/pf-migration/index.md)**
 
@@ -232,7 +232,7 @@ hide:
 
     PF version migration -- breaking change detection, class scanning, upgrade planning
 
-    **0 skills** - Development Tools - v0.1.0
+    **3 skills** - Development Tools - v0.1.0
 
 -   **[pf-code-review](plugins/pf-code-review/index.md)**
 
@@ -240,7 +240,7 @@ hide:
 
     Code review and quality -- adversarial review, security patterns
 
-    **0 skills** - Development Tools - v0.1.0
+    **2 skills** - Development Tools - v0.1.0
 
 -   **[pf-mcp](plugins/pf-mcp/index.md)**
 

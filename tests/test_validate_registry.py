@@ -108,6 +108,21 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
+    def test_schema_accepts_skill_count_and_bundle_members(self):
+        registry = build_registry()
+        registry["plugins"][0]["skill_count"] = 7
+        registry["plugins"].append({
+            "name": "bundle-plugin",
+            "description": "A bundle",
+            "version": "1.0.0",
+            "source": {"type": "github", "repo": "example-org/bundle"},
+            "bundle_members": ["example-plugin"],
+        })
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertEqual([], errors)
+
     def test_schema_rejects_unknown_function_value(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
@@ -777,6 +792,89 @@ class SkillNameDriftTests(unittest.TestCase):
             self.assertIsNone(
                 self.validate_registry.diff_touched_plugins({"plugins": []}, "origin/nope")
             )
+
+
+class BundleCheckTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.validate_registry = get_validate_registry_module()
+
+    def _registry(self, bundle_overrides=None):
+        bundle = {
+            "name": "bundle",
+            "description": "d",
+            "version": "1.0.0",
+            "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "a"},
+            "bundle_members": ["leaf"],
+        }
+        if bundle_overrides:
+            bundle.update(bundle_overrides)
+        return {
+            "name": "r",
+            "owner": {"name": "o"},
+            "plugins": [
+                bundle,
+                {
+                    "name": "leaf",
+                    "description": "d",
+                    "version": "1.0.0",
+                    "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
+                    "skill_count": 3,
+                },
+            ],
+        }
+
+    def test_valid_bundle_passes(self):
+        self.assertEqual([], self.validate_registry.check_bundles(self._registry()))
+
+    def test_unknown_member_errors(self):
+        errors = self.validate_registry.check_bundles(
+            self._registry({"bundle_members": ["leaf", "ghost"]}))
+        self.assertEqual(1, len(errors))
+        self.assertIn("ghost", errors[0])
+
+    def test_bundle_with_own_skill_count_errors(self):
+        errors = self.validate_registry.check_bundles(
+            self._registry({"skill_count": 5}))
+        self.assertTrue(any("skill_count" in e for e in errors))
+
+    def test_bundle_with_own_skills_errors(self):
+        errors = self.validate_registry.check_bundles(
+            self._registry({"skills": [{"name": "s", "description": "d"}]}))
+        self.assertTrue(any("skills" in e for e in errors))
+
+    def test_bundle_listing_itself_errors(self):
+        errors = self.validate_registry.check_bundles(
+            self._registry({"bundle_members": ["bundle"]}))
+        self.assertTrue(any("itself" in e for e in errors))
+
+    def test_member_cycle_errors(self):
+        registry = {
+            "name": "r", "owner": {"name": "o"},
+            "plugins": [
+                {"name": "a", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "a"},
+                 "bundle_members": ["b"]},
+                {"name": "b", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
+                 "bundle_members": ["a"]},
+            ],
+        }
+        errors = self.validate_registry.check_bundles(registry)
+        self.assertTrue(any("cycle" in e for e in errors))
+
+    def test_leaf_with_skill_count_and_skills_errors(self):
+        registry = {
+            "name": "r", "owner": {"name": "o"},
+            "plugins": [
+                {"name": "leaf", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
+                 "skill_count": 5,
+                 "skills": [{"name": "s", "description": "d"}]},
+            ],
+        }
+        errors = self.validate_registry.check_bundles(registry)
+        self.assertTrue(any("skill_count" in e and "skills" in e for e in errors))
 
 
 if __name__ == "__main__":

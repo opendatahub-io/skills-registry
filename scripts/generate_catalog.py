@@ -205,6 +205,12 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         lines.append(f"**Requires:** {', '.join(f'`{d}`' for d in deps)}")
         lines.append("")
 
+    # Bundle members (meta-plugin): the sub-plugins installed together
+    members = plugin.get("bundle_members", [])
+    if members:
+        lines.append(f"**Includes:** {', '.join(f'`{m}`' for m in members)}")
+        lines.append("")
+
     # Metadata line
     meta_parts = []
     if version:

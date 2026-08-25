@@ -38,13 +38,13 @@ title: Plugins
 |--------|----------|--------|---------|
 | [odh-ai-helpers](odh-ai-helpers/index.md) | Development Tools | 19 | v0.1.0 |
 | [agent-eval-harness](agent-eval-harness/index.md) | Evaluation & Testing | 10 | v1.30.0 |
-| [patternfly](patternfly/index.md) | Development Tools | 0 | v0.1.0 |
-| [pf-react](pf-react/index.md) | Development Tools | 0 | v0.1.0 |
-| [pf-design-guide](pf-design-guide/index.md) | Development Tools | 0 | v0.1.0 |
-| [pf-design-audit](pf-design-audit/index.md) | Development Tools | 0 | v0.1.0 |
-| [pf-a11y](pf-a11y/index.md) | Development Tools | 0 | v0.1.0 |
-| [pf-migration](pf-migration/index.md) | Development Tools | 0 | v0.1.0 |
-| [pf-code-review](pf-code-review/index.md) | Development Tools | 0 | v0.1.0 |
+| [patternfly](patternfly/index.md) | Development Tools | 25 | v0.1.0 |
+| [pf-react](pf-react/index.md) | Development Tools | 10 | v0.1.0 |
+| [pf-design-guide](pf-design-guide/index.md) | Development Tools | 2 | v0.1.0 |
+| [pf-design-audit](pf-design-audit/index.md) | Development Tools | 6 | v0.1.0 |
+| [pf-a11y](pf-a11y/index.md) | Development Tools | 2 | v0.1.0 |
+| [pf-migration](pf-migration/index.md) | Development Tools | 3 | v0.1.0 |
+| [pf-code-review](pf-code-review/index.md) | Development Tools | 2 | v0.1.0 |
 | [pf-mcp](pf-mcp/index.md) | Development Tools | 0 | v0.1.0 |
 
 ## Teams
