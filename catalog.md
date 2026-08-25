@@ -478,8 +478,8 @@ Tags: gitlab, aws, slack, jira, konflux, mapt, devops, ci-cd, cloud, provisionin
 | `/aws-log-analyzer` | Troubleshoot and analyze AWS CloudWatch Logs for debugging and monitoring | `analyze` | `task_success` (`judge`) |
 | `/slack-utilities` | Search messages, post updates, and interact with Slack workspaces | `retrieve`, `execute` | `task_success` (`judge`) |
 | `/gitlab-branch-manager` | Create and protect GitLab branches with configurable protection rules | `execute` | `task_success` (`judge`) |
-| `/jira-utilities` | Manage Jira issues with JQL search, create/update issues, link issues, and sprint info | `execute` | `task_success` (`judge`) |
-| `/jira-cve-tracker` | CVE deduplication and release-date clustering for Jira issues | `analyze` | `task_success` (`judge`) |
+| `/jira-utilities` | Manage Jira issues with JQL search, create/update issues, link issues, and sprint info | `retrieve`, `execute` | `task_success` (`judge`) |
+| `/jira-cve-tracker` | CVE deduplication and release-date clustering for Jira issues | `retrieve`, `analyze` | `task_success` (`judge`) |
 | `/jira-release-setup` | Set up Jira release versions and manage release workflows | `execute` | `task_success` (`judge`) |
 | `/jira-sprint-manager` | Create sprints and assign issues to sprints on Jira boards | `execute` | `task_success` (`judge`) |
 | `/jira-gap-audit` | Audit Jira releases for gaps in issue coverage | `analyze` | `task_success` (`judge`) |

@@ -2526,10 +2526,10 @@ plugins:
               - Never modify pipeline configuration or retry jobs without user confirmation
             fixed_context:
               tools: [Bash]
-              cli: [glab]
+              cli: [glab, jq]
               knowledge_inputs:
                 - kind: tool_output
-                  privacy: task_private
+                  privacy: organization_private
           source_assertions:
             skill_path: productization-plugin/skills/gitlab-job-analyzer/SKILL.md
       - name: aws-log-analyzer
@@ -2554,10 +2554,10 @@ plugins:
               - Never modify or delete log data
             fixed_context:
               tools: [Bash]
-              cli: [aws]
+              cli: [aws, jq]
               knowledge_inputs:
                 - kind: tool_output
-                  privacy: task_private
+                  privacy: organization_private
           source_assertions:
             skill_path: productization-plugin/skills/aws-log-analyzer/SKILL.md
       - name: slack-utilities
@@ -2582,7 +2582,7 @@ plugins:
               - Use Slack API tokens from environment, never hardcode credentials
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [python3, jq]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private
@@ -2610,7 +2610,7 @@ plugins:
               - Never delete branches without explicit user confirmation
             fixed_context:
               tools: [Bash]
-              cli: [glab]
+              cli: [glab, jq]
               knowledge_inputs:
                 - kind: task_input
                   privacy: task_private
@@ -2621,7 +2621,7 @@ plugins:
         user-invocable: true
         contract:
           version: canonical-skill-v1
-          functions: [execute]
+          functions: [retrieve, execute]
           metrics:
             - id: task_success
               measure: judge
@@ -2635,10 +2635,10 @@ plugins:
           invariants:
             must_preserve:
               - Never delete issues without explicit user confirmation
-              - Use Jira MCP tools or REST API, never modify Jira data without confirmation
+              - Use the acli CLI (or Jira REST API) for all interactions; never modify Jira data without confirmation
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [acli, jq, curl]
               knowledge_inputs:
                 - kind: task_input
                   privacy: task_private
@@ -2651,7 +2651,7 @@ plugins:
         user-invocable: true
         contract:
           version: canonical-skill-v1
-          functions: [analyze]
+          functions: [retrieve, analyze]
           metrics:
             - id: task_success
               measure: judge
@@ -2668,7 +2668,7 @@ plugins:
               - Preserve original CVE identifiers and severity ratings
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [acli, jq, curl]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private
@@ -2696,7 +2696,7 @@ plugins:
               - Never skip required epics or tasks from the template
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [acli, jq]
               knowledge_inputs:
                 - kind: repository_content
                   privacy: public
@@ -2726,7 +2726,7 @@ plugins:
               - Preserve existing sprint assignments unless explicitly asked to change
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [acli, jq]
               knowledge_inputs:
                 - kind: task_input
                   privacy: task_private
@@ -2754,7 +2754,7 @@ plugins:
               - Use the canonical release template as the source of truth
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [acli, jq]
               knowledge_inputs:
                 - kind: repository_content
                   privacy: public
@@ -2784,7 +2784,7 @@ plugins:
               - Always use mapt CLI, never call cloud provider APIs directly
             fixed_context:
               tools: [Bash]
-              cli: [mapt]
+              cli: [mapt, jq]
               knowledge_inputs:
                 - kind: task_input
                   privacy: task_private
@@ -2812,10 +2812,10 @@ plugins:
               - Never modify or rerun pipelines without user confirmation
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [kubectl, jq]
               knowledge_inputs:
                 - kind: tool_output
-                  privacy: task_private
+                  privacy: organization_private
           source_assertions:
             skill_path: productization-plugin/skills/konflux-its-analyzer/SKILL.md
       - name: gitlab-code-review
@@ -2840,10 +2840,10 @@ plugins:
               - Never approve or merge MRs without explicit user confirmation
             fixed_context:
               tools: [Bash]
-              cli: [glab]
+              cli: [glab, git]
               knowledge_inputs:
                 - kind: tool_output
-                  privacy: task_private
+                  privacy: organization_private
           source_assertions:
             skill_path: productization-plugin/skills/gitlab-code-review/SKILL.md
       - name: slack-webhook
@@ -2868,7 +2868,7 @@ plugins:
               - Use webhook URLs from environment or user input, never hardcode
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [curl, jq]
               knowledge_inputs:
                 - kind: task_input
                   privacy: task_private
@@ -2896,7 +2896,7 @@ plugins:
               - Use the user's configured sources for activity data
             fixed_context:
               tools: [Bash]
-              cli: [git, curl]
+              cli: [git, acli, jq]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private
@@ -2924,7 +2924,7 @@ plugins:
               - Use Google Workspace API via authenticated scripts only
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [gws, jq]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private
@@ -2952,7 +2952,7 @@ plugins:
               - Use Google Workspace API via authenticated scripts only
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [gws, jq]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private
@@ -2980,7 +2980,7 @@ plugins:
               - Use Google Workspace API via authenticated scripts only
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [gws, jq]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private
@@ -3008,7 +3008,7 @@ plugins:
               - Use Google Workspace API via authenticated scripts only
             fixed_context:
               tools: [Bash]
-              cli: [curl]
+              cli: [gws, jq, python3]
               knowledge_inputs:
                 - kind: tool_output
                   privacy: organization_private

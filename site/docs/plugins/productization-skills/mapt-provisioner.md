@@ -58,7 +58,7 @@ Provision and manage cloud VMs on AWS and Azure using mapt
       <span class="skill-contract__field">Fixed Context</span>
       <div class="skill-contract__code">
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Bash</span></div>
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">mapt</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">mapt, jq</span></div>
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">task_input<span class="skill-contract__privacy">task_private</span></span></div>
       </div>
     </div>

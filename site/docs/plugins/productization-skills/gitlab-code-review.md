@@ -58,8 +58,8 @@ Structured GitLab merge request code review
       <span class="skill-contract__field">Fixed Context</span>
       <div class="skill-contract__code">
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Bash</span></div>
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">glab</span></div>
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">tool_output<span class="skill-contract__privacy">task_private</span></span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">glab, git</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">tool_output<span class="skill-contract__privacy">organization_private</span></span></div>
       </div>
     </div>
   </section>

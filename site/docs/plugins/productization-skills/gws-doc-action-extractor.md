@@ -59,7 +59,7 @@ Extract action items from Google Docs
       <span class="skill-contract__field">Fixed Context</span>
       <div class="skill-contract__code">
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Bash</span></div>
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">curl</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">gws, jq</span></div>
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">tool_output<span class="skill-contract__privacy">organization_private</span></span></div>
       </div>
     </div>

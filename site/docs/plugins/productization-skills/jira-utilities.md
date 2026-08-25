@@ -24,6 +24,7 @@ Manage Jira issues with JQL search, create/update issues, link issues, and sprin
     <div class="skill-contract__row">
       <span class="skill-contract__field">Functions</span>
       <div class="skill-contract__inline">
+        <span class="skill-contract__chip skill-contract__chip--function">retrieve</span>
         <span class="skill-contract__chip skill-contract__chip--function">execute</span>
       </div>
     </div>
@@ -51,14 +52,14 @@ Manage Jira issues with JQL search, create/update issues, link issues, and sprin
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
         <li>Never delete issues without explicit user confirmation</li>
-        <li>Use Jira MCP tools or REST API, never modify Jira data without confirmation</li>
+        <li>Use the acli CLI (or Jira REST API) for all interactions; never modify Jira data without confirmation</li>
       </ul>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Fixed Context</span>
       <div class="skill-contract__code">
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Bash</span></div>
-      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">curl</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">acli, jq, curl</span></div>
       <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">task_input<span class="skill-contract__privacy">task_private</span>, tool_output<span class="skill-contract__privacy">organization_private</span></span></div>
       </div>
     </div>
