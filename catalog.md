@@ -284,39 +284,6 @@ Tags: pipeline, ci-cd, failure-analysis, grouping, root-cause, gitlab
 /plugin install pipeline-skills@opendatahub-skills
 ```
 
-### productization-skills
-
-Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.
-
-v0.8.1 | Apache-2.0 | [opendatahub-io/productization-skills](https://github.com/opendatahub-io/productization-skills)
-
-Tags: gitlab, aws, slack, jira, konflux, mapt, devops, ci-cd, cloud, provisioning
-
-| Skill | Description | Functions | Metrics |
-|-------|-------------|-----------|---------|
-| `/gitlab-job-analyzer` | Analyze GitLab CI/CD job failures with structured scripts and error pattern recognition | `analyze` | `task_success` (`judge`) |
-| `/aws-log-analyzer` | Troubleshoot and analyze AWS CloudWatch Logs for debugging and monitoring | `analyze` | `task_success` (`judge`) |
-| `/slack-utilities` | Search messages, post updates, and interact with Slack workspaces | `retrieve`, `execute` | `task_success` (`judge`) |
-| `/gitlab-branch-manager` | Create and protect GitLab branches with configurable protection rules | `execute` | `task_success` (`judge`) |
-| `/jira-utilities` | Manage Jira issues with JQL search, create/update issues, link issues, and sprint info | `execute` | `task_success` (`judge`) |
-| `/jira-cve-tracker` | CVE deduplication and release-date clustering for Jira issues | `analyze` | `task_success` (`judge`) |
-| `/jira-release-setup` | Set up Jira release versions and manage release workflows | `execute` | `task_success` (`judge`) |
-| `/jira-sprint-manager` | Create sprints and assign issues to sprints on Jira boards | `execute` | `task_success` (`judge`) |
-| `/jira-gap-audit` | Audit Jira releases for gaps in issue coverage | `analyze` | `task_success` (`judge`) |
-| `/mapt-provisioner` | Provision and manage cloud VMs on AWS and Azure using mapt | `execute` | `task_success` (`judge`) |
-| `/konflux-its-analyzer` | Analyze Konflux integration test scenario failures | `analyze` | `task_success` (`judge`) |
-| `/gitlab-code-review` | Structured GitLab merge request code review | `review` | `task_success` (`judge`) |
-| `/slack-webhook` | Post messages to Slack channels via incoming webhooks | `execute` | `task_success` (`judge`) |
-| `/weekly-status` | Generate weekly status reports from project activity | `generate` | `task_success` (`judge`) |
-| `/gws-calendar-reader` | Read Google Calendar events and check free/busy status | `retrieve` | `task_success` (`judge`) |
-| `/gws-doc-action-extractor` | Extract action items from Google Docs | `retrieve`, `analyze` | `task_success` (`judge`) |
-| `/gws-drive-reader` | List, search, and read files from Google Drive | `retrieve` | `task_success` (`judge`) |
-| `/gws-slides-analyzer` | Read, search, and create Google Slides presentations | `retrieve`, `generate` | `task_success` (`judge`) |
-
-```bash
-/plugin install productization-skills@opendatahub-skills
-```
-
 ## Security Review
 
 Security analysis, threat modeling, and compliance review
@@ -491,4 +458,41 @@ Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibi
 
 ```bash
 /plugin install spike-executor@opendatahub-skills
+```
+
+## Team-Specific
+
+Plugins hardcoded to a specific team's setup. Not generally reusable by other teams without modification.
+
+### productization-skills
+
+Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.
+
+v0.8.1 | Team-Specific | Apache-2.0 | [opendatahub-io/productization-skills](https://github.com/opendatahub-io/productization-skills)
+
+Tags: gitlab, aws, slack, jira, konflux, mapt, devops, ci-cd, cloud, provisioning, google-workspace, reporting
+
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/gitlab-job-analyzer` | Analyze GitLab CI/CD job failures with structured scripts and error pattern recognition | `analyze` | `task_success` (`judge`) |
+| `/aws-log-analyzer` | Troubleshoot and analyze AWS CloudWatch Logs for debugging and monitoring | `analyze` | `task_success` (`judge`) |
+| `/slack-utilities` | Search messages, post updates, and interact with Slack workspaces | `retrieve`, `execute` | `task_success` (`judge`) |
+| `/gitlab-branch-manager` | Create and protect GitLab branches with configurable protection rules | `execute` | `task_success` (`judge`) |
+| `/jira-utilities` | Manage Jira issues with JQL search, create/update issues, link issues, and sprint info | `execute` | `task_success` (`judge`) |
+| `/jira-cve-tracker` | CVE deduplication and release-date clustering for Jira issues | `analyze` | `task_success` (`judge`) |
+| `/jira-release-setup` | Set up Jira release versions and manage release workflows | `execute` | `task_success` (`judge`) |
+| `/jira-sprint-manager` | Create sprints and assign issues to sprints on Jira boards | `execute` | `task_success` (`judge`) |
+| `/jira-gap-audit` | Audit Jira releases for gaps in issue coverage | `analyze` | `task_success` (`judge`) |
+| `/mapt-provisioner` | Provision and manage cloud VMs on AWS and Azure using mapt | `execute` | `task_success` (`judge`) |
+| `/konflux-its-analyzer` | Analyze Konflux integration test scenario failures | `analyze` | `task_success` (`judge`) |
+| `/gitlab-code-review` | Structured GitLab merge request code review | `review` | `task_success` (`judge`) |
+| `/slack-webhook` | Post messages to Slack channels via incoming webhooks | `execute` | `task_success` (`judge`) |
+| `/weekly-status` | Generate weekly status reports from project activity | `generate` | `task_success` (`judge`) |
+| `/gws-calendar-reader` | Read Google Calendar events and check free/busy status | `retrieve` | `task_success` (`judge`) |
+| `/gws-doc-action-extractor` | Extract action items from Google Docs | `retrieve`, `analyze` | `task_success` (`judge`) |
+| `/gws-drive-reader` | List, search, and read files from Google Drive | `retrieve` | `task_success` (`judge`) |
+| `/gws-slides-analyzer` | Read, search, and create Google Slides presentations | `retrieve`, `generate` | `task_success` (`judge`) |
+
+```bash
+/plugin install productization-skills@opendatahub-skills
 ```

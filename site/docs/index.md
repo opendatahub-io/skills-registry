@@ -164,14 +164,6 @@ hide:
 
     **1 skills** - Documentation - v0.3.15
 
--   **[productization-skills](plugins/productization-skills/index.md)**
-
-    ---
-
-    Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for Git...
-
-    **18 skills** - DevOps & CI/CD - v0.8.1
-
 </div>
 
 ## Generic
@@ -196,12 +188,26 @@ hide:
 
 </div>
 
+## Teams
+
+<div class="grid cards" markdown>
+
+-   **[productization-skills](plugins/productization-skills/index.md)**
+
+    ---
+
+    Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for Git...
+
+    **18 skills** - DevOps & CI/CD - v0.8.1
+
+</div>
+
 ## Categories
 
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (5 plugins)
 - [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
-- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (5 plugins)
+- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (4 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (4 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)

@@ -2489,7 +2489,8 @@ plugins:
       provisioning via mapt, and Google Workspace integration.
     version: "0.8.1"
     category: devops
-    tags: [gitlab, aws, slack, jira, konflux, mapt, devops, ci-cd, cloud, provisioning]
+    scope: team
+    tags: [gitlab, aws, slack, jira, konflux, mapt, devops, ci-cd, cloud, provisioning, google-workspace, reporting]
     author:
       name: opendatahub-io
     license: Apache-2.0

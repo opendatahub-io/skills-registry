@@ -31,7 +31,6 @@ title: Plugins
 | [code-review-skills](code-review-skills/index.md) | Code Quality | 1 | v0.1.0 |
 | [spike-executor](spike-executor/index.md) | Product Planning | 1 | v0.2.0 |
 | [docs-skills](docs-skills/index.md) | Documentation | 1 | v0.3.15 |
-| [productization-skills](productization-skills/index.md) | DevOps & CI/CD | 18 | v0.8.1 |
 
 ## Generic
 
@@ -39,3 +38,9 @@ title: Plugins
 |--------|----------|--------|---------|
 | [odh-ai-helpers](odh-ai-helpers/index.md) | Development Tools | 19 | v0.1.0 |
 | [agent-eval-harness](agent-eval-harness/index.md) | Evaluation & Testing | 10 | v1.30.0 |
+
+## Teams
+
+| Plugin | Category | Skills | Version |
+|--------|----------|--------|---------|
+| [productization-skills](productization-skills/index.md) | DevOps & CI/CD | 18 | v0.8.1 |

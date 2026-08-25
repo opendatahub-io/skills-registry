@@ -14,9 +14,10 @@ Claude Code plugin with specialized skills for DevOps and cloud-native developme
     - **Version**: 0.8.1
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
+    - **Scope**: Team-specific
     - **Category**: [DevOps & CI/CD](../../categories/devops.md)
     - **Repository**: [opendatahub-io/productization-skills](https://github.com/opendatahub-io/productization-skills)
-    - **Tags**: <span class="tag-pill">gitlab</span> <span class="tag-pill">aws</span> <span class="tag-pill">slack</span> <span class="tag-pill">jira</span> <span class="tag-pill">konflux</span> <span class="tag-pill">mapt</span> <span class="tag-pill">devops</span> <span class="tag-pill">ci-cd</span> <span class="tag-pill">cloud</span> <span class="tag-pill">provisioning</span>
+    - **Tags**: <span class="tag-pill">gitlab</span> <span class="tag-pill">aws</span> <span class="tag-pill">slack</span> <span class="tag-pill">jira</span> <span class="tag-pill">konflux</span> <span class="tag-pill">mapt</span> <span class="tag-pill">devops</span> <span class="tag-pill">ci-cd</span> <span class="tag-pill">cloud</span> <span class="tag-pill">provisioning</span> <span class="tag-pill">google-workspace</span> <span class="tag-pill">reporting</span>
 
 ## Skills
 

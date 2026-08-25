@@ -562,7 +562,9 @@
         "devops",
         "ci-cd",
         "cloud",
-        "provisioning"
+        "provisioning",
+        "google-workspace",
+        "reporting"
       ],
       "license": "Apache-2.0",
       "name": "productization-skills",
