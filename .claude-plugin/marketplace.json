@@ -567,12 +567,16 @@
       "license": "Apache-2.0",
       "name": "productization-skills",
       "repository": "https://github.com/opendatahub-io/productization-skills",
+      "skills": [
+        "./productization-plugin/skills"
+      ],
       "source": {
         "ref": "v0.8.1",
         "repo": "opendatahub-io/productization-skills",
         "sha": "86f0ce3f1697bcbe2b849b2770d235deddb16abe",
         "source": "github"
       },
+      "strict": false,
       "version": "0.8.1"
     }
   ]

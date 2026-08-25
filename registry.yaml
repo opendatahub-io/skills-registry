@@ -2498,6 +2498,8 @@ plugins:
       repo: opendatahub-io/productization-skills
       ref: v0.8.1
       sha: 86f0ce3f1697bcbe2b849b2770d235deddb16abe
+    strict: false
+    skills_dir: productization-plugin/skills
     homepage: https://github.com/opendatahub-io/productization-skills
     repository: https://github.com/opendatahub-io/productization-skills
     skills:
