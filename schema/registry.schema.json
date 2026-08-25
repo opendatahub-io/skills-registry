@@ -348,11 +348,6 @@
             "$ref": "#/$defs/skill"
           }
         },
-        "skill_count": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Cached skill count for plugins that delegate discovery to plugin.json (e.g. meta-plugins). Auto-synced by check_versions.py."
-        },
         "agents": {
           "type": "array",
           "items": {

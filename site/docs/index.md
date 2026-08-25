@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-22 plugins | 146 skills | 7 categories
+29 plugins | 124 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -192,7 +192,63 @@ hide:
 
     Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Install...
 
-    **22 skills** - Development Tools - v0.1.0
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-react](plugins/pf-react/index.md)**
+
+    ---
+
+    React component development -- coding standards, testing, and structure
+
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-design-guide](plugins/pf-design-guide/index.md)**
+
+    ---
+
+    Design guide -- component selection, interaction patterns, AI experience patterns
+
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-design-audit](plugins/pf-design-audit/index.md)**
+
+    ---
+
+    Design audit -- validate existing code and designs against PatternFly standards
+
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-a11y](plugins/pf-a11y/index.md)**
+
+    ---
+
+    Accessibility auditing, reporting, and documentation
+
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-migration](plugins/pf-migration/index.md)**
+
+    ---
+
+    PF version migration -- breaking change detection, class scanning, upgrade planning
+
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-code-review](plugins/pf-code-review/index.md)**
+
+    ---
+
+    Code review and quality -- adversarial review, security patterns
+
+    **0 skills** - Development Tools - v0.1.0
+
+-   **[pf-mcp](plugins/pf-mcp/index.md)**
+
+    ---
+
+    PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Conte...
+
+    **0 skills** - Development Tools - v0.1.0
 
 </div>
 
@@ -217,5 +273,5 @@ hide:
 - [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (4 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
-- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (5 plugins)
+- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (12 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)

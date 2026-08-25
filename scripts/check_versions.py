@@ -19,7 +19,6 @@ import sys
 import tempfile
 from pathlib import Path
 from urllib.parse import quote
-from urllib.request import Request, urlopen
 
 import yaml
 
@@ -92,62 +91,6 @@ def fetch_remote_version_via_clone(clone_url: str, ref: str = "main") -> str | N
             return None
 
 
-def _github_api_get(endpoint: str) -> dict | list | None:
-    """Fetch a GitHub REST API endpoint (unauthenticated, public repos only)."""
-    url = f"https://api.github.com/{endpoint}"
-    req = Request(url, headers={"Accept": "application/vnd.github+json",
-                                "User-Agent": "opendatahub-skills-registry"})
-    try:
-        with urlopen(req, timeout=30) as resp:  # noqa: S310
-            return json.loads(resp.read())
-    except (OSError, ValueError):
-        return None
-
-
-def fetch_remote_skill_count(repo: str, ref: str, path: str) -> int | None:
-    """Count SKILL.md files under a meta-plugin's dependencies via GitHub API."""
-    api_path = quote(f"{path}/.claude-plugin/plugin.json", safe="")
-    data = _github_api_get(f"repos/{repo}/contents/{api_path}?ref={quote(ref, safe='')}")
-    if not isinstance(data, dict) or "content" not in data:
-        return None
-    try:
-        deps = set(json.loads(base64.b64decode(data["content"])).get("dependencies", []))
-    except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
-        return None
-    if not deps:
-        return None
-    tree_data = _github_api_get(f"repos/{repo}/git/trees/{quote(ref, safe='')}?recursive=1")
-    if not isinstance(tree_data, dict) or "tree" not in tree_data:
-        return None
-    prefix = f"{path}/"
-    return sum(
-        1 for entry in tree_data["tree"]
-        if entry.get("path", "").endswith("/SKILL.md")
-        and entry["path"].startswith(prefix)
-        and entry["path"][len(prefix):].split("/")[0] in deps
-    )
-
-
-def update_skill_count_in_file(path: str, updates: list[tuple[dict, int]]):
-    """Insert or update skill_count in-place without reformatting the file."""
-    with open(path) as f:
-        content = f.read()
-    for plugin, new_count in updates:
-        name = re.escape(plugin["name"])
-        old_count = plugin.get("skill_count")
-        if old_count is not None:
-            pattern = rf'(name:\s*{name}\b.*?skill_count:\s*){re.escape(str(old_count))}'
-            content = re.sub(pattern, rf'\g<1>{new_count}', content, count=1, flags=re.DOTALL)
-        else:
-            pattern = rf'(name:\s*{name}\b.*?)(version:\s*"[^"]*")'
-            content = re.sub(
-                pattern, rf'\1\2\n    skill_count: {new_count}',
-                content, count=1, flags=re.DOTALL,
-            )
-    with open(path, "w") as f:
-        f.write(content)
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -195,45 +138,17 @@ def main():
         else:
             print(f"  OK: {name} {current}")
 
-    # --- Skill count sync for meta-plugins (GitHub + source.path + strict) ---
-    skill_updates = []
-    for plugin in registry.get("plugins", []):
-        source = plugin.get("source") or {}
-        if source.get("type") != "github" or not source.get("path"):
-            continue
-        if plugin.get("strict", True) is False:
-            continue
-        name = plugin.get("name", "<unknown>")
-        repo = source.get("repo")
-        if not repo:
-            continue
-        remote_count = fetch_remote_skill_count(repo, source.get("ref", "main"), source["path"])
-        if remote_count is None:
-            print(f"  SKIP: {name} skill_count (could not fetch)")
-            continue
-        current_count = plugin.get("skill_count")
-        if current_count != remote_count:
-            print(f"  UPDATE: {name} skill_count {current_count} -> {remote_count}")
-            skill_updates.append((plugin, remote_count))
-        else:
-            print(f"  OK: {name} skill_count {current_count}")
-
-    if not updates and not skill_updates:
+    if not updates:
         print("\nAll plugins up to date.")
         return
 
     if args.dry_run:
-        total = len(updates) + len(skill_updates)
-        print(f"\n{total} update(s) found (dry run, no changes made)")
+        print(f"\n{len(updates)} update(s) found (dry run, no changes made)")
         return
 
     # Apply updates (surgical text replacement to preserve formatting)
-    if updates:
-        update_version_in_file(args.registry, updates)
-        print(f"\nUpdated {len(updates)} version(s) in {args.registry}")
-    if skill_updates:
-        update_skill_count_in_file(args.registry, skill_updates)
-        print(f"Updated {len(skill_updates)} skill_count(s) in {args.registry}")
+    update_version_in_file(args.registry, updates)
+    print(f"\nUpdated {len(updates)} plugin(s) in {args.registry}")
 
     # Regenerate marketplace.json
     result = subprocess.run(

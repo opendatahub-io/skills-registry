@@ -3165,9 +3165,63 @@ Examples:
 
 ## patternfly
 
-Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
-**Repository**: https://github.com/rh-uxd/ai-helpers
+### Skills
+
+---
+
+## pf-react
+
+React component development -- coding standards, testing, and structure
+
+### Skills
+
+---
+
+## pf-design-guide
+
+Design guide -- component selection, interaction patterns, AI experience patterns
+
+### Skills
+
+---
+
+## pf-design-audit
+
+Design audit -- validate existing code and designs against PatternFly standards
+
+### Skills
+
+---
+
+## pf-a11y
+
+Accessibility auditing, reporting, and documentation
+
+### Skills
+
+---
+
+## pf-migration
+
+PF version migration -- breaking change detection, class scanning, upgrade planning
+
+### Skills
+
+---
+
+## pf-code-review
+
+Code review and quality -- adversarial review, security patterns
+
+### Skills
+
+---
+
+## pf-mcp
+
+PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
 
 ### Skills
 

@@ -670,10 +670,7 @@ def main() -> None:
     # Summary
     print()
     plugin_count = len(registry.get("plugins", []))
-    skill_count = sum(
-        p.get("skill_count", len(p.get("skills", [])))
-        for p in registry.get("plugins", [])
-    )
+    skill_count = sum(len(p.get("skills", [])) for p in registry.get("plugins", []))
     print(f"Registry: {plugin_count} plugin(s), {skill_count} skill(s)")
 
     if all_errors:

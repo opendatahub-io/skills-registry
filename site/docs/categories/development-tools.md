@@ -39,6 +39,48 @@ Developer productivity tools for Python packaging, CI/CD debugging, and workflow
 
 ### [patternfly](../plugins/patternfly/index.md)
 
-Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
-**22 skills** - v0.1.0
+**0 skills** - v0.1.0
+
+### [pf-react](../plugins/pf-react/index.md)
+
+React component development -- coding standards, testing, and structure
+
+**0 skills** - v0.1.0
+
+### [pf-design-guide](../plugins/pf-design-guide/index.md)
+
+Design guide -- component selection, interaction patterns, AI experience patterns
+
+**0 skills** - v0.1.0
+
+### [pf-design-audit](../plugins/pf-design-audit/index.md)
+
+Design audit -- validate existing code and designs against PatternFly standards
+
+**0 skills** - v0.1.0
+
+### [pf-a11y](../plugins/pf-a11y/index.md)
+
+Accessibility auditing, reporting, and documentation
+
+**0 skills** - v0.1.0
+
+### [pf-migration](../plugins/pf-migration/index.md)
+
+PF version migration -- breaking change detection, class scanning, upgrade planning
+
+**0 skills** - v0.1.0
+
+### [pf-code-review](../plugins/pf-code-review/index.md)
+
+Code review and quality -- adversarial review, security patterns
+
+**0 skills** - v0.1.0
+
+### [pf-mcp](../plugins/pf-mcp/index.md)
+
+PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
+
+**0 skills** - v0.1.0

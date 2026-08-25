@@ -12,6 +12,7 @@ Usage:
 import argparse
 import html
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -160,10 +161,6 @@ def build_category_plugins(registry: dict) -> dict[str, list]:
     return by_cat
 
 
-def get_skill_count(plugin):
-    return plugin.get("skill_count", len(plugin.get("skills", [])))
-
-
 SCOPE_BADGE = {"team": "Team-specific", "generic": "Generic"}
 VALID_SCOPES = {"sdlc", "generic", "team"}
 
@@ -191,7 +188,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
     lines.append(f"# {title}")
     lines.append("")
     lines.append(f"{len(plugins)} plugins | "
-                 f'{sum(get_skill_count(p) for p in plugins)} skills | '
+                 f'{sum(len(p.get("skills", [])) for p in plugins)} skills | '
                  f"{len([k for k, v in cat_plugins.items() if v])} categories")
     lines.append("")
     lines.append("[Getting Started](getting-started.md){ .md-button .md-button--primary }")
@@ -203,7 +200,7 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
         desc = plugin["description"].strip().split("\n")[0]
         if len(desc) > 120:
             desc = desc[:117] + "..."
-        skill_count = get_skill_count(plugin)
+        skill_count = len(plugin.get("skills", []))
         cat_key = plugin.get("category", "")
         cat_name = categories.get(cat_key, {}).get("name", cat_key)
         version = plugin.get("version", "")
@@ -265,7 +262,7 @@ def generate_plugins_index(registry: dict) -> str:
         name = plugin["name"]
         cat_key = plugin.get("category", "")
         cat_name = categories.get(cat_key, {}).get("name", cat_key)
-        skill_count = get_skill_count(plugin)
+        skill_count = len(plugin.get("skills", []))
         version = plugin.get("version", "")
         lines.append(f"| [{name}]({name}/index.md) | {cat_name} | {skill_count} | v{version} |")
 
@@ -878,7 +875,7 @@ def generate_category_page(cat_key: str, cat_meta: dict,
         for plugin in group:
             name = plugin["name"]
             desc = plugin["description"].strip()
-            skill_count = get_skill_count(plugin)
+            skill_count = len(plugin.get("skills", []))
             version = plugin.get("version", "")
             lines.append(f"### [{name}](../plugins/{name}/index.md)")
             lines.append("")
@@ -1124,7 +1121,7 @@ def main() -> None:
     generate_site(registry, output_dir)
 
     plugins = registry.get("plugins", [])
-    skills = sum(get_skill_count(p) for p in plugins)
+    skills = sum(len(p.get("skills", [])) for p in plugins)
     categories = len([k for k, v in build_category_plugins(registry).items() if v])
     print(f"Generated site: {len(plugins)} plugins, {skills} skills, "
           f"{categories} categories → {output_dir}/")

@@ -394,14 +394,98 @@ Tags: python-packaging, onboarding, fondue, investigation, security, license, te
 
 ### patternfly
 
-Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
-v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers](https://github.com/rh-uxd/ai-helpers)
+v0.1.0 | Generic | MIT
 
 Tags: patternfly, react, uxd, design, mcp, components, migration
 
 ```bash
 /plugin install patternfly@opendatahub-skills
+```
+
+### pf-react
+
+React component development -- coding standards, testing, and structure
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, react
+
+```bash
+/plugin install pf-react@opendatahub-skills
+```
+
+### pf-design-guide
+
+Design guide -- component selection, interaction patterns, AI experience patterns
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, design
+
+```bash
+/plugin install pf-design-guide@opendatahub-skills
+```
+
+### pf-design-audit
+
+Design audit -- validate existing code and designs against PatternFly standards
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, design, audit
+
+```bash
+/plugin install pf-design-audit@opendatahub-skills
+```
+
+### pf-a11y
+
+Accessibility auditing, reporting, and documentation
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, accessibility, a11y
+
+```bash
+/plugin install pf-a11y@opendatahub-skills
+```
+
+### pf-migration
+
+PF version migration -- breaking change detection, class scanning, upgrade planning
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, migration
+
+```bash
+/plugin install pf-migration@opendatahub-skills
+```
+
+### pf-code-review
+
+Code review and quality -- adversarial review, security patterns
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, code-review
+
+```bash
+/plugin install pf-code-review@opendatahub-skills
+```
+
+### pf-mcp
+
+PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
+
+v0.1.0 | Generic | MIT
+
+Tags: patternfly, mcp
+
+```bash
+/plugin install pf-mcp@opendatahub-skills
 ```
 
 ## Product Planning

@@ -2454,9 +2454,8 @@ plugins:
     description: >
       Everything you need for PatternFly development -- React components,
       design guidance, migration, and MCP docs. Installs all PatternFly
-      sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+      sub-plugins in one step.
     version: "0.1.0"
-    skill_count: 22
     category: development-tools
     scope: generic
     tags: [patternfly, react, uxd, design, mcp, components, migration]
@@ -2464,8 +2463,8 @@ plugins:
       name: UXD Team
     license: MIT
     source:
-      type: github
-      repo: rh-uxd/ai-helpers
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
       path: plugins/patternfly
       ref: main
     homepage: https://github.com/rh-uxd/ai-helpers
@@ -2473,6 +2472,140 @@ plugins:
     harnesses:
       claude-code:
         install: "/plugin install patternfly@opendatahub-skills"
+    depends_on: []
+
+  - name: pf-react
+    description: >
+      React component development -- coding standards, testing, and structure
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, react]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-react
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    depends_on: []
+
+  - name: pf-design-guide
+    description: >
+      Design guide -- component selection, interaction patterns, AI experience patterns
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, design]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-design-guide
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    depends_on: []
+
+  - name: pf-design-audit
+    description: >
+      Design audit -- validate existing code and designs against PatternFly standards
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, design, audit]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-design-audit
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    depends_on: []
+
+  - name: pf-a11y
+    description: >
+      Accessibility auditing, reporting, and documentation
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, accessibility, a11y]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-a11y
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    depends_on: []
+
+  - name: pf-migration
+    description: >
+      PF version migration -- breaking change detection, class scanning, upgrade planning
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, migration]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-migration
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    depends_on: []
+
+  - name: pf-code-review
+    description: >
+      Code review and quality -- adversarial review, security patterns
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, code-review]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-code-review
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
+    depends_on: []
+
+  - name: pf-mcp
+    description: >
+      PatternFly MCP server -- component documentation, design token lookup,
+      and accessibility guidance via the Model Context Protocol
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    tags: [patternfly, mcp]
+    author:
+      name: UXD Team
+    license: MIT
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-mcp
+      ref: main
+    homepage: https://github.com/rh-uxd/ai-helpers
+    repository: https://github.com/rh-uxd/ai-helpers
     depends_on: []
 
   - name: docs-skills

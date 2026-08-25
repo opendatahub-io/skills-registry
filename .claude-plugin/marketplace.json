@@ -522,7 +522,7 @@
         "name": "UXD Team"
       },
       "category": "development-tools",
-      "description": "Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.\n",
+      "description": "Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.\n",
       "homepage": "https://github.com/rh-uxd/ai-helpers",
       "keywords": [
         "patternfly",
@@ -539,8 +539,164 @@
       "source": {
         "path": "plugins/patternfly",
         "ref": "main",
-        "repo": "rh-uxd/ai-helpers",
-        "source": "github"
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "React component development -- coding standards, testing, and structure\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "react"
+      ],
+      "license": "MIT",
+      "name": "pf-react",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-react",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "Design guide -- component selection, interaction patterns, AI experience patterns\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "design"
+      ],
+      "license": "MIT",
+      "name": "pf-design-guide",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-design-guide",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "Design audit -- validate existing code and designs against PatternFly standards\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "design",
+        "audit"
+      ],
+      "license": "MIT",
+      "name": "pf-design-audit",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-design-audit",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "Accessibility auditing, reporting, and documentation\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "accessibility",
+        "a11y"
+      ],
+      "license": "MIT",
+      "name": "pf-a11y",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-a11y",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "PF version migration -- breaking change detection, class scanning, upgrade planning\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "migration"
+      ],
+      "license": "MIT",
+      "name": "pf-migration",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-migration",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "Code review and quality -- adversarial review, security patterns\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "code-review"
+      ],
+      "license": "MIT",
+      "name": "pf-code-review",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-code-review",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "UXD Team"
+      },
+      "category": "development-tools",
+      "description": "PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol\n",
+      "homepage": "https://github.com/rh-uxd/ai-helpers",
+      "keywords": [
+        "patternfly",
+        "mcp"
+      ],
+      "license": "MIT",
+      "name": "pf-mcp",
+      "repository": "https://github.com/rh-uxd/ai-helpers",
+      "source": {
+        "path": "plugins/patternfly/pf-mcp",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
       },
       "version": "0.1.0"
     },

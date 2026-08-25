@@ -7,7 +7,7 @@ title: patternfly
 
 # patternfly
 
-Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins from the rh-uxd/ai-helpers marketplace in one step.
+Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
 !!! info "Plugin Details"
 
@@ -16,7 +16,6 @@ Everything you need for PatternFly development -- React components, design guida
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
-    - **Repository**: [rh-uxd/ai-helpers](https://github.com/rh-uxd/ai-helpers)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">react</span> <span class="tag-pill">uxd</span> <span class="tag-pill">design</span> <span class="tag-pill">mcp</span> <span class="tag-pill">components</span> <span class="tag-pill">migration</span>
 
 ## Installation
