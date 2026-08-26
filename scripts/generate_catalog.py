@@ -206,7 +206,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         lines.append("")
 
     # Bundle members (meta-plugin): the sub-plugins installed together
-    members = plugin.get("bundle_members", [])
+    members = plugin.get("includes", [])
     if members:
         lines.append(f"**Includes:** {', '.join(f'`{m}`' for m in members)}")
         lines.append("")

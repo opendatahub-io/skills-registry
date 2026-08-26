@@ -169,7 +169,7 @@ def build_plugin_index(registry: dict) -> dict:
 def get_skill_count(plugin: dict, by_name: dict, _seen: frozenset = frozenset()) -> int:
     """Effective skill count for display.
 
-    A bundle (non-empty ``bundle_members``) derives its count from its members,
+    A bundle (non-empty ``includes``) derives its count from its members,
     so the number has a single source of truth. A leaf plugin uses its cached
     ``skill_count`` when it delegates discovery (carries no ``skills`` array),
     otherwise the length of its listed skills.
@@ -179,7 +179,7 @@ def get_skill_count(plugin: dict, by_name: dict, _seen: frozenset = frozenset())
     as a validation error separately. Distinct paths (e.g. a diamond) are not
     affected because a fresh frozenset is passed down each branch.
     """
-    members = plugin.get("bundle_members")
+    members = plugin.get("includes")
     if members:
         name = plugin.get("name")
         if name in _seen:
@@ -199,7 +199,7 @@ def total_skill_count(registry: dict) -> int:
     by_name = build_plugin_index(registry)
     return sum(get_skill_count(p, by_name)
                for p in registry.get("plugins", [])
-               if not p.get("bundle_members"))
+               if not p.get("includes"))
 
 
 SCOPE_BADGE = {"team": "Team-specific", "generic": "Generic"}
@@ -400,7 +400,7 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
         lines.append("")
 
     # Bundle members (meta-plugin): the sub-plugins installed together
-    members = plugin.get("bundle_members")
+    members = plugin.get("includes")
     if members:
         lines.append("## Includes")
         lines.append("")

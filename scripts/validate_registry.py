@@ -95,7 +95,7 @@ def check_categories(registry: dict) -> list[str]:
 
 
 def _detect_bundle_cycles(by_name: dict) -> list[str]:
-    """Report cycles in the bundle_members graph (each cycle once)."""
+    """Report cycles in the includes graph (each cycle once)."""
     errors: list[str] = []
     reported: set[frozenset] = set()
 
@@ -107,16 +107,16 @@ def _detect_bundle_cycles(by_name: dict) -> list[str]:
                 if key not in reported:
                     reported.add(key)
                     errors.append(
-                        "  bundle_members cycle detected: "
+                        "  includes cycle detected: "
                         + " -> ".join(cycle + [name]))
             return
-        members = (by_name.get(name) or {}).get("bundle_members") or []
+        members = (by_name.get(name) or {}).get("includes") or []
         for member in members:
             if member in by_name:
                 dfs(member, path + [name])
 
     for name, plugin in by_name.items():
-        if plugin.get("bundle_members"):
+        if plugin.get("includes"):
             dfs(name, [])
     return errors
 
@@ -124,7 +124,7 @@ def _detect_bundle_cycles(by_name: dict) -> list[str]:
 def check_bundles(registry: dict) -> list[str]:
     """Validate bundle (meta-plugin) entries.
 
-    A bundle declares ``bundle_members`` naming other registry plugins. Because
+    A bundle declares ``includes`` naming other registry plugins. Because
     a bundle's displayed skill count is derived from its members (and it is
     excluded from registry-wide totals), it must not also carry its own count:
     no ``skills`` array and no ``skill_count``. Members must resolve to defined
@@ -138,13 +138,13 @@ def check_bundles(registry: dict) -> list[str]:
     errors = []
     for plugin in plugins:
         name = plugin.get("name")
-        # Presence-based, not truthiness-based: an explicit empty bundle_members
+        # Presence-based, not truthiness-based: an explicit empty includes
         # or an empty skills array is still a contract violation.
-        has_members = "bundle_members" in plugin
-        members = plugin.get("bundle_members") or []
-        if has_members and not members:
+        has_includes = "includes" in plugin
+        members = plugin.get("includes") or []
+        if has_includes and not members:
             errors.append(
-                f"  Plugin '{name}' declares an empty bundle_members list; "
+                f"  Plugin '{name}' declares an empty includes list; "
                 "omit the field or list at least one member")
         if not members:
             if "skill_count" in plugin and "skills" in plugin:
@@ -155,18 +155,18 @@ def check_bundles(registry: dict) -> list[str]:
             continue
         if "skills" in plugin:
             errors.append(
-                f"  Plugin '{name}' declares bundle_members and a skills array; "
+                f"  Plugin '{name}' declares includes and a skills array; "
                 "a bundle must not carry its own skills")
         if "skill_count" in plugin:
             errors.append(
-                f"  Plugin '{name}' declares bundle_members and skill_count; a "
+                f"  Plugin '{name}' declares includes and skill_count; a "
                 "bundle's count is derived from its members, remove skill_count")
         for member in members:
             if member == name:
-                errors.append(f"  Plugin '{name}' lists itself in bundle_members")
+                errors.append(f"  Plugin '{name}' lists itself in includes")
             elif member not in names:
                 errors.append(
-                    f"  Plugin '{name}' bundle_members references undefined "
+                    f"  Plugin '{name}' includes references undefined "
                     f"plugin '{member}'")
     errors.extend(_detect_bundle_cycles(by_name))
     return errors
@@ -764,7 +764,7 @@ def main() -> None:
     skill_count = sum(
         p.get("skill_count", len(p.get("skills", [])))
         for p in registry.get("plugins", [])
-        if not p.get("bundle_members")
+        if not p.get("includes")
     )
     print(f"Registry: {plugin_count} plugin(s), {skill_count} skill(s)")
 

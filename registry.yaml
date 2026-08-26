@@ -2459,7 +2459,7 @@ plugins:
     category: development-tools
     scope: generic
     tags: [patternfly, react, uxd, design, mcp, components, migration]
-    bundle_members: [pf-react, pf-design-guide, pf-design-audit, pf-a11y, pf-migration, pf-code-review, pf-mcp]
+    includes: [pf-react, pf-design-guide, pf-design-audit, pf-a11y, pf-migration, pf-code-review, pf-mcp]
     author:
       name: UXD Team
     license: MIT

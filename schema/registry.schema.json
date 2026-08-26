@@ -353,7 +353,7 @@
           "minimum": 0,
           "description": "Cached count of skills for a plugin that delegates discovery to its plugin.json and carries no 'skills' array (e.g. a git-subdir sub-plugin). Read by the catalog/site generators for display; not propagated to marketplace.json."
         },
-        "bundle_members": {
+        "includes": {
           "type": "array",
           "items": { "type": "string" },
           "uniqueItems": true,

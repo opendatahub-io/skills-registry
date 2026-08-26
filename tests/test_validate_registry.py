@@ -108,7 +108,7 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
-    def test_schema_accepts_skill_count_and_bundle_members(self):
+    def test_schema_accepts_skill_count_and_includes(self):
         registry = build_registry()
         registry["plugins"][0]["skill_count"] = 7
         registry["plugins"].append({
@@ -116,7 +116,7 @@ class SchemaTests(unittest.TestCase):
             "description": "A bundle",
             "version": "1.0.0",
             "source": {"type": "github", "repo": "example-org/bundle"},
-            "bundle_members": ["example-plugin"],
+            "includes": ["example-plugin"],
         })
 
         errors = self.validate_registry.validate_schema(registry, self.schema)
@@ -805,7 +805,7 @@ class BundleCheckTests(unittest.TestCase):
             "description": "d",
             "version": "1.0.0",
             "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "a"},
-            "bundle_members": ["leaf"],
+            "includes": ["leaf"],
         }
         if bundle_overrides:
             bundle.update(bundle_overrides)
@@ -829,7 +829,7 @@ class BundleCheckTests(unittest.TestCase):
 
     def test_unknown_member_errors(self):
         errors = self.validate_registry.check_bundles(
-            self._registry({"bundle_members": ["leaf", "ghost"]}))
+            self._registry({"includes": ["leaf", "ghost"]}))
         self.assertEqual(1, len(errors))
         self.assertIn("ghost", errors[0])
 
@@ -845,7 +845,7 @@ class BundleCheckTests(unittest.TestCase):
 
     def test_bundle_listing_itself_errors(self):
         errors = self.validate_registry.check_bundles(
-            self._registry({"bundle_members": ["bundle"]}))
+            self._registry({"includes": ["bundle"]}))
         self.assertTrue(any("itself" in e for e in errors))
 
     def test_member_cycle_errors(self):
@@ -854,10 +854,10 @@ class BundleCheckTests(unittest.TestCase):
             "plugins": [
                 {"name": "a", "description": "d", "version": "1.0.0",
                  "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "a"},
-                 "bundle_members": ["b"]},
+                 "includes": ["b"]},
                 {"name": "b", "description": "d", "version": "1.0.0",
                  "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
-                 "bundle_members": ["a"]},
+                 "includes": ["a"]},
             ],
         }
         errors = self.validate_registry.check_bundles(registry)
@@ -890,10 +890,10 @@ class BundleCheckTests(unittest.TestCase):
         errors = self.validate_registry.check_bundles(registry)
         self.assertTrue(any("skill_count" in e and "skills" in e for e in errors))
 
-    def test_empty_bundle_members_errors(self):
+    def test_empty_includes_errors(self):
         errors = self.validate_registry.check_bundles(
-            self._registry({"bundle_members": []}))
-        self.assertTrue(any("empty bundle_members" in e for e in errors))
+            self._registry({"includes": []}))
+        self.assertTrue(any("empty includes" in e for e in errors))
 
 
 if __name__ == "__main__":

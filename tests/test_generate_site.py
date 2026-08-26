@@ -165,7 +165,7 @@ class SkillCountTests(unittest.TestCase):
     def _registry(self):
         return {
             "plugins": [
-                {"name": "bundle", "bundle_members": ["leaf-a", "leaf-b"]},
+                {"name": "bundle", "includes": ["leaf-a", "leaf-b"]},
                 {"name": "leaf-a", "skill_count": 10},
                 {"name": "leaf-b", "skill_count": 5},
                 {"name": "listed", "skills": [{"name": "x"}, {"name": "y"}]},
@@ -189,8 +189,8 @@ class SkillCountTests(unittest.TestCase):
         # A malformed mutual cycle must not recurse forever (check_bundles
         # rejects it separately); get_skill_count returns 0 for the cycle.
         registry = {"plugins": [
-            {"name": "a", "bundle_members": ["b"]},
-            {"name": "b", "bundle_members": ["a"]},
+            {"name": "a", "includes": ["b"]},
+            {"name": "b", "includes": ["a"]},
         ]}
         by_name = generate_site.build_plugin_index(registry)
         self.assertEqual(0, generate_site.get_skill_count(by_name["a"], by_name))
@@ -199,9 +199,9 @@ class SkillCountTests(unittest.TestCase):
         # A bundles B and C; both bundle the same leaf D. The per-path visited
         # set must not treat the second D as a cycle.
         registry = {"plugins": [
-            {"name": "a", "bundle_members": ["b", "c"]},
-            {"name": "b", "bundle_members": ["d"]},
-            {"name": "c", "bundle_members": ["d"]},
+            {"name": "a", "includes": ["b", "c"]},
+            {"name": "b", "includes": ["d"]},
+            {"name": "c", "includes": ["d"]},
             {"name": "d", "skill_count": 4},
         ]}
         by_name = generate_site.build_plugin_index(registry)
@@ -211,7 +211,7 @@ class SkillCountTests(unittest.TestCase):
         plugin = {
             "name": "bundle", "description": "A bundle plugin", "version": "0.1.0",
             "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
-            "bundle_members": ["leaf-a", "leaf-b"],
+            "includes": ["leaf-a", "leaf-b"],
         }
         registry = {"name": "opendatahub-skills", "plugins": [plugin], "categories": {}}
         page = generate_site.generate_plugin_page(
