@@ -41,6 +41,21 @@ def load_registry(path: str = "registry.yaml") -> dict:
         return yaml.safe_load(f)
 
 
+def _rel_path(name: str, path: str) -> str:
+    """Normalize a source path to a ``./``-prefixed, root-relative form.
+
+    Rejects absolute paths and any parent-directory (``..``) component so a
+    source cannot escape the marketplace/repository root (CWE-22). Codex resolves
+    ``local``/``git-subdir`` paths from that root, so ``..`` must not leak through.
+    """
+    normalized = path.replace("\\", "/")
+    if normalized.startswith("/") or (len(path) > 1 and path[1] == ":"):
+        raise ValueError(f"{name!r}: source path must be relative, got {path!r}")
+    if ".." in normalized.split("/"):
+        raise ValueError(f"{name!r}: source path must not contain '..': {path!r}")
+    return path if path.startswith("./") else "./" + path
+
+
 def _map_source(name: str, source: dict) -> dict:
     """Map a registry source object to a Codex source object.
 
@@ -69,9 +84,7 @@ def _map_source(name: str, source: dict) -> dict:
         return mapped
 
     if stype == "git-subdir":
-        path = source["path"]
-        if not path.startswith("./"):
-            path = "./" + path
+        path = _rel_path(name, source["path"])
         mapped = {"source": "git-subdir", "url": source["url"], "path": path}
         if "ref" in source:
             mapped["ref"] = source["ref"]
@@ -95,10 +108,7 @@ def _map_source(name: str, source: dict) -> dict:
         return mapped
 
     if stype == "local":
-        path = source["path"]
-        if not path.startswith("./"):
-            path = "./" + path
-        return {"source": "local", "path": path}
+        return {"source": "local", "path": _rel_path(name, source["path"])}
 
     raise ValueError(f"{name!r}: unknown source type {stype!r}")
 

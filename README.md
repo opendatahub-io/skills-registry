@@ -57,7 +57,7 @@ codex plugin marketplace add opendatahub-io/skills-registry
 
 Codex reads the registry's `.agents/plugins/marketplace.json`. To test changes from a branch before they're merged, pin the ref with `--ref branch-name`.
 
-> **Note:** Codex discovers a plugin's skills from that plugin's own manifest (`.codex-plugin/plugin.json`, or the legacy `.claude-plugin/plugin.json`). A plugin with no manifest in its source repo installs with no skills under Codex until one is added upstream.
+> **Note:** Codex discovers a plugin's skills from that plugin's own `.codex-plugin/plugin.json` manifest (its `skills` path). A plugin with no `.codex-plugin/plugin.json` in its source repo installs with no skills under Codex until one is added upstream.
 
 ### Other Agent Harnesses
 

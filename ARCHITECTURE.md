@@ -226,9 +226,9 @@ projection applies:
 
 Because a Codex marketplace entry has **no per-entry `skills` array**, Codex
 discovers a plugin's skills from that plugin's own `.codex-plugin/plugin.json`
-(or the legacy `.claude-plugin/plugin.json`). A `strict: false` plugin that ships
-no manifest in its repo therefore installs with **zero skills under Codex** until
-a `.codex-plugin/plugin.json` with a `skills` path is added upstream — the one
+manifest (its `skills` path). A `strict: false` plugin that ships no manifest in
+its repo therefore installs with **zero skills under Codex** until a
+`.codex-plugin/plugin.json` with a `skills` path is added upstream — the one
 case where the registry-only projection is insufficient for Codex.
 
 ## CI Pipeline
@@ -289,8 +289,9 @@ match the registry. Contributors must run the scripts locally before pushing.
 3. Run `python3 scripts/sync_marketplace.py`
 4. Run `python3 scripts/sync_codex_marketplace.py`
 5. Run `python3 scripts/generate_catalog.py`
-6. Commit all changes and open a PR
-7. CI verifies everything is in sync
+6. Run `python3 scripts/generate_site.py`
+7. Commit all changes and open a PR
+8. CI verifies everything is in sync
 
 ## References
 

@@ -72,10 +72,10 @@ codex plugin marketplace add opendatahub-io/skills-registry --ref branch-name
 ```
 
 > **Skill discovery under Codex:** Codex discovers a plugin's skills from that
-> plugin's own manifest (`.codex-plugin/plugin.json`, or the legacy
-> `.claude-plugin/plugin.json`) — the marketplace entry does not inject a skills
-> path. A plugin that has no manifest in its source repo installs with no skills
-> under Codex until one is added upstream.
+> plugin's own `.codex-plugin/plugin.json` manifest (its `skills` path) — the
+> marketplace entry does not inject a skills path. A plugin that has no
+> `.codex-plugin/plugin.json` in its source repo installs with no skills under
+> Codex until one is added upstream.
 
 ## Contributing
 
