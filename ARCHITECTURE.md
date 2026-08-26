@@ -2,10 +2,11 @@
 
 ## Overview
 
-The skills-registry is a centralized catalog that aggregates Claude Code plugins
-from multiple GitHub repositories into a single discoverable marketplace. It acts
-as an indirection layer: plugin source code lives in separate repos, while this
-registry provides the metadata and discovery mechanism.
+The skills-registry is a centralized catalog that aggregates agent plugins
+(Claude Code and OpenAI Codex) from multiple GitHub repositories into a single
+discoverable marketplace. It acts as an indirection layer: plugin source code
+lives in separate repos, while this registry provides the metadata and discovery
+mechanism.
 
 Plugins in this registry conform to the [Agent Skills](https://agentskills.io/specification)
 open standard, extended by Claude Code with features like invocation control
@@ -281,6 +282,12 @@ match the registry. Contributors must run the scripts locally before pushing.
      │─────────────────────────────►│  (runs skill locally)    │
      │◄─────────────────────────────│                          │
 ```
+
+OpenAI Codex follows an analogous flow: `codex plugin marketplace add
+opendatahub-io/skills-registry` fetches `.agents/plugins/marketplace.json`
+(falling back to the legacy `.claude-plugin/marketplace.json`), then plugins are
+enabled from the `/plugins` browser and each plugin's skills are discovered from
+its own `.codex-plugin/plugin.json`.
 
 ## Adding a New Plugin
 

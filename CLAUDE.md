@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Skills and Claude Code plugins marketplace for the opendatahub-io organization. `registry.yaml` is the single source of truth — all other files are generated from it.
+Skills and plugins marketplace (Claude Code and OpenAI Codex) for the opendatahub-io organization. `registry.yaml` is the single source of truth — all other files are generated from it.
 
 ## Common Commands
 
