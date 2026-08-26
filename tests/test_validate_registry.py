@@ -876,6 +876,25 @@ class BundleCheckTests(unittest.TestCase):
         errors = self.validate_registry.check_bundles(registry)
         self.assertTrue(any("skill_count" in e and "skills" in e for e in errors))
 
+    def test_leaf_with_skill_count_and_empty_skills_errors(self):
+        # Presence-based: an empty skills array alongside skill_count is still
+        # a contract violation.
+        registry = {
+            "name": "r", "owner": {"name": "o"},
+            "plugins": [
+                {"name": "leaf", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
+                 "skill_count": 5, "skills": []},
+            ],
+        }
+        errors = self.validate_registry.check_bundles(registry)
+        self.assertTrue(any("skill_count" in e and "skills" in e for e in errors))
+
+    def test_empty_bundle_members_errors(self):
+        errors = self.validate_registry.check_bundles(
+            self._registry({"bundle_members": []}))
+        self.assertTrue(any("empty bundle_members" in e for e in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

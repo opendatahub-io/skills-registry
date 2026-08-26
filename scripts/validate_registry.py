@@ -138,18 +138,25 @@ def check_bundles(registry: dict) -> list[str]:
     errors = []
     for plugin in plugins:
         name = plugin.get("name")
-        members = plugin.get("bundle_members")
-        if not members:
-            if "skill_count" in plugin and plugin.get("skills"):
-                errors.append(
-                    f"  Plugin '{name}' declares both skill_count and a "
-                    "non-empty skills list; use one (skill_count is for "
-                    "plugins that carry no skills array)")
-            continue
-        if plugin.get("skills"):
+        # Presence-based, not truthiness-based: an explicit empty bundle_members
+        # or an empty skills array is still a contract violation.
+        has_members = "bundle_members" in plugin
+        members = plugin.get("bundle_members") or []
+        if has_members and not members:
             errors.append(
-                f"  Plugin '{name}' declares bundle_members and a non-empty "
-                "skills list; a bundle must not carry its own skills")
+                f"  Plugin '{name}' declares an empty bundle_members list; "
+                "omit the field or list at least one member")
+        if not members:
+            if "skill_count" in plugin and "skills" in plugin:
+                errors.append(
+                    f"  Plugin '{name}' declares both skill_count and a skills "
+                    "array; use one (skill_count is for plugins that carry no "
+                    "skills array)")
+            continue
+        if "skills" in plugin:
+            errors.append(
+                f"  Plugin '{name}' declares bundle_members and a skills array; "
+                "a bundle must not carry its own skills")
         if "skill_count" in plugin:
             errors.append(
                 f"  Plugin '{name}' declares bundle_members and skill_count; a "
