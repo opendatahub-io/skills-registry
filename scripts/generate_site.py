@@ -1091,6 +1091,18 @@ def generate_llms_txt(registry: dict, site_url: str) -> str:
                 sdesc = s.get("description", "").strip()
                 lines.append(f"- [{sname}]({site_url}/plugins/{pname}/{sname}/): {sdesc} (internal)")
     lines.append("")
+    mcp_lines = []
+    for p in plugins:
+        pname = p["name"]
+        for server in p.get("mcp_servers", []):
+            mname = server["name"]
+            mdesc = server.get("description", "").strip()
+            mcp_lines.append(f"- [{mname}]({site_url}/plugins/{pname}/): {mdesc}")
+    if mcp_lines:
+        lines.append("## MCP Servers")
+        lines.append("")
+        lines.extend(mcp_lines)
+        lines.append("")
     return "\n".join(lines)
 
 
@@ -1162,6 +1174,15 @@ def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
                 for ex in examples:
                     lines.append(ex)
                 lines.append("```")
+                lines.append("")
+        mcp_servers = p.get("mcp_servers", [])
+        if mcp_servers:
+            lines.append("### MCP Servers")
+            lines.append("")
+            for server in mcp_servers:
+                lines.append(f"#### {server['name']}")
+                lines.append("")
+                lines.append(server.get("description", "").strip())
                 lines.append("")
         lines.append("---")
         lines.append("")

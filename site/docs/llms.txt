@@ -163,3 +163,7 @@
 - [security-audit](https://opendatahub-io.github.io/skills-registry/plugins/python-package-skills/security-audit/): Run a security audit on a Python package with risk rating and structured verdict (internal)
 - [pipeline-grouping](https://opendatahub-io.github.io/skills-registry/plugins/pipeline-skills/pipeline-grouping/): Group failed CI/CD pipeline jobs by error similarity using log analysis and Jira ticket deduplication (internal)
 - [pipeline-rca](https://opendatahub-io.github.io/skills-registry/plugins/pipeline-skills/pipeline-rca/): Root cause analysis for a pipeline failure error group with structured findings and section files (internal)
+
+## MCP Servers
+
+- [patternfly](https://opendatahub-io.github.io/skills-registry/plugins/pf-mcp/): PatternFly component documentation, design token lookup, and accessibility guidance via the Model Context Protocol

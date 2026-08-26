@@ -235,6 +235,27 @@ class SkillCountTests(unittest.TestCase):
         self.assertIn("## MCP Servers", page)
         self.assertIn("| patternfly | Component docs via MCP |", page)
 
+    def test_llms_txt_and_full_surface_mcp_servers(self):
+        import tempfile
+        from pathlib import Path
+        registry = {
+            "name": "opendatahub-skills",
+            "categories": {},
+            "plugins": [
+                {"name": "pf-mcp", "description": "MCP plugin", "version": "0.1.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+                 "skill_count": 0,
+                 "mcp_servers": [{"name": "patternfly", "description": "Docs via MCP"}]},
+            ],
+        }
+        llms = generate_site.generate_llms_txt(registry, "https://example.test")
+        self.assertIn("## MCP Servers", llms)
+        self.assertIn("[patternfly](https://example.test/plugins/pf-mcp/): Docs via MCP", llms)
+        with tempfile.TemporaryDirectory() as d:
+            full = generate_site.generate_llms_full_txt(registry, Path(d))
+        self.assertIn("### MCP Servers", full)
+        self.assertIn("#### patternfly", full)
+
 
 class VisiblePluginsTests(unittest.TestCase):
     def _registry(self):
