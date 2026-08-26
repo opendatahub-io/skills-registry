@@ -124,7 +124,7 @@ A **meta-plugin** installs several other plugins in one step. List its members w
       url: https://github.com/rh-uxd/ai-helpers.git
       path: plugins/patternfly
       ref: main
-    includes: [pf-react, pf-design-guide, pf-a11y, pf-migration, pf-code-review, pf-mcp]
+    includes: [pf-react, pf-design-guide, pf-design-audit, pf-a11y, pf-migration, pf-code-review, pf-mcp]
     depends_on: []
 ```
 

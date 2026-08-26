@@ -895,6 +895,25 @@ class BundleCheckTests(unittest.TestCase):
             self._registry({"includes": []}))
         self.assertTrue(any("empty includes" in e for e in errors))
 
+    def test_nested_bundle_errors(self):
+        # A bundle member may not itself be a bundle (nesting unsupported).
+        registry = {
+            "name": "r", "owner": {"name": "o"},
+            "plugins": [
+                {"name": "a", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "a"},
+                 "includes": ["b"]},
+                {"name": "b", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
+                 "includes": ["c"]},
+                {"name": "c", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "c"},
+                 "skill_count": 1},
+            ],
+        }
+        errors = self.validate_registry.check_bundles(registry)
+        self.assertTrue(any("nested bundles are not supported" in e for e in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

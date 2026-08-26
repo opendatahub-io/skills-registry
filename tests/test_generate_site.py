@@ -255,7 +255,7 @@ class VisiblePluginsTests(unittest.TestCase):
     def test_plugins_index_hides_members_shows_bundle(self):
         page = generate_site.generate_plugins_index(self._registry())
         self.assertIn("[bundle](bundle/index.md)", page)
-        self.assertIn("2 plugins in the marketplace", page)
+        self.assertIn("2 plugins.", page)
         self.assertNotIn("[m1](m1/index.md)", page)
         self.assertNotIn("[m2](m2/index.md)", page)
 
@@ -274,3 +274,47 @@ class VisiblePluginsTests(unittest.TestCase):
         self.assertIn("      - m1: plugins/m1/index.md", yml)
         self.assertIn("    - bundle:", yml)      # bundle IS a top-level group
         self.assertNotIn("    - m1:\n", yml)     # m1 is NOT a top-level group
+
+    def test_mkdocs_nav_nests_member_skill_pages(self):
+        # A member that lists its own skills must have those skill pages nested
+        # under it, or they would be orphaned from the nav.
+        reg = {
+            "name": "opendatahub-skills",
+            "categories": {"dev": {"name": "Dev", "description": "d"}},
+            "plugins": [
+                {"name": "bundle", "description": "b", "version": "0.1.0",
+                 "category": "dev", "scope": "generic",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+                 "includes": ["m1"]},
+                {"name": "m1", "description": "m", "version": "0.1.0",
+                 "category": "dev", "scope": "generic",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p/m1"},
+                 "skills": [{"name": "sk1"}]},
+            ],
+        }
+        yml = generate_site.generate_mkdocs_yml(
+            reg, reg["categories"], generate_site.build_category_plugins(reg))
+        self.assertIn("      - m1:", yml)
+        self.assertIn("        - sk1: plugins/m1/sk1.md", yml)
+
+    def test_plugin_page_category_link_guarded_when_no_page(self):
+        # A member whose category has no surfaced plugins must not link to a
+        # category page that is never generated (would 404); it shows plain text.
+        reg = {
+            "name": "opendatahub-skills",
+            "categories": {"dev": {"name": "Dev", "description": "d"},
+                           "lonely": {"name": "Lonely", "description": "d"}},
+            "plugins": [
+                {"name": "bundle", "description": "b", "version": "0.1.0",
+                 "category": "dev", "scope": "generic",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+                 "includes": ["m1"]},
+                {"name": "m1", "description": "m", "version": "0.1.0",
+                 "category": "lonely", "scope": "generic", "skill_count": 1,
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p/m1"}},
+            ],
+        }
+        m1 = reg["plugins"][1]
+        page = generate_site.generate_plugin_page(m1, reg, enrichment=None, plugin_dir=None)
+        self.assertIn("**Category**: Lonely", page)
+        self.assertNotIn("../../categories/lonely.md", page)

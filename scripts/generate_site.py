@@ -217,8 +217,8 @@ def get_skill_count(plugin: dict, by_name: dict, _seen: frozenset = frozenset())
 def total_skill_count(registry: dict) -> int:
     """Registry-wide skill total, counting each skill exactly once.
 
-    Bundles are excluded because their members are themselves top-level entries
-    that are already counted individually.
+    Members are still counted individually via ``registry.plugins``; only the
+    bundle wrapper is skipped so its derived aggregate is not added on top.
     """
     by_name = build_plugin_index(registry)
     return sum(get_skill_count(p, by_name)
@@ -322,7 +322,8 @@ def generate_plugins_index(registry: dict) -> str:
     lines.append(GENERATED_MARKER)
     lines.append("# Plugins")
     lines.append("")
-    lines.append(f"{len(plugins)} plugins in the marketplace.")
+    lines.append(f"{len(plugins)} plugins. Bundle members are grouped under "
+                 "their bundle.")
     lines.append("")
 
     def render_row(plugin):
@@ -395,7 +396,13 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     if scope in SCOPE_BADGE:
         meta.append(f"    - **Scope**: {SCOPE_BADGE[scope]}")
     if category:
-        meta.append(f"    - **Category**: [{cat_name}](../../categories/{category}.md)")
+        # Only link to a category page that is actually generated (a category
+        # with at least one surfaced plugin). A bundle member whose category has
+        # no surfaced plugins would otherwise link to a non-existent page.
+        if build_category_plugins(registry).get(category):
+            meta.append(f"    - **Category**: [{cat_name}](../../categories/{category}.md)")
+        else:
+            meta.append(f"    - **Category**: {cat_name}")
     if source_type in ("github", "git"):
         display = source_display_name(source)
         browse = source_browse_url(source)
@@ -1009,7 +1016,18 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
             sname = skill["name"]
             nav_lines.append(f"      - {sname}: plugins/{name}/{sname}.md")
         for member in (plugin.get("includes") or []):
-            if member in by_name:
+            m = by_name.get(member)
+            if not m:
+                continue
+            m_skills = m.get("skills", [])
+            if m_skills:
+                # Member with its own skill pages: nest them so none are orphaned.
+                nav_lines.append(f"      - {member}:")
+                nav_lines.append(f"        - plugins/{member}/index.md")
+                for skill in m_skills:
+                    nav_lines.append(
+                        f"        - {skill['name']}: plugins/{member}/{skill['name']}.md")
+            else:
                 nav_lines.append(f"      - {member}: plugins/{member}/index.md")
 
     # Categories section — with index page
@@ -1208,10 +1226,11 @@ def main() -> None:
     generate_site(registry, output_dir)
 
     plugins = registry.get("plugins", [])
+    surfaced = len(visible_plugins(registry))
     skills = total_skill_count(registry)
     categories = len([k for k, v in build_category_plugins(registry).items() if v])
-    print(f"Generated site: {len(plugins)} plugins, {skills} skills, "
-          f"{categories} categories → {output_dir}/")
+    print(f"Generated site: {len(plugins)} plugin pages ({surfaced} surfaced), "
+          f"{skills} skills, {categories} categories → {output_dir}/")
 
 
 if __name__ == "__main__":

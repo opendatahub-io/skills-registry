@@ -128,9 +128,10 @@ def check_bundles(registry: dict) -> list[str]:
     a bundle's displayed skill count is derived from its members (and it is
     excluded from registry-wide totals), it must not also carry its own count:
     no ``skills`` array and no ``skill_count``. Members must resolve to defined
-    plugins, a bundle may not list itself, and the graph must be acyclic. For a
-    leaf plugin, ``skill_count`` is a substitute for a ``skills`` array, so the
-    two are mutually exclusive there as well.
+    plugins, a bundle may not list itself, a member may not itself be a bundle
+    (nesting is not supported), and the graph must be acyclic. For a leaf
+    plugin, ``skill_count`` is a substitute for a ``skills`` array, so the two
+    are mutually exclusive there as well.
     """
     plugins = registry.get("plugins", [])
     names = {p.get("name") for p in plugins}
@@ -168,6 +169,10 @@ def check_bundles(registry: dict) -> list[str]:
                 errors.append(
                     f"  Plugin '{name}' includes references undefined "
                     f"plugin '{member}'")
+            elif by_name.get(member, {}).get("includes"):
+                errors.append(
+                    f"  Plugin '{name}' includes '{member}', which is itself a "
+                    "bundle; nested bundles are not supported")
     errors.extend(_detect_bundle_cycles(by_name))
     return errors
 

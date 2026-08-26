@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-22 plugins in the marketplace.
+22 plugins. Bundle members are grouped under their bundle.
 
 ## SDLC
 
