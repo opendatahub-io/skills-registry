@@ -157,15 +157,23 @@ one step. It lists its members with `includes`:
   a bundle neither lists itself nor forms a cycle, and a bundle carries no
   `skills`/`skill_count` of its own.
 
-### Delegated skill discovery (`skill_count`)
+### Delegated sub-plugins and the contract exemption
 
-A plugin that delegates skill discovery to its own `plugin.json` (e.g. a
-`git-subdir` sub-plugin) carries no `skills` array in `registry.yaml`, so the
-catalog would otherwise show "0 skills". Set `skill_count: N` to record the
-number for display. It is catalog-only metadata (not propagated to
-`marketplace.json`); the actual skills are still discovered from the source
-repo at install time. A plugin may set `skill_count` **or** list `skills`, not
-both.
+A sub-plugin that delegates skill discovery to its own `plugin.json` (e.g. a
+`git-subdir` bundle member) can **list its skills** (name + description) in
+`registry.yaml` so they render on its catalog/site page. Such skills do **not**
+require a `contract` block: the canonical-contract requirement is enforced only
+for skills whose plugin `source.type` is `github`/`git` (`GIT_CLONE_TYPES`) —
+the same cloneable sources `skill-linter` and the skill-name-drift check
+verify. A `git-subdir`/`npm`/`local` source cannot be cloned and its
+`source_assertions` cannot be resolved, so a contract on it would be
+unverifiable; the exemption keeps enforcement aligned with what can actually be
+verified rather than weakening it.
+
+When only a count is wanted (no list), set `skill_count: N` instead — catalog-only
+metadata (not propagated to `marketplace.json`). A plugin sets `skill_count`
+**or** lists `skills`, not both. Either way the actual skills are discovered
+from the source repo at install time.
 
 ### Agents and MCP servers
 

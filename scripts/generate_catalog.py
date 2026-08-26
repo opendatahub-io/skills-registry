@@ -242,7 +242,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
             lines.append("|-------|-------------|-----------|---------|")
             for skill in skills:
                 sname = skill["name"]
-                sdesc = skill.get("description", "")
+                sdesc = " ".join(skill.get("description", "").split())
                 lines.append(
                     f"| `/{sname}` | {sdesc} | "
                     f"{format_contract_functions(skill)} | {format_contract_metrics(skill)} |"
@@ -252,7 +252,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
             lines.append("|-------|-------------|")
             for skill in skills:
                 sname = skill["name"]
-                sdesc = skill.get("description", "")
+                sdesc = " ".join(skill.get("description", "").split())
                 lines.append(f"| `/{sname}` | {sdesc} |")
         lines.append("")
 
@@ -263,7 +263,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         lines.append("|-------|-------------|")
         for agent in agents:
             aname = agent["name"]
-            adesc = agent.get("description", "")
+            adesc = " ".join(agent.get("description", "").split())
             lines.append(f"| {aname} | {adesc} |")
         lines.append("")
 
@@ -274,7 +274,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         lines.append("|------------|-------------|")
         for server in mcp_servers:
             mname = server["name"]
-            mdesc = server.get("description", "")
+            mdesc = " ".join(server.get("description", "").split())
             lines.append(f"| {mname} | {mdesc} |")
         lines.append("")
 

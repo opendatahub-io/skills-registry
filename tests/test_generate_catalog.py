@@ -45,6 +45,22 @@ class CatalogGitSourceTests(unittest.TestCase):
         self.assertNotIn("github.com", content.split("Quick Start")[1])
 
 
+class CatalogMultilineDescriptionTests(unittest.TestCase):
+    def test_multiline_skill_description_renders_single_row(self):
+        registry = build_registry_with_contract()
+        registry["plugins"][0]["skills"][0]["description"] = (
+            "First line of the description.\nSecond line after a newline.\n"
+        )
+
+        content = generate_catalog.generate_catalog(registry)
+
+        # The description must be collapsed onto one properly-terminated table row.
+        self.assertIn(
+            "First line of the description. Second line after a newline.", content)
+        # The renderer appends " |", so a broken row would contain "\n |".
+        self.assertNotIn("Second line after a newline.\n |", content)
+
+
 class CatalogMcpServerTests(unittest.TestCase):
     def test_catalog_renders_mcp_servers_table(self):
         registry = build_registry_with_contract()

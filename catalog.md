@@ -212,8 +212,7 @@ Tags: documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onbo
 
 | Skill | Description |
 |-------|-------------|
-| `/docs-orchestrator` | Documentation workflow orchestrator. Reads the step list from .agent_workspace/docs-workflow.yaml (or the plugin default). Runs steps sequentially, manages progress state, handles iteration and confirmation gates. Claude is the orchestrator — the YAML is a step list, not a workflow engine.
- |
+| `/docs-orchestrator` | Documentation workflow orchestrator. Reads the step list from .agent_workspace/docs-workflow.yaml (or the plugin default). Runs steps sequentially, manages progress state, handles iteration and confirmation gates. Claude is the orchestrator — the YAML is a step list, not a workflow engine. |
 
 ```bash
 /plugin install docs-skills@opendatahub-skills
@@ -298,10 +297,8 @@ Tags: security, review, strat, threat-modeling, fips, compliance, consensus
 
 | Skill | Description |
 |-------|-------------|
-| `/strat-security-review` | Multi-reviewer consensus orchestrator for security review of STRAT documents. Extracts threat surfaces, spawns three independent security-reviewer instances, synthesizes findings with confidence levels, and produces a final verdict (PASS/CONCERNS/FAIL).
- |
-| `/security-reviewer` | Individual security reviewer that assesses RHOAI strategy documents against 39 catalog patterns covering authentication, data protection, cryptographic compliance, network security, supply chain, and infrastructure. Uses a two-phase discovery-then-filter approach with severity classification.
- |
+| `/strat-security-review` | Multi-reviewer consensus orchestrator for security review of STRAT documents. Extracts threat surfaces, spawns three independent security-reviewer instances, synthesizes findings with confidence levels, and produces a final verdict (PASS/CONCERNS/FAIL). |
+| `/security-reviewer` | Individual security reviewer that assesses RHOAI strategy documents against 39 catalog patterns covering authentication, data protection, cryptographic compliance, network security, supply chain, and infrastructure. Uses a two-phase discovery-then-filter approach with severity classification. |
 
 ```bash
 /plugin install rhoai-security-reviewer@opendatahub-skills
@@ -414,6 +411,19 @@ v0.1.0 | Generic | MIT
 
 Tags: patternfly, react
 
+| Skill | Description |
+|-------|-------------|
+| `/pf-chart-gen` | Generate PatternFly chart components with theming, responsive sizing, and accessibility. Use when building charts, data visualizations, or dashboards with PatternFly. |
+| `/pf-component-check` | Audit PatternFly React component nesting, wrapper hierarchies, and layout structure. Use when scanning for hierarchy violations or debugging spacing caused by missing wrapper components. |
+| `/pf-component-reuse-check` | Detects custom React components in newly created or modified (uncommitted) code that overlap with PatternFly React components, suggests the PatternFly equivalent, and can replace the custom component then build to verify. Use when creating UI components, reviewing uncommitted React changes, or when the user asks to prefer PatternFly instead of a custom component. |
+| `/pf-deploy` | Deploy a PatternFly React project to GitHub Pages using pfcli deploy. Use when publishing a prototype, sharing a demo URL, deploying to GitHub Pages, or when the user mentions pfcli deploy. |
+| `/pf-design-comments-setup` | Integrate @patternfly/design-comments into React apps for on-page design feedback, pinned comment threads, GitHub Issues sync, and Jira linking. Use when adding design comments, review overlays, or removing the commenting system from a PatternFly React project. |
+| `/pf-form-gen` | Generate PatternFly form components with validation, layout, and accessibility. Use when building forms, adding form fields, or creating validated input workflows. |
+| `/pf-import-check` | Audit and fix invalid PatternFly import paths across packages. Use when imports fail, modules are unresolved, or after upgrading PatternFly versions. |
+| `/pf-project-gen` | Scaffolds PatternFly React projects with PF6-safe dependencies, imports, and starter layout. Use when creating a new PatternFly app or bootstrapping a migration sandbox. |
+| `/pf-table-gen` | Generate PatternFly table components with sorting, filtering, pagination, and expandable rows. Use when building data tables, adding table features, or migrating HTML tables to PatternFly. |
+| `/pf-test-gen` | Generate a unit test file for a React component using Testing Library. Use when adding test coverage to new or existing components. |
+
 ```bash
 /plugin install pf-react@opendatahub-skills
 ```
@@ -425,6 +435,11 @@ Design guide -- component selection, interaction patterns, AI experience pattern
 v0.1.0 | Generic | MIT
 
 Tags: patternfly, design
+
+| Skill | Description |
+|-------|-------------|
+| `/pf-figma-design-mode` | Create and edit Figma design files using PatternFly-approved component libraries. Use when building, updating, or restructuring Figma frames and components. Requires Figma MCP. |
+| `/pf-screenshot-mapping` | Maps screenshots and UI mockups (any fidelity) to PatternFly 6 layout and building-block components. Output uses PF Component Mapping (regions, PF6 direction including structure and behavior, doc links) and PF Gaps & Recommendations (structural gaps/stretches and design-system follow-ups). Omits branding and visual styling (logos, colors, typography, border radius, shadows, component shape). Use when the user shares a UI image or asks whether a screen can be built with PatternFly, which PatternFly components to use, or for a PatternFly component pass on a wireframe, lo-fi, or third-party UI reference. |
 
 ```bash
 /plugin install pf-design-guide@opendatahub-skills
@@ -438,6 +453,15 @@ v0.1.0 | Generic | MIT
 
 Tags: patternfly, design, audit
 
+| Skill | Description |
+|-------|-------------|
+| `/pf-ai-audit` | Audit AI-powered features against Red Hat's AI design language — transparency notices, iconography, chatbot patterns, color and gradient rules. Use when reviewing chatbots, AI assistants, or generation UIs for brand compliance. |
+| `/pf-color-scan` | Find raw color values (hex, rgb, hsl) in code and suggest PatternFly design token replacements. Use when auditing stylesheets for hardcoded colors or enforcing token compliance. |
+| `/pf-css-token-check` | Detect hardcoded color, spacing, typography, border radius and shadow values that have PF token equivalents and suggest the correct design token replacements. Works on CSS, SCSS, CSS-in-JS, and inline styles. Use when auditing stylesheets for hardcoded values, enforcing design token compliance, or refactoring styles to use PatternFly tokens. |
+| `/pf-figma-check` | Check Figma designs against PatternFly v6 standards for colors, typography, spacing, and component usage. Use when validating a design before handoff, auditing existing mockups for compliance, or reviewing design token usage. Requires Figma MCP. |
+| `/pf-figma-token-check` | Audit designs against the PatternFly 6 token architecture and bridge Figma styles to PF semantic tokens. Use when validating token usage, mapping Figma variables to PF tokens, or checking designs for token compliance. |
+| `/pf-icon-finder` | Identify PatternFly icons in design mockups and provide the correct React import statements. Use when implementing a design, verifying icon usage in a prototype, or finding the correct icon imports for React components. |
+
 ```bash
 /plugin install pf-design-audit@opendatahub-skills
 ```
@@ -449,6 +473,11 @@ Accessibility auditing, reporting, and documentation
 v0.1.0 | Generic | MIT
 
 Tags: patternfly, accessibility, a11y
+
+| Skill | Description |
+|-------|-------------|
+| `/pf-a11y-audit` | Audit PatternFly components and pages against WCAG and ARIA best practices. Use when reviewing accessibility, fixing screen reader issues, or validating ARIA usage in PatternFly-based applications. |
+| `/pf-a11y-keyboard` | Test keyboard accessibility of PatternFly UIs via live browser interaction. Use when validating keyboard navigation, focus management, or interaction patterns in a running application. |
 
 ```bash
 /plugin install pf-a11y@opendatahub-skills
@@ -462,6 +491,12 @@ v0.1.0 | Generic | MIT
 
 Tags: patternfly, migration
 
+| Skill | Description |
+|-------|-------------|
+| `/pf-css-migration-scan` | Scan code for legacy PatternFly CSS classes and recommend PF6-safe replacements. Use when upgrading from PF4/PF5 or auditing a codebase for deprecated class names. |
+| `/pf-react-migration-scan` | Scan code for @patternfly/react-* API breaking changes and produce a markdown report. Use when upgrading PatternFly React versions, auditing component API usage, or checking for removed props, renamed components, or import path changes. |
+| `/pf-release-candidate-update` | Update @patternfly/* npm dependencies to the latest release candidate versions. Use when testing the next PF release or bumping to RC packages. |
+
 ```bash
 /plugin install pf-migration@opendatahub-skills
 ```
@@ -473,6 +508,11 @@ Code review and quality -- adversarial review, security patterns
 v0.1.0 | Generic | MIT
 
 Tags: patternfly, code-review
+
+| Skill | Description |
+|-------|-------------|
+| `/pf-review` | Run all PatternFly compliance checks on a project — imports, components, colors, legacy CSS, and security. Use when auditing PF code, before merging PRs, or for comprehensive compliance review. |
+| `/pf-security-scan` | Scan PatternFly React code for security anti-patterns — XSS via dangerouslySetInnerHTML, unsanitized user input in tooltips/labels, and insecure href patterns. Use when reviewing PF code for security vulnerabilities or auditing user-controlled content in PF components. |
 
 ```bash
 /plugin install pf-code-review@opendatahub-skills

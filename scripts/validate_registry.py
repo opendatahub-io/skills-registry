@@ -31,6 +31,7 @@ sys.path.insert(0, _REPO_ROOT_STR)
 from scripts.registry_contracts import (  # noqa: E402
     CANONICAL_FUNCTIONS,
     CANONICAL_METRICS,
+    GIT_CLONE_TYPES,
     SkillKey,
     detect_touched_skills,
     iter_plugins,
@@ -250,6 +251,15 @@ def check_skill_contracts(registry: dict, required_skills: set[SkillKey]) -> lis
     errors: list[str] = []
     for plugin in iter_plugins(registry):
         plugin_name = get_plugin_label(plugin)
+        # Contracts are required only for cloneable/verifiable sources
+        # (github/git) -- the same boundary skill-linter and skill-name-drift
+        # use. git-subdir/npm/local skills are delegated: their source cannot be
+        # cloned and their source_assertions cannot be resolved, so a contract
+        # on them would be unverifiable metadata. Such plugins may list skills
+        # (name + description) for display without a contract block.
+        source = plugin.get("source") or {}
+        if source.get("type") not in GIT_CLONE_TYPES:
+            continue
         for skill in iter_skills(plugin):
             skill_name = skill.get("name", "<unknown>")
             key = SkillKey(plugin_name, skill_name)
@@ -491,7 +501,7 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
 
     Returns (errors, warnings). A registry skill with no upstream SKILL.md is an error:
     the catalog publishes a slash command that resolves to nothing. Upstream skills the
-    registry omits, and user-invocable disagreements, are warnings — they misdescribe the
+    registry omits, and user-invocable disagreements, are warnings -- they misdescribe the
     plugin without inventing a command, and several are known upstream-side gaps.
     """
     from scripts.discover_skills import parse_frontmatter

@@ -94,9 +94,9 @@ The optional `scope` field declares how reusable the plugin is. It is catalog-on
 
 `generic` and `team` plugins are labeled on the site; `team` plugins are listed in a dedicated "Team-Specific" section rather than mixed into function categories. Always use a **function-based** `category` (what the skill does) regardless of scope — do not create team-named categories. Team identity belongs in `tags` and `scope`.
 
-### Skill count for delegated discovery (`skill_count`)
+### Delegated sub-plugins: listing skills vs `skill_count`
 
-Some plugins delegate skill discovery to their own `plugin.json` and do not list `skills` in `registry.yaml` — for example a `git-subdir` sub-plugin whose skills live under its subdirectory. Without a `skills` list the catalog shows "0 skills". Add `skill_count` so the catalog/site display the real number:
+A sub-plugin whose skills live in its own repo (typically a `git-subdir` source) delegates discovery to its `plugin.json`. Because such sources are exempt from the contract requirement (see [Choosing Canonical Contracts](#choosing-canonical-contracts)), **the preferred approach is to list its skills** (name + description, no contract) so they render on the plugin's catalog/site page:
 
 ```yaml
     source:
@@ -104,10 +104,14 @@ Some plugins delegate skill discovery to their own `plugin.json` and do not list
       url: https://github.com/rh-uxd/ai-helpers.git
       path: plugins/patternfly/pf-react
       ref: main
-    skill_count: 10               # catalog-only; skills are discovered at install time
+    skills:
+      - name: pf-test-gen
+        description: Generate a unit test file for a React component using Testing Library.
+        user-invocable: true
+      # ... name + description only; no contract needed for git-subdir sources
 ```
 
-`skill_count` is catalog-only metadata (not propagated to `marketplace.json`). A plugin sets `skill_count` **or** lists `skills`, never both. It is hand-maintained today; keep it in sync when the upstream plugin adds or removes skills.
+Alternatively, when you only want a count and not a list, set `skill_count: N` instead of a `skills` array — catalog-only metadata (not propagated to `marketplace.json`). A plugin sets `skill_count` **or** lists `skills`, never both. Either way it is hand-maintained; keep it in sync when the upstream plugin adds or removes skills.
 
 ### Meta-plugins (bundles)
 
@@ -130,7 +134,7 @@ A **meta-plugin** installs several other plugins in one step. List its members w
 
 Rules for bundles:
 
-- **Register every member as its own top-level entry** in `registry.yaml`, with `name` matching the bundle's upstream `plugin.json` `dependencies`. Claude Code resolves a plugin's dependencies within the marketplace it was installed *from*, so if the members are not in this registry, installing the bundle resolves nothing (`dependency-unsatisfied`) and no skills load. (Members are normal entries — often `git-subdir` sub-plugins with their own `skill_count`.)
+- **Register every member as its own top-level entry** in `registry.yaml`, with `name` matching the bundle's upstream `plugin.json` `dependencies`. Claude Code resolves a plugin's dependencies within the marketplace it was installed *from*, so if the members are not in this registry, installing the bundle resolves nothing (`dependency-unsatisfied`) and no skills load. (Members are normal entries — typically `git-subdir` sub-plugins that list their own skills, name + description, without contract blocks.)
 - **Do not give the bundle its own `skills` or `skill_count`.** Its displayed count is derived by summing its members' counts, and bundles are excluded from registry-wide totals so each skill is counted once.
 - `includes` is different from `depends_on`. `depends_on` records a peer plugin this one *requires*; `includes` records the plugins this one *installs together*, and renders as an "Includes" section in the catalog and site. Neither reaches `marketplace.json`.
 - `validate_registry.py` rejects a bundle that references an undefined member, lists itself, forms a cycle, or carries its own `skills`/`skill_count`.
@@ -179,6 +183,8 @@ The hooks validate staged `registry.yaml` changes and run pinned `skill-linter` 
 `config/skill-linter-registry.json` may downgrade an occasionally noisy rule to warning when permission-documentation text would otherwise false-positive, so you can still see warning-level linter output while the hook passes.
 
 When you add a skill or change an existing skill's registry entry (compared against `HEAD` for pre-commit or the configured base ref in CI), include a canonical `contract` block on that skill plus accurate `contract.source_assertions` paths into the upstream repository; CI and hooks enforce this for touched skills.
+
+The contract requirement applies **only to skills whose plugin `source.type` is `github` or `git`** — the same cloneable sources that `skill-linter` and the skill-name-drift check verify. Skills on `git-subdir`, `npm`, or `local` sources are **exempt**: their source cannot be cloned and their `source_assertions` cannot be resolved, so a contract on them would be unverifiable metadata. This lets a delegated sub-plugin (e.g. a bundle member) list its skills (name + description) for display without a contract block.
 
 ### Choosing Canonical Contracts
 

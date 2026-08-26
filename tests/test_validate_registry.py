@@ -933,5 +933,43 @@ class BundleCheckTests(unittest.TestCase):
         self.assertTrue(any("nested bundles are not supported" in e for e in errors))
 
 
+class ContractSourceExemptionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.validate_registry = get_validate_registry_module()
+
+    def _registry(self):
+        return {
+            "name": "r", "owner": {"name": "o"},
+            "plugins": [
+                {"name": "gh", "description": "d", "version": "1.0.0",
+                 "source": {"type": "github", "repo": "o/r"},
+                 "skills": [{"name": "s1", "description": "d"}]},
+                {"name": "sub", "description": "d", "version": "1.0.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+                 "skills": [{"name": "s2", "description": "d"}]},
+            ],
+        }
+
+    def test_git_subdir_skill_exempt_from_contract(self):
+        reg = self._registry()
+        required = {SkillKey("sub", "s2")}
+        errors = self.validate_registry.check_skill_contracts(reg, required)
+        self.assertEqual([], errors)
+
+    def test_github_skill_still_requires_contract(self):
+        # Hole-closed: a cloneable-source plugin's contract-less skill is flagged
+        # even when it is a bundle member.
+        reg = self._registry()
+        reg["plugins"].append({
+            "name": "bundle", "description": "d", "version": "1.0.0",
+            "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "b"},
+            "includes": ["gh"],
+        })
+        required = {SkillKey("gh", "s1")}
+        errors = self.validate_registry.check_skill_contracts(reg, required)
+        self.assertTrue(any("gh" in e and "s1" in e for e in errors))
+
+
 if __name__ == "__main__":
     unittest.main()

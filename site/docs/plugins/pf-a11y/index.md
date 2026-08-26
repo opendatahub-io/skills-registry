@@ -18,6 +18,13 @@ Accessibility auditing, reporting, and documentation
     - **Category**: [Development Tools](../../categories/development-tools.md)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">accessibility</span> <span class="tag-pill">a11y</span>
 
+## Skills
+
+| Skill | Description | Invocable |
+|-------|-------------|-----------|
+| [`/pf-a11y-audit`](pf-a11y-audit.md) | Audit PatternFly components and pages against WCAG and ARIA best practices. Use when reviewing accessibility, fixing screen reader issues, or validating ARIA usage in PatternFly-based applications. | :material-check: |
+| [`/pf-a11y-keyboard`](pf-a11y-keyboard.md) | Test keyboard accessibility of PatternFly UIs via live browser interaction. Use when validating keyboard navigation, focus management, or interaction patterns in a running application. | :material-check: |
+
 ## Installation
 
 ```bash

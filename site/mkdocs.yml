@@ -198,12 +198,43 @@ nav:
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
     - patternfly:
       - plugins/patternfly/index.md
-      - pf-react: plugins/pf-react/index.md
-      - pf-design-guide: plugins/pf-design-guide/index.md
-      - pf-design-audit: plugins/pf-design-audit/index.md
-      - pf-a11y: plugins/pf-a11y/index.md
-      - pf-migration: plugins/pf-migration/index.md
-      - pf-code-review: plugins/pf-code-review/index.md
+      - pf-react:
+        - plugins/pf-react/index.md
+        - pf-chart-gen: plugins/pf-react/pf-chart-gen.md
+        - pf-component-check: plugins/pf-react/pf-component-check.md
+        - pf-component-reuse-check: plugins/pf-react/pf-component-reuse-check.md
+        - pf-deploy: plugins/pf-react/pf-deploy.md
+        - pf-design-comments-setup: plugins/pf-react/pf-design-comments-setup.md
+        - pf-form-gen: plugins/pf-react/pf-form-gen.md
+        - pf-import-check: plugins/pf-react/pf-import-check.md
+        - pf-project-gen: plugins/pf-react/pf-project-gen.md
+        - pf-table-gen: plugins/pf-react/pf-table-gen.md
+        - pf-test-gen: plugins/pf-react/pf-test-gen.md
+      - pf-design-guide:
+        - plugins/pf-design-guide/index.md
+        - pf-figma-design-mode: plugins/pf-design-guide/pf-figma-design-mode.md
+        - pf-screenshot-mapping: plugins/pf-design-guide/pf-screenshot-mapping.md
+      - pf-design-audit:
+        - plugins/pf-design-audit/index.md
+        - pf-ai-audit: plugins/pf-design-audit/pf-ai-audit.md
+        - pf-color-scan: plugins/pf-design-audit/pf-color-scan.md
+        - pf-css-token-check: plugins/pf-design-audit/pf-css-token-check.md
+        - pf-figma-check: plugins/pf-design-audit/pf-figma-check.md
+        - pf-figma-token-check: plugins/pf-design-audit/pf-figma-token-check.md
+        - pf-icon-finder: plugins/pf-design-audit/pf-icon-finder.md
+      - pf-a11y:
+        - plugins/pf-a11y/index.md
+        - pf-a11y-audit: plugins/pf-a11y/pf-a11y-audit.md
+        - pf-a11y-keyboard: plugins/pf-a11y/pf-a11y-keyboard.md
+      - pf-migration:
+        - plugins/pf-migration/index.md
+        - pf-css-migration-scan: plugins/pf-migration/pf-css-migration-scan.md
+        - pf-react-migration-scan: plugins/pf-migration/pf-react-migration-scan.md
+        - pf-release-candidate-update: plugins/pf-migration/pf-release-candidate-update.md
+      - pf-code-review:
+        - plugins/pf-code-review/index.md
+        - pf-review: plugins/pf-code-review/pf-review.md
+        - pf-security-scan: plugins/pf-code-review/pf-security-scan.md
       - pf-mcp: plugins/pf-mcp/index.md
     - docs-skills:
       - plugins/docs-skills/index.md

@@ -2479,7 +2479,37 @@ plugins:
     description: >
       React component development -- coding standards, testing, and structure
     version: "0.1.0"
-    skill_count: 10
+    skills:
+      - name: pf-chart-gen
+        description: Generate PatternFly chart components with theming, responsive sizing, and accessibility. Use when building charts, data visualizations, or dashboards with PatternFly.
+        user-invocable: true
+      - name: pf-component-check
+        description: Audit PatternFly React component nesting, wrapper hierarchies, and layout structure. Use when scanning for hierarchy violations or debugging spacing caused by missing wrapper components.
+        user-invocable: true
+      - name: pf-component-reuse-check
+        description: Detects custom React components in newly created or modified (uncommitted) code that overlap with PatternFly React components, suggests the PatternFly equivalent, and can replace the custom component then build to verify. Use when creating UI components, reviewing uncommitted React changes, or when the user asks to prefer PatternFly instead of a custom component.
+        user-invocable: true
+      - name: pf-deploy
+        description: Deploy a PatternFly React project to GitHub Pages using pfcli deploy. Use when publishing a prototype, sharing a demo URL, deploying to GitHub Pages, or when the user mentions pfcli deploy.
+        user-invocable: true
+      - name: pf-design-comments-setup
+        description: Integrate @patternfly/design-comments into React apps for on-page design feedback, pinned comment threads, GitHub Issues sync, and Jira linking. Use when adding design comments, review overlays, or removing the commenting system from a PatternFly React project.
+        user-invocable: true
+      - name: pf-form-gen
+        description: Generate PatternFly form components with validation, layout, and accessibility. Use when building forms, adding form fields, or creating validated input workflows.
+        user-invocable: true
+      - name: pf-import-check
+        description: Audit and fix invalid PatternFly import paths across packages. Use when imports fail, modules are unresolved, or after upgrading PatternFly versions.
+        user-invocable: true
+      - name: pf-project-gen
+        description: Scaffolds PatternFly React projects with PF6-safe dependencies, imports, and starter layout. Use when creating a new PatternFly app or bootstrapping a migration sandbox.
+        user-invocable: true
+      - name: pf-table-gen
+        description: Generate PatternFly table components with sorting, filtering, pagination, and expandable rows. Use when building data tables, adding table features, or migrating HTML tables to PatternFly.
+        user-invocable: true
+      - name: pf-test-gen
+        description: Generate a unit test file for a React component using Testing Library. Use when adding test coverage to new or existing components.
+        user-invocable: true
     category: development-tools
     scope: generic
     tags: [patternfly, react]
@@ -2499,7 +2529,13 @@ plugins:
     description: >
       Design guide -- component selection, interaction patterns, AI experience patterns
     version: "0.1.0"
-    skill_count: 2
+    skills:
+      - name: pf-figma-design-mode
+        description: Create and edit Figma design files using PatternFly-approved component libraries. Use when building, updating, or restructuring Figma frames and components. Requires Figma MCP.
+        user-invocable: true
+      - name: pf-screenshot-mapping
+        description: Maps screenshots and UI mockups (any fidelity) to PatternFly 6 layout and building-block components. Output uses PF Component Mapping (regions, PF6 direction including structure and behavior, doc links) and PF Gaps & Recommendations (structural gaps/stretches and design-system follow-ups). Omits branding and visual styling (logos, colors, typography, border radius, shadows, component shape). Use when the user shares a UI image or asks whether a screen can be built with PatternFly, which PatternFly components to use, or for a PatternFly component pass on a wireframe, lo-fi, or third-party UI reference.
+        user-invocable: true
     category: development-tools
     scope: generic
     tags: [patternfly, design]
@@ -2519,7 +2555,25 @@ plugins:
     description: >
       Design audit -- validate existing code and designs against PatternFly standards
     version: "0.1.0"
-    skill_count: 6
+    skills:
+      - name: pf-ai-audit
+        description: Audit AI-powered features against Red Hat's AI design language — transparency notices, iconography, chatbot patterns, color and gradient rules. Use when reviewing chatbots, AI assistants, or generation UIs for brand compliance.
+        user-invocable: true
+      - name: pf-color-scan
+        description: Find raw color values (hex, rgb, hsl) in code and suggest PatternFly design token replacements. Use when auditing stylesheets for hardcoded colors or enforcing token compliance.
+        user-invocable: true
+      - name: pf-css-token-check
+        description: Detect hardcoded color, spacing, typography, border radius and shadow values that have PF token equivalents and suggest the correct design token replacements. Works on CSS, SCSS, CSS-in-JS, and inline styles. Use when auditing stylesheets for hardcoded values, enforcing design token compliance, or refactoring styles to use PatternFly tokens.
+        user-invocable: true
+      - name: pf-figma-check
+        description: Check Figma designs against PatternFly v6 standards for colors, typography, spacing, and component usage. Use when validating a design before handoff, auditing existing mockups for compliance, or reviewing design token usage. Requires Figma MCP.
+        user-invocable: true
+      - name: pf-figma-token-check
+        description: Audit designs against the PatternFly 6 token architecture and bridge Figma styles to PF semantic tokens. Use when validating token usage, mapping Figma variables to PF tokens, or checking designs for token compliance.
+        user-invocable: true
+      - name: pf-icon-finder
+        description: Identify PatternFly icons in design mockups and provide the correct React import statements. Use when implementing a design, verifying icon usage in a prototype, or finding the correct icon imports for React components.
+        user-invocable: true
     category: development-tools
     scope: generic
     tags: [patternfly, design, audit]
@@ -2539,7 +2593,13 @@ plugins:
     description: >
       Accessibility auditing, reporting, and documentation
     version: "0.1.0"
-    skill_count: 2
+    skills:
+      - name: pf-a11y-audit
+        description: Audit PatternFly components and pages against WCAG and ARIA best practices. Use when reviewing accessibility, fixing screen reader issues, or validating ARIA usage in PatternFly-based applications.
+        user-invocable: true
+      - name: pf-a11y-keyboard
+        description: Test keyboard accessibility of PatternFly UIs via live browser interaction. Use when validating keyboard navigation, focus management, or interaction patterns in a running application.
+        user-invocable: true
     category: development-tools
     scope: generic
     tags: [patternfly, accessibility, a11y]
@@ -2559,7 +2619,16 @@ plugins:
     description: >
       PF version migration -- breaking change detection, class scanning, upgrade planning
     version: "0.1.0"
-    skill_count: 3
+    skills:
+      - name: pf-css-migration-scan
+        description: Scan code for legacy PatternFly CSS classes and recommend PF6-safe replacements. Use when upgrading from PF4/PF5 or auditing a codebase for deprecated class names.
+        user-invocable: true
+      - name: pf-react-migration-scan
+        description: Scan code for @patternfly/react-* API breaking changes and produce a markdown report. Use when upgrading PatternFly React versions, auditing component API usage, or checking for removed props, renamed components, or import path changes.
+        user-invocable: true
+      - name: pf-release-candidate-update
+        description: Update @patternfly/* npm dependencies to the latest release candidate versions. Use when testing the next PF release or bumping to RC packages.
+        user-invocable: true
     category: development-tools
     scope: generic
     tags: [patternfly, migration]
@@ -2579,7 +2648,13 @@ plugins:
     description: >
       Code review and quality -- adversarial review, security patterns
     version: "0.1.0"
-    skill_count: 2
+    skills:
+      - name: pf-review
+        description: Run all PatternFly compliance checks on a project — imports, components, colors, legacy CSS, and security. Use when auditing PF code, before merging PRs, or for comprehensive compliance review.
+        user-invocable: true
+      - name: pf-security-scan
+        description: Scan PatternFly React code for security anti-patterns — XSS via dangerouslySetInnerHTML, unsanitized user input in tooltips/labels, and insecure href patterns. Use when reviewing PF code for security vulnerabilities or auditing user-controlled content in PF components.
+        user-invocable: true
     category: development-tools
     scope: generic
     tags: [patternfly, code-review]
