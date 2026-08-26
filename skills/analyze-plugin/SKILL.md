@@ -36,39 +36,100 @@ and generate enriched documentation pages with SVG diagrams for the skills-regis
 ### 1. Find the plugin in the registry
 
 Read `registry.yaml` and locate the plugin entry matching the provided name.
-Extract: `source.repo`, `source.ref`, `skills_dir` (or default `.claude/skills`),
-`skills[]`, `agents[]`, and all metadata.
+Extract `source`, `skills[]`, `agents[]`, `mcp_servers[]`, `includes[]`, and all
+metadata. The `source` comes in three shapes — note which one this plugin uses,
+because it changes how you clone (Step 2) and where SKILL.md files live (Step 3):
+
+| `source.type` | Fields | Repo to clone | Plugin lives at | Skills at |
+|---------------|--------|---------------|-----------------|-----------|
+| `github` | `repo` (`owner/name`), `ref`, `skills_dir?` | `https://github.com/<repo>.git` | repo root | `<skills_dir or .claude/skills>/<name>/SKILL.md` |
+| `git` | `url`, `ref`, `skills_dir?` | `<url>` | repo root | `<skills_dir or .claude/skills>/<name>/SKILL.md` |
+| `git-subdir` | `url`, `path`, `ref` | `<url>` | `<path>/` inside the repo | `<path>/skills/<name>/SKILL.md` |
+
+Call the plugin's directory inside the clone `<SUBDIR>` — it is `.` for `github`/`git`
+and `<source.path>` for `git-subdir`. Agents live at `<SUBDIR>/agents/`.
+
+**Meta-plugins (bundles).** If the entry has a non-empty `includes: [members...]`, it is a
+bundle — it installs those member plugins and has **no skills of its own**. Skip the
+skill-reading and per-skill diagram steps for it; instead follow *Bundle handling* below.
+The members are their own top-level registry entries (usually `git-subdir`) and are
+analyzed on their own runs.
 
 If the plugin name is not found, list available plugins and exit.
 
+#### Bundle handling (plugins with `includes`)
+
+For a bundle, produce an enrichment that describes the toolkit rather than skills it
+does not have:
+
+- Write `_enriched.yaml` with a synthesized `description` (what the bundle installs and
+  why) and an `architecture_notes` that lists the member plugins from `includes` and, if
+  useful, reads each member entry's `description` from `registry.yaml`. Do **not** emit a
+  `skills:` map.
+- For diagrams (unless `--no-diagrams`), generate only a **pipeline** overview whose nodes
+  are the member plugins (one node per member, the bundle as entry). Skip per-skill
+  diagrams — the bundle has none.
+- You may still clone the bundle's `<SUBDIR>` to read its `plugin.json`/`README.md` for
+  the overview, but there are no `<SUBDIR>/skills/` to iterate.
+
 ### 2. Clone the source repository
 
-Clone into `.tmp/skill-repos/<plugin-name>` inside the project directory (not a system
-temp dir — sub-agents need read access and can't access paths outside the project).
+Clone inside the project directory under `.tmp/skill-repos/` (not a system temp dir —
+sub-agents need read access and can't reach paths outside the project).
+
+**Validate inputs first — before building any path or running `rm`/`git clone`.**
+`<plugin-name>` and `source.path` come from `registry.yaml` and are interpolated into
+`CLONE_DIR`/`WORKDIR` that `rm -rf` and `git clone` then act on, so a traversal value must
+be rejected *up front* (the Step 5 sanitize runs too late — after these commands). Confirm
+`<plugin-name>` is a plain slug (`^[a-z0-9][a-z0-9._-]*$` — no `/`, no `..`), and confirm
+`source.path` (git-subdir) is a safe **relative** path — reject a leading `/` and any `..`
+segment, allow `packages/foo`. Abort the run on either (path traversal / unintended
+deletion — CWE-22 / CWE-73).
+
+Then pick `CLONE_URL`, `CLONE_DIR`, `WORKDIR`, and `SKILLS_DIR` from the source shape
+identified in Step 1:
+
+- **`CLONE_URL`** — `https://github.com/<source.repo>.git` for `github`; `<source.url>`
+  for `git` and `git-subdir`.
+- **`CLONE_DIR`** — `.tmp/skill-repos/<plugin-name>` for **every** source type (one dir
+  per plugin). A `git-subdir` member clones its whole monorepo here and reads only its
+  subdir. Keep it per-plugin (not per-repo): `generate-site` fans this skill out in
+  parallel, so a shared per-repo dir would let concurrent clones/pulls race and corrupt
+  the checkout. The cost is that members of one monorepo each shallow-clone it — redundant
+  but safe; a future optimization could clone the shared repo once before the fan-out.
+- **`WORKDIR`** — `<CLONE_DIR>/<SUBDIR>` (recall `<SUBDIR>` is `.` for `github`/`git`,
+  `<source.path>` for `git-subdir`). All later steps read SKILL.md/agents under `WORKDIR`.
+- **`SKILLS_DIR`** — `<skills_dir>` if the entry sets one; else `.claude/skills` for
+  `github`/`git`, `skills` for `git-subdir`. Skills resolve at
+  `<WORKDIR>/<SKILLS_DIR>/<name>/SKILL.md`; use this **same** value in Step 3 and in the
+  Step 6 agent prompt (don't hardcode `skills`, which is wrong for a default github/git plugin).
 
 If the directory already exists, check that it points to the correct repo:
 
 ```bash
-if [ -d .tmp/skill-repos/<plugin-name> ]; then
-  remote=$(cd .tmp/skill-repos/<plugin-name> && git remote get-url origin 2>/dev/null)
-  if [ "$remote" != "https://github.com/<repo>.git" ]; then
-    echo "Repo URL changed ($remote → <repo>), re-cloning"
-    rm -rf .tmp/skill-repos/<plugin-name>
+if [ -d "$CLONE_DIR" ]; then
+  remote=$(cd "$CLONE_DIR" && git remote get-url origin 2>/dev/null)
+  if [ "$remote" != "$CLONE_URL" ]; then
+    echo "Repo URL changed ($remote → $CLONE_URL), re-cloning"
+    rm -rf "$CLONE_DIR"
   fi
 fi
 ```
 
-If the directory doesn't exist (or was just deleted), clone fresh:
+Clone fresh, or (for an existing clone) **fetch and check out the requested `<ref>`** — the
+`ref` in `registry.yaml` may have changed since the last run, and this also handles a tag
+or SHA checkout cleanly (a plain `git pull --ff-only` fails on a detached/tag checkout and
+would silently keep the old branch):
 
 ```bash
 mkdir -p .tmp/skill-repos
-git clone --depth 1 --branch <ref> https://github.com/<repo>.git .tmp/skill-repos/<plugin-name>
-```
-
-If the directory exists and the remote matches, pull latest:
-
-```bash
-cd .tmp/skill-repos/<plugin-name> && git pull --ff-only
+if [ ! -d "$CLONE_DIR" ]; then
+  # git-subdir needs the subdir, so a plain shallow clone of the repo is fine here.
+  git clone --depth 1 --branch <ref> "$CLONE_URL" "$CLONE_DIR"
+else
+  git -C "$CLONE_DIR" fetch --depth 1 origin <ref>
+  git -C "$CLONE_DIR" checkout -q -f FETCH_HEAD   # switch to the requested ref (branch/tag/SHA)
+fi
 ```
 
 The `.tmp/` directory is already in `.gitignore`.
@@ -105,7 +166,12 @@ This handles:
 ### 3. Read all SKILL.md files
 
 For each skill listed in the plugin's registry entry, read the corresponding SKILL.md file
-from the cloned repo at `<skills_dir>/<skill-name>/SKILL.md`.
+at `<WORKDIR>/<SKILLS_DIR>/<skill-name>/SKILL.md` using the `WORKDIR` and `SKILLS_DIR`
+resolved in Step 2. Concretely, a `git-subdir` member resolves to
+`<CLONE_DIR>/<source.path>/skills/<skill-name>/SKILL.md`, and a default `github`/`git`
+plugin to `<CLONE_DIR>/.claude/skills/<skill-name>/SKILL.md`.
+
+(Skip this step entirely for a bundle — it has no skills; see *Bundle handling* in Step 1.)
 
 If a skill's SKILL.md is not found at the expected path, try common name transformations:
 - Replace `-` with `.` (dashes to dots): `test-plan-create` → `test-plan.create`
@@ -135,7 +201,10 @@ Extract from each SKILL.md:
 - **Input/output** — what the skill takes and produces
 - **Architecture notes** — how the skill works internally (sub-agents, scripts, prompts)
 
-Also read any agent definitions from `<agents_dir>/<agent-name>.md` if the plugin has agents.
+Also read any agent definitions from `<WORKDIR>/<agents_dir or agents>/<agent-name>.md` if
+the plugin has agents. If the plugin declares `mcp_servers` in `registry.yaml`, note them
+for the enrichment description — they already render as their own table via
+`generate_site.py`, so enrichment only needs to add context, not re-list them.
 
 ### 4. Generate the enrichment file
 
@@ -224,10 +293,12 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
    expensive batch.
 
    **Sanitize the target clone before spawning agents** (it came from an arbitrary
-   `registry.yaml` URL): (a) reject symlinks — `find .tmp/skill-repos/<plugin-name> -type l`
+   `registry.yaml` URL): (a) reject symlinks — `find "$CLONE_DIR" -type l` (the clone dir
+   from Step 2, `.tmp/skill-repos/<plugin-name>`)
    must return nothing, else abort the run (a symlink like `SKILL.md -> ~/.ssh/id_rsa` would
    let an agent read host files through the allowed read scope); and (b) confirm
-   `<plugin-name>` / `<skill-name>` / `<dir-name>` are plain slugs (no `/`, no `..`) before
+   `<plugin-name>` / `<skill-name>` / `<dir-name>` / `<source.path>` are plain slugs (no `..`)
+   before
    building any path, so a crafted name cannot escape `.tmp/diagram-work/*` or
    `site/docs/plugins/*`.
 3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
@@ -294,7 +365,7 @@ Agent({
     name: <skill-name>
     OUT_DIR: <abs>/site/docs/plugins/<plugin-name>
     SCRATCH: <abs>/.tmp/diagram-work/<skill-name>/artifacts
-    SKILL_MD: <abs>/.tmp/skill-repos/<plugin-name>/<skills_dir>/<dir-name>/SKILL.md
+    SKILL_MD: <abs>/<WORKDIR>/<SKILLS_DIR>/<dir-name>/SKILL.md   # WORKDIR + SKILLS_DIR from Step 2; git-subdir member -> <abs>/.tmp/skill-repos/<plugin-name>/<source.path>/skills/<dir-name>/SKILL.md
     DIAGRAM_SKILLS: <DIAGRAM_SKILLS>
     Suggested flow: <the per-skill outline from Step 5.4 — roles + llm count>
     Callout target: <the skill's primary output artifact to ground a callout>
@@ -377,5 +448,6 @@ Report:
 
 ### Cleanup
 
-The cloned repo in `.tmp/skill-repos/<plugin-name>` can be left in place for future
+The cloned repo in `.tmp/skill-repos/<plugin-name>` (a `git-subdir` member clones its
+whole monorepo here; its subdir is `WORKDIR`) can be left in place for future
 re-runs (it's gitignored). To force a fresh clone, delete it before running.

@@ -36,6 +36,13 @@ diagrams, and produces structural pages from `registry.yaml`.
 
 Invoke `/analyze-plugin` for each plugin in the registry (or just the `--plugin` if specified).
 
+`/analyze-plugin` handles every source type (`github`, `git`, `git-subdir`) and both
+plain plugins and **meta-plugins (bundles)** — an entry with `includes` is a bundle with
+no skills of its own, and its members are their own registry entries. So fan it over
+**all** plugins as usual, including bundles and their `git-subdir` members; each member
+gets its own enriched page, and the bundle gets an overview. (Members of one monorepo each
+shallow-clone it into their own `.tmp/skill-repos/<name>` — redundant but parallel-safe.)
+
 If `--no-diagrams` is set, pass it through to `/analyze-plugin` so it skips Steps 5-6
 (pipeline and individual skill diagrams) and only generates the enrichment YAML.
 
