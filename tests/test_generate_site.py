@@ -219,3 +219,58 @@ class SkillCountTests(unittest.TestCase):
         self.assertIn("## Includes", page)
         self.assertIn("[`leaf-a`](../leaf-a/index.md)", page)
         self.assertIn("[`leaf-b`](../leaf-b/index.md)", page)
+
+
+class VisiblePluginsTests(unittest.TestCase):
+    def _registry(self):
+        return {
+            "name": "opendatahub-skills",
+            "categories": {"dev": {"name": "Dev", "description": "d"}},
+            "plugins": [
+                {"name": "bundle", "description": "A bundle", "version": "0.1.0",
+                 "category": "dev", "scope": "generic",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+                 "includes": ["m1", "m2"]},
+                {"name": "m1", "description": "Member one", "version": "0.1.0",
+                 "category": "dev", "scope": "generic", "skill_count": 3,
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p/m1"}},
+                {"name": "m2", "description": "Member two", "version": "0.1.0",
+                 "category": "dev", "scope": "generic", "skill_count": 2,
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p/m2"}},
+                {"name": "solo", "description": "Standalone", "version": "0.1.0",
+                 "category": "dev", "scope": "generic",
+                 "source": {"type": "github", "repo": "o/solo"},
+                 "skills": [{"name": "s1"}]},
+            ],
+        }
+
+    def test_bundle_member_names(self):
+        self.assertEqual({"m1", "m2"},
+                         generate_site.bundle_member_names(self._registry()))
+
+    def test_visible_plugins_excludes_members(self):
+        names = [p["name"] for p in generate_site.visible_plugins(self._registry())]
+        self.assertEqual(["bundle", "solo"], names)
+
+    def test_plugins_index_hides_members_shows_bundle(self):
+        page = generate_site.generate_plugins_index(self._registry())
+        self.assertIn("[bundle](bundle/index.md)", page)
+        self.assertIn("2 plugins in the marketplace", page)
+        self.assertNotIn("[m1](m1/index.md)", page)
+        self.assertNotIn("[m2](m2/index.md)", page)
+
+    def test_category_page_excludes_members(self):
+        by_cat = generate_site.build_category_plugins(self._registry())
+        names = [p["name"] for p in by_cat["dev"]]
+        self.assertNotIn("m1", names)
+        self.assertNotIn("m2", names)
+        self.assertIn("bundle", names)
+
+    def test_mkdocs_nav_nests_members_under_bundle(self):
+        reg = self._registry()
+        yml = generate_site.generate_mkdocs_yml(reg, reg["categories"],
+                                                generate_site.build_category_plugins(reg))
+        # members are nested under the bundle, not top-level nav entries
+        self.assertIn("      - m1: plugins/m1/index.md", yml)
+        self.assertIn("    - bundle:", yml)      # bundle IS a top-level group
+        self.assertNotIn("    - m1:\n", yml)     # m1 is NOT a top-level group

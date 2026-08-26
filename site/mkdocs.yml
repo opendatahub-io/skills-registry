@@ -198,20 +198,13 @@ nav:
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md
     - patternfly:
       - plugins/patternfly/index.md
-    - pf-react:
-      - plugins/pf-react/index.md
-    - pf-design-guide:
-      - plugins/pf-design-guide/index.md
-    - pf-design-audit:
-      - plugins/pf-design-audit/index.md
-    - pf-a11y:
-      - plugins/pf-a11y/index.md
-    - pf-migration:
-      - plugins/pf-migration/index.md
-    - pf-code-review:
-      - plugins/pf-code-review/index.md
-    - pf-mcp:
-      - plugins/pf-mcp/index.md
+      - pf-react: plugins/pf-react/index.md
+      - pf-design-guide: plugins/pf-design-guide/index.md
+      - pf-design-audit: plugins/pf-design-audit/index.md
+      - pf-a11y: plugins/pf-a11y/index.md
+      - pf-migration: plugins/pf-migration/index.md
+      - pf-code-review: plugins/pf-code-review/index.md
+      - pf-mcp: plugins/pf-mcp/index.md
     - docs-skills:
       - plugins/docs-skills/index.md
       - docs-orchestrator: plugins/docs-skills/docs-orchestrator.md

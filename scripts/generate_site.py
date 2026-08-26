@@ -147,13 +147,37 @@ def clean_generated(output_dir: Path):
         index.unlink()
 
 
+def bundle_member_names(registry: dict) -> set:
+    """Names of plugins that belong to some bundle (listed in an ``includes``).
+
+    Members are surfaced through their bundle — its "Includes" section and its
+    nav group — rather than as standalone top-level entries in the site
+    listings, so a bundle reads as a single offering.
+    """
+    members: set = set()
+    for plugin in registry.get("plugins", []):
+        members.update(plugin.get("includes") or [])
+    return members
+
+
+def visible_plugins(registry: dict) -> list:
+    """Top-level plugins for site listings: everything except bundle members."""
+    member_names = bundle_member_names(registry)
+    return [p for p in registry.get("plugins", [])
+            if p["name"] not in member_names]
+
+
 def build_category_plugins(registry: dict) -> dict[str, list]:
-    """Group plugins by category key. Team-scoped plugins are excluded — they
-    are surfaced in a dedicated Team-Specific section, not function categories."""
+    """Group plugins by category key. Team-scoped plugins and bundle members
+    are excluded — team plugins are surfaced in a dedicated Team-Specific
+    section, and members are surfaced through their bundle."""
     categories = registry.get("categories", {})
+    member_names = bundle_member_names(registry)
     by_cat: dict[str, list] = {k: [] for k in categories}
     for plugin in registry.get("plugins", []):
         if scope_of(plugin) == "team":
+            continue
+        if plugin["name"] in member_names:
             continue
         cat = plugin.get("category")
         if cat and cat in by_cat:
@@ -215,7 +239,7 @@ def scope_of(plugin: dict) -> str:
 
 def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
     categories = registry.get("categories", {})
-    plugins = registry.get("plugins", [])
+    plugins = visible_plugins(registry)
     by_name = build_plugin_index(registry)
     lines = ["---"]
     lines.append("hide:")
@@ -291,14 +315,14 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
 
 
 def generate_plugins_index(registry: dict) -> str:
-    plugins = registry.get("plugins", [])
+    plugins = visible_plugins(registry)
     categories = registry.get("categories", {})
     by_name = build_plugin_index(registry)
     lines = ["---\ntitle: Plugins\n---\n"]
     lines.append(GENERATED_MARKER)
     lines.append("# Plugins")
     lines.append("")
-    lines.append(f"{len(plugins)} plugins registered in the marketplace.")
+    lines.append(f"{len(plugins)} plugins in the marketplace.")
     lines.append("")
 
     def render_row(plugin):
@@ -963,22 +987,30 @@ def generate_mkdocs_yml(registry: dict, categories: dict,
                         cat_plugins: dict[str, list]) -> str:
     """Generate complete mkdocs.yml with dynamic nav."""
     plugins = registry.get("plugins", [])
+    by_name = build_plugin_index(registry)
+    member_names = bundle_member_names(registry)
 
     nav_lines = []
     nav_lines.append("nav:")
     nav_lines.append("  - Home: index.md")
 
-    # Plugins section — two-level: plugin > skills
+    # Plugins section — two-level: plugin > skills. Bundle members are nested
+    # under their bundle rather than listed as top-level entries.
     nav_lines.append("  - Plugins:")
     nav_lines.append("    - plugins/index.md")
     for plugin in plugins:
         name = plugin["name"]
+        if name in member_names:
+            continue  # surfaced under its bundle below
         skills = plugin.get("skills", [])
         nav_lines.append(f"    - {name}:")
         nav_lines.append(f"      - plugins/{name}/index.md")
         for skill in skills:
             sname = skill["name"]
             nav_lines.append(f"      - {sname}: plugins/{name}/{sname}.md")
+        for member in (plugin.get("includes") or []):
+            if member in by_name:
+                nav_lines.append(f"      - {member}: plugins/{member}/index.md")
 
     # Categories section — with index page
     nav_lines.append("  - Categories:")
