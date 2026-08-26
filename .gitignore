@@ -1,5 +1,10 @@
 .venv/
+# mkdocs build output — never commit. Default local build dir is site/site/
+# (mkdocs.yml lives in site/ with no site_dir override); CI deploys to /_site/
+# via `mkdocs build --site-dir ../_site`.
+site/site/
 site/_site/
+/_site/
 __pycache__/
 *.pyc
 .idea/
