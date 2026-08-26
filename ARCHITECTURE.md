@@ -127,7 +127,45 @@ and validation scripts enforce this constraint.
 Plugins can declare `depends_on: [other-plugin]` to express inter-plugin
 dependencies within the registry. This is registry-level metadata only —
 it is not propagated to `marketplace.json` (Claude Code does not support
-dependency resolution).
+registry-level dependency resolution).
+
+### Meta-plugins (bundles)
+
+A **meta-plugin** (bundle) is a plugin that installs a set of other plugins in
+one step. It lists its members with `includes`:
+
+```yaml
+  - name: patternfly            # the bundle — no skills of its own
+    includes: [pf-react, pf-a11y, pf-mcp]   # names of member plugins
+  - name: pf-react              # a member, registered as its own entry
+    skill_count: 10
+    source: { type: git-subdir, url: ..., path: plugins/patternfly/pf-react }
+```
+
+- **Members must be registered as their own top-level entries** in this
+  registry, with names matching the bundle's upstream `plugin.json`
+  `dependencies`. Claude Code resolves a plugin's dependencies *within the same
+  marketplace it was installed from*, so a bundle whose members are absent from
+  this registry would install with zero skills (`dependency-unsatisfied`).
+- The bundle's displayed skill count is **derived** by summing its members'
+  counts (single source of truth), and bundles are **excluded from
+  registry-wide totals** so each skill is counted exactly once.
+- `includes` is distinct from `depends_on`: `depends_on` records a required
+  peer plugin; `includes` means "installing this installs these" and drives the
+  catalog/site **Includes** section. Neither is propagated to `marketplace.json`.
+- `validate_registry.py` (`check_bundles`) enforces that members are defined,
+  a bundle neither lists itself nor forms a cycle, and a bundle carries no
+  `skills`/`skill_count` of its own.
+
+### Delegated skill discovery (`skill_count`)
+
+A plugin that delegates skill discovery to its own `plugin.json` (e.g. a
+`git-subdir` sub-plugin) carries no `skills` array in `registry.yaml`, so the
+catalog would otherwise show "0 skills". Set `skill_count: N` to record the
+number for display. It is catalog-only metadata (not propagated to
+`marketplace.json`); the actual skills are still discovered from the source
+repo at install time. A plugin may set `skill_count` **or** list `skills`, not
+both.
 
 ## CI Pipeline
 

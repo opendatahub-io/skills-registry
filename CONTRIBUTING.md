@@ -94,6 +94,47 @@ The optional `scope` field declares how reusable the plugin is. It is catalog-on
 
 `generic` and `team` plugins are labeled on the site; `team` plugins are listed in a dedicated "Team-Specific" section rather than mixed into function categories. Always use a **function-based** `category` (what the skill does) regardless of scope — do not create team-named categories. Team identity belongs in `tags` and `scope`.
 
+### Skill count for delegated discovery (`skill_count`)
+
+Some plugins delegate skill discovery to their own `plugin.json` and do not list `skills` in `registry.yaml` — for example a `git-subdir` sub-plugin whose skills live under its subdirectory. Without a `skills` list the catalog shows "0 skills". Add `skill_count` so the catalog/site display the real number:
+
+```yaml
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly/pf-react
+      ref: main
+    skill_count: 10               # catalog-only; skills are discovered at install time
+```
+
+`skill_count` is catalog-only metadata (not propagated to `marketplace.json`). A plugin sets `skill_count` **or** lists `skills`, never both. It is hand-maintained today; keep it in sync when the upstream plugin adds or removes skills.
+
+### Meta-plugins (bundles)
+
+A **meta-plugin** installs several other plugins in one step. List its members with `includes` (the names of other registry plugins):
+
+```yaml
+  - name: patternfly            # the bundle
+    description: Everything you need for PatternFly development
+    version: "0.1.0"
+    category: development-tools
+    scope: generic
+    source:
+      type: git-subdir
+      url: https://github.com/rh-uxd/ai-helpers.git
+      path: plugins/patternfly
+      ref: main
+    includes: [pf-react, pf-design-guide, pf-a11y, pf-migration, pf-code-review, pf-mcp]
+    depends_on: []
+```
+
+Rules for bundles:
+
+- **Register every member as its own top-level entry** in `registry.yaml`, with `name` matching the bundle's upstream `plugin.json` `dependencies`. Claude Code resolves a plugin's dependencies within the marketplace it was installed *from*, so if the members are not in this registry, installing the bundle resolves nothing (`dependency-unsatisfied`) and no skills load. (Members are normal entries — often `git-subdir` sub-plugins with their own `skill_count`.)
+- **Do not give the bundle its own `skills` or `skill_count`.** Its displayed count is derived by summing its members' counts, and bundles are excluded from registry-wide totals so each skill is counted once.
+- `includes` is different from `depends_on`. `depends_on` records a peer plugin this one *requires*; `includes` records the plugins this one *installs together*, and renders as an "Includes" section in the catalog and site. Neither reaches `marketplace.json`.
+- `validate_registry.py` rejects a bundle that references an undefined member, lists itself, forms a cycle, or carries its own `skills`/`skill_count`.
+
 ### 3. Regenerate Artifacts
 
 After editing `registry.yaml`, validate and regenerate artifacts so CI stays in sync (same sequence as `CLAUDE.md`):

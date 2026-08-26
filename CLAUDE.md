@@ -63,6 +63,10 @@ The `source` field in marketplace.json uses `"source": "github"` (not `"type"`).
 
 Plugins can include agents (defined in `agents/` directories) alongside skills. Agents run in isolated context windows and are auto-delegated by Claude or selected via `/agents`. The `agents_dir` field works like `skills_dir` — only valid with `strict: false`.
 
+### Meta-plugins (bundles) and skill_count
+
+A plugin with a non-empty `includes: [names...]` is a **meta-plugin** (bundle) that installs those member plugins together. Each member **must** also be registered as its own entry in `registry.yaml` (with a matching name), because Claude Code resolves a plugin's dependencies within the marketplace it was installed from — otherwise the bundle installs zero skills. The bundle's skill count is derived from its members (don't give it its own `skills`/`skill_count`). Use `skill_count: N` on a member that delegates discovery to its `plugin.json` and lists no `skills`. Both fields are catalog-only (not in `marketplace.json`); `check_bundles` in `validate_registry.py` enforces the rules. See @ARCHITECTURE.md and @CONTRIBUTING.md.
+
 ## Adding a Plugin
 
 See @CONTRIBUTING.md for the full process. Quick checklist:
