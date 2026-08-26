@@ -135,6 +135,22 @@ Rules for bundles:
 - `includes` is different from `depends_on`. `depends_on` records a peer plugin this one *requires*; `includes` records the plugins this one *installs together*, and renders as an "Includes" section in the catalog and site. Neither reaches `marketplace.json`.
 - `validate_registry.py` rejects a bundle that references an undefined member, lists itself, forms a cycle, or carries its own `skills`/`skill_count`.
 
+### Agents and MCP servers
+
+A plugin can provide **agents** and **MCP servers** alongside (or instead of) skills. Both are surfaced as their own table on the plugin's catalog and site page:
+
+```yaml
+    agents:
+      - name: python-packaging-investigator
+        description: Investigates Python package repositories and packaging complexity
+    mcp_servers:
+      - name: patternfly
+        description: Component documentation, design token lookup, and accessibility guidance via MCP
+```
+
+- **`agents`** lists the agents the plugin ships (matching the agent file names). For a `strict: false` plugin, also set `agents_dir` so the marketplace entry points Claude Code at them; for a `strict: true` plugin, the `plugin.json` is authoritative and `agents` is catalog-only display metadata.
+- **`mcp_servers`** lists the MCP servers the plugin provides (matching the keys in the plugin's `plugin.json` `mcpServers`). It is **catalog-only** display metadata — Claude Code reads the actual server config from the source `plugin.json`, so `mcp_servers` is never propagated to `marketplace.json`. Use it so an MCP-only plugin (e.g. `pf-mcp`) advertises what it offers instead of appearing as "0 skills".
+
 ### 3. Regenerate Artifacts
 
 After editing `registry.yaml`, validate and regenerate artifacts so CI stays in sync (same sequence as `CLAUDE.md`):

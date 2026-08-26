@@ -59,9 +59,11 @@ The schema enforces `skills_dir` requires `strict` to be present (`dependentRequ
 
 The `source` field in marketplace.json uses `"source": "github"` (not `"type"`). The `skills` field must be an array (e.g., `["./.claude/skills"]`), not a string. The sync script handles both correctly.
 
-### Agents
+### Agents and MCP servers
 
 Plugins can include agents (defined in `agents/` directories) alongside skills. Agents run in isolated context windows and are auto-delegated by Claude or selected via `/agents`. The `agents_dir` field works like `skills_dir` — only valid with `strict: false`.
+
+Plugins can also provide MCP servers. List them in `mcp_servers: [{name, description}]` so the catalog/site show what the plugin offers (useful for an MCP-only plugin that has no skills, e.g. `pf-mcp`). `mcp_servers` is catalog-only — Claude Code reads the real server config from the source `plugin.json` `mcpServers`, so it is not propagated to `marketplace.json`. Both `agents` and `mcp_servers` render as their own table on the plugin page.
 
 ### Meta-plugins (bundles) and skill_count
 

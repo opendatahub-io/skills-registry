@@ -18,6 +18,12 @@ PatternFly MCP server -- component documentation, design token lookup, and acces
     - **Category**: [Development Tools](../../categories/development-tools.md)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">mcp</span>
 
+## MCP Servers
+
+| MCP Server | Description |
+|------------|-------------|
+| patternfly | PatternFly component documentation, design token lookup, and accessibility guidance via the Model Context Protocol |
+
 ## Installation
 
 ```bash

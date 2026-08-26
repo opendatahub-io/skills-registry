@@ -267,6 +267,17 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
             lines.append(f"| {aname} | {adesc} |")
         lines.append("")
 
+    # MCP servers table
+    mcp_servers = plugin.get("mcp_servers", [])
+    if mcp_servers:
+        lines.append("| MCP Server | Description |")
+        lines.append("|------------|-------------|")
+        for server in mcp_servers:
+            mname = server["name"]
+            mdesc = server.get("description", "")
+            lines.append(f"| {mname} | {mdesc} |")
+        lines.append("")
+
     # Install command
     lines.append("```bash")
     lines.append(f"/plugin install {name}@{registry_name}")

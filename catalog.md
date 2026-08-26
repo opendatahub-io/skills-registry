@@ -486,6 +486,10 @@ v0.1.0 | Generic | MIT
 
 Tags: patternfly, mcp
 
+| MCP Server | Description |
+|------------|-------------|
+| patternfly | PatternFly component documentation, design token lookup, and accessibility guidance via the Model Context Protocol |
+
 ```bash
 /plugin install pf-mcp@opendatahub-skills
 ```

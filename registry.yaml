@@ -2614,6 +2614,9 @@ plugins:
       ref: main
     homepage: https://github.com/rh-uxd/ai-helpers
     repository: https://github.com/rh-uxd/ai-helpers
+    mcp_servers:
+      - name: patternfly
+        description: PatternFly component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
     depends_on: []
 
   - name: docs-skills

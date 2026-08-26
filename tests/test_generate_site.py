@@ -220,6 +220,21 @@ class SkillCountTests(unittest.TestCase):
         self.assertIn("[`leaf-a`](../leaf-a/index.md)", page)
         self.assertIn("[`leaf-b`](../leaf-b/index.md)", page)
 
+    def test_plugin_page_renders_mcp_servers(self):
+        plugin = {
+            "name": "pf-mcp", "description": "An MCP plugin", "version": "0.1.0",
+            "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "p"},
+            "skill_count": 0,
+            "mcp_servers": [
+                {"name": "patternfly", "description": "Component docs via MCP"},
+            ],
+        }
+        registry = {"name": "opendatahub-skills", "plugins": [plugin], "categories": {}}
+        page = generate_site.generate_plugin_page(
+            plugin, registry, enrichment=None, plugin_dir=None)
+        self.assertIn("## MCP Servers", page)
+        self.assertIn("| patternfly | Component docs via MCP |", page)
+
 
 class VisiblePluginsTests(unittest.TestCase):
     def _registry(self):

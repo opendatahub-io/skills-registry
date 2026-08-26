@@ -167,6 +167,18 @@ number for display. It is catalog-only metadata (not propagated to
 repo at install time. A plugin may set `skill_count` **or** list `skills`, not
 both.
 
+### Agents and MCP servers
+
+Besides skills, a plugin may provide **agents** (`agents` + `agents_dir`) and
+**MCP servers** (`mcp_servers`). Each renders as its own table on the plugin's
+catalog and site page. `agents_dir` (like `skills_dir`) points the marketplace
+entry at agent files for `strict: false` plugins. `mcp_servers` is catalog-only
+display metadata (name + description of each server declared in the source
+`plugin.json` `mcpServers`); Claude Code reads the real config from that
+`plugin.json`, so it is never propagated to `marketplace.json`. This lets an
+MCP-only plugin (e.g. `pf-mcp`) advertise what it provides instead of reading as
+"0 skills".
+
 ## CI Pipeline
 
 ```

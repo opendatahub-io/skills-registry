@@ -368,6 +368,7 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     deps = plugin.get("depends_on", [])
     skills = plugin.get("skills", [])
     agents = plugin.get("agents", [])
+    mcp_servers = plugin.get("mcp_servers", [])
     registry_name = registry["name"]
     categories = registry.get("categories", {})
     cat_name = categories.get(category, {}).get("name", category)
@@ -465,6 +466,18 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
             aname = agent["name"]
             adesc = agent.get("description", "")
             lines.append(f"| {aname} | {adesc} |")
+        lines.append("")
+
+    # MCP servers table
+    if mcp_servers:
+        lines.append("## MCP Servers")
+        lines.append("")
+        lines.append("| MCP Server | Description |")
+        lines.append("|------------|-------------|")
+        for server in mcp_servers:
+            mname = server["name"]
+            mdesc = server.get("description", "")
+            lines.append(f"| {mname} | {mdesc} |")
         lines.append("")
 
     contract_summary = mapping_if_dict(plugin.get("contract_summary"))

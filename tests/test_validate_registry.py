@@ -123,6 +123,24 @@ class SchemaTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
+    def test_schema_accepts_mcp_servers(self):
+        registry = build_registry()
+        registry["plugins"][0]["mcp_servers"] = [
+            {"name": "patternfly", "description": "Component docs via MCP"}
+        ]
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertEqual([], errors)
+
+    def test_schema_rejects_mcp_server_without_description(self):
+        registry = build_registry()
+        registry["plugins"][0]["mcp_servers"] = [{"name": "patternfly"}]
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertNotEqual([], errors)
+
     def test_schema_rejects_unknown_function_value(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])

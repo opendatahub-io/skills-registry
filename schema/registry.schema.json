@@ -369,6 +369,13 @@
           "type": "string",
           "description": "Path to agents directory in the repo (used when strict: false)"
         },
+        "mcp_servers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mcpServer"
+          },
+          "description": "MCP servers this plugin provides (declared in the plugin's plugin.json 'mcpServers'). Catalog-only display metadata — Claude Code reads the actual server config from the source plugin.json; not propagated to marketplace.json."
+        },
         "harnesses": {
           "type": "object",
           "additionalProperties": {
@@ -482,6 +489,21 @@
         "description": {
           "type": "string",
           "description": "What this agent does"
+        }
+      }
+    },
+    "mcpServer": {
+      "type": "object",
+      "required": ["name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "MCP server name (matches a key in the plugin.json 'mcpServers' object)"
+        },
+        "description": {
+          "type": "string",
+          "description": "What this MCP server provides"
         }
       }
     }
