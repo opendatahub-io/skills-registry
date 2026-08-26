@@ -44,8 +44,16 @@ launch, verdict reading) lives in separate repos (jira-autofix, ai-agentic-lib).
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install autofix-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `autofix-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

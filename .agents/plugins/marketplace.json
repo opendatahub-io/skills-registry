@@ -1,0 +1,394 @@
+{
+  "interface": {
+    "displayName": "OpenDataHub Skills"
+  },
+  "name": "opendatahub-skills",
+  "plugins": [
+    {
+      "category": "Product Planning",
+      "name": "rfe-creator",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/rfe-creator.git"
+      }
+    },
+    {
+      "category": "Product Planning",
+      "name": "strat-creator",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/strat-creator.git"
+      }
+    },
+    {
+      "category": "Evaluation & Testing",
+      "name": "assess-rfe",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/assess-rfe.git"
+      }
+    },
+    {
+      "category": "Evaluation & Testing",
+      "name": "assess-strat",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/assess-strat.git"
+      }
+    },
+    {
+      "category": "Security Review",
+      "name": "rhoai-security-reviewer",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/jctanner/ai-first-pipeline.git"
+      }
+    },
+    {
+      "category": "Evaluation & Testing",
+      "name": "test-plan",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/odh-test-gen.git"
+      }
+    },
+    {
+      "category": "Evaluation & Testing",
+      "name": "quality-tooling",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/antowaddle/Red-Hat-Quality-Tiger-Team.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-ai-helpers",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Evaluation & Testing",
+      "name": "agent-eval-harness",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "v1.30.0",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/agent-eval-harness.git"
+      }
+    },
+    {
+      "category": "Documentation",
+      "name": "knowledge-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/knowledge-skills.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "autofix-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/autofix-skills.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "autoqa-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/autoqa-skills.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "python-package-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/python-package-skills.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "ec-cve-check",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/jrusz/ec-cve-check.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "disconnected-readiness-scorer",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/disconnected-readiness-scorer.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "aiops-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/aiops-infra.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "pipeline-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/pipeline-skills.git"
+      }
+    },
+    {
+      "category": "Code Quality",
+      "name": "code-review-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/code-review-skills.git"
+      }
+    },
+    {
+      "category": "Product Planning",
+      "name": "spike-executor",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "master",
+        "source": "url",
+        "url": "https://github.com/IKRedHat/SPIKE-executor.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "patternfly",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-react",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-react",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-design-guide",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-design-guide",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-design-audit",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-design-audit",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-a11y",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-a11y",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-migration",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-migration",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-code-review",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-code-review",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "pf-mcp",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/patternfly/pf-mcp",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/rh-uxd/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Documentation",
+      "name": "docs-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "main",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/docs-skills.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "productization-skills",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "v0.8.1",
+        "sha": "86f0ce3f1697bcbe2b849b2770d235deddb16abe",
+        "source": "url",
+        "url": "https://github.com/opendatahub-io/productization-skills.git"
+      }
+    }
+  ]
+}

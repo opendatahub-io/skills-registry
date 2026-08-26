@@ -51,8 +51,16 @@ integration.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install rhoai-security-reviewer@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `rhoai-security-reviewer` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

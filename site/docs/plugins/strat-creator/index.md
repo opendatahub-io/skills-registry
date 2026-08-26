@@ -66,8 +66,16 @@ Atlassian MCP server when available, falling back to a REST API script driven by
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install strat-creator@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `strat-creator` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

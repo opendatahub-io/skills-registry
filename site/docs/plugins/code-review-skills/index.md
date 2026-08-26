@@ -39,8 +39,16 @@ falls back to a formatted terminal display.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install code-review-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `code-review-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

@@ -33,6 +33,14 @@ AI skills for Python package onboarding into the RHAI distribution pipeline. End
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install python-package-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `python-package-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

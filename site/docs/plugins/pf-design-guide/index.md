@@ -27,6 +27,14 @@ Design guide -- component selection, interaction patterns, AI experience pattern
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-design-guide@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-design-guide` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

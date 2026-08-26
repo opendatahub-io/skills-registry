@@ -46,6 +46,14 @@ Strategy assessment against a scored rubric and rubric export.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install assess-strat@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `assess-strat` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

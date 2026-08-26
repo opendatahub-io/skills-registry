@@ -64,8 +64,16 @@ automatically on first use.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install rfe-creator@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `rfe-creator` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

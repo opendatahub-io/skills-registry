@@ -73,8 +73,16 @@ This plugin centers on rubric-based RFE assessment and rubric export.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install assess-rfe@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `assess-rfe` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

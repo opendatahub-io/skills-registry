@@ -66,8 +66,16 @@ containerized (UBI9) execution.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install agent-eval-harness@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `agent-eval-harness` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

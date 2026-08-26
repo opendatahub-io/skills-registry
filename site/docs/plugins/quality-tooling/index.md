@@ -47,8 +47,16 @@ rule files -- that are immediately actionable without manual post-processing.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install quality-tooling@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `quality-tooling` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

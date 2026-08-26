@@ -27,6 +27,14 @@ Accessibility auditing, reporting, and documentation
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-a11y@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-a11y` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

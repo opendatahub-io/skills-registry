@@ -150,18 +150,19 @@ def main():
     update_version_in_file(args.registry, updates)
     print(f"\nUpdated {len(updates)} plugin(s) in {args.registry}")
 
-    # Regenerate marketplace.json
-    result = subprocess.run(
-        [sys.executable, "scripts/sync_marketplace.py", "--registry", args.registry],
-        capture_output=True, text=True,
-        timeout=60,
-    )
-    if result.returncode == 0:
-        print(result.stdout.strip())
-    else:
-        print(f"WARNING: failed to regenerate marketplace.json: {result.stderr}",
-              file=sys.stderr)
-        sys.exit(1)
+    # Regenerate the generated marketplace files (Claude Code + OpenAI Codex)
+    for script in ("scripts/sync_marketplace.py", "scripts/sync_codex_marketplace.py"):
+        result = subprocess.run(
+            [sys.executable, script, "--registry", args.registry],
+            capture_output=True, text=True,
+            timeout=60,
+        )
+        if result.returncode == 0:
+            print(result.stdout.strip())
+        else:
+            print(f"WARNING: failed to regenerate via {script}: {result.stderr}",
+                  file=sys.stderr)
+            sys.exit(1)
 
 
 if __name__ == "__main__":

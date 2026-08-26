@@ -18,6 +18,9 @@ python3 scripts/validate_registry.py
 # Regenerate marketplace.json from registry.yaml
 python3 scripts/sync_marketplace.py
 
+# Regenerate the Codex marketplace (.agents/plugins/marketplace.json)
+python3 scripts/sync_codex_marketplace.py
+
 # Regenerate catalog.md from registry.yaml
 python3 scripts/generate_catalog.py
 
@@ -31,12 +34,13 @@ python3 scripts/check_versions.py --dry-run
 python3 scripts/validate_registry.py --diff origin/main --validate-remote-plugins
 ```
 
-**Before committing any change to `registry.yaml`**, run all four generators (validate, sync marketplace, generate catalog, generate site). CI checks that every generated file matches -- it does not auto-commit.
+**Before committing any change to `registry.yaml`**, run all five generators (validate, sync marketplace, sync Codex marketplace, generate catalog, generate site). CI checks that every generated file matches -- it does not auto-commit.
 
 ## Architecture
 
 - `registry.yaml` — source of truth, edited by humans
 - `.claude-plugin/marketplace.json` — generated, Claude Code reads this
+- `.agents/plugins/marketplace.json` — generated, OpenAI Codex reads this
 - `catalog.md` — generated, human-readable listing
 - `schema/registry.schema.json` — JSON Schema for validation
 - `site/` — MkDocs Material documentation site (generated + static)
@@ -59,6 +63,10 @@ The schema enforces `skills_dir` requires `strict` to be present (`dependentRequ
 
 The `source` field in marketplace.json uses `"source": "github"` (not `"type"`). The `skills` field must be an array (e.g., `["./.claude/skills"]`), not a string. The sync script handles both correctly.
 
+### Codex marketplace format
+
+`scripts/sync_codex_marketplace.py` projects the same `registry.yaml` into OpenAI Codex's native marketplace at `.agents/plugins/marketplace.json` (Codex also reads the legacy `.claude-plugin/marketplace.json`). A Codex entry is minimal — exactly `{name, source, policy, category}`. Differences from the Claude marketplace: `github` sources become `{"source": "url", "url": ".../repo.git"}` (Codex has no in-file `github` shorthand); every entry carries `policy` (`installation: AVAILABLE`, `authentication: ON_INSTALL`) and a display-name `category` (from `categories[<key>].name`); the top level uses `interface.displayName` (from the optional top-level `display_name` key) instead of `metadata.description`; and `skills`/`strict`/`agents` are dropped because Codex discovers skills from each plugin's own `.codex-plugin/plugin.json`. That last point means a `strict: false` plugin with no manifest in its repo installs with **zero skills under Codex** until a `.codex-plugin/plugin.json` (with a `skills` path) is added upstream.
+
 ### Agents and MCP servers
 
 Plugins can include agents (defined in `agents/` directories) alongside skills. Agents run in isolated context windows and are auto-delegated by Claude or selected via `/agents`. The `agents_dir` field works like `skills_dir` — only valid with `strict: false`.
@@ -76,9 +84,10 @@ See @CONTRIBUTING.md for the full process. Quick checklist:
 1. Add entry to `registry.yaml` with correct `strict`/`skills_dir` settings
 2. Run `python3 scripts/validate_registry.py`
 3. Run `python3 scripts/sync_marketplace.py`
-4. Run `python3 scripts/generate_catalog.py`
-5. Run `python3 scripts/generate_site.py`
-6. Commit all changed files and open a PR
+4. Run `python3 scripts/sync_codex_marketplace.py`
+5. Run `python3 scripts/generate_catalog.py`
+6. Run `python3 scripts/generate_site.py`
+7. Commit all changed files and open a PR
 
 ## Testing a Marketplace Branch
 

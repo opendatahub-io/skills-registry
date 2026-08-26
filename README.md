@@ -4,7 +4,7 @@
 
 Central registry for AI skills and plugins developed across the opendatahub-io organization.
 
-This registry serves as a **Claude Code marketplace** with native plugin management, and as a **skill catalog** for discovering plugins to use with other agent harnesses.
+This registry serves as a native marketplace for **Claude Code** and **OpenAI Codex** with plugin management, and as a **skill catalog** for discovering plugins to use with other agent harnesses.
 
 ## Installation
 
@@ -43,22 +43,30 @@ Add to your project's `.claude/settings.json` to auto-enable for all developers:
 }
 ```
 
+### OpenAI Codex
+
+This registry is also a native Codex marketplace:
+
+```bash
+# Add the marketplace
+codex plugin marketplace add opendatahub-io/skills-registry
+
+# Browse and enable plugins
+/plugins
+```
+
+Codex reads the registry's `.agents/plugins/marketplace.json`. To test changes from a branch before they're merged, pin the ref with `--ref branch-name`.
+
+> **Note:** Codex discovers a plugin's skills from that plugin's own manifest (`.codex-plugin/plugin.json`, or the legacy `.claude-plugin/plugin.json`). A plugin with no manifest in its source repo installs with no skills under Codex until one is added upstream.
+
 ### Other Agent Harnesses
 
-Other platforms (Cursor, Gemini CLI, Codex, OpenCode) do not have a marketplace aggregation mechanism. Install plugins directly from their source repositories instead:
+Other platforms (Cursor, Gemini CLI, OpenCode) do not have a marketplace aggregation mechanism. Install plugins directly from their source repositories instead:
 
 #### Gemini CLI
 
 ```bash
 gemini extensions install https://github.com/opendatahub-io/assess-rfe
-```
-
-#### Codex
-
-```bash
-git clone https://github.com/opendatahub-io/assess-rfe ~/.codex/assess-rfe
-mkdir -p ~/.agents/skills
-ln -s ~/.codex/assess-rfe/skills ~/.agents/skills/assess-rfe
 ```
 
 #### OpenCode
@@ -79,7 +87,7 @@ Add to your `opencode.json`:
 
 Replace the repo URL with the plugin you want to install. See [catalog.md](catalog.md) for the full list of plugins and their source repositories.
 
-> **Note:** Multi-harness support depends on each plugin repo having the appropriate configuration files (`.codex/`, `.opencode/`, `gemini-extension.json`, `.cursor-plugin/`). Not all plugins may support all platforms. Check the plugin's repository for platform-specific instructions.
+> **Note:** Multi-harness support depends on each plugin repo having the appropriate configuration files (`.opencode/`, `gemini-extension.json`, `.cursor-plugin/`). Not all plugins may support all platforms. Check the plugin's repository for platform-specific instructions.
 
 ## Available Plugins
 
@@ -91,6 +99,7 @@ See [catalog.md](catalog.md) for the full list of plugins, skills, and install c
 |------|---------|
 | `registry.yaml` | Source of truth for all plugins and skills |
 | `.claude-plugin/marketplace.json` | Generated Claude Code marketplace manifest |
+| `.agents/plugins/marketplace.json` | Generated OpenAI Codex marketplace manifest |
 | `catalog.md` | Auto-generated human-readable catalog |
 | `schema/registry.schema.json` | JSON Schema for validation |
 | `scripts/` | Sync, validation, and automation scripts |

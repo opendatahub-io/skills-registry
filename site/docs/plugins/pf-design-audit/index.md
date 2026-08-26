@@ -31,6 +31,14 @@ Design audit -- validate existing code and designs against PatternFly standards
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-design-audit@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-design-audit` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

@@ -27,6 +27,14 @@ Code review and quality -- adversarial review, security patterns
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-code-review@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-code-review` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

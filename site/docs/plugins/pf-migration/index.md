@@ -28,6 +28,14 @@ PF version migration -- breaking change detection, class scanning, upgrade plann
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-migration@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-migration` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

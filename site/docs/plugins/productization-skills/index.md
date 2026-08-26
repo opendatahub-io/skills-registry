@@ -44,6 +44,14 @@ Claude Code plugin with specialized skills for DevOps and cloud-native developme
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install productization-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `productization-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

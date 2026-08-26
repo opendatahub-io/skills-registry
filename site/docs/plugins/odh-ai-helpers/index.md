@@ -76,8 +76,16 @@ with each stage producing JSON artifacts consumed by the next.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install odh-ai-helpers@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `odh-ai-helpers` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

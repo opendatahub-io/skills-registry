@@ -10,6 +10,10 @@ registry provides the metadata and discovery mechanism.
 Plugins in this registry conform to the [Agent Skills](https://agentskills.io/specification)
 open standard, extended by Claude Code with features like invocation control
 and subagent execution (see [Claude Code skills](https://code.claude.com/docs/en/skills)).
+The same standard underpins OpenAI Codex, so the one `registry.yaml` is projected
+into a native marketplace for each supported harness — Claude Code
+(`.claude-plugin/marketplace.json`) and OpenAI Codex
+(`.agents/plugins/marketplace.json`); see [Harness Projections](#harness-projections).
 
 ```
                         skills-registry
@@ -18,6 +22,7 @@ and subagent execution (see [Claude Code skills](https://code.claude.com/docs/en
 │  registry.yaml          (source of truth)            │
 │       │                                              │
 │       ├──► marketplace.json   (Claude Code native)   │
+│       ├──► .agents/plugins   (OpenAI Codex native)   │
 │       ├──► catalog.md         (human-readable)       │
 │       │                                              │
 │  schema/                (validation)                 │
@@ -46,6 +51,10 @@ and subagent execution (see [Claude Code skills](https://code.claude.com/docs/en
      (Claude Code)     (docs)       (CI gate)
 ```
 
+`sync_codex_marketplace.py` runs the same way, projecting `registry.yaml` into
+OpenAI Codex's native `.agents/plugins/marketplace.json` (see
+[Harness Projections](#harness-projections)).
+
 ## File Structure
 
 ```
@@ -53,12 +62,15 @@ skills-registry/
 ├── registry.yaml                    # Source of truth
 ├── .claude-plugin/
 │   └── marketplace.json             # Generated — Claude Code reads this
+├── .agents/plugins/
+│   └── marketplace.json             # Generated — OpenAI Codex reads this
 ├── catalog.md                       # Generated — human-readable listing
 ├── schema/
 │   └── registry.schema.json         # JSON Schema for registry.yaml
 ├── scripts/
 │   ├── validate_registry.py         # Schema + structure validation
 │   ├── sync_marketplace.py          # registry.yaml -> marketplace.json
+│   ├── sync_codex_marketplace.py    # registry.yaml -> .agents/plugins/marketplace.json
 │   ├── generate_catalog.py          # registry.yaml -> catalog.md
 │   └── check_versions.py            # Poll plugin repos for version bumps
 ├── .github/workflows/
@@ -187,6 +199,38 @@ display metadata (name + description of each server declared in the source
 MCP-only plugin (e.g. `pf-mcp`) advertise what it provides instead of reading as
 "0 skills".
 
+## Harness Projections
+
+`registry.yaml` is projected into a **native marketplace per harness**, each in
+that harness's own format, from the same single source of truth:
+
+| Harness | Generated file | Generator | Entry shape |
+|---------|----------------|-----------|-------------|
+| Claude Code | `.claude-plugin/marketplace.json` | `sync_marketplace.py` | `source: github` + `repo`; per-entry `skills`/`strict`/`agents` supported |
+| OpenAI Codex | `.agents/plugins/marketplace.json` | `sync_codex_marketplace.py` | exactly `{name, source, policy, category}`; `github` → `source: url` clone URL; skills come from each plugin's own manifest |
+
+Codex ([developers.openai.com/codex/plugins](https://developers.openai.com/codex/plugins/build))
+reads `$REPO_ROOT/.agents/plugins/marketplace.json` (and still falls back to the
+legacy `$REPO_ROOT/.claude-plugin/marketplace.json`). Key differences the Codex
+projection applies:
+
+- Top level is `{name, interface?, plugins[]}` — no `owner`/`metadata`.
+  `interface.displayName` comes from the optional top-level `display_name` and is
+  omitted when unset. Plugin array order is the Codex render order.
+- Each entry carries a `policy` (`installation: AVAILABLE`,
+  `authentication: ON_INSTALL`) and a display-name `category`
+  (`categories[<key>].name`), both of which Codex asks you to always include.
+- `github`/`git` sources become `{source: url, url: <clone URL>}` (Codex has no
+  in-file `github`+`repo` shorthand); `git-subdir` carries a `./`-prefixed
+  `path`; `ref`/`sha` carry through.
+
+Because a Codex marketplace entry has **no per-entry `skills` array**, Codex
+discovers a plugin's skills from that plugin's own `.codex-plugin/plugin.json`
+(or the legacy `.claude-plugin/plugin.json`). A `strict: false` plugin that ships
+no manifest in its repo therefore installs with **zero skills under Codex** until
+a `.codex-plugin/plugin.json` with a `skills` path is added upstream — the one
+case where the registry-only projection is insufficient for Codex.
+
 ## CI Pipeline
 
 ```
@@ -243,9 +287,10 @@ match the registry. Contributors must run the scripts locally before pushing.
 1. Add an entry to `registry.yaml`
 2. Run `python3 scripts/validate_registry.py`
 3. Run `python3 scripts/sync_marketplace.py`
-4. Run `python3 scripts/generate_catalog.py`
-5. Commit all changes and open a PR
-6. CI verifies everything is in sync
+4. Run `python3 scripts/sync_codex_marketplace.py`
+5. Run `python3 scripts/generate_catalog.py`
+6. Commit all changes and open a PR
+7. CI verifies everything is in sync
 
 ## References
 
@@ -253,3 +298,4 @@ match the registry. Contributors must run the scripts locally before pushing.
 - [Claude Code skills](https://code.claude.com/docs/en/skills) — SKILL.md frontmatter and invocation semantics
 - [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents) — agent frontmatter and delegation
 - [Claude Code plugins](https://code.claude.com/docs/en/plugins) — plugin manifest and marketplace format
+- [OpenAI Codex plugins](https://developers.openai.com/codex/plugins/build) — Codex plugin manifest and marketplace format

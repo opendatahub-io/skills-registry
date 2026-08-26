@@ -40,8 +40,16 @@ OpenShift access for cluster test execution.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install spike-executor@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `spike-executor` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

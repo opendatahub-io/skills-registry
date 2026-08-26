@@ -14,6 +14,10 @@
       "type": "string",
       "description": "Human-readable description of the registry"
     },
+    "display_name": {
+      "type": "string",
+      "description": "Short marketplace title. Emitted as interface.displayName in the Codex marketplace (.agents/plugins/marketplace.json). Optional; when unset the Codex generator omits interface entirely. Catalog/Claude marketplace do not use it."
+    },
     "owner": {
       "type": "object",
       "required": ["name"],

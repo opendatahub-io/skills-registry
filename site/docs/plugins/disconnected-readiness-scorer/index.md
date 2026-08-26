@@ -41,8 +41,16 @@ and lint rules from blocker-level findings.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install disconnected-readiness-scorer@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `disconnected-readiness-scorer` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

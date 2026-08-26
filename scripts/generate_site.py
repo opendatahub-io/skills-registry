@@ -529,9 +529,17 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
         lines.append("")
 
     # Install
+    owner = registry.get("owner", {}).get("name", "")
     lines.append("## Installation")
     lines.append("")
+    lines.append("**Claude Code**")
+    lines.append("")
     _append_code_block(lines, [f"/plugin install {name}@{registry_name}"])
+    lines.append("")
+    lines.append("**OpenAI Codex** — add the marketplace, then enable "
+                 f"`{name}` from the `/plugins` browser:")
+    lines.append("")
+    _append_code_block(lines, [f"codex plugin marketplace add {owner}/skills-registry"])
     lines.append("")
 
     # Architecture notes from enrichment (very bottom — deep-dive content)
@@ -1060,9 +1068,9 @@ def generate_llms_txt(registry: dict, site_url: str) -> str:
     plugins = registry.get("plugins", [])
     lines = ["# OpenDataHub Skills Registry"]
     lines.append("")
-    lines.append("> Claude Code skills and plugins marketplace for the "
-                 "opendatahub-io organization. Aggregates skills from multiple "
-                 "GitHub repositories into a single discoverable marketplace.")
+    lines.append("> Claude Code and OpenAI Codex skills and plugins marketplace "
+                 "for the opendatahub-io organization. Aggregates skills from "
+                 "multiple GitHub repositories into a single discoverable marketplace.")
     lines.append("")
     lines.append("## Plugins")
     lines.append("")
@@ -1111,9 +1119,9 @@ def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
     plugins = registry.get("plugins", [])
     lines = ["# OpenDataHub Skills Registry"]
     lines.append("")
-    lines.append("> Claude Code skills and plugins marketplace for the "
-                 "opendatahub-io organization. Aggregates skills from multiple "
-                 "GitHub repositories into a single discoverable marketplace.")
+    lines.append("> Claude Code and OpenAI Codex skills and plugins marketplace "
+                 "for the opendatahub-io organization. Aggregates skills from "
+                 "multiple GitHub repositories into a single discoverable marketplace.")
     lines.append("")
     lines.append("---")
     lines.append("")

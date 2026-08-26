@@ -5,12 +5,20 @@ Auto-generated from `registry.yaml`. Do not edit directly.
 
 ## Quick Start
 
-```bash
-# Add this marketplace to Claude Code
-claude plugin marketplace add opendatahub-io/skills-registry
+Add this marketplace to your agent harness, then browse the plugins.
 
-# Browse available plugins
+**Claude Code**
+
+```bash
+claude plugin marketplace add opendatahub-io/skills-registry
 /plugin
+```
+
+**OpenAI Codex**
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
+/plugins
 ```
 
 ## Canonical Contract System

@@ -1,6 +1,6 @@
 # OpenDataHub Skills Registry
 
-> Claude Code skills and plugins marketplace for the opendatahub-io organization. Aggregates skills from multiple GitHub repositories into a single discoverable marketplace.
+> Claude Code and OpenAI Codex skills and plugins marketplace for the opendatahub-io organization. Aggregates skills from multiple GitHub repositories into a single discoverable marketplace.
 
 ## Plugins
 

@@ -26,6 +26,14 @@ PatternFly MCP server -- component documentation, design token lookup, and acces
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-mcp@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-mcp` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

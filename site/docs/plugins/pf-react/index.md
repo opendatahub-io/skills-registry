@@ -35,6 +35,14 @@ React component development -- coding standards, testing, and structure
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pf-react@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pf-react` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```

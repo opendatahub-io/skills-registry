@@ -57,8 +57,16 @@ to decide whether tests belong in the component repo or downstream E2E repo.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install test-plan@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `test-plan` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

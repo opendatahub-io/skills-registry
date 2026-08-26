@@ -48,8 +48,16 @@ RHOAI: RHOAIENG-17225).
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install aiops-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `aiops-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

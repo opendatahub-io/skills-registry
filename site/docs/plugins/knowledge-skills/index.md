@@ -37,8 +37,16 @@ tooling handles forge interactions.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install knowledge-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `knowledge-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

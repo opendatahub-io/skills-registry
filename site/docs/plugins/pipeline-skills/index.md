@@ -60,8 +60,16 @@ orchestrator assembles and routes downstream.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install pipeline-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `pipeline-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture

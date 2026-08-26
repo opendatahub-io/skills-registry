@@ -116,15 +116,23 @@ def generate_catalog(registry: dict) -> str:
     lines.append("")
 
     # Quick install
+    owner = registry["owner"]["name"]
     lines.append("## Quick Start")
     lines.append("")
-    lines.append("```bash")
-    lines.append("# Add this marketplace to Claude Code")
-    owner = registry["owner"]["name"]
-    lines.append(f"claude plugin marketplace add {owner}/skills-registry")
+    lines.append("Add this marketplace to your agent harness, then browse the plugins.")
     lines.append("")
-    lines.append("# Browse available plugins")
+    lines.append("**Claude Code**")
+    lines.append("")
+    lines.append("```bash")
+    lines.append(f"claude plugin marketplace add {owner}/skills-registry")
     lines.append("/plugin")
+    lines.append("```")
+    lines.append("")
+    lines.append("**OpenAI Codex**")
+    lines.append("")
+    lines.append("```bash")
+    lines.append(f"codex plugin marketplace add {owner}/skills-registry")
+    lines.append("/plugins")
     lines.append("```")
     lines.append("")
     lines.extend(render_contract_reference())

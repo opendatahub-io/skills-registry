@@ -66,8 +66,16 @@ and actions reviewer comments on a PR/MR.
 
 ## Installation
 
+**Claude Code**
+
 ```bash
 /plugin install docs-skills@opendatahub-skills
+```
+
+**OpenAI Codex** — add the marketplace, then enable `docs-skills` from the `/plugins` browser:
+
+```bash
+codex plugin marketplace add opendatahub-io/skills-registry
 ```
 
 ## Architecture
