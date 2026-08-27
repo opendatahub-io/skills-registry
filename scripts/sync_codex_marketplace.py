@@ -14,7 +14,7 @@ generators, it defines its own load_registry rather than importing one):
   * each entry is exactly {name, source, policy, category}
   * github sources become source:"url" with a full .git clone URL
   * per-entry skills/strict/agents are dropped (Codex discovers skills from
-    each plugin's own .codex-plugin/plugin.json / legacy .claude-plugin/plugin.json)
+    each plugin's own .codex-plugin/plugin.json)
 
 Usage:
     python3 scripts/sync_codex_marketplace.py [--registry registry.yaml] [--output .agents/plugins/marketplace.json]
