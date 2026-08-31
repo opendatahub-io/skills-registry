@@ -107,7 +107,6 @@ nav:
       - test-plan-analyze-infra: plugins/test-plan/test-plan-analyze-infra.md
       - test-plan-merge: plugins/test-plan/test-plan-merge.md
       - test-plan-resolve-gaps: plugins/test-plan/test-plan-resolve-gaps.md
-      - test-plan-analyze-placement: plugins/test-plan/test-plan-analyze-placement.md
       - test-plan-review: plugins/test-plan/test-plan-review.md
       - test-plan-generate-test-file: plugins/test-plan/test-plan-generate-test-file.md
       - test-plan-score-test-function: plugins/test-plan/test-plan-score-test-function.md

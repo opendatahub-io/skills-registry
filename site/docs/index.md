@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-22 plugins | 150 skills | 7 categories
+22 plugins | 149 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -66,7 +66,7 @@ hide:
 
     End-to-end test planning workflow for RHOAI: generate E2E/UI-focused test plans from Jira strategies, create traceabl...
 
-    **17 skills** - Evaluation & Testing - v2.0.0
+    **16 skills** - Evaluation & Testing - v2.0.0
 
 -   **[quality-tooling](plugins/quality-tooling/index.md)**
 

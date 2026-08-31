@@ -1187,14 +1187,6 @@ new analyzer findings and documentation. Uses semantic matching to determine
 which gaps are resolved, which remain open, and identifies new gaps. Returns
 structured output with resolved/unresolved/new gaps and statistics.
 
-#### /test-plan-analyze-placement (internal)
-
-Internal forked sub-agent for test case placement analysis. Classifies each TC
-by test level (unit, integration, k8s-integration, api, e2e) and scores placement
-options (same_repo, downstream, both) using factors: test level preferences,
-infrastructure requirements, TC priority (P0 prefers upstream for fast feedback),
-and code repo agent readiness. Returns recommendations with user confirmation.
-
 #### /test-plan-review (internal)
 
 Internal quality reviewer and auto-revision orchestrator. Scores test plans
