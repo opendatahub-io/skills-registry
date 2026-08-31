@@ -27,7 +27,7 @@ Assess RHAISTRAT strategies against quality criteria using a scored rubric with 
 
 End-to-end test planning workflow for RHOAI: generate E2E/UI-focused test plans from Jira strategies, create traceable test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub, resolve review feedback, and score plans with deterministic evidence gates and automated rubrics.
 
-**17 skills** - v2.0.0
+**16 skills** - v2.0.0
 
 ### [quality-tooling](../plugins/quality-tooling/index.md)
 

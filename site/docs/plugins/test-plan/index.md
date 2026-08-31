@@ -50,7 +50,6 @@ to decide whether tests belong in the component repo or downstream E2E repo.
 | [`/test-plan-analyze-infra`](test-plan-analyze-infra.md) | Identify environment and infrastructure needs | :material-close: internal |
 | [`/test-plan-merge`](test-plan-merge.md) | Intelligently merge new analyzer findings into existing test plan | :material-close: internal |
 | [`/test-plan-resolve-gaps`](test-plan-resolve-gaps.md) | Cross-reference gaps with new findings to determine what's resolved | :material-close: internal |
-| [`/test-plan-analyze-placement`](test-plan-analyze-placement.md) | Analyze test cases and recommend placement (component repo vs downstream) | :material-close: internal |
 | [`/test-plan-review`](test-plan-review.md) | Review test plan with 5-criteria rubric and auto-revision | :material-close: internal |
 | [`/test-plan-generate-test-file`](test-plan-generate-test-file.md) | Generate complete test file with all functions, quality scoring and auto-revision | :material-close: internal |
 | [`/test-plan-score-test-function`](test-plan-score-test-function.md) | Score generated test function code using 5-criteria quality rubric | :material-close: internal |

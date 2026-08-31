@@ -172,7 +172,6 @@
 - [test-plan-analyze-infra](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-analyze-infra/): Identify environment and infrastructure needs (internal)
 - [test-plan-merge](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-merge/): Intelligently merge new analyzer findings into existing test plan (internal)
 - [test-plan-resolve-gaps](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-resolve-gaps/): Cross-reference gaps with new findings to determine what's resolved (internal)
-- [test-plan-analyze-placement](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-analyze-placement/): Analyze test cases and recommend placement (component repo vs downstream) (internal)
 - [test-plan-review](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-review/): Review test plan with 5-criteria rubric and auto-revision (internal)
 - [test-plan-generate-test-file](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-generate-test-file/): Generate complete test file with all functions, quality scoring and auto-revision (internal)
 - [test-plan-score-test-function](https://opendatahub-io.github.io/skills-registry/plugins/test-plan/test-plan-score-test-function/): Score generated test function code using 5-criteria quality rubric (internal)

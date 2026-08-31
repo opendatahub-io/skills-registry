@@ -1040,9 +1040,6 @@ plugins:
       - name: test-plan-resolve-gaps
         description: Cross-reference gaps with new findings to determine what's resolved
         user-invocable: false
-      - name: test-plan-analyze-placement
-        description: Analyze test cases and recommend placement (component repo vs downstream)
-        user-invocable: false
       - name: test-plan-review
         description: Review test plan with 5-criteria rubric and auto-revision
         user-invocable: false
