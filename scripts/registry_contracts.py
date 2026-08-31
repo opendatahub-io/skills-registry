@@ -70,7 +70,15 @@ CANONICAL_METRICS = frozenset(CANONICAL_METRIC_DOCS)
 PLUGIN_FIELDS_THAT_TOUCH_ALL_SKILLS = {"source", "strict", "skills_dir"}
 
 _SCHEME_RE = _re.compile(r"^https?://")
+# Sources whose skills are verified in-repo and therefore require a canonical
+# contract with resolvable source_assertions. Only the two whole-repo git types
+# qualify — a git-subdir/npm/local plugin's assertions cannot be resolved.
 GIT_CLONE_TYPES = frozenset({"github", "git"})
+# Sources that can be git-cloned for upstream verification (skill-name drift,
+# source accessibility, Codex-manifest presence). Broader than GIT_CLONE_TYPES:
+# git-subdir IS cloneable (clone the repo, then look under its `path`), even
+# though it is exempt from the contract requirement above.
+GIT_CLONEABLE_TYPES = frozenset({"github", "git", "git-subdir"})
 
 # Strip user[:token]@ credentials from any URL in the given text before logging.
 # Applies to both the URL we hold and URLs that git echoes back in stderr /
@@ -84,13 +92,32 @@ def redact_url(text: str) -> str:
 
 
 def source_clone_url(source: dict) -> str:
-    """Return the git clone URL for a plugin source entry."""
+    """Return the git clone URL for a plugin source entry.
+
+    For git-subdir the clone URL is the whole repo's URL; the subdirectory is
+    resolved separately (see source_subdir).
+    """
     source_type = source.get("type")
     if source_type == "github":
         return f"https://github.com/{source['repo']}.git"
-    if source_type == "git":
+    if source_type in ("git", "git-subdir"):
         return source["url"]
     raise ValueError(f"unsupported source type for cloning: {source_type!r}")
+
+
+def source_subdir(source: dict) -> str:
+    """Return the in-repo subdirectory a plugin lives in, or "" for whole-repo sources.
+
+    Only git-subdir sources have one. The value is normalized to a repo-relative
+    POSIX path with no leading "./" or "/". Callers must still guard the joined
+    path against escaping the clone root (the schema does not constrain `path`).
+    """
+    if source.get("type") != "git-subdir":
+        return ""
+    path = (source.get("path") or "").strip().replace("\\", "/")
+    while path.startswith("./"):
+        path = path[2:]
+    return path.lstrip("/")
 
 
 def source_display_name(source: dict) -> str:

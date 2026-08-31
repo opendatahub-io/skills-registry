@@ -184,7 +184,9 @@ The hooks validate staged `registry.yaml` changes and run pinned `skill-linter` 
 
 When you add a skill or change an existing skill's registry entry (compared against `HEAD` for pre-commit or the configured base ref in CI), include a canonical `contract` block on that skill plus accurate `contract.source_assertions` paths into the upstream repository; CI and hooks enforce this for touched skills.
 
-The contract requirement applies **only to skills whose plugin `source.type` is `github` or `git`** — the same cloneable sources that `skill-linter` and the skill-name-drift check verify. Skills on `git-subdir`, `npm`, or `local` sources are **exempt**: their source cannot be cloned and their `source_assertions` cannot be resolved, so a contract on them would be unverifiable metadata. This lets a delegated sub-plugin (e.g. a bundle member) list its skills (name + description) for display without a contract block.
+The contract requirement applies **only to skills whose plugin `source.type` is `github` or `git`** — whole-repo sources whose in-repo skills carry resolvable `source_assertions`, the same sources `skill-linter` verifies. Skills on `git-subdir`, `npm`, or `local` sources are **exempt from the contract requirement**: `npm`/`local` cannot be cloned at all, and a `git-subdir` sub-plugin delegates skill discovery to its own `plugin.json` rather than to `source_assertions`, so a contract on it would be unverifiable metadata. This lets a delegated sub-plugin (e.g. a bundle member) list its skills (name + description) for display without a contract block.
+
+Note that the **clone-based upstream sweeps are broader** than the contract requirement. `git-subdir` *is* cloneable (clone the repo, then resolve its `path`), so skill-name drift, `--check-sources`, and the Codex-manifest check (`GIT_CLONEABLE_TYPES` = `github`/`git`/`git-subdir`) all cover it — only the contract requirement stays scoped to `github`/`git`.
 
 ### Choosing Canonical Contracts
 
@@ -222,7 +224,11 @@ It **fails** when a registry skill has no upstream `SKILL.md` declaring that nam
 - the registry and the upstream frontmatter disagree on `user-invocable` (remember the registry value is catalog-only — the source `SKILL.md` is what controls the `/` menu);
 - a `strict: false` plugin has upstream skills missing from `registry.yaml`. Those install anyway, since the whole `skills_dir` is loaded, so they are live but undocumented commands. For `strict: true` plugins the registry list is a curated subset by design and is not flagged.
 
-Most drift starts upstream, where no registry PR is involved, so the same sweep runs weekly across every plugin via the `Skill Name Drift` workflow.
+Most drift starts upstream, where no registry PR is involved, so the same sweep runs weekly across every plugin (github / git / git-subdir) via the `Upstream Plugin Checks` workflow, which also reports plugins missing a `.codex-plugin/plugin.json` (see below).
+
+### Codex-manifest readiness
+
+Codex discovers a plugin's skills from that plugin's own `.codex-plugin/plugin.json` `skills` path. A skill-bearing plugin whose source repo ships no such manifest installs with **zero skills under Codex**. Because that is an upstream repo property the registry can't fix, `scripts/validate_registry.py --check-codex-manifests` only **warns** (never fails) — it clones each plugin and lists those lacking a `.codex-plugin/plugin.json`. It runs weekly alongside skill-name drift in the `Upstream Plugin Checks` workflow. To fix a warned plugin, add a `.codex-plugin/plugin.json` (with a `skills` path) to its source repo — use `.codex-plugin/` rather than `.claude-plugin/plugin.json`, which would conflict with a `strict: false` entry's Claude install.
 
 ### 5. Review and Merge
 

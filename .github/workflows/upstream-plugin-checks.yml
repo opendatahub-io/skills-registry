@@ -1,0 +1,33 @@
+name: Upstream Plugin Checks
+
+# The PR-scoped checks in validate.yml only see plugins whose registry entry changed.
+# Most drift starts upstream, in a plugin's own repo, where no registry PR is involved:
+#   - a skill is renamed or deleted and the registry keeps advertising the old command
+#   - a plugin ships no .codex-plugin/plugin.json, so its skills won't load under Codex
+# This weekly sweep clones every plugin (github / git / git-subdir) once and checks both.
+
+on:
+  schedule:
+    # Mondays at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  upstream-plugin-checks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml==6.0.3 jsonschema==4.26.0
+
+      # One invocation clones each repo (and each git-subdir monorepo) a single time
+      # for both sweeps. Skill-name drift fails the job; Codex readiness is warn-only.
+      - name: Check skill names and Codex manifests against source repos
+        run: python3 scripts/validate_registry.py --check-skill-names --check-codex-manifests

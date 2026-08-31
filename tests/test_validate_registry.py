@@ -971,5 +971,208 @@ class ContractSourceExemptionTests(unittest.TestCase):
         self.assertTrue(any("gh" in e and "s1" in e for e in errors))
 
 
+class PluginRootInCloneTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    def test_whole_repo_source_returns_repo_root(self):
+        root = Path("/tmp/clone-xyz")
+        self.assertEqual(
+            root,
+            self.vr._plugin_root_in_clone(root, {"type": "github", "repo": "o/r"}),
+        )
+
+    def test_git_subdir_roots_at_subdirectory(self):
+        import os
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, "plugins", "pf-react"))
+            got = self.vr._plugin_root_in_clone(
+                Path(d),
+                {"type": "git-subdir", "url": "https://x/y.git", "path": "plugins/pf-react"},
+            )
+            self.assertEqual(Path(d, "plugins", "pf-react").resolve(), got.resolve())
+
+    def test_traversal_subdir_is_rejected(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            self.assertIsNone(
+                self.vr._plugin_root_in_clone(
+                    Path(d),
+                    {"type": "git-subdir", "url": "https://x/y.git", "path": "../escape"},
+                )
+            )
+
+
+class RunOnClonesTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    def test_dedupes_clone_per_repo_ref_and_roots_at_subdir(self):
+        import os
+
+        members = [
+            {"name": "pf-a", "source": {"type": "git-subdir",
+                                        "url": "https://x/y.git", "path": "plugins/a"}},
+            {"name": "pf-b", "source": {"type": "git-subdir",
+                                        "url": "https://x/y.git", "path": "plugins/b"}},
+        ]
+        clone_calls = []
+
+        def fake_clone(url, ref, dest, **kwargs):
+            clone_calls.append((url, ref))
+            os.makedirs(os.path.join(dest, "plugins", "a"))
+            os.makedirs(os.path.join(dest, "plugins", "b"))
+            return subprocess.CompletedProcess(["git", "clone"], 0, "", "")
+
+        seen = {}
+
+        def per_plugin(plugin, root):
+            seen[plugin["name"]] = os.path.basename(str(root))
+            return [], [f"w:{plugin['name']}"]
+
+        with mock.patch.object(self.vr, "shallow_clone", side_effect=fake_clone):
+            errors, warnings = self.vr.run_on_clones(members, per_plugin)
+
+        self.assertEqual(1, len(clone_calls), "one clone per (url, ref) — members share it")
+        self.assertEqual({"pf-a": "a", "pf-b": "b"}, seen)
+        self.assertEqual([], errors)
+        self.assertEqual({"w:pf-a", "w:pf-b"}, set(warnings))
+
+    def test_clone_failure_warns_and_skips_per_plugin(self):
+        members = [{"name": "p", "source": {"type": "github", "repo": "o/r"}}]
+
+        def fake_clone(url, ref, dest, **kwargs):
+            return subprocess.CompletedProcess(["git", "clone"], 128, "", "boom")
+
+        called = []
+
+        with mock.patch.object(self.vr, "shallow_clone", side_effect=fake_clone):
+            errors, warnings = self.vr.run_on_clones(
+                members, lambda p, root: (called.append(p["name"]) or ([], [])))
+
+        self.assertEqual([], called, "per_plugin must not run on clone failure")
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings))
+        self.assertIn("could not clone", warnings[0])
+
+    def test_missing_subdir_warns_and_skips_per_plugin(self):
+        members = [{"name": "p", "source": {"type": "git-subdir",
+                                            "url": "https://x/y.git", "path": "nope"}}]
+
+        def fake_clone(url, ref, dest, **kwargs):
+            return subprocess.CompletedProcess(["git", "clone"], 0, "", "")
+
+        def per_plugin(plugin, root):
+            raise AssertionError("per_plugin must not run when the subdir is missing")
+
+        with mock.patch.object(self.vr, "shallow_clone", side_effect=fake_clone):
+            errors, warnings = self.vr.run_on_clones(members, per_plugin)
+
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings))
+        self.assertIn("nope", warnings[0])
+
+    def test_non_cloneable_sources_are_skipped(self):
+        members = [
+            {"name": "npm-plugin", "source": {"type": "npm"}},
+            {"name": "local-plugin", "source": {"type": "local"}},
+        ]
+
+        def fake_clone(url, ref, dest, **kwargs):
+            raise AssertionError("no clone should happen for npm/local sources")
+
+        with mock.patch.object(self.vr, "shallow_clone", side_effect=fake_clone):
+            errors, warnings = self.vr.run_on_clones(members, lambda p, root: ([], []))
+
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+
+class CodexManifestTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    @staticmethod
+    def _root(tmp, *, codex=False, claude=False):
+        import os
+
+        if codex:
+            os.makedirs(os.path.join(tmp, ".codex-plugin"))
+            (Path(tmp) / ".codex-plugin" / "plugin.json").write_text("{}")
+        if claude:
+            os.makedirs(os.path.join(tmp, ".claude-plugin"))
+            (Path(tmp) / ".claude-plugin" / "plugin.json").write_text("{}")
+        return Path(tmp)
+
+    def _check(self, plugin, **root_kwargs):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            return self.vr.check_codex_manifest(plugin, self._root(d, **root_kwargs))
+
+    def test_warns_when_manifest_missing_and_plugin_has_skills(self):
+        errors, warnings = self._check({"name": "p", "skills": [{"name": "s"}]})
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings))
+        self.assertIn(".codex-plugin/plugin.json", warnings[0])
+
+    def test_warns_for_skill_count_only_plugin(self):
+        errors, warnings = self._check({"name": "p", "skill_count": 4})
+        self.assertEqual(1, len(warnings), warnings)
+
+    def test_silent_when_codex_manifest_present(self):
+        errors, warnings = self._check({"name": "p", "skills": [{"name": "s"}]}, codex=True)
+        self.assertEqual(([], []), (errors, warnings))
+
+    def test_silent_for_bundle_meta_plugin(self):
+        errors, warnings = self._check({"name": "b", "includes": ["x"]})
+        self.assertEqual(([], []), (errors, warnings))
+
+    def test_silent_when_plugin_declares_no_skills(self):
+        errors, warnings = self._check({"name": "mcp-only"})
+        self.assertEqual(([], []), (errors, warnings))
+
+    def test_never_returns_errors(self):
+        errors, _ = self._check({"name": "p", "skills": [{"name": "s"}]})
+        self.assertEqual([], errors, "Codex readiness is warn-only, never a blocking error")
+
+    def test_hint_mentions_claude_manifest_when_present(self):
+        _, warnings = self._check({"name": "p", "skills": [{"name": "s"}]}, claude=True)
+        self.assertEqual(1, len(warnings))
+        self.assertIn(".claude-plugin/plugin.json", warnings[0])
+
+
+class GitSubdirSourceCoverageTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.validate_registry = get_validate_registry_module()
+
+    @mock.patch("subprocess.run")
+    def test_check_sources_ls_remotes_git_subdir_repo_url(self, run_mock):
+        run_mock.return_value = subprocess.CompletedProcess(
+            ["git", "ls-remote"], 0, stdout="", stderr=""
+        )
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://github.com/acme/monorepo.git",
+            "path": "tools/plugin",
+        }
+
+        errors = self.validate_registry.check_sources(registry)
+
+        self.assertEqual([], errors)
+        run_mock.assert_called_once()
+        cmd = run_mock.call_args[0][0]
+        self.assertIn("ls-remote", cmd)
+        self.assertIn("https://github.com/acme/monorepo.git", cmd)
+
+
 if __name__ == "__main__":
     unittest.main()

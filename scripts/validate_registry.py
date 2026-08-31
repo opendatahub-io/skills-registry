@@ -9,6 +9,7 @@ Usage:
     python3 scripts/validate_registry.py --staged               # Require contracts for skills changed vs HEAD (staged registry)
     python3 scripts/validate_registry.py --diff-base REF        # Require contracts for skills changed since REF
     python3 scripts/validate_registry.py --check-skill-names    # Check skill names against upstream SKILL.md
+    python3 scripts/validate_registry.py --check-codex-manifests  # Warn on plugins missing .codex-plugin/plugin.json
 """
 
 import argparse
@@ -32,6 +33,7 @@ from scripts.registry_contracts import (  # noqa: E402
     CANONICAL_FUNCTIONS,
     CANONICAL_METRICS,
     GIT_CLONE_TYPES,
+    GIT_CLONEABLE_TYPES,
     SkillKey,
     detect_touched_skills,
     iter_plugins,
@@ -39,7 +41,10 @@ from scripts.registry_contracts import (  # noqa: E402
     load_registry_from_ref,
     load_staged_registry,
     normalize_git_ref,
+    redact_url,
     shallow_clone,
+    source_clone_url,
+    source_subdir,
 )
 
 try:
@@ -346,16 +351,19 @@ def check_skill_contracts(registry: dict, required_skills: set[SkillKey]) -> lis
 
 
 def check_sources(registry: dict) -> list[str]:
-    """Check that source repos are accessible."""
-    from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url
+    """Check that source repos are accessible.
 
+    Covers every cloneable source, including git-subdir: the whole repo is what
+    must be reachable, so `git ls-remote` runs against the repo clone URL (the
+    subdirectory itself is verified by the clone-based checks).
+    """
     errors = []
     for plugin in registry.get("plugins", []):
         source = plugin.get("source")
         if not source:
             continue
         source_type = source.get("type")
-        if source_type not in GIT_CLONE_TYPES:
+        if source_type not in GIT_CLONEABLE_TYPES:
             continue
         name = plugin.get("name", "<unknown>")
         if source_type == "github":
@@ -399,13 +407,36 @@ def diff_plugins(registry: dict, base_ref: str) -> list[str]:
     return new_names
 
 
-def validate_remote_plugin(plugin: dict) -> list[str]:
-    """Clone a plugin repo and validate its structure."""
-    from scripts.registry_contracts import GIT_CLONE_TYPES, redact_url, source_clone_url
+def _plugin_root_in_clone(repo_path: Path, source: dict) -> Path | None:
+    """Root of the plugin inside a cloned repo.
 
+    For git-subdir this is ``repo_path/<path>``; for whole-repo sources it is
+    ``repo_path`` itself. Returns ``None`` if the subdirectory would escape the
+    clone root — the schema does not constrain ``source.path``, so a ``..``
+    component is rejected here (CWE-22).
+    """
+    subdir = source_subdir(source)
+    if not subdir:
+        return repo_path
+    root = repo_path.resolve()
+    try:
+        candidate = (repo_path / subdir).resolve()
+    except OSError:
+        return None
+    if candidate != root and not candidate.is_relative_to(root):
+        return None
+    return candidate
+
+
+def validate_remote_plugin(plugin: dict) -> list[str]:
+    """Clone a plugin repo and validate its structure.
+
+    For git-subdir sources the plugin lives in a subdirectory of the clone; all
+    structure checks are rooted there rather than at the repository root.
+    """
     errors = []
     source = plugin.get("source")
-    if not source or source.get("type") not in GIT_CLONE_TYPES:
+    if not source or source.get("type") not in GIT_CLONEABLE_TYPES:
         return errors
 
     try:
@@ -432,7 +463,19 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
             )
             return errors
 
-        repo_path = Path(tmpdir)
+        plugin_root = _plugin_root_in_clone(Path(tmpdir), source)
+        if plugin_root is None:
+            errors.append(
+                f"  Plugin '{plugin['name']}': source.path escapes the repository root"
+            )
+            return errors
+        if not plugin_root.is_dir():
+            errors.append(
+                f"  Plugin '{plugin['name']}': subdirectory "
+                f"'{source_subdir(source)}' not found in the cloned repo"
+            )
+            return errors
+        repo_path = plugin_root
 
         if strict:
             # Strict mode: plugin.json must exist in the repo
@@ -579,33 +622,108 @@ def diff_touched_plugins(registry: dict, base_ref: str) -> list[str] | None:
     )
 
 
-def check_remote_skill_names(plugin: dict) -> tuple[list[str], list[str]]:
-    """Clone a plugin repo and compare its SKILL.md names with the registry entry."""
-    from scripts.registry_contracts import GIT_CLONE_TYPES, redact_url, source_clone_url
+def check_codex_manifest(plugin: dict, plugin_root: Path) -> tuple[list[str], list[str]]:
+    """Warn (never error) when a skill-bearing plugin's repo has no Codex manifest.
+
+    Codex discovers a plugin's skills from that plugin's own .codex-plugin/plugin.json
+    ``skills`` path. A plugin that declares skills but ships no such manifest installs
+    with zero skills under Codex. That is an upstream repo property the registry cannot
+    fix, so it is reported as a warning for the weekly sweep, never a blocking error.
+
+    ``plugin_root`` is the plugin's root inside the clone (the subdir for git-subdir).
+    """
+    # A bundle installs its members, not skills of its own; a plugin that declares
+    # no skills (e.g. an MCP-only plugin) has nothing to lose under Codex.
+    if plugin.get("includes"):
+        return [], []
+    has_skills = bool(plugin.get("skills")) or bool(plugin.get("skill_count"))
+    if not has_skills:
+        return [], []
+    if (plugin_root / ".codex-plugin" / "plugin.json").is_file():
+        return [], []
 
     name = get_plugin_label(plugin)
-    source = plugin.get("source")
-    if not source or source.get("type") not in GIT_CLONE_TYPES:
-        return [], []
+    hint = ""
+    if (plugin_root / ".claude-plugin" / "plugin.json").is_file():
+        hint = (" (a .claude-plugin/plugin.json exists, but Codex is only confirmed to "
+                "read the legacy .claude-plugin/marketplace.json, not a plugin manifest)")
+    return [], [
+        f"  Plugin '{name}': no .codex-plugin/plugin.json in source{hint}; its skills "
+        "will not load under Codex until one is added upstream."
+    ]
 
-    try:
-        ref = normalize_git_ref(source.get("ref", "main"))
-        clone_url = source_clone_url(source)
-    except (ValueError, KeyError):
-        # validate_remote_plugin reports malformed sources; nothing to add here.
-        return [], []
 
-    with tempfile.TemporaryDirectory() as tmpdir:
+def _scope_plugins(registry: dict, diff_base: str | None) -> tuple[list[dict], str]:
+    """Plugins to sweep, optionally narrowed to those whose entry changed since diff_base."""
+    plugins = registry.get("plugins", [])
+    if not diff_base:
+        return plugins, "all"
+    touched = diff_touched_plugins(registry, diff_base)
+    if touched is None:
+        print(f"WARNING: could not read registry.yaml from {diff_base}, "
+              "checking every plugin", file=sys.stderr)
+        return plugins, "all"
+    names = set(touched)
+    return [p for p in plugins if p.get("name") in names], f"touched since {diff_base}"
+
+
+def run_on_clones(plugins: list[dict], per_plugin) -> tuple[list[str], list[str]]:
+    """Clone each distinct (clone_url, ref) once and run per-plugin clone checks.
+
+    ``per_plugin(plugin, plugin_root)`` returns (errors, warnings), aggregated across
+    all plugins. Plugins that share a repo+ref (e.g. every git-subdir bundle member of
+    one monorepo) are cloned a single time. A malformed source is skipped silently
+    (validate_remote_plugin reports those); a failed clone or a missing subdirectory
+    yields a warning for the affected plugin(s) — an upstream/transient condition, not
+    a registry error — mirroring the existing skill-name sweep.
+    """
+    groups: dict[tuple[str, str], list[dict]] = {}
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    for plugin in plugins:
+        source = plugin.get("source") or {}
+        if source.get("type") not in GIT_CLONEABLE_TYPES:
+            continue
         try:
-            result = shallow_clone(clone_url, ref, tmpdir)
-        except RuntimeError as exc:
-            return [], [f"  Plugin '{name}': could not clone to check skill names: {redact_url(str(exc))}"]
-        if result.returncode != 0:
-            return [], [
-                f"  Plugin '{name}': could not clone {redact_url(clone_url)} (ref={ref}) "
-                "to check skill names"
-            ]
-        return check_skill_names_against_source(plugin, Path(tmpdir))
+            clone_url = source_clone_url(source)
+            ref = normalize_git_ref(source.get("ref", "main"))
+        except (ValueError, KeyError):
+            continue
+        groups.setdefault((clone_url, ref), []).append(plugin)
+
+    for (clone_url, ref), members in groups.items():
+        with tempfile.TemporaryDirectory() as tmpdir:
+            try:
+                result = shallow_clone(clone_url, ref, tmpdir)
+                clone_ok = result.returncode == 0
+            except RuntimeError as exc:
+                for plugin in members:
+                    warnings.append(
+                        f"  Plugin '{get_plugin_label(plugin)}': could not clone to run "
+                        f"upstream checks: {redact_url(str(exc))}"
+                    )
+                continue
+            if not clone_ok:
+                for plugin in members:
+                    warnings.append(
+                        f"  Plugin '{get_plugin_label(plugin)}': could not clone "
+                        f"{redact_url(clone_url)} (ref={ref}) to run upstream checks"
+                    )
+                continue
+            for plugin in members:
+                plugin_root = _plugin_root_in_clone(Path(tmpdir), plugin["source"])
+                if plugin_root is None or not plugin_root.is_dir():
+                    warnings.append(
+                        f"  Plugin '{get_plugin_label(plugin)}': subdirectory "
+                        f"'{source_subdir(plugin['source'])}' not found in the cloned repo"
+                    )
+                    continue
+                e, w = per_plugin(plugin, plugin_root)
+                errors.extend(e)
+                warnings.extend(w)
+
+    return errors, warnings
 
 
 def main() -> None:
@@ -623,6 +741,10 @@ def main() -> None:
                         help="Clone plugin repos and check registry skill names against "
                              "upstream SKILL.md frontmatter (scoped to plugins touched "
                              "since --diff-base, if given)")
+    parser.add_argument("--check-codex-manifests", action="store_true",
+                        help="Clone plugin repos and warn (never fail) about skill-bearing "
+                             "plugins missing a .codex-plugin/plugin.json, whose skills will "
+                             "not load under Codex (scoped to --diff-base, if given)")
     parser.add_argument("--staged", action="store_true",
                         help="Require contracts for skills changed between HEAD and staged registry.yaml")
     parser.add_argument("--diff-base", metavar="REF",
@@ -739,34 +861,42 @@ def main() -> None:
             else:
                 print("    OK")
 
-    # Registry skill names vs upstream SKILL.md frontmatter
-    if args.check_skill_names:
-        plugins_to_check = registry.get("plugins", [])
-        scope = "all"
-        if args.diff_base:
-            touched_names = diff_touched_plugins(registry, args.diff_base)
-            if touched_names is None:
-                print(f"WARNING: could not read registry.yaml from {args.diff_base}, "
-                      "checking every plugin", file=sys.stderr)
-            else:
-                plugins_to_check = [p for p in plugins_to_check
-                                    if p.get("name") in set(touched_names)]
-                scope = f"touched since {args.diff_base}"
+    # Upstream clone-based sweeps: skill-name drift and/or Codex-manifest presence.
+    # Both clone the same repos, so when both are requested we clone each repo once
+    # (git-subdir bundle members of one monorepo share a single clone regardless).
+    if args.check_skill_names or args.check_codex_manifests:
+        plugins_to_check, scope = _scope_plugins(registry, args.diff_base)
 
-        print(f"Checking skill names against source ({len(plugins_to_check)} plugin(s), {scope})...")
-        name_errors: list[str] = []
-        name_warnings: list[str] = []
-        for plugin in plugins_to_check:
-            errors, warnings = check_remote_skill_names(plugin)
-            name_errors.extend(errors)
-            name_warnings.extend(warnings)
+        clone_checks = []
+        if args.check_skill_names:
+            clone_checks.append(check_skill_names_against_source)
+        if args.check_codex_manifests:
+            clone_checks.append(check_codex_manifest)
 
-        for w in name_warnings:
+        labels = " + ".join(
+            label for label, enabled in (
+                ("skill names", args.check_skill_names),
+                ("Codex manifests", args.check_codex_manifests),
+            ) if enabled
+        )
+        print(f"Checking {labels} against source ({len(plugins_to_check)} plugin(s), {scope})...")
+
+        def _combined(plugin: dict, plugin_root: Path) -> tuple[list[str], list[str]]:
+            errs: list[str] = []
+            warns: list[str] = []
+            for check in clone_checks:
+                e, w = check(plugin, plugin_root)
+                errs.extend(e)
+                warns.extend(w)
+            return errs, warns
+
+        sweep_errors, sweep_warnings = run_on_clones(plugins_to_check, _combined)
+        for w in sweep_warnings:
             print(f"  WARNING:{w.lstrip(' ')}")
-        all_errors.extend(name_errors)
-        if name_errors:
-            print(f"  FAIL: {len(name_errors)} skill name error(s)")
-            for e in name_errors:
+        all_errors.extend(sweep_errors)
+        if sweep_errors:
+            print(f"  FAIL: {len(sweep_errors)} error(s)")
+            for e in sweep_errors:
                 print(e)
         else:
             print("  OK")

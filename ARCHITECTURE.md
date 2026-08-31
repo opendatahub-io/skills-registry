@@ -164,11 +164,19 @@ A sub-plugin that delegates skill discovery to its own `plugin.json` (e.g. a
 `registry.yaml` so they render on its catalog/site page. Such skills do **not**
 require a `contract` block: the canonical-contract requirement is enforced only
 for skills whose plugin `source.type` is `github`/`git` (`GIT_CLONE_TYPES`) —
-the same cloneable sources `skill-linter` and the skill-name-drift check
-verify. A `git-subdir`/`npm`/`local` source cannot be cloned and its
-`source_assertions` cannot be resolved, so a contract on it would be
-unverifiable; the exemption keeps enforcement aligned with what can actually be
-verified rather than weakening it.
+whole-repo sources whose in-repo skills carry resolvable `source_assertions`, the
+same sources `skill-linter` verifies. `git-subdir`/`npm`/`local` sources are
+exempt from the **contract** requirement: `npm`/`local` cannot be cloned at all,
+and a `git-subdir` sub-plugin delegates skill discovery to its own `plugin.json`
+rather than to `source_assertions`, so a contract on it would be unverifiable
+metadata. The exemption keeps contract enforcement aligned with what can actually
+be verified rather than weakening it.
+
+The **clone-based upstream sweeps are broader** (`GIT_CLONEABLE_TYPES` =
+`github`/`git`/`git-subdir`): `git-subdir` *is* cloneable — clone the repo, then
+resolve its `path` — so skill-name drift, `--check-sources`, and the
+Codex-manifest check all cover it. Only the contract requirement stays scoped to
+`github`/`git`.
 
 When only a count is wanted (no list), set `skill_count: N` instead — catalog-only
 metadata (not propagated to `marketplace.json`). A plugin sets `skill_count`
