@@ -423,6 +423,30 @@ class SchemaTests(unittest.TestCase):
 
         self.assertTrue(any("repo" in error for error in errors), errors)
 
+    def test_schema_rejects_blank_git_subdir_path(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://github.com/acme/monorepo.git",
+            "path": "   ",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(errors, "a blank git-subdir path must be rejected")
+
+    def test_schema_rejects_git_subdir_path_with_traversal(self):
+        registry = build_registry()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://github.com/acme/monorepo.git",
+            "path": "../escape",
+        }
+
+        errors = self.validate_registry.validate_schema(registry, self.schema)
+
+        self.assertTrue(errors, "a git-subdir path with '..' must be rejected")
+
     def test_schema_accepts_dot_prefixed_skill_path(self):
         registry = build_registry()
         add_minimal_contract(registry["plugins"][0]["skills"][0])
@@ -969,6 +993,27 @@ class ContractSourceExemptionTests(unittest.TestCase):
         required = {SkillKey("gh", "s1")}
         errors = self.validate_registry.check_skill_contracts(reg, required)
         self.assertTrue(any("gh" in e and "s1" in e for e in errors))
+
+
+class SourceSubdirTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    def test_whole_repo_source_returns_empty(self):
+        self.assertEqual("", self.vr.source_subdir({"type": "github", "repo": "o/r"}))
+        self.assertEqual("", self.vr.source_subdir({"type": "git", "url": "https://x/y.git"}))
+
+    def test_non_string_path_returns_empty_not_crash(self):
+        # Unreachable after schema validation, but the helper must never raise.
+        self.assertEqual("", self.vr.source_subdir({"type": "git-subdir", "url": "u", "path": 1}))
+        self.assertEqual("", self.vr.source_subdir({"type": "git-subdir", "url": "u"}))
+
+    def test_normalizes_dot_slash_and_leading_slash(self):
+        self.assertEqual(
+            "a/b", self.vr.source_subdir({"type": "git-subdir", "url": "u", "path": "./a/b"}))
+        self.assertEqual(
+            "a/b", self.vr.source_subdir({"type": "git-subdir", "url": "u", "path": "/a/b"}))
 
 
 class PluginRootInCloneTests(unittest.TestCase):

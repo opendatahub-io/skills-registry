@@ -114,7 +114,13 @@ def source_subdir(source: dict) -> str:
     """
     if source.get("type") != "git-subdir":
         return ""
-    path = (source.get("path") or "").strip().replace("\\", "/")
+    path = source.get("path")
+    if not isinstance(path, str):
+        # The schema requires a nonempty repo-relative path for git-subdir, so a
+        # missing/non-string value only reaches here on unvalidated input; return
+        # "" rather than raising, so callers never crash on malformed data.
+        return ""
+    path = path.strip().replace("\\", "/")
     while path.startswith("./"):
         path = path[2:]
     return path.lstrip("/")

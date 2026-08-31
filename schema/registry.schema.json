@@ -450,7 +450,11 @@
         },
         {
           "if": { "properties": { "type": { "const": "git-subdir" } }, "required": ["type"] },
-          "then": { "required": ["url", "path"], "not": { "required": ["repo"] } }
+          "then": {
+            "required": ["url", "path"],
+            "not": { "required": ["repo"] },
+            "properties": { "path": { "$ref": "#/$defs/repoRelativePath" } }
+          }
         }
       ]
     },
