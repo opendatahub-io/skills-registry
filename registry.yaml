@@ -985,12 +985,11 @@ plugins:
 
   - name: test-plan
     description: >
-      End-to-end test planning workflow for RHOAI: generate test plans from
-      strategies, create test cases, implement executable automation code, verify
-      UI tests against live clusters via Playwright, publish to GitHub with PR
-      creation, resolve review feedback, and score quality with automated rubrics
-      using parallel sub-agent analysis.
-    version: "1.0.1"
+      End-to-end test planning workflow for RHOAI: generate E2E/UI-focused test plans
+      from Jira strategies, create traceable test cases, implement executable automation code,
+      verify UI tests against live clusters via Playwright, publish to GitHub,
+      resolve review feedback, and score plans with deterministic evidence gates and automated rubrics.
+    version: "2.0.0"
     category: evaluation
     tags: [test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing]
     author:

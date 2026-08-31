@@ -64,9 +64,9 @@ hide:
 
     ---
 
-    End-to-end test planning workflow for RHOAI: generate test plans from strategies, create test cases, implement execut...
+    End-to-end test planning workflow for RHOAI: generate E2E/UI-focused test plans from Jira strategies, create traceabl...
 
-    **17 skills** - Evaluation & Testing - v1.0.1
+    **17 skills** - Evaluation & Testing - v2.0.0
 
 -   **[quality-tooling](plugins/quality-tooling/index.md)**
 
