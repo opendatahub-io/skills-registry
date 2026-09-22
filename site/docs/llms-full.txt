@@ -2496,11 +2496,15 @@ Examples:
 
 ## python-package-skills
 
-AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, fondue monorepo onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
+AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, fondue monorepo onboarding, constraint bug descriptions, hardware variant resolution, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
 
 **Repository**: https://github.com/opendatahub-io/python-package-skills
 
 ### Skills
+
+#### /constraint-bug-description (internal)
+
+Describe a builder constraint and production-index version gap for Jira
 
 #### /executive-summary (internal)
 
@@ -2513,6 +2517,10 @@ Analyze a build failure for a Python package in the RHAI pipeline and produce a 
 #### /fondue-onboarding (internal)
 
 Onboard a Python package into the fondue monorepo (builder/ and/or rhai-pipeline/) with configuration changes, linting, and git commit(s)
+
+#### /hardware-variant (internal)
+
+Resolve free-text hardware requirements to one allowed accelerator variant
 
 #### /jira-context-summary (internal)
 

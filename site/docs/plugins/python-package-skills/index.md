@@ -7,7 +7,7 @@ title: python-package-skills
 
 # python-package-skills
 
-AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, fondue monorepo onboarding, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
+AI skills for Python package onboarding into the RHAI distribution pipeline. End-to-end automation covering packaging investigation, license checking, security auditing, build failure analysis, fondue monorepo onboarding, constraint bug descriptions, hardware variant resolution, probe test creation, Jira context summarization, and executive summary generation. Designed to run inside a Claude Code container as part of the package-onboarding CI pipeline.
 
 !!! info "Plugin Details"
 
@@ -16,15 +16,17 @@ AI skills for Python package onboarding into the RHAI distribution pipeline. End
     - **License**: Apache-2.0
     - **Category**: [Development Tools](../../categories/development-tools.md)
     - **Repository**: [opendatahub-io/python-package-skills](https://github.com/opendatahub-io/python-package-skills)
-    - **Tags**: <span class="tag-pill">python-packaging</span> <span class="tag-pill">onboarding</span> <span class="tag-pill">fondue</span> <span class="tag-pill">investigation</span> <span class="tag-pill">security</span> <span class="tag-pill">license</span> <span class="tag-pill">testing</span>
+    - **Tags**: <span class="tag-pill">python-packaging</span> <span class="tag-pill">onboarding</span> <span class="tag-pill">fondue</span> <span class="tag-pill">investigation</span> <span class="tag-pill">security</span> <span class="tag-pill">license</span> <span class="tag-pill">testing</span> <span class="tag-pill">constraints</span> <span class="tag-pill">hardware</span> <span class="tag-pill">accelerators</span>
 
 ## Skills
 
 | Skill | Description | Invocable |
 |-------|-------------|-----------|
+| [`/constraint-bug-description`](constraint-bug-description.md) | Describe a builder constraint and production-index version gap for Jira | :material-close: internal |
 | [`/executive-summary`](executive-summary.md) | Create a concise 2-3 line executive summary of a package onboarding outcome | :material-close: internal |
 | [`/failure-analysis`](failure-analysis.md) | Analyze a build failure for a Python package in the RHAI pipeline and produce a structured diagnosis report | :material-close: internal |
 | [`/fondue-onboarding`](fondue-onboarding.md) | Onboard a Python package into the fondue monorepo (builder/ and/or rhai-pipeline/) with configuration changes, linting, and git commit(s) | :material-close: internal |
+| [`/hardware-variant`](hardware-variant.md) | Resolve free-text hardware requirements to one allowed accelerator variant | :material-close: internal |
 | [`/jira-context-summary`](jira-context-summary.md) | Summarize Jira ticket context for a package onboarding request with actionable requirements and blockers | :material-close: internal |
 | [`/license-check`](license-check.md) | Check Python package license compatibility with redistribution in Red Hat AI distribution pipeline | :material-close: internal |
 | [`/packaging-investigation`](packaging-investigation.md) | Investigate a Python package for enterprise packaging and distribution readiness with structured analysis and verdict | :material-close: internal |

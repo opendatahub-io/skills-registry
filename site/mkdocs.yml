@@ -165,9 +165,11 @@ nav:
       - false-alarm-detection: plugins/autoqa-skills/false-alarm-detection.md
     - python-package-skills:
       - plugins/python-package-skills/index.md
+      - constraint-bug-description: plugins/python-package-skills/constraint-bug-description.md
       - executive-summary: plugins/python-package-skills/executive-summary.md
       - failure-analysis: plugins/python-package-skills/failure-analysis.md
       - fondue-onboarding: plugins/python-package-skills/fondue-onboarding.md
+      - hardware-variant: plugins/python-package-skills/hardware-variant.md
       - jira-context-summary: plugins/python-package-skills/jira-context-summary.md
       - license-check: plugins/python-package-skills/license-check.md
       - packaging-investigation: plugins/python-package-skills/packaging-investigation.md
