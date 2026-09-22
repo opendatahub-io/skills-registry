@@ -552,8 +552,6 @@ Skills for requirements, RFEs, and product strategy
 
 Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.
 
-**Requires:** `assess-rfe`
-
 v0.1.0 | [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-creator)
 
 Tags: rfe, jira, review, strategy, pipeline
