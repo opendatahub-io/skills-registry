@@ -52,7 +52,6 @@ automatically on first use.
 | [`/rfe.speedrun`](rfe.speedrun.md) | Execute the full RFE pipeline end-to-end | :material-check: |
 | [`/rfe.auto-fix`](rfe.auto-fix.md) | Batch review, revise, and split operations | :material-check: |
 | [`/rfe-creator.update-deps`](rfe-creator.update-deps.md) | Update vendored dependencies | :material-check: |
-| [`/rfe-feasibility-review`](rfe-feasibility-review.md) | Reviews RFEs for technical feasibility, blockers, and strategy alignment | :material-close: internal |
 
 ## Installation
 

@@ -85,8 +85,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.create/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe.create/rfe-template.md
       - name: rfe.review
         description: Score and improve RFEs with auto-revision
         user-invocable: true
@@ -120,11 +118,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.review/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe.review/prompts/fetch-agent.md
-              - .claude/skills/rfe.review/prompts/assess-agent.md
-              - .claude/skills/rfe.review/prompts/review-agent.md
-              - .claude/skills/rfe.review/prompts/revise-agent.md
       - name: rfe.split
         description: Decompose oversized RFEs into appropriately-scoped pieces
         user-invocable: true
@@ -155,8 +148,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.split/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe.split/prompts/split-agent.md
       - name: rfe.submit
         description: Push RFEs to Jira
         user-invocable: true
@@ -273,33 +264,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe-creator.update-deps/SKILL.md
-      - name: rfe-feasibility-review
-        description: Reviews RFEs for technical feasibility, blockers, and strategy alignment
-        user-invocable: false
-        contract:
-          version: canonical-skill-v1
-          functions: [review]
-          metrics:
-            - id: task_success
-              measure: judge
-              rubric_ref: opendatahub-io/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe-feasibility-review/SKILL.md
-          problem_statement: Review a single RFE for technical feasibility, blockers, and alignment with technical strategy, and write the verdict.
-          success_conditions:
-            - Produces a feasibility verdict (feasible/infeasible/indeterminate) for the RFE with blockers and a scope assessment.
-            - Writes artifacts/rfe-reviews/{ID}-feasibility.md, grounded in architecture context when available.
-          invariants:
-            must_preserve:
-              - Do not block an RFE for a capability that simply does not exist yet — that is feasible, not infeasible.
-              - Do not suggest implementation approaches — assess feasibility only.
-            fixed_context:
-              tools: [Read, Write, Grep, Glob, Bash]
-              knowledge_inputs:
-                - kind: repository_content
-                  privacy: public
-                - kind: task_input
-                  privacy: task_private
-          source_assertions:
-            skill_path: .claude/skills/rfe-feasibility-review/SKILL.md
   - name: strat-creator
     description: >
       Claude Code skills for creating, reviewing, and submitting strategies

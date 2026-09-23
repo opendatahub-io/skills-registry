@@ -159,7 +159,6 @@
 
 ## Optional
 
-- [rfe-feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/rfe-creator/rfe-feasibility-review/): Reviews RFEs for technical feasibility, blockers, and strategy alignment (internal)
 - [strategy-feasibility-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-feasibility-review/): Reviews strategy for technical feasibility and effort estimate credibility (internal)
 - [strategy-testability-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-testability-review/): Reviews strategy for testability and measurable acceptance criteria (internal)
 - [strategy-scope-review](https://opendatahub-io.github.io/skills-registry/plugins/strat-creator/strategy-scope-review/): Reviews strategy for right-sizing and bounded scope (internal)

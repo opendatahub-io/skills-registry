@@ -62,7 +62,6 @@ nav:
       - rfe.speedrun: plugins/rfe-creator/rfe.speedrun.md
       - rfe.auto-fix: plugins/rfe-creator/rfe.auto-fix.md
       - rfe-creator.update-deps: plugins/rfe-creator/rfe-creator.update-deps.md
-      - rfe-feasibility-review: plugins/rfe-creator/rfe-feasibility-review.md
     - strat-creator:
       - plugins/strat-creator/index.md
       - strategy-create: plugins/strat-creator/strategy-create.md
