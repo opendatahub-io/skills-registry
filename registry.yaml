@@ -38,8 +38,10 @@ plugins:
   - name: rfe-creator
     description: >
       Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the
-      RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic /rfe-* pipeline (--type
-      initiative for Initiatives); the legacy /rfe.* names remain as compatibility aliases.
+      RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic pipeline (/rfe-create,
+      /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for
+      Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility
+      aliases.
     version: "0.1.0"
     category: planning
     tags: [rfe, initiative, jira, review, pipeline]
@@ -150,9 +152,11 @@ plugins:
       - name: rfe-split
         description: >
           Split oversized work items of any registered type — RFEs and Initiatives — into smaller,
-          right-sized ones. Accepts one or more IDs (e.g., /rfe-split RHAIRFE-1234 RHAIRFE-5678,
-          /rfe-split --type initiative INIT-001). Runs non-interactively — decomposes, generates new
-          items, reviews them, self-corrects, and checks coverage.
+          right-sized ones. Takes one or more IDs of items already in the workspace (fetched by
+          /rfe-review or written by /rfe-create; e.g. /rfe-split RHAIRFE-1234 RHAIRFE-5678, /rfe-
+          split --type initiative INIT-001) and skips an ID with no local task file. Runs non-
+          interactively — decomposes, generates new items, reviews them, self-corrects, and checks
+          coverage.
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -316,8 +320,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.create/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe-create/SKILL.md
       - name: rfe.review
         description: >
           Compatibility alias for /rfe-review, kept so existing /rfe.review invocations keep
@@ -354,8 +356,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.review/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe-review/SKILL.md
       - name: rfe.split
         description: >
           Compatibility alias for /rfe-split, kept so existing /rfe.split invocations keep working.
@@ -388,8 +388,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.split/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe-split/SKILL.md
       - name: rfe.submit
         description: >
           Compatibility alias for /rfe-submit, kept so existing /rfe.submit invocations keep
@@ -422,8 +420,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.submit/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe-submit/SKILL.md
       - name: rfe.speedrun
         description: >
           Compatibility alias for /rfe-speedrun, kept so existing /rfe.speedrun invocations keep
@@ -457,8 +453,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.speedrun/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe-speedrun/SKILL.md
       - name: rfe.auto-fix
         description: >
           Compatibility alias for /rfe-auto-fix, kept so existing /rfe.auto-fix invocations keep
@@ -492,8 +486,6 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.auto-fix/SKILL.md
-            supporting_paths:
-              - .claude/skills/rfe-auto-fix/SKILL.md
       - name: rfe-creator.update-deps
         description: Update vendored dependencies
         user-invocable: true

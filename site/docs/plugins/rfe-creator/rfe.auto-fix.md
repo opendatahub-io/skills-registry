@@ -78,12 +78,6 @@ report and counts summary.
       <span class="skill-contract__field">Skill</span>
       <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/opendatahub-io/rfe-creator/blob/c8a2a1edb53654f08bbe67b7aa4382121e22866f/.claude/skills/rfe.auto-fix/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/rfe.auto-fix/SKILL.md</code></a></div>
     </div>
-    <div class="skill-contract__row">
-      <span class="skill-contract__field">Supporting</span>
-      <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/opendatahub-io/rfe-creator/blob/c8a2a1edb53654f08bbe67b7aa4382121e22866f/.claude/skills/rfe-auto-fix/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/rfe-auto-fix/SKILL.md</code></a></li>
-      </ul>
-    </div>
   </section>
 </div>
 

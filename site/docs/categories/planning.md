@@ -13,7 +13,7 @@ Skills for requirements, RFEs, and product strategy
 
 ### [rfe-creator](../plugins/rfe-creator/index.md)
 
-Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic /rfe-* pipeline (--type initiative for Initiatives); the legacy /rfe.* names remain as compatibility aliases.
+Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic pipeline (/rfe-create, /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility aliases.
 
 **13 skills** - v0.1.0
 
