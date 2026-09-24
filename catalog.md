@@ -550,20 +550,26 @@ Skills for requirements, RFEs, and product strategy
 
 ### rfe-creator
 
-Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.
+Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic /rfe-* pipeline (--type initiative for Initiatives); the legacy /rfe.* names remain as compatibility aliases.
 
 v0.1.0 | [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-creator)
 
-Tags: rfe, jira, review, strategy, pipeline
+Tags: rfe, initiative, jira, review, pipeline
 
 | Skill | Description | Functions | Metrics |
 |-------|-------------|-----------|---------|
-| `/rfe.create` | Generate new RFEs from problem statements | `generate` | `task_success` (`judge`) |
-| `/rfe.review` | Score and improve RFEs with auto-revision | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
-| `/rfe.split` | Decompose oversized RFEs into appropriately-scoped pieces | `transform` | `task_success` (`judge`) |
-| `/rfe.submit` | Push RFEs to Jira | `execute` | `task_success` (`deterministic`) |
-| `/rfe.speedrun` | Execute the full RFE pipeline end-to-end | `orchestrate` | `task_success` (`judge`) |
-| `/rfe.auto-fix` | Batch review, revise, and split operations | `orchestrate` | `task_success` (`judge`) |
+| `/rfe-create` | Write a new work item of any registered type — an RFE from a problem statement, idea, or need (business needs, WHAT/WHY), or an Initiative from an objective or strategic goal (/rfe-create --type initiative ...). Asks clarifying questions, then produces well-formed items. Use when starting from scratch. | `generate` | `task_success` (`judge`) |
+| `/rfe-review` | Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives (RHOAIENG, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring and the type's review dimensions (technical feasibility, strategic alignment), then auto- revises the issues it finds. | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
+| `/rfe-split` | Split oversized work items of any registered type — RFEs and Initiatives — into smaller, right-sized ones. Accepts one or more IDs (e.g., /rfe-split RHAIRFE-1234 RHAIRFE-5678, /rfe-split --type initiative INIT-001). Runs non-interactively — decomposes, generates new items, reviews them, self-corrects, and checks coverage. | `transform` | `task_success` (`judge`) |
+| `/rfe-submit` | Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new RFEs, RHOAIENG Initiative tickets for Initiatives (/rfe-submit --type initiative), or updates to existing tickets fetched from Jira. Use after /rfe-review. | `execute` | `task_success` (`deterministic`) |
+| `/rfe-speedrun` | End-to-end pipeline for work items of any registered type — RFEs by default, Initiatives with --type initiative. Accepts a single idea, Jira key(s), or a YAML batch file. Creates, reviews, auto-fixes (with splits), and submits. Supports --headless, --announce-complete, and --dry-run for CI. | `orchestrate` | `task_success` (`judge`) |
+| `/rfe-auto-fix` | Review and fix batches of work items automatically — RFEs by default, any registered type with --type (e.g. --type initiative). Accepts explicit IDs or a JQL query. Reviews, auto- revises, and splits oversized items. Non-interactive. | `orchestrate` | `task_success` (`judge`) |
+| `/rfe.create` | Compatibility alias for /rfe-create, kept so existing /rfe.create invocations keep working. Write a new RFE: prefer /rfe-create (Initiatives: /rfe-create --type initiative). | `generate` | `task_success` (`judge`) |
+| `/rfe.review` | Compatibility alias for /rfe-review, kept so existing /rfe.review invocations keep working. Review, improve and auto-revise RFEs: prefer /rfe-review (Initiatives: /rfe- review --type initiative). | `review` | `task_success` (`judge`), `output_quality` (`judge`) |
+| `/rfe.split` | Compatibility alias for /rfe-split, kept so existing /rfe.split invocations keep working. Split oversized RFEs: prefer /rfe-split (Initiatives: /rfe-split --type initiative). | `transform` | `task_success` (`judge`) |
+| `/rfe.submit` | Compatibility alias for /rfe-submit, kept so existing /rfe.submit invocations keep working. Submit or update RFEs in Jira: prefer /rfe-submit (Initiatives: /rfe-submit --type initiative). | `execute` | `task_success` (`deterministic`) |
+| `/rfe.speedrun` | Compatibility alias for /rfe-speedrun, kept so existing /rfe.speedrun invocations keep working. End-to-end RFE pipeline: prefer /rfe-speedrun (Initiatives: /rfe-speedrun --type initiative). | `orchestrate` | `task_success` (`judge`) |
+| `/rfe.auto-fix` | Compatibility alias for /rfe-auto-fix, kept so existing /rfe.auto-fix invocations keep working. Batch review, revision and split of RFEs: prefer /rfe-auto-fix (Initiatives: /rfe-auto-fix --type initiative). | `orchestrate` | `task_success` (`judge`) |
 | `/rfe-creator.update-deps` | Update vendored dependencies | `execute` | `task_success` (`deterministic`) |
 
 ```bash

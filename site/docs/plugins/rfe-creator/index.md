@@ -33,7 +33,7 @@ automatically on first use.
     - **Author**: jwforres
     - **Category**: [Product Planning](../../categories/planning.md)
     - **Repository**: [opendatahub-io/rfe-creator](https://github.com/opendatahub-io/rfe-creator)
-    - **Tags**: <span class="tag-pill">rfe</span> <span class="tag-pill">jira</span> <span class="tag-pill">review</span> <span class="tag-pill">strategy</span> <span class="tag-pill">pipeline</span>
+    - **Tags**: <span class="tag-pill">rfe</span> <span class="tag-pill">initiative</span> <span class="tag-pill">jira</span> <span class="tag-pill">review</span> <span class="tag-pill">pipeline</span>
 
 ## Pipeline
 
@@ -45,12 +45,18 @@ automatically on first use.
 
 | Skill | Description | Invocable |
 |-------|-------------|-----------|
-| [`/rfe.create`](rfe.create.md) | Generate new RFEs from problem statements | :material-check: |
-| [`/rfe.review`](rfe.review.md) | Score and improve RFEs with auto-revision | :material-check: |
-| [`/rfe.split`](rfe.split.md) | Decompose oversized RFEs into appropriately-scoped pieces | :material-check: |
-| [`/rfe.submit`](rfe.submit.md) | Push RFEs to Jira | :material-check: |
-| [`/rfe.speedrun`](rfe.speedrun.md) | Execute the full RFE pipeline end-to-end | :material-check: |
-| [`/rfe.auto-fix`](rfe.auto-fix.md) | Batch review, revise, and split operations | :material-check: |
+| [`/rfe-create`](rfe-create.md) | Write a new work item of any registered type — an RFE from a problem statement, idea, or need (business needs, WHAT/WHY), or an Initiative from an objective or strategic goal (/rfe-create --type initiative ...). Asks clarifying questions, then produces well-formed items. Use when starting from scratch. | :material-check: |
+| [`/rfe-review`](rfe-review.md) | Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives (RHOAIENG, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring and the type's review dimensions (technical feasibility, strategic alignment), then auto- revises the issues it finds. | :material-check: |
+| [`/rfe-split`](rfe-split.md) | Split oversized work items of any registered type — RFEs and Initiatives — into smaller, right-sized ones. Accepts one or more IDs (e.g., /rfe-split RHAIRFE-1234 RHAIRFE-5678, /rfe-split --type initiative INIT-001). Runs non-interactively — decomposes, generates new items, reviews them, self-corrects, and checks coverage. | :material-check: |
+| [`/rfe-submit`](rfe-submit.md) | Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new RFEs, RHOAIENG Initiative tickets for Initiatives (/rfe-submit --type initiative), or updates to existing tickets fetched from Jira. Use after /rfe-review. | :material-check: |
+| [`/rfe-speedrun`](rfe-speedrun.md) | End-to-end pipeline for work items of any registered type — RFEs by default, Initiatives with --type initiative. Accepts a single idea, Jira key(s), or a YAML batch file. Creates, reviews, auto-fixes (with splits), and submits. Supports --headless, --announce-complete, and --dry-run for CI. | :material-check: |
+| [`/rfe-auto-fix`](rfe-auto-fix.md) | Review and fix batches of work items automatically — RFEs by default, any registered type with --type (e.g. --type initiative). Accepts explicit IDs or a JQL query. Reviews, auto- revises, and splits oversized items. Non-interactive. | :material-check: |
+| [`/rfe.create`](rfe.create.md) | Compatibility alias for /rfe-create, kept so existing /rfe.create invocations keep working. Write a new RFE: prefer /rfe-create (Initiatives: /rfe-create --type initiative). | :material-check: |
+| [`/rfe.review`](rfe.review.md) | Compatibility alias for /rfe-review, kept so existing /rfe.review invocations keep working. Review, improve and auto-revise RFEs: prefer /rfe-review (Initiatives: /rfe- review --type initiative). | :material-check: |
+| [`/rfe.split`](rfe.split.md) | Compatibility alias for /rfe-split, kept so existing /rfe.split invocations keep working. Split oversized RFEs: prefer /rfe-split (Initiatives: /rfe-split --type initiative). | :material-check: |
+| [`/rfe.submit`](rfe.submit.md) | Compatibility alias for /rfe-submit, kept so existing /rfe.submit invocations keep working. Submit or update RFEs in Jira: prefer /rfe-submit (Initiatives: /rfe-submit --type initiative). | :material-check: |
+| [`/rfe.speedrun`](rfe.speedrun.md) | Compatibility alias for /rfe-speedrun, kept so existing /rfe.speedrun invocations keep working. End-to-end RFE pipeline: prefer /rfe-speedrun (Initiatives: /rfe-speedrun --type initiative). | :material-check: |
+| [`/rfe.auto-fix`](rfe.auto-fix.md) | Compatibility alias for /rfe-auto-fix, kept so existing /rfe.auto-fix invocations keep working. Batch review, revision and split of RFEs: prefer /rfe-auto-fix (Initiatives: /rfe-auto-fix --type initiative). | :material-check: |
 | [`/rfe-creator.update-deps`](rfe-creator.update-deps.md) | Update vendored dependencies | :material-check: |
 
 ## Installation

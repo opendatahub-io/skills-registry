@@ -12,13 +12,13 @@
         "name": "jwforres"
       },
       "category": "planning",
-      "description": "Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.\n",
+      "description": "Claude Code skills for creating, reviewing, splitting and submitting work items \u2014 RFEs to the RHAIRFE Jira project and Initiatives to RHOAIENG \u2014 through one generic /rfe-* pipeline (--type initiative for Initiatives); the legacy /rfe.* names remain as compatibility aliases.\n",
       "homepage": "https://github.com/opendatahub-io/rfe-creator",
       "keywords": [
         "rfe",
+        "initiative",
         "jira",
         "review",
-        "strategy",
         "pipeline"
       ],
       "name": "rfe-creator",

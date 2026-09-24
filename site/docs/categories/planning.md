@@ -13,9 +13,9 @@ Skills for requirements, RFEs, and product strategy
 
 ### [rfe-creator](../plugins/rfe-creator/index.md)
 
-Claude Code skills for creating, reviewing, and submitting RFEs to the RHAIRFE Jira project. Provides an automated pipeline from initial creation through review, splitting, and submission, plus strategy refinement skills.
+Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic /rfe-* pipeline (--type initiative for Initiatives); the legacy /rfe.* names remain as compatibility aliases.
 
-**7 skills** - v0.1.0
+**13 skills** - v0.1.0
 
 ### [strat-creator](../plugins/strat-creator/index.md)
 

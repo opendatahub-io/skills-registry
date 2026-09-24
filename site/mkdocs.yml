@@ -55,6 +55,12 @@ nav:
     - plugins/index.md
     - rfe-creator:
       - plugins/rfe-creator/index.md
+      - rfe-create: plugins/rfe-creator/rfe-create.md
+      - rfe-review: plugins/rfe-creator/rfe-review.md
+      - rfe-split: plugins/rfe-creator/rfe-split.md
+      - rfe-submit: plugins/rfe-creator/rfe-submit.md
+      - rfe-speedrun: plugins/rfe-creator/rfe-speedrun.md
+      - rfe-auto-fix: plugins/rfe-creator/rfe-auto-fix.md
       - rfe.create: plugins/rfe-creator/rfe.create.md
       - rfe.review: plugins/rfe-creator/rfe.review.md
       - rfe.split: plugins/rfe-creator/rfe.split.md

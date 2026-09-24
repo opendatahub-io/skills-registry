@@ -37,13 +37,12 @@ plugins:
 
   - name: rfe-creator
     description: >
-      Claude Code skills for creating, reviewing, and submitting RFEs
-      to the RHAIRFE Jira project. Provides an automated pipeline from
-      initial creation through review, splitting, and submission, plus
-      strategy refinement skills.
+      Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the
+      RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic /rfe-* pipeline (--type
+      initiative for Initiatives); the legacy /rfe.* names remain as compatibility aliases.
     version: "0.1.0"
     category: planning
-    tags: [rfe, jira, review, strategy, pipeline]
+    tags: [rfe, initiative, jira, review, pipeline]
     author:
       name: jwforres
     source:
@@ -55,8 +54,240 @@ plugins:
     homepage: https://github.com/opendatahub-io/rfe-creator
     repository: https://github.com/opendatahub-io/rfe-creator
     skills:
+      - name: rfe-create
+        description: >
+          Write a new work item of any registered type — an RFE from a problem statement, idea, or
+          need (business needs, WHAT/WHY), or an Initiative from an objective or strategic goal
+          (/rfe-create --type initiative ...). Asks clarifying questions, then produces well-formed
+          items. Use when starting from scratch.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [generate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-create/SKILL.md
+          problem_statement: Turn a problem statement, idea or objective into a well-formed work item of the resolved type — an RFE describing business needs (WHAT and WHY) by default, an Initiative with --type initiative — sized and ready for review.
+          success_conditions:
+            - Produces a well-formed item of the resolved type, sized by the type's rules (S/M/L/XL from acceptance-criteria count for RFEs).
+            - Writes the type's task file (artifacts/rfe-tasks/RFE-NNN.md, artifacts/initiatives/INIT-NNN.md) with valid frontmatter and rebuilds the index when the type keeps one.
+          invariants:
+            must_preserve:
+              - Describe needs and outcomes (WHAT and WHY) only — never prescribe architecture or implementation.
+              - Use Jira priority values (Blocker/Critical/Major/Normal/Minor), never High/Medium/Low.
+              - Take every typed literal (template, guidance, dirs, id prefix) from the type registry's launch block — never hand-write a typed path.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-create/SKILL.md
+            supporting_paths:
+              - types/rfe/template.md
+              - types/rfe/prompts/create-guidance.md
+              - types/initiative/template.md
+              - types/initiative/prompts/create-guidance.md
+      - name: rfe-review
+        description: >
+          Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives
+          (RHOAIENG, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and
+          review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring
+          and the type's review dimensions (technical feasibility, strategic alignment), then auto-
+          revises the issues it finds.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-review/SKILL.md
+            - id: output_quality
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-review/SKILL.md
+          problem_statement: Score work items of the resolved type against the type's rubric, run its review dimensions (technical feasibility; strategic alignment for Initiatives), and auto-revise failing items across up to two re-assessment cycles.
+          success_conditions:
+            - Produces a review file per item with rubric scores, a verdict per review dimension, and a recommendation.
+            - Auto-revises failing items and re-assesses up to 2 cycles; auto_revised stays true only when the content changed.
+          invariants:
+            must_preserve:
+              - Never read item bodies into orchestrator context — delegate to agents and read only frontmatter.
+              - Do not exceed 2 re-assessment cycles.
+              - Launch every agent with the type's launch block — the review prompts are the shared skeletons under .claude/skills/rfe-review/prompts/ filled from it.
+            fixed_context:
+              tools: [Glob, Bash, Agent, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-review/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-review/prompts/fetch-agent.md
+              - .claude/skills/rfe-review/prompts/assess-agent.md
+              - .claude/skills/rfe-review/prompts/review-agent.md
+              - .claude/skills/rfe-review/prompts/revise-agent.md
+              - types/rfe/prompts/review-rules.md
+              - types/rfe/prompts/review-sections.md
+              - types/rfe/prompts/revise-rules.md
+              - types/rfe/dimensions/feasibility.md
+              - types/initiative/prompts/review-rules.md
+              - types/initiative/prompts/review-sections.md
+              - types/initiative/prompts/revise-rules.md
+              - types/initiative/dimensions/feasibility.md
+              - types/initiative/dimensions/alignment.md
+      - name: rfe-split
+        description: >
+          Split oversized work items of any registered type — RFEs and Initiatives — into smaller,
+          right-sized ones. Accepts one or more IDs (e.g., /rfe-split RHAIRFE-1234 RHAIRFE-5678,
+          /rfe-split --type initiative INIT-001). Runs non-interactively — decomposes, generates new
+          items, reviews them, self-corrects, and checks coverage.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [transform]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-split/SKILL.md
+          problem_statement: Decompose an oversized work item of the resolved type into right-sized children that together cover the original scope.
+          success_conditions:
+            - Decomposes an oversized item into right-sized children that cover all of the original scope.
+            - Reviews the children through /rfe-review and archives the parent.
+          invariants:
+            must_preserve:
+              - Preserve full coverage of the original scope across the children.
+              - Limit right-sizing self-correction to one cycle, and re-split only for right-sizing.
+            fixed_context:
+              tools: [Glob, Bash, Agent, Skill, AskUserQuestion]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-split/SKILL.md
+            supporting_paths:
+              - types/rfe/prompts/split-rules.md
+              - types/initiative/prompts/split-rules.md
+      - name: rfe-submit
+        description: >
+          Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new
+          RFEs, RHOAIENG Initiative tickets for Initiatives (/rfe-submit --type initiative), or
+          updates to existing tickets fetched from Jira. Use after /rfe-review.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [execute]
+          metrics:
+            - id: task_success
+              measure: deterministic
+          problem_statement: Create or update Jira tickets of the resolved type — RHAIRFE for RFEs, RHOAIENG Initiatives with --type initiative — from reviewed artifacts using deterministic REST API calls.
+          success_conditions:
+            - Creates or updates the type's Jira tickets from the reviewed artifacts.
+            - Applies pipeline-outcome labels and rebuilds the index when the type keeps one.
+          invariants:
+            must_preserve:
+              - Route all Jira writes through the deterministic Python scripts (REST plus Basic Auth), not LLM tool-calling.
+              - Keep the type's verdict-label families mutually exclusive.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-submit/SKILL.md
+      - name: rfe-speedrun
+        description: >
+          End-to-end pipeline for work items of any registered type — RFEs by default, Initiatives
+          with --type initiative. Accepts a single idea, Jira key(s), or a YAML batch file. Creates,
+          reviews, auto-fixes (with splits), and submits. Supports --headless, --announce-complete,
+          and --dry-run for CI.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [orchestrate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-speedrun/SKILL.md
+          problem_statement: Run the full pipeline for the resolved type end-to-end — create, auto-fix, and submit — from an idea, Jira key(s), or a batch file.
+          success_conditions:
+            - Runs create, auto-fix, and submit in sequence, persisting IDs and config between phases.
+            - Verifies completeness and retries missing IDs before submitting.
+          invariants:
+            must_preserve:
+              - Always pass an explicit batch size to auto-fix for reproducibility.
+              - Never emit a text-only response during pipeline execution, which terminates the CI process.
+              - Forward the resolved type to every phase it launches.
+            fixed_context:
+              tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-speedrun/SKILL.md
+      - name: rfe-auto-fix
+        description: >
+          Review and fix batches of work items automatically — RFEs by default, any registered type
+          with --type (e.g. --type initiative). Accepts explicit IDs or a JQL query. Reviews, auto-
+          revises, and splits oversized items. Non-interactive.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [orchestrate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-auto-fix/SKILL.md
+          problem_statement: Review, revise, and split batches of work items of the resolved type non-interactively through a pipeline state machine.
+          success_conditions:
+            - Processes every ID through assess, review dimensions, review, revise, re-assess, and split phases until DONE.
+            - Emits a run report and a counts summary.
+          invariants:
+            must_preserve:
+              - Run the dispatch loop to completion — never exit early or skip batches.
+              - After launching a wave of agents, the next call must be wait-for-wave.
+            fixed_context:
+              tools: [Glob, Bash, Agent]
+              cli: [python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: .claude/skills/rfe-auto-fix/SKILL.md
       - name: rfe.create
-        description: Generate new RFEs from problem statements
+        description: >
+          Compatibility alias for /rfe-create, kept so existing /rfe.create invocations keep
+          working. Write a new RFE: prefer /rfe-create (Initiatives: /rfe-create --type initiative).
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -85,8 +316,13 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.create/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-create/SKILL.md
       - name: rfe.review
-        description: Score and improve RFEs with auto-revision
+        description: >
+          Compatibility alias for /rfe-review, kept so existing /rfe.review invocations keep
+          working. Review, improve and auto-revise RFEs: prefer /rfe-review (Initiatives: /rfe-
+          review --type initiative).
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -118,8 +354,12 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.review/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-review/SKILL.md
       - name: rfe.split
-        description: Decompose oversized RFEs into appropriately-scoped pieces
+        description: >
+          Compatibility alias for /rfe-split, kept so existing /rfe.split invocations keep working.
+          Split oversized RFEs: prefer /rfe-split (Initiatives: /rfe-split --type initiative).
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -148,8 +388,13 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.split/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-split/SKILL.md
       - name: rfe.submit
-        description: Push RFEs to Jira
+        description: >
+          Compatibility alias for /rfe-submit, kept so existing /rfe.submit invocations keep
+          working. Submit or update RFEs in Jira: prefer /rfe-submit (Initiatives: /rfe-submit
+          --type initiative).
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -177,8 +422,13 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.submit/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-submit/SKILL.md
       - name: rfe.speedrun
-        description: Execute the full RFE pipeline end-to-end
+        description: >
+          Compatibility alias for /rfe-speedrun, kept so existing /rfe.speedrun invocations keep
+          working. End-to-end RFE pipeline: prefer /rfe-speedrun (Initiatives: /rfe-speedrun --type
+          initiative).
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -207,8 +457,13 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.speedrun/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-speedrun/SKILL.md
       - name: rfe.auto-fix
-        description: Batch review, revise, and split operations
+        description: >
+          Compatibility alias for /rfe-auto-fix, kept so existing /rfe.auto-fix invocations keep
+          working. Batch review, revision and split of RFEs: prefer /rfe-auto-fix (Initiatives:
+          /rfe-auto-fix --type initiative).
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -237,6 +492,8 @@ plugins:
                   privacy: task_private
           source_assertions:
             skill_path: .claude/skills/rfe.auto-fix/SKILL.md
+            supporting_paths:
+              - .claude/skills/rfe-auto-fix/SKILL.md
       - name: rfe-creator.update-deps
         description: Update vendored dependencies
         user-invocable: true
