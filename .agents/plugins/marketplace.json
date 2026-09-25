@@ -109,6 +109,230 @@
       }
     },
     {
+      "category": "Code Quality",
+      "name": "odh-code-quality",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-code-quality",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Documentation",
+      "name": "odh-documentation",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-documentation",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-general",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-general",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-git",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-git",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-google-workspace",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-google-workspace",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-jira",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-jira",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "odh-konflux",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-konflux",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "odh-llm-d",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-llm-d",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "odh-maas",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-maas",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-modules",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-modules",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-python-packaging",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-python-packaging",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-pytorch",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-pytorch",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "odh-rpm",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-rpm",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Security Review",
+      "name": "odh-security",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-security",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "Development Tools",
+      "name": "odh-team",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-team",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
+      "category": "DevOps & CI/CD",
+      "name": "odh-vllm",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/odh-vllm",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      }
+    },
+    {
       "category": "Evaluation & Testing",
       "name": "agent-eval-harness",
       "policy": {

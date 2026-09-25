@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-22 plugins | 153 skills | 7 categories
+38 plugins | 274 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -75,6 +75,62 @@ hide:
     Quality tooling and automation for RHOAI component development. Includes automated repository analysis, build validat...
 
     **5 skills** - Evaluation & Testing - v1.0.0
+
+-   **[odh-documentation](plugins/odh-documentation/index.md)**
+
+    ---
+
+    AsciiDoc documentation generation, validation, review, and ADR review
+
+    **9 skills** - Documentation - v0.1.0
+
+-   **[odh-jira](plugins/odh-jira/index.md)**
+
+    ---
+
+    Jira ticket management, search, triage, and automation
+
+    **12 skills** - Development Tools - v0.1.0
+
+-   **[odh-konflux](plugins/odh-konflux/index.md)**
+
+    ---
+
+    Konflux application and component management
+
+    **3 skills** - DevOps & CI/CD - v0.1.0
+
+-   **[odh-modules](plugins/odh-modules/index.md)**
+
+    ---
+
+    ODH module operator scaffolding, migration, and compliance checks
+
+    **3 skills** - Development Tools - v0.1.0
+
+-   **[odh-rpm](plugins/odh-rpm/index.md)**
+
+    ---
+
+    RPM build failure analysis and non-Red Hat RPM detection
+
+    **2 skills** - DevOps & CI/CD - v0.1.0
+
+-   **[odh-team](plugins/odh-team/index.md)**
+
+    ---
+
+    Team weekly reports, engineer activity snapshots, and delivery postmortems
+
+    **3 skills** - Development Tools - v0.1.0
+
+-   **[odh-vllm](plugins/odh-vllm/index.md)**
+
+    ---
+
+    vLLM backport triage, cherry-pick automation, and requirements comparison
+
+    **8 skills** - DevOps & CI/CD - v0.1.0
 
 -   **[knowledge-skills](plugins/knowledge-skills/index.md)**
 
@@ -174,9 +230,65 @@ hide:
 
     ---
 
-    Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for anal...
+    [DEPRECATED] Backwards-compatibility umbrella for the ODH AI Helpers plugins. Re-exports the skills that existed befo...
 
-    **19 skills** - Development Tools - v0.1.0
+    **69 skills** - Development Tools - v0.1.0
+
+-   **[odh-code-quality](plugins/odh-code-quality/index.md)**
+
+    ---
+
+    CodeRabbit review triage and project-conformant unit test generation
+
+    **2 skills** - Code Quality - v0.1.0
+
+-   **[odh-general](plugins/odh-general/index.md)**
+
+    ---
+
+    General-purpose helpers and learning mode
+
+    **1 skills** - Development Tools - v0.1.0
+
+-   **[odh-git](plugins/odh-git/index.md)**
+
+    ---
+
+    Git utilities, GitHub/GitLab workflow automation, and CI debugging
+
+    **6 skills** - Development Tools - v0.1.0
+
+-   **[odh-google-workspace](plugins/odh-google-workspace/index.md)**
+
+    ---
+
+    Gmail, Google Calendar, Docs, and Drive integration
+
+    **3 skills** - Development Tools - v0.1.0
+
+-   **[odh-python-packaging](plugins/odh-python-packaging/index.md)**
+
+    ---
+
+    Python package analysis, security auditing, and build complexity assessment
+
+    **11 skills** - Development Tools - v0.1.0
+
+-   **[odh-pytorch](plugins/odh-pytorch/index.md)**
+
+    ---
+
+    PyTorch cross-language analysis with TorchTalk
+
+    **3 skills** - Development Tools - v0.1.0
+
+-   **[odh-security](plugins/odh-security/index.md)**
+
+    ---
+
+    Supply-chain security alerting and OCI image CVE comparison
+
+    **2 skills** - Security Review - v0.1.0
 
 -   **[agent-eval-harness](plugins/agent-eval-harness/index.md)**
 
@@ -200,6 +312,22 @@ hide:
 
 <div class="grid cards" markdown>
 
+-   **[odh-llm-d](plugins/odh-llm-d/index.md)**
+
+    ---
+
+    llm-d release orchestration for opendatahub-io
+
+    **2 skills** - DevOps & CI/CD - v0.1.0
+
+-   **[odh-maas](plugins/odh-maas/index.md)**
+
+    ---
+
+    MaaS nightly QE impact analysis
+
+    **1 skills** - DevOps & CI/CD - v0.1.0
+
 -   **[productization-skills](plugins/productization-skills/index.md)**
 
     ---
@@ -213,9 +341,9 @@ hide:
 ## Categories
 
 - [Evaluation & Testing](categories/evaluation.md) -- Skills for evaluating and testing AI agent skills (5 plugins)
-- [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (1 plugin)
-- [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (2 plugins)
-- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (4 plugins)
-- [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (1 plugin)
-- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (5 plugins)
+- [Code Quality](categories/code-quality.md) -- Code review, linting, and quality enforcement (2 plugins)
+- [Documentation](categories/documentation.md) -- Skills for generating and maintaining documentation (3 plugins)
+- [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (7 plugins)
+- [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (2 plugins)
+- [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (13 plugins)
 - [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (3 plugins)

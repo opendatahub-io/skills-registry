@@ -1,0 +1,140 @@
+skills:
+  python-full-deps:
+    description: |
+      Resolve the full install-time transitive dependency tree for a Python
+      package, respecting environment markers for a specific Python version.
+      Uses uv pip compile (preferred) with fallback to pip install --dry-run
+      --report. Outputs a sorted, deduplicated list of name==version pairs.
+      Complements python-packaging-complexity which only shows direct
+      dependencies from metadata.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "PyPI project name (e.g., vllm, requests)"
+      - name: "VERSION"
+        required: false
+        default: "latest"
+        description: "Specific package version (e.g., 0.4.0)"
+      - name: "PYTHON_VERSION"
+        required: false
+        default: "3.12"
+        description: "Python version for environment marker resolution (e.g., 3.11)"
+    usage_examples:
+      - "/python-full-deps requests"
+      - "/python-full-deps vllm 0.4.0 3.11"
+  python-packaging-bug-finder:
+    description: |
+      Find known packaging bugs, fixes, and workarounds for Python projects
+      by searching GitHub issues. First uses source-finder to locate the repo,
+      then searches issues for build, installation, dependency, compiler, and
+      platform-specific problems. Analyzes resolution status, version impact,
+      and available workarounds for each issue found.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name to search issues for"
+    usage_examples:
+      - "/python-packaging-bug-finder torch"
+      - "/python-packaging-bug-finder numpy"
+  python-packaging-complexity:
+    description: |
+      Analyze Python package build complexity by inspecting PyPI metadata.
+      Evaluates compilation requirements (C/C++/Rust/Fortran), dependency
+      complexity, distribution types (sdist, platform-specific wheels, universal
+      wheels), and produces a numerical complexity score (0-10+). Provides
+      actionable recommendations for wheel building strategies.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name to analyze"
+      - name: "VERSION"
+        required: false
+        default: "latest"
+        description: "Specific package version"
+      - name: "--json"
+        required: false
+        description: "Output as structured JSON for programmatic processing"
+    usage_examples:
+      - "/python-packaging-complexity torch"
+      - "/python-packaging-complexity numpy 1.24.3"
+      - "/python-packaging-complexity tensorflow --json"
+  python-packaging-env-finder:
+    description: |
+      Investigate environment variables that can be set when building Python
+      wheels for a given project. Analyzes setup.py, CMake files, and other
+      build configuration files to discover compiler variables (CC, CXX, CFLAGS),
+      path configuration, feature control flags (ENABLE_*, WITH_*, USE_*), and
+      Python-specific build variables.
+    arguments:
+      - name: "PROJECT_PATH"
+        required: false
+        default: "current directory"
+        description: "Path to the Python project to analyze"
+    usage_examples:
+      - "/python-packaging-env-finder"
+      - "/python-packaging-env-finder /path/to/project"
+  python-packaging-license-checker:
+    description: |
+      Check whether a Python package license is compatible with redistribution
+      in Red Hat products, using the Fedora License Data as the authoritative
+      policy source. Clones the source repo to read the actual LICENSE file
+      (not just PyPI metadata), normalizes to SPDX identifiers, handles
+      compound AND/OR expressions, checks vendor agreements (NVIDIA, Intel
+      Gaudi, IBM Spyre), and performs build and export compliance checks.
+      Produces a structured six-field verdict: License, Source verified,
+      Verdict, Build compliance, Export compliance, and Notes.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name to check"
+      - name: "--repo-url"
+        type: "URL"
+        required: false
+        description: "Source repository URL (skips source-finder step)"
+      - name: "--source-available"
+        type: "boolean"
+        required: false
+        description: "Whether buildable source exists"
+      - name: "--upstream-org"
+        type: "string"
+        required: false
+        description: "Name and primary country of the maintaining organization"
+    usage_examples:
+      - "/python-packaging-license-checker requests"
+      - "/python-packaging-license-checker some-package --repo-url https://github.com/org/repo"
+  python-packaging-license-finder:
+    description: |
+      Deterministically find license information for Python packages using a
+      two-step approach: first check PyPI metadata via a helper script, then
+      fall back to cloning the source repository and reading LICENSE files
+      directly. Can also accept a source URL to skip PyPI lookup entirely.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name"
+      - name: "VERSION"
+        required: false
+        default: "latest"
+        description: "Specific package version"
+      - name: "--source-url"
+        type: "URL"
+        required: false
+        description: "Source repository URL (skips PyPI lookup)"
+    usage_examples:
+      - "/python-packaging-license-finder requests"
+      - "/python-packaging-license-finder django 4.2.0"
+      - "/python-packaging-license-finder some-pkg --source-url https://github.com/org/repo"
+  python-packaging-source-finder:
+    description: |
+      Locate source code repositories for Python packages by analyzing PyPI
+      metadata, project URLs, and code hosting platforms (GitHub, GitLab,
+      Bitbucket). Returns a JSON result with repository URL, confidence level
+      (high/medium/low), and the method used to find it. Falls back to web
+      search when PyPI metadata is insufficient.
+    arguments:
+      - name: "PACKAGE_NAME"
+        required: true
+        description: "Python package name to find the repository for"
+    usage_examples:
+      - "/python-packaging-source-finder requests"
+      - "/python-packaging-source-finder vllm"

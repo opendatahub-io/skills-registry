@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-22 plugins. Bundle members are grouped under their bundle.
+38 plugins. Bundle members are grouped under their bundle.
 
 ## SDLC
 
@@ -20,6 +20,13 @@ title: Plugins
 | [rhoai-security-reviewer](rhoai-security-reviewer/index.md) | Security Review | 2 | v0.1.0 |
 | [test-plan](test-plan/index.md) | Evaluation & Testing | 16 | v2.0.0 |
 | [quality-tooling](quality-tooling/index.md) | Evaluation & Testing | 5 | v1.0.0 |
+| [odh-documentation](odh-documentation/index.md) | Documentation | 9 | v0.1.0 |
+| [odh-jira](odh-jira/index.md) | Development Tools | 12 | v0.1.0 |
+| [odh-konflux](odh-konflux/index.md) | DevOps & CI/CD | 3 | v0.1.0 |
+| [odh-modules](odh-modules/index.md) | Development Tools | 3 | v0.1.0 |
+| [odh-rpm](odh-rpm/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
+| [odh-team](odh-team/index.md) | Development Tools | 3 | v0.1.0 |
+| [odh-vllm](odh-vllm/index.md) | DevOps & CI/CD | 8 | v0.1.0 |
 | [knowledge-skills](knowledge-skills/index.md) | Documentation | 4 | v0.1.0 |
 | [autofix-skills](autofix-skills/index.md) | Development Tools | 4 | v0.1.0 |
 | [autoqa-skills](autoqa-skills/index.md) | Development Tools | 3 | v0.1.0 |
@@ -36,7 +43,14 @@ title: Plugins
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
-| [odh-ai-helpers](odh-ai-helpers/index.md) | Development Tools | 19 | v0.1.0 |
+| [odh-ai-helpers](odh-ai-helpers/index.md) | Development Tools | 69 | v0.1.0 |
+| [odh-code-quality](odh-code-quality/index.md) | Code Quality | 2 | v0.1.0 |
+| [odh-general](odh-general/index.md) | Development Tools | 1 | v0.1.0 |
+| [odh-git](odh-git/index.md) | Development Tools | 6 | v0.1.0 |
+| [odh-google-workspace](odh-google-workspace/index.md) | Development Tools | 3 | v0.1.0 |
+| [odh-python-packaging](odh-python-packaging/index.md) | Development Tools | 11 | v0.1.0 |
+| [odh-pytorch](odh-pytorch/index.md) | Development Tools | 3 | v0.1.0 |
+| [odh-security](odh-security/index.md) | Security Review | 2 | v0.1.0 |
 | [agent-eval-harness](agent-eval-harness/index.md) | Evaluation & Testing | 10 | v1.30.0 |
 | [patternfly](patternfly/index.md) | Development Tools | 25 | v0.1.0 |
 
@@ -44,4 +58,6 @@ title: Plugins
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
+| [odh-llm-d](odh-llm-d/index.md) | DevOps & CI/CD | 2 | v0.1.0 |
+| [odh-maas](odh-maas/index.md) | DevOps & CI/CD | 1 | v0.1.0 |
 | [productization-skills](productization-skills/index.md) | DevOps & CI/CD | 18 | v0.8.1 |

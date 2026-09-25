@@ -191,29 +191,22 @@
     },
     {
       "agents": [
-        "./helpers/agents/python-packaging-investigator.md"
+        "./plugins/odh-ai-helpers/agents/python-packaging-investigator.md"
       ],
       "author": {
         "name": "opendatahub-io"
       },
       "category": "development-tools",
-      "description": "Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.\n",
-      "homepage": "https://github.com/opendatahub-io/ai-helpers",
+      "description": "[DEPRECATED] Backwards-compatibility umbrella for the ODH AI Helpers plugins. Re-exports the skills that existed before the split into the individual odh-* plugins under their original odh-ai-helpers:* names, so existing agents and workflows keep working. Install the odh-* plugins you need, then uninstall this one; it will be removed after the migration window.\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-ai-helpers",
       "keywords": [
-        "python-packaging",
-        "licensing",
-        "dependencies",
-        "gitlab",
-        "jira",
-        "adr",
-        "git",
-        "automation"
+        "deprecated"
       ],
       "license": "Apache-2.0",
       "name": "odh-ai-helpers",
       "repository": "https://github.com/opendatahub-io/ai-helpers",
       "skills": [
-        "./helpers/skills"
+        "./plugins/odh-ai-helpers/skills"
       ],
       "source": {
         "ref": "main",
@@ -221,6 +214,381 @@
         "source": "github"
       },
       "strict": false,
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "code-quality",
+      "description": "CodeRabbit review triage and project-conformant unit test generation\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-code-quality",
+      "keywords": [
+        "code-review",
+        "coderabbit",
+        "unit-tests"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-code-quality",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-code-quality",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "documentation",
+      "description": "AsciiDoc documentation generation, validation, review, and ADR review\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-documentation",
+      "keywords": [
+        "documentation",
+        "asciidoc",
+        "adr",
+        "review"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-documentation",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-documentation",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "General-purpose helpers and learning mode\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-general",
+      "keywords": [
+        "mentoring",
+        "learning"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-general",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-general",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Git utilities, GitHub/GitLab workflow automation, and CI debugging\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-git",
+      "keywords": [
+        "git",
+        "github",
+        "gitlab",
+        "ci",
+        "gist"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-git",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-git",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Gmail, Google Calendar, Docs, and Drive integration\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-google-workspace",
+      "keywords": [
+        "google-workspace",
+        "gmail",
+        "calendar",
+        "drive"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-google-workspace",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-google-workspace",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Jira ticket management, search, triage, and automation\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-jira",
+      "keywords": [
+        "jira",
+        "acli",
+        "triage",
+        "automation"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-jira",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-jira",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "Konflux application and component management\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-konflux",
+      "keywords": [
+        "konflux",
+        "ci",
+        "onboarding"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-konflux",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-konflux",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "llm-d release orchestration for opendatahub-io\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-llm-d",
+      "keywords": [
+        "llm-d",
+        "release",
+        "konflux"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-llm-d",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-llm-d",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "MaaS nightly QE impact analysis\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-maas",
+      "keywords": [
+        "maas",
+        "qe",
+        "autofix"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-maas",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-maas",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "ODH module operator scaffolding, migration, and compliance checks\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-modules",
+      "keywords": [
+        "operator",
+        "modules",
+        "scaffolding",
+        "compliance"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-modules",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-modules",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Python package analysis, security auditing, and build complexity assessment\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-python-packaging",
+      "keywords": [
+        "python-packaging",
+        "licensing",
+        "dependencies",
+        "security-audit"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-python-packaging",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-python-packaging",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "PyTorch cross-language analysis with TorchTalk\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-pytorch",
+      "keywords": [
+        "pytorch",
+        "torchtalk",
+        "mcp"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-pytorch",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-pytorch",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "RPM build failure analysis and non-Red Hat RPM detection\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-rpm",
+      "keywords": [
+        "rpm",
+        "containers",
+        "compliance"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-rpm",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-rpm",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "security",
+      "description": "Supply-chain security alerting and OCI image CVE comparison\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-security",
+      "keywords": [
+        "cve",
+        "supply-chain",
+        "oci"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-security",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-security",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "development-tools",
+      "description": "Team weekly reports, engineer activity snapshots, and delivery postmortems\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-team",
+      "keywords": [
+        "reporting",
+        "postmortem",
+        "jira",
+        "github"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-team",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-team",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
+      "version": "0.1.0"
+    },
+    {
+      "author": {
+        "name": "opendatahub-io"
+      },
+      "category": "devops",
+      "description": "vLLM backport triage, cherry-pick automation, and requirements comparison\n",
+      "homepage": "https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-vllm",
+      "keywords": [
+        "vllm",
+        "backport",
+        "release"
+      ],
+      "license": "Apache-2.0",
+      "name": "odh-vllm",
+      "repository": "https://github.com/opendatahub-io/ai-helpers",
+      "source": {
+        "path": "plugins/odh-vllm",
+        "ref": "main",
+        "source": "git-subdir",
+        "url": "https://github.com/opendatahub-io/ai-helpers.git"
+      },
       "version": "0.1.0"
     },
     {
