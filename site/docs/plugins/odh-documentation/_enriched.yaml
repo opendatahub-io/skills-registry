@@ -1,0 +1,18 @@
+skills:
+  adr-review:
+    description: |
+      Review an Architectural Decision Record (ADR) using a panel of six
+      specialist reviewer sub-agents running in parallel. The reviewers cover
+      Context & Problem Framing, Technical Soundness, Operational & Reliability,
+      Security & Compliance, Cost & Performance, and Consequences & Reversibility.
+      After the panel runs, a human-in-the-loop step lets the user agree, disagree,
+      or refine each finding before synthesis. Produces consolidated outputs as
+      both a detailed PDF report and a scannable PPTX slide deck. Handles
+      Markdown files, .docx documents, and directories of multiple ADRs.
+    arguments:
+      - name: "ADR_PATH"
+        required: true
+        description: "Path to an ADR file (.md or .docx) or a directory containing multiple ADRs"
+    usage_examples:
+      - "/adr-review /path/to/adr.md"
+      - "/adr-review /path/to/adr-directory/"

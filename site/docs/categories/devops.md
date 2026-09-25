@@ -11,6 +11,24 @@ Skills for deployment, CI/CD, and infrastructure
 
 ## SDLC
 
+### [odh-konflux](../plugins/odh-konflux/index.md)
+
+Konflux application and component management
+
+**3 skills** - v0.1.0
+
+### [odh-rpm](../plugins/odh-rpm/index.md)
+
+RPM build failure analysis and non-Red Hat RPM detection
+
+**2 skills** - v0.1.0
+
+### [odh-vllm](../plugins/odh-vllm/index.md)
+
+vLLM backport triage, cherry-pick automation, and requirements comparison
+
+**8 skills** - v0.1.0
+
 ### [ec-cve-check](../plugins/ec-cve-check/index.md)
 
 Inspect Enterprise Contract CVE scan results from Konflux-built container images and test ECP exception removal. Extracts the full Clair REPORTS data from cosign attestations (the same data EC's cve.cve_blockers rule evaluates), supports human-readable and JSON output, and can drive local or cluster-based EC policy validation to check whether a cve.cve_blockers exception is still needed.

@@ -16,3 +16,11 @@ Code review, linting, and quality enforcement
 AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
 
 **1 skills** - v0.1.0
+
+## Generic
+
+### [odh-code-quality](../plugins/odh-code-quality/index.md)
+
+CodeRabbit review triage and project-conformant unit test generation
+
+**2 skills** - v0.1.0
