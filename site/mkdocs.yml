@@ -120,25 +120,109 @@ nav:
       - risk-assessment: plugins/quality-tooling/risk-assessment.md
     - odh-ai-helpers:
       - plugins/odh-ai-helpers/index.md
-      - adr-review: plugins/odh-ai-helpers/adr-review.md
-      - gitlab-pipeline-debugger: plugins/odh-ai-helpers/gitlab-pipeline-debugger.md
-      - git-shallow-clone: plugins/odh-ai-helpers/git-shallow-clone.md
-      - jira-upload-chat-log: plugins/odh-ai-helpers/jira-upload-chat-log.md
-      - python-full-deps: plugins/odh-ai-helpers/python-full-deps.md
-      - python-packaging-bug-finder: plugins/odh-ai-helpers/python-packaging-bug-finder.md
-      - python-packaging-complexity: plugins/odh-ai-helpers/python-packaging-complexity.md
-      - python-packaging-env-finder: plugins/odh-ai-helpers/python-packaging-env-finder.md
-      - python-packaging-license-checker: plugins/odh-ai-helpers/python-packaging-license-checker.md
-      - python-packaging-license-finder: plugins/odh-ai-helpers/python-packaging-license-finder.md
-      - python-packaging-source-finder: plugins/odh-ai-helpers/python-packaging-source-finder.md
-      - vllm-backport-fetch-prs: plugins/odh-ai-helpers/vllm-backport-fetch-prs.md
-      - vllm-backport-classify: plugins/odh-ai-helpers/vllm-backport-classify.md
-      - vllm-backport-check-backported: plugins/odh-ai-helpers/vllm-backport-check-backported.md
-      - vllm-backport-score-rank: plugins/odh-ai-helpers/vllm-backport-score-rank.md
-      - vllm-backport-push-report: plugins/odh-ai-helpers/vllm-backport-push-report.md
-      - vllm-backport-cherry-pick: plugins/odh-ai-helpers/vllm-backport-cherry-pick.md
-      - vllm-compare-reqs: plugins/odh-ai-helpers/vllm-compare-reqs.md
-      - vllm-slack-summary: plugins/odh-ai-helpers/vllm-slack-summary.md
+    - odh-code-quality:
+      - plugins/odh-code-quality/index.md
+      - coderabbit-review: plugins/odh-code-quality/coderabbit-review.md
+      - unit-test-project-conformant: plugins/odh-code-quality/unit-test-project-conformant.md
+    - odh-documentation:
+      - plugins/odh-documentation/index.md
+      - adr-review: plugins/odh-documentation/adr-review.md
+      - doc-gap: plugins/odh-documentation/doc-gap.md
+      - doc-gather: plugins/odh-documentation/doc-gather.md
+      - doc-generate: plugins/odh-documentation/doc-generate.md
+      - doc-pipeline: plugins/odh-documentation/doc-pipeline.md
+      - doc-plan: plugins/odh-documentation/doc-plan.md
+      - doc-post: plugins/odh-documentation/doc-post.md
+      - doc-review: plugins/odh-documentation/doc-review.md
+      - doc-validate: plugins/odh-documentation/doc-validate.md
+    - odh-general:
+      - plugins/odh-general/index.md
+      - learning-mode: plugins/odh-general/learning-mode.md
+    - odh-git:
+      - plugins/odh-git/index.md
+      - aipcc-commit-suggest: plugins/odh-git/aipcc-commit-suggest.md
+      - gist-upload: plugins/odh-git/gist-upload.md
+      - git-shallow-clone: plugins/odh-git/git-shallow-clone.md
+      - github-actions-debugger: plugins/odh-git/github-actions-debugger.md
+      - github-sync-upstream: plugins/odh-git/github-sync-upstream.md
+      - gitlab-pipeline-debugger: plugins/odh-git/gitlab-pipeline-debugger.md
+    - odh-google-workspace:
+      - plugins/odh-google-workspace/index.md
+      - email-meeting-summary: plugins/odh-google-workspace/email-meeting-summary.md
+      - gmail-draft: plugins/odh-google-workspace/gmail-draft.md
+      - google-workspace: plugins/odh-google-workspace/google-workspace.md
+    - odh-jira:
+      - plugins/odh-jira/index.md
+      - acli-setup-check: plugins/odh-jira/acli-setup-check.md
+      - ai-bug-fix-triage: plugins/odh-jira/ai-bug-fix-triage.md
+      - jira-activity: plugins/odh-jira/jira-activity.md
+      - jira-aipcc-create: plugins/odh-jira/jira-aipcc-create.md
+      - jira-sprint-summary: plugins/odh-jira/jira-sprint-summary.md
+      - jira-upload-chat-log: plugins/odh-jira/jira-upload-chat-log.md
+      - jira-workitem-attach: plugins/odh-jira/jira-workitem-attach.md
+      - jira-workitem-comment: plugins/odh-jira/jira-workitem-comment.md
+      - jira-workitem-search: plugins/odh-jira/jira-workitem-search.md
+      - jira-workitem-view: plugins/odh-jira/jira-workitem-view.md
+      - pr-jira-linker: plugins/odh-jira/pr-jira-linker.md
+      - triage-bug-readiness: plugins/odh-jira/triage-bug-readiness.md
+    - odh-konflux:
+      - plugins/odh-konflux/index.md
+      - konflux-application: plugins/odh-konflux/konflux-application.md
+      - konflux-component: plugins/odh-konflux/konflux-component.md
+      - konflux-sandbox-onboarding: plugins/odh-konflux/konflux-sandbox-onboarding.md
+    - odh-llm-d:
+      - plugins/odh-llm-d/index.md
+      - ai-gateway-operator-manifest-update: plugins/odh-llm-d/ai-gateway-operator-manifest-update.md
+      - odh-llm-d-release: plugins/odh-llm-d/odh-llm-d-release.md
+    - odh-maas:
+      - plugins/odh-maas/index.md
+      - maas-nightly-qe-impact: plugins/odh-maas/maas-nightly-qe-impact.md
+    - odh-modules:
+      - plugins/odh-modules/index.md
+      - module-compliance: plugins/odh-modules/module-compliance.md
+      - module-migrate: plugins/odh-modules/module-migrate.md
+      - module-scaffold: plugins/odh-modules/module-scaffold.md
+    - odh-python-packaging:
+      - plugins/odh-python-packaging/index.md
+      - python-full-deps: plugins/odh-python-packaging/python-full-deps.md
+      - python-packaging-binary-audit: plugins/odh-python-packaging/python-packaging-binary-audit.md
+      - python-packaging-bug-finder: plugins/odh-python-packaging/python-packaging-bug-finder.md
+      - python-packaging-complexity: plugins/odh-python-packaging/python-packaging-complexity.md
+      - python-packaging-env-finder: plugins/odh-python-packaging/python-packaging-env-finder.md
+      - python-packaging-git-audit: plugins/odh-python-packaging/python-packaging-git-audit.md
+      - python-packaging-license-checker: plugins/odh-python-packaging/python-packaging-license-checker.md
+      - python-packaging-license-finder: plugins/odh-python-packaging/python-packaging-license-finder.md
+      - python-packaging-security-audit: plugins/odh-python-packaging/python-packaging-security-audit.md
+      - python-packaging-source-finder: plugins/odh-python-packaging/python-packaging-source-finder.md
+      - python-packaging-static-audit: plugins/odh-python-packaging/python-packaging-static-audit.md
+    - odh-pytorch:
+      - plugins/odh-pytorch/index.md
+      - torchtalk-analyzer: plugins/odh-pytorch/torchtalk-analyzer.md
+      - torchtalk-setup: plugins/odh-pytorch/torchtalk-setup.md
+      - torchtalk-trace: plugins/odh-pytorch/torchtalk-trace.md
+    - odh-rpm:
+      - plugins/odh-rpm/index.md
+      - non-redhat-rpms: plugins/odh-rpm/non-redhat-rpms.md
+      - rpm-examine: plugins/odh-rpm/rpm-examine.md
+    - odh-security:
+      - plugins/odh-security/index.md
+      - oci-cve-checker: plugins/odh-security/oci-cve-checker.md
+      - security-alert: plugins/odh-security/security-alert.md
+    - odh-team:
+      - plugins/odh-team/index.md
+      - create-delivery-postmortem: plugins/odh-team/create-delivery-postmortem.md
+      - engineer-snapshot: plugins/odh-team/engineer-snapshot.md
+      - team-weekly-report: plugins/odh-team/team-weekly-report.md
+    - odh-vllm:
+      - plugins/odh-vllm/index.md
+      - vllm-backport-check-backported: plugins/odh-vllm/vllm-backport-check-backported.md
+      - vllm-backport-cherry-pick: plugins/odh-vllm/vllm-backport-cherry-pick.md
+      - vllm-backport-classify: plugins/odh-vllm/vllm-backport-classify.md
+      - vllm-backport-fetch-prs: plugins/odh-vllm/vllm-backport-fetch-prs.md
+      - vllm-backport-push-report: plugins/odh-vllm/vllm-backport-push-report.md
+      - vllm-backport-score-rank: plugins/odh-vllm/vllm-backport-score-rank.md
+      - vllm-compare-reqs: plugins/odh-vllm/vllm-compare-reqs.md
+      - vllm-slack-summary: plugins/odh-vllm/vllm-slack-summary.md
     - agent-eval-harness:
       - plugins/agent-eval-harness/index.md
       - eval-setup: plugins/agent-eval-harness/eval-setup.md

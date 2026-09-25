@@ -173,6 +173,23 @@ Tags: evaluation, testing, skills, agents, mlflow, optimization, scoring, compar
 
 Code review, linting, and quality enforcement
 
+### odh-code-quality
+
+CodeRabbit review triage and project-conformant unit test generation
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: code-review, coderabbit, unit-tests
+
+| Skill | Description |
+|-------|-------------|
+| `/coderabbit-review` | Use when you need to evaluate CodeRabbit PR comments and fix or reply |
+| `/unit-test-project-conformant` | Use this skill to write unit tests that strictly conform to the project's existing testing structure, patterns, and style by learning from similar tests before writing anything new. |
+
+```bash
+/plugin install odh-code-quality@opendatahub-skills
+```
+
 ### code-review-skills
 
 AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
@@ -192,6 +209,30 @@ Tags: code-review, gitlab, ci, merge-request
 ## Documentation
 
 Skills for generating and maintaining documentation
+
+### odh-documentation
+
+AsciiDoc documentation generation, validation, review, and ADR review
+
+v0.1.0 | Apache-2.0
+
+Tags: documentation, asciidoc, adr, review
+
+| Skill | Description |
+|-------|-------------|
+| `/adr-review` | Review an Architectural Decision Record (ADR) using a team of six specialist reviewer subagents and produce a consolidated report as both PDF and PPTX slide deck. Use this skill whenever the user asks to review, critique, audit, or get feedback on an ADR, architecture decision, design doc, or RFC — whether the input is a Markdown file, a .docx document, or pasted text. Trigger even if the user does not explicitly say "ADR"; phrases like "review this architecture decision", "critique this design doc", or "run the reviewer panel on this" should also invoke this skill. |
+| `/doc-gap` | Use this skill to analyze context sufficiency for documentation generation. Reads workspace/context-package.json and produces workspace/gap-report.json with severity-rated gaps and a proceed/gather-more/stop recommendation. |
+| `/doc-gather` | Use when you need to gather context for a Jira ticket or PR. Resolves ticket metadata, clones relevant repos, collects candidate files, runs filtering pipeline, and produces workspace/context-package.json. |
+| `/doc-generate` | Use when you need to generate AsciiDoc documentation modules from gathered context. Reads context package and gap report, generates content, then self-validates with iterative correction (up to 3 retries). Produces generated files and workspace/generation-report.json. |
+| `/doc-pipeline` | Use this skill to orchestrate the full documentation pipeline. Sequences doc-gather, doc-gap, doc-validate, doc-review, and doc-generate skills based on the requested pipeline mode. |
+| `/doc-plan` | Use this skill to produce a STRAT-level documentation plan. Traverses a strategic initiative's child epics and stories to identify what documentation is needed, what type, and at what priority. |
+| `/doc-post` | Use this skill to post validation and review findings as comments on a GitHub PR or GitLab MR. Reads workspace findings files and formats them as inline or summary comments. |
+| `/doc-review` | Use this skill to perform adversarial review of AsciiDoc documentation against context sources. Checks factual accuracy, completeness, consistency, and hallucination. Produces workspace/review-findings.json. |
+| `/doc-validate` | Use when you need to validate AsciiDoc documentation for technical accuracy using Extract-Identify-Validate pattern. Runs Vale, asciidoctor, lychee, YAML syntax checks, and LLM-powered cross-reference validation. Produces workspace/validation-findings.json. |
+
+```bash
+/plugin install odh-documentation@opendatahub-skills
+```
 
 ### knowledge-skills
 
@@ -231,6 +272,64 @@ Tags: documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onbo
 ## DevOps & CI/CD
 
 Skills for deployment, CI/CD, and infrastructure
+
+### odh-konflux
+
+Konflux application and component management
+
+v0.1.0 | Apache-2.0
+
+Tags: konflux, ci, onboarding
+
+| Skill | Description |
+|-------|-------------|
+| `/konflux-application` | Manage Konflux application |
+| `/konflux-component` | Manage Konflux component |
+| `/konflux-sandbox-onboarding` | Guide AIPCC engineers through obtaining access to the shared Konflux sandbox, onboarding a user-selected GitHub repository or dummy project, and verifying pull-request and push pipelines. Use when an engineer wants a hands-on Konflux staging experiment; exclude production tenants and release configuration. |
+
+```bash
+/plugin install odh-konflux@opendatahub-skills
+```
+
+### odh-rpm
+
+RPM build failure analysis and non-Red Hat RPM detection
+
+v0.1.0 | Apache-2.0
+
+Tags: rpm, containers, compliance
+
+| Skill | Description |
+|-------|-------------|
+| `/non-redhat-rpms` | Use this skill to identify non-Red Hat RPM packages installed in container images or on the local machine. For containers, pulls images across multiple architectures and release tags; for local scans, inspects the host directly. Extracts RPM signing metadata and reports packages not signed with the Red Hat GPG key as CSV output. Use when auditing compliance, checking supply-chain provenance, or scanning for third-party RPMs in RHOAI component images. |
+| `/rpm-examine` | Analyze RPM build.log failures |
+
+```bash
+/plugin install odh-rpm@opendatahub-skills
+```
+
+### odh-vllm
+
+vLLM backport triage, cherry-pick automation, and requirements comparison
+
+v0.1.0 | Apache-2.0
+
+Tags: vllm, backport, release
+
+| Skill | Description |
+|-------|-------------|
+| `/vllm-backport-check-backported` | Check which candidate PRs have already been cherry-picked into the downstream branch. Use after classify-and-filter to mark already_backported on each PR. Fully deterministic — compares merge SHAs and PR titles. |
+| `/vllm-backport-cherry-pick` | Auto cherry-pick backport candidates and create a draft PR on the downstream repo. Use after scoring to attempt clean cherry-picks for ai-fixable candidates. The agent must still do semantic validation on the result. |
+| `/vllm-backport-classify` | Classify bugfix PRs by type (runtime_bug, platform_specific, unclear, not_bugfix) and filter by file existence at a release tag. Use after fetching raw PRs to produce a filtered candidate list. PRs marked "unclear" need agent review. |
+| `/vllm-backport-fetch-prs` | Fetch merged bugfix PRs from vllm-project/vllm within a date window. Use when starting a backport triage run to get raw PR data from GitHub. Outputs a JSON array of PR objects with labels, authors, and merge commits. |
+| `/vllm-backport-push-report` | Push a triage report to GitHub under a timestamped directory in reports/. Use after the agent writes the report markdown and has ranked.json ready. Outputs the report URL to stdout. |
+| `/vllm-backport-score-rank` | Score and rank backport candidates using a composite formula based on verdict, severity, scope, risk, and self-containedness. Use after the agent completes semantic analysis to produce a prioritized ranked list. |
+| `/vllm-compare-reqs` | Use this skill to compare vllm requirements files between versions |
+| `/vllm-slack-summary` | Use this skill to generate slack summaries of vLLM CI SIG Slack channel activity for the RHAIIS midstream release team |
+
+```bash
+/plugin install odh-vllm@opendatahub-skills
+```
 
 ### ec-cve-check
 
@@ -314,39 +413,34 @@ Tags: security, review, strat, threat-modeling, fips, compliance, consensus
 /plugin install rhoai-security-reviewer@opendatahub-skills
 ```
 
+### odh-security
+
+Supply-chain security alerting and OCI image CVE comparison
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: cve, supply-chain, oci
+
+| Skill | Description |
+|-------|-------------|
+| `/oci-cve-checker` | Use this skill to compare CVE vulnerabilities between two OCI container images and generate reports showing fixed and new CVEs. |
+| `/security-alert` | Use this skill to filter a pre-fetched set of Hacker News stories down to those that report supply-chain security threats relevant to the Red Hat / RHEL ecosystem, Python (PyPI/pip), or JavaScript/TypeScript (npm/yarn/pnpm). Reads stories from stories.json in the workspace, performs semantic analysis (fetching HN threads when the title alone is ambiguous), and writes the stories worth alerting on to findings.json. |
+
+```bash
+/plugin install odh-security@opendatahub-skills
+```
+
 ## Development Tools
 
 Developer productivity tools for packaging, CI/CD debugging, and workflow automation
 
 ### odh-ai-helpers
 
-Developer productivity tools for Python packaging, CI/CD debugging, and workflow automation. Includes skills for analyzing package build complexity, resolving dependencies, finding licenses, debugging GitLab pipelines, reviewing ADRs, and more.
+[DEPRECATED] Backwards-compatibility umbrella for the ODH AI Helpers plugins. Re-exports the skills that existed before the split into the individual odh-* plugins under their original odh-ai-helpers:* names, so existing agents and workflows keep working. Install the odh-* plugins you need, then uninstall this one; it will be removed after the migration window.
 
 v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
 
-Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automation
-
-| Skill | Description |
-|-------|-------------|
-| `/adr-review` | Review an Architectural Decision Record (ADR) using a team of specialist reviewer subagents and produce a consolidated report |
-| `/gitlab-pipeline-debugger` | Debug and monitor GitLab CI/CD pipelines for merge requests, check pipeline status, view job logs, and troubleshoot CI failures |
-| `/git-shallow-clone` | Perform a shallow clone of a Git repository to a temporary location |
-| `/jira-upload-chat-log` | Export and upload the current chat conversation as a markdown file attachment to a Jira ticket |
-| `/python-full-deps` | Resolve the full install-time dependency tree for a Python package with environment markers |
-| `/python-packaging-bug-finder` | Find known packaging bugs, fixes, and workarounds for Python projects by searching GitHub issues |
-| `/python-packaging-complexity` | Analyze Python package build complexity by inspecting PyPI metadata, compilation requirements, and distribution types |
-| `/python-packaging-env-finder` | Investigate environment variables that can be set when building Python wheels for a given project |
-| `/python-packaging-license-checker` | Check whether a Python package license is compatible with redistribution in Red Hat products |
-| `/python-packaging-license-finder` | Deterministically find license information for Python packages by checking PyPI metadata and Git repository LICENSE files |
-| `/python-packaging-source-finder` | Locate source code repositories for Python packages by analyzing PyPI metadata and project URLs |
-| `/vllm-backport-fetch-prs` | Fetch merged bugfix PRs from upstream vLLM within a configurable date window using GitHub CLI |
-| `/vllm-backport-classify` | Classify PRs by backport relevance using labels, title patterns, and file-existence heuristics |
-| `/vllm-backport-check-backported` | Check if PRs are already cherry-picked in a downstream release branch via SHA and title matching |
-| `/vllm-backport-score-rank` | Score and rank backport candidates by severity, scope, and risk using a deterministic composite score |
-| `/vllm-backport-push-report` | Push triage report to a GitHub repository with timestamped directory structure |
-| `/vllm-backport-cherry-pick` | Attempt automatic cherry-pick of clean backport candidates to a downstream release branch |
-| `/vllm-compare-reqs` | Compare Python requirements between upstream vLLM and a downstream fork to identify version mismatches and missing packages |
-| `/vllm-slack-summary` | Generate a concise Slack-formatted summary of vLLM backport triage results |
+Tags: deprecated
 
 | Agent | Description |
 |-------|-------------|
@@ -354,6 +448,174 @@ Tags: python-packaging, licensing, dependencies, gitlab, jira, adr, git, automat
 
 ```bash
 /plugin install odh-ai-helpers@opendatahub-skills
+```
+
+### odh-general
+
+General-purpose helpers and learning mode
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: mentoring, learning
+
+| Skill | Description |
+|-------|-------------|
+| `/learning-mode` | Hands-on mentoring: the agent scaffolds work, then pauses so the engineer writes small, meaningful code (roughly 5–15 lines) for practice. Use when the user enables learning mode, asks for guided mentoring, hands-on practice, collaborative coding, or teaching while building a feature. |
+
+```bash
+/plugin install odh-general@opendatahub-skills
+```
+
+### odh-git
+
+Git utilities, GitHub/GitLab workflow automation, and CI debugging
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: git, github, gitlab, ci, gist
+
+| Skill | Description |
+|-------|-------------|
+| `/aipcc-commit-suggest` | Generate AIPCC Commits style commit messages or summarize existing commits |
+| `/gist-upload` | Use this skill to upload a summary or plan from the current conversation as a GitHub Gist using the `gh` CLI. |
+| `/git-shallow-clone` | Use this skill to perform a shallow clone of a Git repository to a temporary location. |
+| `/github-actions-debugger` | Debug and monitor GitHub Actions workflow runs. Check run status, view failed job logs, and troubleshoot CI failures. Use this when the user needs to investigate GitHub Actions failures, inspect job output, or identify the root cause of a broken workflow run. |
+| `/github-sync-upstream` | Sync code from an upstream GitHub repository into a target fork (e.g., opendatahub-io midstream). Detects remotes from the current repo, or clones fresh if run from outside. Fetches upstream, merges into a sync branch, restores protected files, resolves conflicts, and opens a PR to the target GitHub repo. Use when asked to sync upstream, merge upstream changes, or bring a GitHub fork up to date with its upstream source. |
+| `/gitlab-pipeline-debugger` | Debug and monitor GitLab CI/CD pipelines for merge requests. Check pipeline status, view job logs, and troubleshoot CI failures. Use this when the user needs to investigate GitLab CI pipeline issues, check job statuses, or view specific job logs. |
+
+```bash
+/plugin install odh-git@opendatahub-skills
+```
+
+### odh-google-workspace
+
+Gmail, Google Calendar, Docs, and Drive integration
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: google-workspace, gmail, calendar, drive
+
+| Skill | Description |
+|-------|-------------|
+| `/email-meeting-summary` | Use when the user wants to summarize a Google Meet meeting and send the summary by email. Reviews a Google Meet transcript for a specific meeting topic, then composes a Gmail draft summarizing decisions and action items for that topic. Prompts for meeting selection if not specified, and for topic selection before drafting. Stops with a message if the transcript is not yet available. |
+| `/gmail-draft` | Use this skill to compose a Gmail draft from text content in the conversation. Accepts a body, recipient list, and subject — either from the user or from context — and creates a draft in the user's Gmail Drafts folder via gws. |
+| `/google-workspace` | Fetch and query data from Google Workspace using the gws CLI — Gmail, Calendar, Docs, Sheets, Slides, and Drive. Use this skill whenever the user mentions email, inbox, messages, calendar, meetings, schedule, agenda, Google Docs, spreadsheets, presentations, or Drive files. Trigger on phrases like "check my email", "what meetings do I have", "read this doc", "open this spreadsheet", "find files in Drive", or any Google URL (docs.google.com, drive.google.com). |
+
+```bash
+/plugin install odh-google-workspace@opendatahub-skills
+```
+
+### odh-jira
+
+Jira ticket management, search, triage, and automation
+
+v0.1.0 | Apache-2.0
+
+Tags: jira, acli, triage, automation
+
+| Skill | Description |
+|-------|-------------|
+| `/acli-setup-check` | Verify acli installation and authentication. Checks if acli is installed, authenticated to Jira, and can query projects. Use when troubleshooting acli issues or setting up acli for the first time. |
+| `/ai-bug-fix-triage` | Triage JIRA bugs against repository code to classify AI fixability. Use when reviewing a backlog of bugs to determine which ones an AI agent can fix. |
+| `/jira-activity` | Summarize Jira ticket activity, including child tickets, to detect stale tickets in the backlog. Use when user asks to review one or more Jira tickets to determine if they are being worked on. |
+| `/jira-aipcc-create` | Create AIPCC-org Jira issues in the RHAI project. Infers summary, description, type, and component from conversation context, confirms with the user before creating. Use when the user wants to file a new AIPCC Jira issue. |
+| `/jira-sprint-summary` | Generate comprehensive sprint summaries by analyzing JIRA sprint data, including issue breakdown, progress metrics, and team performance insights. |
+| `/jira-upload-chat-log` | Use this skill to export and upload the current chat conversation as a markdown file attachment to a JIRA ticket for later review and documentation. |
+| `/jira-workitem-attach` | Upload file attachments to Jira tickets. Verifies file exists and uploads via Jira API. Use when user wants to attach files to tickets. |
+| `/jira-workitem-comment` | Add comments to Jira tickets using simple text or Jira markup (ADF JSON). Supports rich formatting with code blocks, lists, mentions, and links. Use when user wants to comment on a ticket. |
+| `/jira-workitem-search` | Search Jira tickets using JQL queries. Provides common query templates and flexible output formats. Use when user needs to find or filter tickets. |
+| `/jira-workitem-view` | Retrieve and display full details of a Jira ticket. Fetches all fields and formats them for conversation context. Use when user needs ticket information or wants to examine a ticket. |
+| `/pr-jira-linker` | Find and link Jira issues to PRs/MRs that are missing Jira references. Supports single PR/MR linking and batch audit of configured repos. Use when the user mentions "link PR to Jira", "scan PRs", "PR audit", "MR missing Jira", "link merge request", or wants to connect code changes to Jira for traceability. |
+| `/triage-bug-readiness` | Use when assessing a Jira bug ticket for AI autofix readiness. Produces a structured JSON verdict (ready/needs_info/not_fixable) based on a three-gate rubric. Designed for CI pipeline use with the jira-triage orchestrator. |
+
+```bash
+/plugin install odh-jira@opendatahub-skills
+```
+
+### odh-modules
+
+ODH module operator scaffolding, migration, and compliance checks
+
+v0.1.0 | Apache-2.0
+
+Tags: operator, modules, scaffolding, compliance
+
+| Skill | Description |
+|-------|-------------|
+| `/module-compliance` | Check an ODH module operator repository for contract violations against the platform onboarding guide. Validates PlatformObject status, CRD structure, Helm chart content, webhook ownership, metadata conventions, and reconciler chain ordering. Use during code review or after scaffolding a new module. |
+| `/module-migrate` | Read existing in-tree ODH operator component code and produce a step-by-step extraction checklist for migrating it to a standalone module. Analyzes controller logic, webhooks, RBAC, embedded manifests, and DSC field mappings. Use when extracting a component from the monolithic operator into its own module repo. |
+| `/module-scaffold` | Given a component name, generate a complete standalone ODH module operator repository. Produces Go module, CRD types implementing PlatformObject, controller skeleton with reconciler builder pattern, Helm chart, Makefile, CI config, singleton webhook, and AGENTS.md. Use when starting a new module from scratch. |
+
+```bash
+/plugin install odh-modules@opendatahub-skills
+```
+
+### odh-python-packaging
+
+Python package analysis, security auditing, and build complexity assessment
+
+**Requires:** `odh-git`
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: python-packaging, licensing, dependencies, security-audit
+
+| Skill | Description |
+|-------|-------------|
+| `/python-full-deps` | Resolve the full install-time dependency tree for a Python package. Use when the user needs all transitive dependencies, full dependency list, or install requirements resolved for a specific Python version with environment markers. |
+| `/python-packaging-binary-audit` | Scan a Python package repository for compiled/binary files using Fromager-style detection and malcontent YARA analysis, then triage findings with deterministic rules and AI reasoning to produce a structured risk report section. |
+| `/python-packaging-bug-finder` | Use when you need to find known packaging bugs, fixes, and workarounds for Python projects by searching GitHub issues and analyzing their resolution status |
+| `/python-packaging-complexity` | Use this skill to analyze Python package build complexity by inspecting PyPI metadata. Evaluates compilation requirements, dependencies, distribution types, and provides recommendations for wheel building strategies. |
+| `/python-packaging-env-finder` | Use this skill to investigate environment variables that can be set when building Python wheels for a given project. Analyzes setup.py, CMake files, and other build configuration files to discover customizable build environment variables. |
+| `/python-packaging-git-audit` | Inspect recent git history of a Python package repository for suspicious commits touching supply-chain-sensitive files, then triage findings with AI reasoning to produce a structured risk report section. |
+| `/python-packaging-license-checker` | Use this skill to check whether a Python package license is compatible with redistribution in Red Hat products, using the Fedora License Data as the authoritative policy source. Produces a structured six-field verdict with escalation guidance for non-trivial cases. |
+| `/python-packaging-license-finder` | Use this skill to deterministically find license information for Python packages by checking PyPI metadata first, then falling back to Git repository LICENSE files using shallow cloning. |
+| `/python-packaging-security-audit` | Use this skill to evaluate the security of a Python package repository by orchestrating static analysis, binary scanning, and git history inspection sub-skills in parallel, then combining their results into a unified security report with a risk rating. |
+| `/python-packaging-source-finder` | Use this skill to locate source code repositories for Python packages by analyzing PyPI metadata, project URLs, and code hosting platforms like GitHub, GitLab, and Bitbucket. Provides deterministic results with confidence levels. |
+| `/python-packaging-static-audit` | Run hexora static analysis on a Python package repository to detect suspicious code patterns, then triage findings with deterministic rules and AI reasoning to produce a structured risk report section. |
+
+| Agent | Description |
+|-------|-------------|
+| python-packaging-investigator | Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity. Provides comprehensive guidance on how packages can be built from source using integrated analysis skills. |
+
+```bash
+/plugin install odh-python-packaging@opendatahub-skills
+```
+
+### odh-pytorch
+
+PyTorch cross-language analysis with TorchTalk
+
+v0.1.0 | Generic | Apache-2.0
+
+Tags: pytorch, torchtalk, mcp
+
+| Skill | Description |
+|-------|-------------|
+| `/torchtalk-analyzer` | Analyze PyTorch internals across Python, C++, and CUDA layers using the TorchTalk MCP server. Use when asked about how PyTorch operators work internally, where functions are implemented, what would break if code is modified, or finding tests for PyTorch operators. |
+| `/torchtalk-setup` | Install and configure TorchTalk MCP server for PyTorch cross-language analysis |
+| `/torchtalk-trace` | Trace a PyTorch function's cross-language binding chain (Python -> C++ -> CUDA) |
+
+```bash
+/plugin install odh-pytorch@opendatahub-skills
+```
+
+### odh-team
+
+Team weekly reports, engineer activity snapshots, and delivery postmortems
+
+v0.1.0 | Apache-2.0
+
+Tags: reporting, postmortem, jira, github
+
+| Skill | Description |
+|-------|-------------|
+| `/create-delivery-postmortem` | Use when a release delay, missed deadline, or delivery incident needs a structured post-mortem. Facilitates context gathering, timeline synthesis, and interactive Five Whys root cause analysis. Produces an executive-ready document in HTML or Markdown. |
+| `/engineer-snapshot` | Generate an engineer activity snapshot showing active JIRA issues with days open, blocked work, upstream PRs awaiting review, recently merged PRs, and open action items from 1:1 notes. Requires a team config YAML file. Use when the user asks to review an engineer's status, check someone's workload, or prepare for a 1:1. |
+| `/team-weekly-report` | Generate a weekly team status report combining JIRA and GitHub data. Fetches closed, open, stale, and blocked issues plus PR activity for each team member. Requires a team config YAML file with JIRA project, GitHub repos, and team member mappings. Use when the user asks for a weekly report, team status, or team update. |
+
+```bash
+/plugin install odh-team@opendatahub-skills
 ```
 
 ### autofix-skills
@@ -619,6 +881,39 @@ Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibi
 ## Team-Specific
 
 Plugins hardcoded to a specific team's setup. Not generally reusable by other teams without modification.
+
+### odh-llm-d
+
+llm-d release orchestration for opendatahub-io
+
+v0.1.0 | Team-Specific | Apache-2.0
+
+Tags: llm-d, release, konflux
+
+| Skill | Description |
+|-------|-------------|
+| `/ai-gateway-operator-manifest-update` | Update batch-gateway manifests in opendatahub-io/ai-gateway-operator when the pinned llm-d-batch-gateway-operator main commit changes. |
+| `/odh-llm-d-release` | Orchestrate the opendatahub-io release for all llm-d components in one cycle. Collects upstream(llm-d) versions, auto-discovers the release tracker issue, then spawns parallel sub-agents — one per component (release branch, Konflux onboarder workflow, PR validation, approve+merge, Quay image verify, GitHub draft release) plus one KServe metadata PR sub-agent — and posts the final #Release# tracker comment. Use when the release manager runs on/before ODH code-freeze date for the llm-d team. |
+
+```bash
+/plugin install odh-llm-d@opendatahub-skills
+```
+
+### odh-maas
+
+MaaS nightly QE impact analysis
+
+v0.1.0 | Team-Specific | Apache-2.0
+
+Tags: maas, qe, autofix
+
+| Skill | Description |
+|-------|-------------|
+| `/maas-nightly-qe-impact` | Assess whether a Models-as-a-Service autofix change requires follow-up in opendatahub-tests or ods-ci nightly QE pipelines. Runs as a Jira autofix post_review extension for the Model as a Service component. Appends a Nightly QE Impact section to the PR description and writes informational findings. Use when autofix completes a fix in models-as-a-service. |
+
+```bash
+/plugin install odh-maas@opendatahub-skills
+```
 
 ### productization-skills
 

@@ -1,0 +1,16 @@
+skills:
+  jira-upload-chat-log:
+    description: |
+      Export the current chat conversation as a formatted markdown document
+      (with both a summary and full transcript) and upload it as a file
+      attachment to a Jira ticket. Automatically detects ticket keys from
+      conversation context, or prompts the user if none is found. Delegates
+      the actual upload to the jira-workitem-attach skill.
+    arguments:
+      - name: "TICKET_KEY"
+        required: false
+        default: "auto-detected from conversation context"
+        description: "Jira ticket key (e.g., AIPCC-1234)"
+    usage_examples:
+      - "/jira-upload-chat-log AIPCC-7354"
+      - "/jira-upload-chat-log"

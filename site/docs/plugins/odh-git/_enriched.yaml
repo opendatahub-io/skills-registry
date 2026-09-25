@@ -1,0 +1,45 @@
+skills:
+  gitlab-pipeline-debugger:
+    description: |
+      Debug and monitor GitLab CI/CD pipelines for merge requests. Check
+      pipeline status, view job logs, and troubleshoot CI failures using the
+      glab CLI. Supports auto-detection of the GitLab project from the local
+      git remote, or targeting a specific project via URL or -R flag. Can
+      parse full GitLab pipeline and job URLs to extract project paths and IDs.
+    arguments:
+      - name: "PIPELINE_URL"
+        required: false
+        description: "Full GitLab pipeline or job URL to debug"
+      - name: "-b"
+        type: "branch-name"
+        required: false
+        description: "Branch name to check pipeline for"
+      - name: "-p"
+        type: "pipeline-id"
+        required: false
+        description: "Specific pipeline ID to inspect"
+      - name: "-R"
+        type: "owner/group/project"
+        required: false
+        default: "auto-detected from git remote"
+        description: "GitLab project path to target"
+    usage_examples:
+      - "/gitlab-pipeline-debugger"
+      - "/gitlab-pipeline-debugger https://gitlab.com/org/project/-/pipelines/123456"
+      - "/gitlab-pipeline-debugger -b feature-branch"
+  git-shallow-clone:
+    description: |
+      Perform a shallow clone of a Git repository to a temporary location
+      for local analysis instead of using web APIs. Uses a helper script that
+      prints the clone path to stdout for downstream consumption.
+    arguments:
+      - name: "REPOSITORY_URL"
+        required: true
+        description: "URL of the Git repository to clone"
+      - name: "TAG_OR_BRANCH"
+        required: false
+        default: "HEAD"
+        description: "Git tag or branch to shallow-clone"
+    usage_examples:
+      - "/git-shallow-clone https://github.com/psf/requests.git"
+      - "/git-shallow-clone https://github.com/psf/requests.git v2.28.0"

@@ -1,0 +1,183 @@
+skills:
+  vllm-backport-fetch-prs:
+    description: |
+      Fetch merged bugfix PRs from vllm-project/vllm within a configurable
+      date window using GitHub CLI. Uses multiple search queries (label:bug,
+      [Bugfix]/[BugFix]/[Bug Fix] title patterns) and deduplicates results.
+      Also detects reverted PRs. Outputs a JSON array of PR objects to stdout.
+    arguments:
+      - name: "DAYS_BACK"
+        required: false
+        default: "7"
+        description: "Number of days to look back for merged PRs"
+    usage_examples:
+      - "/vllm-backport-fetch-prs"
+      - "/vllm-backport-fetch-prs 14"
+  vllm-backport-classify:
+    description: |
+      Classify bugfix PRs by type (runtime_bug, platform_specific, unclear,
+      not_bugfix) and filter by file existence at a release tag. Applies
+      deterministic regex rules, checks which files existed at the target tag,
+      detects subsystems, and filters PRs touching only post-release or
+      non-runtime code. PRs classified as "unclear" require agent review.
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to raw-prs.json from fetch-prs step"
+      - name: "--repo"
+        type: "path"
+        required: true
+        description: "Path to local vllm repository clone"
+      - name: "--tag"
+        type: "string"
+        required: true
+        description: "Release tag to check file existence against (e.g., v0.13.0)"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for filtered.json"
+    usage_examples:
+      - "/vllm-backport-classify --input artifacts/raw-prs.json --repo /path/to/vllm --tag v0.13.0 --output artifacts/filtered.json"
+  vllm-backport-check-backported:
+    description: |
+      Check which candidate PRs have already been cherry-picked into a
+      downstream branch. Uses two detection methods: SHA match (via git log
+      --grep for cherry-pick messages) and title match (via gh pr list on
+      the downstream branch). Adds an already_backported boolean to each PR.
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to filtered.json from classify step"
+      - name: "--downstream"
+        type: "path"
+        required: true
+        description: "Path to downstream repository"
+      - name: "--branch"
+        type: "string"
+        required: true
+        description: "Downstream branch name (e.g., rhai/0.13.0)"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for candidates.json"
+    usage_examples:
+      - "/vllm-backport-check-backported --input artifacts/filtered.json --downstream /path/to/downstream --branch rhai/0.13.0 --output artifacts/candidates.json"
+  vllm-backport-score-rank:
+    description: |
+      Score and rank backport candidates using a deterministic composite
+      formula (max 100 points) based on verdict (0-30), severity (5-25),
+      affected scope (3-20), backport risk (0-15), and self-containedness
+      (0-10). Filters out SKIP/already_backported PRs and assigns
+      backport_ease labels (ai-fixable if self-contained and safe/moderate risk).
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to analyzed.json with agent-added semantic fields"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for ranked.json"
+    usage_examples:
+      - "/vllm-backport-score-rank --input artifacts/analyzed.json --output artifacts/ranked.json"
+  vllm-backport-push-report:
+    description: |
+      Push a triage report to a GitHub repository under a timestamped
+      directory in reports/. Copies the report markdown and candidates JSON,
+      commits, pushes, and prints the GitHub URL to stdout.
+    arguments:
+      - name: "--report"
+        type: "path"
+        required: true
+        description: "Path to report markdown file"
+      - name: "--candidates"
+        type: "path"
+        required: true
+        description: "Path to ranked.json"
+      - name: "--version"
+        type: "string"
+        required: true
+        description: "Release version (e.g., v0.13.0)"
+    usage_examples:
+      - "/vllm-backport-push-report --report artifacts/report.md --candidates artifacts/ranked.json --version v0.13.0"
+  vllm-backport-cherry-pick:
+    description: |
+      Attempt automatic cherry-pick of clean backport candidates to a
+      downstream release branch. Selects eligible PRs (ai-fixable, score >= 50,
+      not already backported, verdict is must_backport or likely_relevant),
+      cherry-picks each, and creates a draft PR if any succeed. Requires agent
+      follow-up for semantic validation of the cherry-picked diff.
+    arguments:
+      - name: "--input"
+        type: "path"
+        required: true
+        description: "Path to ranked.json from score-rank step"
+      - name: "--downstream"
+        type: "path"
+        required: true
+        description: "Path to downstream repository"
+      - name: "--branch"
+        type: "string"
+        required: true
+        description: "Downstream branch name (e.g., rhai/0.13.0)"
+      - name: "--jira-url"
+        type: "URL"
+        required: false
+        description: "Jira ticket URL to link in the PR"
+      - name: "--report-url"
+        type: "URL"
+        required: false
+        description: "GitHub report URL to link in the PR"
+      - name: "--output"
+        type: "path"
+        required: true
+        description: "Output path for cherry-pick-result.json"
+    usage_examples:
+      - "/vllm-backport-cherry-pick --input artifacts/ranked.json --downstream /path/to/repo --branch rhai/0.13.0 --output artifacts/cherry-pick-result.json"
+  vllm-compare-reqs:
+    description: |
+      Compare Python requirements files and Dockerfiles between vLLM versions
+      to identify dependency changes. Supports variant-based comparison (rocm,
+      cuda, cpu, tpu, xpu) which auto-includes runtime, build, and Dockerfile
+      differences, or single-file comparison. Produces a categorized summary
+      table followed by detailed per-file change listings. Designed for AIPCC
+      package onboarding workflows.
+    arguments:
+      - name: "VERSION1"
+        required: true
+        description: "First version to compare (e.g., v0.13.0)"
+      - name: "VERSION2"
+        required: true
+        description: "Second version to compare (e.g., v0.14.0)"
+      - name: "VARIANT_OR_FILE"
+        required: true
+        description: "Variant name (rocm, cuda, cpu, tpu, xpu) or specific file (common.txt, rocm-build.txt)"
+      - name: "--pretty"
+        required: false
+        default: "true"
+        description: "Show clean categorized output (use --no-pretty for simple diff)"
+    usage_examples:
+      - "/vllm-compare-reqs v0.13.0 v0.14.0 rocm"
+      - "/vllm-compare-reqs v0.13.0 v0.14.0 cuda"
+      - "/vllm-compare-reqs v0.13.0 v0.14.0 common.txt"
+  vllm-slack-summary:
+    description: |
+      Generate a summary of the vLLM CI SIG Slack channel activity for the
+      RHAIIS midstream release team. Uses slackdump to export channel messages,
+      generates a markdown transcript, then analyzes it for breaking changes,
+      hardware issues, CI/CD infrastructure changes, dependency updates,
+      performance regressions, and upstream release stability.
+    arguments:
+      - name: "--days"
+        required: false
+        default: "7"
+        description: "Number of days of Slack history to export"
+      - name: "--output-dir"
+        required: false
+        default: "vllm_slack_summary"
+        description: "Output directory for transcript and summary"
+    usage_examples:
+      - "/vllm-slack-summary"
+      - "/vllm-slack-summary --days 14"
