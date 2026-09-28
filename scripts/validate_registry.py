@@ -487,13 +487,19 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
             return errors
         repo_path = plugin_root
 
-        if strict:
-            # Strict mode: plugin.json must exist in the repo
+        if strict and "skills_dir" not in plugin:
+            # strict without skills_dir: the entry declares no components, so only the
+            # repo's plugin.json can define the plugin — it must exist. With skills_dir
+            # the entry is a complete plugin definition while the repo has no manifest
+            # (Claude Code: the entry is the manifest whenever plugin.json is absent,
+            # whatever strict says — the state a repo passes through while adding one)
+            # and is appended to the manifest once it lands.
             plugin_json = repo_path / ".claude-plugin" / "plugin.json"
             if not plugin_json.exists():
                 errors.append(
                     f"  Plugin '{plugin['name']}': missing .claude-plugin/plugin.json "
-                    "(strict mode). Add plugin.json or set strict: false in registry.yaml"
+                    "(strict mode without skills_dir). Add plugin.json, or declare "
+                    "skills_dir so the entry defines the plugin until the manifest lands"
                 )
         # Check for at least one SKILL.md
         skills_dir_val = plugin.get("skills_dir", "skills")

@@ -1508,6 +1508,64 @@ class DeprecatedPluginTotalsTests(unittest.TestCase):
         ]}
         self.assertEqual(gs.total_skill_count(registry), vr.registry_skill_total(registry))
         self.assertEqual(5, vr.registry_skill_total(registry))
+class RemoteStrictManifestTests(unittest.TestCase):
+    """The strict manifest requirement of the remote check applies only to entries
+    that declare no ``skills_dir``: with ``skills_dir`` the entry is a complete plugin
+    definition while the repo has no manifest (the state a repo passes through while
+    adding one), and is appended to the manifest once it lands."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.validate_registry = get_validate_registry_module()
+
+    def _run(self, plugin, layout):
+        import os
+        import shutil
+        import tempfile
+
+        real_tmpdir = tempfile.mkdtemp()
+        try:
+            for rel, content in layout.items():
+                path = os.path.join(real_tmpdir, rel)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w") as f:
+                    f.write(content)
+            ctx = mock.MagicMock()
+            ctx.__enter__ = mock.Mock(return_value=real_tmpdir)
+            ctx.__exit__ = mock.Mock(return_value=False)
+            with mock.patch("subprocess.run", return_value=subprocess.CompletedProcess(
+                    ["git", "clone"], 0, stdout="", stderr="")), \
+                    mock.patch("tempfile.TemporaryDirectory", return_value=ctx):
+                return self.validate_registry.validate_remote_plugin(plugin)
+        finally:
+            shutil.rmtree(real_tmpdir)
+
+    SKILL = "---\nname: alpha\ndescription: d\n---\nbody\n"
+    SOURCE = {"type": "github", "repo": "acme/plugin", "ref": "main"}
+
+    def test_strict_with_skills_dir_and_no_manifest_passes(self):
+        errors = self._run(
+            {"name": "p", "source": self.SOURCE, "strict": True,
+             "skills_dir": ".claude/skills", "skills": [{"name": "alpha"}]},
+            {".claude/skills/alpha/SKILL.md": self.SKILL})
+        self.assertEqual([], [e for e in errors if "plugin.json" in e], errors)
+
+    def test_strict_without_skills_dir_and_no_manifest_fails(self):
+        errors = self._run(
+            {"name": "p", "source": self.SOURCE, "strict": True,
+             "skills": [{"name": "alpha"}]},
+            {"skills/alpha/SKILL.md": self.SKILL})
+        self.assertTrue(any("missing .claude-plugin/plugin.json" in e for e in errors), errors)
+
+    def test_strict_with_skills_dir_and_manifest_passes(self):
+        errors = self._run(
+            {"name": "p", "source": self.SOURCE, "strict": True,
+             "skills_dir": ".claude/skills", "skills": [{"name": "alpha"}]},
+            {".claude/skills/alpha/SKILL.md": self.SKILL,
+             ".claude-plugin/plugin.json": '{"name": "p", "version": "0.1.0"}'})
+        self.assertEqual([], [e for e in errors if "plugin.json" in e], errors)
+
+
 class StrictConsistencyTests(unittest.TestCase):
     """``skills_dir`` is valid with either ``strict`` value and must state it.
 
