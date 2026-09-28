@@ -50,14 +50,14 @@ See @ARCHITECTURE.md for detailed diagrams and design documentation.
 
 ## Key Rules
 
-### strict: false and skills_dir
+### strict and skills_dir
 
-Plugins without `.claude-plugin/plugin.json` in their repo **must** set `strict: false` and `skills_dir` in their registry entry. Without these, Claude Code cannot discover skills when the plugin is installed via the marketplace. Auto-discovery of `.claude/skills/` only works locally, not for marketplace installs.
+Plugins whose skills live outside the default `skills/` (typically `.claude/skills/`) **must** set `skills_dir` in their registry entry: auto-discovery of `.claude/skills/` only works locally, not for marketplace installs. While the repo has no `.claude-plugin/plugin.json`, the entry is the plugin definition whatever `strict` says. `strict` matters once the repo ships a manifest:
 
-- `strict: true` (default): repo has `plugin.json`, Claude Code reads it
-- `strict: false`: marketplace defines everything, `skills_dir` required
+- `strict: true` (default): the repo's `plugin.json` is authoritative and the entry's `skills` (from `skills_dir`) are appended to it — a directory listed by both loads once
+- `strict: false`: the entry is the entire plugin; if the repo also ships a `plugin.json` that declares components, the plugin **fails to load** ("conflicting manifests")
 
-The schema enforces `skills_dir` requires `strict` to be present (`dependentRequired`), and the validation script checks `skills_dir` is only used with `strict: false`.
+So a plugin that is about to add a manifest flips its entry to `strict: true` **before** the manifest lands (rfe-creator did this for opendatahub-io/rfe-creator#206). The schema enforces that `skills_dir` comes with an explicit `strict` (`dependentRequired`), and the validation script checks the same.
 
 ### Marketplace JSON format
 

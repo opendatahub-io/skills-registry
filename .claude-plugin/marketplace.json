@@ -31,7 +31,6 @@
         "repo": "opendatahub-io/rfe-creator",
         "source": "github"
       },
-      "strict": false,
       "version": "0.1.0"
     },
     {

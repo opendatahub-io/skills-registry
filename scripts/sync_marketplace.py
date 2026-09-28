@@ -60,14 +60,20 @@ def plugin_to_marketplace_entry(plugin: dict) -> dict:
         mapped["path"] = source["path"]
     entry["source"] = mapped
 
+    # skills_dir → the entry's skills, whatever strict says: with strict: false it is
+    # where the entry-defined plugin's skills are; with strict: true Claude Code appends
+    # it to the repo's plugin.json (a directory listed by both loads once). Emitting it
+    # only for strict: false would leave a strict: true plugin without a manifest yet
+    # (the state a repo passes through while adding one) with zero skills.
+    if "skills_dir" in plugin:
+        skills_dir = plugin["skills_dir"]
+        if not skills_dir.startswith("./"):
+            skills_dir = "./" + skills_dir
+        entry["skills"] = [skills_dir]
+
     # Handle strict: false plugins
     if plugin.get("strict") is False:
         entry["strict"] = False
-        if "skills_dir" in plugin:
-            skills_dir = plugin["skills_dir"]
-            if not skills_dir.startswith("./"):
-                skills_dir = "./" + skills_dir
-            entry["skills"] = [skills_dir]
         if "agents_dir" in plugin and "agents" in plugin:
             agents_dir = plugin["agents_dir"]
             if not agents_dir.startswith("./"):

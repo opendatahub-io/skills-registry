@@ -332,11 +332,11 @@
         "strict": {
           "type": "boolean",
           "default": true,
-          "description": "If false, marketplace is the entire plugin definition. If true (default), plugin.json in the repo is authoritative and marketplace supplements it. Setting strict: false when the repo also has a plugin.json with components causes a conflict"
+          "description": "If false, the marketplace entry is the entire plugin definition. If true (default), plugin.json in the repo is authoritative and the entry's skills (from skills_dir) are appended to it; a directory listed by both loads once. While the repo has no plugin.json the entry is the plugin definition either way. strict: false with a plugin.json that declares components fails to load (conflicting manifests)"
         },
         "skills_dir": {
           "type": "string",
-          "description": "Path to skills directory in the repo. Only valid when strict: false (marketplace defines the plugin). When strict: true, Claude Code auto-discovers skills in default locations"
+          "description": "Path to the skills directory in the repo, for skills outside the default skills/. With strict: false it is where the entry-defined plugin finds its skills; with strict: true it is appended to the repo's plugin.json (a directory listed by both loads once). Requires an explicit strict value"
         },
         "homepage": {
           "type": "string",

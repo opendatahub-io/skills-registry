@@ -51,7 +51,7 @@ plugins:
       type: github
       repo: opendatahub-io/rfe-creator
       ref: main
-    strict: false
+    strict: true
     skills_dir: .claude/skills
     homepage: https://github.com/opendatahub-io/rfe-creator
     repository: https://github.com/opendatahub-io/rfe-creator

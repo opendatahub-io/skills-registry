@@ -41,3 +41,28 @@ class SourceTypeMappingTests(unittest.TestCase):
         })
         entry = sync_marketplace.plugin_to_marketplace_entry(plugin)
         self.assertEqual(entry["source"]["url"], clone_url)
+
+
+class SkillsDirWithEitherStrictTests(unittest.TestCase):
+    """The entry's ``skills`` come from ``skills_dir`` whatever ``strict`` says: with
+    ``strict: true`` Claude Code appends them to the repo's ``plugin.json``, and a repo
+    that has no manifest yet is defined by the entry either way."""
+
+    def _plugin(self, **extra):
+        return {"name": "p", "source": {"type": "github", "repo": "o/r"}, **extra}
+
+    def test_strict_true_keeps_skills_and_omits_strict(self):
+        entry = sync_marketplace.plugin_to_marketplace_entry(
+            self._plugin(strict=True, skills_dir=".claude/skills"))
+        self.assertEqual(["./.claude/skills"], entry["skills"])
+        self.assertNotIn("strict", entry)
+
+    def test_strict_false_keeps_skills_and_strict(self):
+        entry = sync_marketplace.plugin_to_marketplace_entry(
+            self._plugin(strict=False, skills_dir=".claude/skills"))
+        self.assertEqual(["./.claude/skills"], entry["skills"])
+        self.assertIs(False, entry["strict"])
+
+    def test_no_skills_dir_emits_no_skills(self):
+        entry = sync_marketplace.plugin_to_marketplace_entry(self._plugin())
+        self.assertNotIn("skills", entry)

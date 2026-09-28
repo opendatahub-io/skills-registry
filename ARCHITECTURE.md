@@ -118,13 +118,18 @@ that contains the actual skills:
 
 - **strict: false** — The marketplace entry is the entire plugin definition.
   If the repo also has a `plugin.json` that declares components, that is a
-  conflict and the plugin fails to load. Use `skills_dir` to tell Claude
-  Code where to find skills in the repo. **Required for repos without a
-  `plugin.json`** — without it, Claude Code has no way to discover skills
-  when installing via a marketplace.
+  conflict and the plugin fails to load ("conflicting manifests").
 
-Note: `skills_dir` must not be specified without `strict: false`. The schema
-and validation scripts enforce this constraint.
+`skills_dir` tells Claude Code where the skills are when they live outside the
+default `skills/` (for example `.claude/skills/`); without it, a marketplace
+install of such a repo has no way to discover them. It works with either
+`strict` value: with `strict: false` it is where the entry-defined plugin's
+skills are; with `strict: true` Claude Code appends it to the repo's
+`plugin.json` (a directory listed by both loads once). While the repo has no
+`plugin.json` the entry is the plugin definition either way, so a repo that is
+about to add a manifest flips to `strict: true` first and keeps `skills_dir`.
+The schema requires an explicit `strict` alongside `skills_dir`
+(`dependentRequired`) and the validation script checks the same.
 
 ### Source Types
 

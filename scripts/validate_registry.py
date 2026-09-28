@@ -184,17 +184,27 @@ def check_bundles(registry: dict) -> list[str]:
 
 
 def check_strict_consistency(registry: dict) -> list[str]:
-    """Check that skills_dir is only used with strict: false."""
+    """Check that a plugin declaring ``skills_dir`` states its ``strict`` value.
+
+    ``skills_dir`` is valid with either value. With ``strict: false`` the entry is
+    the whole plugin definition. With ``strict: true`` Claude Code appends the
+    entry's ``skills`` to the repo's own ``plugin.json`` (a directory listed by
+    both loads once) — the shape for a repo that ships a manifest and keeps its
+    skills outside the default ``skills/``. While the repo has no manifest the
+    entry is the plugin definition whatever ``strict`` says. The one failing
+    combination is ``strict: false`` with an upstream ``plugin.json`` that
+    declares components ("conflicting manifests"), so a plugin that adds a
+    manifest flips to ``strict: true`` before the manifest lands. The schema's
+    ``dependentRequired`` already demands the key; this keeps the statement
+    explicit when the schema is bypassed.
+    """
     errors = []
     for plugin in registry.get("plugins", []):
         name = plugin.get("name", "<unknown>")
-        has_skills_dir = "skills_dir" in plugin
-        strict = plugin.get("strict", True)
-
-        if has_skills_dir and strict is not False:
+        if "skills_dir" in plugin and "strict" not in plugin:
             errors.append(
-                f"  Plugin '{name}': skills_dir requires strict: false. "
-                "Remove skills_dir or set strict: false"
+                f"  Plugin '{name}': skills_dir requires an explicit strict value "
+                "(true: appended to the repo's plugin.json; false: the entry is the plugin)"
             )
     return errors
 

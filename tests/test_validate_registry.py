@@ -1508,6 +1508,36 @@ class DeprecatedPluginTotalsTests(unittest.TestCase):
         ]}
         self.assertEqual(gs.total_skill_count(registry), vr.registry_skill_total(registry))
         self.assertEqual(5, vr.registry_skill_total(registry))
+class StrictConsistencyTests(unittest.TestCase):
+    """``skills_dir`` is valid with either ``strict`` value and must state it.
+
+    With ``strict: true`` Claude Code appends the entry's skills to the repo's
+    ``plugin.json``; with ``strict: false`` the entry is the plugin; ``strict: false``
+    plus an upstream manifest is the one combination that fails to load, so a
+    plugin adding a manifest flips to ``strict: true`` first and keeps ``skills_dir``.
+    """
+
+    def setUp(self):
+        self.module = get_validate_registry_module()
+
+    def check(self, plugin):
+        return self.module.check_strict_consistency({"plugins": [plugin]})
+
+    def test_skills_dir_with_strict_true_is_valid(self):
+        self.assertEqual([], self.check(
+            {"name": "p", "strict": True, "skills_dir": ".claude/skills"}))
+
+    def test_skills_dir_with_strict_false_is_valid(self):
+        self.assertEqual([], self.check(
+            {"name": "p", "strict": False, "skills_dir": ".claude/skills"}))
+
+    def test_skills_dir_without_strict_is_an_error(self):
+        errors = self.check({"name": "p", "skills_dir": ".claude/skills"})
+        self.assertEqual(1, len(errors))
+        self.assertIn("skills_dir requires an explicit strict value", errors[0])
+
+    def test_no_skills_dir_needs_no_strict(self):
+        self.assertEqual([], self.check({"name": "p"}))
 
 
 if __name__ == "__main__":
