@@ -510,6 +510,17 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
                 f"  Plugin '{plugin['name']}': invalid skills_dir '{skills_dir_val}' escapes the repository root"
             )
             return errors
+        if "skills_dir" in plugin:
+            # A declared skills_dir is what the marketplace entry publishes (for either
+            # strict value), so it is authoritative: an empty or missing directory would
+            # pass a fallback scan here and install as a plugin with no skills.
+            if not (resolved_skills_dir.is_dir() and list(resolved_skills_dir.glob("*/SKILL.md"))):
+                errors.append(
+                    f"  Plugin '{plugin['name']}': declared skills_dir '{skills_dir_val}' has no "
+                    "<name>/SKILL.md — the marketplace entry points there"
+                )
+            return errors
+
         skill_locations = [
             resolved_skills_dir,
             repo_path / ".claude" / "skills",
@@ -563,15 +574,23 @@ def _manifest_skill_paths(repo_path: Path) -> list[str]:
 def _upstream_skill_locations(plugin: dict, repo_path: Path | None = None) -> list[str]:
     """Repo-relative directories searched for a plugin's upstream SKILL.md files.
 
-    Order matters: the declared ``skills_dir`` first, then any path the cloned
-    plugin's own ``plugin.json`` declares, then the two conventional fallbacks,
-    then the plugin root -- which Claude Code loads as a single skill when a
-    bare ``SKILL.md`` sits there. ``repo_path`` is optional so the ordering can
-    be inspected without a clone; the manifest paths are simply omitted.
+    A declared ``skills_dir`` is the only location: it is what the marketplace
+    entry publishes, for either ``strict`` value. Otherwise order matters: the
+    default ``skills/``, then any path the cloned plugin's own ``plugin.json``
+    declares, then the conventional fallbacks, then the plugin root -- which
+    Claude Code loads as a single skill when a bare ``SKILL.md`` sits there.
+    ``repo_path`` is optional so the ordering can be inspected without a clone;
+    the manifest paths are simply omitted.
     Duplicates are dropped so a plugin that declares one of the fallbacks
     explicitly is not reported as having searched it twice.
     """
-    candidates = [plugin.get("skills_dir", "skills")]
+    if "skills_dir" in plugin:
+        # Declared: authoritative, whatever `strict` says. The marketplace entry
+        # publishes exactly this directory, so a fallback that finds skills
+        # elsewhere would pass a plugin that installs with none (CodeRabbit on
+        # #123). validate_remote_plugin applies the same rule.
+        return [plugin["skills_dir"]]
+    candidates = ["skills"]
     if repo_path is not None:
         candidates.extend(_manifest_skill_paths(repo_path))
     candidates.extend((".claude/skills", "skills", "."))
@@ -653,10 +672,12 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
         declared = plugin.get("skill_count", len(plugin.get("skills", [])))
         searched = ", ".join(f"'{loc}'" for loc in
                              _upstream_skill_locations(plugin, repo_path))
-        # `skills_dir` only exists on strict: false entries; a strict: true
-        # plugin is fixed upstream, in its own plugin.json.
+        # An entry that declares `skills_dir` (either strict value) or that is
+        # the plugin definition itself (strict: false) is fixed in the registry;
+        # a strict: true entry without skills_dir is fixed upstream, in its own
+        # plugin.json.
         remedy = ("fix skills_dir / source.path, or remove the entry"
-                  if plugin.get("strict") is False
+                  if "skills_dir" in plugin or plugin.get("strict") is False
                   else "fix source.path or the source plugin.json 'skills' path, "
                        "or remove the entry")
         return [

@@ -1364,9 +1364,14 @@ class UpstreamSkillsMissingTests(unittest.TestCase):
             {"name": "p", "strict": False, "skills": [{"name": "a"}]})
         strict_true, _ = self._check({"name": "p", "skills": [{"name": "a"}]})
         self.assertIn("fix skills_dir / source.path", strict_false[0])
-        # skills_dir is not settable on a strict: true entry, so do not suggest it.
+        # A strict: true entry without skills_dir is fixed upstream, in its own
+        # plugin.json, so do not suggest skills_dir there.
         self.assertNotIn("skills_dir", strict_true[0])
         self.assertIn("source plugin.json", strict_true[0])
+        # With skills_dir declared the registry is where the fix goes, whatever strict says.
+        strict_true_dir, _ = self._check(
+            {"name": "p", "strict": True, "skills_dir": "helpers/skills", "skills": [{"name": "a"}]})
+        self.assertIn("fix skills_dir / source.path", strict_true_dir[0])
 
     def test_manifest_paths_appear_in_the_searched_list(self):
         import json as _json
@@ -1397,18 +1402,17 @@ class UpstreamSkillsMissingTests(unittest.TestCase):
         self.assertEqual([], errors)
 
     def test_searched_locations_are_deduped_and_ordered(self):
-        # "." comes last: the plugin root counts only for a bare SKILL.md.
-        self.assertEqual(
-            ["skills", ".claude/skills", "."],
-            self.vr._upstream_skill_locations({"skills_dir": "skills"}),
-        )
-        # No skills_dir means the "skills" default, which stays first.
+        # No skills_dir: the "skills" default first, the conventional fallback,
+        # then "." last -- the plugin root counts only for a bare SKILL.md.
         self.assertEqual(
             ["skills", ".claude/skills", "."],
             self.vr._upstream_skill_locations({}),
         )
+        # A declared skills_dir is the only location, whatever it names: it is
+        # what the marketplace entry publishes, so no fallback may stand in for it.
+        self.assertEqual(["skills"], self.vr._upstream_skill_locations({"skills_dir": "skills"}))
         self.assertEqual(
-            ["helpers/skills", ".claude/skills", "skills", "."],
+            ["helpers/skills"],
             self.vr._upstream_skill_locations({"skills_dir": "helpers/skills"}),
         )
 
@@ -1556,6 +1560,29 @@ class RemoteStrictManifestTests(unittest.TestCase):
              "skills": [{"name": "alpha"}]},
             {"skills/alpha/SKILL.md": self.SKILL})
         self.assertTrue(any("missing .claude-plugin/plugin.json" in e for e in errors), errors)
+
+    def test_declared_skills_dir_is_authoritative_no_fallback(self):
+        """CodeRabbit on #123: an empty declared skills_dir must not pass on the strength
+        of skills found elsewhere — the marketplace entry points at the declared one."""
+        for strict in (True, False):
+            errors = self._run(
+                {"name": "p", "source": self.SOURCE, "strict": strict,
+                 "skills_dir": ".claude/skills", "skills": [{"name": "alpha"}]},
+                {"skills/alpha/SKILL.md": self.SKILL})          # populated, but not the declared dir
+            self.assertTrue(any("declared skills_dir '.claude/skills' has no" in e for e in errors),
+                            (strict, errors))
+            errors = self._run(
+                {"name": "p", "source": self.SOURCE, "strict": strict,
+                 "skills_dir": ".claude/skills", "skills": [{"name": "alpha"}]},
+                {".claude/skills/alpha/SKILL.md": self.SKILL})
+            self.assertEqual([], [e for e in errors if "skills_dir" in e or "SKILL.md" in e],
+                             (strict, errors))
+
+    def test_no_skills_dir_keeps_the_fallback_scan(self):
+        errors = self._run(
+            {"name": "p", "source": self.SOURCE, "strict": False, "skills": [{"name": "alpha"}]},
+            {".claude/skills/alpha/SKILL.md": self.SKILL})
+        self.assertEqual([], [e for e in errors if "SKILL.md" in e], errors)
 
     def test_strict_with_skills_dir_and_manifest_passes(self):
         errors = self._run(
