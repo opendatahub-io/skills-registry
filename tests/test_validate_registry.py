@@ -812,11 +812,15 @@ class SkillNameDriftTests(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertEqual([], warnings)
 
-    def test_repo_without_any_skill_md_is_left_to_remote_validation(self):
+    def test_repo_without_any_skill_md_is_an_error(self):
+        # Previously deferred to validate_remote_plugin, which no workflow runs,
+        # so an entry pointing at a skills path deleted upstream passed in
+        # silence. See UpstreamSkillsMissingTests for the full behaviour.
         plugin = {"name": "p", "skills": [{"name": "alpha"}]}
         errors, warnings = self.check(plugin, lambda root: None)
 
-        self.assertEqual([], errors)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("installs zero skills", errors[0])
         self.assertEqual([], warnings)
 
     def test_diff_touched_plugins_lists_changed_entries(self):
@@ -1217,6 +1221,129 @@ class GitSubdirSourceCoverageTests(unittest.TestCase):
         cmd = run_mock.call_args[0][0]
         self.assertIn("ls-remote", cmd)
         self.assertIn("https://github.com/acme/monorepo.git", cmd)
+
+
+class UpstreamSkillsMissingTests(unittest.TestCase):
+    """A plugin that declares skills the source does not have must fail the sweep.
+
+    Guards the regression that let `odh-ai-helpers` keep pointing at a
+    `skills_dir` deleted upstream while `--check-skill-names` stayed green.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    def _check(self, plugin, skills=None):
+        """Run the sweep against a clone containing `skills` (name -> frontmatter)."""
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for skill_name in skills or []:
+                skill_dir = root / "skills" / skill_name
+                skill_dir.mkdir(parents=True)
+                (skill_dir / "SKILL.md").write_text(
+                    f"---\nname: {skill_name}\ndescription: d\n---\n"
+                )
+            return self.vr.check_skill_names_against_source(plugin, root)
+
+    def test_errors_when_listed_skills_have_no_upstream_source(self):
+        errors, warnings = self._check(
+            {"name": "p", "skills_dir": "helpers/skills", "skills": [{"name": "a"}, {"name": "b"}]}
+        )
+        self.assertEqual([], warnings)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("declares 2 skill(s)", errors[0])
+        self.assertIn("installs zero skills", errors[0])
+        self.assertIn("'helpers/skills'", errors[0])
+
+    def test_errors_for_skill_count_only_plugin(self):
+        errors, _ = self._check({"name": "p", "skill_count": 69})
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("declares 69 skill(s)", errors[0])
+
+    def test_silent_for_bundle_meta_plugin(self):
+        self.assertEqual(([], []), self._check({"name": "b", "includes": ["x"]}))
+
+    def test_silent_when_plugin_declares_no_skills(self):
+        self.assertEqual(([], []), self._check({"name": "mcp-only"}))
+
+    def test_silent_when_skill_count_is_zero(self):
+        self.assertEqual(([], []), self._check({"name": "mcp-only", "skill_count": 0}))
+
+    def test_no_error_when_skills_resolve_upstream(self):
+        errors, _ = self._check({"name": "p", "skills": [{"name": "a"}]}, skills=["a"])
+        self.assertEqual([], errors)
+
+    def test_searched_locations_are_deduped_and_ordered(self):
+        self.assertEqual(
+            ["skills", ".claude/skills"],
+            self.vr._upstream_skill_locations({"skills_dir": "skills"}),
+        )
+        # No skills_dir means the "skills" default, which stays first.
+        self.assertEqual(
+            ["skills", ".claude/skills"],
+            self.vr._upstream_skill_locations({}),
+        )
+        self.assertEqual(
+            ["helpers/skills", ".claude/skills", "skills"],
+            self.vr._upstream_skill_locations({"skills_dir": "helpers/skills"}),
+        )
+
+
+class DeprecatedPluginTotalsTests(unittest.TestCase):
+    """A deprecated re-export entry must not inflate the registry-wide total."""
+
+    def test_schema_accepts_deprecated_flag(self):
+        registry = build_registry()
+        registry["plugins"][0]["deprecated"] = True
+        vr = get_validate_registry_module()
+        schema = vr.load_schema(str(REPO_ROOT / "schema" / "registry.schema.json"))
+        self.assertEqual([], vr.validate_schema(registry, schema))
+
+    def test_deprecated_entry_excluded_from_total(self):
+        vr = get_validate_registry_module()
+        registry = {"plugins": [
+            {"name": "live", "skills": [{"name": "a"}, {"name": "b"}]},
+            {"name": "compat", "skill_count": 2, "deprecated": True},
+        ]}
+        self.assertEqual(2, vr.registry_skill_total(registry))
+
+    def test_bundle_still_excluded_from_total(self):
+        vr = get_validate_registry_module()
+        registry = {"plugins": [
+            {"name": "member", "skill_count": 3},
+            {"name": "bundle", "includes": ["member"]},
+        ]}
+        self.assertEqual(3, vr.registry_skill_total(registry))
+
+    def test_live_entries_counted(self):
+        vr = get_validate_registry_module()
+        registry = {"plugins": [
+            {"name": "a", "skills": [{"name": "s1"}]},
+            {"name": "b", "skill_count": 4},
+        ]}
+        self.assertEqual(5, vr.registry_skill_total(registry))
+
+    def test_validator_total_matches_site_total(self):
+        """The two implementations must not drift; they publish the same number."""
+        import importlib.util
+
+        vr = get_validate_registry_module()
+        spec = importlib.util.spec_from_file_location(
+            "generate_site", REPO_ROOT / "scripts" / "generate_site.py")
+        gs = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(gs)
+
+        registry = {"plugins": [
+            {"name": "member", "skill_count": 3},
+            {"name": "bundle", "includes": ["member"]},
+            {"name": "compat", "skill_count": 3, "deprecated": True},
+            {"name": "live", "skills": [{"name": "s1"}, {"name": "s2"}]},
+        ]}
+        self.assertEqual(gs.total_skill_count(registry), vr.registry_skill_total(registry))
+        self.assertEqual(5, vr.registry_skill_total(registry))
 
 
 if __name__ == "__main__":

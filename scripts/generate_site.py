@@ -25,6 +25,7 @@ sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
 sys.path.insert(0, _REPO_ROOT_STR)
 
 from scripts.registry_contracts import (  # noqa: E402
+    BROWSABLE_SOURCE_TYPES,
     CANONICAL_FUNCTION_DOCS,
     CANONICAL_METRIC_DOCS,
     contract_metrics_as_dicts,
@@ -214,16 +215,28 @@ def get_skill_count(plugin: dict, by_name: dict, _seen: frozenset = frozenset())
     return plugin.get("skill_count", len(plugin.get("skills", [])))
 
 
+def counts_toward_total(plugin: dict) -> bool:
+    """Whether a plugin's skills add to the registry-wide total.
+
+    Two kinds of entry are skipped because their skills are already counted
+    under another entry: a bundle, whose count is derived from its members,
+    and a ``deprecated`` compatibility entry, which re-exports skills that the
+    plugins superseding it list in their own right.
+    """
+    return not plugin.get("includes") and not plugin.get("deprecated")
+
+
 def total_skill_count(registry: dict) -> int:
     """Registry-wide skill total, counting each skill exactly once.
 
     Members are still counted individually via ``registry.plugins``; only the
-    bundle wrapper is skipped so its derived aggregate is not added on top.
+    bundle wrapper and deprecated re-export entries are skipped so their
+    aggregates are not added on top.
     """
     by_name = build_plugin_index(registry)
     return sum(get_skill_count(p, by_name)
                for p in registry.get("plugins", [])
-               if not p.get("includes"))
+               if counts_toward_total(p))
 
 
 SCOPE_BADGE = {"team": "Team-specific", "generic": "Generic"}
@@ -277,7 +290,8 @@ def generate_landing_page(registry: dict, cat_plugins: dict[str, list]) -> str:
         lines.append("")
         lines.append(f"    {desc}")
         lines.append("")
-        lines.append(f"    **{skill_count} skills** - {cat_name} - v{version}")
+        status = " - Deprecated" if plugin.get("deprecated") else ""
+        lines.append(f"    **{skill_count} skills** - {cat_name} - v{version}{status}")
         lines.append("")
 
     def render_card_section(title, group):
@@ -332,7 +346,10 @@ def generate_plugins_index(registry: dict) -> str:
         cat_name = categories.get(cat_key, {}).get("name", cat_key)
         skill_count = get_skill_count(plugin, by_name)
         version = plugin.get("version", "")
-        lines.append(f"| [{name}]({name}/index.md) | {cat_name} | {skill_count} | v{version} |")
+        # Marked inline rather than as a column so the table keeps its shape
+        # while no entry is deprecated.
+        label = f"{name} (deprecated)" if plugin.get("deprecated") else name
+        lines.append(f"| [{label}]({name}/index.md) | {cat_name} | {skill_count} | v{version} |")
 
     # Group into one section per scope: SDLC (default), Generic, Teams
     sections = [
@@ -388,6 +405,8 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
     lines.append("")
     scope = scope_of(plugin)
     meta = []
+    if plugin.get("deprecated"):
+        meta.append("    - **Status**: Deprecated")
     if version:
         meta.append(f"    - **Version**: {version}")
     if author:
@@ -404,7 +423,7 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
             meta.append(f"    - **Category**: [{cat_name}](../../categories/{category}.md)")
         else:
             meta.append(f"    - **Category**: {cat_name}")
-    if source_type in ("github", "git"):
+    if source_type in BROWSABLE_SOURCE_TYPES:
         display = source_display_name(source)
         browse = source_browse_url(source)
         meta.append(f"    - **Repository**: [{display}]({browse})")
@@ -987,7 +1006,8 @@ def generate_category_page(cat_key: str, cat_meta: dict,
             lines.append("")
             lines.append(desc)
             lines.append("")
-            lines.append(f"**{skill_count} skills** - v{version}")
+            status = " - Deprecated" if plugin.get("deprecated") else ""
+            lines.append(f"**{skill_count} skills** - v{version}{status}")
             lines.append("")
 
     # Split into SDLC and Generic subsections (team plugins aren't in categories)

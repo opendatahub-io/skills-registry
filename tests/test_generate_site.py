@@ -354,3 +354,118 @@ class VisiblePluginsTests(unittest.TestCase):
         page = generate_site.generate_plugin_page(m1, reg, enrichment=None, plugin_dir=None)
         self.assertIn("**Category**: Lonely", page)
         self.assertNotIn("../../categories/lonely.md", page)
+
+
+class SiteGitSubdirRepositoryLinkTests(unittest.TestCase):
+    """git-subdir plugins must say where their code lives (24 of 45 entries)."""
+
+    @staticmethod
+    def _registry(source):
+        return {
+            "name": "opendatahub-skills",
+            "categories": {"dev": {"name": "Dev", "description": "d"}},
+            "plugins": [
+                {"name": "m1", "description": "m", "version": "0.1.0",
+                 "category": "dev", "scope": "generic", "skill_count": 1,
+                 "source": source},
+            ],
+        }
+
+    def test_plugin_page_deep_links_into_the_subdirectory(self):
+        reg = self._registry({"type": "git-subdir", "ref": "main",
+                              "url": "https://github.com/acme/monorepo.git",
+                              "path": "plugins/thing"})
+        page = generate_site.generate_plugin_page(
+            reg["plugins"][0], reg, enrichment=None, plugin_dir=None)
+        self.assertIn(
+            "**Repository**: [acme/monorepo/plugins/thing]"
+            "(https://github.com/acme/monorepo/tree/main/plugins/thing)",
+            page,
+        )
+
+    def test_plugin_page_links_repo_root_for_non_github_forge(self):
+        reg = self._registry({"type": "git-subdir",
+                              "url": "https://gitlab.example.com/t/mono.git",
+                              "path": "plugins/thing"})
+        page = generate_site.generate_plugin_page(
+            reg["plugins"][0], reg, enrichment=None, plugin_dir=None)
+        self.assertIn("(https://gitlab.example.com/t/mono)", page)
+        self.assertNotIn("/tree/", page)
+
+    def test_github_source_link_unchanged(self):
+        reg = self._registry({"type": "github", "repo": "acme/plugin"})
+        page = generate_site.generate_plugin_page(
+            reg["plugins"][0], reg, enrichment=None, plugin_dir=None)
+        self.assertIn("**Repository**: [acme/plugin](https://github.com/acme/plugin)", page)
+
+    def test_npm_source_still_has_no_repository_line(self):
+        reg = self._registry({"type": "npm", "package": "@acme/plugin"})
+        page = generate_site.generate_plugin_page(
+            reg["plugins"][0], reg, enrichment=None, plugin_dir=None)
+        self.assertNotIn("**Repository**", page)
+
+
+class SiteDeprecatedPluginTests(unittest.TestCase):
+    """A deprecated compatibility entry is labelled and left out of the total."""
+
+    @staticmethod
+    def _registry():
+        return {
+            "name": "opendatahub-skills",
+            "description": "Skills registry",
+            "categories": {"dev": {"name": "Dev", "description": "d"}},
+            "plugins": [
+                {"name": "live", "description": "live plugin", "version": "1.0.0",
+                 "category": "dev", "scope": "generic",
+                 "source": {"type": "github", "repo": "acme/live"},
+                 "skills": [{"name": "s1"}, {"name": "s2"}]},
+                {"name": "compat", "description": "compat umbrella", "version": "0.1.0",
+                 "category": "dev", "scope": "generic", "skill_count": 2,
+                 "deprecated": True,
+                 "source": {"type": "github", "repo": "acme/live"}},
+            ],
+        }
+
+    def test_excluded_from_registry_total(self):
+        reg = self._registry()
+        self.assertEqual(2, generate_site.total_skill_count(reg))
+        del reg["plugins"][1]["deprecated"]
+        self.assertEqual(4, generate_site.total_skill_count(reg))
+
+    def test_keeps_its_own_displayed_count(self):
+        reg = self._registry()
+        by_name = generate_site.build_plugin_index(reg)
+        self.assertEqual(2, generate_site.get_skill_count(reg["plugins"][1], by_name))
+
+    def test_landing_page_labels_and_totals(self):
+        reg = self._registry()
+        index = generate_site.generate_landing_page(
+            reg, generate_site.build_category_plugins(reg))
+        self.assertIn("2 plugins | 2 skills", index)
+        self.assertIn("**2 skills** - Dev - v0.1.0 - Deprecated", index)
+        self.assertIn("**2 skills** - Dev - v1.0.0\n", index)
+
+    def test_plugins_index_marks_the_row(self):
+        page = generate_site.generate_plugins_index(self._registry())
+        self.assertIn("| [compat (deprecated)](compat/index.md) |", page)
+        self.assertIn("| [live](live/index.md) |", page)
+
+    def test_plugin_page_shows_status(self):
+        reg = self._registry()
+        page = generate_site.generate_plugin_page(
+            reg["plugins"][1], reg, enrichment=None, plugin_dir=None)
+        self.assertIn("- **Status**: Deprecated", page)
+
+    def test_live_plugin_page_has_no_status_line(self):
+        reg = self._registry()
+        page = generate_site.generate_plugin_page(
+            reg["plugins"][0], reg, enrichment=None, plugin_dir=None)
+        self.assertNotIn("**Status**", page)
+
+    def test_category_page_labels_the_entry(self):
+        reg = self._registry()
+        by_name = generate_site.build_plugin_index(reg)
+        page = generate_site.generate_category_page(
+            "dev", reg["categories"]["dev"],
+            generate_site.build_category_plugins(reg)["dev"], by_name)
+        self.assertIn("**2 skills** - v0.1.0 - Deprecated", page)

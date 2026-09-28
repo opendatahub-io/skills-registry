@@ -79,6 +79,9 @@ GIT_CLONE_TYPES = frozenset({"github", "git"})
 # git-subdir IS cloneable (clone the repo, then look under its `path`), even
 # though it is exempt from the contract requirement above.
 GIT_CLONEABLE_TYPES = frozenset({"github", "git", "git-subdir"})
+# Sources that resolve to a browsable web URL, so the catalog and site can link
+# to where the code lives (see source_browse_url). npm/local have no repo page.
+BROWSABLE_SOURCE_TYPES = frozenset({"github", "git", "git-subdir"})
 
 # Strip user[:token]@ credentials from any URL in the given text before logging.
 # Applies to both the URL we hold and URLs that git echoes back in stderr /
@@ -126,17 +129,29 @@ def source_subdir(source: dict) -> str:
     return path.lstrip("/")
 
 
+def _strip_scheme_and_suffix(url: str) -> str:
+    """`https://github.com/o/r.git` -> `github.com/o/r`."""
+    name = _SCHEME_RE.sub("", url)
+    if name.endswith(".git"):
+        name = name[:-4]
+    return name
+
+
 def source_display_name(source: dict) -> str:
     """Return a human-readable display name (scheme-stripped, no trailing .git)."""
     source_type = source.get("type")
     if source_type == "github":
         return source["repo"]
     if source_type == "git":
-        url = source["url"]
-        name = _SCHEME_RE.sub("", url)
-        if name.endswith(".git"):
-            name = name[:-4]
-        return name
+        return _strip_scheme_and_suffix(source["url"])
+    if source_type == "git-subdir":
+        # Show owner/repo/subdir. GitHub is spelled without the host so a
+        # git-subdir entry reads like the `github` entries next to it.
+        name = _strip_scheme_and_suffix(source.get("url", ""))
+        if name.startswith("github.com/"):
+            name = name[len("github.com/"):]
+        subdir = source_subdir(source)
+        return f"{name}/{subdir}" if subdir else name
     return source.get("repo") or source.get("url") or "<unknown>"
 
 
@@ -150,6 +165,23 @@ def source_browse_url(source: dict) -> str:
         if url.endswith(".git"):
             return url[:-4]
         return url
+    if source_type == "git-subdir":
+        url = source.get("url", "")
+        base = url[:-4] if url.endswith(".git") else url
+        subdir = source_subdir(source)
+        if not subdir:
+            return base
+        # Only GitHub's /tree/<ref>/<path> layout is assumed; other forges spell
+        # subdirectory browsing differently (GitLab /-/tree, Gitea /src/branch),
+        # so they link to the repository root rather than a wrong deep link.
+        host = _SCHEME_RE.sub("", base).split("/", 1)[0].lower()
+        if host not in ("github.com", "www.github.com"):
+            return base
+        try:
+            ref = normalize_git_ref(source.get("ref"))
+        except ValueError:
+            return base
+        return f"{base}/tree/{ref}/{subdir}"
     return source.get("url") or f"https://github.com/{source.get('repo', '')}"
 
 

@@ -74,6 +74,68 @@ class CatalogMcpServerTests(unittest.TestCase):
         self.assertIn("| patternfly | Component docs via MCP |", content)
 
 
+class CatalogGitSubdirSourceTests(unittest.TestCase):
+    def test_catalog_deep_links_into_the_subdirectory(self):
+        registry = build_registry_with_contract()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://github.com/acme/monorepo.git",
+            "path": "plugins/thing",
+            "ref": "main",
+        }
+
+        content = generate_catalog.generate_catalog(registry)
+
+        self.assertIn(
+            "[acme/monorepo/plugins/thing]"
+            "(https://github.com/acme/monorepo/tree/main/plugins/thing)",
+            content,
+        )
+
+    def test_catalog_links_repo_root_for_non_github_forge(self):
+        registry = build_registry_with_contract()
+        registry["plugins"][0]["source"] = {
+            "type": "git-subdir",
+            "url": "https://gitlab.example.com/team/monorepo.git",
+            "path": "plugins/thing",
+        }
+
+        content = generate_catalog.generate_catalog(registry)
+
+        # GitLab spells subdirectory browsing differently, so no deep link.
+        self.assertIn("(https://gitlab.example.com/team/monorepo)", content)
+        self.assertNotIn("/tree/", content)
+
+
+class CatalogSkillCountTests(unittest.TestCase):
+    """A plugin that delegates discovery declares a count instead of a list."""
+
+    def _registry_with_count(self, count):
+        registry = build_registry_with_contract()
+        plugin = registry["plugins"][0]
+        plugin.pop("skills", None)
+        plugin["skill_count"] = count
+        return registry
+
+    def test_renders_count_when_no_skills_are_listed(self):
+        content = generate_catalog.generate_catalog(self._registry_with_count(69))
+        self.assertIn("**69 skills**", content)
+
+    def test_singular_noun_for_one_skill(self):
+        content = generate_catalog.generate_catalog(self._registry_with_count(1))
+        self.assertIn("**1 skill**,", content)
+
+    def test_no_count_line_for_mcp_only_plugin(self):
+        content = generate_catalog.generate_catalog(self._registry_with_count(0))
+        self.assertNotIn("**0 skills**", content)
+
+    def test_listed_skills_still_render_a_table(self):
+        registry = build_registry_with_contract()
+        content = generate_catalog.generate_catalog(registry)
+        self.assertIn("| `/example-skill` |", content)
+        self.assertNotIn("discovered from the source repository", content)
+
+
 class CatalogMalformedContractRenderingTests(unittest.TestCase):
     def test_catalog_skips_non_dict_contract_for_columns(self):
         registry = build_registry_with_contract()

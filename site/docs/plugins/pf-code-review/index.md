@@ -16,6 +16,7 @@ Code review and quality -- adversarial review, security patterns
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly/pf-code-review](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-code-review)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">code-review</span>
 
 ## Skills

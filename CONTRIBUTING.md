@@ -155,6 +155,27 @@ A plugin can provide **agents** and **MCP servers** alongside (or instead of) sk
 - **`agents`** lists the agents the plugin ships (matching the agent file names). For a `strict: false` plugin, also set `agents_dir` so the marketplace entry points Claude Code at them; for a `strict: true` plugin, the `plugin.json` is authoritative and `agents` is catalog-only display metadata.
 - **`mcp_servers`** lists the MCP servers the plugin provides (matching the keys in the plugin's `plugin.json` `mcpServers`). It is **catalog-only** display metadata — Claude Code reads the actual server config from the source `plugin.json`, so `mcp_servers` is never propagated to `marketplace.json`. Use it so an MCP-only plugin (e.g. `pf-mcp`) advertises what it offers instead of appearing as "0 skills".
 
+### Deprecating a plugin
+
+When a plugin is superseded but must stay installable so existing installs keep working — typically a compatibility umbrella that re-exports skills now registered under other plugins — mark it `deprecated: true`:
+
+```yaml
+  - name: old-umbrella
+    description: >
+      [DEPRECATED] Re-exports the skills that moved into the new-* plugins under
+      their original old-umbrella:* names. Install the new-* plugins you need,
+      then uninstall this one.
+    deprecated: true
+    skill_count: 69
+```
+
+`deprecated` is catalog-only — it is **not** propagated to either marketplace, so the plugin stays fully installable. It does two things:
+
+- the entry is labelled **Deprecated** on its plugin page, its landing-page card, its category entry and the plugins index;
+- its skills are **excluded from registry-wide totals**, the same treatment bundles get, so a re-exported skill is not counted twice (once under the umbrella and once under the plugin that now owns it). The entry still displays its own count on its own page.
+
+Say in the description what to install instead, and remove the entry once the migration window closes.
+
 ### 3. Regenerate Artifacts
 
 After editing `registry.yaml`, validate and regenerate artifacts so CI stays in sync (same sequence as `CLAUDE.md`):
@@ -209,8 +230,8 @@ Use the generated canonical reference in [`catalog.md`](catalog.md#canonical-con
 CI runs on pull requests and pushes to `main`. It automatically:
 - Validates `registry.yaml` against the JSON Schema and touched-skill contract rules (diff-aware vs the PR base branch or prior push commit).
 - Runs pinned `skill-linter` on skills you changed when they declare GitHub `source` and `contract.source_assertions`.
-- Checks that referenced GitHub repos are reachable and that expected manifests or paths resolve as validated by `scripts/validate_registry.py`.
-- Clones the plugins you touched and checks each registry skill `name` against the upstream `SKILL.md` frontmatter.
+- Checks that referenced GitHub repos are reachable as validated by `scripts/validate_registry.py`.
+- Clones the plugins you touched and checks each registry skill `name` against the upstream `SKILL.md` frontmatter, failing if the plugin's declared skills path holds no `SKILL.md` at all.
 
 ### Skill name drift
 
@@ -222,7 +243,12 @@ A registry skill `name` must match the `name` in that skill's upstream `SKILL.md
 python3 scripts/validate_registry.py --diff-base origin/main --check-skill-names
 ```
 
-It **fails** when a registry skill has no upstream `SKILL.md` declaring that name. It **warns**, without failing, when:
+It **fails** in two cases:
+
+- a registry skill has no upstream `SKILL.md` declaring that name;
+- a plugin that declares skills (a `skills` list, or a non-zero `skill_count`) has **no** `SKILL.md` at all under any path searched — its declared `skills_dir`, then `.claude/skills`, then `skills`. That means the entry installs zero skills, usually because `skills_dir` or a `git-subdir` `path` points at somewhere the source repo has since moved or deleted. Bundles and plugins that declare no skills (e.g. an MCP-only plugin) are exempt.
+
+It **warns**, without failing, when:
 
 - the registry and the upstream frontmatter disagree on `user-invocable` (remember the registry value is catalog-only — the source `SKILL.md` is what controls the `/` menu);
 - a `strict: false` plugin has upstream skills missing from `registry.yaml`. Those install anyway, since the whole `skills_dir` is loaded, so they are live but undocumented commands. For `strict: true` plugins the registry list is a curated subset by design and is not flagged.

@@ -16,6 +16,7 @@ React component development -- coding standards, testing, and structure
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly/pf-react](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-react)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">react</span>
 
 ## Skills

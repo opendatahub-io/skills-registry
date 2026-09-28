@@ -513,6 +513,20 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
     return errors
 
 
+def _upstream_skill_locations(plugin: dict) -> list[str]:
+    """Repo-relative directories searched for a plugin's upstream SKILL.md files.
+
+    Order matters: the declared ``skills_dir`` first, then the two conventional
+    fallbacks. Duplicates are dropped so a plugin that declares one of the
+    fallbacks explicitly is not reported as having searched it twice.
+    """
+    ordered = []
+    for location in (plugin.get("skills_dir", "skills"), ".claude/skills", "skills"):
+        if isinstance(location, str) and location not in ordered:
+            ordered.append(location)
+    return ordered
+
+
 def _iter_upstream_skill_files(plugin: dict, repo_path: Path) -> list[Path]:
     """SKILL.md files in a cloned plugin repo, from the first skills directory that has any.
 
@@ -521,11 +535,7 @@ def _iter_upstream_skill_files(plugin: dict, repo_path: Path) -> list[Path]:
     .claude/skills/; unioning the two would report that tooling as missing from the registry.
     """
     root = repo_path.resolve()
-    locations = [
-        repo_path / plugin.get("skills_dir", "skills"),
-        repo_path / ".claude" / "skills",
-        repo_path / "skills",
-    ]
+    locations = [repo_path / loc for loc in _upstream_skill_locations(plugin)]
     for location in locations:
         try:
             resolved = location.resolve()
@@ -565,8 +575,22 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
         upstream[skill_name] = frontmatter.get("user-invocable", True) is not False
 
     if not upstream:
-        # validate_remote_plugin already reports "no SKILL.md found"; don't double-report.
-        return [], []
+        # A bundle installs its members rather than skills of its own, and a
+        # plugin that declares no skills (e.g. an MCP-only plugin) legitimately
+        # ships no SKILL.md. Anything else claims skills the source does not
+        # have: the entry installs nothing, and the catalog publishes commands
+        # that resolve to nothing. That is how `odh-ai-helpers` kept pointing at
+        # a `skills_dir` deleted upstream while every check stayed green --
+        # `validate_remote_plugin` does report it, but no workflow runs it.
+        if plugin.get("includes") or not (plugin.get("skills") or plugin.get("skill_count")):
+            return [], []
+        declared = plugin.get("skill_count", len(plugin.get("skills", [])))
+        searched = ", ".join(f"'{loc}'" for loc in _upstream_skill_locations(plugin))
+        return [
+            f"  Plugin '{name}': declares {declared} skill(s) but no SKILL.md was found "
+            f"in the cloned source (looked in {searched}). The plugin installs zero "
+            "skills; fix skills_dir / source.path, or remove the entry."
+        ], []
 
     errors = []
     warnings = []
@@ -606,6 +630,23 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
             )
 
     return errors, warnings
+
+
+def registry_skill_total(registry: dict) -> int:
+    """Registry-wide skill total, counting each skill exactly once.
+
+    Leaf plugins count by their ``skill_count`` or their listed skills. Two
+    kinds of entry are skipped because their skills are counted under another
+    entry: a bundle, whose members are top-level entries in their own right,
+    and a ``deprecated`` compatibility entry, which re-exports skills the
+    plugins superseding it already register. Mirrors ``total_skill_count`` in
+    generate_site.py, which drives the published figure.
+    """
+    return sum(
+        p.get("skill_count", len(p.get("skills", [])))
+        for p in registry.get("plugins", [])
+        if not p.get("includes") and not p.get("deprecated")
+    )
 
 
 def diff_touched_plugins(registry: dict, base_ref: str) -> list[str] | None:
@@ -904,14 +945,7 @@ def main() -> None:
     # Summary
     print()
     plugin_count = len(registry.get("plugins", []))
-    # Count each skill once: leaf plugins by their skill_count (or listed
-    # skills); bundles are excluded since their members are counted individually.
-    skill_count = sum(
-        p.get("skill_count", len(p.get("skills", [])))
-        for p in registry.get("plugins", [])
-        if not p.get("includes")
-    )
-    print(f"Registry: {plugin_count} plugin(s), {skill_count} skill(s)")
+    print(f"Registry: {plugin_count} plugin(s), {registry_skill_total(registry)} skill(s)")
 
     if all_errors:
         print(f"\nFAILED: {len(all_errors)} error(s)")

@@ -77,6 +77,14 @@ Plugins can also provide MCP servers. List them in `mcp_servers: [{name, descrip
 
 A plugin with a non-empty `includes: [names...]` is a **meta-plugin** (bundle) that installs those member plugins together. Each member **must** also be registered as its own entry in `registry.yaml` (with a matching name), because Claude Code resolves a plugin's dependencies within the marketplace it was installed from — otherwise the bundle installs zero skills. The bundle's skill count is derived from its members (don't give it its own `skills`/`skill_count`). Members (typically `git-subdir` sub-plugins) **list their own skills** (name + description) so they show on the member page — no `contract` block is required because the canonical-contract requirement applies only to `github`/`git` (`GIT_CLONE_TYPES`) sources; `git-subdir`/`npm`/`local` are exempt from **contracts** (same boundary as `skill-linter`). Note the clone-based upstream sweeps are broader (`GIT_CLONEABLE_TYPES` adds `git-subdir`): skill-name drift, `--check-sources`, and the Codex-manifest check do cover `git-subdir`. A member may instead set `skill_count: N` for a count-only display. These fields are catalog-only (not in `marketplace.json`); `check_bundles` in `validate_registry.py` enforces the bundle rules. See @ARCHITECTURE.md and @CONTRIBUTING.md.
 
+### Deprecated entries
+
+`deprecated: true` marks a compatibility entry kept only so existing installs keep working — typically an umbrella re-exporting skills now registered under the plugins that superseded it. Catalog-only (not in either marketplace, so the plugin stays installable): the catalog and site label it **Deprecated**, and its skills are excluded from registry-wide totals so a re-exported skill is not counted twice. `total_skill_count()` in `generate_site.py` and `registry_skill_total()` in `validate_registry.py` both apply the rule. See @ARCHITECTURE.md and @CONTRIBUTING.md.
+
+### Declared skills must exist upstream
+
+`--check-skill-names` **fails** a plugin that declares skills (a `skills` list or non-zero `skill_count`) but has no `SKILL.md` under any searched path (`skills_dir`, then `.claude/skills`, then `skills`) — that entry installs zero skills. Bundles and plugins declaring no skills are exempt. This is the check that a repointed `skills_dir`/`git-subdir` `path` must satisfy.
+
 ## Adding a Plugin
 
 See @CONTRIBUTING.md for the full process. Quick checklist:

@@ -16,6 +16,7 @@ Design guide -- component selection, interaction patterns, AI experience pattern
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly/pf-design-guide](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-design-guide)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">design</span>
 
 ## Skills

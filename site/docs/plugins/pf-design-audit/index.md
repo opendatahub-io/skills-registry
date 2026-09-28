@@ -16,6 +16,7 @@ Design audit -- validate existing code and designs against PatternFly standards
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly/pf-design-audit](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-design-audit)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">design</span> <span class="tag-pill">audit</span>
 
 ## Skills

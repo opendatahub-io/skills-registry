@@ -170,6 +170,24 @@ one step. It lists its members with `includes`:
   a bundle neither lists itself nor forms a cycle, and a bundle carries no
   `skills`/`skill_count` of its own.
 
+### Deprecated entries
+
+A plugin marked `deprecated: true` is a compatibility entry kept only so
+existing installs keep working — typically an umbrella that re-exports skills
+now registered under the plugins that superseded it. It is catalog-only
+metadata: the entry stays fully installable and `deprecated` is not propagated
+to either marketplace. Its two effects mirror the bundle treatment above:
+
+- the catalog and site label it **Deprecated** (plugin page, landing card,
+  category entry, plugins index);
+- its skills are **excluded from registry-wide totals**, because the plugins
+  that now own them count them already. The entry still shows its own count on
+  its own page.
+
+`total_skill_count()` in `generate_site.py` and `registry_skill_total()` in
+`validate_registry.py` both apply the rule, so the published figure and the
+validator summary agree.
+
 ### Delegated sub-plugins and the contract exemption
 
 A sub-plugin that delegates skill discovery to its own `plugin.json` (e.g. a

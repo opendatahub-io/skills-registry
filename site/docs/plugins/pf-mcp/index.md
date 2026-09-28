@@ -16,6 +16,7 @@ PatternFly MCP server -- component documentation, design token lookup, and acces
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly/pf-mcp](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-mcp)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">mcp</span>
 
 ## MCP Servers

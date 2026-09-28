@@ -357,6 +357,10 @@
           "minimum": 0,
           "description": "Cached count of skills for a plugin that delegates discovery to its plugin.json and carries no 'skills' array (e.g. a git-subdir sub-plugin). Read by the catalog/site generators for display; not propagated to marketplace.json."
         },
+        "deprecated": {
+          "type": "boolean",
+          "description": "Marks a compatibility entry kept only so existing installs keep working, whose skills are re-exports of skills registered under other plugins. Catalog-only: the entry is labelled 'Deprecated' in the catalog and site and excluded from registry-wide skill totals so each skill is counted once. Not propagated to marketplace.json; the plugin stays fully installable."
+        },
         "includes": {
           "type": "array",
           "items": { "type": "string" },

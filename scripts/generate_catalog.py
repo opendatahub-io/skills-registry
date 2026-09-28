@@ -21,6 +21,7 @@ sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
 sys.path.insert(0, _REPO_ROOT_STR)
 
 from scripts.registry_contracts import (  # noqa: E402
+    BROWSABLE_SOURCE_TYPES,
     CANONICAL_FUNCTION_DOCS,
     CANONICAL_METRIC_DOCS,
     MEASURE_DOCS,
@@ -229,7 +230,7 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         meta_parts.append("Team-Specific")
     if license_str:
         meta_parts.append(license_str)
-    if source_type in ("github", "git"):
+    if source_type in BROWSABLE_SOURCE_TYPES:
         display = source_display_name(source)
         browse = source_browse_url(source)
         meta_parts.append(f"[{display}]({browse})")
@@ -262,6 +263,14 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
                 sname = skill["name"]
                 sdesc = " ".join(skill.get("description", "").split())
                 lines.append(f"| `/{sname}` | {sdesc} |")
+        lines.append("")
+    elif plugin.get("skill_count"):
+        # A plugin that delegates discovery to its source declares a count
+        # instead of a list. Without this the catalog renders no skills at all
+        # for it, contradicting the site, which does show the count.
+        count = plugin["skill_count"]
+        noun = "skill" if count == 1 else "skills"
+        lines.append(f"**{count} {noun}**, discovered from the source repository at install time.")
         lines.append("")
 
     # Agents table

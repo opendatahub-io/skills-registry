@@ -667,7 +667,7 @@ Everything you need for PatternFly development -- React components, design guida
 
 **Includes:** `pf-react`, `pf-design-guide`, `pf-design-audit`, `pf-a11y`, `pf-migration`, `pf-code-review`, `pf-mcp`
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly)
 
 Tags: patternfly, react, uxd, design, mcp, components, migration
 
@@ -679,7 +679,7 @@ Tags: patternfly, react, uxd, design, mcp, components, migration
 
 React component development -- coding standards, testing, and structure
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-react](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-react)
 
 Tags: patternfly, react
 
@@ -704,7 +704,7 @@ Tags: patternfly, react
 
 Design guide -- component selection, interaction patterns, AI experience patterns
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-design-guide](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-design-guide)
 
 Tags: patternfly, design
 
@@ -721,7 +721,7 @@ Tags: patternfly, design
 
 Design audit -- validate existing code and designs against PatternFly standards
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-design-audit](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-design-audit)
 
 Tags: patternfly, design, audit
 
@@ -742,7 +742,7 @@ Tags: patternfly, design, audit
 
 Accessibility auditing, reporting, and documentation
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-a11y](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-a11y)
 
 Tags: patternfly, accessibility, a11y
 
@@ -759,7 +759,7 @@ Tags: patternfly, accessibility, a11y
 
 PF version migration -- breaking change detection, class scanning, upgrade planning
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-migration](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-migration)
 
 Tags: patternfly, migration
 
@@ -777,7 +777,7 @@ Tags: patternfly, migration
 
 Code review and quality -- adversarial review, security patterns
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-code-review](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-code-review)
 
 Tags: patternfly, code-review
 
@@ -794,7 +794,7 @@ Tags: patternfly, code-review
 
 PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
 
-v0.1.0 | Generic | MIT
+v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-mcp](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-mcp)
 
 Tags: patternfly, mcp
 

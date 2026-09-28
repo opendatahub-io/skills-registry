@@ -16,6 +16,7 @@ Accessibility auditing, reporting, and documentation
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly/pf-a11y](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-a11y)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">accessibility</span> <span class="tag-pill">a11y</span>
 
 ## Skills

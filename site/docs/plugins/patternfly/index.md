@@ -16,6 +16,7 @@ Everything you need for PatternFly development -- React components, design guida
     - **License**: MIT
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [rh-uxd/ai-helpers/plugins/patternfly](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly)
     - **Tags**: <span class="tag-pill">patternfly</span> <span class="tag-pill">react</span> <span class="tag-pill">uxd</span> <span class="tag-pill">design</span> <span class="tag-pill">mcp</span> <span class="tag-pill">components</span> <span class="tag-pill">migration</span>
 
 ## Includes
