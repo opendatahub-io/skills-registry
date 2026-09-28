@@ -7,6 +7,12 @@ on:
 
 jobs:
   sync-drawio:
+    # This job commits back to the PR head branch, which only works for branches
+    # in this repository: `github.head_ref` is resolved against the base repo, and
+    # GITHUB_TOKEN is read-only for pull requests from forks. Fork PRs are skipped
+    # rather than failed -- a maintainer runs scripts/sync_drawio_from_svg.py after
+    # merge, or pushes the sync to the fork branch directly.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,16 +28,23 @@ jobs:
 
       - name: Find changed SVGs
         id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
+          # Diff against the branch point, not the base tip, so diagrams changed on
+          # main since the branch was cut are not mistaken for changes in this PR.
+          base=$(git merge-base "$BASE_SHA" HEAD)
+          echo "base=$base" >> $GITHUB_OUTPUT
+
           # If drawio files were also changed, this is a batch update — skip sync
-          changed_drawio=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.drawio')
+          changed_drawio=$(git diff --name-only "$base"..HEAD -- 'site/docs/plugins/**/*.drawio')
           if [ -n "$changed_drawio" ]; then
             echo "svgs=" >> $GITHUB_OUTPUT
             echo "Batch update detected (drawio files changed) — skipping sync"
             exit 0
           fi
 
-          changed_svgs=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD -- 'site/docs/plugins/**/*.svg')
+          changed_svgs=$(git diff --name-only "$base"..HEAD -- 'site/docs/plugins/**/*.svg')
           if [ -z "$changed_svgs" ]; then
             echo "svgs=" >> $GITHUB_OUTPUT
             echo "No SVG changes detected"
@@ -43,17 +56,22 @@ jobs:
 
       - name: Validate SVGs have embedded draw.io data
         if: steps.changed.outputs.svgs != ''
+        env:
+          SVGS: ${{ steps.changed.outputs.svgs }}
         run: |
           while IFS= read -r svg; do
             if [ -f "$svg" ] && ! grep -q "mxfile\|mxGraphModel" "$svg"; then
               echo "WARNING: $svg does not contain embedded draw.io data"
             fi
-          done <<< "${{ steps.changed.outputs.svgs }}"
+          done <<< "$SVGS"
 
       - name: Sync drawio files from SVGs
         if: steps.changed.outputs.svgs != ''
+        env:
+          SVGS: ${{ steps.changed.outputs.svgs }}
         run: |
-          python3 scripts/sync_drawio_from_svg.py ${{ steps.changed.outputs.svgs }}
+          # Unquoted on purpose: SVGS is a newline-separated list of paths
+          python3 scripts/sync_drawio_from_svg.py $SVGS
 
       - name: Commit updated drawio files
         if: steps.changed.outputs.svgs != ''
@@ -70,11 +88,13 @@ jobs:
 
       - name: Extract before/after pairs for eval dataset
         if: steps.changed.outputs.svgs != ''
+        env:
+          BASE: ${{ steps.changed.outputs.base }}
+          SVGS: ${{ steps.changed.outputs.svgs }}
         run: |
           pip install pyyaml
-          python3 scripts/extract_diagram_feedback.py \
-            --base-ref ${{ github.event.pull_request.base.sha }} \
-            --svgs ${{ steps.changed.outputs.svgs }}
+          # Unquoted on purpose: SVGS is a newline-separated list of paths
+          python3 scripts/extract_diagram_feedback.py --base-ref "$BASE" --svgs $SVGS
 
       - name: Upload feedback cases
         if: always()
