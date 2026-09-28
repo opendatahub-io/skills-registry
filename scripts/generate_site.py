@@ -474,6 +474,16 @@ def generate_plugin_page(plugin: dict, registry: dict, enrichment: dict | None,
             badge = ":material-check:" if invocable else ":material-close: internal"
             lines.append(f"| [`/{sname}`]({sname}.md) | {sdesc} | {badge} |")
         lines.append("")
+    elif plugin.get("skill_count"):
+        # A plugin that delegates discovery declares a count, not a list.
+        # Guarded on the raw field so a bundle, whose count is derived from its
+        # members, keeps showing its Includes section instead.
+        count = plugin["skill_count"]
+        lines.append("## Skills")
+        lines.append("")
+        lines.append(f"**{count} {'skill' if count == 1 else 'skills'}**, "
+                     "discovered from the source repository at install time.")
+        lines.append("")
 
     # Agents table
     if agents:
@@ -1158,7 +1168,12 @@ def generate_llms_full_txt(registry: dict, docs_dir: Path) -> str:
         lines.append("")
         lines.append(edesc)
         lines.append("")
-        if source_type in ("github", "git"):
+        # An enriched description can drop a "[DEPRECATED]" prefix the registry
+        # entry carries, so state the status rather than relying on the prose.
+        if p.get("deprecated"):
+            lines.append("**Status**: Deprecated")
+            lines.append("")
+        if source_type in BROWSABLE_SOURCE_TYPES:
             lines.append(f"**Repository**: {source_browse_url(source)}")
             lines.append("")
         if arch:

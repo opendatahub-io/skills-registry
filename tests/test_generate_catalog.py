@@ -144,3 +144,15 @@ class CatalogMalformedContractRenderingTests(unittest.TestCase):
         self.assertIn("| Skill | Description |", content)
         self.assertIn("| `/example-skill` | Example skill |", content)
         self.assertNotIn("| Skill | Description | Functions | Metrics |", content)
+
+
+class CatalogDeprecatedPluginTests(unittest.TestCase):
+    def test_marks_a_deprecated_entry(self):
+        registry = build_registry_with_contract()
+        registry["plugins"][0]["deprecated"] = True
+        content = generate_catalog.generate_catalog(registry)
+        self.assertRegex(content, r"v[\d.]+ \|.*\| Deprecated\n")
+
+    def test_live_entry_is_not_marked(self):
+        content = generate_catalog.generate_catalog(build_registry_with_contract())
+        self.assertNotIn("| Deprecated", content)

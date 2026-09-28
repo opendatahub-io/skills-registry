@@ -129,12 +129,22 @@ def source_subdir(source: dict) -> str:
     return path.lstrip("/")
 
 
+def _normalize_repo_url(url: str) -> str:
+    """Drop surrounding whitespace, a trailing slash and a `.git` suffix.
+
+    Idempotent, and ordered so `https://host/o/r.git/` normalizes the same as
+    `https://host/o/r`; without the leading rstrip the `.git` test misses and
+    the browse URL is built from a path segment that 404s.
+    """
+    url = (url or "").strip().rstrip("/")
+    if url.endswith(".git"):
+        url = url[:-4]
+    return url.rstrip("/")
+
+
 def _strip_scheme_and_suffix(url: str) -> str:
     """`https://github.com/o/r.git` -> `github.com/o/r`."""
-    name = _SCHEME_RE.sub("", url)
-    if name.endswith(".git"):
-        name = name[:-4]
-    return name
+    return _SCHEME_RE.sub("", _normalize_repo_url(url))
 
 
 def source_display_name(source: dict) -> str:
@@ -161,13 +171,9 @@ def source_browse_url(source: dict) -> str:
     if source_type == "github":
         return f"https://github.com/{source['repo']}"
     if source_type == "git":
-        url = source["url"]
-        if url.endswith(".git"):
-            return url[:-4]
-        return url
+        return _normalize_repo_url(source["url"])
     if source_type == "git-subdir":
-        url = source.get("url", "")
-        base = url[:-4] if url.endswith(".git") else url
+        base = _normalize_repo_url(source.get("url", ""))
         subdir = source_subdir(source)
         if not subdir:
             return base

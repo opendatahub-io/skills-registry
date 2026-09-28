@@ -246,7 +246,7 @@ python3 scripts/validate_registry.py --diff-base origin/main --check-skill-names
 It **fails** in two cases:
 
 - a registry skill has no upstream `SKILL.md` declaring that name;
-- a plugin that declares skills (a `skills` list, or a non-zero `skill_count`) has **no** `SKILL.md` at all under any path searched — its declared `skills_dir`, then `.claude/skills`, then `skills`. That means the entry installs zero skills, usually because `skills_dir` or a `git-subdir` `path` points at somewhere the source repo has since moved or deleted. Bundles and plugins that declare no skills (e.g. an MCP-only plugin) are exempt.
+- a plugin that declares skills (a `skills` list, or a non-zero `skill_count`) has **no** `SKILL.md` anywhere Claude Code would load one, or its `git-subdir` `path` is not in the clone at all. That means the entry installs zero skills, usually because `skills_dir` or `path` points at somewhere the source repo has since moved or deleted. Searched, in order: the declared `skills_dir`, any path the source `plugin.json` declares in its `skills` key, `.claude/skills`, `skills`, and finally a bare `SKILL.md` at the plugin root (which Claude Code loads as a single skill). Bundles and plugins that declare no skills (e.g. an MCP-only plugin) are exempt.
 
 It **warns**, without failing, when:
 

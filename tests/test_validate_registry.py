@@ -1264,10 +1264,94 @@ class UpstreamSkillsMissingTests(unittest.TestCase):
         self.assertIn("declares 69 skill(s)", errors[0])
 
     def test_silent_for_bundle_meta_plugin(self):
-        self.assertEqual(([], []), self._check({"name": "b", "includes": ["x"]}))
+        # skill_count is deliberately set: check_bundles rejects that pairing,
+        # so the fixture is only reachable in an already-invalid registry. The
+        # guard exists so such a registry gets one clear bundle error rather
+        # than also a bogus "installs zero skills". Without skill_count here
+        # the no-skills guard would short-circuit first and the bundle branch
+        # would never be exercised.
+        self.assertEqual(
+            ([], []), self._check({"name": "b", "includes": ["x"], "skill_count": 7}))
 
     def test_silent_when_plugin_declares_no_skills(self):
         self.assertEqual(([], []), self._check({"name": "mcp-only"}))
+
+    def test_finds_skills_via_plugin_json_skills_path(self):
+        """A strict: true plugin may point plugin.json at a non-default dir."""
+        import json as _json
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / ".claude-plugin").mkdir()
+            (root / ".claude-plugin" / "plugin.json").write_text(
+                _json.dumps({"name": "p", "skills": ["./agent-skills"]}))
+            skill_dir = root / "agent-skills" / "alpha"
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text("---\nname: alpha\n---\n")
+
+            errors, _ = self.vr.check_skill_names_against_source(
+                {"name": "p", "skills": [{"name": "alpha"}]}, root)
+
+        self.assertEqual([], errors)
+
+    def test_finds_single_skill_at_plugin_root(self):
+        """A bare SKILL.md at the plugin root loads as one skill."""
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "SKILL.md").write_text("---\nname: solo\n---\n")
+
+            errors, _ = self.vr.check_skill_names_against_source(
+                {"name": "p", "skills": [{"name": "solo"}]}, root)
+
+        self.assertEqual([], errors)
+
+    def test_root_is_not_scanned_as_a_parent_directory(self):
+        """A stray top-level <dir>/SKILL.md must not mask a dead skills_dir."""
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "docs").mkdir()
+            (root / "docs" / "SKILL.md").write_text("---\nname: stray\n---\n")
+
+            errors, _ = self.vr.check_skill_names_against_source(
+                {"name": "p", "skills_dir": "gone/skills", "skills": [{"name": "a"}]}, root)
+
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("installs zero skills", errors[0])
+
+    def test_remedy_text_matches_the_entry_kind(self):
+        strict_false, _ = self._check(
+            {"name": "p", "strict": False, "skills": [{"name": "a"}]})
+        strict_true, _ = self._check({"name": "p", "skills": [{"name": "a"}]})
+        self.assertIn("fix skills_dir / source.path", strict_false[0])
+        # skills_dir is not settable on a strict: true entry, so do not suggest it.
+        self.assertNotIn("skills_dir", strict_true[0])
+        self.assertIn("source plugin.json", strict_true[0])
+
+    def test_manifest_paths_appear_in_the_searched_list(self):
+        import json as _json
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / ".claude-plugin").mkdir()
+            (root / ".claude-plugin" / "plugin.json").write_text(
+                _json.dumps({"skills": "./agent-skills"}))
+            self.assertIn("agent-skills", self.vr._upstream_skill_locations({}, root))
+
+    def test_malformed_manifest_is_ignored(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / ".claude-plugin").mkdir()
+            (root / ".claude-plugin" / "plugin.json").write_text("{not json")
+            self.assertEqual([], self.vr._manifest_skill_paths(root))
+
 
     def test_silent_when_skill_count_is_zero(self):
         self.assertEqual(([], []), self._check({"name": "mcp-only", "skill_count": 0}))
@@ -1277,20 +1361,64 @@ class UpstreamSkillsMissingTests(unittest.TestCase):
         self.assertEqual([], errors)
 
     def test_searched_locations_are_deduped_and_ordered(self):
+        # "." comes last: the plugin root counts only for a bare SKILL.md.
         self.assertEqual(
-            ["skills", ".claude/skills"],
+            ["skills", ".claude/skills", "."],
             self.vr._upstream_skill_locations({"skills_dir": "skills"}),
         )
         # No skills_dir means the "skills" default, which stays first.
         self.assertEqual(
-            ["skills", ".claude/skills"],
+            ["skills", ".claude/skills", "."],
             self.vr._upstream_skill_locations({}),
         )
         self.assertEqual(
-            ["helpers/skills", ".claude/skills", "skills"],
+            ["helpers/skills", ".claude/skills", "skills", "."],
             self.vr._upstream_skill_locations({"skills_dir": "helpers/skills"}),
         )
 
+
+class MissingSubdirIsErrorTests(unittest.TestCase):
+    """A git-subdir path absent from the clone installs nothing, like a dead skills_dir."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    def _run(self, plugin, **kwargs):
+        with mock.patch.object(self.vr, "shallow_clone") as clone:
+            clone.return_value = subprocess.CompletedProcess(["git"], 0, "", "")
+            return self.vr.run_on_clones([plugin], lambda p, r: ([], []), **kwargs)
+
+    @staticmethod
+    def _plugin(**extra):
+        return {
+            "name": "p",
+            "source": {"type": "git-subdir", "url": "https://github.com/a/b.git",
+                       "path": "missing/dir"},
+            **extra,
+        }
+
+    def test_warns_by_default(self):
+        errors, warnings = self._run(self._plugin(skill_count=3))
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings))
+
+    def test_errors_when_promoted_and_plugin_declares_skills(self):
+        errors, warnings = self._run(self._plugin(skill_count=3), missing_root_is_error=True)
+        self.assertEqual([], warnings)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("installs zero skills", errors[0])
+
+    def test_stays_a_warning_for_a_bundle(self):
+        errors, warnings = self._run(self._plugin(includes=["m"], skill_count=3),
+                                     missing_root_is_error=True)
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings))
+
+    def test_stays_a_warning_when_no_skills_declared(self):
+        errors, warnings = self._run(self._plugin(), missing_root_is_error=True)
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings))
 
 class DeprecatedPluginTotalsTests(unittest.TestCase):
     """A deprecated re-export entry must not inflate the registry-wide total."""

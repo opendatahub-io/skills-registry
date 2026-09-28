@@ -513,15 +513,54 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
     return errors
 
 
-def _upstream_skill_locations(plugin: dict) -> list[str]:
+def _manifest_skill_paths(repo_path: Path) -> list[str]:
+    """Skills paths declared by the plugin's own .claude-plugin/plugin.json.
+
+    Claude Code treats the manifest's ``skills`` value -- a path or a list of
+    paths, conventionally ``./``-prefixed, with "." meaning the plugin root --
+    as an addition to the default ``skills/`` scan. Without reading it, a
+    plugin whose skills live somewhere non-conventional looks empty. An absent
+    or malformed manifest yields nothing; this is untrusted cloned content, so
+    callers still apply the containment guard.
+    """
+    try:
+        data = json.loads((repo_path / ".claude-plugin" / "plugin.json")
+                          .read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return []
+    if not isinstance(data, dict):
+        return []
+    raw = data.get("skills")
+    values = [raw] if isinstance(raw, str) else raw if isinstance(raw, list) else []
+    paths = []
+    for value in values:
+        if not isinstance(value, str):
+            continue
+        cleaned = value.strip().replace("\\", "/")
+        while cleaned.startswith("./"):
+            cleaned = cleaned[2:]
+        cleaned = cleaned.strip("/")
+        paths.append(cleaned or ".")
+    return paths
+
+
+def _upstream_skill_locations(plugin: dict, repo_path: Path | None = None) -> list[str]:
     """Repo-relative directories searched for a plugin's upstream SKILL.md files.
 
-    Order matters: the declared ``skills_dir`` first, then the two conventional
-    fallbacks. Duplicates are dropped so a plugin that declares one of the
-    fallbacks explicitly is not reported as having searched it twice.
+    Order matters: the declared ``skills_dir`` first, then any path the cloned
+    plugin's own ``plugin.json`` declares, then the two conventional fallbacks,
+    then the plugin root -- which Claude Code loads as a single skill when a
+    bare ``SKILL.md`` sits there. ``repo_path`` is optional so the ordering can
+    be inspected without a clone; the manifest paths are simply omitted.
+    Duplicates are dropped so a plugin that declares one of the fallbacks
+    explicitly is not reported as having searched it twice.
     """
+    candidates = [plugin.get("skills_dir", "skills")]
+    if repo_path is not None:
+        candidates.extend(_manifest_skill_paths(repo_path))
+    candidates.extend((".claude/skills", "skills", "."))
     ordered = []
-    for location in (plugin.get("skills_dir", "skills"), ".claude/skills", "skills"):
+    for location in candidates:
         if isinstance(location, str) and location not in ordered:
             ordered.append(location)
     return ordered
@@ -533,15 +572,26 @@ def _iter_upstream_skill_files(plugin: dict, repo_path: Path) -> list[Path]:
     Mirrors the first-match lookup in validate_remote_plugin() rather than taking the union.
     A repo can ship its published skills in skills/ while also keeping its own tooling in
     .claude/skills/; unioning the two would report that tooling as missing from the registry.
+
+    A location holding a bare ``SKILL.md`` is itself one skill; otherwise it is
+    a parent of ``<name>/SKILL.md`` directories. Both shapes load in Claude Code.
     """
     root = repo_path.resolve()
-    locations = [repo_path / loc for loc in _upstream_skill_locations(plugin)]
+    locations = [repo_path / loc for loc in _upstream_skill_locations(plugin, repo_path)]
     for location in locations:
         try:
             resolved = location.resolve()
         except OSError:
             continue
         if not resolved.is_relative_to(root) or not resolved.is_dir():
+            continue
+        if (resolved / "SKILL.md").is_file():
+            return [resolved / "SKILL.md"]
+        if resolved == root:
+            # The plugin root counts only for a bare SKILL.md sitting in it.
+            # Globbing `*/SKILL.md` from the root would scan every top-level
+            # directory, which Claude Code does not do and which would mask a
+            # skills_dir that points nowhere.
             continue
         found = sorted(resolved.glob("*/SKILL.md"))
         if found:
@@ -585,11 +635,18 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
         if plugin.get("includes") or not (plugin.get("skills") or plugin.get("skill_count")):
             return [], []
         declared = plugin.get("skill_count", len(plugin.get("skills", [])))
-        searched = ", ".join(f"'{loc}'" for loc in _upstream_skill_locations(plugin))
+        searched = ", ".join(f"'{loc}'" for loc in
+                             _upstream_skill_locations(plugin, repo_path))
+        # `skills_dir` only exists on strict: false entries; a strict: true
+        # plugin is fixed upstream, in its own plugin.json.
+        remedy = ("fix skills_dir / source.path, or remove the entry"
+                  if plugin.get("strict") is False
+                  else "fix source.path or the source plugin.json 'skills' path, "
+                       "or remove the entry")
         return [
             f"  Plugin '{name}': declares {declared} skill(s) but no SKILL.md was found "
             f"in the cloned source (looked in {searched}). The plugin installs zero "
-            "skills; fix skills_dir / source.path, or remove the entry."
+            f"skills; {remedy}."
         ], []
 
     errors = []
@@ -708,15 +765,22 @@ def _scope_plugins(registry: dict, diff_base: str | None) -> tuple[list[dict], s
     return [p for p in plugins if p.get("name") in names], f"touched since {diff_base}"
 
 
-def run_on_clones(plugins: list[dict], per_plugin) -> tuple[list[str], list[str]]:
+def run_on_clones(plugins: list[dict], per_plugin, *,
+                  missing_root_is_error: bool = False) -> tuple[list[str], list[str]]:
     """Clone each distinct (clone_url, ref) once and run per-plugin clone checks.
 
     ``per_plugin(plugin, plugin_root)`` returns (errors, warnings), aggregated across
     all plugins. Plugins that share a repo+ref (e.g. every git-subdir bundle member of
     one monorepo) are cloned a single time. A malformed source is skipped silently
-    (validate_remote_plugin reports those); a failed clone or a missing subdirectory
-    yields a warning for the affected plugin(s) — an upstream/transient condition, not
-    a registry error — mirroring the existing skill-name sweep.
+    (validate_remote_plugin reports those); a failed clone yields a warning for the
+    affected plugin(s) — an upstream/transient condition, not a registry error.
+
+    A ``git-subdir`` ``path`` that is not in the clone is a different matter: the
+    entry points at a directory the source repo does not have, so it installs
+    nothing. With ``missing_root_is_error`` the caller promotes that to an error,
+    using the same guards as the skill-name check — a bundle installs its members,
+    and a plugin declaring no skills has nothing to lose. It stays a warning by
+    default because ``check_codex_manifest`` is documented to never fail.
     """
     groups: dict[tuple[str, str], list[dict]] = {}
     errors: list[str] = []
@@ -755,10 +819,17 @@ def run_on_clones(plugins: list[dict], per_plugin) -> tuple[list[str], list[str]
             for plugin in members:
                 plugin_root = _plugin_root_in_clone(Path(tmpdir), plugin["source"])
                 if plugin_root is None or not plugin_root.is_dir():
-                    warnings.append(
+                    message = (
                         f"  Plugin '{get_plugin_label(plugin)}': subdirectory "
                         f"'{source_subdir(plugin['source'])}' not found in the cloned repo"
                     )
+                    declares_skills = bool(plugin.get("skills")) or bool(
+                        plugin.get("skill_count"))
+                    if (missing_root_is_error and declares_skills
+                            and not plugin.get("includes")):
+                        errors.append(message + "; the plugin installs zero skills")
+                    else:
+                        warnings.append(message)
                     continue
                 e, w = per_plugin(plugin, plugin_root)
                 errors.extend(e)
@@ -931,7 +1002,10 @@ def main() -> None:
                 warns.extend(w)
             return errs, warns
 
-        sweep_errors, sweep_warnings = run_on_clones(plugins_to_check, _combined)
+        # A missing git-subdir path is only an error for the skill-name sweep;
+        # --check-codex-manifests alone must never fail.
+        sweep_errors, sweep_warnings = run_on_clones(
+            plugins_to_check, _combined, missing_root_is_error=args.check_skill_names)
         for w in sweep_warnings:
             print(f"  WARNING:{w.lstrip(' ')}")
         all_errors.extend(sweep_errors)

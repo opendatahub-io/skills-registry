@@ -234,6 +234,9 @@ def render_plugin(plugin: dict, registry_name: str) -> list[str]:
         display = source_display_name(source)
         browse = source_browse_url(source)
         meta_parts.append(f"[{display}]({browse})")
+    # Trailing, matching generate_site.py's meta-line ordering.
+    if plugin.get("deprecated"):
+        meta_parts.append("Deprecated")
     if meta_parts:
         lines.append(" | ".join(meta_parts))
         lines.append("")

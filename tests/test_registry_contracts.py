@@ -326,3 +326,59 @@ class ShallowCloneIntegrationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GitSubdirUrlTests(unittest.TestCase):
+    @staticmethod
+    def _src(**kw):
+        base = {"type": "git-subdir", "url": "https://github.com/acme/mono.git",
+                "path": "plugins/thing"}
+        base.update(kw)
+        return base
+
+    def test_deep_links_github(self):
+        self.assertEqual(
+            "https://github.com/acme/mono/tree/main/plugins/thing",
+            source_browse_url(self._src()))
+
+    def test_trailing_slash_and_dot_git_normalize(self):
+        for url in ("https://github.com/acme/mono.git/",
+                    "https://github.com/acme/mono/",
+                    "https://github.com/acme/mono.git"):
+            with self.subTest(url=url):
+                self.assertEqual(
+                    "https://github.com/acme/mono/tree/main/plugins/thing",
+                    source_browse_url(self._src(url=url)))
+                self.assertEqual("acme/mono/plugins/thing",
+                                 source_display_name(self._src(url=url)))
+
+    def test_ref_is_honoured(self):
+        self.assertEqual(
+            "https://github.com/acme/mono/tree/release/1.2/plugins/thing",
+            source_browse_url(self._src(ref="release/1.2")))
+
+    def test_non_github_forge_links_repo_root(self):
+        self.assertEqual(
+            "https://gitlab.example.com/t/mono",
+            source_browse_url(self._src(url="https://gitlab.example.com/t/mono.git")))
+
+    def test_missing_url_does_not_crash(self):
+        src = {"type": "git-subdir", "path": "p"}
+        self.assertEqual("", source_browse_url(src))
+        self.assertEqual("/p", source_display_name(src))
+
+    def test_no_path_links_repo_root(self):
+        self.assertEqual("https://github.com/acme/mono",
+                         source_browse_url({"type": "git-subdir",
+                                            "url": "https://github.com/acme/mono.git"}))
+
+    def test_rejected_ref_falls_back_to_repo_root(self):
+        # normalize_git_ref rejects a leading "-"; a wrong deep link is worse
+        # than linking the repository root.
+        self.assertEqual("https://github.com/acme/mono",
+                         source_browse_url(self._src(ref="-oops")))
+
+    def test_git_type_trailing_slash_normalizes(self):
+        self.assertEqual(
+            "https://gitlab.example.com/t/r",
+            source_browse_url({"type": "git", "url": "https://gitlab.example.com/t/r.git/"}))

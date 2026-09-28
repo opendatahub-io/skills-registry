@@ -3430,6 +3430,8 @@ Examples:
 
 Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly
+
 ### Skills
 
 ---
@@ -3437,6 +3439,8 @@ Everything you need for PatternFly development -- React components, design guida
 ## pf-react
 
 React component development -- coding standards, testing, and structure
+
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-react
 
 ### Skills
 
@@ -3486,6 +3490,8 @@ Generate a unit test file for a React component using Testing Library. Use when 
 
 Design guide -- component selection, interaction patterns, AI experience patterns
 
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-design-guide
+
 ### Skills
 
 #### /pf-figma-design-mode
@@ -3501,6 +3507,8 @@ Maps screenshots and UI mockups (any fidelity) to PatternFly 6 layout and buildi
 ## pf-design-audit
 
 Design audit -- validate existing code and designs against PatternFly standards
+
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-design-audit
 
 ### Skills
 
@@ -3534,6 +3542,8 @@ Identify PatternFly icons in design mockups and provide the correct React import
 
 Accessibility auditing, reporting, and documentation
 
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-a11y
+
 ### Skills
 
 #### /pf-a11y-audit
@@ -3549,6 +3559,8 @@ Test keyboard accessibility of PatternFly UIs via live browser interaction. Use 
 ## pf-migration
 
 PF version migration -- breaking change detection, class scanning, upgrade planning
+
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-migration
 
 ### Skills
 
@@ -3570,6 +3582,8 @@ Update @patternfly/* npm dependencies to the latest release candidate versions. 
 
 Code review and quality -- adversarial review, security patterns
 
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-code-review
+
 ### Skills
 
 #### /pf-review
@@ -3585,6 +3599,8 @@ Scan PatternFly React code for security anti-patterns — XSS via dangerouslySet
 ## pf-mcp
 
 PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
+
+**Repository**: https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-mcp
 
 ### Skills
 

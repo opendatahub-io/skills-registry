@@ -83,7 +83,7 @@ A plugin with a non-empty `includes: [names...]` is a **meta-plugin** (bundle) t
 
 ### Declared skills must exist upstream
 
-`--check-skill-names` **fails** a plugin that declares skills (a `skills` list or non-zero `skill_count`) but has no `SKILL.md` under any searched path (`skills_dir`, then `.claude/skills`, then `skills`) — that entry installs zero skills. Bundles and plugins declaring no skills are exempt. This is the check that a repointed `skills_dir`/`git-subdir` `path` must satisfy.
+`--check-skill-names` **fails** a plugin that declares skills (a `skills` list or non-zero `skill_count`) but has no `SKILL.md` anywhere Claude Code would load one — that entry installs zero skills. The same run also fails when a `git-subdir` `path` is missing from the clone. Searched, in order: `skills_dir`, any path the source `plugin.json` declares in its `skills` key, `.claude/skills`, `skills`, and finally a bare `SKILL.md` at the plugin root. Bundles and plugins declaring no skills are exempt. This is the check a repointed `skills_dir` / `git-subdir` `path` must satisfy.
 
 ## Adding a Plugin
 
