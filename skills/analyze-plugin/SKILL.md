@@ -293,11 +293,11 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
    expensive batch.
 
    **Sanitize the target clone before spawning agents** (it came from an arbitrary
-   `registry.yaml` URL): (a) reject **escaping** symlinks — any symlink under the clone
+   `registry.yaml` URL): (a) reject **escaping** symlinks -- any symlink under the clone
    dir from Step 2 (`.tmp/skill-repos/<plugin-name>`) whose target resolves OUTSIDE that
    dir. Abort the run if one exists: a symlink like `SKILL.md -> ~/.ssh/id_rsa` would let
    an agent read host files through the allowed read scope. A symlink resolving back
-   inside the clone is fine and must NOT abort — in-repo symlinks are a legitimate and
+   inside the clone is fine and must NOT abort -- in-repo symlinks are a legitimate and
    common layout (e.g. a compatibility plugin that re-exports its siblings' skills), and
    rejecting them outright blocks whole monorepos while giving no extra protection,
    since the threat is escaping the read scope, not indirection as such:
@@ -326,7 +326,7 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
    ```
 
    A dangling link whose target path is *inside* the clone is not escaping and does not
-   abort — it resolves nowhere, so there is nothing to read.
+   abort -- it resolves nowhere, so there is nothing to read.
 
    And (b) confirm `<plugin-name>` / `<skill-name>` / `<dir-name>` / `<source.path>` are
    plain slugs (no `..`) before building any path, so a crafted name cannot escape
@@ -334,19 +334,19 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
 3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
    `site/docs/plugins/<plugin-name>/` to `.tmp/diagram-backup/<plugin-name>/`, then
    delete them from the output dir (so no agent mistakes stale output for "done").
-   Clear this run's scratch — the single dir `.tmp/diagram-work/plugins/<plugin-name>/`
+   Clear this run's scratch -- the single dir `.tmp/diagram-work/plugins/<plugin-name>/`
    (see the SCRATCH naming rule in Step 6; everything for this plugin lives under it).
    A stale `layout-plan.json` in a shared dir renders the WRONG plugin's pipeline, and
    because `generate-site` runs 6-8 `analyze-plugin` agents CONCURRENTLY, a shared dir
    is a live write race between plugins, not just staleness between runs. Clear only
-   your own plugin's dir — never all of `.tmp/diagram-work/`, which would delete a
+   your own plugin's dir -- never all of `.tmp/diagram-work/`, which would delete a
    concurrently-running sibling's intermediates.
 
    **One run per plugin at a time.** Two concurrent `/analyze-plugin <same-plugin>`
    invocations are not supported and scratch isolation cannot make them safe: they also
    share `site/docs/plugins/<plugin-name>/`, so this very step would delete the other
    run's outputs and both would write the same `.d2`/`.drawio`. `generate-site`
-   dispatches one agent per plugin, so its fan-out never does this — just don't start a
+   dispatches one agent per plugin, so its fan-out never does this -- just don't start a
    second run for a plugin already being analyzed.
 4. **Derive per-skill flows.** From the SKILL.md files read in Step 3 (and a skim of
    each skill's `scripts/`), write a brief node/edge **suggested flow** per skill and
@@ -405,7 +405,7 @@ Agent({
   prompt: `Read <abs>/.claude/skills/analyze-plugin/references/diagram-agent-instructions.md and follow it EXACTLY.
     name: <skill-name>
     OUT_DIR: <abs>/site/docs/plugins/<plugin-name>
-    SCRATCH: <abs>/<scratch-path>   # see the SCRATCH naming rule below — two disjoint namespaces
+    SCRATCH: <abs>/<scratch-path>   # see the SCRATCH naming rule below -- two disjoint namespaces
     SKILL_MD: <abs>/<WORKDIR>/<SKILLS_DIR>/<dir-name>/SKILL.md   # WORKDIR + SKILLS_DIR from Step 2; git-subdir member -> <abs>/.tmp/skill-repos/<plugin-name>/<source.path>/skills/<dir-name>/SKILL.md
     DIAGRAM_SKILLS: <DIAGRAM_SKILLS>
     Suggested flow: <the per-skill outline from Step 5.4 — roles + llm count>
@@ -438,7 +438,7 @@ name:
 
 - **Pipeline.** A bare `.tmp/diagram-work/pipeline/` is the same string for every plugin.
   Qualifying it as `<plugin-name>-pipeline` in a flat namespace still collides with a
-  skill literally *named* `<plugin-name>-pipeline` — `odh-documentation` ships
+  skill literally *named* `<plugin-name>-pipeline` -- `odh-documentation` ships
   `doc-pipeline`, so a plugin named `doc` would land on it.
 - **Per-skill.** Skill names are **not** unique across plugins. `check_duplicates()` in
   `validate_registry.py` only rejects duplicate *plugin* names, and the registry today
@@ -449,7 +449,7 @@ name:
   race: `assess-rfe` and `assess-strat` both generate `export-rubric` in the same
   `generate-site` fan-out.
 
-`OUT_DIR` is already per-plugin, so output filenames are unaffected — only scratch paths
+`OUT_DIR` is already per-plugin, so output filenames are unaffected -- only scratch paths
 change. Rooting everything at `plugins/<plugin-name>/` also makes the Step 3 clean-slate
 a single directory to clear, with no way to touch a sibling's.
 

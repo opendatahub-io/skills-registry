@@ -51,7 +51,7 @@ report — do not widen your own scope.
 
 - `<name>` — diagram base name (usually the skill name; `pipeline` for the overview)
 - `<OUT_DIR>` — where to write `<name>.d2` and `<name>.drawio`
-- `<SCRATCH>` — a writable scratch dir for intermediates (`graph-spec.json`, `layout-plan.json`).
+- `<SCRATCH>` -- a writable scratch dir for intermediates (`graph-spec.json`, `layout-plan.json`).
   Write intermediates ONLY here. Sibling `analyze-plugin` runs may be executing
   concurrently against their own scratch dirs, so never write to, or clear, anything
   else under `.tmp/diagram-work/`.
@@ -66,7 +66,7 @@ report — do not widen your own scope.
 Use absolute paths everywhere. `cd` is allowed but not required.
 
 **The suggested flow is a hypothesis, the source is the truth.** The orchestrator derives
-the outline from a skim, so it can be wrong — it may assert a stage, a shared pattern or an
+the outline from a skim, so it can be wrong -- it may assert a stage, a shared pattern or an
 llm-node count the SKILL.md contradicts. Where they disagree, follow the source, and
 **say so in your final report** with the file and the quoted line. Those corrections are
 the orchestrator's only signal that its own prose about the plugin is wrong; silently
@@ -164,8 +164,8 @@ diagramming the right thing fixes the diagram and leaves the description wrong.
    If a callout is missing, add it (from the real script structure) and re-render.
    Then report a ONE-LINE status:
    `<name>: OK — N mxCells, M callouts, double1=K, topology=<t>` (or the error).
-   Follow it with a **Source corrections** list — every point where the suggested flow
-   disagreed with the SKILL.md, quoting the line you relied on — or `none`. Do not omit
+   Follow it with a **Source corrections** list -- every point where the suggested flow
+   disagreed with the SKILL.md, quoting the line you relied on -- or `none`. Do not omit
    this: the orchestrator uses it to correct the plugin's written description, which it
    drafted from the same mistaken reading.
 
