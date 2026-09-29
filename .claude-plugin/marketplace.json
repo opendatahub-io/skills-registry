@@ -884,7 +884,6 @@
         "repo": "IKRedHat/SPIKE-executor",
         "source": "github"
       },
-      "strict": false,
       "version": "0.2.0"
     },
     {

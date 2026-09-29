@@ -3144,7 +3144,7 @@ plugins:
       type: github
       repo: IKRedHat/SPIKE-executor
       ref: master
-    strict: false
+    strict: true
     skills_dir: .claude/skills
     homepage: https://github.com/IKRedHat/SPIKE-executor
     repository: https://github.com/IKRedHat/SPIKE-executor
