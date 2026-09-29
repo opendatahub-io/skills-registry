@@ -25,7 +25,7 @@ scoring, (8) RFE generation + approval, (9) completion summary. Supports
     <span class="skill-contract__eyebrow">Skill Contract</span>
     <span class="skill-contract__version">canonical-skill-v1</span>
   </header>
-  <p class="skill-contract__lede">Guide an engineer through the nine-step RHOAI SPIKE lifecycle for a named project — plan, Jira structure and sync, AI research enrichment and validation, test plan and pytest suite, cluster test run and feasibility scoring, RFE generation — by running the spike-executor CLI at each step and stopping at every approval gate for human review.</p>
+  <p class="skill-contract__lede">Guide an engineer through the nine-step RHOAI SPIKE lifecycle for a named project (plan, Jira structure and sync, AI research enrichment and validation, test plan and pytest suite, cluster test run and feasibility scoring, RFE generation, final summary) by running the spike-executor CLI at each step and stopping at each of the skill&#x27;s six breakpoints for human review.</p>
   <section class="skill-contract__section" data-section="01">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
     <div class="skill-contract__row">
@@ -38,9 +38,9 @@ scoring, (8) RFE generation + approval, (9) completion summary. Supports
     <div class="skill-contract__row">
       <span class="skill-contract__field">Success</span>
       <ul class="skill-contract__list">
-        <li>Every step&#x27;s artifact is written under artifacts/ with the &lt;Type&gt;-&lt;project&gt; naming and shown to the engineer in full before the matching approval gate.</li>
-        <li>The workflow advances only on the engineer&#x27;s explicit approval phrase at each breakpoint, and stages skipped with --skip-jira or --skip-tests are reported upfront rather than silently omitted.</li>
-        <li>The feasibility decision (GO / PIVOT / NO-GO) follows the computed score and the security gate, and an RFE is offered only for GO or PIVOT.</li>
+        <li>Each step writes the artifact the skill names for it under artifacts/ (SPIKE-Plan-&lt;project&gt;.md, SPIKE-Jira-Preview-&lt;project&gt;.md, SPIKE-Jira-Tickets-&lt;project&gt;.md and Jira-Links-&lt;project&gt;-spike.md, Research-Findings-&lt;project&gt;.yaml and .md, Research-Prompt-&lt;project&gt;.md, Research-Validation-&lt;project&gt;.md, Dockerfile.ubi-&lt;project&gt;, Test-Plan-&lt;project&gt;.md, test_suite_&lt;project&gt;.py, Test-Results-&lt;project&gt;.yaml, Feasibility-Report-&lt;project&gt;.yaml and .md, RFE-Input-&lt;project&gt;.md, SPIKE-Summary-&lt;project&gt;.md).</li>
+        <li>At each of the six breakpoints (plan, Jira structure, research, test plan, test execution, RFE) the artifacts generated for that gate are shown in full and the workflow advances only on the engineer&#x27;s approval phrase; Step 4 (ticket creation) displays the created-tickets table and continues without a gate.</li>
+        <li>With cluster tests run, the feasibility decision (GO, PIVOT or NO-GO) follows the computed score and the security gate, and RFE generation is offered only for GO or PIVOT; with --skip-tests, Steps 6 and 7 are skipped, the RFE step runs without a score, and the skipped stages are reported upfront rather than silently omitted.</li>
       </ul>
     </div>
   </section>
@@ -59,10 +59,10 @@ scoring, (8) RFE generation + approval, (9) completion summary. Supports
     <div class="skill-contract__row">
       <span class="skill-contract__field">Must Preserve</span>
       <ul class="skill-contract__list">
-        <li>Display each generated artifact&#x27;s complete content with the Read tool at every breakpoint — never a summary, an excerpt or a path alone.</li>
-        <li>Never proceed past an approval gate without the engineer&#x27;s explicit approval phrase.</li>
+        <li>At every breakpoint, display each generated .md artifact&#x27;s complete content with the Read tool, never a summary, an excerpt or a path alone.</li>
+        <li>Never proceed past a breakpoint without the engineer&#x27;s explicit approval phrase.</li>
         <li>Report missing Jira credentials or OpenShift access before starting and continue with the steps that remain possible instead of blocking.</li>
-        <li>Any security check scoring 0 blocks GO; a NO-GO result never offers RFE generation.</li>
+        <li>When tests run, any security check scoring 0 blocks GO, and a NO-GO result never offers RFE generation.</li>
       </ul>
     </div>
     <div class="skill-contract__row">

@@ -3159,17 +3159,17 @@ plugins:
             - id: task_success
               measure: judge
               rubric_ref: IKRedHat/SPIKE-executor@924ec480198b89d42ceb82275938a7859dbf92ff:.claude/skills/SPIKE-executor/SKILL.md
-          problem_statement: Guide an engineer through the nine-step RHOAI SPIKE lifecycle for a named project — plan, Jira structure and sync, AI research enrichment and validation, test plan and pytest suite, cluster test run and feasibility scoring, RFE generation — by running the spike-executor CLI at each step and stopping at every approval gate for human review.
+          problem_statement: Guide an engineer through the nine-step RHOAI SPIKE lifecycle for a named project (plan, Jira structure and sync, AI research enrichment and validation, test plan and pytest suite, cluster test run and feasibility scoring, RFE generation, final summary) by running the spike-executor CLI at each step and stopping at each of the skill's six breakpoints for human review.
           success_conditions:
-            - Every step's artifact is written under artifacts/ with the <Type>-<project> naming and shown to the engineer in full before the matching approval gate.
-            - The workflow advances only on the engineer's explicit approval phrase at each breakpoint, and stages skipped with --skip-jira or --skip-tests are reported upfront rather than silently omitted.
-            - The feasibility decision (GO / PIVOT / NO-GO) follows the computed score and the security gate, and an RFE is offered only for GO or PIVOT.
+            - Each step writes the artifact the skill names for it under artifacts/ (SPIKE-Plan-<project>.md, SPIKE-Jira-Preview-<project>.md, SPIKE-Jira-Tickets-<project>.md and Jira-Links-<project>-spike.md, Research-Findings-<project>.yaml and .md, Research-Prompt-<project>.md, Research-Validation-<project>.md, Dockerfile.ubi-<project>, Test-Plan-<project>.md, test_suite_<project>.py, Test-Results-<project>.yaml, Feasibility-Report-<project>.yaml and .md, RFE-Input-<project>.md, SPIKE-Summary-<project>.md).
+            - At each of the six breakpoints (plan, Jira structure, research, test plan, test execution, RFE) the artifacts generated for that gate are shown in full and the workflow advances only on the engineer's approval phrase; Step 4 (ticket creation) displays the created-tickets table and continues without a gate.
+            - With cluster tests run, the feasibility decision (GO, PIVOT or NO-GO) follows the computed score and the security gate, and RFE generation is offered only for GO or PIVOT; with --skip-tests, Steps 6 and 7 are skipped, the RFE step runs without a score, and the skipped stages are reported upfront rather than silently omitted.
           invariants:
             must_preserve:
-              - Display each generated artifact's complete content with the Read tool at every breakpoint — never a summary, an excerpt or a path alone.
-              - Never proceed past an approval gate without the engineer's explicit approval phrase.
+              - At every breakpoint, display each generated .md artifact's complete content with the Read tool, never a summary, an excerpt or a path alone.
+              - Never proceed past a breakpoint without the engineer's explicit approval phrase.
               - Report missing Jira credentials or OpenShift access before starting and continue with the steps that remain possible instead of blocking.
-              - Any security check scoring 0 blocks GO; a NO-GO result never offers RFE generation.
+              - When tests run, any security check scoring 0 blocks GO, and a NO-GO result never offers RFE generation.
             fixed_context:
               tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, WebSearch, WebFetch]
               cli: [spike-executor, oc]
