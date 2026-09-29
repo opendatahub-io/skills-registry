@@ -334,14 +334,13 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
 3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
    `site/docs/plugins/<plugin-name>/` to `.tmp/diagram-backup/<plugin-name>/`, then
    delete them from the output dir (so no agent mistakes stale output for "done").
-   Clear this run's scratch — `.tmp/diagram-work/plugins/<plugin-name>/` and the
-   `.tmp/diagram-work/skills/<skill-name>/` dir of each skill you are about to
-   regenerate (see the SCRATCH naming rule in Step 6). A stale `layout-plan.json` in a
-   shared dir renders the WRONG plugin's pipeline, and because `generate-site` runs 6-8
-   `analyze-plugin` agents CONCURRENTLY, a shared dir is a live write race between
-   plugins, not just staleness between runs. Clear only your own dirs — never all of
-   `.tmp/diagram-work/`, which would delete a concurrently-running sibling's
-   intermediates.
+   Clear this run's scratch — the single dir `.tmp/diagram-work/plugins/<plugin-name>/`
+   (see the SCRATCH naming rule in Step 6; everything for this plugin lives under it).
+   A stale `layout-plan.json` in a shared dir renders the WRONG plugin's pipeline, and
+   because `generate-site` runs 6-8 `analyze-plugin` agents CONCURRENTLY, a shared dir
+   is a live write race between plugins, not just staleness between runs. Clear only
+   your own plugin's dir — never all of `.tmp/diagram-work/`, which would delete a
+   concurrently-running sibling's intermediates.
 
    **One run per plugin at a time.** Two concurrent `/analyze-plugin <same-plugin>`
    invocations are not supported and scratch isolation cannot make them safe: they also
@@ -421,29 +420,38 @@ output paths (so site files match registry names). Launch in **barrier batches o
 `name: pipeline` and a whole-plugin flow (one node per skill, fan-out + feedback
 edges); the per-skill callout floor is relaxed for that overview.
 
-**SCRATCH naming rule (prevents cross-plugin corruption).** Scratch lives in two
-disjoint namespaces, so no plugin's pipeline dir can ever be a skill's dir:
+**SCRATCH naming rule (prevents cross-plugin corruption).** Every scratch path is rooted
+at the plugin, so nothing is shared between two concurrently-running plugins:
 
 | diagram | `<scratch-path>` |
 |---|---|
 | pipeline overview | `.tmp/diagram-work/plugins/<plugin-name>/pipeline/artifacts` |
-| per-skill | `.tmp/diagram-work/skills/<skill-name>/artifacts` |
+| per-skill | `.tmp/diagram-work/plugins/<plugin-name>/skills/<skill-name>/artifacts` |
 
-A bare `.tmp/diagram-work/pipeline/artifacts` is the same string for every plugin, so
-all of them share it. That matters because `generate-site` launches 6-8
-`analyze-plugin` agents **in parallel**, each generating its own pipeline: they would
-concurrently write the same `graph-spec.json` and `layout-plan.json`, and the damage is
-silent — a plugin's page gets a pipeline rendered from another plugin's layout plan,
-with no error anywhere.
+This matters because `generate-site` launches 6-8 `analyze-plugin` agents **in
+parallel**, and any shared dir means they concurrently write the same `graph-spec.json`
+and `layout-plan.json`. The damage is silent: a page gets a diagram rendered from
+another plugin's layout plan, with no error anywhere.
 
-Qualifying the pipeline as `<plugin-name>-pipeline` in one flat namespace is NOT enough:
-it collides with a skill literally named `<plugin-name>-pipeline`. That is not
-hypothetical — `odh-documentation` ships a skill called `doc-pipeline`, so a plugin
-named `doc` would land on the same dir. Registry-wide uniqueness of skill names does not
-prevent a skill/plugin cross-type collision; separate parent dirs do.
+Two collisions make the plugin root necessary, and neither is avoided by a cleverer flat
+name:
 
-`OUT_DIR` is already per-plugin, so output filenames stay `pipeline.d2` /
-`pipeline.drawio` — only the scratch path changes.
+- **Pipeline.** A bare `.tmp/diagram-work/pipeline/` is the same string for every plugin.
+  Qualifying it as `<plugin-name>-pipeline` in a flat namespace still collides with a
+  skill literally *named* `<plugin-name>-pipeline` — `odh-documentation` ships
+  `doc-pipeline`, so a plugin named `doc` would land on it.
+- **Per-skill.** Skill names are **not** unique across plugins. `check_duplicates()` in
+  `validate_registry.py` only rejects duplicate *plugin* names, and the registry today
+  has three skill names in more than one plugin: `export-rubric` (`strat-creator`,
+  `assess-rfe`, `assess-strat`), `failure-analysis` (`autoqa-skills`,
+  `python-package-skills`) and `gitlab-code-review` (`code-review-skills`,
+  `productization-skills`). A bare `skills/<skill-name>/` dir is therefore a **live**
+  race: `assess-rfe` and `assess-strat` both generate `export-rubric` in the same
+  `generate-site` fan-out.
+
+`OUT_DIR` is already per-plugin, so output filenames are unaffected — only scratch paths
+change. Rooting everything at `plugins/<plugin-name>/` also makes the Step 3 clean-slate
+a single directory to clear, with no way to touch a sibling's.
 
 Agents produce only `<name>.d2` + `<name>.drawio` (no SVG). **You (main thread) then
 export SVGs sequentially** — do NOT let agents export (draw.io desktop contention):
