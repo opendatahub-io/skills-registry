@@ -617,39 +617,54 @@ def _upstream_skill_locations(plugin: dict, repo_path: Path | None = None) -> li
     Duplicates are dropped so a plugin that declares one of the fallbacks
     explicitly is not reported as having searched it twice.
     """
+    return [location for location, _ in _upstream_skill_locations_with_origin(plugin, repo_path)]
+
+
+def _upstream_skill_locations_with_origin(
+    plugin: dict, repo_path: Path | None = None
+) -> list[tuple[str, bool]]:
+    """``(location, explicit)`` pairs behind _upstream_skill_locations().
+
+    ``explicit`` marks a directory the registry entry (``skills_dir``) or the
+    plugin's manifest names outright, as opposed to a conventional fallback.
+    The distinction matters at the plugin root: a manifest ``skills`` entry of
+    ``"."`` makes the root a directory of ``<name>/SKILL.md`` folders, whereas
+    the fallback root only ever counts for a bare ``SKILL.md``.
+    """
     if "skills_dir" in plugin:
         # Declared: authoritative -- a fallback that finds skills elsewhere would
         # pass a plugin that installs with none (CodeRabbit on #123, first
         # round); validate_remote_plugin applies the same rule. Under strict:
         # true the manifest's skills load alongside it (second round).
-        candidates = [plugin["skills_dir"]]
+        candidates = [(plugin["skills_dir"], True)]
         if (plugin.get("strict", True) is not False and repo_path is not None
                 and _has_manifest(repo_path)):
             # The manifest's `skills` value ADDS to the default skills/ scan, so
             # both load; a manifest that names none still scans skills/.
-            candidates.append("skills")
-            candidates.extend(_manifest_skill_paths(repo_path))
-        ordered = []
-        for location in candidates:
-            if isinstance(location, str) and location not in ordered:
-                ordered.append(location)
-        return ordered
-    candidates = ["skills"]
-    if repo_path is not None:
-        candidates.extend(_manifest_skill_paths(repo_path))
-    candidates.extend((".claude/skills", "skills", "."))
-    ordered = []
-    for location in candidates:
-        if isinstance(location, str) and location not in ordered:
-            ordered.append(location)
+            candidates.append(("skills", False))
+            candidates.extend((path, True) for path in _manifest_skill_paths(repo_path))
+    else:
+        candidates = [("skills", False)]
+        if repo_path is not None:
+            candidates.extend((path, True) for path in _manifest_skill_paths(repo_path))
+        candidates.extend(((".claude/skills", False), ("skills", False), (".", False)))
+    ordered: list[tuple[str, bool]] = []
+    seen: set[str] = set()
+    for location, explicit in candidates:
+        if isinstance(location, str) and location not in seen:
+            seen.add(location)
+            ordered.append((location, explicit))
     return ordered
 
 
-def _skill_files_at(location: Path, root: Path) -> list[Path]:
+def _skill_files_at(location: Path, root: Path, explicit: bool = False) -> list[Path]:
     """SKILL.md files one skills location holds, or [] when it holds none.
 
     A location holding a bare ``SKILL.md`` is itself one skill; otherwise it is
     a parent of ``<name>/SKILL.md`` directories. Both shapes load in Claude Code.
+    ``explicit`` says the registry or the manifest named this directory: only
+    then is the plugin root scanned for child skills (a manifest ``skills`` of
+    ``"."``); the fallback root counts for a bare ``SKILL.md`` alone.
     """
     try:
         resolved = location.resolve()
@@ -666,11 +681,11 @@ def _skill_files_at(location: Path, root: Path) -> list[Path]:
 
     if contained(resolved / "SKILL.md"):
         return [resolved / "SKILL.md"]
-    if resolved == root:
-        # The plugin root counts only for a bare SKILL.md sitting in it.
-        # Globbing `*/SKILL.md` from the root would scan every top-level
-        # directory, which Claude Code does not do and which would mask a
-        # skills_dir that points nowhere.
+    if resolved == root and not explicit:
+        # The fallback plugin root counts only for a bare SKILL.md sitting in
+        # it. Globbing `*/SKILL.md` from the root would scan every top-level
+        # directory, which Claude Code does not do unless the manifest names
+        # "." -- and which would mask a skills_dir that points nowhere.
         return []
     return sorted(path for path in resolved.glob("*/SKILL.md") if contained(path))
 
@@ -689,16 +704,17 @@ def _iter_upstream_skill_files(plugin: dict, repo_path: Path) -> list[Path]:
     from the registry.
     """
     root = repo_path.resolve()
-    locations = [repo_path / loc for loc in _upstream_skill_locations(plugin, repo_path)]
+    locations = [(repo_path / loc, explicit)
+                 for loc, explicit in _upstream_skill_locations_with_origin(plugin, repo_path)]
     if "skills_dir" in plugin:
         found: list[Path] = []
-        for location in locations:
-            for skill_md in _skill_files_at(location, root):
+        for location, explicit in locations:
+            for skill_md in _skill_files_at(location, root, explicit):
                 if skill_md not in found:
                     found.append(skill_md)
         return found
-    for location in locations:
-        found = _skill_files_at(location, root)
+    for location, explicit in locations:
+        found = _skill_files_at(location, root, explicit)
         if found:
             return found
     return []
@@ -736,7 +752,7 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
         # The declared directory is what the marketplace entry publishes: skills
         # found only through the manifest must not stand in for an empty one.
         # (An entirely empty upstream falls through to the zero-skills error.)
-        if not _skill_files_at(repo_path / plugin["skills_dir"], repo_path.resolve()):
+        if not _skill_files_at(repo_path / plugin["skills_dir"], repo_path.resolve(), explicit=True):
             return [
                 f"  Plugin '{name}': declared skills_dir '{plugin['skills_dir']}' has no "
                 "<name>/SKILL.md -- the marketplace entry points there; fix skills_dir / "

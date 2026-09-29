@@ -908,6 +908,29 @@ class SkillNameDriftTests(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertEqual([], warnings)
 
+    def test_manifest_naming_the_root_scans_child_skills(self):
+        """CodeRabbit on #123: a manifest `skills` of "./" makes the plugin root a
+        directory of <name>/SKILL.md folders, so a root child skill loads."""
+        def build(root):
+            self.write_skill(root, ".", "alpha")
+            self._manifest(root, ["./"])
+
+        plugin = {"name": "p", "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_fallback_root_does_not_scan_child_directories(self):
+        """Without the manifest naming ".", a child directory at the root is not a
+        skill Claude Code loads, and a skills_dir that points nowhere stays visible."""
+        def build(root):
+            self.write_skill(root, ".", "alpha")   # <root>/alpha/SKILL.md, nothing names the root
+
+        plugin = {"name": "p", "skills": [{"name": "alpha"}]}
+        errors, _ = self.check(plugin, build)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("installs zero skills", errors[0])
+
     def test_skill_md_symlinked_out_of_the_clone_is_ignored(self):
         """A SKILL.md that is a symlink to a file outside the clone is untrusted
         content and must not be read (CodeRabbit on #123)."""
