@@ -834,6 +834,61 @@ class SkillNameDriftTests(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertEqual([], warnings, "tooling in .claude/skills must not be reported")
 
+    def _manifest(self, root, skills=None):
+        import json as _json
+
+        (root / ".claude-plugin").mkdir(exist_ok=True)
+        data = {"name": "p"} if skills is None else {"name": "p", "skills": skills}
+        (root / ".claude-plugin" / "plugin.json").write_text(_json.dumps(data), encoding="utf-8")
+
+    def test_strict_true_loads_the_manifest_skills_alongside_skills_dir(self):
+        """CodeRabbit on #123: strict: true appends the entry's skills_dir to the manifest's
+        own skills, so a manifest skill the registry lists is not reported missing."""
+        def build(root):
+            self.write_skill(root, ".claude/skills", "alpha")
+            self.write_skill(root, "extra", "beta")
+            self._manifest(root, ["./extra"])
+
+        plugin = {"name": "p", "strict": True, "skills_dir": ".claude/skills",
+                  "skills": [{"name": "alpha"}, {"name": "beta"}]}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_strict_false_loads_the_entry_alone(self):
+        def build(root):
+            self.write_skill(root, ".claude/skills", "alpha")
+            self.write_skill(root, "extra", "beta")
+            self._manifest(root, ["./extra"])
+
+        plugin = {"name": "p", "strict": False, "skills_dir": ".claude/skills",
+                  "skills": [{"name": "alpha"}, {"name": "beta"}]}
+        errors, _ = self.check(plugin, build)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("beta", errors[0])
+
+    def test_manifest_without_skills_key_adds_the_default_directory(self):
+        def build(root):
+            self.write_skill(root, ".claude/skills", "alpha")
+            self.write_skill(root, "skills", "gamma")
+            self._manifest(root)
+
+        plugin = {"name": "p", "skills_dir": ".claude/skills",
+                  "skills": [{"name": "alpha"}, {"name": "gamma"}]}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_empty_declared_skills_dir_is_an_error_even_with_manifest_skills(self):
+        def build(root):
+            self.write_skill(root, "extra", "beta")
+            self._manifest(root, ["./extra"])
+
+        plugin = {"name": "p", "skills_dir": ".claude/skills", "skills": [{"name": "beta"}]}
+        errors, _ = self.check(plugin, build)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("declared skills_dir '.claude/skills' has no", errors[0])
+
     def test_directory_name_is_the_fallback_when_frontmatter_omits_name(self):
         def build(root):
             skill_dir = root / "skills" / "alpha"
