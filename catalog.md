@@ -872,9 +872,9 @@ v0.2.0 | Apache-2.0 | [IKRedHat/SPIKE-executor](https://github.com/IKRedHat/SPIK
 
 Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibility
 
-| Skill | Description |
-|-------|-------------|
-| `/SPIKE-executor` | Execute RHOAI SPIKE investigations with human-in-the-loop approval gates |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/SPIKE-executor` | Execute RHOAI SPIKE investigations with human-in-the-loop approval gates | `orchestrate`, `generate` | `task_success` (`judge`) |
 
 ```bash
 /plugin install spike-executor@opendatahub-skills

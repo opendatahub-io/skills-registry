@@ -18,6 +18,81 @@ scoring, (8) RFE generation + approval, (9) completion summary. Supports
 
 **Plugin**: [spike-executor](index.md) | **:material-check: User-invocable**
 
+## Contract
+
+<div class="skill-contract">
+  <header class="skill-contract__header">
+    <span class="skill-contract__eyebrow">Skill Contract</span>
+    <span class="skill-contract__version">canonical-skill-v1</span>
+  </header>
+  <p class="skill-contract__lede">Guide an engineer through the nine-step RHOAI SPIKE lifecycle for a named project — plan, Jira structure and sync, AI research enrichment and validation, test plan and pytest suite, cluster test run and feasibility scoring, RFE generation — by running the spike-executor CLI at each step and stopping at every approval gate for human review.</p>
+  <section class="skill-contract__section" data-section="01">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Functions</span>
+      <div class="skill-contract__inline">
+        <span class="skill-contract__chip skill-contract__chip--function">orchestrate</span>
+        <span class="skill-contract__chip skill-contract__chip--function">generate</span>
+      </div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Success</span>
+      <ul class="skill-contract__list">
+        <li>Every step&#x27;s artifact is written under artifacts/ with the &lt;Type&gt;-&lt;project&gt; naming and shown to the engineer in full before the matching approval gate.</li>
+        <li>The workflow advances only on the engineer&#x27;s explicit approval phrase at each breakpoint, and stages skipped with --skip-jira or --skip-tests are reported upfront rather than silently omitted.</li>
+        <li>The feasibility decision (GO / PIVOT / NO-GO) follows the computed score and the security gate, and an RFE is offered only for GO or PIVOT.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="02">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Optimization Targets</span></h3>
+    <div class="skill-contract__metrics">
+      <div class="skill-contract__metric">
+        <code class="skill-contract__metric-id">task_success</code>
+        <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
+        <a class="skill-contract__ref" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/.claude/skills/SPIKE-executor/SKILL.md" title="IKRedHat/SPIKE-executor@924ec480198b89d42ceb82275938a7859dbf92ff:.claude/skills/SPIKE-executor/SKILL.md">SKILL.md @ 924ec48<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="03">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Invariants</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Must Preserve</span>
+      <ul class="skill-contract__list">
+        <li>Display each generated artifact&#x27;s complete content with the Read tool at every breakpoint — never a summary, an excerpt or a path alone.</li>
+        <li>Never proceed past an approval gate without the engineer&#x27;s explicit approval phrase.</li>
+        <li>Report missing Jira credentials or OpenShift access before starting and continue with the steps that remain possible instead of blocking.</li>
+        <li>Any security check scoring 0 blocks GO; a NO-GO result never offers RFE generation.</li>
+      </ul>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Fixed Context</span>
+      <div class="skill-contract__code">
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">tools</span><span class="skill-contract__code-val">Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, WebSearch, WebFetch</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">cli</span><span class="skill-contract__code-val">spike-executor, oc</span></div>
+      <div class="skill-contract__code-line"><span class="skill-contract__code-key">knowledge</span><span class="skill-contract__code-val">repository_content<span class="skill-contract__privacy">public</span>, task_input<span class="skill-contract__privacy">task_private</span>, tool_output<span class="skill-contract__privacy">task_private</span></span></div>
+      </div>
+    </div>
+  </section>
+  <section class="skill-contract__section" data-section="04">
+    <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Skill</span>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/.claude/skills/SPIKE-executor/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/SPIKE-executor/SKILL.md</code></a></div>
+    </div>
+    <div class="skill-contract__row">
+      <span class="skill-contract__field">Supporting</span>
+      <ul class="skill-contract__paths">
+        <li><a class="skill-contract__path" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/templates/spike_plan.md.j2"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>templates/spike_plan.md.j2</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/templates/research_findings.md.j2"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>templates/research_findings.md.j2</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/templates/test_suites.md.j2"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>templates/test_suites.md.j2</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/templates/feasibility_report.md.j2"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>templates/feasibility_report.md.j2</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/IKRedHat/SPIKE-executor/blob/924ec480198b89d42ceb82275938a7859dbf92ff/templates/rfe_document.md.j2"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>templates/rfe_document.md.j2</code></a></li>
+      </ul>
+    </div>
+  </section>
+</div>
+
 ## Diagram
 
 <div class="diagram-container" markdown>
