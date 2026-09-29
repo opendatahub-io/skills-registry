@@ -334,13 +334,21 @@ Diagrams are authored by parallel sub-agents that each follow the durable recipe
 3. **Back up + clean-slate.** Copy any existing `*.d2`/`*.drawio`/`*.svg` in
    `site/docs/plugins/<plugin-name>/` to `.tmp/diagram-backup/<plugin-name>/`, then
    delete them from the output dir (so no agent mistakes stale output for "done").
-   Clear this plugin's scratch under `.tmp/diagram-work/`, including its pipeline dir
-   (see the naming rule in Step 6 — `<plugin-name>-pipeline`, never a bare `pipeline`).
-   A stale `layout-plan.json` in a shared dir renders the WRONG plugin's pipeline, and
-   because `generate-site` runs 6-8 `analyze-plugin` agents CONCURRENTLY, a shared dir
-   is a live write race between plugins, not just staleness between runs. Clear only
-   your own plugin's dirs — never all of `.tmp/diagram-work/`, which would delete a
-   concurrently-running sibling's intermediates.
+   Clear this run's scratch — `.tmp/diagram-work/plugins/<plugin-name>/` and the
+   `.tmp/diagram-work/skills/<skill-name>/` dir of each skill you are about to
+   regenerate (see the SCRATCH naming rule in Step 6). A stale `layout-plan.json` in a
+   shared dir renders the WRONG plugin's pipeline, and because `generate-site` runs 6-8
+   `analyze-plugin` agents CONCURRENTLY, a shared dir is a live write race between
+   plugins, not just staleness between runs. Clear only your own dirs — never all of
+   `.tmp/diagram-work/`, which would delete a concurrently-running sibling's
+   intermediates.
+
+   **One run per plugin at a time.** Two concurrent `/analyze-plugin <same-plugin>`
+   invocations are not supported and scratch isolation cannot make them safe: they also
+   share `site/docs/plugins/<plugin-name>/`, so this very step would delete the other
+   run's outputs and both would write the same `.d2`/`.drawio`. `generate-site`
+   dispatches one agent per plugin, so its fan-out never does this — just don't start a
+   second run for a plugin already being analyzed.
 4. **Derive per-skill flows.** From the SKILL.md files read in Step 3 (and a skim of
    each skill's `scripts/`), write a brief node/edge **suggested flow** per skill and
    for the pipeline: ordered nodes with roles pre-assigned (entry / processing /
@@ -398,7 +406,7 @@ Agent({
   prompt: `Read <abs>/.claude/skills/analyze-plugin/references/diagram-agent-instructions.md and follow it EXACTLY.
     name: <skill-name>
     OUT_DIR: <abs>/site/docs/plugins/<plugin-name>
-    SCRATCH: <abs>/.tmp/diagram-work/<scratch-name>/artifacts   # see the SCRATCH naming rule below
+    SCRATCH: <abs>/<scratch-path>   # see the SCRATCH naming rule below — two disjoint namespaces
     SKILL_MD: <abs>/<WORKDIR>/<SKILLS_DIR>/<dir-name>/SKILL.md   # WORKDIR + SKILLS_DIR from Step 2; git-subdir member -> <abs>/.tmp/skill-repos/<plugin-name>/<source.path>/skills/<dir-name>/SKILL.md
     DIAGRAM_SKILLS: <DIAGRAM_SKILLS>
     Suggested flow: <the per-skill outline from Step 5.4 — roles + llm count>
@@ -413,17 +421,29 @@ output paths (so site files match registry names). Launch in **barrier batches o
 `name: pipeline` and a whole-plugin flow (one node per skill, fan-out + feedback
 edges); the per-skill callout floor is relaxed for that overview.
 
-**SCRATCH naming rule (prevents cross-plugin corruption).** `<scratch-name>` is
-`<skill-name>` for a per-skill diagram, but **`<plugin-name>-pipeline` for the pipeline
-overview** — never a bare `pipeline`. Skill names are unique registry-wide, so they
-cannot collide; `pipeline` is the same string for every plugin, so a bare
-`.tmp/diagram-work/pipeline/artifacts` is shared by all of them. That matters because
-`generate-site` launches 6-8 `analyze-plugin` agents **in parallel**, each generating
-its own pipeline: they would concurrently write the same `graph-spec.json` and
-`layout-plan.json`, and the damage is silent — a plugin's page gets a pipeline rendered
-from another plugin's layout plan, with no error anywhere. `OUT_DIR` is already
-per-plugin, so the output filename stays `pipeline.d2` / `pipeline.drawio`; only the
-scratch path is qualified.
+**SCRATCH naming rule (prevents cross-plugin corruption).** Scratch lives in two
+disjoint namespaces, so no plugin's pipeline dir can ever be a skill's dir:
+
+| diagram | `<scratch-path>` |
+|---|---|
+| pipeline overview | `.tmp/diagram-work/plugins/<plugin-name>/pipeline/artifacts` |
+| per-skill | `.tmp/diagram-work/skills/<skill-name>/artifacts` |
+
+A bare `.tmp/diagram-work/pipeline/artifacts` is the same string for every plugin, so
+all of them share it. That matters because `generate-site` launches 6-8
+`analyze-plugin` agents **in parallel**, each generating its own pipeline: they would
+concurrently write the same `graph-spec.json` and `layout-plan.json`, and the damage is
+silent — a plugin's page gets a pipeline rendered from another plugin's layout plan,
+with no error anywhere.
+
+Qualifying the pipeline as `<plugin-name>-pipeline` in one flat namespace is NOT enough:
+it collides with a skill literally named `<plugin-name>-pipeline`. That is not
+hypothetical — `odh-documentation` ships a skill called `doc-pipeline`, so a plugin
+named `doc` would land on the same dir. Registry-wide uniqueness of skill names does not
+prevent a skill/plugin cross-type collision; separate parent dirs do.
+
+`OUT_DIR` is already per-plugin, so output filenames stay `pipeline.d2` /
+`pipeline.drawio` — only the scratch path changes.
 
 Agents produce only `<name>.d2` + `<name>.drawio` (no SVG). **You (main thread) then
 export SVGs sequentially** — do NOT let agents export (draw.io desktop contention):
