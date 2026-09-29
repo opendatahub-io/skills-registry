@@ -43,7 +43,7 @@ title: Plugins
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
-| [odh-ai-helpers](odh-ai-helpers/index.md) | Development Tools | 69 | v0.1.0 |
+| [odh-ai-helpers (deprecated)](odh-ai-helpers/index.md) | Development Tools | 69 | v0.1.0 |
 | [odh-code-quality](odh-code-quality/index.md) | Code Quality | 2 | v0.1.0 |
 | [odh-general](odh-general/index.md) | Development Tools | 1 | v0.1.0 |
 | [odh-git](odh-git/index.md) | Development Tools | 6 | v0.1.0 |

@@ -1363,6 +1363,8 @@ Examples:
 
 [DEPRECATED] Backwards-compatibility umbrella for the ODH AI Helpers plugins. Re-exports the skills that existed before the split into the individual odh-* plugins under their original odh-ai-helpers:* names, so existing agents and workflows keep working. Install the odh-* plugins you need, then uninstall this one; it will be removed after the migration window.
 
+**Status**: Deprecated
+
 **Repository**: https://github.com/opendatahub-io/ai-helpers
 
 ### Skills

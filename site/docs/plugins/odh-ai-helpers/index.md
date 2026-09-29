@@ -11,6 +11,7 @@ title: odh-ai-helpers
 
 !!! info "Plugin Details"
 
+    - **Status**: Deprecated
     - **Version**: 0.1.0
     - **Author**: opendatahub-io
     - **License**: Apache-2.0

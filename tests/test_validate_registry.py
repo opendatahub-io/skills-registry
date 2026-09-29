@@ -786,6 +786,42 @@ class SkillNameDriftTests(unittest.TestCase):
         self.assertEqual(1, len(warnings), warnings)
         self.assertIn("extra", warnings[0])
 
+    def test_deprecated_skill_count_entry_is_not_warned_about_unlisted_skills(self):
+        # A deprecated re-export entry uses skill_count precisely so its 69
+        # aliases are not duplicated as catalog pages; warning about every one
+        # of them on each sweep would bury real drift.
+        def build(root):
+            self.write_skill(root, "skills", "alpha")
+            self.write_skill(root, "skills", "beta")
+
+        plugin = {"name": "compat", "strict": False, "deprecated": True, "skill_count": 2}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual(([], []), (errors, warnings))
+
+    def test_deprecated_entry_that_lists_skills_is_still_warned(self):
+        # Opting out is tied to skill_count, not to the deprecated flag alone:
+        # an entry that does publish a list should keep it accurate.
+        def build(root):
+            self.write_skill(root, "skills", "alpha")
+            self.write_skill(root, "skills", "extra")
+
+        plugin = {"name": "compat", "strict": False, "deprecated": True,
+                  "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+        self.assertIn("extra", warnings[0])
+
+    def test_skill_count_entry_without_deprecated_is_still_warned(self):
+        def build(root):
+            self.write_skill(root, "skills", "alpha")
+
+        plugin = {"name": "p", "strict": False, "skill_count": 1}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+        self.assertIn("alpha", warnings[0])
+
     def test_only_the_first_populated_skills_dir_is_used(self):
         # A repo can publish skills/ while keeping its own tooling in .claude/skills/.
         def build(root):

@@ -675,7 +675,13 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
     # Only flag unlisted upstream skills for strict: false plugins. There the whole
     # skills_dir is installed, so anything missing from registry.yaml is a live command
     # with no documentation. A strict: true registry list is a curated subset by design.
-    if plugin.get("strict", True) is False:
+    #
+    # A deprecated entry that declares `skill_count` instead of a `skills` list has
+    # opted out of listing on purpose: its skills are re-exports documented under the
+    # plugins that superseded it, and enumerating them again would duplicate every
+    # page. Warning about all of them on every sweep would bury real drift.
+    lists_skills_by_choice = not (plugin.get("deprecated") and plugin.get("skill_count"))
+    if plugin.get("strict", True) is False and lists_skills_by_choice:
         unlisted = sorted(set(upstream) - registered)
         if unlisted:
             shown = ", ".join(unlisted[:5])

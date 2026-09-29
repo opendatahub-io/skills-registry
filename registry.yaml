@@ -1199,6 +1199,7 @@ plugins:
     version: "0.1.0"
     category: development-tools
     scope: generic
+    deprecated: true
     tags: [deprecated]
     author:
       name: opendatahub-io

@@ -53,7 +53,7 @@ AI skills for Python package onboarding into the RHAI distribution pipeline. End
 
 [DEPRECATED] Backwards-compatibility umbrella for the ODH AI Helpers plugins. Re-exports the skills that existed before the split into the individual odh-* plugins under their original odh-ai-helpers:* names, so existing agents and workflows keep working. Install the odh-* plugins you need, then uninstall this one; it will be removed after the migration window.
 
-**69 skills** - v0.1.0
+**69 skills** - v0.1.0 - Deprecated
 
 ### [odh-general](../plugins/odh-general/index.md)
 

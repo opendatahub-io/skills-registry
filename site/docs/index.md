@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-38 plugins | 274 skills | 7 categories
+38 plugins | 205 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -232,7 +232,7 @@ hide:
 
     [DEPRECATED] Backwards-compatibility umbrella for the ODH AI Helpers plugins. Re-exports the skills that existed befo...
 
-    **69 skills** - Development Tools - v0.1.0
+    **69 skills** - Development Tools - v0.1.0 - Deprecated
 
 -   **[odh-code-quality](plugins/odh-code-quality/index.md)**
 
