@@ -15,6 +15,7 @@ Jira ticket management, search, triage, and automation
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-jira](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-jira)
     - **Tags**: <span class="tag-pill">jira</span> <span class="tag-pill">acli</span> <span class="tag-pill">triage</span> <span class="tag-pill">automation</span>
 
 ## Skills

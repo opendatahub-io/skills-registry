@@ -15,6 +15,7 @@ ODH module operator scaffolding, migration, and compliance checks
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-modules](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-modules)
     - **Tags**: <span class="tag-pill">operator</span> <span class="tag-pill">modules</span> <span class="tag-pill">scaffolding</span> <span class="tag-pill">compliance</span>
 
 ## Skills

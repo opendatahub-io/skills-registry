@@ -16,6 +16,7 @@ CodeRabbit review triage and project-conformant unit test generation
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Code Quality](../../categories/code-quality.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-code-quality](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-code-quality)
     - **Tags**: <span class="tag-pill">code-review</span> <span class="tag-pill">coderabbit</span> <span class="tag-pill">unit-tests</span>
 
 ## Skills

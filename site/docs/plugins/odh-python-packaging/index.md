@@ -16,6 +16,7 @@ Python package analysis, security auditing, and build complexity assessment
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-python-packaging](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-python-packaging)
     - **Tags**: <span class="tag-pill">python-packaging</span> <span class="tag-pill">licensing</span> <span class="tag-pill">dependencies</span> <span class="tag-pill">security-audit</span>
 
 ## Dependencies

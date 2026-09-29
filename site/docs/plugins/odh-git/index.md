@@ -16,6 +16,7 @@ Git utilities, GitHub/GitLab workflow automation, and CI debugging
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-git](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-git)
     - **Tags**: <span class="tag-pill">git</span> <span class="tag-pill">github</span> <span class="tag-pill">gitlab</span> <span class="tag-pill">ci</span> <span class="tag-pill">gist</span>
 
 ## Skills

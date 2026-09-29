@@ -15,6 +15,7 @@ AsciiDoc documentation generation, validation, review, and ADR review
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [Documentation](../../categories/documentation.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-documentation](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-documentation)
     - **Tags**: <span class="tag-pill">documentation</span> <span class="tag-pill">asciidoc</span> <span class="tag-pill">adr</span> <span class="tag-pill">review</span>
 
 ## Skills

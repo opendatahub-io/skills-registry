@@ -1373,6 +1373,8 @@ Examples:
 
 CodeRabbit review triage and project-conformant unit test generation
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-code-quality
+
 ### Skills
 
 #### /coderabbit-review
@@ -1388,6 +1390,8 @@ Use this skill to write unit tests that strictly conform to the project's existi
 ## odh-documentation
 
 AsciiDoc documentation generation, validation, review, and ADR review
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-documentation
 
 ### Skills
 
@@ -1450,6 +1454,8 @@ Use when you need to validate AsciiDoc documentation for technical accuracy usin
 
 General-purpose helpers and learning mode
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-general
+
 ### Skills
 
 #### /learning-mode
@@ -1461,6 +1467,8 @@ Hands-on mentoring: the agent scaffolds work, then pauses so the engineer writes
 ## odh-git
 
 Git utilities, GitHub/GitLab workflow automation, and CI debugging
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-git
 
 ### Skills
 
@@ -1525,6 +1533,8 @@ Examples:
 
 Gmail, Google Calendar, Docs, and Drive integration
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-google-workspace
+
 ### Skills
 
 #### /email-meeting-summary
@@ -1544,6 +1554,8 @@ Fetch and query data from Google Workspace using the gws CLI — Gmail, Calendar
 ## odh-jira
 
 Jira ticket management, search, triage, and automation
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-jira
 
 ### Skills
 
@@ -1615,6 +1627,8 @@ Use when assessing a Jira bug ticket for AI autofix readiness. Produces a struct
 
 Konflux application and component management
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-konflux
+
 ### Skills
 
 #### /konflux-application
@@ -1635,6 +1649,8 @@ Guide AIPCC engineers through obtaining access to the shared Konflux sandbox, on
 
 llm-d release orchestration for opendatahub-io
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-llm-d
+
 ### Skills
 
 #### /ai-gateway-operator-manifest-update
@@ -1651,6 +1667,8 @@ Orchestrate the opendatahub-io release for all llm-d components in one cycle. Co
 
 MaaS nightly QE impact analysis
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-maas
+
 ### Skills
 
 #### /maas-nightly-qe-impact
@@ -1662,6 +1680,8 @@ Assess whether a Models-as-a-Service autofix change requires follow-up in openda
 ## odh-modules
 
 ODH module operator scaffolding, migration, and compliance checks
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-modules
 
 ### Skills
 
@@ -1682,6 +1702,8 @@ Given a component name, generate a complete standalone ODH module operator repos
 ## odh-python-packaging
 
 Python package analysis, security auditing, and build complexity assessment
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-python-packaging
 
 ### Skills
 
@@ -1847,6 +1869,8 @@ Run hexora static analysis on a Python package repository to detect suspicious c
 
 PyTorch cross-language analysis with TorchTalk
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-pytorch
+
 ### Skills
 
 #### /torchtalk-analyzer
@@ -1867,6 +1891,8 @@ Trace a PyTorch function's cross-language binding chain (Python -> C++ -> CUDA)
 
 RPM build failure analysis and non-Red Hat RPM detection
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-rpm
+
 ### Skills
 
 #### /non-redhat-rpms
@@ -1883,6 +1909,8 @@ Analyze RPM build.log failures
 
 Supply-chain security alerting and OCI image CVE comparison
 
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-security
+
 ### Skills
 
 #### /oci-cve-checker
@@ -1898,6 +1926,8 @@ Use this skill to filter a pre-fetched set of Hacker News stories down to those 
 ## odh-team
 
 Team weekly reports, engineer activity snapshots, and delivery postmortems
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-team
 
 ### Skills
 
@@ -1918,6 +1948,8 @@ Generate a weekly team status report combining JIRA and GitHub data. Fetches clo
 ## odh-vllm
 
 vLLM backport triage, cherry-pick automation, and requirements comparison
+
+**Repository**: https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-vllm
 
 ### Skills
 

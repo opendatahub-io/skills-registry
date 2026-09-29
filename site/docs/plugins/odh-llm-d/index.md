@@ -16,6 +16,7 @@ llm-d release orchestration for opendatahub-io
     - **License**: Apache-2.0
     - **Scope**: Team-specific
     - **Category**: [DevOps & CI/CD](../../categories/devops.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-llm-d](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-llm-d)
     - **Tags**: <span class="tag-pill">llm-d</span> <span class="tag-pill">release</span> <span class="tag-pill">konflux</span>
 
 ## Skills

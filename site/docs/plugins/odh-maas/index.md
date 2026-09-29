@@ -16,6 +16,7 @@ MaaS nightly QE impact analysis
     - **License**: Apache-2.0
     - **Scope**: Team-specific
     - **Category**: [DevOps & CI/CD](../../categories/devops.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-maas](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-maas)
     - **Tags**: <span class="tag-pill">maas</span> <span class="tag-pill">qe</span> <span class="tag-pill">autofix</span>
 
 ## Skills

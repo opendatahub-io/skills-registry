@@ -19,6 +19,10 @@ title: odh-ai-helpers
     - **Repository**: [opendatahub-io/ai-helpers](https://github.com/opendatahub-io/ai-helpers)
     - **Tags**: <span class="tag-pill">deprecated</span>
 
+## Skills
+
+**69 skills**, discovered from the source repository at install time.
+
 ## Agents
 
 | Agent | Description |

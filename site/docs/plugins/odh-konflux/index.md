@@ -15,6 +15,7 @@ Konflux application and component management
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [DevOps & CI/CD](../../categories/devops.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-konflux](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-konflux)
     - **Tags**: <span class="tag-pill">konflux</span> <span class="tag-pill">ci</span> <span class="tag-pill">onboarding</span>
 
 ## Skills

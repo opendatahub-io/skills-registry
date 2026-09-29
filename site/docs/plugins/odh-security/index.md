@@ -16,6 +16,7 @@ Supply-chain security alerting and OCI image CVE comparison
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Security Review](../../categories/security.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-security](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-security)
     - **Tags**: <span class="tag-pill">cve</span> <span class="tag-pill">supply-chain</span> <span class="tag-pill">oci</span>
 
 ## Skills

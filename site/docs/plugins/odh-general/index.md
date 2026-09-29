@@ -16,6 +16,7 @@ General-purpose helpers and learning mode
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-general](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-general)
     - **Tags**: <span class="tag-pill">mentoring</span> <span class="tag-pill">learning</span>
 
 ## Skills

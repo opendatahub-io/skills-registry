@@ -382,3 +382,18 @@ class GitSubdirUrlTests(unittest.TestCase):
         self.assertEqual(
             "https://gitlab.example.com/t/r",
             source_browse_url({"type": "git", "url": "https://gitlab.example.com/t/r.git/"}))
+
+    def test_hash_and_space_are_percent_encoded(self):
+        # Git permits "#" in a ref and the schema permits "#"/spaces in a path.
+        # Unencoded, everything after "#" becomes a URL fragment.
+        self.assertEqual(
+            "https://github.com/acme/mono/tree/release%23candidate/plugins/thing",
+            source_browse_url(self._src(ref="release#candidate")))
+        self.assertEqual(
+            "https://github.com/acme/mono/tree/main/plugins/a%20b%23c",
+            source_browse_url(self._src(path="plugins/a b#c")))
+
+    def test_slash_separators_survive_encoding(self):
+        self.assertEqual(
+            "https://github.com/acme/mono/tree/release/1.2/a/b/c",
+            source_browse_url(self._src(ref="release/1.2", path="a/b/c")))

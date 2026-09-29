@@ -16,6 +16,7 @@ PyTorch cross-language analysis with TorchTalk
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-pytorch](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-pytorch)
     - **Tags**: <span class="tag-pill">pytorch</span> <span class="tag-pill">torchtalk</span> <span class="tag-pill">mcp</span>
 
 ## Skills

@@ -16,6 +16,7 @@ Gmail, Google Calendar, Docs, and Drive integration
     - **License**: Apache-2.0
     - **Scope**: Generic
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-google-workspace](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-google-workspace)
     - **Tags**: <span class="tag-pill">google-workspace</span> <span class="tag-pill">gmail</span> <span class="tag-pill">calendar</span> <span class="tag-pill">drive</span>
 
 ## Skills

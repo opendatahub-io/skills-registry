@@ -15,6 +15,7 @@ RPM build failure analysis and non-Red Hat RPM detection
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [DevOps & CI/CD](../../categories/devops.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-rpm](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-rpm)
     - **Tags**: <span class="tag-pill">rpm</span> <span class="tag-pill">containers</span> <span class="tag-pill">compliance</span>
 
 ## Skills

@@ -177,7 +177,7 @@ Code review, linting, and quality enforcement
 
 CodeRabbit review triage and project-conformant unit test generation
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-code-quality](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-code-quality)
 
 Tags: code-review, coderabbit, unit-tests
 
@@ -214,7 +214,7 @@ Skills for generating and maintaining documentation
 
 AsciiDoc documentation generation, validation, review, and ADR review
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-documentation](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-documentation)
 
 Tags: documentation, asciidoc, adr, review
 
@@ -277,7 +277,7 @@ Skills for deployment, CI/CD, and infrastructure
 
 Konflux application and component management
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-konflux](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-konflux)
 
 Tags: konflux, ci, onboarding
 
@@ -295,7 +295,7 @@ Tags: konflux, ci, onboarding
 
 RPM build failure analysis and non-Red Hat RPM detection
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-rpm](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-rpm)
 
 Tags: rpm, containers, compliance
 
@@ -312,7 +312,7 @@ Tags: rpm, containers, compliance
 
 vLLM backport triage, cherry-pick automation, and requirements comparison
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-vllm](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-vllm)
 
 Tags: vllm, backport, release
 
@@ -417,7 +417,7 @@ Tags: security, review, strat, threat-modeling, fips, compliance, consensus
 
 Supply-chain security alerting and OCI image CVE comparison
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-security](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-security)
 
 Tags: cve, supply-chain, oci
 
@@ -442,6 +442,8 @@ v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers](https://github.com/o
 
 Tags: deprecated
 
+**69 skills**, discovered from the source repository at install time.
+
 | Agent | Description |
 |-------|-------------|
 | python-packaging-investigator | Investigates Python package repositories to analyze build systems, dependencies, and packaging complexity |
@@ -454,7 +456,7 @@ Tags: deprecated
 
 General-purpose helpers and learning mode
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-general](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-general)
 
 Tags: mentoring, learning
 
@@ -470,7 +472,7 @@ Tags: mentoring, learning
 
 Git utilities, GitHub/GitLab workflow automation, and CI debugging
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-git](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-git)
 
 Tags: git, github, gitlab, ci, gist
 
@@ -491,7 +493,7 @@ Tags: git, github, gitlab, ci, gist
 
 Gmail, Google Calendar, Docs, and Drive integration
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-google-workspace](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-google-workspace)
 
 Tags: google-workspace, gmail, calendar, drive
 
@@ -509,7 +511,7 @@ Tags: google-workspace, gmail, calendar, drive
 
 Jira ticket management, search, triage, and automation
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-jira](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-jira)
 
 Tags: jira, acli, triage, automation
 
@@ -536,7 +538,7 @@ Tags: jira, acli, triage, automation
 
 ODH module operator scaffolding, migration, and compliance checks
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-modules](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-modules)
 
 Tags: operator, modules, scaffolding, compliance
 
@@ -556,7 +558,7 @@ Python package analysis, security auditing, and build complexity assessment
 
 **Requires:** `odh-git`
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-python-packaging](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-python-packaging)
 
 Tags: python-packaging, licensing, dependencies, security-audit
 
@@ -586,7 +588,7 @@ Tags: python-packaging, licensing, dependencies, security-audit
 
 PyTorch cross-language analysis with TorchTalk
 
-v0.1.0 | Generic | Apache-2.0
+v0.1.0 | Generic | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-pytorch](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-pytorch)
 
 Tags: pytorch, torchtalk, mcp
 
@@ -604,7 +606,7 @@ Tags: pytorch, torchtalk, mcp
 
 Team weekly reports, engineer activity snapshots, and delivery postmortems
 
-v0.1.0 | Apache-2.0
+v0.1.0 | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-team](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-team)
 
 Tags: reporting, postmortem, jira, github
 
@@ -886,7 +888,7 @@ Plugins hardcoded to a specific team's setup. Not generally reusable by other te
 
 llm-d release orchestration for opendatahub-io
 
-v0.1.0 | Team-Specific | Apache-2.0
+v0.1.0 | Team-Specific | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-llm-d](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-llm-d)
 
 Tags: llm-d, release, konflux
 
@@ -903,7 +905,7 @@ Tags: llm-d, release, konflux
 
 MaaS nightly QE impact analysis
 
-v0.1.0 | Team-Specific | Apache-2.0
+v0.1.0 | Team-Specific | Apache-2.0 | [opendatahub-io/ai-helpers/plugins/odh-maas](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-maas)
 
 Tags: maas, qe, autofix
 

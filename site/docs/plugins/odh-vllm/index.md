@@ -15,6 +15,7 @@ vLLM backport triage, cherry-pick automation, and requirements comparison
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [DevOps & CI/CD](../../categories/devops.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-vllm](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-vllm)
     - **Tags**: <span class="tag-pill">vllm</span> <span class="tag-pill">backport</span> <span class="tag-pill">release</span>
 
 ## Skills

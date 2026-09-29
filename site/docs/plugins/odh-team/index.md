@@ -15,6 +15,7 @@ Team weekly reports, engineer activity snapshots, and delivery postmortems
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [Development Tools](../../categories/development-tools.md)
+    - **Repository**: [opendatahub-io/ai-helpers/plugins/odh-team](https://github.com/opendatahub-io/ai-helpers/tree/main/plugins/odh-team)
     - **Tags**: <span class="tag-pill">reporting</span> <span class="tag-pill">postmortem</span> <span class="tag-pill">jira</span> <span class="tag-pill">github</span>
 
 ## Skills

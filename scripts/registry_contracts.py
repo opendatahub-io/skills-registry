@@ -5,6 +5,7 @@ import shlex
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import quote as _quote
 
 import yaml
 
@@ -187,7 +188,12 @@ def source_browse_url(source: dict) -> str:
             ref = normalize_git_ref(source.get("ref"))
         except ValueError:
             return base
-        return f"{base}/tree/{ref}/{subdir}"
+        # Percent-encode both as path segments, keeping "/" as the separator.
+        # Git allows "#" in a ref and the schema allows it (and spaces) in a
+        # path; unencoded, everything after it becomes a URL fragment and the
+        # link resolves to the wrong tree.
+        return (f"{base}/tree/{_quote(ref, safe='/')}"
+                f"/{_quote(subdir, safe='/')}")
     return source.get("url") or f"https://github.com/{source.get('repo', '')}"
 
 
