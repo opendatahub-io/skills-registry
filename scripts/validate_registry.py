@@ -487,6 +487,10 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
             return errors
         repo_path = plugin_root
 
+        conflict = _manifest_conflict(plugin, repo_path)
+        if conflict:
+            errors.append(conflict)
+            return errors
         if strict and "skills_dir" not in plugin:
             # strict without skills_dir: the entry declares no components, so only the
             # repo's plugin.json can define the plugin — it must exist. With skills_dir
@@ -575,16 +579,36 @@ def _has_manifest(repo_path: Path) -> bool:
     return (repo_path / ".claude-plugin" / "plugin.json").is_file()
 
 
+def _manifest_conflict(plugin: dict, repo_path: Path) -> str | None:
+    """The one entry/manifest combination Claude Code refuses to load, or None.
+
+    The marketplace projects a declared ``skills_dir`` as the entry's ``skills``
+    component. With ``strict: false`` and a ``plugin.json`` upstream, Claude
+    Code rejects the plugin ("conflicting manifests: both plugin.json and
+    marketplace entry specify components") -- it does not load the entry alone.
+    """
+    if plugin.get("strict") is False and "skills_dir" in plugin and _has_manifest(repo_path):
+        return (
+            f"  Plugin '{get_plugin_label(plugin)}': strict: false with skills_dir while the "
+            "source ships .claude-plugin/plugin.json -- Claude Code refuses to load the "
+            "plugin (conflicting manifests). Set strict: true (the entry's skills are then "
+            "appended to the manifest's) or remove skills_dir"
+        )
+    return None
+
+
 def _upstream_skill_locations(plugin: dict, repo_path: Path | None = None) -> list[str]:
     """Repo-relative directories Claude Code loads a plugin's SKILL.md files from.
 
     With a declared ``skills_dir`` the list is exactly what loads, no fallbacks:
     the declared directory (what the marketplace entry publishes, for either
     ``strict`` value) and, under ``strict: true`` with a manifest upstream, the
-    manifest's own skills paths -- its ``skills`` value, or the default
-    ``skills/`` when it names none -- because Claude Code appends the entry's
-    skills to the manifest's. ``strict: false`` loads the entry alone, and
-    without a manifest the entry is the manifest whatever ``strict`` says.
+    manifest's own skills: the default ``skills/`` plus any ``skills`` paths the
+    manifest names (the key adds to the default scan) -- because Claude Code
+    appends the entry's skills to the manifest's. Without a manifest the entry
+    is the manifest whatever ``strict`` says; ``strict: false`` with a manifest
+    does not load at all (see _manifest_conflict), so nothing is listed for it
+    beyond the declared directory.
     Without ``skills_dir`` order matters and the list is a search: the default
     ``skills/``, then the manifest's paths, then the conventional fallbacks,
     then the plugin root -- which Claude Code loads as a single skill when a
@@ -601,7 +625,10 @@ def _upstream_skill_locations(plugin: dict, repo_path: Path | None = None) -> li
         candidates = [plugin["skills_dir"]]
         if (plugin.get("strict", True) is not False and repo_path is not None
                 and _has_manifest(repo_path)):
-            candidates.extend(_manifest_skill_paths(repo_path) or ["skills"])
+            # The manifest's `skills` value ADDS to the default skills/ scan, so
+            # both load; a manifest that names none still scans skills/.
+            candidates.append("skills")
+            candidates.extend(_manifest_skill_paths(repo_path))
         ordered = []
         for location in candidates:
             if isinstance(location, str) and location not in ordered:
@@ -630,7 +657,14 @@ def _skill_files_at(location: Path, root: Path) -> list[Path]:
         return []
     if not resolved.is_relative_to(root) or not resolved.is_dir():
         return []
-    if (resolved / "SKILL.md").is_file():
+    def contained(path: Path) -> bool:
+        # Untrusted cloned content: a SKILL.md may be a symlink out of the clone.
+        try:
+            return path.is_file() and path.resolve().is_relative_to(root)
+        except OSError:
+            return False
+
+    if contained(resolved / "SKILL.md"):
         return [resolved / "SKILL.md"]
     if resolved == root:
         # The plugin root counts only for a bare SKILL.md sitting in it.
@@ -638,7 +672,7 @@ def _skill_files_at(location: Path, root: Path) -> list[Path]:
         # directory, which Claude Code does not do and which would mask a
         # skills_dir that points nowhere.
         return []
-    return sorted(resolved.glob("*/SKILL.md"))
+    return sorted(path for path in resolved.glob("*/SKILL.md") if contained(path))
 
 
 def _iter_upstream_skill_files(plugin: dict, repo_path: Path) -> list[Path]:
@@ -681,6 +715,9 @@ def check_skill_names_against_source(plugin: dict, repo_path: Path) -> tuple[lis
     from scripts.discover_skills import parse_frontmatter
 
     name = get_plugin_label(plugin)
+    conflict = _manifest_conflict(plugin, repo_path)
+    if conflict:
+        return [conflict], []
     upstream: dict[str, bool] = {}
     for skill_md in _iter_upstream_skill_files(plugin, repo_path):
         try:

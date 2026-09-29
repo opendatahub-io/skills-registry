@@ -855,17 +855,46 @@ class SkillNameDriftTests(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertEqual([], warnings)
 
-    def test_strict_false_loads_the_entry_alone(self):
+    def test_strict_false_with_a_manifest_is_a_conflict(self):
+        """Claude Code refuses strict: false + entry skills + plugin.json; it does not
+        load the entry alone, so the sweep must not pretend it does."""
         def build(root):
             self.write_skill(root, ".claude/skills", "alpha")
-            self.write_skill(root, "extra", "beta")
             self._manifest(root, ["./extra"])
 
         plugin = {"name": "p", "strict": False, "skills_dir": ".claude/skills",
-                  "skills": [{"name": "alpha"}, {"name": "beta"}]}
+                  "skills": [{"name": "alpha"}]}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("conflicting manifests", errors[0])
+        self.assertIn("Set strict: true", errors[0])
+        self.assertEqual([], warnings)
+
+    def test_strict_false_without_a_manifest_loads_the_entry_alone(self):
+        def build(root):
+            self.write_skill(root, ".claude/skills", "alpha")
+            self.write_skill(root, "skills", "gamma")  # a default dir the entry does not load
+
+        plugin = {"name": "p", "strict": False, "skills_dir": ".claude/skills",
+                  "skills": [{"name": "alpha"}, {"name": "gamma"}]}
         errors, _ = self.check(plugin, build)
         self.assertEqual(1, len(errors), errors)
-        self.assertIn("beta", errors[0])
+        self.assertIn("gamma", errors[0])
+
+    def test_manifest_skills_add_to_the_default_directory(self):
+        """The manifest's `skills` value adds to the default skills/ scan: with a
+        manifest upstream, skills_dir, skills/ and the named paths all load."""
+        def build(root):
+            self.write_skill(root, ".claude/skills", "alpha")
+            self.write_skill(root, "skills", "gamma")
+            self.write_skill(root, "extra", "beta")
+            self._manifest(root, ["./extra"])
+
+        plugin = {"name": "p", "skills_dir": ".claude/skills",
+                  "skills": [{"name": "alpha"}, {"name": "beta"}, {"name": "gamma"}]}
+        errors, warnings = self.check(plugin, build)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
 
     def test_manifest_without_skills_key_adds_the_default_directory(self):
         def build(root):
@@ -878,6 +907,28 @@ class SkillNameDriftTests(unittest.TestCase):
         errors, warnings = self.check(plugin, build)
         self.assertEqual([], errors)
         self.assertEqual([], warnings)
+
+    def test_skill_md_symlinked_out_of_the_clone_is_ignored(self):
+        """A SKILL.md that is a symlink to a file outside the clone is untrusted
+        content and must not be read (CodeRabbit on #123)."""
+        import os
+        import tempfile
+
+        outside = Path(tempfile.mkdtemp())
+        (outside / "SKILL.md").write_text("---\nname: evil\ndescription: d\n---\n", encoding="utf-8")
+        try:
+            def build(root):
+                self.write_skill(root, "skills", "alpha")
+                (root / "skills" / "evil").mkdir()
+                os.symlink(outside / "SKILL.md", root / "skills" / "evil" / "SKILL.md")
+
+            plugin = {"name": "p", "skills": [{"name": "alpha"}]}
+            errors, warnings = self.check(plugin, build)
+            self.assertEqual([], errors)
+            self.assertEqual([], warnings, "the symlinked skill must not surface as an unlisted upstream skill")
+        finally:
+            import shutil
+            shutil.rmtree(outside)
 
     def test_empty_declared_skills_dir_is_an_error_even_with_manifest_skills(self):
         def build(root):
