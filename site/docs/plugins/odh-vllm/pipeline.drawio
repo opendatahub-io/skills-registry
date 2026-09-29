@@ -1,0 +1,124 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;Backport triage run&lt;/b&gt;&lt;br&gt;&lt;br&gt;target tag v0.13.0&lt;br&gt;downstream rhai/0.13.0&lt;br&gt;DAYS_BACK auto-detected from latest reports/{version}/*/&lt;br&gt;default 7 days" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="90" width="170" height="185" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-prs" value="&lt;b&gt;vllm-backport-fetch-prs&lt;/b&gt;&lt;br&gt;&lt;br&gt;fetch-bugfix-prs.sh DAYS_BACK&lt;br&gt;gh search: label:bug plus [Bugfix] / [BugFix] / [Bug Fix] in title&lt;br&gt;dedupe across queries&lt;br&gt;detect reverted_by" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="270" y="95" width="230" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="classify-filter" value="&lt;b&gt;vllm-backport-classify&lt;/b&gt;&lt;br&gt;&lt;br&gt;classify-and-filter.py --tag v0.13.0&lt;br&gt;deterministic regex classification&lt;br&gt;file-existence check at the release tag&lt;br&gt;adds classification, verdict, subsystems" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="610" y="95" width="230" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="unclear-check" value="&lt;b&gt;classification&lt;br&gt;== unclear?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="950" y="110" width="170" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="agent-review" value="&lt;b&gt;Agent review: unclear PRs&lt;/b&gt;&lt;br&gt;LLM agent &#8212; no script&lt;br&gt;&lt;br&gt;read the PR diff + description&lt;br&gt;vLLM bugfix titles are often misleading&lt;br&gt;override classification in the JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1190" y="95" width="250" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="check-backported" value="&lt;b&gt;vllm-backport-check-backported&lt;/b&gt;&lt;br&gt;&lt;br&gt;check-backported.sh --branch rhai/0.13.0&lt;br&gt;SHA match: git log --grep=&quot;cherry picked from commit&quot;&lt;br&gt;title match: gh pr list --state merged&lt;br&gt;adds already_backported" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="400" width="230" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="semantic-analysis" value="&lt;b&gt;Agent semantic analysis&lt;/b&gt;&lt;br&gt;LLM agent &#8212; no script&lt;br&gt;&lt;br&gt;no script for this stage &#8212; the agent's judgement is the stage&lt;br&gt;adds verdict, severity, affected_scope&lt;br&gt;adds backport_risk, self_contained" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="400" y="400" width="235" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="score-rank" value="&lt;b&gt;vllm-backport-score-rank&lt;/b&gt;&lt;br&gt;&lt;br&gt;score-and-rank.py&lt;br&gt;deterministic composite formula&lt;br&gt;drops SKIP + already_backported&lt;br&gt;adds rank, score, change_size, backport_ease" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="755" y="400" width="230" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="score-formula" value="score = sum of 5 fields, max 100&lt;br&gt;&lt;br&gt;verdict: must_backport 30, likely_relevant 20,&lt;br&gt;&#160;&#160;needs_review 10, likely_skip / skip 0&lt;br&gt;severity: critical 25, moderate 15, low 5&lt;br&gt;affected_scope: all_users 20, specific_models 12,&lt;br&gt;&#160;&#160;specific_feature 8, edge_case 3&lt;br&gt;backport_risk: safe 15, moderate 8, risky 0&lt;br&gt;self_contained: true 10, false 0&lt;br&gt;&lt;br&gt;sort: score desc, then files_in_release desc,&lt;br&gt;&#160;&#160;then change_size asc&lt;br&gt;backport_ease = ai-fixable when self_contained&lt;br&gt;&#160;&#160;and backport_risk is safe or moderate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1060" y="390" width="340" height="235" as="geometry"/>
+    </mxCell>
+    <mxCell id="eligible" value="&lt;b&gt;eligible for auto&lt;br&gt;cherry-pick?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="210" y="745" width="230" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="cherry-pick" value="&lt;b&gt;vllm-backport-cherry-pick&lt;/b&gt;&lt;br&gt;&lt;br&gt;cherry-pick.sh --jira-url --report-url&lt;br&gt;eligible = ai-fixable AND score &gt;= 50 AND not already_backported AND verdict must_backport / likely_relevant&lt;br&gt;attempts each cherry-pick, opens a DRAFT PR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="560" y="730" width="245" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="cp-schema" value="cherry-pick-result.json&lt;br&gt;{&lt;br&gt;&#160;&#160;&quot;status&quot;: &quot;created&quot; | &quot;skipped&quot;,&lt;br&gt;&#160;&#160;&quot;pr_url&quot;: &quot;https://...&quot;,&lt;br&gt;&#160;&#160;&quot;succeeded&quot;: 3,&lt;br&gt;&#160;&#160;&quot;conflicts&quot;: 1,&lt;br&gt;&#160;&#160;&quot;results&quot;: [&lt;br&gt;&#160;&#160;&#160;&#160;{ &quot;number&quot;: 12345,&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&quot;title&quot;: &quot;...&quot;,&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&quot;score&quot;: 85,&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&quot;status&quot;: &quot;success&quot; | &quot;conflict&quot; }&lt;br&gt;&#160;&#160;]&lt;br&gt;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="530" y="980" width="310" height="215" as="geometry"/>
+    </mxCell>
+    <mxCell id="validate-cp" value="&lt;b&gt;Agent semantic validation&lt;/b&gt;&lt;br&gt;LLM agent &#8212; required&lt;br&gt;&lt;br&gt;review the cherry-picked diff&lt;br&gt;imports + calls must resolve at the target tag&lt;br&gt;comment on the draft PR&lt;br&gt;update the Jira ticket with the PR link&lt;br&gt;label score &gt;= 70 conflicts ai-autofix-candidate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="985" y="725" width="270" height="185" as="geometry"/>
+    </mxCell>
+    <mxCell id="push-report-step" value="&lt;b&gt;vllm-backport-push-report&lt;/b&gt;&lt;br&gt;&lt;br&gt;push-report.sh --version v0.13.0&lt;br&gt;reports/{version}/{timestamp}/ with report.md + candidates.json&lt;br&gt;git commit + git push&lt;br&gt;prints the report URL to stdout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="985" y="1210" width="270" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="standalone" value="&lt;b&gt;Standalone skills&lt;/b&gt;&lt;br&gt;independent of the backport pipeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1300" y="960" width="320" height="430" as="geometry"/>
+    </mxCell>
+    <mxCell id="compare-reqs" value="&lt;b&gt;vllm-compare-reqs&lt;/b&gt;&lt;br&gt;&lt;br&gt;compare_reqs.py v1 v2 {variant}&lt;br&gt;rocm / cuda / cpu / tpu / xpu&lt;br&gt;runtime + build reqs + Dockerfile ARG diff&lt;br&gt;AIPCC wheels onboarding impact" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="standalone">
+      <mxGeometry x="15" y="55" width="290" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="slack-summary" value="&lt;b&gt;vllm-slack-summary&lt;/b&gt;&lt;br&gt;&lt;br&gt;generate_transcript.py --days 14&lt;br&gt;slackdump of the vLLM CI SIG channel&lt;br&gt;transcript.md + slack_summary_{from}_to_{to}.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="standalone">
+      <mxGeometry x="15" y="245" width="290" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="fetch-prs" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="20" value="raw-prs.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-prs" target="classify-filter" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="21" value="filtered.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="classify-filter" target="unclear-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="22" value="unclear" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="unclear-check" target="agent-review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="23" value="classification overridden" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.12;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="agent-review" target="unclear-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1220" y="45"/>
+          <mxPoint x="1035" y="45"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="24" value="runtime_bug / platform_specific" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="unclear-check" target="check-backported" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="25" value="candidates.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-backported" target="semantic-analysis" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="26" value="analyzed.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="semantic-analysis" target="score-rank" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="27" value="ranked.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="score-rank" target="eligible" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="28" value="all 4 criteria" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eligible" target="cherry-pick" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="29" value="no: report only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="eligible" target="push-report-step" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="325" y="1300"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="30" value="cherry-pick-result.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="cherry-pick" target="validate-cp" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="31" value="report.md + ranked.json" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="validate-cp" target="push-report-step" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4148936170212766;entryDx=0;entryDy=0;" edge="1" source="score-rank" target="score-formula" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="33" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.49193548387096775;entryY=0;entryDx=0;entryDy=0;" edge="1" source="cherry-pick" target="cp-schema" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

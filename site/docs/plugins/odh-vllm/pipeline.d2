@@ -1,0 +1,301 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **Backport triage run**
+
+  - target tag v0.13.0
+  - downstream rhai/0.13.0
+  - DAYS_BACK auto-detected from
+    latest reports/{version}/*/
+  - default 7 days
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Fetch ---
+
+fetch-prs: |md
+  **vllm-backport-fetch-prs**
+
+  - fetch-bugfix-prs.sh DAYS_BACK
+  - gh search: label:bug plus
+    [Bugfix] / [BugFix] / [Bug Fix]
+  - dedupe across queries
+  - detect reverted_by
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Classify ---
+
+classify-filter: |md
+  **vllm-backport-classify**
+
+  - classify-and-filter.py --tag
+  - deterministic regex rules
+  - file-existence check at the
+    release tag, subsystems
+  - adds classification, verdict
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+unclear-check: "classification\n== unclear?" {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+agent-review: |md
+  **Agent review: unclear PRs**
+  LLM, no script
+
+  - read the PR diff plus description
+  - vLLM bugfix titles are often
+    misleading
+  - override classification in JSON
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Already backported ---
+
+check-backported: |md
+  **vllm-backport-check-backported**
+
+  - check-backported.sh --branch
+  - SHA match: git log --grep=
+    "cherry picked from commit"
+  - title match: gh pr list --merged
+  - adds already_backported
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Semantic analysis ---
+
+semantic-analysis: |md
+  **Agent semantic analysis**
+  LLM, no script
+
+  - agent judgement, not a script
+  - adds verdict, severity,
+    affected_scope
+  - adds backport_risk, self_contained
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Score and rank ---
+
+score-rank: |md
+  **vllm-backport-score-rank**
+
+  - score-and-rank.py
+  - deterministic composite formula
+  - drops SKIP and already_backported
+  - adds rank, score, change_size,
+    backport_ease
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+score-formula: |md
+  score = sum of 5 fields, max 100
+
+  verdict: must_backport 30, likely_relevant 20,
+    needs_review 10, likely_skip / skip 0
+  severity: critical 25, moderate 15, low 5
+  affected_scope: all_users 20, specific_models 12,
+    specific_feature 8, edge_case 3
+  backport_risk: safe 15, moderate 8, risky 0
+  self_contained: true 10, false 0
+
+  sort: score desc, then files_in_release desc,
+    then change_size asc
+  backport_ease = ai-fixable when self_contained
+    and backport_risk is safe or moderate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+eligible: "eligible for auto\ncherry-pick?" {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Cherry-pick ---
+
+cherry-pick: |md
+  **vllm-backport-cherry-pick**
+
+  - cherry-pick.sh --jira-url --report-url
+  - eligible = ai-fixable AND score >= 50
+    AND not already_backported AND verdict
+    must_backport / likely_relevant
+  - attempts each cherry-pick on rhai/0.13.0
+  - opens a DRAFT PR via gh pr create
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+cp-schema: |md
+  cherry-pick-result.json
+  {
+    "status": "created" / "skipped",
+    "pr_url": "https://...",
+    "succeeded": 3,
+    "conflicts": 1,
+    "results": [
+      { "number": 12345,
+        "title": "...",
+        "score": 85,
+        "status": "success" / "conflict" }
+    ]
+  }
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+validate-cp: |md
+  **Agent semantic validation**
+  LLM, required
+
+  - review the cherry-picked diff
+  - imports and calls must resolve
+    at the target tag
+  - comment on the draft PR, update Jira
+  - label score >= 70 conflicts
+    ai-autofix-candidate
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Publish ---
+
+push-report-step: |md
+  **vllm-backport-push-report**
+
+  - push-report.sh --version v0.13.0
+  - reports/{version}/{timestamp}/
+    report.md + candidates.json
+  - git commit and git push
+  - prints the report URL to stdout
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Standalone skills (independent of the triage pipeline) ---
+
+standalone: Standalone skills {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  compare-reqs: |md
+    **vllm-compare-reqs**
+
+    - compare_reqs.py v1 v2 {variant}
+    - rocm / cuda / cpu / tpu / xpu
+    - runtime + build reqs + Dockerfile
+      ARG diff, AIPCC onboarding impact
+  |
+  slack-summary: |md
+    **vllm-slack-summary**
+
+    - generate_transcript.py --days 14
+    - slackdump of vLLM CI SIG
+    - transcript.md plus
+      slack_summary_{from}_to_{to}.md
+  |
+}
+
+# --- Flow ---
+
+entry -> fetch-prs
+fetch-prs -> classify-filter: "raw-prs.json"
+classify-filter -> unclear-check: "filtered.json"
+
+unclear-check -> agent-review: "unclear"
+agent-review -> unclear-check: "classification overridden" {
+  style.stroke-dash: 3
+}
+unclear-check -> check-backported: "runtime_bug / platform_specific"
+
+check-backported -> semantic-analysis: "candidates.json"
+semantic-analysis -> score-rank: "analyzed.json"
+score-rank -> eligible: "ranked.json"
+
+eligible -> cherry-pick: "all 4 criteria"
+eligible -> push-report-step: "no: report only" {
+  style.stroke-dash: 3
+}
+
+cherry-pick -> validate-cp: "cherry-pick-result.json"
+validate-cp -> push-report-step: "report.md + ranked.json"
+
+# --- Callouts ---
+
+score-rank -> score-formula: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+cherry-pick -> cp-schema: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

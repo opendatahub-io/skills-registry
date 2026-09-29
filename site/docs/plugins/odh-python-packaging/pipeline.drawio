@@ -1,0 +1,151 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;Package name or repo URL&lt;/b&gt;&lt;br&gt;&lt;br&gt;PyPI package_name or git repo URL&lt;br&gt;optional flag: skip_security_audit&lt;br&gt;agent auto-delegated or via /agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="322" width="180" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="clone" value="&lt;b&gt;git-shallow-clone&lt;/b&gt;&lt;br&gt;odh-git plugin (depends_on)&lt;br&gt;&lt;br&gt;shallow clone to a temp dir&lt;br&gt;security-audit clones --depth 50" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="295" y="140" width="250" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="investigator" value="&lt;b&gt;python-packaging-investigator&lt;/b&gt;&lt;br&gt;agent (orchestrator)&lt;br&gt;&lt;br&gt;tools: Bash, Read, Grep, Glob, WebFetch, Skill&lt;br&gt;Steps 1-7 investigation workflow&lt;br&gt;package name only: source-finder first&lt;br&gt;owns the mandatory report template" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="295" y="300" width="250" height="184" as="geometry"/>
+    </mxCell>
+    <mxCell id="report-tpl" value="# {Package} Build Analysis&amp;nbsp;&amp;nbsp;&amp;nbsp;(MANDATORY)&lt;br&gt;## Executive summary&lt;br&gt;## Source Discovery&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;(source-finder)&lt;br&gt;## Repository Layout&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;(Step 2)&lt;br&gt;## Build System Analysis&lt;br&gt;## Compilation Requirements (complexity)&lt;br&gt;## Dependencies Analysis&lt;br&gt;## Environment Investigation (env-finder)&lt;br&gt;## Packaging Issue Analysis (bug-finder)&lt;br&gt;## CI/CD Analysis&lt;br&gt;## License Compatibility (license-checker)&lt;br&gt;## Security Assessment&amp;nbsp;&amp;nbsp;&amp;nbsp;(security-audit)&lt;br&gt;## Documentation Review&lt;br&gt;## Recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="277" y="540" width="286" height="215" as="geometry"/>
+    </mxCell>
+    <mxCell id="standalone" value="&lt;b&gt;Standalone skills - not dispatched by the agent&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="850" width="290" height="258" as="geometry"/>
+    </mxCell>
+    <mxCell id="full-deps" value="&lt;b&gt;python-full-deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;scripts/resolve_full_deps.py&lt;br&gt;uv pip compile, pip fallback&lt;br&gt;sorted name==version tree" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="standalone">
+      <mxGeometry x="16" y="40" width="258" height="92" as="geometry"/>
+    </mxCell>
+    <mxCell id="license-finder" value="&lt;b&gt;python-packaging-license-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;./scripts/find_license.py {pkg}&lt;br&gt;PyPI metadata, then repo LICENSE&lt;br&gt;complements license-checker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="standalone">
+      <mxGeometry x="16" y="150" width="258" height="92" as="geometry"/>
+    </mxCell>
+    <mxCell id="scan" value="&lt;b&gt;Step 2 - Quick assessment&lt;/b&gt;&lt;br&gt;&lt;br&gt;find -maxdepth 4 for setup.py, pyproject.toml, setup.cfg&lt;br&gt;read the root build config name field&lt;br&gt;a root build file alone is not proof" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="640" y="125" width="216" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="layout-q" value="&lt;b&gt;Repository layout?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="648" y="340" width="200" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="pkg-root" value="&lt;b&gt;Package root resolution&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="940" y="165" width="249" height="462" as="geometry"/>
+    </mxCell>
+    <mxCell id="std" value="&lt;b&gt;Standard (root)&lt;/b&gt;&lt;br&gt;&lt;br&gt;build files at repo root&lt;br&gt;name field matches the target&lt;br&gt;no cd needed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="pkg-root">
+      <mxGeometry x="16" y="44" width="215" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="srclay" value="&lt;b&gt;Src-layout&lt;/b&gt;&lt;br&gt;&lt;br&gt;root build files, code in src/&lt;br&gt;a convention, NOT a monorepo&lt;br&gt;no cd needed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="pkg-root">
+      <mxGeometry x="16" y="148" width="215" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="mono" value="&lt;b&gt;Monorepo (subdir)&lt;/b&gt;&lt;br&gt;&lt;br&gt;sdk/python/, client/python/&lt;br&gt;root config names another package&lt;br&gt;cd into the subdirectory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="pkg-root">
+      <mxGeometry x="16" y="252" width="215" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="multi" value="&lt;b&gt;Multi-package monorepo&lt;/b&gt;&lt;br&gt;&lt;br&gt;core/, tabular/, multimodal/&lt;br&gt;match name in each build config&lt;br&gt;cd into the matching one" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="pkg-root">
+      <mxGeometry x="16" y="356" width="215" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="build-scan" value="&lt;b&gt;Steps 3-5, 7 - analyse package root&lt;/b&gt;&lt;br&gt;&lt;br&gt;pyproject.toml / setup.py / setup.cfg&lt;br&gt;requirements*.txt, environment.yml&lt;br&gt;.github/workflows, tox.ini, .gitlab-ci.yml&lt;br&gt;README / INSTALL / CONTRIBUTING" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1280" y="316" width="245" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="dispatch" value="&lt;b&gt;Step 6 - parallel skill dispatch (Task sub-agents)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1610" y="80" width="552" height="632" as="geometry"/>
+    </mxCell>
+    <mxCell id="src-finder" value="&lt;b&gt;python-packaging-source-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;./scripts/finder.py {package}&lt;br&gt;PyPI project_urls to repo URL&lt;br&gt;confidence high / medium / low&lt;br&gt;fills Source Discovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="16" y="44" width="252" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="complexity" value="&lt;b&gt;python-packaging-complexity&lt;/b&gt;&lt;br&gt;&lt;br&gt;./scripts/pypi_inspect.py {pkg} {ver}&lt;br&gt;sdist plus wheel coverage&lt;br&gt;complexity score 0-10&lt;br&gt;fills Compilation Requirements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="16" y="162" width="252" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="license-checker" value="&lt;b&gt;python-packaging-license-checker&lt;/b&gt;&lt;br&gt;&lt;br&gt;LICENSE mapped to an SPDX id&lt;br&gt;Fedora License Data lookup&lt;br&gt;ALLOWED / BLOCKED / ESCALATE&lt;br&gt;fills License Compatibility" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="16" y="280" width="252" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="env-finder" value="&lt;b&gt;python-packaging-env-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;./scripts/env_finder.py {path}&lt;br&gt;CC/CFLAGS, ENABLE_*, WITH_*&lt;br&gt;fills Environment Investigation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="16" y="398" width="252" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="bug-finder" value="&lt;b&gt;python-packaging-bug-finder&lt;/b&gt;&lt;br&gt;&lt;br&gt;GitHub issues via WebFetch&lt;br&gt;fixed / workaround / unresolved&lt;br&gt;fills Packaging Issue Analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="16" y="516" width="252" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="secaudit" value="&lt;b&gt;python-packaging-security-audit&lt;/b&gt;&lt;br&gt;3 background agents - worst rating wins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="284" y="44" width="252" height="400" as="geometry"/>
+    </mxCell>
+    <mxCell id="static-audit" value="&lt;b&gt;python-packaging-static-audit&lt;/b&gt;&lt;br&gt;&lt;br&gt;./scripts/run-hexora.sh {repo}&lt;br&gt;Stage 1 deterministic rules&lt;br&gt;Stage 2 AI reasoning&lt;br&gt;writes static-audit.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="secaudit">
+      <mxGeometry x="16" y="48" width="220" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="binary-audit" value="&lt;b&gt;python-packaging-binary-audit&lt;/b&gt;&lt;br&gt;&lt;br&gt;scan_binaries.py (Fromager-style)&lt;br&gt;run_malcontent.py YARA scan&lt;br&gt;Stage 1 rules, then Stage 2 AI&lt;br&gt;writes binary-audit.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="secaudit">
+      <mxGeometry x="16" y="166" width="220" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="git-audit" value="&lt;b&gt;python-packaging-git-audit&lt;/b&gt;&lt;br&gt;&lt;br&gt;git log -50 on sensitive files&lt;br&gt;eval/exec/base64/socket patterns&lt;br&gt;AI triage only, no Stage 1 rules&lt;br&gt;writes git-audit.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="secaudit">
+      <mxGeometry x="16" y="284" width="220" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="report-out" value="&lt;b&gt;Build Analysis report&lt;/b&gt;&lt;br&gt;&lt;br&gt;mandatory template, 13 sections&lt;br&gt;Executive summary to Recommendations&lt;br&gt;Security Assessment omitted when skip_security_audit is true" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1610" y="800" width="260" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="risk-scale" value="RISK_RATING:{value} = line 1 of&lt;br&gt;&amp;nbsp;&amp;nbsp;static-audit.md&lt;br&gt;&amp;nbsp;&amp;nbsp;binary-audit.md&lt;br&gt;&amp;nbsp;&amp;nbsp;git-audit.md&lt;br&gt;&lt;br&gt;overall = worst of the three:&lt;br&gt;&amp;nbsp;&amp;nbsp;critical &gt; needs_review &gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;low_risk &gt; no_issues&lt;br&gt;&lt;br&gt;Stage-1 verdict: BLOCK &gt; REVIEW &gt; PASS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1891" y="800" width="258" height="155" as="geometry"/>
+    </mxCell>
+    <mxCell id="e-entry-investigator" value="package name /&lt;br&gt;repo URL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="investigator" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-investigator-clone" value="repo URL (Step 1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="investigator" target="clone" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-clone-scan" value="shallow clone path" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="clone" target="scan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-scan-layout" value="setup.py /&lt;br&gt;pyproject.toml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="scan" target="layout-q" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-layout-std" value="root name matches" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="layout-q" target="std" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-layout-srclay" value="code under src/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="layout-q" target="srclay" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-layout-mono" value="build files only&lt;br&gt;in a subdir" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="layout-q" target="mono" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-layout-multi" value="several build files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="layout-q" target="multi" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-pkgroot-buildscan" value="package root&lt;br&gt;(cd if subdir)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pkg-root" target="build-scan" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-buildscan-dispatch" value="5 parallel&lt;br&gt;sub-agents" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="build-scan" target="dispatch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-buildscan-secaudit" value="skip_security_audit = false" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="build-scan" target="secaudit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1402.5" y="45"/>
+          <mxPoint x="2020" y="45"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-dispatch-report" value="6 report sections" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.23550724637681159;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="dispatch" target="report-out" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-entry-standalone" value="invoked directly" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3103448275862069;entryY=0;entryDx=0;entryDy=0;" edge="1" source="entry" target="standalone" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-callout-tpl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="investigator" target="report-tpl" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e-callout-risk" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="secaudit" target="risk-scale" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

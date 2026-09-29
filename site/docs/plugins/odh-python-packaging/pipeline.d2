@@ -1,0 +1,419 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **Package name or repo URL**
+
+  - PyPI `package_name` or git URL
+  - optional `skip_security_audit`
+  - agent auto-delegated or /agents
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Orchestrator agent ---
+
+investigator: |md
+  **python-packaging-investigator**
+  agent (orchestrator)
+
+  - tools: Bash, Read, Grep, Glob,
+    WebFetch, Skill
+  - Steps 1-7 investigation workflow
+  - package name only: source-finder first
+  - owns the mandatory report template
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- External: cross-plugin dependency ---
+
+clone: |md
+  **git-shallow-clone**
+  odh-git plugin (depends_on)
+
+  - shallow clone to a temp dir
+  - security-audit clones --depth 50
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 2: quick assessment ---
+
+scan: |md
+  **Step 2 - Quick assessment**
+
+  - find -maxdepth 4 for setup.py,
+    pyproject.toml, setup.cfg
+  - read the root build config `name`
+  - a root build file alone is not proof
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+layout-q: |md
+  **Repository layout?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2: package root resolution ---
+
+pkg-root: "Package root resolution" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  std: |md
+    **Standard (root)**
+
+    - build files at repo root
+    - `name` matches the target
+    - no cd needed
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  srclay: |md
+    **Src-layout**
+
+    - root build files, code in src/
+    - a convention, NOT a monorepo
+    - no cd needed
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  mono: |md
+    **Monorepo (subdir)**
+
+    - sdk/python/, client/python/
+    - root config names another package
+    - cd into the subdirectory
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  multi: |md
+    **Multi-package monorepo**
+
+    - core/, tabular/, multimodal/
+    - match `name` in each build config
+    - cd into the matching one
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Steps 3-5, 7 ---
+
+build-scan: |md
+  **Steps 3-5, 7 - analyse package root**
+
+  - pyproject.toml / setup.py / setup.cfg
+  - requirements*.txt, environment.yml
+  - .github/workflows, tox.ini, .gitlab-ci.yml
+  - README / INSTALL / CONTRIBUTING
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 6: parallel skill dispatch ---
+
+dispatch: "Step 6 - parallel skill dispatch (Task sub-agents)" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  src-finder: |md
+    **python-packaging-source-finder**
+
+    - ./scripts/finder.py {package}
+    - PyPI project_urls to repo URL
+    - confidence high / medium / low
+    - fills Source Discovery
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  complexity: |md
+    **python-packaging-complexity**
+
+    - ./scripts/pypi_inspect.py {pkg} {ver}
+    - sdist plus wheel coverage
+    - complexity score 0-10
+    - fills Compilation Requirements
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  license-checker: |md
+    **python-packaging-license-checker**
+
+    - LICENSE mapped to an SPDX id
+    - Fedora License Data lookup
+    - ALLOWED / BLOCKED / ESCALATE
+    - fills License Compatibility
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  env-finder: |md
+    **python-packaging-env-finder**
+
+    - ./scripts/env_finder.py {path}
+    - CC/CFLAGS, ENABLE_*, WITH_*
+    - fills Environment Investigation
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  bug-finder: |md
+    **python-packaging-bug-finder**
+
+    - GitHub issues via WebFetch
+    - fixed / workaround / unresolved
+    - fills Packaging Issue Analysis
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  secaudit: "python-packaging-security-audit - 3 background agents, worst rating wins" {
+    style.fill: "#ececec"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+
+    static-audit: |md
+      **python-packaging-static-audit**
+
+      - ./scripts/run-hexora.sh {repo}
+      - Stage 1 deterministic rules
+      - Stage 2 AI reasoning
+      - writes static-audit.md
+    | {
+      shape: rectangle
+      style.fill: "#e8e8e8"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+      style.double-border: true
+    }
+
+    binary-audit: |md
+      **python-packaging-binary-audit**
+
+      - scan_binaries.py (Fromager-style)
+      - run_malcontent.py YARA scan
+      - Stage 1 rules, then Stage 2 AI
+      - writes binary-audit.md
+    | {
+      shape: rectangle
+      style.fill: "#e8e8e8"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+      style.double-border: true
+    }
+
+    git-audit: |md
+      **python-packaging-git-audit**
+
+      - git log -50 on sensitive files
+      - eval/exec/base64/socket patterns
+      - AI triage only, no Stage 1 rules
+      - writes git-audit.md
+    | {
+      shape: rectangle
+      style.fill: "#e8e8e8"
+      style.stroke: "#333333"
+      style.stroke-width: 2
+      style.double-border: true
+    }
+  }
+}
+
+# --- Standalone skills (not dispatched by the agent) ---
+
+standalone: "Standalone skills - not dispatched by the agent" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  full-deps: |md
+    **python-full-deps**
+
+    - scripts/resolve_full_deps.py
+    - uv pip compile, pip fallback
+    - sorted name==version tree
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  license-finder: |md
+    **python-packaging-license-finder**
+
+    - ./scripts/find_license.py {pkg}
+    - PyPI metadata, then repo LICENSE
+    - complements license-checker
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Output ---
+
+report-out: |md
+  **Build Analysis report**
+
+  - mandatory template, 13 sections
+  - Executive summary to Recommendations
+  - Security Assessment omitted when
+    skip_security_audit is true
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callouts ---
+
+report-tpl: |md
+  # {Package} Build Analysis  (MANDATORY)
+  ## Executive summary
+  ## Source Discovery      (source-finder)
+  ## Repository Layout     (Step 2)
+  ## Build System Analysis
+  ## Compilation Requirements (complexity)
+  ## Dependencies Analysis
+  ## Environment Investigation (env-finder)
+  ## Packaging Issue Analysis (bug-finder)
+  ## CI/CD Analysis
+  ## License Compatibility (license-checker)
+  ## Security Assessment   (security-audit)
+  ## Documentation Review
+  ## Recommendations
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+risk-scale: |md
+  RISK_RATING:{value} = line 1 of
+    static-audit.md
+    binary-audit.md
+    git-audit.md
+
+  overall = worst of the three:
+    critical > needs_review >
+    low_risk > no_issues
+
+  Stage-1 verdict: BLOCK > REVIEW > PASS
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow ---
+
+entry -> investigator: "package name /\nrepo URL"
+investigator -> clone: "repo URL (Step 1)"
+clone -> scan: "shallow clone path"
+scan -> layout-q: "setup.py /\npyproject.toml"
+
+layout-q -> pkg-root.std: "root name matches"
+layout-q -> pkg-root.srclay: "code under src/"
+layout-q -> pkg-root.mono: "build files only\nin a subdir"
+layout-q -> pkg-root.multi: "several build files"
+
+pkg-root -> build-scan: "package root\n(cd if subdir)"
+
+build-scan -> dispatch: "5 parallel\nsub-agents"
+build-scan -> dispatch.secaudit: "skip_security_audit = false" {
+  style.stroke-dash: 3
+}
+
+dispatch -> report-out: "6 report sections"
+
+entry -> standalone: "invoked directly" {
+  style.stroke-dash: 3
+}
+
+# --- Callout connectors ---
+
+investigator -> report-tpl: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+dispatch.secaudit -> risk-scale: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
