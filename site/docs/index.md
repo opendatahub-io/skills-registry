@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-38 plugins | 205 skills | 7 categories
+38 plugins | 206 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -192,9 +192,9 @@ hide:
 
     ---
 
-    Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocesse...
+    Pipeline failure analysis skills for AIPCC CI/CD pipelines. Collects structured wheel failures into one audit report,...
 
-    **2 skills** - DevOps & CI/CD - v0.1.0
+    **3 skills** - DevOps & CI/CD - v0.1.0
 
 -   **[code-review-skills](plugins/code-review-skills/index.md)**
 

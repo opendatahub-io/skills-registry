@@ -8,15 +8,15 @@ title: pipeline-skills
 # pipeline-skills
 
 Pipeline failure analysis skills for AIPCC (AI Platform Compute Cluster)
-CI/CD pipelines. This plugin is the **inner layer** of a larger failure
-analysis system — the two skills that run inside a Claude Code container
-and do the actual reasoning. The **outer layer** (Python orchestration,
-GitLab CI wiring, per-group report assembly, and Jira/Slack notification)
-lives in [pipeline-failure-analyzer](https://github.com/opendatahub-io/pipeline-failure-analyzer)
+CI/CD pipelines. The plugin provides three skills: deterministic
+**wheel-failure-triage** helpers for collecting build evidence and preparing
+an audit report, plus **pipeline-grouping** and **pipeline-rca** for analysis
+inside the agent container. Report assembly and Jira/Slack notification
+live in [pipeline-failure-analyzer](https://github.com/opendatahub-io/pipeline-failure-analyzer)
 and the generic [agentic-ci](https://github.com/opendatahub-io/agentic-ci)
 framework.
 
-Analysis runs in two stages. First, **pipeline-grouping** reads the
+For ordinary failed-job logs, analysis runs in two stages. First, **pipeline-grouping** reads the
 preprocessed error output of every failed job and clusters jobs by shared
 root cause — merging jobs with the same underlying error even when they
 span different collections or pipeline actions, and deduplicating against
@@ -25,7 +25,7 @@ open Jira tickets to avoid filing repeats. Then, for each resulting group,
 to diagnose *why* the failure happened, emitting structured narrative
 sections and a machine-readable finding with a confidence-rated diagnosis.
 
-Both skills are **orchestrator-invoked** (`user-invocable: false`): they
+Both analysis skills are **orchestrator-invoked** (`user-invocable: false`): they
 take no command-line arguments. Instead they operate against a workspace
 contract at `/workspace/` that the orchestrator populates with context
 JSON, job trace logs, preprocessed error files, and shallow repository
@@ -57,6 +57,7 @@ orchestrator assembles and routes downstream.
 |-------|-------------|-----------|
 | [`/pipeline-grouping`](pipeline-grouping.md) | Group failed CI/CD pipeline jobs by error similarity using log analysis and Jira ticket deduplication | :material-close: internal |
 | [`/pipeline-rca`](pipeline-rca.md) | Root cause analysis for a pipeline failure error group with structured findings and section files | :material-close: internal |
+| [`/wheel-failure-triage`](wheel-failure-triage.md) | Collect structured wheel failures across GitLab build pipelines, prepare one audit child job, and hand the completed report to PFA. | :material-close: internal |
 
 ## Installation
 
@@ -74,8 +75,16 @@ codex plugin marketplace add opendatahub-io/skills-registry
 
 ## Architecture
 
-The two skills form a fan-out pipeline: one grouping pass produces N error
-groups, and one root-cause-analysis task runs per group. Each skill is
+**wheel-failure-triage** runs directly in CI through its bundled Python CLI.
+It collects original bootstrap failure reports, including successful jobs
+in build child pipelines, and retains each occurrence's `source_pipeline_url`
+and producer job URL. It prepares one audit child job with the full report;
+the audit fails for a nonempty report. The parent waits for the audit result
+before starting PFA. If audit creation fails, it sends the root pipeline URL
+to PFA instead.
+
+The two analysis skills form a fan-out pipeline for ordinary job logs: one
+grouping pass produces N error groups, and one RCA task runs per group. Each skill is
 self-contained — its prompt, scripts, and reference templates live together
 under `skills/<name>/` and reference themselves via `${CLAUDE_SKILL_DIR}`.
 

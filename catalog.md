@@ -382,7 +382,7 @@ Tags: devops, testops, odh, rhoai, konflux, onboarding, ci-cd, release, automati
 
 ### pipeline-skills
 
-Pipeline failure analysis skills for AIPCC CI/CD pipelines. Groups failed jobs by shared root cause using preprocessed error logs, then performs root cause analysis per group with structured findings, section files, and confidence-rated diagnoses. Designed to run inside a Claude Code container as part of the pipeline-failure-analyzer CI pipeline.
+Pipeline failure analysis skills for AIPCC CI/CD pipelines. Collects structured wheel failures into one audit report, groups failed jobs by shared root cause, and performs root cause analysis with structured findings and confidence-rated diagnoses. Includes deterministic CI helpers and analysis skills used by pipeline-failure-analyzer.
 
 v0.1.0 | Apache-2.0 | [opendatahub-io/pipeline-skills](https://github.com/opendatahub-io/pipeline-skills)
 
