@@ -45,7 +45,7 @@ for Sections 2, 7, and 8.
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/fullsend-ai/odh-test-gen/blob/d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0/skills/test-plan-analyze-risks/SKILL.md" title="fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-risks/SKILL.md">SKILL.md @ d13995e<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
+        <a class="skill-contract__ref" href="https://github.com/fullsend-ai/test-creator/blob/d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0/skills/test-plan-analyze-risks/SKILL.md" title="fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-risks/SKILL.md">SKILL.md @ d13995e<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -70,7 +70,7 @@ for Sections 2, 7, and 8.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/fullsend-ai/odh-test-gen/blob/d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0/skills/test-plan-analyze-risks/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/test-plan-analyze-risks/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/fullsend-ai/test-creator/blob/d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0/skills/test-plan-analyze-risks/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>skills/test-plan-analyze-risks/SKILL.md</code></a></div>
     </div>
   </section>
 </div>

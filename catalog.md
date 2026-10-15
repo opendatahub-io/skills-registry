@@ -105,7 +105,7 @@ Tags: strategy, strat, rubric, quality, assessment
 
 End-to-end test planning workflow for RHOAI: generate E2E/UI-focused test plans from Jira strategies, create traceable test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub, resolve review feedback, and score plans with deterministic evidence gates and automated rubrics.
 
-v2.0.0 | [fullsend-ai/odh-test-gen](https://github.com/fullsend-ai/odh-test-gen)
+v2.0.0 | [fullsend-ai/test-creator](https://github.com/fullsend-ai/test-creator)
 
 Tags: test-plan, test-cases, quality, strategy, review, scoring, automation, playwright, ui-testing
 
