@@ -24,7 +24,7 @@ to decide whether tests belong in the component repo or downstream E2E repo.
     - **Version**: 2.0.0
     - **Author**: Federico Mosca
     - **Category**: [Evaluation & Testing](../../categories/evaluation.md)
-    - **Repository**: [fullsend-ai/odh-test-gen](https://github.com/fullsend-ai/odh-test-gen)
+    - **Repository**: [fullsend-ai/test-creator](https://github.com/fullsend-ai/test-creator)
     - **Tags**: <span class="tag-pill">test-plan</span> <span class="tag-pill">test-cases</span> <span class="tag-pill">quality</span> <span class="tag-pill">strategy</span> <span class="tag-pill">review</span> <span class="tag-pill">scoring</span> <span class="tag-pill">automation</span> <span class="tag-pill">playwright</span> <span class="tag-pill">ui-testing</span>
 
 ## Pipeline

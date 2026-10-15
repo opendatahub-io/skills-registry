@@ -906,7 +906,7 @@ against live clusters via Playwright. Test code generation uses odh-test-context
 repo-specific conventions, Tiger Team pattern guides, and intelligent placement analysis
 to decide whether tests belong in the component repo or downstream E2E repo.
 
-**Repository**: https://github.com/fullsend-ai/odh-test-gen
+**Repository**: https://github.com/fullsend-ai/test-creator
 
 ### Architecture
 

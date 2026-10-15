@@ -1181,10 +1181,10 @@ plugins:
       name: Federico Mosca
     source:
       type: github
-      repo: fullsend-ai/odh-test-gen
+      repo: fullsend-ai/test-creator
       ref: main
-    homepage: https://github.com/fullsend-ai/odh-test-gen
-    repository: https://github.com/fullsend-ai/odh-test-gen
+    homepage: https://github.com/fullsend-ai/test-creator
+    repository: https://github.com/fullsend-ai/test-creator
     skills:
       - name: test-plan-create
         description: Generate a test plan from a strategy
@@ -1197,7 +1197,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-review/prompts/score-agent.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-review/prompts/score-agent.md
           problem_statement: Turn a Jira strategy and optional design documents into a grounded E2E/UI test plan ready
             for review.
           success_conditions:
@@ -1230,7 +1230,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-create-cases/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-create-cases/SKILL.md
           problem_statement: Convert an approved test plan into self-contained, traceable test-case specifications.
           success_conditions:
             - Writes test cases and updates the index and plan coverage tables.
@@ -1262,7 +1262,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-update/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-update/SKILL.md
           problem_statement: Incorporate new design documents into an existing test plan while retaining human edits
             and tracking unresolved gaps.
           success_conditions:
@@ -1290,7 +1290,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-score-test-function/prompts/score-test-function.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-score-test-function/prompts/score-test-function.md
           problem_statement: Implement backend test-case specifications as executable pytest code in the selected target
             test repository.
           success_conditions:
@@ -1323,7 +1323,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-ui-verify/instructions.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-ui-verify/instructions.md
           problem_statement: Execute UI test cases against a prepared live browser session and produce evidence-backed
             verification reports.
           success_conditions:
@@ -1383,7 +1383,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-resolve-feedback/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-resolve-feedback/SKILL.md
           problem_statement: Assess review feedback on a test-plan pull request and apply the changes accepted by the
             user.
           success_conditions:
@@ -1411,7 +1411,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-review/prompts/score-agent.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-review/prompts/score-agent.md
           problem_statement: Assess an existing test plan against the five-criterion quality rubric and deterministic
             evidence gates.
           success_conditions:
@@ -1444,7 +1444,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-endpoints/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-endpoints/SKILL.md
           problem_statement: Extract test scope, objectives and interfaces from the supplied strategy and optional
             design documents.
           success_conditions:
@@ -1472,7 +1472,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-risks/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-risks/SKILL.md
           problem_statement: Derive E2E/UI test priorities, non-functional requirements and risks from the supplied
             feature documents.
           success_conditions:
@@ -1501,7 +1501,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-infra/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-analyze-infra/SKILL.md
           problem_statement: Identify the test environment, infrastructure, data, users and tools needed to verify
             the documented feature.
           success_conditions:
@@ -1529,7 +1529,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-merge/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-merge/SKILL.md
           problem_statement: Merge new scope, risk and infrastructure findings into an existing test plan while preserving
             user customizations.
           success_conditions:
@@ -1557,7 +1557,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-resolve-gaps/SKILL.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-resolve-gaps/SKILL.md
           problem_statement: Determine which existing test-plan gaps are answered by new documentation and which gaps
             remain or are newly discovered.
           success_conditions:
@@ -1586,7 +1586,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-review/prompts/score-agent.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-review/prompts/score-agent.md
           problem_statement: Review and improve a test plan using the five-criterion quality rubric with deterministic
             evidence gates.
           success_conditions:
@@ -1619,7 +1619,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-score-test-function/prompts/score-test-function.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-score-test-function/prompts/score-test-function.md
           problem_statement: Produce one complete test file implementing the assigned cases while preserving existing
             code and repository conventions.
           success_conditions:
@@ -1650,7 +1650,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/odh-test-gen@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-score-test-function/prompts/score-test-function.md
+              rubric_ref: fullsend-ai/test-creator@d13995efb9bdc5b88a2c20e7f864a26fdf9ee9a0:skills/test-plan-score-test-function/prompts/score-test-function.md
           problem_statement: Assess generated test code against its test-case specification, repository conventions
             and five-criterion quality rubric.
           success_conditions:

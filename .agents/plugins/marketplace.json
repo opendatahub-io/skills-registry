@@ -92,7 +92,7 @@
       "source": {
         "ref": "main",
         "source": "url",
-        "url": "https://github.com/fullsend-ai/odh-test-gen.git"
+        "url": "https://github.com/fullsend-ai/test-creator.git"
       }
     },
     {

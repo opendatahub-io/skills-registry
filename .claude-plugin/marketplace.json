@@ -163,7 +163,7 @@
       },
       "category": "evaluation",
       "description": "End-to-end test planning workflow for RHOAI: generate E2E/UI-focused test plans from Jira strategies, create traceable test cases, implement executable automation code, verify UI tests against live clusters via Playwright, publish to GitHub, resolve review feedback, and score plans with deterministic evidence gates and automated rubrics.\n",
-      "homepage": "https://github.com/fullsend-ai/odh-test-gen",
+      "homepage": "https://github.com/fullsend-ai/test-creator",
       "keywords": [
         "test-plan",
         "test-cases",
@@ -176,10 +176,10 @@
         "ui-testing"
       ],
       "name": "test-plan",
-      "repository": "https://github.com/fullsend-ai/odh-test-gen",
+      "repository": "https://github.com/fullsend-ai/test-creator",
       "source": {
         "ref": "main",
-        "repo": "fullsend-ai/odh-test-gen",
+        "repo": "fullsend-ai/test-creator",
         "source": "github"
       },
       "version": "2.0.0"
