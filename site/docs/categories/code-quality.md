@@ -13,9 +13,9 @@ Code review, linting, and quality enforcement
 
 ### [code-review-skills](../plugins/code-review-skills/index.md)
 
-AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
+AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.
 
-**1 skills** - v0.1.0
+**3 skills** - v0.2.1
 
 ## Generic
 

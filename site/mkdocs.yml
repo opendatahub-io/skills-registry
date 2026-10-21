@@ -285,6 +285,8 @@ nav:
     - code-review-skills:
       - plugins/code-review-skills/index.md
       - gitlab-code-review: plugins/code-review-skills/gitlab-code-review.md
+      - code-review-panel: plugins/code-review-skills/code-review-panel.md
+      - security-diff-review: plugins/code-review-skills/security-diff-review.md
     - spike-executor:
       - plugins/spike-executor/index.md
       - SPIKE-executor: plugins/spike-executor/SPIKE-executor.md

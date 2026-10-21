@@ -3517,6 +3517,14 @@ Examples:
 /gitlab-code-review only flag critical and major issues
 ```
 
+#### /code-review-panel
+
+Risk-tiered review panel for the committed changes on a branch, PR or MR. A triage script picks the tier (quick, standard or deep) and the lenses, one read-only finder subagent runs per lens, skeptic subagents verify each finding, and the ranked report blocks on security. Can write gitlab-code-review JSON for posting.
+
+#### /security-diff-review
+
+Security-only review of the committed changes on a branch, PR or MR. One finder subagent looks for exploitable vulnerabilities the change introduces, one false-positive filter subagent per finding scores it, and only findings scoring 8 or more out of 10 are kept. Repos tune exclusions and precedents in REVIEW.md at the base ref.
+
 ---
 
 ## spike-executor
