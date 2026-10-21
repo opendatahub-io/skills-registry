@@ -192,15 +192,17 @@ Tags: code-review, coderabbit, unit-tests
 
 ### code-review-skills
 
-AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON feedback with inline comments, and posts results to the GitLab MR (in CI) or displays them locally for preview. Supports chill mode filtering and comment deduplication.
+AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.
 
-v0.1.0 | Apache-2.0 | [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
+v0.2.1 | Apache-2.0 | [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
 
-Tags: code-review, gitlab, ci, merge-request
+Tags: code-review, gitlab, ci, merge-request, security, subagents
 
-| Skill | Description |
-|-------|-------------|
-| `/gitlab-code-review` | Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments |
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/gitlab-code-review` | Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments | — | — |
+| `/code-review-panel` | Risk-tiered review panel for the committed changes on a branch, PR or MR. A triage script picks the tier (quick, standard or deep) and the lenses, one read-only finder subagent runs per lens, skeptic subagents verify each finding, and the ranked report blocks on security. Can write gitlab-code-review JSON for posting. | `review`, `orchestrate` | `task_success` (`judge`), `evidence_completeness` (`verifier_backed`), `token_efficiency` (`deterministic`) |
+| `/security-diff-review` | Security-only review of the committed changes on a branch, PR or MR. One finder subagent looks for exploitable vulnerabilities the change introduces, one false-positive filter subagent per finding scores it, and only findings scoring 8 or more out of 10 are kept. Repos tune exclusions and precedents in REVIEW.md at the base ref. | `review` | `task_success` (`judge`), `evidence_completeness` (`judge`) |
 
 ```bash
 /plugin install code-review-skills@opendatahub-skills

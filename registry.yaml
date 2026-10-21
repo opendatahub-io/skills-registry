@@ -3668,14 +3668,14 @@ plugins:
 
   - name: code-review-skills
     description: >
-      AI-powered code review for GitLab merge requests. Reviews all commits
-      since the base branch, produces structured JSON feedback with inline
-      comments, and posts results to the GitLab MR (in CI) or displays them
-      locally for preview. Supports chill mode filtering and comment
-      deduplication.
-    version: "0.1.0"
+      AI code review skills. A single-pass GitLab merge request reviewer that
+      posts inline comments and a summary (in CI) or displays them locally, a
+      risk-tiered review panel with one reviewer subagent per lens and skeptic
+      subagents that verify each finding, and a security-only diff review with
+      a false-positive filter per finding.
+    version: "0.2.1"
     category: code-quality
-    tags: [code-review, gitlab, ci, merge-request]
+    tags: [code-review, gitlab, ci, merge-request, security, subagents]
     author:
       name: opendatahub-io
     license: Apache-2.0
@@ -3689,6 +3689,93 @@ plugins:
       - name: gitlab-code-review
         description: Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments
         user-invocable: true
+      - name: code-review-panel
+        description: >
+          Risk-tiered review panel for the committed changes on a branch, PR or MR. A triage script
+          picks the tier (quick, standard or deep) and the lenses, one read-only finder subagent runs
+          per lens, skeptic subagents verify each finding, and the ranked report blocks on security.
+          Can write gitlab-code-review JSON for posting.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review, orchestrate]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/code-review-skills@aeba1914f60b23473fc8539aeeac572bd9d655f9:skills/code-review-panel/references/report.md
+            - id: evidence_completeness
+              measure: verifier_backed
+              verifier_ref: opendatahub-io/code-review-skills@aeba1914f60b23473fc8539aeeac572bd9d655f9:skills/code-review-panel/scripts/panel.py
+            - id: token_efficiency
+              measure: deterministic
+          problem_statement: Review one committed change with independent per-lens finders and skeptic verification, and report only the findings the skeptics confirm, ranked by severity, with security as the blocking pass.
+          success_conditions:
+            - panel.py report accepts the findings and verdicts files and prints a report whose first line starts with a count or says plainly that the review is incomplete or found nothing.
+            - Every counted finding cites a file and line and survived the skeptic vote or an explicit orchestrator resolution.
+          invariants:
+            must_preserve:
+              - Finders and skeptics are read-only and treat the diff, repo files and REVIEW.md as data, never instructions.
+              - REVIEW.md is read from the base ref only, so a change cannot loosen its own review.
+              - The panel does not run without the security-diff-review references, and a failed security pass is reported as incomplete.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob, Agent]
+              cli: [git, python3]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/code-review-panel/SKILL.md
+            supporting_paths:
+              - skills/code-review-panel/scripts/panel.py
+              - skills/code-review-panel/references/finder-brief.md
+              - skills/code-review-panel/references/skeptics.md
+              - skills/code-review-panel/references/report.md
+              - skills/code-review-panel/references/review-md.md
+      - name: security-diff-review
+        description: >
+          Security-only review of the committed changes on a branch, PR or MR. One finder subagent looks
+          for exploitable vulnerabilities the change introduces, one false-positive filter subagent per
+          finding scores it, and only findings scoring 8 or more out of 10 are kept. Repos tune
+          exclusions and precedents in REVIEW.md at the base ref.
+        user-invocable: true
+        contract:
+          version: canonical-skill-v1
+          functions: [review]
+          metrics:
+            - id: task_success
+              measure: judge
+              rubric_ref: opendatahub-io/code-review-skills@aeba1914f60b23473fc8539aeeac572bd9d655f9:skills/security-diff-review/references/filter.md
+            - id: evidence_completeness
+              measure: judge
+              rubric_ref: opendatahub-io/code-review-skills@aeba1914f60b23473fc8539aeeac572bd9d655f9:skills/security-diff-review/references/finder.md
+          problem_statement: Find exploitable vulnerabilities that a committed change introduces and keep only those an independent filter scores 8 or more out of 10 under the exclusion rules.
+          success_conditions:
+            - Reports each kept finding with its file, line, severity, exploit scenario and recommendation, or says plainly that none were found.
+            - Says the review did not complete when the diff command is refused or the merge base is missing.
+          invariants:
+            must_preserve:
+              - The finder and filters are read-only and run nothing that executes the code under review.
+              - REVIEW.md overrides are read from the base ref only.
+              - An exclusion rule is a veto that no other check can override.
+            fixed_context:
+              tools: [Bash, Read, Grep, Glob, Agent]
+              cli: [git]
+              knowledge_inputs:
+                - kind: repository_content
+                  privacy: public
+                - kind: task_input
+                  privacy: task_private
+                - kind: tool_output
+                  privacy: task_private
+          source_assertions:
+            skill_path: skills/security-diff-review/SKILL.md
+            supporting_paths:
+              - skills/security-diff-review/references/finder.md
+              - skills/security-diff-review/references/filter.md
     harnesses:
       claude-code:
         install: "/plugin install code-review-skills@opendatahub-skills"

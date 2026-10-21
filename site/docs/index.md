@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-39 plugins | 207 skills | 7 categories
+39 plugins | 209 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -208,9 +208,9 @@ hide:
 
     ---
 
-    AI-powered code review for GitLab merge requests. Reviews all commits since the base branch, produces structured JSON...
+    AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) o...
 
-    **1 skills** - Code Quality - v0.1.0
+    **3 skills** - Code Quality - v0.2.1
 
 -   **[spike-executor](plugins/spike-executor/index.md)**
 

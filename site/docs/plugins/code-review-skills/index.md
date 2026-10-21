@@ -24,18 +24,20 @@ falls back to a formatted terminal display.
 
 !!! info "Plugin Details"
 
-    - **Version**: 0.1.0
+    - **Version**: 0.2.1
     - **Author**: opendatahub-io
     - **License**: Apache-2.0
     - **Category**: [Code Quality](../../categories/code-quality.md)
     - **Repository**: [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
-    - **Tags**: <span class="tag-pill">code-review</span> <span class="tag-pill">gitlab</span> <span class="tag-pill">ci</span> <span class="tag-pill">merge-request</span>
+    - **Tags**: <span class="tag-pill">code-review</span> <span class="tag-pill">gitlab</span> <span class="tag-pill">ci</span> <span class="tag-pill">merge-request</span> <span class="tag-pill">security</span> <span class="tag-pill">subagents</span>
 
 ## Skills
 
 | Skill | Description | Invocable |
 |-------|-------------|-----------|
 | [`/gitlab-code-review`](gitlab-code-review.md) | Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments | :material-check: |
+| [`/code-review-panel`](code-review-panel.md) | Risk-tiered review panel for the committed changes on a branch, PR or MR. A triage script picks the tier (quick, standard or deep) and the lenses, one read-only finder subagent runs per lens, skeptic subagents verify each finding, and the ranked report blocks on security. Can write gitlab-code-review JSON for posting. | :material-check: |
+| [`/security-diff-review`](security-diff-review.md) | Security-only review of the committed changes on a branch, PR or MR. One finder subagent looks for exploitable vulnerabilities the change introduces, one false-positive filter subagent per finding scores it, and only findings scoring 8 or more out of 10 are kept. Repos tune exclusions and precedents in REVIEW.md at the base ref. | :material-check: |
 
 ## Installation
 
