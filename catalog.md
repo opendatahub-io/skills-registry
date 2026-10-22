@@ -259,7 +259,7 @@ Tags: knowledge, context, claude-md, agents-md, pr-analysis, automation
 
 Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
 
-v0.3.15 | Apache-2.0 | [opendatahub-io/docs-skills](https://github.com/opendatahub-io/docs-skills)
+v0.3.25 | Apache-2.0 | [opendatahub-io/docs-skills](https://github.com/opendatahub-io/docs-skills)
 
 Tags: documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onboarding, code-analysis
 
@@ -671,7 +671,7 @@ Everything you need for PatternFly development -- React components, design guida
 
 **Includes:** `pf-react`, `pf-design-guide`, `pf-design-audit`, `pf-a11y`, `pf-migration`, `pf-code-review`, `pf-mcp`
 
-v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly)
+v1.0.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly)
 
 Tags: patternfly, react, uxd, design, mcp, components, migration
 
@@ -781,7 +781,7 @@ Tags: patternfly, migration
 
 Code review and quality -- adversarial review, security patterns
 
-v0.1.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-code-review](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-code-review)
+v1.0.0 | Generic | MIT | [rh-uxd/ai-helpers/plugins/patternfly/pf-code-review](https://github.com/rh-uxd/ai-helpers/tree/main/plugins/patternfly/pf-code-review)
 
 Tags: patternfly, code-review
 

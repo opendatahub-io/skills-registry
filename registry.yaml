@@ -3855,7 +3855,7 @@ plugins:
       Everything you need for PatternFly development -- React components,
       design guidance, migration, and MCP docs. Installs all PatternFly
       sub-plugins in one step.
-    version: "0.1.0"
+    version: "1.0.0"
     category: development-tools
     scope: generic
     tags: [patternfly, react, uxd, design, mcp, components, migration]
@@ -4047,7 +4047,7 @@ plugins:
   - name: pf-code-review
     description: >
       Code review and quality -- adversarial review, security patterns
-    version: "0.1.0"
+    version: "1.0.0"
     skills:
       - name: pf-review
         description: Run all PatternFly compliance checks on a project — imports, components, colors, legacy CSS, and security. Use when auditing PF code, before merging PRs, or for comprehensive compliance review.
@@ -4100,7 +4100,7 @@ plugins:
       Markdown documentation. Includes an orchestrated multi-step pipeline,
       standalone review skills, codebase analysis for onboarding, and
       JIRA/PR integration.
-    version: "0.3.15"
+    version: "0.3.25"
     category: documentation
     tags: [documentation, asciidoc, mkdocs, workflow, review, style-guide, jira, onboarding, code-analysis]
     author:

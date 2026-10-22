@@ -11,7 +11,7 @@ Code review and quality -- adversarial review, security patterns
 
 !!! info "Plugin Details"
 
-    - **Version**: 0.1.0
+    - **Version**: 1.0.0
     - **Author**: UXD Team
     - **License**: MIT
     - **Scope**: Generic

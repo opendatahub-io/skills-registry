@@ -936,7 +936,7 @@
         "source": "git-subdir",
         "url": "https://github.com/rh-uxd/ai-helpers.git"
       },
-      "version": "0.1.0"
+      "version": "1.0.0"
     },
     {
       "author": {
@@ -1070,7 +1070,7 @@
         "source": "git-subdir",
         "url": "https://github.com/rh-uxd/ai-helpers.git"
       },
-      "version": "0.1.0"
+      "version": "1.0.0"
     },
     {
       "author": {
@@ -1120,7 +1120,7 @@
         "repo": "opendatahub-io/docs-skills",
         "source": "github"
       },
-      "version": "0.3.15"
+      "version": "0.3.25"
     },
     {
       "author": {
