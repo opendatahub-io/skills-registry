@@ -1,0 +1,194 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe-auto-fix&lt;/b&gt;&lt;br&gt;&lt;br&gt;--type {t}, --jql &quot;{query}&quot;&lt;br&gt;--limit N, --batch-size N (default 50)&lt;br&gt;--data-dir {path}, --random N&lt;br&gt;--headless, --announce-complete&lt;br&gt;--reprocess&lt;br&gt;trailing args = explicit IDs&lt;br&gt;allowed-tools: Bash, Agent&lt;br&gt;(no Skill tool)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="30" width="190" height="220" as="geometry"/>
+    </mxCell>
+    <mxCell id="setup" value="&lt;b&gt;Setup - layout check + Step 0 type&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap.sh --layout links scripts/, types/&lt;br&gt;type_registry.py resolve [--type t]&lt;br&gt;[--headless] {IDs}&lt;br&gt;forwards ONLY --type / --headless / IDs&lt;br&gt;never --jql, --data-dir, --limit,&lt;br&gt;--batch-size, --reprocess, --random&lt;br&gt;prints TYPE RESOLVED: {type} ({how})&lt;br&gt;launch-vars {type} auto-fix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="270" y="25" width="260" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="init" value="&lt;b&gt;Step 1 - Init&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py init {TYPE_FLAG}&lt;br&gt;[--batch-size N] [--headless]&lt;br&gt;[--announce-complete]&lt;br&gt;clears tmp/pipeline-batch-*-ids.txt&lt;br&gt;phase=INIT, batch=0, total_batches=0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="40" width="230" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="id-source" value="&lt;b&gt;Step 2&lt;/b&gt;&lt;br&gt;ID source?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="860" y="60" width="190" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-jql" value="&lt;b&gt;JQL mode&lt;/b&gt;&lt;br&gt;&lt;br&gt;snapshot_fetch.py fetch &quot;{query}&quot; {TYPE_FLAG}&lt;br&gt;--ids-file tmp/pipeline-all-ids.txt&lt;br&gt;--changed-file tmp/pipeline-changed-ids.txt&lt;br&gt;[--limit N] [--data-dir {path}] [--random N]&lt;br&gt;snapshot diff -&gt; new + changed only&lt;br&gt;JQL project cross-checked vs the&lt;br&gt;resolved type's binding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1130" y="30" width="280" height="220" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-reprocess" value="&lt;b&gt;Reprocess-only mode&lt;/b&gt;&lt;br&gt;&lt;br&gt;snapshot_fetch.py fetch --reprocess&lt;br&gt;{TYPE_FLAG} (no JQL)&lt;br&gt;re-includes unchanged-processed IDs&lt;br&gt;same --ids-file / --changed-file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1130" y="300" width="280" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="explicit-ids" value="&lt;b&gt;Explicit IDs&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py write-ids&lt;br&gt;tmp/pipeline-all-ids.txt {IDs}&lt;br&gt;state.py write-ids&lt;br&gt;tmp/pipeline-changed-ids.txt (empty)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1130" y="510" width="280" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="usage-stop" value="&lt;b&gt;Stop - usage&lt;/b&gt;&lt;br&gt;&lt;br&gt;no IDs, no --jql, no --reprocess&lt;br&gt;print usage instructions and stop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1130" y="720" width="280" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="bootstrap" value="&lt;b&gt;Step 3 - {BOOTSTRAP}&lt;/b&gt;&lt;br&gt;bash scripts/bootstrap.sh --type {type}&lt;br&gt;&lt;br&gt;retry once on failure&lt;br&gt;second failure -&gt; stop&lt;br&gt;&quot;bootstrap failed.&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1490" y="300" width="230" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="resume-check" value="&lt;b&gt;Step 4 - check_resume.py&lt;/b&gt;&lt;br&gt;changed bypass resume,&lt;br&gt;passing review skipped;&lt;br&gt;any IDs left to process?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1490" y="560" width="230" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="phases-callout" value="PHASES (31) - scripts/pipeline_state.py&lt;br&gt;noop / script (run_script) / agent (launch_wave)&lt;br&gt;&lt;br&gt;BATCH_START FETCH SETUP&lt;br&gt;ASSESS REVIEW REVISE FIXUP&lt;br&gt;REASSESS_CHECK REASSESS_SAVE&lt;br&gt;REASSESS_ASSESS REASSESS_REVIEW&lt;br&gt;REASSESS_RESTORE REASSESS_REVISE&lt;br&gt;REASSESS_FIXUP&lt;br&gt;COLLECT SPLIT SPLIT_COLLECT&lt;br&gt;SPLIT_PIPELINE_START SPLIT_ASSESS&lt;br&gt;SPLIT_REVIEW SPLIT_REVISE SPLIT_FIXUP&lt;br&gt;SPLIT_SAVE SPLIT_REASSESS&lt;br&gt;SPLIT_RE_REVIEW SPLIT_RESTORE&lt;br&gt;SPLIT_CORRECTION_CHECK&lt;br&gt;BATCH_DONE ERROR_COLLECT REPORT DONE&lt;br&gt;&lt;br&gt;BATCH_DONE -&gt; BATCH_START while batch &lt; total&lt;br&gt;ERROR_COLLECT -&gt; BATCH_START (1 retry batch)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="300" width="340" height="300" as="geometry"/>
+    </mxCell>
+    <mxCell id="launch-callout" value="next-action YAML - the launch_wave contract&lt;br&gt;&lt;br&gt;action: launch_wave&lt;br&gt;phase: ASSESS&lt;br&gt;message: &quot;ASSESS: wave 1/2 (5 IDs)&quot;&lt;br&gt;agents:&lt;br&gt;&#160;&#160;- subagent_type: rfe-scorer&lt;br&gt;&#160;&#160;&#160;&#160;prompt_file: .claude/skills/rfe-review/&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;prompts/assess-agent.md&lt;br&gt;&#160;&#160;&#160;&#160;vars: |&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;KEY=RHAIRFE-1234&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;DATA_FILE=tmp/rfe-assess/single/&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;RHAIRFE-1234.md&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;RUN_DIR=tmp/rfe-assess/single&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;PROMPT_PATH=.context/assess-rfe/.../&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;agent_prompt.md&lt;br&gt;&#160;&#160;- prompt_file: types/rfe/dimensions/&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;feasibility.md&lt;br&gt;&#160;&#160;&#160;&#160;vars: |&lt;br&gt;&#160;&#160;&#160;&#160;&#160;&#160;ID=RHAIRFE-1234" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="430" y="300" width="400" height="300" as="geometry"/>
+    </mxCell>
+    <mxCell id="batching" value="&lt;b&gt;Step 4b - Batch&lt;/b&gt;&lt;br&gt;&lt;br&gt;split process IDs into batch_size chunks&lt;br&gt;state.py write-ids&lt;br&gt;tmp/pipeline-batch-{N}-ids.txt&lt;br&gt;pipeline_state.py set total_batches={M}&lt;br&gt;pipeline_state.py set-phase BATCH_START&lt;br&gt;&lt;br&gt;idle run: no batch files, total_batches=0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="1070" width="260" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="dispatch" value="&lt;b&gt;Dispatch loop - repeat until phase DONE&lt;/b&gt;&lt;br&gt;Run it to completion: never stop early, skip a batch or summarize before every batch is processed.&lt;br&gt;Budget and timeout are managed externally - ignore any &quot;running low on context&quot; impulse.&lt;br&gt;Bash discipline: exactly one operation per Bash call; no $(...) substitution and no ; &amp;&amp; || chaining&lt;br&gt;(they prompt for approval and are denied headless). Values move between commands through tmp/ files written with state.py." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="340" y="950" width="1190" height="800" as="geometry"/>
+    </mxCell>
+    <mxCell id="run-phase" value="&lt;b&gt;run_script -&gt; run-phase&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py run-phase&lt;br&gt;runs that phase's own script&lt;br&gt;(SETUP, FIXUP, SPLIT_COLLECT,&lt;br&gt;ERROR_COLLECT, REPORT, ...)&lt;br&gt;writes tmp/.dispatch-marker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="325" y="120" width="230" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="next-action" value="&lt;b&gt;next-action&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py next-action&lt;br&gt;chains noop phases and&lt;br&gt;already-run script phases&lt;br&gt;internally&lt;br&gt;emits YAML: action, phase,&lt;br&gt;message, agents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="25" y="330" width="220" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="action-kind" value="&lt;b&gt;action?&lt;/b&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="dispatch">
+      <mxGeometry x="345" y="345" width="190" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="launch-wave" value="&lt;b&gt;launch_wave - background Agents&lt;/b&gt;&lt;br&gt;&lt;br&gt;one Agent per entry in agents[]&lt;br&gt;prompt = &quot;{vars}\n\nRead {prompt_file}&lt;br&gt;and follow all instructions exactly.&quot;&lt;br&gt;vars = pre-rendered KEY=VALUE lines&lt;br&gt;(launch block + per-agent, {ID} filled in)&lt;br&gt;subagent_type when present (rfe-scorer)&lt;br&gt;SAME prompt files /rfe-review and&lt;br&gt;/rfe-split use - headless, never a Skill call" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="310" y="570" width="260" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="wait-wave" value="&lt;b&gt;wait-for-wave&lt;/b&gt;&lt;br&gt;&lt;br&gt;pipeline_state.py wait-for-wave&lt;br&gt;blocking barrier - polls artifact&lt;br&gt;files on disk, not Agent&lt;br&gt;notifications&lt;br&gt;stall guard: 900s window,&lt;br&gt;retry cap 2, then escalate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="dispatch">
+      <mxGeometry x="680" y="580" width="220" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="wave-exit" value="&lt;b&gt;exit code?&lt;/b&gt;&lt;br&gt;any other code&lt;br&gt;is an error" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="dispatch">
+      <mxGeometry x="955" y="590" width="190" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="report-summary" value="&lt;b&gt;Teardown&lt;/b&gt;&lt;br&gt;&lt;br&gt;batch_summary.py {TYPE_FLAG}&lt;br&gt;--counts-only&lt;br&gt;--ids-file tmp/pipeline-all-ids.txt&lt;br&gt;&lt;br&gt;TOTAL= PASSED= FAILED=&lt;br&gt;SPLIT= ERRORS=&lt;br&gt;split children folded in via parent_key&lt;br&gt;idle run -&gt; TOTAL=0, no run report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1620" y="1265" width="240" height="220" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_setup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="setup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_setup_init" value="launch block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="setup" target="init" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_init_idsource" value="pipeline-state.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="init" target="id-source" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_idsource_jql" value="--jql" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="id-source" target="fetch-jql" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_idsource_reprocess" value="--reprocess, no JQL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="id-source" target="fetch-reprocess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="955" y="385"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_idsource_explicit" value="explicit IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="id-source" target="explicit-ids" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="955" y="595"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_idsource_usage" value="none of the three" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="id-source" target="usage-stop" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="955" y="785"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_jql_bootstrap" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="fetch-jql" target="bootstrap" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_reprocess_bootstrap" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-reprocess" target="bootstrap" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_explicit_bootstrap" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="explicit-ids" target="bootstrap" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_bootstrap_resume" value="all + changed IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="resume-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resume_batching" value="pipeline-process-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;" edge="1" source="resume-check" target="batching" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1605" y="890"/>
+          <mxPoint x="238" y="890"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resume_report" value="0 to process - idle run" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.625;entryY=0;entryDx=0;entryDy=0;" edge="1" source="resume-check" target="report-summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1770" y="650"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_batching_nextaction" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="batching" target="next-action" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_nextaction_action" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="next-action" target="action-kind" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_action_runphase" value="run_script" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="action-kind" target="run-phase" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_action_launchwave" value="launch_wave" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="action-kind" target="launch-wave" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_action_report" value="done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action-kind" target="report-summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_runphase_nextaction" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="run-phase" target="next-action" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_launchwave_waitwave" value="wave IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="launch-wave" target="wait-wave" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_waitwave_waveexit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="wait-wave" target="wave-exit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_waveexit_waitwave" value="exit 3 - pending" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="wave-exit" target="wait-wave" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1390" y="1790"/>
+          <mxPoint x="1130" y="1790"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_waveexit_nextaction" value="exit 0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="wave-exit" target="next-action" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1570" y="1620"/>
+          <mxPoint x="1570" y="1860"/>
+          <mxPoint x="475" y="1860"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_nextaction_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.1125;entryY=1;entryDx=0;entryDy=0;" edge="1" source="next-action" target="launch-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_batching_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.2941176;entryY=1;entryDx=0;entryDy=0;" edge="1" source="batching" target="phases-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

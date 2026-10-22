@@ -7,8 +7,19 @@ title: rfe-create
 
 # rfe-create
 
-Write a new work item of any registered type — an RFE from a problem statement, idea, or need (business needs, WHAT/WHY), or an Initiative from an objective or strategic goal (/rfe-create --type initiative ...). Asks clarifying questions, then produces well-formed items. Use when starting from scratch.
+Writes a new work item from a problem statement, idea or objective — an RFE
+capturing business needs (WHAT and WHY) by default, an Initiative with
+`--type initiative`. It resolves the type, loads the type's rubric
+(bootstrapping and exporting it if absent), reads the type's creation
+guidance, and asks at most 2-5 clarifying questions — only what it cannot
+infer from the input. `--headless` skips the questions but still reads the
+guidance.
 
+Items are written from the type's template to `{TASKS_DIR}/<ID>.md`. IDs are
+allocated atomically by `next_rfe_id.py` unless `--id` pre-assigned one, and
+all frontmatter is set through `frontmatter.py set` against the type's
+schema — never written by hand. For a type that sizes its items, the Size
+Guide assigns S/M/L/XL from the acceptance-criteria count.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -83,8 +94,32 @@ Write a new work item of any registered type — an RFE from a problem statement
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![rfe-create diagram](rfe-create.svg)
+</div>
+
+## Arguments
+
+```bash
+/rfe-create [--type <t>] [--headless] [--priority <value>] [--labels <csv>] [--id <ID>] [--parent <KEY>] <problem statement>
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `problem statement` | :material-check: | - | The idea, need or objective to turn into a work item. Free text, taken from whatever arguments remain after the flags. |
+| `--type` |  | `rfe` | Work-item type to create. An explicit --type always wins over inference. |
+| `--headless` |  | - | Ask no clarifying questions — generate the item directly from the input. The type's guidance is still read. |
+| `--priority` |  | `Normal` | Override the default priority. Jira values only — never High/Medium/Low. |
+| `--labels` |  | - | Labels to apply to the created item. |
+| `--id` |  | - | Use this pre-assigned ID instead of allocating one. The placeholder file already exists. --rfe-id / --initiative-id are accepted as aliases. |
+| `--parent` |  | - | Parent key to set on the created item. Offered only for a type whose batch entries carry parent_key — PARENT_FLAG is empty for rfe, so in practice this is the Initiative type. |
+
 ## Usage
 
 ```bash
-/rfe-create
+/rfe-create Users need to verify model signatures at serving time
+/rfe-create --type initiative Establish a trusted model supply chain for RHOAI
+/rfe-create --headless --priority Critical --labels candidate-3.5 TrustyAI operator crashes on large clusters
 ```

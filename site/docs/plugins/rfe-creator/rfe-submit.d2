@@ -1,0 +1,379 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe-submit**
+
+  - --type {t} (rfe, initiative)
+  - --dry-run, --headless
+  - explicit IDs
+  - non-interactive: invoking IS
+    the confirmation
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 0: layout check + type resolution ---
+
+step0: |md
+  **Step 0: Layout + Type**
+
+  - bash scripts/bootstrap.sh
+    --layout (links scripts/ +
+    types/; exit 3 = already there)
+  - type_registry.py resolve
+    [--type {t}] [--headless] {IDs}
+  - launch-vars {type} submit
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Credentials gate ---
+
+creds: |md
+  **JIRA_SERVER /
+  JIRA_USER /
+  JIRA_TOKEN set?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+creds-help: |md
+  **Print Setup, Stop**
+
+  - export JIRA_SERVER,
+    JIRA_USER, JIRA_TOKEN
+  - id.atlassian.com token page
+  - re-run /rfe-submit —
+    nothing is submitted
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: invocation mode ---
+
+mode: |md
+  **--headless
+  parsed?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+run-interactive: |md
+  **Interactive Run**
+  Step 1
+
+  - submit.py {TYPE_FLAG}
+    [--dry-run] [--artifacts-dir]
+  - passes NEITHER --auto-approve
+    NOR --hold-interrupted
+  - a hand-edited task file is a
+    manual revision: publish it
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+run-headless: |md
+  **Headless Run**
+  /rfe-speedrun Phase 3, CI
+
+  - same command plus
+    --hold-interrupted
+  - arms the interrupted-revision
+    hold (pipeline-correctness 5.12)
+  - --auto-approve is the
+    production job's, never this one
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Plan ---
+
+plan: |md
+  **Build Submission Plan**
+  scripts/submit.py
+
+  - scan_tasks over
+    artifacts/rfe-tasks
+  - read {ID}-review.md:
+    recommendation, auto_revised,
+    needs_attention
+  - skip Archived / Submitted /
+    no readable review
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+verify: |md
+  **Verify Existing Items**
+
+  - check_description_conflict vs
+    the saved original
+  - same GET carries the project +
+    issuetype binding witnesses
+  - conflict or wrong binding:
+    skipped, left unprocessed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- External tracker ---
+
+jira: |md
+  **Jira REST API**
+  external
+
+  - /rest/api/3/issue, Basic Auth
+  - jira_utils.py, NOT the
+    Atlassian MCP server
+  - deterministic call sequence
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Per-item outcome ---
+
+outcome: |md
+  **Per-item
+  outcome?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+disposition: Per-item Disposition {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  create-rename: |md
+    **Created**
+
+    - create_issue POST: project,
+      issuetype, summary,
+      description ADF, priority
+    - rename {LOCAL_PREFIX}NNN.md
+      to {KEY_PREFIX}NNNN.md
+    - id field + tracker_ref = key
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  update-item: |md
+    **Updated**
+
+    - update_issue PUT: summary +
+      description ADF
+    - removed-context comment from
+      {ID}-removed-context.yaml
+    - status: Submitted, post-submit
+      hash into the snapshot
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  hold: |md
+    **HELD**
+
+    - description NOT published
+    - review gets pass: false,
+      error: revision_interrupted
+    - needs-attention label only,
+      stale verdict labels removed
+    - left unprocessed for the
+      next run
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+}
+
+# --- Labels ---
+
+apply-labels: |md
+  **Apply Type Labels**
+
+  - swap_labels PUT: one atomic
+    add + remove
+  - conventions.labels in
+    types/{TYPE}/type.yaml
+  - every label starts with
+    {LABEL_PREFIX}-
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+report-results: |md
+  **Step 2: Report Results**
+
+  - created / updated / skipped
+    per item
+  - INDEX_ENABLED true:
+    artifacts/rfes.md rebuilt
+    by the script
+  - on failure: check credentials
+    or re-run with --dry-run
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Callout: the labelling scheme (produced by apply-labels) ---
+
+label-scheme: |md
+  conventions.labels  —  every key
+  renders as {LABEL_PREFIX}-...
+
+  auto_created     created by the pipeline
+                   (new items, not updates)
+  auto_revised     review auto_revised: true
+  split_original   parent that was decomposed
+  split_result     child of a split
+  needs_attention  review needs_attention: true
+  rubric_pass      recommendation = submit
+                   (excluded from auto-fix JQL)
+  {dimension}.{verdict}
+                   one family per declared
+                   dimension: {VERDICT_LABELS}
+                   rfe: feasibility.feasible /
+                   .infeasible / .indeterminate
+
+  A family is mutually exclusive: each submit
+  adds the matching label and removes the
+  family's others found in original_labels.
+  A rejected item has its verdict labels
+  stripped, with none added.
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Callout: the Jira field mappings used on create ---
+
+jira-fields: |md
+  Jira field mappings (CLAUDE.md)
+
+  RFE         project   RHAIRFE
+              issuetype Feature Request
+  Initiative  project   RHOAIENG
+              issuetype Initiative (id 10103)
+              parent    RHAISTRAT Outcome key
+  priority    Blocker, Critical, Major,
+              Normal, Minor, Undefined
+  status on creation: New
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Flow: Step 0 ---
+
+entry -> step0
+step0 -> creds: "launch block: TYPE_FLAG, LABEL_PREFIX"
+
+creds -> creds-help: "any missing"
+creds -> mode: "all three set"
+
+# --- Flow: Step 1 invocation ---
+
+mode -> run-interactive: "no --headless"
+mode -> run-headless: "--headless"
+
+run-interactive -> plan
+run-headless -> plan: "--hold-interrupted"
+
+# --- Flow: plan and verification ---
+
+plan -> verify: "artifacts/rfe-originals/KEY.md"
+verify -> outcome
+
+verify -> jira: "GET /issue" {
+  style.stroke-dash: 3
+}
+
+# --- Flow: per-item disposition ---
+
+outcome -> disposition.create-rename: "new local id"
+outcome -> disposition.update-item: "existing, body changed"
+outcome -> disposition.hold: "changed, no auto_revised"
+
+disposition -> jira: "POST+PUT /issue" {
+  style.stroke-dash: 3
+}
+
+disposition -> apply-labels
+apply-labels -> report-results: "artifacts/rfes.md"
+
+# --- Callout connectors ---
+
+apply-labels -> label-scheme: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+jira -> jira-fields: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

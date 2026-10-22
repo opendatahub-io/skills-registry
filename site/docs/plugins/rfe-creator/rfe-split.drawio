@@ -1,0 +1,162 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe-split&lt;/b&gt;&lt;br&gt;&lt;br&gt;--type {t} (rfe or initiative)&lt;br&gt;--headless (no summary)&lt;br&gt;one or more {ID} args&lt;br&gt;tools: Bash, Agent, Skill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="125" width="165" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve-type" value="&lt;b&gt;Step 0 - Resolve Type&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap.sh --layout links scripts/, types/&lt;br&gt;type_registry.py resolve --type {t} {IDs}&lt;br&gt;launch-vars {type} split -&gt; launch block&lt;br&gt;no IDs -&gt; print usage and stop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="240" y="120" width="210" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="vars-callout" value="launch-vars {type} split&lt;br&gt;{TASKS_DIR} = artifacts/rfe-tasks&lt;br&gt;{REVIEWS_DIR} = artifacts/rfe-reviews&lt;br&gt;{STATE_PREFIX} = {POLL_PREFIX} = &quot;&quot;&lt;br&gt;{RESPLIT_FIELD} = right_sized&lt;br&gt;{RESPLIT_BELOW} = 2&lt;br&gt;{INDEX_ENABLED} = true&lt;br&gt;{SPLIT_RULES_PATH} =&lt;br&gt;&amp;nbsp;&amp;nbsp;types/rfe/prompts/split-rules.md&lt;br&gt;&lt;br&gt;initiative: artifacts/initiatives,&lt;br&gt;artifacts/initiative-reviews,&lt;br&gt;prefixes &quot;initiative-&quot;, index false" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="225" y="330" width="240" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="persist" value="&lt;b&gt;Persist Flags + IDs&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py init tmp/{STATE_PREFIX}split-config.yaml&lt;br&gt;type={TYPE} headless=true/false&lt;br&gt;state.py write-ids {STATE_PREFIX}split-all-ids.txt&lt;br&gt;survives context compression" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="500" y="128" width="205" height="164" as="geometry"/>
+    </mxCell>
+    <mxCell id="skip-missing" value="&lt;b&gt;Report + Skip&lt;/b&gt;&lt;br&gt;&lt;br&gt;ID listed under PENDING_IDS&lt;br&gt;no {TASKS_DIR}/{ID}.md on disk&lt;br&gt;no split agent launched" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="735" y="18" width="200" height="108" as="geometry"/>
+    </mxCell>
+    <mxCell id="task-check" value="&lt;b&gt;task file exists?&lt;/b&gt;&lt;br&gt;check_review_progress.py&lt;br&gt;--phase {POLL_PREFIX}fetch" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="745" y="155" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="split-agent" value="&lt;b&gt;Split Agent (1 per ID)&lt;/b&gt;&lt;br&gt;Agent, model opus, background&lt;br&gt;&lt;br&gt;prompt = {SPLIT_RULES_PATH}&lt;br&gt;subs {ID}, {TASK_FILE}, {REVIEW_FILE}&lt;br&gt;gaps -&gt; atomic capabilities&lt;br&gt;next_rfe_id.py allocates child IDs&lt;br&gt;writes children, archives parent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="965" y="120" width="230" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="split-status-callout" value="{REVIEWS_DIR}/{ID}-split-status.yaml&lt;br&gt;written by the split agent, read with&lt;br&gt;yaml.safe_load - action is the key&lt;br&gt;&lt;br&gt;status: completed&lt;br&gt;action: split&lt;br&gt;reason: &quot;split into N children&quot;&lt;br&gt;children: [RFE-003, RFE-004]&lt;br&gt;&lt;br&gt;status: completed&lt;br&gt;action: no-split&lt;br&gt;reason: &quot;delivery-coupled&quot;&lt;br&gt;&lt;br&gt;absent file = split_failed error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1250" y="110" width="245" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="poll-split" value="&lt;b&gt;Poll the Split Wave&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py write-ids {POLL_FILE_PREFIX}split.txt&lt;br&gt;check_review_progress.py --phase {POLL_PREFIX}split&lt;br&gt;sleep NEXT_POLL until COMPLETED changes&lt;br&gt;no status file -&gt; frontmatter.py set error=split_failed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="965" y="530" width="230" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="action-check" value="&lt;b&gt;action:&lt;/b&gt;&lt;br&gt;{ID}-split-status.yaml" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="745" y="565" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="mark-revise" value="&lt;b&gt;Mark for Revision&lt;/b&gt;&lt;br&gt;&lt;br&gt;frontmatter.py set {REVIEWS_DIR}/{ID}-review.md recommendation=revise&lt;br&gt;same for action: split with 0 children&lt;br&gt;reason kept for the final summary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="727" y="725" width="216" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="collect-children" value="&lt;b&gt;Collect Children&lt;/b&gt;&lt;br&gt;&lt;br&gt;collect_children.py {TYPE_FLAG} {split_IDs}&lt;br&gt;matches parent_key, skips status: Archived&lt;br&gt;prints {ID}:child1,child2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="500" y="555" width="215" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="review-children" value="&lt;b&gt;/rfe-review&lt;/b&gt; (inline Skill)&lt;br&gt;&lt;br&gt;--headless --caller split {TYPE_FLAG}&lt;br&gt;full agent-delegation review&lt;br&gt;writes {child}-review.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="45" y="555" width="210" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="rightsize" value="&lt;b&gt;Step 3 - Right-sizing Self-Correction (max 1 cycle)&lt;/b&gt;&lt;br&gt;capped at 1: repeated re-splitting compounds child count (5 -&gt; 9) for diminishing returns;&lt;br&gt;a decomposition still wrong after one correction needs human judgement.&lt;br&gt;Corrects grouping mistakes only - every other criterion is /rfe-review's auto-revision." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="880" width="660" height="248" as="geometry"/>
+    </mxCell>
+    <mxCell id="cycle-init" value="&lt;b&gt;Cycle Counter&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py set-default correction_cycle=0&lt;br&gt;collect_children.py --ids-file re-derives&lt;br&gt;set correction_cycle={N+1} per cycle" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="rightsize">
+      <mxGeometry x="20" y="90" width="200" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="read-scores" value="&lt;b&gt;Read Child Scores&lt;/b&gt;&lt;br&gt;&lt;br&gt;frontmatter.py read&lt;br&gt;{REVIEWS_DIR}/{child}-review.md&lt;br&gt;scores.{RESPLIT_FIELD}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="rightsize">
+      <mxGeometry x="240" y="90" width="200" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="right-sized" value="&lt;b&gt;right-sized?&lt;/b&gt;&lt;br&gt;same rule as&lt;br&gt;check_right_sized.py" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="rightsize">
+      <mxGeometry x="460" y="90" width="180" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="finalize" value="&lt;b&gt;Step 4 - Finalize&lt;/b&gt;&lt;br&gt;&lt;br&gt;frontmatter.py rebuild-index if {INDEX_ENABLED}&lt;br&gt;state.py read {STATE_PREFIX}split-config.yaml&lt;br&gt;cycle 1 already used -&gt; report what is left" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="727" y="967" width="216" height="146" as="geometry"/>
+    </mxCell>
+    <mxCell id="headless-check" value="&lt;b&gt;headless?&lt;/b&gt;&lt;br&gt;split-config.yaml" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="983" y="985" width="180" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="headless-exit" value="&lt;b&gt;Headless Exit&lt;/b&gt;&lt;br&gt;&lt;br&gt;prints &quot;rfe-split step completed.&quot;&lt;br&gt;no summary, caller drives the rest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1213" y="890" width="215" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="summary" value="&lt;b&gt;## Split Complete&lt;/b&gt;&lt;br&gt;&lt;br&gt;original {KEY_EXAMPLE} (archived)&lt;br&gt;new {ENTITY_PLURAL}: title, priority, PASS&lt;br&gt;coverage of the original scope&lt;br&gt;no-split reason per parent&lt;br&gt;next: /rfe-submit --type {TYPE}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1213" y="1055" width="215" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_resolve" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="resolve-type" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resolve_persist" value="launch block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve-type" target="persist" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resolve_vars" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="resolve-type" target="vars-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_persist_taskcheck" value="split-all-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="persist" target="task-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_taskcheck_skip" value="in PENDING_IDS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="task-check" target="skip-missing" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_taskcheck_agent" value="task file found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="task-check" target="split-agent" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_agent_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="split-agent" target="split-status-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_agent_poll" value="split-status.yaml per ID" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="split-agent" target="poll-split" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_poll_action" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="poll-split" target="action-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_action_revise" value="no-split / 0 children" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="action-check" target="mark-revise" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_action_collect" value="split" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="action-check" target="collect-children" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_review" value="child IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="collect-children" target="review-children" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_cycle" value="scored review.md per child" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="review-children" target="cycle-init" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_cycle_scores" value="child IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="cycle-init" target="read-scores" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_scores_rightsized" value="scores.right_sized" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="read-scores" target="right-sized" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rightsized_finalize" value="all 2/2, or cycle used" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="right-sized" target="finalize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_rightsized_resplit" value="right_sized &lt; {RESPLIT_BELOW}/2 - max 1 cycle" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="right-sized" target="split-agent" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="580" y="1255"/>
+          <mxPoint x="1525" y="1255"/>
+          <mxPoint x="1525" y="60"/>
+          <mxPoint x="1080" y="60"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_revise_finalize" value="recommendation: revise" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="mark-revise" target="finalize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_finalize_headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="finalize" target="headless-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_headless_exit" value="--headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;dashed=1;dashPattern=8 4;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="headless-check" target="headless-exit" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1073" y="945"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_headless_summary" value="interactive" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="headless-check" target="summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -1,336 +1,460 @@
 description: |
-  A comprehensive Claude Code skill suite for the full lifecycle of Requests for
-  Enhancement (RFEs) in the RHAIRFE Jira project. Covers creation from problem
-  statements, multi-phase rubric-based review with technical feasibility checks
-  and auto-revision, intelligent splitting of oversized RFEs, batch auto-fix at
-  scale, and deterministic submission to Jira. A speedrun skill chains the whole
-  pipeline end-to-end (create → auto-fix → submit) for a single idea, a set of
-  existing Jira keys, or a YAML batch of ideas.
+  rfe-creator turns a problem statement into a tracked, reviewed Jira work item
+  without a human writing the ticket. Since 0.2.0 it is **type-generic**: one
+  pipeline serves every registered work-item type — RFEs in the RHAIRFE project
+  by default, Initiatives in RHOAIENG with `--type initiative` — instead of a
+  separate skill set per type. Each type is a data-only descriptor at
+  `types/<type>/type.yaml`, and every skill body renders its paths, labels,
+  rubric, size rules and review dimensions from the `launch-vars` block that
+  `scripts/type_registry.py` prints for the resolved type. Adding a type is a
+  descriptor, not a fork of the skills.
 
-  The plugin uses a shared artifact convention -- all skills read from and write
-  to an `artifacts/` directory, with YAML frontmatter (managed exclusively via
-  `scripts/frontmatter.py`) carrying structured metadata on every task and review
-  file. Jira write operations go through deterministic Python scripts (REST API +
-  Basic Auth) rather than LLM tool-calling, so the exact sequence of API calls is
-  reproducible; read operations prefer the Atlassian MCP server and fall back to
-  the REST API. Long-running orchestrators persist state to `tmp/` via
-  `scripts/state.py` so they survive context-compression boundaries. A dependency
-  on the `assess-rfe` plugin provides the scoring rubric, bootstrapped
-  automatically on first use.
+  Six skills make the pipeline. `/rfe-create` interviews you (or runs
+  `--headless` from a batch) and writes the item. `/rfe-review` scores it against
+  the type's rubric, runs the type's review dimensions — technical feasibility
+  for RFEs, feasibility plus strategic alignment for Initiatives — and
+  auto-revises what fails, over at most two re-assessment cycles. `/rfe-split`
+  decomposes an oversized item into right-sized children and reviews them, with
+  one self-correction cycle. `/rfe-submit` writes to Jira through the REST API.
+  `/rfe-auto-fix` drives the same work over whole batches as a non-interactive
+  state machine — it re-runs the very same agent prompt files rather than
+  calling the skills — and `/rfe-speedrun` chains create → auto-fix → submit end
+  to end. A seventh skill, `/rfe-creator.update-deps`, re-vendors the pinned
+  assess-rfe rubric and the architecture context.
+
+  The orchestrating skills never read item bodies into their own context. They
+  launch background agents for all content-heavy work and communicate with them
+  only through files on disk: frontmatter via `scripts/frontmatter.py`, run state
+  via `scripts/state.py`, and completion via polling `check_review_progress.py`.
+  That is what lets a batch run survive context compression — every ID list,
+  cycle counter and flag is re-read from `tmp/` rather than remembered.
+
+  The legacy dotted commands (`/rfe.create` and friends) still work. Since 0.2.0
+  they are ten-line compatibility aliases that bootstrap the layout and then
+  delegate to their generic sibling, so they have no workflow of their own.
+
 architecture_notes: |
-  The RFE skills (rfe.*) form the requirements pipeline. `rfe.speedrun` is the
-  top-level orchestrator: it invokes `rfe.create`, `rfe.auto-fix`, and
-  `rfe.submit` as sub-skills and never duplicates their work, persisting the ID
-  list and flags between phases so the run is resumable.
+  **Type resolution.** Every skill's Step 0 resolves the work-item type
+  (`type_registry.py resolve`) and then prints a launch block
+  (`type_registry.py launch-vars <type> <stage>`). Each `{VAR}` in a skill body —
+  `{TASKS_DIR}`, `{REVIEWS_DIR}`, `{ID_FIELD}`, `{DIMENSIONS}`, `{STATE_PREFIX}`,
+  `{SCORER_AGENT}` — is a line in that block, and the whole block is prepended to
+  every agent prompt. The `{STATE_PREFIX}` (empty for RFEs, `initiative-` for
+  Initiatives) keeps concurrent runs of different types from colliding in `tmp/`.
 
-  `rfe.review` is the central review orchestrator and is deliberately
-  content-blind -- it never reads RFE bodies into its own context. Instead it
-  launches parallel waves of sub-agents (fetch, assess, feasibility, review,
-  revise), reads only YAML frontmatter via `scripts/frontmatter.py`, checks file
-  existence via Glob, and polls for wave completion with
-  `scripts/check_review_progress.py` (sleeping for the reported `NEXT_POLL`
-  interval). Rubric assessment is delegated to the `assess-rfe` plugin (a
-  dedicated `rfe-scorer` subagent), and per-RFE technical feasibility is delegated
-  to the `rfe-feasibility-review` sub-agent. Failing RFEs are auto-revised and
-  re-assessed for up to two cycles.
+  **Layout check.** A marketplace install has no `scripts/` or `types/` in the
+  working directory, so each skill runs `scripts/bootstrap.sh --layout` once
+  through its own plugin path to link them in. Thereafter every command in the
+  body runs verbatim as a relative path — the headless permission allowlist
+  matches command text literally, so absolute paths would be denied.
 
-  `rfe.auto-fix` wraps the same building blocks into a non-interactive pipeline
-  state machine (`scripts/pipeline_state.py`) with phased dispatch (fetch →
-  bootstrap → assess → feasibility → review → revise → re-assess → split). It
-  drives a strict `next-action` / `launch_wave` / `wait-for-wave` loop, processes
-  IDs in configurable batches, and supports snapshot-based incremental fetch
-  (`scripts/snapshot_fetch.py`) for resume and reprocessing. `rfe.split`
-  decomposes oversized RFEs via parallel split agents, re-reviews the children
-  through `rfe.review`, and runs a one-cycle right-sizing self-correction loop.
+  **Orchestrator / agent split.** `/rfe-review`, `/rfe-split` and `/rfe-auto-fix`
+  are orchestrators: they launch opus background agents (fetch, assess, dimension,
+  review, revise, split) and read back only structured frontmatter. The contract
+  between them is the filesystem — an agent is "done" when its output file exists
+  and parses, which `check_review_progress.py` polls with a script-supplied
+  `NEXT_POLL` backoff.
 
-  Review artifacts follow a fixed layout under `artifacts/` (`rfe-tasks/`,
-  `rfe-originals/`, `rfe-reviews/`), and `scripts/frontmatter.py rebuild-index`
-  regenerates `rfes.md`. Architecture context is fetched from
-  opendatahub-io/architecture-context into `.context/architecture-context/` and
-  used by the feasibility fork to ground assessments in real platform components
-  and APIs; human-authored overlays under `overlays/` take precedence over the
-  generated docs. Note that `architecture-review`, `feasibility-review`,
-  `scope-review`, and `testability-review` are forked strategy reviewers (they
-  read `artifacts/strat-tasks/` and assess refined strategy features) shared with
-  the strategy workflow; `rfe-feasibility-review` is the RFE-specific reviewer
-  wired into `rfe.review`.
+  **State machine.** `/rfe-auto-fix` is not a caller of the other skills — its
+  `allowed-tools` is `Bash, Agent`, so it has no Skill tool at all. It is a
+  second, headless implementation of the same work that launches agents directly
+  against the same prompt files — `.claude/skills/rfe-review/prompts/*.md` for
+  the review waves, and the typed descriptor paths
+  `types/<type>/dimensions/*.md` and `types/<type>/prompts/split-rules.md` for
+  the dimension and split waves — replacing the hand-rolled polling with
+  `scripts/pipeline_state.py`, a 31-phase machine (`BATCH_START` → `FETCH` →
+  `SETUP` → `ASSESS` → `REVIEW` → `REVISE` → `FIXUP` → the `REASSESS_*` block →
+  `COLLECT` → the `SPLIT_*` block → `BATCH_DONE` → `ERROR_COLLECT` → `REPORT` →
+  `DONE`). The skill loops on `next-action`, executes `run_script` or
+  `launch_wave`, and blocks on `wait-for-wave`; a `Stop` hook re-enters the loop
+  if a turn ends before `DONE`.
+
+  **Scoring.** The rubric comes from the assess-rfe plugin, vendored by
+  `scripts/bootstrap.sh` at the commit the descriptors pin
+  (`pipeline.rubric.ref`, one shared value both types must agree on) and exported
+  to `artifacts/rfe-rubric.md`. `/rfe-create` reads it to shape its questions so
+  what it writes will pass.
+
+  **Jira.** Writes go through `scripts/submit.py` over the REST API with Basic
+  Auth rather than the MCP server, so the call sequence is deterministic rather
+  than dependent on tool-calling decisions. Reads prefer the Atlassian MCP server
+  and fall back to `scripts/fetch_issue.py`.
+
 skills:
-  rfe.create:
+  rfe-create:
     description: |
-      Generate new RFEs from a problem statement, idea, or need. Loads the
-      assess-rfe rubric (bootstrapping it if needed), and unless run headless
-      asks 2-5 clarifying questions about affected customers, business
-      justification, the user's problem, size, and success criteria. Produces
-      well-formed RFEs from a template that describe WHAT and WHY (business
-      needs), never HOW (implementation) -- it explicitly avoids loading
-      architecture context so it won't prescribe a solution. Determines each
-      RFE's t-shirt size from its acceptance-criteria count via the Size Guide
-      (S: 1-2, M: 3-5, L: 5-8, XL: 8+), allocates IDs atomically (or uses a
-      pre-assigned `--rfe-id`), writes artifacts with YAML frontmatter via
-      scripts/frontmatter.py, and rebuilds the index.
-    argument_hint: "<problem-statement> [--headless] [--priority <value>] [--labels <csv>] [--rfe-id <ID>]"
+      Writes a new work item from a problem statement, idea or objective — an RFE
+      capturing business needs (WHAT and WHY) by default, an Initiative with
+      `--type initiative`. It resolves the type, loads the type's rubric
+      (bootstrapping and exporting it if absent), reads the type's creation
+      guidance, and asks at most 2-5 clarifying questions — only what it cannot
+      infer from the input. `--headless` skips the questions but still reads the
+      guidance.
+
+      Items are written from the type's template to `{TASKS_DIR}/<ID>.md`. IDs are
+      allocated atomically by `next_rfe_id.py` unless `--id` pre-assigned one, and
+      all frontmatter is set through `frontmatter.py set` against the type's
+      schema — never written by hand. For a type that sizes its items, the Size
+      Guide assigns S/M/L/XL from the acceptance-criteria count.
+    argument_hint: "[--type <t>] [--headless] [--priority <value>] [--labels <csv>] [--id <ID>] [--parent <KEY>] <problem statement>"
     arguments:
-      - name: "problem-statement"
+      - name: "problem statement"
         required: true
-        description: "The problem statement, idea, or need to turn into RFEs"
+        description: "The idea, need or objective to turn into a work item. Free text, taken from whatever arguments remain after the flags."
+      - name: "--type"
+        type: "(type name)"
+        required: false
+        default: "rfe"
+        description: "Work-item type to create. An explicit --type always wins over inference."
       - name: "--headless"
         required: false
-        description: "Skip clarifying questions (Step 2), generate RFEs directly from the input"
+        description: "Ask no clarifying questions — generate the item directly from the input. The type's guidance is still read."
       - name: "--priority"
-        type: "Blocker | Critical | Major | Normal | Minor"
+        type: "(Blocker|Critical|Major|Normal|Minor)"
         required: false
         default: "Normal"
-        description: "Override default priority for created RFEs"
+        description: "Override the default priority. Jira values only — never High/Medium/Low."
       - name: "--labels"
-        type: "<comma-separated>"
+        type: "(comma-separated)"
         required: false
-        description: "Labels to apply to created RFEs"
-      - name: "--rfe-id"
-        type: "<ID>"
+        description: "Labels to apply to the created item."
+      - name: "--id"
+        type: "(ID)"
         required: false
-        description: "Pre-assigned RFE ID; use this instead of allocating a new one. The placeholder file must already exist."
+        description: "Use this pre-assigned ID instead of allocating one. The placeholder file already exists. --rfe-id / --initiative-id are accepted as aliases."
+      - name: "--parent"
+        type: "(Jira key)"
+        required: false
+        description: "Parent key to set on the created item. Offered only for a type whose batch entries carry parent_key — PARENT_FLAG is empty for rfe, so in practice this is the Initiative type."
     usage_examples:
-      - "/rfe.create Users need better error messages when model serving fails"
-      - "/rfe.create --headless --priority Critical Fix dashboard latency for large clusters"
-      - "/rfe.create --headless --rfe-id RFE-003 --labels candidate-3.5 Support GPU sharing"
-  rfe.review:
+      - "/rfe-create Users need to verify model signatures at serving time"
+      - "/rfe-create --type initiative Establish a trusted model supply chain for RHOAI"
+      - "/rfe-create --headless --priority Critical --labels candidate-3.5 TrustyAI operator crashes on large clusters"
+
+  rfe-review:
     description: |
-      Score and improve RFEs with a multi-phase agent pipeline. Accepts one or
-      more Jira keys (RHAIRFE-NNNN) or local IDs (RFE-NNN); missing RFEs are
-      fetched from Jira first. The orchestrator never reads RFE content directly
-      -- all content-heavy work is delegated to background sub-agents (fetch,
-      assess, feasibility, review, revise) launched in parallel waves and polled
-      via scripts/check_review_progress.py. It runs rubric-based assessment
-      (assess-rfe / rfe-scorer subagent), launches per-RFE feasibility checks
-      (rfe-feasibility-review), synthesizes scored review files, auto-revises
-      failing RFEs (filter_for_revision.py), and re-assesses up to 2 cycles,
-      preserving cumulative scores and revision history across cycles. Can return
-      headlessly to a calling skill (auto-fix or split) or print an interactive
-      summary with next-step suggestions.
-    argument_hint: "<ID> [ID2 ...] [--headless] [--caller <name>]"
+      Scores work items against the type's rubric and auto-revises what fails. It
+      accepts Jira keys (fetched if not already local) or reviews the local
+      artifacts `/rfe-create` wrote.
+
+      It is an orchestrator: it never reads item bodies into its own context, only
+      frontmatter. For each ID it launches an assess agent plus one agent per
+      declared review dimension — technical feasibility for RFEs, strategic
+      alignment for Initiatives — each with its own blocking and condition rules.
+      A review agent then merges those results into
+      `{REVIEWS_DIR}/<ID>-review.md`, and `filter_for_revision.py` selects which
+      items a revise agent should rewrite.
+
+      Revised items are re-assessed from scratch for at most two cycles. Before
+      each cycle the review and assess results are deleted so progress detection
+      works, with `preserve_review_state.py` saving and restoring the cumulative
+      before-scores and revision history across the teardown. An agent that dies
+      mid-run leaves no output file, so the ID gets an error stub and drops out of
+      the batch rather than stalling it.
+    argument_hint: "[--type <t>] [--headless] [--caller <name>] <ID> [ID2 ...]"
     arguments:
       - name: "ID"
         required: true
-        description: "One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN)"
+        description: "One or more space-separated item IDs — the type's Jira key form or local id form. A key with no local task file is fetched from Jira first."
+      - name: "--type"
+        type: "(type name)"
+        required: false
+        default: "rfe"
+        description: "Work-item type to review. An explicit --type always wins."
       - name: "--headless"
         required: false
-        description: "Suppress end-of-run summary; used when called from rfe.auto-fix or rfe.split"
+        description: "Suppress the end-of-run summary and emit a completion marker instead."
       - name: "--caller"
-        type: "autofix | split | none"
+        type: "(split|none)"
         required: false
         default: "none"
-        description: "Identifies calling skill for headless return routing"
+        description: "Identifies the calling skill so a headless run returns to it. /rfe-split passes --caller split."
     usage_examples:
-      - "/rfe.review RHAIRFE-1234"
-      - "/rfe.review RFE-001 RFE-002 RFE-003"
-      - "/rfe.review --headless --caller autofix RHAIRFE-1234 RHAIRFE-5678"
-  rfe.split:
+      - "/rfe-review RHAIRFE-1595"
+      - "/rfe-review RHAIRFE-1595 RHAIRFE-1602 RFE-001"
+      - "/rfe-review --type initiative INIT-001"
+
+  rfe-split:
     description: |
-      Decompose oversized RFEs into appropriately-scoped pieces. Runs
-      non-interactively: launches parallel split agents that analyze each parent
-      RFE and generate child RFEs, collects the children (collect_children.py),
-      then invokes rfe.review on all of them via an inline Skill call. Includes a
-      right-sizing self-correction loop (1 cycle max) that re-splits any child
-      still scoring below 2/2 on right-sizing, validates that all original scope
-      is covered, and archives the parent RFE. Parents assessed as "no-split"
-      have their recommendation downgraded to `revise` so downstream consumers
-      don't treat them as pending splits.
-    argument_hint: "<ID> [ID2 ...] [--headless]"
+      Decomposes an oversized work item into right-sized children that together
+      cover the original scope. It takes IDs already in the workspace — fetched by
+      `/rfe-review` or written by `/rfe-create` — and skips any ID with no local
+      task file.
+
+      It runs non-interactively. A split agent per parent applies the type's own
+      decomposition rules (`{SPLIT_RULES_PATH}`) and writes
+      `{REVIEWS_DIR}/<ID>-split-status.yaml`; a parent whose status says
+      `no-split` (delivery-coupled, say) has its recommendation set back to
+      `revise` so downstream consumers don't keep treating it as pending.
+      Children are collected and handed to `/rfe-review` as an inline headless
+      call.
+
+      One self-correction cycle follows: any child scoring below half the type's
+      `resplit` threshold on `right_sized` is split again and its children
+      reviewed. It stops there by design — repeated re-splitting compounds the
+      child count for diminishing returns, so a decomposition still wrong after
+      one correction needs human judgement. The loop corrects grouping mistakes
+      only; every other criterion is `/rfe-review`'s auto-revision to fix.
+    argument_hint: "[--type <t>] [--headless] <ID> [ID2 ...]"
     arguments:
       - name: "ID"
         required: true
-        description: "One or more space-separated RFE IDs (RHAIRFE-NNNN or RFE-NNN) to split"
+        description: "One or more space-separated IDs of items already in the workspace. An ID with no local task file is reported and skipped."
+      - name: "--type"
+        type: "(type name)"
+        required: false
+        default: "rfe"
+        description: "Work-item type to split. An explicit --type always wins."
       - name: "--headless"
         required: false
-        description: "Suppress end-of-run summary; used when called from rfe.auto-fix"
+        description: "Suppress the end-of-run summary and emit a completion marker instead."
     usage_examples:
-      - "/rfe.split RHAIRFE-1234"
-      - "/rfe.split RHAIRFE-1234 RHAIRFE-5678"
-  rfe.submit:
+      - "/rfe-split RHAIRFE-1234"
+      - "/rfe-split RHAIRFE-1234 RHAIRFE-5678"
+      - "/rfe-split --type initiative INIT-001"
+
+  rfe-submit:
     description: |
-      Push RFEs to Jira via deterministic Python scripts (scripts/submit.py)
-      using the REST API with Basic Auth. Creates new RHAIRFE tickets for new
-      RFEs or updates existing tickets for fetched RFEs, then rebuilds
-      artifacts/rfes.md and reports results. Applies labels automatically based
-      on pipeline outcomes (auto-created, auto-revised, split-original,
-      split-result, needs-attention, rubric-pass, and the three mutually
-      exclusive feasibility verdicts). Non-interactive by design -- invoking the
-      skill is the confirmation, no dry-run approval step. Requires JIRA_SERVER,
-      JIRA_USER, and JIRA_TOKEN environment variables.
-    argument_hint: "[--dry-run] [--artifacts-dir <path>]"
+      Creates or updates the type's Jira tickets from reviewed artifacts — new
+      RHAIRFE tickets for RFEs, RHOAIENG Initiative tickets for Initiatives, or
+      updates to tickets already fetched from Jira.
+
+      Submission goes through `scripts/submit.py` against the Jira REST API with
+      Basic Auth (`JIRA_SERVER`, `JIRA_USER`, `JIRA_TOKEN`), not the MCP server,
+      so the exact call sequence is deterministic rather than dependent on
+      tool-calling decisions. On submit, `RFE-NNN.md` is renamed to its Jira key
+      — along with its companion files and its review file — and `tracker_ref`
+      and `type` are written into the task and review frontmatter.
+
+      The skill is deliberately non-interactive — invoking it is the confirmation,
+      so it does not ask again. A headless invocation (the `/rfe-speedrun` Phase 3
+      handoff, or CI) adds `--hold-interrupted`, which holds back any item whose
+      body changed while its review never recorded `auto_revised`, rather than
+      publishing it. The scripts apply the type's label family automatically:
+      `auto_created`, `auto_revised`, `split_original`, `split_result`,
+      `needs_attention`, `rubric_pass`, and one mutually-exclusive
+      `<dimension>.<verdict>` label per declared review dimension. Those are the
+      descriptor *keys*; the string actually pushed to Jira is the key's value in
+      `conventions.labels`, each prefixed `<LABEL_PREFIX>-` (for RFEs,
+      `rfe-creator-feasibility-pass`, `rfe-creator-autofix-rubric-pass`, …).
+    argument_hint: "[--type <t>] [--dry-run] [--headless] [ID ...]"
     arguments:
+      - name: "ID"
+        required: false
+        description: "Explicit item IDs to submit. With none given, the script submits the reviewed artifacts that are ready."
+      - name: "--type"
+        type: "(type name)"
+        required: false
+        default: "rfe"
+        description: "Work-item type to submit. An explicit --type always wins."
       - name: "--dry-run"
         required: false
-        description: "Validate locally without writing to Jira"
-      - name: "--artifacts-dir"
-        type: "<path>"
+        description: "Validate locally and skip all Jira writes."
+      - name: "--headless"
         required: false
-        default: "artifacts"
-        description: "Path to the artifacts directory"
+        description: "Non-interactive invocation — adds --hold-interrupted so an item edited outside the pipeline is held for a human instead of published."
     usage_examples:
-      - "/rfe.submit"
-      - "/rfe.submit --dry-run"
-  rfe.speedrun:
+      - "/rfe-submit"
+      - "/rfe-submit --dry-run"
+      - "/rfe-submit --type initiative INIT-001"
+
+  rfe-speedrun:
     description: |
-      Execute the full RFE pipeline end-to-end -- create, auto-fix (review +
-      revise + split), and submit -- with minimal interaction. Detects one of
-      three modes: batch YAML input (multiple ideas in a file), one or more
-      existing Jira keys, or a single free-text idea. In batch mode it validates
-      the input file with validate_batch_input.py --strict before spending any
-      agent budget, pre-allocates all RFE IDs, and launches one parallel
-      rfe.create agent per entry. It always passes an explicit --batch-size to
-      auto-fix for reproducibility, then verifies completeness with
-      check_autofix_complete.py and re-invokes auto-fix on any missing IDs (up to
-      3 retries). Orchestrates purely by invoking rfe.create, rfe.auto-fix, and
-      rfe.submit, persisting config and IDs to disk between phases to survive
-      context compression.
-    argument_hint: "<idea-or-key> [--input <path>] [--headless] [--dry-run] [--batch-size N] [--announce-complete]"
+      Runs the whole pipeline end to end — create, auto-fix, submit — from a single
+      idea, a Jira key, or a YAML batch file, with as little interaction as
+      possible.
+
+      Step 0 resolves the type, cleans `tmp/`, and pins every flag (notably
+      `batch_size`, which must be a concrete integer) into
+      `tmp/{STATE_PREFIX}speedrun-config.yaml` so the run is reproducible and
+      survives compression. It then picks a mode: **A** a `--input` batch YAML,
+      **B** an existing Jira key (skip create), or **C** a single free-text idea.
+
+      Mode A validates the batch with `--strict` before spending any agent budget,
+      pre-allocates every ID, then fans out one `/rfe-create` agent per entry —
+      passing each entry's `clarifying_context` verbatim inside a delimited block
+      as data, never as instructions. Completion is a blocking barrier on the task
+      files, not agent notifications: the same IDs pending across three exit-3
+      results means those agents are dead and get relaunched. Phase 2 hands off to
+      `/rfe-auto-fix` via the Skill tool (Agent would background it and end the
+      session) and verifies with `check_autofix_complete.py`, retrying the missing
+      IDs up to three times. Phase 3 submits only the IDs
+      `collect_recommendations.py` reports as passing.
+    argument_hint: "[--type <t>] [--input <path>] [--headless] [--announce-complete] [--dry-run] [--batch-size N] <idea | Jira key>"
     arguments:
-      - name: "idea-or-key"
+      - name: "idea | Jira key"
         required: false
-        description: "A free-text idea or Jira key (RHAIRFE-NNNN). Mutually exclusive with --input."
+        description: "A free-text idea or objective (mode C), or a single Jira key to process an existing item (mode B). Omit when using --input."
+      - name: "--type"
+        type: "(type name)"
+        required: false
+        default: "rfe"
+        description: "Work-item type for the run. An explicit --type always wins."
       - name: "--input"
-        type: "<path>"
+        type: "(path)"
         required: false
-        description: "Path to a YAML file with batch entries (prompt, priority, labels per entry)"
+        description: "YAML file of batch entries (prompt, priority, labels, clarifying_context) — mode A. May also be a mapping with type and items keys."
       - name: "--headless"
         required: false
-        description: "Suppress questions and confirmations (for CI/eval)"
+        description: "Suppress questions and confirmations, for CI and eval runs."
+      - name: "--announce-complete"
+        required: false
+        description: "Print a completion marker when done, for CI and eval harnesses."
       - name: "--dry-run"
         required: false
-        description: "Skip Jira writes in submit phase"
+        description: "Skip the Jira writes in the submit phase."
       - name: "--batch-size"
-        type: "<N>"
+        type: "(integer)"
         required: false
         default: "5"
-        description: "Override batch size for auto-fix phase (always passed through explicitly)"
-      - name: "--announce-complete"
-        required: false
-        description: "Print completion marker when done (for CI/eval harnesses)"
+        description: "Batch size forwarded to auto-fix. Always passed explicitly so runs stay reproducible."
     usage_examples:
-      - "/rfe.speedrun Better dashboard for ML model monitoring"
-      - "/rfe.speedrun RHAIRFE-1234"
-      - "/rfe.speedrun --input batch.yaml --headless --dry-run"
-      - "/rfe.speedrun --input batch.yaml --headless --batch-size 10 --announce-complete"
-  rfe.auto-fix:
+      - "/rfe-speedrun Users need to verify model signatures at serving time"
+      - "/rfe-speedrun --input batch.yaml --headless --announce-complete"
+      - "/rfe-speedrun --type initiative --dry-run RHOAIENG-12345"
+
+  rfe-auto-fix:
     description: |
-      Non-interactive batch pipeline for reviewing, revising, and splitting RFEs
-      at scale. Accepts explicit IDs or a JQL query (with --limit and --random
-      sampling) to fetch from Jira. Runs a pipeline state machine
-      (pipeline_state.py) with phased dispatch -- fetch, bootstrap, assess,
-      feasibility, review, revise, re-assess, and split -- driven by a strict
-      next-action / launch_wave / wait-for-wave loop that must run to completion
-      (no early exit, context compression handled automatically). Processes IDs in
-      configurable batches with snapshot-based incremental fetch
-      (snapshot_fetch.py) for resume and --reprocess support, then emits a run
-      report and counts summary.
-    argument_hint: "<IDs...> | --jql <query> [--limit N] [--batch-size N] [--headless] [--reprocess] [--random N] [--announce-complete] [--data-dir <path>]"
+      Reviews, revises and splits batches of work items non-interactively. It
+      takes explicit IDs or a JQL query and makes every decision autonomously.
+
+      Where `/rfe-review` hand-rolls its polling, auto-fix delegates control to
+      `scripts/pipeline_state.py` — a 31-phase state machine running `BATCH_START`
+      → `FETCH` → `SETUP` → `ASSESS` → `REVIEW` → `REVISE` → `FIXUP`, the
+      `REASSESS_*` block, `COLLECT`, the `SPLIT_*` block, `BATCH_DONE`,
+      `ERROR_COLLECT`, `REPORT`, `DONE`. The skill loops on `next-action` and
+      executes what it returns: `run_script` runs a phase, `launch_wave` launches
+      the listed background agents with pre-rendered variables, and every wave is
+      followed by the blocking `wait-for-wave` barrier (exit 3 means re-run it).
+
+      In JQL mode `snapshot_fetch.py` fetches only what is new or changed since
+      the last run, so an idle re-run legitimately processes zero IDs and goes
+      straight to `done`. The loop must reach `DONE` on its own — the skill body
+      explicitly tells the model to ignore any impulse to stop early for budget,
+      and a `Stop` hook re-enters the loop if a turn ends first.
+    argument_hint: "[--type <t>] [--jql \"<query>\"] [--limit N] [--batch-size N] [--data-dir <path>] [--headless] [--announce-complete] [--reprocess] [--random N] [ID ...]"
     arguments:
-      - name: "IDs"
+      - name: "ID"
         required: false
-        description: "Explicit RFE IDs to process (space-separated)"
+        description: "Explicit item IDs to process. Omit when using --jql or --reprocess."
+      - name: "--type"
+        type: "(type name)"
+        required: false
+        default: "rfe"
+        description: "Work-item type to process. An explicit --type always wins; a headless run with no type and no IDs resolves to rfe."
       - name: "--jql"
-        type: "<query>"
+        type: "(query)"
         required: false
-        description: "JQL query to fetch RFE IDs from Jira"
+        description: "Fetch the batch from Jira by JQL. The query's project is cross-checked against the resolved type's binding."
       - name: "--limit"
-        type: "<N>"
+        type: "(integer)"
         required: false
-        description: "Max number of results from JQL query"
+        description: "Cap the number of issues the JQL fetch returns."
       - name: "--batch-size"
-        type: "<N>"
+        type: "(integer)"
         required: false
         default: "50"
-        description: "Process IDs in batches of this size"
+        description: "Number of IDs processed per batch."
       - name: "--data-dir"
-        type: "<path>"
+        type: "(path)"
         required: false
-        description: "Directory for snapshot data"
+        description: "Alternate data directory for the snapshot fetch."
       - name: "--headless"
         required: false
-        description: "Non-interactive mode"
-      - name: "--reprocess"
-        required: false
-        description: "Reprocess RFEs that had prior runs"
-      - name: "--random"
-        type: "<N>"
-        required: false
-        description: "Process N random RFEs from the result set"
+        description: "Non-interactive run (the default posture for this skill)."
       - name: "--announce-complete"
         required: false
-        description: "Print completion marker when done"
+        description: "Print a completion marker when the pipeline reaches DONE."
+      - name: "--reprocess"
+        required: false
+        description: "Reprocess already-seen issues instead of only new or changed ones. Works with or without --jql."
+      - name: "--random"
+        type: "(integer)"
+        required: false
+        description: "Sample N issues at random from the fetch result."
     usage_examples:
-      - "/rfe.auto-fix RFE-001 RFE-002 RFE-003"
-      - '/rfe.auto-fix --jql "project=RHAIRFE AND status=New" --limit 20'
-      - '/rfe.auto-fix --jql "project=RHAIRFE" --reprocess --random 5'
+      - "/rfe-auto-fix RHAIRFE-1595 RHAIRFE-1602"
+      - "/rfe-auto-fix --jql \"project = RHAIRFE AND status = New\" --limit 20"
+      - "/rfe-auto-fix --type initiative --reprocess --batch-size 10"
+
   rfe-creator.update-deps:
     description: |
-      Force-update all vendored dependencies by removing cached copies and
-      re-fetching. Refreshes the assess-rfe skills (assess-rfe / export-rubric,
-      via scripts/bootstrap-assess-rfe.sh) and the architecture context (from
-      opendatahub-io/architecture-context, via scripts/fetch-architecture-context.sh),
-      then reports what was updated and the versions fetched. Has
-      disable-model-invocation set, so it can only be triggered explicitly by the
-      user.
+      Force re-vendors the plugin's dependencies: the assess-rfe skills at the
+      commit the type descriptors pin, and the latest architecture context. Use it
+      after bumping `pipeline.rubric.ref` or to repair a stale copy. It is
+      `disable-model-invocation: true` — a maintenance command you run from the
+      slash menu, never something the model delegates to on its own.
+
+      It removes everything `scripts/bootstrap.sh` installs — the
+      `.context/assess-rfe` checkout, the vendored `assess-rfe`,
+      `assess-initiative` and `export-rubric` skill directories, and the
+      `rfe-scorer` / `initiative-scorer` agent definitions — then re-runs the
+      bootstrap, and separately refreshes `.context/architecture-context`.
+
+      Note that re-running alone will not pick up newer assess-rfe commits: the
+      bootstrap checks out the pinned `pipeline.rubric.ref`, which
+      `types/rfe/type.yaml` and `types/initiative/type.yaml` must both carry at
+      the same value (`validate_types.py` refuses two different pins). To move the
+      rubric, bump both descriptors first, then run this skill.
     usage_examples:
       - "/rfe-creator.update-deps"
-  rfe-feasibility-review:
+
+  rfe.create:
     description: |
-      Internal sub-agent (model: opus) launched per RFE by rfe.review. Acts as a
-      senior engineer looking for blockers and risks rather than confirming the
-      work is good. Reads the RFE task file (and Jira comment history if present),
-      grounds its assessment in architecture context (LATEST_VERSION / PLATFORM.md
-      plus active overlays filtered by status, release, and affected components),
-      and reads any prior review report for re-reviews. Emits one of three
-      verdicts -- feasible (can be built), infeasible (platform architecture
-      fundamentally conflicts), or indeterminate (RFE too ambiguous to assess) --
-      distinguishing "capability doesn't exist yet" (feasible) from
-      "architecturally incompatible" (infeasible). Named components absent from
-      the architecture inventory are treated as strategy considerations, not
-      blockers. Writes to artifacts/rfe-reviews/{ID}-feasibility.md.
-  architecture-review:
+      Compatibility alias for `/rfe-create`, kept so existing `/rfe.create`
+      invocations keep working. It runs the layout bootstrap once, then reads its
+      generic sibling's SKILL.md and follows it from Step 0 with the same
+      arguments. Prefer `/rfe-create` (Initiatives: `/rfe-create --type
+      initiative`).
+    usage_examples:
+      - "/rfe.create Users need to verify model signatures at serving time"
+
+  rfe.review:
     description: |
-      Internal forked reviewer sub-agent (context: fork, model: opus) for the
-      strategy workflow. Acts as a platform architect assessing refined strategy
-      features in artifacts/strat-tasks/ (cross-referenced against source RFEs)
-      for architectural correctness: verifies every dependency against the
-      architecture docs, checks integration patterns match how components actually
-      communicate, ensures component boundaries aren't violated, validates the
-      deployment model, and flags architectural conflicts and cross-component
-      coordination needs (versioning, rollout order, backwards compatibility).
-      Applies architecture-context overlays as authoritative corrections, skips
-      cleanly when no architecture context is available, and grounds every
-      finding in specific docs, components, or APIs.
-  feasibility-review:
+      Compatibility alias for `/rfe-review`, kept so existing `/rfe.review`
+      invocations keep working. It runs the layout bootstrap once, then reads its
+      generic sibling's SKILL.md and follows it from Step 0 with the same
+      arguments. Prefer `/rfe-review` (Initiatives: `/rfe-review --type
+      initiative`).
+    usage_examples:
+      - "/rfe.review RHAIRFE-1595"
+
+  rfe.split:
     description: |
-      Internal forked reviewer sub-agent (context: fork, model: opus) for the
-      strategy workflow. Acts as a staff engineer assessing refined strategy
-      features in artifacts/strat-tasks/ for technical feasibility: whether the
-      proposed approach actually works, whether it delivers what the source RFE
-      asks for (flagging silent scope reduction), whether the effort estimate /
-      T-shirt size is credible, and what hidden dependencies or integration
-      challenges will surface during implementation. Grounds assessments in
-      architecture context and overlays, takes an adversarial stance toward
-      optimistic estimates, and emits an approve / revise / reject recommendation.
-  scope-review:
+      Compatibility alias for `/rfe-split`, kept so existing `/rfe.split`
+      invocations keep working. It runs the layout bootstrap once, then reads its
+      generic sibling's SKILL.md and follows it from Step 0 with the same
+      arguments. Prefer `/rfe-split` (Initiatives: `/rfe-split --type
+      initiative`).
+    usage_examples:
+      - "/rfe.split RHAIRFE-1234"
+
+  rfe.submit:
     description: |
-      Internal forked reviewer sub-agent (context: fork, model: opus) for the
-      strategy workflow. Acts as a product owner assessing whether each refined
-      strategy in artifacts/strat-tasks/ is right-sized -- not so big it needs
-      splitting, not so small it's just a task -- and scoped to match its effort
-      estimate. Checks that scope is explicitly bounded, that the strategy
-      delivers a complete capability, and that it neither silently expands nor
-      shrinks the source RFE. Flags scope-trap phrasing ("and related
-      functionality", "full support for"), and when recommending a split suggests
-      concrete boundaries for each resulting strategy.
-  testability-review:
+      Compatibility alias for `/rfe-submit`, kept so existing `/rfe.submit`
+      invocations keep working. It runs the layout bootstrap once, then reads its
+      generic sibling's SKILL.md and follows it from Step 0 with the same
+      arguments. Prefer `/rfe-submit` (Initiatives: `/rfe-submit --type
+      initiative`).
+    usage_examples:
+      - "/rfe.submit"
+
+  rfe.speedrun:
     description: |
-      Internal forked reviewer sub-agent (context: fork, model: opus) for the
-      strategy workflow. Acts as a test engineer determining whether each refined
-      strategy in artifacts/strat-tasks/ can be validated: are acceptance criteria
-      testable and success criteria measurable (with a baseline), what edge cases
-      are missing (failure modes, boundary conditions, concurrent access,
-      large-scale, backwards compatibility), what test strategy is needed, and can
-      the non-functional requirements (performance, scalability, security) be
-      tested. Suggests concrete rewrites for vague criteria and emits an approve /
-      revise-criteria / add-test-plan recommendation.
+      Compatibility alias for `/rfe-speedrun`, kept so existing `/rfe.speedrun`
+      invocations keep working. It runs the layout bootstrap once, then reads its
+      generic sibling's SKILL.md and follows it from Step 0 with the same
+      arguments. Prefer `/rfe-speedrun` (Initiatives: `/rfe-speedrun --type
+      initiative`).
+    usage_examples:
+      - "/rfe.speedrun Users need to verify model signatures at serving time"
+
+  rfe.auto-fix:
+    description: |
+      Compatibility alias for `/rfe-auto-fix`, kept so existing `/rfe.auto-fix`
+      invocations keep working. It runs the layout bootstrap once, then reads its
+      generic sibling's SKILL.md and follows it from Step 0 with the same
+      arguments. Prefer `/rfe-auto-fix` (Initiatives: `/rfe-auto-fix --type
+      initiative`).
+    usage_examples:
+      - "/rfe.auto-fix RHAIRFE-1595 RHAIRFE-1602"

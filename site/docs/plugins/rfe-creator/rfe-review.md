@@ -7,8 +7,24 @@ title: rfe-review
 
 # rfe-review
 
-Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives (RHOAIENG, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring and the type's review dimensions (technical feasibility, strategic alignment), then auto- revises the issues it finds.
+Scores work items against the type's rubric and auto-revises what fails. It
+accepts Jira keys (fetched if not already local) or reviews the local
+artifacts `/rfe-create` wrote.
 
+It is an orchestrator: it never reads item bodies into its own context, only
+frontmatter. For each ID it launches an assess agent plus one agent per
+declared review dimension — technical feasibility for RFEs, strategic
+alignment for Initiatives — each with its own blocking and condition rules.
+A review agent then merges those results into
+`{REVIEWS_DIR}/<ID>-review.md`, and `filter_for_revision.py` selects which
+items a revise agent should rewrite.
+
+Revised items are re-assessed from scratch for at most two cycles. Before
+each cycle the review and assess results are deleted so progress detection
+works, with `preserve_review_state.py` saving and restoring the cumulative
+before-scores and revision history across the teardown. An agent that dies
+mid-run leaves no output file, so the ID gets an error stub and drops out of
+the batch rather than stalling it.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -97,8 +113,29 @@ Review and improve work items of any registered type — RFEs (RHAIRFE) and Init
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![rfe-review diagram](rfe-review.svg)
+</div>
+
+## Arguments
+
+```bash
+/rfe-review [--type <t>] [--headless] [--caller <name>] <ID> [ID2 ...]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ID` | :material-check: | - | One or more space-separated item IDs — the type's Jira key form or local id form. A key with no local task file is fetched from Jira first. |
+| `--type` |  | `rfe` | Work-item type to review. An explicit --type always wins. |
+| `--headless` |  | - | Suppress the end-of-run summary and emit a completion marker instead. |
+| `--caller` |  | `none` | Identifies the calling skill so a headless run returns to it. /rfe-split passes --caller split. |
+
 ## Usage
 
 ```bash
-/rfe-review
+/rfe-review RHAIRFE-1595
+/rfe-review RHAIRFE-1595 RHAIRFE-1602 RFE-001
+/rfe-review --type initiative INIT-001
 ```

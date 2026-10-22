@@ -1,0 +1,393 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe-auto-fix**
+
+  - --type {t}, --jql "{query}"
+  - --limit N, --batch-size N (default 50)
+  - --data-dir {path}, --random N
+  - --headless, --announce-complete, --reprocess
+  - trailing args = explicit IDs
+  - allowed-tools: Bash, Agent (no Skill tool)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Setup: layout check + type resolution ---
+
+setup: |md
+  **Setup - Layout + Step 0 Type**
+
+  - bootstrap.sh --layout links scripts/, types/
+  - type_registry.py resolve [--type t]
+    [--headless] {IDs}
+  - forwards ONLY --type / --headless / IDs
+  - prints TYPE RESOLVED: {type} ({how})
+  - launch-vars {type} auto-fix -> launch block
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+init: |md
+  **Step 1 - Init**
+
+  - pipeline_state.py init {TYPE_FLAG}
+  - [--batch-size N] [--headless]
+    [--announce-complete]
+  - clears tmp/pipeline-batch-*-ids.txt
+  - phase=INIT, batch=0, total_batches=0
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2: where the IDs come from ---
+
+id-source: |md
+  **Step 2 - ID source?**
+  --jql / --reprocess
+  / explicit IDs
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+fetch-jql: |md
+  **JQL mode**
+
+  - snapshot_fetch.py fetch "{query}" {TYPE_FLAG}
+  - --ids-file tmp/pipeline-all-ids.txt
+  - --changed-file tmp/pipeline-changed-ids.txt
+  - [--limit N] [--data-dir {path}] [--random N]
+  - snapshot diff: new + changed only
+  - JQL project cross-checked vs the type
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+fetch-reprocess: |md
+  **Reprocess-only mode**
+
+  - snapshot_fetch.py fetch --reprocess
+    {TYPE_FLAG} (no JQL)
+  - re-includes unchanged-processed IDs
+  - same ids-file / changed-file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+explicit-ids: |md
+  **Explicit IDs**
+
+  - state.py write-ids
+    tmp/pipeline-all-ids.txt {IDs}
+  - state.py write-ids
+    tmp/pipeline-changed-ids.txt (empty)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+usage-stop: |md
+  **Stop - usage**
+
+  - no IDs, no --jql, no --reprocess
+  - print usage instructions and stop
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 3: bootstrap (external CLI) ---
+
+bootstrap: |md
+  **Step 3 - {BOOTSTRAP}**
+  bash scripts/bootstrap.sh --type {type}
+
+  - retry once on failure
+  - second failure -> stop "bootstrap failed."
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 4: resume check ---
+
+resume-check: |md
+  **Step 4 - check_resume.py**
+  all + changed -> process IDs
+  passing review -> skip
+  any left to process?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+batching: |md
+  **Step 4b - Batch**
+
+  - split process IDs into batch_size chunks
+  - state.py write-ids
+    tmp/pipeline-batch-{N}-ids.txt
+  - pipeline_state.py set total_batches={M}
+  - pipeline_state.py set-phase BATCH_START
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+phases-callout: |md
+  PHASES (31) - scripts/pipeline_state.py
+  noop / script (run_script) / agent (launch_wave)
+
+  BATCH_START FETCH SETUP
+  ASSESS REVIEW REVISE FIXUP
+  REASSESS_CHECK REASSESS_SAVE
+  REASSESS_ASSESS REASSESS_REVIEW
+  REASSESS_RESTORE REASSESS_REVISE
+  REASSESS_FIXUP
+  COLLECT SPLIT SPLIT_COLLECT
+  SPLIT_PIPELINE_START SPLIT_ASSESS
+  SPLIT_REVIEW SPLIT_REVISE SPLIT_FIXUP
+  SPLIT_SAVE SPLIT_REASSESS
+  SPLIT_RE_REVIEW SPLIT_RESTORE
+  SPLIT_CORRECTION_CHECK
+  BATCH_DONE ERROR_COLLECT REPORT DONE
+
+  BATCH_DONE -> BATCH_START while batch < total
+  ERROR_COLLECT -> BATCH_START (one retry batch)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- The dispatch loop ---
+
+dispatch: "Dispatch loop - repeat until phase DONE (run to completion; one Bash operation per call)" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dispatch.next-action: |md
+  **next-action**
+
+  - pipeline_state.py next-action
+  - chains noop + already-run script
+    phases internally
+  - emits YAML: action, phase,
+    message, agents
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dispatch.action-kind: |md
+  **action?**
+  done / run_script
+  / launch_wave
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dispatch.run-phase: |md
+  **run-phase**
+
+  - pipeline_state.py run-phase
+  - runs the phase's own script
+    (SETUP, FIXUP, SPLIT_COLLECT,
+    ERROR_COLLECT, REPORT, ...)
+  - writes tmp/.dispatch-marker
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dispatch.launch-wave: |md
+  **launch_wave - background Agents**
+  one Agent per entry in `agents`
+
+  - prompt = "{vars}\n\nRead {prompt_file}
+    and follow all instructions exactly."
+  - vars = pre-rendered KEY=VALUE lines
+    (launch block + per-agent, {ID} substituted)
+  - subagent_type when present (rfe-scorer)
+  - SAME prompt files /rfe-review and /rfe-split
+    use - headless, never a Skill call
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+dispatch.wait-wave: |md
+  **wait-for-wave**
+
+  - pipeline_state.py wait-for-wave
+  - blocking barrier, polls artifact
+    files (not Agent notifications)
+  - stall guard: 900s window,
+    retry cap 2, then escalate
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+dispatch.wave-exit: |md
+  **exit code?**
+  any other code
+  is an error
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+launch-callout: |||md
+  next-action YAML (launch_wave)
+
+  action: launch_wave
+  phase: ASSESS
+  message: "ASSESS: wave 1/2 (5 IDs)"
+  agents:
+    - subagent_type: rfe-scorer
+      prompt_file: .claude/skills/rfe-review/
+                   prompts/assess-agent.md
+      vars: |
+        KEY=RHAIRFE-1234
+        DATA_FILE=tmp/rfe-assess/single/
+                  RHAIRFE-1234.md
+        RUN_DIR=tmp/rfe-assess/single
+        PROMPT_PATH=.context/assess-rfe/.../
+                    agent_prompt.md
+    - prompt_file: types/rfe/dimensions/
+                   feasibility.md
+      vars: |
+        ID=RHAIRFE-1234
+||| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Teardown ---
+
+report-summary: |md
+  **Teardown**
+
+  - batch_summary.py {TYPE_FLAG} --counts-only
+    --ids-file tmp/pipeline-all-ids.txt
+  - TOTAL= PASSED= FAILED= SPLIT= ERRORS=
+  - split children folded in via parent_key
+  - idle run -> TOTAL=0, no run report
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> setup
+setup -> init: "launch block"
+init -> id-source: "pipeline-state.yaml"
+
+id-source -> fetch-jql: "--jql"
+id-source -> fetch-reprocess: "--reprocess, no JQL"
+id-source -> explicit-ids: "explicit IDs"
+id-source -> usage-stop: "none of the three"
+
+fetch-jql -> bootstrap
+fetch-reprocess -> bootstrap
+explicit-ids -> bootstrap
+
+bootstrap -> resume-check: "all + changed IDs"
+resume-check -> batching: "pipeline-process-ids.txt"
+resume-check -> report-summary: "0 to process - idle run" {
+  style.stroke-dash: 3
+}
+
+batching -> dispatch.next-action
+dispatch.next-action -> dispatch.action-kind
+dispatch.action-kind -> dispatch.run-phase: "run_script"
+dispatch.action-kind -> dispatch.launch-wave: "launch_wave"
+dispatch.action-kind -> report-summary: "done"
+dispatch.run-phase -> dispatch.next-action {
+  style.stroke-dash: 3
+}
+dispatch.launch-wave -> dispatch.wait-wave: "wave IDs"
+dispatch.wait-wave -> dispatch.wave-exit
+dispatch.wave-exit -> dispatch.next-action: "exit 0" {
+  style.stroke-dash: 3
+}
+dispatch.wave-exit -> dispatch.wait-wave: "exit 3 - pending" {
+  style.stroke-dash: 3
+}
+
+# --- Callout connectors ---
+
+dispatch.next-action -> launch-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+batching -> phases-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

@@ -1,0 +1,221 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe-review&lt;/b&gt;&lt;br&gt;&lt;br&gt;work-item review orchestrator&lt;br&gt;--type {t} (rfe default)&lt;br&gt;--headless&lt;br&gt;--caller split&lt;br&gt;one or more {IDs}&lt;br&gt;tools: Bash, Agent, AskUserQuestion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="110" y="95" width="175" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="step0" value="&lt;b&gt;Step 0: Resolve Type, Persist&lt;/b&gt;&lt;br&gt;&lt;br&gt;bash scripts/bootstrap.sh --layout&lt;br&gt;type_registry.py resolve [--type t]&lt;br&gt;launch-vars {TYPE} review: the {VAR}&lt;br&gt;block prepended to every agent prompt&lt;br&gt;state.py init tmp/{STATE_PREFIX}review-config.yaml&lt;br&gt;state.py write-ids ...review-all-ids.txt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="330" y="85" width="250" height="195" as="geometry"/>
+    </mxCell>
+    <mxCell id="local-check" value="&lt;b&gt;Task file&lt;br&gt;on disk?&lt;/b&gt;&lt;br&gt;check_review_progress.py&lt;br&gt;--list-ids (one-shot)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="625" y="125" width="165" height="115" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch" value="&lt;b&gt;Step 1: Fetch Agents&lt;/b&gt;&lt;br&gt;opus, background, one per remote ID&lt;br&gt;&lt;br&gt;prompts/fetch-agent.md&lt;br&gt;fetch_issue.py {KEY} --fetch-all&lt;br&gt;MCP getJiraIssue fallback on exit 2&lt;br&gt;writes task, original, -comments.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="835" y="87.5" width="235" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="setup" value="&lt;b&gt;Step 1.5: Setup&lt;/b&gt;&lt;br&gt;two parallel Bash calls&lt;br&gt;&lt;br&gt;scripts/fetch-architecture-context.sh&lt;br&gt;{BOOTSTRAP}: the assess-rfe rubric&lt;br&gt;both failures are non-fatal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1115" y="100" width="245" height="165" as="geometry"/>
+    </mxCell>
+    <mxCell id="step2" value="&lt;b&gt;Step 2: Per-ID Agent Wave - (1 + dimensions) x N agents in parallel&lt;/b&gt;&lt;br&gt;the orchestrator never reads an item body: only frontmatter.py read and --list-ids" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1405" y="60" width="730" height="360" as="geometry"/>
+    </mxCell>
+    <mxCell id="prep-assess" value="&lt;b&gt;prep_assess.py {ID}&lt;/b&gt;&lt;br&gt;&lt;br&gt;removes stale .md / .result.md&lt;br&gt;copies the task file into&lt;br&gt;{ASSESS_STAGING}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="step2">
+      <mxGeometry x="20" y="80" width="200" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="assess" value="&lt;b&gt;Assess Agent&lt;/b&gt;&lt;br&gt;subagent_type {SCORER_AGENT}&lt;br&gt;&lt;br&gt;prompts/assess-agent.md&lt;br&gt;scores against {PROMPT_PATH}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="step2">
+      <mxGeometry x="245" y="80" width="205" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="dimension" value="&lt;b&gt;Dimension Agents&lt;/b&gt;&lt;br&gt;one per DIMENSIONS entry&lt;br&gt;&lt;br&gt;rfe: feasibility (blocking)&lt;br&gt;initiative: feasibility + alignment&lt;br&gt;(parent_key startswith RHAISTRAT-)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="step2">
+      <mxGeometry x="245" y="220" width="205" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="poll" value="&lt;b&gt;Poll the Wave&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py write-ids {POLL_FILE_PREFIX}&lt;br&gt;check_review_progress.py --phase ...&lt;br&gt;sleep the reported NEXT_POLL&lt;br&gt;blocking dimension PENDING is an&lt;br&gt;error; non-blocking is a note" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="step2">
+      <mxGeometry x="485" y="150" width="225" height="125" as="geometry"/>
+    </mxCell>
+    <mxCell id="error-stub" value="&lt;b&gt;Error Stub (any phase)&lt;/b&gt;&lt;br&gt;&lt;br&gt;frontmatter.py set on the review file&lt;br&gt;fetch_failed, assess_failed,&lt;br&gt;{name}_failed, review_failed&lt;br&gt;score=0 pass=false needs_attention=true&lt;br&gt;ID dropped from the processing list" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1330" y="460" width="240" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="stub-cmd" value="python3 scripts/frontmatter.py set&lt;br&gt;&amp;nbsp;&amp;nbsp;artifacts/rfe-reviews/ID-review.md&lt;br&gt;&amp;nbsp;&amp;nbsp;rfe_id=ID score=0 pass=false&lt;br&gt;&amp;nbsp;&amp;nbsp;recommendation=revise&lt;br&gt;&amp;nbsp;&amp;nbsp;feasibility=feasible&lt;br&gt;&amp;nbsp;&amp;nbsp;auto_revised=false&lt;br&gt;&amp;nbsp;&amp;nbsp;needs_attention=true&lt;br&gt;&amp;nbsp;&amp;nbsp;scores.what=0 scores.why=0&lt;br&gt;&amp;nbsp;&amp;nbsp;scores.open_to_how=0&lt;br&gt;&amp;nbsp;&amp;nbsp;scores.not_a_task=0&lt;br&gt;&amp;nbsp;&amp;nbsp;scores.right_sized=0&lt;br&gt;&amp;nbsp;&amp;nbsp;error=&quot;fetch_failed: task file&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;not created&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;type=rfe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1325" y="660" width="250" height="250" as="geometry"/>
+    </mxCell>
+    <mxCell id="review" value="&lt;b&gt;Step 3: Review Agents&lt;/b&gt;&lt;br&gt;opus, background, {FIRST_PASS}=true&lt;br&gt;&lt;br&gt;prompts/review-agent.md&lt;br&gt;reads the assess result and every&lt;br&gt;dimension file, never the item body&lt;br&gt;body from {SECTIONS_PATH}, verdict&lt;br&gt;from {RULES_PATH}&lt;br&gt;writes {REVIEWS_DIR}/{ID}-review.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1880" y="980" width="255" height="205" as="geometry"/>
+    </mxCell>
+    <mxCell id="review-fm" value="artifacts/rfe-reviews/ID-review.md&lt;br&gt;rfe_id: RHAIRFE-1595&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# required&lt;br&gt;score: 10&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# int&lt;br&gt;pass: true&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# bool&lt;br&gt;recommendation: submit&amp;nbsp;&amp;nbsp;# submit /&lt;br&gt;&amp;nbsp;&amp;nbsp;# revise / split / reject /&lt;br&gt;&amp;nbsp;&amp;nbsp;# autorevise_reject&lt;br&gt;feasibility: feasible&amp;nbsp;&amp;nbsp;&amp;nbsp;# feasible /&lt;br&gt;&amp;nbsp;&amp;nbsp;# infeasible / indeterminate&lt;br&gt;auto_revised: false&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# bool&lt;br&gt;needs_attention: false&amp;nbsp;&amp;nbsp;# bool&lt;br&gt;scores:&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;# required&lt;br&gt;&amp;nbsp;&amp;nbsp;what: 2&lt;br&gt;&amp;nbsp;&amp;nbsp;why: 2&lt;br&gt;&amp;nbsp;&amp;nbsp;open_to_how: 2&lt;br&gt;&amp;nbsp;&amp;nbsp;not_a_task: 2&lt;br&gt;&amp;nbsp;&amp;nbsp;right_sized: 2&lt;br&gt;# optional: local_id, type,&lt;br&gt;# tracker_ref, error, before_score,&lt;br&gt;# before_scores" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="2190" y="960" width="280" height="330" as="geometry"/>
+    </mxCell>
+    <mxCell id="filter-revision" value="&lt;b&gt;Needs&lt;br&gt;revision?&lt;/b&gt;&lt;br&gt;state.py read-ids, then&lt;br&gt;filter_for_revision.py" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1650" y="1025" width="175" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="revise" value="&lt;b&gt;Step 3.5: Revise Agents&lt;/b&gt;&lt;br&gt;opus, background&lt;br&gt;&lt;br&gt;prompts/revise-agent.md&lt;br&gt;edits only the flagged sections of&lt;br&gt;{TASKS_DIR}/{ID}.md&lt;br&gt;check_content_preservation.py&lt;br&gt;--write-yaml&lt;br&gt;appends to ## Revision History" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1370" y="985" width="240" height="195" as="geometry"/>
+    </mxCell>
+    <mxCell id="check-revised" value="&lt;b&gt;Fix the auto_revised Flag&lt;/b&gt;&lt;br&gt;&lt;br&gt;check_revised.py --batch {TYPE_FLAG}&lt;br&gt;--ids-file {POLL_FILE_PREFIX}revise.txt&lt;br&gt;diffs originals against task files&lt;br&gt;prints STALE_COMPANIONS= and drops&lt;br&gt;the empty removed-context files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="995" width="235" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="reassess-gate" value="&lt;b&gt;Re-assess?&lt;/b&gt;&lt;br&gt;collect_recommendations.py&lt;br&gt;--reassess, reassess_cycle" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="880" y="1025" width="170" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="reassess" value="&lt;b&gt;Step 4: Re-assess Cycle (max 2)&lt;/b&gt;&lt;br&gt;state.py set-default reassess_cycle=0 - never resets an existing counter,&lt;br&gt;so re-entry after context compression is safe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="130" y="970" width="630" height="240" as="geometry"/>
+    </mxCell>
+    <mxCell id="save-state" value="&lt;b&gt;4a. Save, then Clear&lt;/b&gt;&lt;br&gt;&lt;br&gt;preserve_review_state.py save:&lt;br&gt;ID-review-state.json&lt;br&gt;rm {REVIEWS_DIR}/{ID}-review.md&lt;br&gt;rm {ASSESS_STAGING}/{ID}.result.md&lt;br&gt;state.py write-ids ...reassess-ids.txt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="reassess">
+      <mxGeometry x="20" y="75" width="280" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="restore-filter" value="&lt;b&gt;4d-4e. Restore, Re-filter&lt;/b&gt;&lt;br&gt;&lt;br&gt;preserve_review_state.py restore:&lt;br&gt;before_scores, auto_revised, history&lt;br&gt;filter_for_revision.py: a score&lt;br&gt;regression sets autorevise_reject&lt;br&gt;revise again, then check_revised.py&lt;br&gt;--clear-addressed-attention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="reassess">
+      <mxGeometry x="325" y="75" width="285" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="finalize" value="&lt;b&gt;Step 5: Finalize&lt;/b&gt;&lt;br&gt;&lt;br&gt;frontmatter.py rebuild-index when&lt;br&gt;INDEX_ENABLED is true&lt;br&gt;state.py read the review config&lt;br&gt;(flags survive compression)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="130" y="1350" width="235" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="headless" value="&lt;b&gt;headless?&lt;/b&gt;&lt;br&gt;caller=split or none" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="415" y="1375" width="165" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="return-caller" value="&lt;b&gt;Return to the Caller&lt;/b&gt;&lt;br&gt;&lt;br&gt;prints &quot;rfe-review step completed.&quot;&lt;br&gt;state.py read ...split-config.yaml&lt;br&gt;caller=split: /rfe-split Step 3&lt;br&gt;caller=none: stop here" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="800" y="1280" width="240" height="175" as="geometry"/>
+    </mxCell>
+    <mxCell id="summary" value="&lt;b&gt;Interactive Summary&lt;/b&gt;&lt;br&gt;&lt;br&gt;batch_summary.py {TYPE_FLAG}&lt;br&gt;--ids-file ...review-all-ids.txt&lt;br&gt;all pass: /rfe-submit --type {TYPE}&lt;br&gt;split: /rfe-split, errors: retry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="800" y="1500" width="240" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_step0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="step0" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_step0_localcheck" value="tmp/review-all-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="step0" target="local-check" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_localcheck_fetch" value="PENDING_IDS (remote)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="local-check" target="fetch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_localcheck_setup" value="COMPLETED_IDS (local)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="local-check" target="setup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="707.5" y="58"/>
+          <mxPoint x="1237.5" y="58"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_setup" value="artifacts/rfe-tasks/ID.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch" target="setup" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_fetch_errorstub" value="still PENDING" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch" target="error-stub" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="952.5" y="550.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_setup_step2" value=".context/assess-rfe rubric" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3402777777777778;entryDx=0;entryDy=0;" edge="1" source="setup" target="step2" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_step2_review" value="ID.result.md + dimension files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.8253424657534246;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="step2" target="review" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_step2_errorstub" value="assess_failed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.616;entryY=0;entryDx=0;entryDy=0;" edge="1" source="step2" target="error-stub" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1624.0" y="435"/>
+          <mxPoint x="1477.84" y="435"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_errorstub_stubcmd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="error-stub" target="stub-cmd" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_reviewfm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3712121212121212;entryDx=0;entryDy=0;" edge="1" source="review" target="review-fm" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_filter" value="artifacts/rfe-reviews/ID-review.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="review" target="filter-revision" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_review_errorstub" value="review_failed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="review" target="error-stub" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1943.75" y="550"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_filter_reassessgate" value="pass / infeasible / reject" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="filter-revision" target="reassess-gate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1737.5" y="945"/>
+          <mxPoint x="965" y="945"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_filter_revise" value="score low, feasible, not rejected" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="filter-revision" target="revise" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_revise_checkrevised" value="revised artifacts/rfe-tasks/ID.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="revise" target="check-revised" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_checkrevised_reassessgate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1.0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="check-revised" target="reassess-gate" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_reassessgate_reassess" value="REASSESS= non-empty" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="reassess-gate" target="reassess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_reassessgate_finalize" value="none, or reassess_cycle &gt;= 2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="reassess-gate" target="finalize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_savestate_restorefilter" value="4b/4c re-run" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="save-state" target="restore-filter" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_savestate_step2" value="auto_revised=true, pass=false - max 2 cycles" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="save-state" target="step2" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="45" y="1120"/>
+          <mxPoint x="45" y="30"/>
+          <mxPoint x="1770" y="30"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_restorefilter_finalize" value="after cycle 2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.745;entryY=0;entryDx=0;entryDy=0;" edge="1" source="restore-filter" target="finalize" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="780" y="1120"/>
+          <mxPoint x="780" y="1300"/>
+          <mxPoint x="305.075" y="1300"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_finalize_headless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="finalize" target="headless" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_headless_returncaller" value="headless: true" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="headless" target="return-caller" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_headless_summary" value="interactive" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="headless" target="summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_prepassess_assess" value="staging/ID.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="prep-assess" target="assess" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_assess_poll" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.78;exitDx=0;exitDy=0;entryX=0;entryY=0.22;entryDx=0;entryDy=0;" edge="1" source="assess" target="poll" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_dimension_poll" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.22;exitDx=0;exitDy=0;entryX=0;entryY=0.78;entryDx=0;entryDy=0;" edge="1" source="dimension" target="poll" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

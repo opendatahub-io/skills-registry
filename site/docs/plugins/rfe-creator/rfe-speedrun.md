@@ -7,8 +7,26 @@ title: rfe-speedrun
 
 # rfe-speedrun
 
-End-to-end pipeline for work items of any registered type — RFEs by default, Initiatives with --type initiative. Accepts a single idea, Jira key(s), or a YAML batch file. Creates, reviews, auto-fixes (with splits), and submits. Supports --headless, --announce-complete, and --dry-run for CI.
+Runs the whole pipeline end to end — create, auto-fix, submit — from a single
+idea, a Jira key, or a YAML batch file, with as little interaction as
+possible.
 
+Step 0 resolves the type, cleans `tmp/`, and pins every flag (notably
+`batch_size`, which must be a concrete integer) into
+`tmp/{STATE_PREFIX}speedrun-config.yaml` so the run is reproducible and
+survives compression. It then picks a mode: **A** a `--input` batch YAML,
+**B** an existing Jira key (skip create), or **C** a single free-text idea.
+
+Mode A validates the batch with `--strict` before spending any agent budget,
+pre-allocates every ID, then fans out one `/rfe-create` agent per entry —
+passing each entry's `clarifying_context` verbatim inside a delimited block
+as data, never as instructions. Completion is a blocking barrier on the task
+files, not agent notifications: the same IDs pending across three exit-3
+results means those agents are dead and get relaunched. Phase 2 hands off to
+`/rfe-auto-fix` via the Skill tool (Agent would background it and end the
+session) and verifies with `check_autofix_complete.py`, retrying the missing
+IDs up to three times. Phase 3 submits only the IDs
+`collect_recommendations.py` reports as passing.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -74,8 +92,32 @@ End-to-end pipeline for work items of any registered type — RFEs by default, I
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![rfe-speedrun diagram](rfe-speedrun.svg)
+</div>
+
+## Arguments
+
+```bash
+/rfe-speedrun [--type <t>] [--input <path>] [--headless] [--announce-complete] [--dry-run] [--batch-size N] <idea | Jira key>
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `idea | Jira key` |  | - | A free-text idea or objective (mode C), or a single Jira key to process an existing item (mode B). Omit when using --input. |
+| `--type` |  | `rfe` | Work-item type for the run. An explicit --type always wins. |
+| `--input` |  | - | YAML file of batch entries (prompt, priority, labels, clarifying_context) — mode A. May also be a mapping with type and items keys. |
+| `--headless` |  | - | Suppress questions and confirmations, for CI and eval runs. |
+| `--announce-complete` |  | - | Print a completion marker when done, for CI and eval harnesses. |
+| `--dry-run` |  | - | Skip the Jira writes in the submit phase. |
+| `--batch-size` |  | `5` | Batch size forwarded to auto-fix. Always passed explicitly so runs stay reproducible. |
+
 ## Usage
 
 ```bash
-/rfe-speedrun
+/rfe-speedrun Users need to verify model signatures at serving time
+/rfe-speedrun --input batch.yaml --headless --announce-complete
+/rfe-speedrun --type initiative --dry-run RHOAIENG-12345
 ```

@@ -1,0 +1,353 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe-split**
+
+  - --type {t} (rfe or initiative)
+  - --headless (no summary)
+  - one or more {ID} args
+  - tools: Bash, Agent, Skill
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 0: resolve the type, parse and persist ---
+
+resolve-type: |md
+  **Step 0 - Resolve Type**
+
+  - bootstrap.sh --layout links scripts/, types/
+  - type_registry.py resolve --type {t} {IDs}
+  - launch-vars {type} split -> launch block
+  - no IDs -> print usage and stop
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+vars-callout: |md
+  launch-vars {type} split
+    types/rfe/type.yaml
+  {TASKS_DIR}     artifacts/rfe-tasks
+  {REVIEWS_DIR}   artifacts/rfe-reviews
+  {STATE_PREFIX}  ""  {POLL_PREFIX} ""
+  {RESPLIT_FIELD} right_sized
+  {RESPLIT_BELOW} 2
+  {INDEX_ENABLED} true
+  {SPLIT_RULES_PATH}
+    types/rfe/prompts/split-rules.md
+  initiative: artifacts/initiatives +
+    initiative-reviews, prefixes
+    "initiative-", INDEX_ENABLED false
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+persist: |md
+  **Persist Flags + IDs**
+
+  - state.py init tmp/{STATE_PREFIX}split-config.yaml
+  - type={TYPE} headless=true/false
+  - state.py write-ids {STATE_PREFIX}split-all-ids.txt
+  - survives context compression
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+task-check: |md
+  **task file exists?**
+  check_review_progress.py
+  --phase {POLL_PREFIX}fetch
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+skip-missing: |md
+  **Report + Skip**
+
+  - ID listed under PENDING_IDS
+  - no {TASKS_DIR}/{ID}.md on disk
+  - no split agent launched
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: the split agents ---
+
+split-agent: |md
+  **Split Agent (1 per ID)**
+  Agent, model opus, background
+
+  - prompt = {SPLIT_RULES_PATH}
+  - subs {ID}, {TASK_FILE}, {REVIEW_FILE}
+  - gaps -> atomic capabilities
+  - next_rfe_id.py allocates child IDs
+  - writes children, archives parent
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+split-status-callout: |md
+  {REVIEWS_DIR}/{ID}-split-status.yaml
+  (yaml.safe_load; `action` is the key
+   split_collect.py branches on)
+
+  status: completed
+  action: split
+  reason: "split into N children"
+  children: [RFE-003, RFE-004]
+
+  no-split form:
+  status: completed
+  action: no-split
+  reason: "delivery-coupled"
+
+  file absent -> split_failed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+poll-split: |md
+  **Poll the Split Wave**
+
+  - state.py write-ids {POLL_FILE_PREFIX}split.txt
+  - check_review_progress.py --phase {POLL_PREFIX}split
+  - sleep NEXT_POLL until COMPLETED changes
+  - no status file -> frontmatter.py set error=split_failed
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 2: route on action, collect children, review them ---
+
+action-check: |md
+  **action:**
+  {ID}-split-status.yaml
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+mark-revise: |md
+  **Mark for Revision**
+
+  - frontmatter.py set {REVIEWS_DIR}/{ID}-review.md
+    recommendation=revise
+  - same for action: split with 0 children
+  - reason kept for the final summary
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+collect-children: |md
+  **Collect Children**
+
+  - collect_children.py {TYPE_FLAG} {split_IDs}
+  - matches parent_key, skips status: Archived
+  - prints {ID}:child1,child2
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+review-children: |md
+  **/rfe-review**
+  inline Skill
+
+  - --headless --caller split {TYPE_FLAG}
+  - full agent-delegation review
+  - writes {child}-review.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 3: right-sizing self-correction ---
+
+rightsize: "Step 3 - Right-sizing Self-Correction (max 1 cycle)" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rightsize.cycle-init: |md
+  **Cycle Counter**
+
+  - state.py set-default correction_cycle=0
+  - collect_children.py --ids-file re-derives
+  - set correction_cycle={N+1} per cycle
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rightsize.read-scores: |md
+  **Read Child Scores**
+
+  - frontmatter.py read
+    {REVIEWS_DIR}/{child}-review.md
+  - scores.{RESPLIT_FIELD}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rightsize.right-sized: |md
+  **right-sized?**
+  same rule as
+  check_right_sized.py
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rightsize.cycle-init -> rightsize.read-scores: "child IDs"
+rightsize.read-scores -> rightsize.right-sized: "scores.{RESPLIT_FIELD}"
+
+# --- Step 4: finalize ---
+
+finalize: |md
+  **Step 4 - Finalize**
+
+  - frontmatter.py rebuild-index if {INDEX_ENABLED}
+  - state.py read {STATE_PREFIX}split-config.yaml
+  - cycle 1 already used -> report what is left
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+headless-check: |md
+  **headless?**
+  split-config.yaml
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+headless-exit: |md
+  **Headless Exit**
+
+  - prints "rfe-split step completed."
+  - no summary, caller drives the rest
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+summary: |md
+  **## Split Complete**
+
+  - original {KEY_EXAMPLE} (archived)
+  - new {ENTITY_PLURAL}: id, title, priority, PASS
+  - coverage of the original scope
+  - no-split reasons per parent
+  - next: /rfe-submit --type {TYPE}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> resolve-type
+resolve-type -> persist: "launch block"
+persist -> task-check: "split-all-ids.txt"
+
+task-check -> skip-missing: "in PENDING_IDS"
+task-check -> split-agent: "task file found"
+
+split-agent -> poll-split: "split-status.yaml per ID"
+poll-split -> action-check
+
+action-check -> mark-revise: "no-split / 0 children"
+action-check -> collect-children: "split"
+
+collect-children -> review-children: "child IDs"
+review-children -> rightsize.cycle-init: "scored review.md per child"
+
+rightsize.right-sized -> finalize: "all 2/2, or cycle used"
+rightsize.right-sized -> split-agent: "right_sized < {RESPLIT_BELOW}/2 - max 1 cycle" {
+  style.stroke-dash: 3
+}
+
+mark-revise -> finalize: "recommendation: revise"
+finalize -> headless-check
+headless-check -> headless-exit: "--headless"
+headless-check -> summary: "interactive"
+
+# --- Callout connectors ---
+
+resolve-type -> vars-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+split-agent -> split-status-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

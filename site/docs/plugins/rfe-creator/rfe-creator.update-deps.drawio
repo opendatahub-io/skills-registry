@@ -2,72 +2,114 @@
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <mxCell id="entry" value="&lt;b&gt;/rfe-creator.update-deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;explicit-only invoke&lt;br&gt;(disable-model-invocation)&lt;br&gt;force-refresh vendored deps&lt;br&gt;allowed-tools: Bash, Glob" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="40" y="200" width="160" height="170" as="geometry"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe-creator.update-deps&lt;/b&gt;&lt;br&gt;&lt;br&gt;user-invocable: true&lt;br&gt;disable-model-invocation: true&lt;br&gt;slash menu only, never&lt;br&gt;auto-delegated by the model&lt;br&gt;allowed-tools: Bash&lt;br&gt;$ARGUMENTS appended" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="285" width="200" height="150" as="geometry"/>
     </mxCell>
-    <mxCell id="assess-grp" value="&lt;b&gt;1. Update assess-rfe&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="270" y="50" width="615" height="188" as="geometry"/>
+    <mxCell id="layout-link" value="&lt;b&gt;Layout check (once)&lt;/b&gt;&lt;br&gt;&lt;br&gt;bash {CLAUDE_SKILL_DIR}/../../../&lt;br&gt;scripts/bootstrap.sh --layout&lt;br&gt;skipped when the cwd is the plugin&lt;br&gt;root (the skill dir's third parent)&lt;br&gt;links scripts/ and types/ into the&lt;br&gt;working directory&lt;br&gt;any nonzero exit: stop and show it&lt;br&gt;(3 = the dir carries its own)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="272" width="250" height="176" as="geometry"/>
     </mxCell>
-    <mxCell id="remove-assess" value="&lt;b&gt;Remove cached&lt;/b&gt;&lt;br&gt;&lt;br&gt;rm -rf .context/assess-rfe&lt;br&gt;rm -rf .claude/skills/assess-rfe&lt;br&gt;rm -rf .claude/skills/export-rubric" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess-grp">
-      <mxGeometry x="15" y="45" width="175" height="125" as="geometry"/>
+    <mxCell id="pin-snippet" value="types/rfe/type.yaml&lt;br&gt;&lt;br&gt;pipeline:&lt;br&gt;&amp;nbsp;&amp;nbsp;rubric:&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;repo: https://github.com/fullsend-ai/assess-rfe&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ref: &quot;d8391ae379fba0497164550e3a33495bc2007aa2&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;path: skills/assess-rfe/scripts/agent_prompt.md&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;export: artifacts/rfe-rubric.md&lt;br&gt;&lt;br&gt;types/initiative/type.yaml pins the same ref&lt;br&gt;(path: skills/assess-initiative/..., export: null)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="500" y="55" width="350" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="bootstrap" value="&lt;b&gt;Re-fetch&lt;/b&gt;&lt;br&gt;bootstrap-assess-rfe.sh&lt;br&gt;&lt;br&gt;git clone / pull assess-rfe&lt;br&gt;into .context/assess-rfe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess-grp">
-      <mxGeometry x="220" y="45" width="175" height="125" as="geometry"/>
+    <mxCell id="pin-decision" value="&lt;b&gt;Move the&lt;br&gt;assess-rfe pin?&lt;/b&gt;&lt;br&gt;pipeline.rubric.ref" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="570" y="295" width="210" height="130" as="geometry"/>
     </mxCell>
-    <mxCell id="populate" value="&lt;b&gt;Repopulate&lt;/b&gt;&lt;br&gt;&lt;br&gt;cp skills to .claude/skills&lt;br&gt;cp agents/*.md to .claude/agents&lt;br&gt;export_rubric.py to artifacts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="assess-grp">
-      <mxGeometry x="425" y="45" width="175" height="125" as="geometry"/>
+    <mxCell id="bump-pin" value="&lt;b&gt;Bump the pin first&lt;/b&gt;&lt;br&gt;&lt;br&gt;edit pipeline.rubric.ref in BOTH&lt;br&gt;types/rfe/type.yaml and&lt;br&gt;types/initiative/type.yaml&lt;br&gt;one shared value: python3&lt;br&gt;scripts/validate_types.py refuses two&lt;br&gt;different pins (cross rule 6)&lt;br&gt;re-running alone never moves it" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="550" y="530" width="250" height="160" as="geometry"/>
     </mxCell>
-    <mxCell id="arch-grp" value="&lt;b&gt;2. Update architecture context&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="270" y="320" width="615" height="200" as="geometry"/>
+    <mxCell id="rm-vendored" value="&lt;b&gt;Step 1: rm -rf the cached copies&lt;/b&gt;&lt;br&gt;&lt;br&gt;the list mirrors everything&lt;br&gt;scripts/bootstrap.sh installs&lt;br&gt;.context/assess-rfe&lt;br&gt;.claude/skills/assess-rfe,&lt;br&gt;assess-initiative, export-rubric&lt;br&gt;.claude/agents/rfe-scorer.md,&lt;br&gt;initiative-scorer.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="950" y="280" width="250" height="160" as="geometry"/>
     </mxCell>
-    <mxCell id="remove-arch" value="&lt;b&gt;Remove cached&lt;/b&gt;&lt;br&gt;&lt;br&gt;rm -rf&lt;br&gt;.context/architecture-context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="arch-grp">
-      <mxGeometry x="15" y="50" width="185" height="120" as="geometry"/>
+    <mxCell id="bootstrap" value="&lt;b&gt;bash scripts/bootstrap.sh&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1240" y="28" width="288" height="664" as="geometry"/>
     </mxCell>
-    <mxCell id="fetch-arch" value="&lt;b&gt;Re-fetch&lt;/b&gt;&lt;br&gt;fetch-architecture-context.sh&lt;br&gt;&lt;br&gt;detect latest rhoai-{X.Y}&lt;br&gt;sparse-checkout architecture + overlays&lt;br&gt;write LATEST_VERSION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="arch-grp">
-      <mxGeometry x="420" y="38" width="180" height="150" as="geometry"/>
+    <mxCell id="clone-pin" value="&lt;b&gt;Clone at the pinned commit&lt;/b&gt;&lt;br&gt;&lt;br&gt;git clone fullsend-ai/assess-rfe&lt;br&gt;into .context/assess-rfe&lt;br&gt;fetch origin + checkout --detach&lt;br&gt;at the descriptor-pinned ref" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="bootstrap">
+      <mxGeometry x="20" y="45" width="250" height="112" as="geometry"/>
     </mxCell>
-    <mxCell id="report" value="&lt;b&gt;3. Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;list what was updated&lt;br&gt;versions fetched&lt;br&gt;(RHOAI rhoai-{X.Y})" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="960" y="225" width="190" height="150" as="geometry"/>
+    <mxCell id="verify-pin" value="&lt;b&gt;Verify the checkout&lt;/b&gt;&lt;br&gt;&lt;br&gt;HEAD must start with the pin,&lt;br&gt;else ERROR exit 1&lt;br&gt;skills/assess-rfe/scripts/&lt;br&gt;agent_prompt.md must exist too" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="bootstrap">
+      <mxGeometry x="20" y="175" width="250" height="112" as="geometry"/>
     </mxCell>
-    <mxCell id="result" value="&lt;b&gt;Done&lt;/b&gt;&lt;br&gt;&lt;br&gt;refreshed vendored deps&lt;br&gt;+ version report" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="1230" y="240" width="180" height="120" as="geometry"/>
+    <mxCell id="vendor-skills" value="&lt;b&gt;Vendor the skill dirs&lt;/b&gt;&lt;br&gt;&lt;br&gt;cp -r .context/assess-rfe/skills/*/&lt;br&gt;into .claude/skills/&lt;br&gt;assess-rfe, assess-initiative,&lt;br&gt;export-rubric (+ their scripts/)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="bootstrap">
+      <mxGeometry x="20" y="305" width="250" height="112" as="geometry"/>
     </mxCell>
-    <mxCell id="deps-tree" value="vendored deps re-fetched:&lt;br&gt;.context/assess-rfe/  (git clone)&lt;br&gt;.claude/skills/assess-rfe/  (cp)&lt;br&gt;.claude/skills/export-rubric/  (cp)&lt;br&gt;.claude/agents/*.md  (cp)&lt;br&gt;artifacts/rfe-rubric.md  (export_rubric)&lt;br&gt;.context/architecture-context/  (sparse)&lt;br&gt;&amp;nbsp;&amp;nbsp;architecture/rhoai-{X.Y}/  (latest)&lt;br&gt;&amp;nbsp;&amp;nbsp;LATEST_VERSION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
-      <mxGeometry x="945" y="440" width="345" height="185" as="geometry"/>
+    <mxCell id="copy-agents" value="&lt;b&gt;Copy the scorer agents&lt;/b&gt;&lt;br&gt;&lt;br&gt;cp .context/assess-rfe/agents/*.md&lt;br&gt;into .claude/agents/&lt;br&gt;rfe-scorer.md, initiative-scorer.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="bootstrap">
+      <mxGeometry x="20" y="435" width="250" height="97" as="geometry"/>
     </mxCell>
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="entry" target="remove-assess" parent="1">
+    <mxCell id="export-rubric" value="&lt;b&gt;Export the rubric&lt;/b&gt;&lt;br&gt;&lt;br&gt;export-rubric/scripts/export_rubric.py&lt;br&gt;writes artifacts/rfe-rubric.md&lt;br&gt;git info/exclude notes the paths" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="bootstrap">
+      <mxGeometry x="20" y="550" width="250" height="97" as="geometry"/>
+    </mxCell>
+    <mxCell id="vendored-tree" value="Step 1 rm -rf &amp;rarr; bash scripts/bootstrap.sh restores&lt;br&gt;&lt;br&gt;.context/assess-rfe/&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;clone at the pin&lt;br&gt;.claude/skills/assess-rfe/&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;cp -r skills/*/&lt;br&gt;.claude/skills/assess-initiative/&lt;br&gt;.claude/skills/export-rubric/&lt;br&gt;.claude/agents/rfe-scorer.md&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;cp agents/*.md&lt;br&gt;.claude/agents/initiative-scorer.md&lt;br&gt;&lt;br&gt;written by bootstrap.sh, not in the rm -rf list:&lt;br&gt;&lt;br&gt;artifacts/rfe-rubric.md&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;export_rubric.py&lt;br&gt;.context/architecture-context/&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Step 2 (own rm)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1195" y="740" width="380" height="205" as="geometry"/>
+    </mxCell>
+    <mxCell id="rm-arch" value="&lt;b&gt;Step 2: drop the cached context&lt;/b&gt;&lt;br&gt;&lt;br&gt;rm -rf .context/architecture-context&lt;br&gt;the only path Step 2 removes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1705" y="312" width="250" height="96" as="geometry"/>
+    </mxCell>
+    <mxCell id="fetch-arch" value="&lt;b&gt;bash scripts/fetch-architecture-context.sh&lt;/b&gt;&lt;br&gt;&lt;br&gt;curl api.github.com .../contents/architecture,&lt;br&gt;the latest rhoai-* name wins&lt;br&gt;git clone --depth 1 --filter=blob:none --sparse&lt;br&gt;opendatahub-io/architecture-context&lt;br&gt;sparse-checkout set architecture/{LATEST}&lt;br&gt;+ overlays&lt;br&gt;writes .context/architecture-context/&lt;br&gt;LATEST_VERSION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1995" y="272" width="300" height="176" as="geometry"/>
+    </mxCell>
+    <mxCell id="report-step" value="&lt;b&gt;Step 3: Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;list what was re-vendored&lt;br&gt;the commit the bootstrap printed:&lt;br&gt;assess-rfe at d8391ae379fb&lt;br&gt;(types/rfe/type.yaml pipeline.rubric.ref)&lt;br&gt;the architecture-context version&lt;br&gt;(LATEST_VERSION, rhoai-{x.y})&lt;br&gt;nothing else is written &amp;mdash; the&lt;br&gt;report is the reply" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="2335" y="272" width="270" height="176" as="geometry"/>
+    </mxCell>
+    <mxCell id="18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="layout-link" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="entry" target="remove-arch" parent="1">
+    <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="layout-link" target="pin-decision" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="remove-assess" target="bootstrap" parent="1">
+    <mxCell id="20" value="pin unchanged" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pin-decision" target="rm-vendored" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="populate" parent="1">
+    <mxCell id="21" value="a newer assess-rfe" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="pin-decision" target="bump-pin" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.48;entryDx=0;entryDy=0;" edge="1" source="remove-arch" target="fetch-arch" parent="1">
+    <mxCell id="22" value="both descriptors agree" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="bump-pin" target="rm-vendored" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1075" y="610"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="23" value="6 paths gone" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rm-vendored" target="bootstrap" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e5" value="artifacts/rfe-rubric.md + skills" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="populate" target="report" parent="1">
+    <mxCell id="24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="clone-pin" target="verify-pin" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e6" value=".context/architecture-context" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-arch" target="report" parent="1">
+    <mxCell id="25" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="verify-pin" target="vendor-skills" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="report" target="result" parent="1">
+    <mxCell id="26" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="vendor-skills" target="copy-agents" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3188405797101449;entryY=0;entryDx=0;entryDy=0;" edge="1" source="report" target="deps-tree" parent="1">
+    <mxCell id="27" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="copy-agents" target="export-rubric" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="28" value="artifacts/rfe-rubric.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="rm-arch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="rm-arch" target="fetch-arch" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="30" value="LATEST_VERSION" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="fetch-arch" target="report-step" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="31" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.49736842105263157;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bootstrap" target="vendored-tree" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="pin-decision" target="pin-snippet" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
