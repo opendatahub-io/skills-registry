@@ -7,8 +7,28 @@ title: rfe-submit
 
 # rfe-submit
 
-Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new RFEs, RHOAIENG Initiative tickets for Initiatives (/rfe-submit --type initiative), or updates to existing tickets fetched from Jira. Use after /rfe-review.
+Creates or updates the type's Jira tickets from reviewed artifacts — new
+RHAIRFE tickets for RFEs, RHOAIENG Initiative tickets for Initiatives, or
+updates to tickets already fetched from Jira.
 
+Submission goes through `scripts/submit.py` against the Jira REST API with
+Basic Auth (`JIRA_SERVER`, `JIRA_USER`, `JIRA_TOKEN`), not the MCP server,
+so the exact call sequence is deterministic rather than dependent on
+tool-calling decisions. On submit, `RFE-NNN.md` is renamed to its Jira key
+— along with its companion files and its review file — and `tracker_ref`
+and `type` are written into the task and review frontmatter.
+
+The skill is deliberately non-interactive — invoking it is the confirmation,
+so it does not ask again. A headless invocation (the `/rfe-speedrun` Phase 3
+handoff, or CI) adds `--hold-interrupted`, which holds back any item whose
+body changed while its review never recorded `auto_revised`, rather than
+publishing it. The scripts apply the type's label family automatically:
+`auto_created`, `auto_revised`, `split_original`, `split_result`,
+`needs_attention`, `rubric_pass`, and one mutually-exclusive
+`<dimension>.<verdict>` label per declared review dimension. Those are the
+descriptor *keys*; the string actually pushed to Jira is the key's value in
+`conventions.labels`, each prefixed `<LABEL_PREFIX>-` (for RFEs,
+`rfe-creator-feasibility-pass`, `rfe-creator-autofix-rubric-pass`, …).
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -73,8 +93,29 @@ Submit or update work items of any registered type in Jira — new RHAIRFE ticke
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![rfe-submit diagram](rfe-submit.svg)
+</div>
+
+## Arguments
+
+```bash
+/rfe-submit [--type <t>] [--dry-run] [--headless] [ID ...]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ID` |  | - | Explicit item IDs to submit. With none given, the script submits the reviewed artifacts that are ready. |
+| `--type` |  | `rfe` | Work-item type to submit. An explicit --type always wins. |
+| `--dry-run` |  | - | Validate locally and skip all Jira writes. |
+| `--headless` |  | - | Non-interactive invocation — adds --hold-interrupted so an item edited outside the pipeline is held for a human instead of published. |
+
 ## Usage
 
 ```bash
 /rfe-submit
+/rfe-submit --dry-run
+/rfe-submit --type initiative INIT-001
 ```

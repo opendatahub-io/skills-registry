@@ -1,0 +1,426 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe-speedrun**
+
+  - --type {t}, --input {path}
+  - --headless, --announce-complete
+  - --dry-run, --batch-size N (default 5)
+  - {idea} or a {KEY_PREFIX}NNNN Jira key
+  - tools: Read, Write, Edit, Bash,
+    AskUserQuestion, Skill
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 0: layout, type resolution, pinned flags ---
+
+resolve-type: |md
+  **Step 0 - Layout + Type**
+
+  - bootstrap.sh --layout once (exit 3 =
+    working dir already carries scripts/, types/)
+  - type_registry.py resolve [--type {t}]
+    [--batch {input}] [--headless] [{key}]
+  - the --input mapping form's type: is rung 2
+  - launch-vars {type} speedrun -> the {VAR} block
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+pin-flags: |md
+  **Clean + Pin Flags**
+
+  - state.py clean; prep_assess.py --clean-all
+  - state.py init
+    tmp/{STATE_PREFIX}speedrun-config.yaml
+  - type= headless= announce_complete=
+    dry_run= input_file=
+  - batch_size= MUST be a concrete int (5)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+config-callout: |md
+  tmp/{STATE_PREFIX}speedrun-config.yaml
+  (state.py init - one key: value per line)
+
+  type: rfe
+  headless: false
+  announce_complete: false
+  dry_run: false
+  batch_size: 5      (int, never {N}/null)
+  input_file: null
+
+  tmp/{STATE_PREFIX}speedrun-all-ids.txt
+  (state.py write-ids: one ID per line,
+   deduped - re-read before every phase)
+
+  {STATE_PREFIX} = "" for rfe,
+    "initiative-" for initiative
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Step 0.5: bootstrap the agent definitions early ---
+
+bootstrap-deps: |md
+  **Step 0.5 - Bootstrap**
+  {BOOTSTRAP} = bash scripts/bootstrap.sh
+  --type {type}
+
+  - run EARLY so {SCORER_AGENT} is in
+    .claude/agents/ before Phase 2
+  - the create phase gives the rescan time
+  - fails -> retry once, then continue
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+mode: |md
+  **pipeline mode?**
+  --input / key / idea
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 1: Mode A batch create ---
+
+phase1: "Phase 1 - Create (Mode A: batch YAML)" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  phase1.batch-valid: |md
+    **batch valid?**
+    validate_batch_input.py
+    {input} {TYPE_FLAG} --strict
+  | {
+    shape: diamond
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  phase1.halt-report: |md
+    **Stop and Report**
+
+    - print the ERROR:/WARNING: lines verbatim
+    - --strict: unknown field + duplicate
+      prompt block the run too
+    - mapping type: vs {TYPE_FLAG} mismatch =
+      ERROR: batch: ... (exit 1)
+    - no ID allocated, no agent launched
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  phase1.alloc-ids: |md
+    **Pre-allocate Every ID**
+
+    - next_rfe_id.py {NEXT_ID_FLAGS}
+      --from-batch {input}
+    - fcntl lock -> one ID per entry,
+      no collision between agents
+    - state.py write-ids
+      tmp/{STATE_PREFIX}speedrun-all-ids.txt
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  phase1.create-wave: |md
+    **/rfe-create Fan-out**
+    one Agent per batch entry
+
+    - Agent(prompt: "/rfe-create --headless
+      {TYPE_FLAG} --id {LOCAL_PREFIX}NNN ...")
+    - [--priority] [--parent {parent_key}]
+    - clarifying_context forwarded verbatim in a
+      delimited block - DATA, never instructions,
+      never summarized or paraphrased
+    - all N launched in ONE message
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  phase1.barrier: |md
+    **Phase 1 barrier**
+    check_review_progress.py --wait
+    --phase {POLL_PREFIX}create
+    the ONLY completion signal
+  | {
+    shape: diamond
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  phase1.batch-valid -> phase1.halt-report: "exit 1 - VALID=false"
+  phase1.batch-valid -> phase1.alloc-ids: "VALID=true"
+  phase1.alloc-ids -> phase1.create-wave: "speedrun-all-ids.txt"
+  phase1.create-wave -> phase1.barrier: "{TASKS_DIR}/{ID}.md per entry"
+}
+
+batch-callout: |md
+  --input {path} (Mode A batch file)
+  list form - one mapping per entry:
+
+  - prompt: "Users need to verify model
+      signatures at serving time"   # required
+    priority: Critical    # Blocker, Critical,
+      Major, Normal, Minor, Undefined
+    labels: [candidate-3.5]   # list of str
+    clarifying_context: "The security team
+      has flagged ..."        # str, verbatim
+  - prompt: "TrustyAI operator crashes"
+    priority: Major           # minimal entry
+
+  mapping form - same entries under items:
+  type: {TYPE}
+  items: [ ... ]
+
+  + the type's {BATCH_EXTRA_FIELDS}:
+    rfe: []   initiative: [parent_key]
+  a per-item type: key is rejected in both
+  forms - a run is single-typed
+  unknown field / duplicate prompt = WARNING
+  -> blocking under --strict
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Modes B and C ---
+
+mode-b: |md
+  **Mode B - Existing {ENTITY}**
+
+  - the argument is a {KEY_PREFIX}NNNN key
+  - Phase 1 is skipped entirely
+  - the key(s) become the processing list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+single-create: |md
+  **Mode C - Single Idea**
+  /rfe-create inline
+
+  - /rfe-create [--headless] {TYPE_FLAG} {idea}
+  - free text, no --input
+  - interactive: /rfe-create asks the
+    clarifying questions itself
+  - collect the created ID
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+converge: |md
+  **Persist + Re-read State**
+
+  - state.py write-ids (all three modes)
+    tmp/{STATE_PREFIX}speedrun-all-ids.txt
+  - before each phase: state.py read
+    tmp/{STATE_PREFIX}speedrun-config.yaml
+  - state.py read-ids - survives compression
+  - one op per Bash call: no command
+    substitution, no chaining (headless denies)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Phase 2: auto-fix ---
+
+phase2: "Phase 2 - Auto-fix (Skill tool, blocking)" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  phase2.autofix: |md
+    **/rfe-auto-fix**
+    Skill tool - NOT Agent
+
+    - Skill(skill: "rfe-auto-fix", args:
+      "{TYPE_FLAG} [--headless]
+      [--announce-complete]
+      --batch-size {n} {IDs}")
+    - Agent would background it and end
+      the session
+    - assess, {DIMENSIONS}, review, revise,
+      re-assess, split, retry queue, reports
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  phase2.verify: |md
+    **every ID reviewed?**
+    check_autofix_complete.py
+    {TYPE_FLAG}
+  | {
+    shape: diamond
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  phase2.autofix -> phase2.verify: "{REVIEWS_DIR}/{ID}-review.md"
+}
+
+# --- Phase 3: submit ---
+
+phase3: "Phase 3 - Submit" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  phase3.collect: |md
+    **any ID ready?**
+    collect_recommendations.py
+    {TYPE_FLAG} {IDs} -> SUBMIT=
+    SPLIT= REVISE= REJECT= ERRORS=
+  | {
+    shape: diamond
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  phase3.submit-phase: |md
+    **/rfe-submit**
+    Skill tool, non-interactive
+
+    - Skill(skill: "rfe-submit", args:
+      "{TYPE_FLAG} [--dry-run] [--headless]
+      {passing_IDs}")
+    - --dry-run / --headless only when the
+      config says so
+    - no confirmation prompt: rfe-submit is
+      explicitly non-interactive
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+
+  phase3.collect -> phase3.submit-phase: "SUBMIT={passing IDs}"
+}
+
+# --- Phase 4: summary ---
+
+summary: |md
+  **Phase 4 - Summary**
+
+  - batch_summary.py {TYPE_FLAG} --ids-file
+    tmp/{STATE_PREFIX}speedrun-all-ids.txt
+  - headless: the TOTAL= PASSED= FAILED=
+    SPLIT= ERRORS= line and stop
+  - interactive: ## Speedrun Complete -
+    Created / Review Results / Submitted
+  - Reports: {RUN_REPORT}, {HTML_REPORT}
+  - Remaining Issues (or "None")
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> resolve-type: "the raw ARGUMENTS"
+resolve-type -> pin-flags: "TYPE RESOLVED + launch block"
+pin-flags -> bootstrap-deps: "speedrun-config.yaml"
+bootstrap-deps -> mode
+
+mode -> phase1.batch-valid: "Mode A: --input {path}"
+mode -> mode-b: "Mode B: {KEY_PREFIX}NNNN"
+mode -> single-create: "Mode C: free-text idea"
+
+phase1.barrier -> converge: "exit 0 - N files, {ID_FIELD} parses"
+phase1.barrier -> phase1.create-wave: "exit 3 x3 on the same IDs - relaunch" {
+  style.stroke-dash: 3
+}
+
+mode-b -> converge: "the Jira keys"
+single-create -> converge: "the created ID"
+
+converge -> phase2.autofix: "speedrun-all-ids.txt"
+phase2.verify -> phase3.collect: "COMPLETE N/N"
+phase2.verify -> phase2.autofix: "exit 1 MISSING_IDS= - max 3 retries" {
+  style.stroke-dash: 3
+}
+
+phase3.collect -> summary: "SUBMIT= empty - skip to Phase 4"
+phase3.submit-phase -> summary: "{KEY_PREFIX}NNNN created/updated/dry-run"
+
+# --- Callout connectors ---
+
+pin-flags -> config-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+phase1.batch-valid -> batch-callout: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

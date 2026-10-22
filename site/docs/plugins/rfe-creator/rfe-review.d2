@@ -1,0 +1,463 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe-review**
+  work-item review orchestrator
+
+  - --type {t} (rfe default)
+  - --headless
+  - --caller split
+  - one or more {IDs}
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 0: type resolution + persisted flags ---
+
+step0: |md
+  **Step 0: Resolve Type, Persist**
+
+  - bash scripts/bootstrap.sh --layout
+  - type_registry.py resolve [--type t]
+  - launch-vars {TYPE} review: the {VAR}
+    block prepended to every agent prompt
+  - state.py init tmp/{STATE_PREFIX}review-config.yaml
+  - state.py write-ids ...review-all-ids.txt
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+local-check: |md
+  **Task file
+  on disk?**
+
+  check_review_progress.py
+  --list-ids (one-shot)
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: fetch ---
+
+fetch: |md
+  **Step 1: Fetch Agents**
+  opus, background, one per remote ID
+
+  - prompts/fetch-agent.md
+  - fetch_issue.py {KEY} --fetch-all
+  - MCP getJiraIssue fallback on exit 2
+  - writes task, original, -comments.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+error-stub: |md
+  **Error Stub (any phase)**
+
+  - frontmatter.py set on the review file
+  - fetch_failed, assess_failed,
+    {name}_failed, review_failed
+  - score=0 pass=false needs_attention=true
+  - ID dropped from the processing list
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+stub-cmd: |md
+  python3 scripts/frontmatter.py set
+    artifacts/rfe-reviews/ID-review.md
+    rfe_id=ID score=0 pass=false
+    recommendation=revise
+    feasibility=feasible
+    auto_revised=false
+    needs_attention=true
+    scores.what=0 scores.why=0
+    scores.open_to_how=0
+    scores.not_a_task=0
+    scores.right_sized=0
+    error="fetch_failed: task file
+      not created"
+    type=rfe
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Step 1.5: setup (two parallel Bash calls) ---
+
+setup: |md
+  **Step 1.5: Setup**
+  two parallel Bash calls
+
+  - scripts/fetch-architecture-context.sh:
+    opendatahub-io/architecture-context
+  - {BOOTSTRAP} = bash scripts/bootstrap.sh
+    --type {TYPE}: the assess-rfe rubric
+  - both failures are non-fatal
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 2: per-ID agent wave (container) ---
+
+step2: "Step 2: Per-ID Agent Wave — (1 + dimensions) x N agents in parallel" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  prep-assess: |md
+    **prep_assess.py {ID}**
+
+    - removes stale .md / .result.md
+    - copies the task file into
+      {ASSESS_STAGING}
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  assess: |md
+    **Assess Agent**
+    subagent_type {SCORER_AGENT}
+
+    - prompts/assess-agent.md
+    - scores against {PROMPT_PATH}
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  dimension: |md
+    **Dimension Agents**
+    one per DIMENSIONS entry
+
+    - rfe: feasibility (blocking)
+    - initiative: feasibility +
+      alignment (non-blocking,
+      parent_key startswith
+      RHAISTRAT-)
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  poll: |md
+    **Poll the Wave**
+
+    - state.py write-ids
+      {POLL_FILE_PREFIX}{phase}.txt
+    - check_review_progress.py --phase ...
+    - sleep the reported NEXT_POLL
+    - blocking dimension PENDING is an
+      error; non-blocking is a note
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  prep-assess -> assess: "staging/ID.md"
+  assess -> poll
+  dimension -> poll
+}
+
+# --- Step 3: review ---
+
+review: |md
+  **Step 3: Review Agents**
+  opus, background, {FIRST_PASS}=true
+
+  - prompts/review-agent.md
+  - reads the assess result and every
+    dimension file, never the item body
+  - body from {SECTIONS_PATH}, verdict
+    from {RULES_PATH}
+  - writes {REVIEWS_DIR}/{ID}-review.md
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+review-fm: |md
+  artifacts/rfe-reviews/ID-review.md
+  rfe_id: RHAIRFE-1595    # required
+  score: 10               # int
+  pass: true              # bool
+  recommendation: submit  # submit
+    # revise / split / reject /
+    # autorevise_reject
+  feasibility: feasible   # feasible /
+    # infeasible / indeterminate
+  auto_revised: false     # bool
+  needs_attention: false  # bool
+  scores:                 # required
+    what: 2
+    why: 2
+    open_to_how: 2
+    not_a_task: 2
+    right_sized: 2
+  # optional: local_id, type,
+  # tracker_ref, error, before_score,
+  # before_scores, needs_attention_*
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Step 3.5: revise ---
+
+filter-revision: |md
+  **Needs
+  revision?**
+
+  state.py read-ids, then
+  filter_for_revision.py
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+revise: |md
+  **Step 3.5: Revise Agents**
+  opus, background
+
+  - prompts/revise-agent.md
+  - edits only the flagged sections of
+    {TASKS_DIR}/{ID}.md
+  - check_content_preservation.py
+    --write-yaml
+  - appends to ## Revision History
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+check-revised: |md
+  **Fix the auto_revised Flag**
+
+  - check_revised.py --batch {TYPE_FLAG}
+    --ids-file {POLL_FILE_PREFIX}revise.txt
+  - diffs originals against task files
+  - prints STALE_COMPANIONS= and drops
+    the empty removed-context files
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 4: re-assess cycle ---
+
+reassess-gate: |md
+  **Re-assess?**
+
+  collect_recommendations.py
+  --reassess, reassess_cycle
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+reassess: "Step 4: Re-assess Cycle (max 2) — state.py set-default reassess_cycle=0" {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  save-state: |md
+    **4a. Save, then Clear**
+
+    - preserve_review_state.py save:
+      ID-review-state.json
+    - rm {REVIEWS_DIR}/{ID}-review.md
+    - rm {ASSESS_STAGING}/{ID}.result.md
+    - state.py write-ids
+      ...review-reassess-ids.txt
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  restore-filter: |md
+    **4d-4e. Restore, Re-filter**
+
+    - preserve_review_state.py restore:
+      before_scores, auto_revised, history
+    - filter_for_revision.py: a score
+      regression sets autorevise_reject
+    - revise again, then check_revised.py
+      --clear-addressed-attention
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  save-state -> restore-filter: "4b/4c re-run"
+}
+
+# --- Step 5: finalize ---
+
+finalize: |md
+  **Step 5: Finalize**
+
+  - frontmatter.py rebuild-index when
+    INDEX_ENABLED is true
+  - state.py read the review config
+    (flags survive compression)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+headless: |md
+  **headless?**
+
+  caller=split or none
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+return-caller: |md
+  **Return to the Caller**
+
+  - prints "rfe-review step completed."
+  - state.py read ...split-config.yaml
+  - caller=split: /rfe-split Step 3
+  - caller=none: stop here
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+summary: |md
+  **Interactive Summary**
+
+  - batch_summary.py {TYPE_FLAG}
+    --ids-file ...review-all-ids.txt
+  - all pass: /rfe-submit --type {TYPE}
+  - split: /rfe-split, errors: retry
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Flow ---
+
+entry -> step0
+step0 -> local-check: "tmp/review-all-ids.txt"
+
+local-check -> fetch: "PENDING_IDS (remote)"
+local-check -> setup: "COMPLETED_IDS (local)"
+
+fetch -> setup: "artifacts/rfe-tasks/ID.md"
+fetch -> error-stub: "still PENDING" {
+  style.stroke-dash: 3
+}
+error-stub -> stub-cmd: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+setup -> step2: ".context/assess-rfe rubric"
+
+step2 -> review: "ID.result.md + dimension files"
+step2 -> error-stub: "assess_failed" {
+  style.stroke-dash: 3
+}
+
+review -> review-fm: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+review -> filter-revision: "artifacts/rfe-reviews/ID-review.md"
+review -> error-stub: "review_failed" {
+  style.stroke-dash: 3
+}
+
+filter-revision -> revise: "score low, feasible, not rejected"
+filter-revision -> reassess-gate: "pass / infeasible / reject"
+
+revise -> check-revised: "revised artifacts/rfe-tasks/ID.md"
+check-revised -> reassess-gate
+
+reassess-gate -> reassess: "REASSESS= non-empty"
+reassess-gate -> finalize: "none, or reassess_cycle >= 2"
+
+reassess.save-state -> step2: "auto_revised=true, pass=false — max 2 cycles" {
+  style.stroke-dash: 3
+}
+reassess.restore-filter -> finalize: "after cycle 2"
+
+finalize -> headless
+headless -> return-caller: "headless: true"
+headless -> summary: "interactive"

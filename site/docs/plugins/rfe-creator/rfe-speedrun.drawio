@@ -1,0 +1,190 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="entry" value="&lt;b&gt;/rfe-speedrun&lt;/b&gt;&lt;br&gt;&lt;br&gt;--type {t}, --input {path}&lt;br&gt;--headless, --announce-complete&lt;br&gt;--dry-run, --batch-size N (default 5)&lt;br&gt;{idea} or a {KEY_PREFIX}NNNN Jira key&lt;br&gt;tools: Read, Write, Edit, Bash,&lt;br&gt;AskUserQuestion, Skill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="435" width="200" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="resolve-type" value="&lt;b&gt;Step 0 - Layout + Type&lt;/b&gt;&lt;br&gt;&lt;br&gt;bootstrap.sh --layout once (exit 3 = the&lt;br&gt;working dir already carries scripts/, types/)&lt;br&gt;type_registry.py resolve [--type {t}]&lt;br&gt;[--batch {input}] [--headless] [{key}]&lt;br&gt;the --input mapping form's type: is rung 2&lt;br&gt;launch-vars {type} speedrun -&gt; the {VAR} block" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="270" y="430" width="290" height="240" as="geometry"/>
+    </mxCell>
+    <mxCell id="pin-flags" value="&lt;b&gt;Clean + Pin Flags&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py clean; prep_assess.py --clean-all&lt;br&gt;state.py init&lt;br&gt;tmp/{STATE_PREFIX}speedrun-config.yaml&lt;br&gt;type= headless= announce_complete=&lt;br&gt;dry_run= input_file=&lt;br&gt;batch_size= MUST be a concrete int (5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="600" y="435" width="280" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="config-callout" value="tmp/{STATE_PREFIX}speedrun-config.yaml&lt;br&gt;(state.py init - one key: value per line)&lt;br&gt;&lt;br&gt;type: rfe&lt;br&gt;headless: false&lt;br&gt;announce_complete: false&lt;br&gt;dry_run: false&lt;br&gt;batch_size: 5&amp;nbsp;&amp;nbsp;&amp;nbsp;(int, never {N}/null)&lt;br&gt;input_file: null&lt;br&gt;&lt;br&gt;tmp/{STATE_PREFIX}speedrun-all-ids.txt&lt;br&gt;(state.py write-ids: one ID per line,&lt;br&gt;&amp;nbsp;deduped - re-read before every phase)&lt;br&gt;&lt;br&gt;{STATE_PREFIX} = &quot;&quot; for rfe,&lt;br&gt;&amp;nbsp;&amp;nbsp;&quot;initiative-&quot; for initiative" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="595" y="125" width="290" height="250" as="geometry"/>
+    </mxCell>
+    <mxCell id="bootstrap-deps" value="&lt;b&gt;Step 0.5 - Bootstrap&lt;/b&gt;&lt;br&gt;{BOOTSTRAP} = bash scripts/bootstrap.sh&lt;br&gt;--type {type}&lt;br&gt;&lt;br&gt;run EARLY so {SCORER_AGENT} is in&lt;br&gt;.claude/agents/ before Phase 2&lt;br&gt;the create phase gives the rescan time&lt;br&gt;fails -&gt; retry once, then continue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="920" y="445" width="250" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="mode" value="&lt;b&gt;pipeline mode?&lt;/b&gt;&lt;br&gt;--input / key / idea" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="1">
+      <mxGeometry x="1210" y="480" width="170" height="140" as="geometry"/>
+    </mxCell>
+    <mxCell id="batch-callout" value="--input {path} (Mode A batch file)&lt;br&gt;list form - one mapping per entry:&lt;br&gt;&lt;br&gt;- prompt: &quot;Users need to verify model&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;signatures at serving time&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;priority: Critical&amp;nbsp;&amp;nbsp;# Blocker, Critical,&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Major, Normal, Minor, Undefined&lt;br&gt;&amp;nbsp;&amp;nbsp;labels: [candidate-3.5]&amp;nbsp;&amp;nbsp;# list of str&lt;br&gt;&amp;nbsp;&amp;nbsp;clarifying_context: &quot;The security team&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;has flagged ...&quot;&amp;nbsp;&amp;nbsp;# verbatim, as DATA&lt;br&gt;- prompt: &quot;TrustyAI operator crashes&quot;&lt;br&gt;&amp;nbsp;&amp;nbsp;priority: Major&amp;nbsp;&amp;nbsp;# minimal entry&lt;br&gt;&lt;br&gt;mapping form - the same entries:&lt;br&gt;type: {TYPE}&lt;br&gt;items: [ ... ]&lt;br&gt;&lt;br&gt;+ the type's {BATCH_EXTRA_FIELDS}:&lt;br&gt;&amp;nbsp;&amp;nbsp;rfe: []&amp;nbsp;&amp;nbsp;initiative: [parent_key]&lt;br&gt;a per-item type: key is rejected in&lt;br&gt;both forms - a run is single-typed&lt;br&gt;unknown field / duplicate prompt =&lt;br&gt;WARNING -&gt; blocking under --strict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#bbbbbb;strokeWidth=1;verticalAlign=top;spacingTop=5;align=left;spacingLeft=8;fontSize=10;fontFamily=JetBrains Mono,Courier New,monospace;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1405" y="30" width="320" height="340" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase1" value="&lt;b&gt;Phase 1 - Create (Mode A: batch YAML)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1440" y="410" width="1060" height="490" as="geometry"/>
+    </mxCell>
+    <mxCell id="batch-valid" value="&lt;b&gt;batch valid?&lt;/b&gt;&lt;br&gt;validate_batch_input.py&lt;br&gt;{input} {TYPE_FLAG} --strict" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase1">
+      <mxGeometry x="25" y="65" width="200" height="150" as="geometry"/>
+    </mxCell>
+    <mxCell id="halt-report" value="&lt;b&gt;Stop and Report&lt;/b&gt;&lt;br&gt;&lt;br&gt;print the ERROR:/WARNING: lines&lt;br&gt;--strict: unknown field and&lt;br&gt;duplicate prompt block too&lt;br&gt;mapping type: vs {TYPE_FLAG}&lt;br&gt;mismatch = ERROR: batch:&lt;br&gt;no ID allocated, no agent run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="phase1">
+      <mxGeometry x="25" y="280" width="200" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="alloc-ids" value="&lt;b&gt;Pre-allocate Every ID&lt;/b&gt;&lt;br&gt;&lt;br&gt;next_rfe_id.py {NEXT_ID_FLAGS}&lt;br&gt;--from-batch {input}&lt;br&gt;fcntl lock -&gt; one ID per entry&lt;br&gt;state.py write-ids&lt;br&gt;tmp/{STATE_PREFIX}speedrun-all-ids.txt&lt;br&gt;the Phase 1 barrier reads this file" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="phase1">
+      <mxGeometry x="260" y="40" width="230" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="create-wave" value="&lt;b&gt;/rfe-create Fan-out&lt;/b&gt;&lt;br&gt;one Agent per batch entry&lt;br&gt;&lt;br&gt;Agent(prompt: &quot;/rfe-create --headless&lt;br&gt;{TYPE_FLAG} --id {LOCAL_PREFIX}NNN ...&quot;)&lt;br&gt;[--priority] [--parent {parent_key}]&lt;br&gt;clarifying_context forwarded verbatim in a&lt;br&gt;delimited block - DATA, never instructions&lt;br&gt;all N launched in ONE message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="phase1">
+      <mxGeometry x="530" y="35" width="270" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="barrier" value="&lt;b&gt;Phase 1 barrier&lt;/b&gt;&lt;br&gt;check_review_progress.py&lt;br&gt;--wait --phase {POLL_PREFIX}create&lt;br&gt;the ONLY completion signal" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase1">
+      <mxGeometry x="840" y="60" width="200" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="mode-b" value="&lt;b&gt;Mode B - Existing {ENTITY}&lt;/b&gt;&lt;br&gt;&lt;br&gt;the argument is a {KEY_PREFIX}NNNN key&lt;br&gt;Phase 1 is skipped entirely&lt;br&gt;the key(s) become the processing list" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1440" y="940" width="260" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="single-create" value="&lt;b&gt;Mode C - Single Idea&lt;/b&gt;&lt;br&gt;/rfe-create inline&lt;br&gt;&lt;br&gt;/rfe-create [--headless] {TYPE_FLAG} {idea}&lt;br&gt;free text, no --input&lt;br&gt;interactive: /rfe-create asks the&lt;br&gt;clarifying questions itself&lt;br&gt;collect the created ID" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=3;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;double=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1440" y="1160" width="280" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="converge" value="&lt;b&gt;Persist + Re-read State&lt;/b&gt;&lt;br&gt;&lt;br&gt;state.py write-ids (all three modes)&lt;br&gt;tmp/{STATE_PREFIX}speedrun-all-ids.txt&lt;br&gt;before each phase: state.py read&lt;br&gt;tmp/{STATE_PREFIX}speedrun-config.yaml&lt;br&gt;state.py read-ids - survives compression&lt;br&gt;one op per Bash call: no command&lt;br&gt;substitution, no chaining" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1779.5" y="980.0" width="270" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase2" value="&lt;b&gt;Phase 2 - Auto-fix (Skill tool, blocking)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="1460" width="680" height="338" as="geometry"/>
+    </mxCell>
+    <mxCell id="autofix" value="&lt;b&gt;/rfe-auto-fix&lt;/b&gt;&lt;br&gt;Skill tool - NOT Agent&lt;br&gt;&lt;br&gt;Skill(skill: &quot;rfe-auto-fix&quot;, args:&lt;br&gt;&quot;{TYPE_FLAG} [--headless] [--announce-complete]&lt;br&gt;--batch-size {n} {IDs}&quot;)&lt;br&gt;Agent would background it and end the session&lt;br&gt;assess, {DIMENSIONS}, review, revise, re-assess,&lt;br&gt;split, retry queue, run + HTML reports&lt;br&gt;blocks until complete - never stop early" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="phase2">
+      <mxGeometry x="30" y="70" width="330" height="250" as="geometry"/>
+    </mxCell>
+    <mxCell id="verify" value="&lt;b&gt;every ID reviewed?&lt;/b&gt;&lt;br&gt;check_autofix_complete.py&lt;br&gt;{TYPE_FLAG}" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase2">
+      <mxGeometry x="420" y="70" width="230" height="250" as="geometry"/>
+    </mxCell>
+    <mxCell id="phase3" value="&lt;b&gt;Phase 3 - Submit&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ececec;strokeColor=#333333;strokeWidth=2;container=1;collapsible=0;verticalAlign=top;spacingTop=5;fontSize=12;fontStyle=1;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="800" y="1460" width="690" height="358" as="geometry"/>
+    </mxCell>
+    <mxCell id="collect" value="&lt;b&gt;any ID ready?&lt;/b&gt;&lt;br&gt;collect_recommendations.py&lt;br&gt;{TYPE_FLAG} {IDs} -&gt; SUBMIT=&lt;br&gt;SPLIT= REVISE= REJECT= ERRORS=" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;fontSize=12;fontFamily=Inter,Helvetica,Arial,sans-serif;" vertex="1" parent="phase3">
+      <mxGeometry x="30" y="50" width="250" height="290" as="geometry"/>
+    </mxCell>
+    <mxCell id="submit-phase" value="&lt;b&gt;/rfe-submit&lt;/b&gt;&lt;br&gt;Skill tool, non-interactive&lt;br&gt;&lt;br&gt;Skill(skill: &quot;rfe-submit&quot;, args:&lt;br&gt;&quot;{TYPE_FLAG} [--dry-run] [--headless]&lt;br&gt;{passing_IDs}&quot;)&lt;br&gt;--dry-run / --headless only when the&lt;br&gt;config says so&lt;br&gt;no confirmation prompt: rfe-submit is&lt;br&gt;explicitly non-interactive" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#333333;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=middle;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="phase3">
+      <mxGeometry x="340" y="50" width="320" height="290" as="geometry"/>
+    </mxCell>
+    <mxCell id="summary" value="&lt;b&gt;Phase 4 - Summary&lt;/b&gt;&lt;br&gt;&lt;br&gt;batch_summary.py {TYPE_FLAG} --ids-file&lt;br&gt;tmp/{STATE_PREFIX}speedrun-all-ids.txt&lt;br&gt;headless: the TOTAL= PASSED= FAILED=&lt;br&gt;SPLIT= ERRORS= line, then stop&lt;br&gt;interactive: ## Speedrun Complete -&lt;br&gt;Created / Review Results / Submitted&lt;br&gt;Reports: {RUN_REPORT}, {HTML_REPORT}&lt;br&gt;Remaining Issues (or &quot;None&quot;)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2;verticalAlign=top;spacingTop=5;fontSize=11;fontFamily=Inter,Helvetica,Arial,sans-serif;arcSize=16;absoluteArcSize=1;" vertex="1" parent="1">
+      <mxGeometry x="1600" y="1505" width="320" height="300" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_entry_resolve" value="the raw ARGUMENTS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="entry" target="resolve-type" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_resolve_pin" value="TYPE RESOLVED + launch block" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="resolve-type" target="pin-flags" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pin_bootstrap" value="speedrun-config.yaml" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pin-flags" target="bootstrap-deps" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_bootstrap_mode" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="bootstrap-deps" target="mode" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mode_batchvalid" value="Mode A: --input {path}" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="batch-valid" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mode_modeb" value="Mode B: a {KEY_PREFIX}NNNN key" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="mode-b" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_mode_single" value="Mode C: free-text idea" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="mode" target="single-create" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_batchvalid_halt" value="exit 1 - VALID=false" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="batch-valid" target="halt-report" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_batchvalid_alloc" value="VALID=true" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="batch-valid" target="alloc-ids" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_alloc_wave" value="speedrun-all-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="alloc-ids" target="create-wave" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_wave_barrier" value="{TASKS_DIR}/{ID}.md per entry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="create-wave" target="barrier" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_barrier_wave" value="exit 3 x3 on the same IDs - relaunch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="barrier" target="create-wave" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2380" y="790"/>
+          <mxPoint x="2105" y="790"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_barrier_converge" value="exit 0 - all N task files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="barrier" target="converge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2695" y="550"/>
+          <mxPoint x="2695" y="955.0"/>
+          <mxPoint x="1914.5" y="955.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_modeb_converge" value="the Jira keys" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.6176470588235294;exitDx=0;exitDy=0;entryX=0;entryY=0.2826086956521739;entryDx=0;entryDy=0;" edge="1" source="mode-b" target="converge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_single_converge" value="the created ID" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.10869565217391304;exitDx=0;exitDy=0;entryX=0;entryY=0.8913043478260869;entryDx=0;entryDy=0;" edge="1" source="single-create" target="converge" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_converge_autofix" value="speedrun-all-ids.txt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="converge" target="autofix" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1914.5" y="1410"/>
+          <mxPoint x="1420" y="1410"/>
+          <mxPoint x="1420" y="1370.0"/>
+          <mxPoint x="225.0" y="1370.0"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_autofix_verify" value="{REVIEWS_DIR}/{ID}-review.md" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="autofix" target="verify" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_verify_autofix" value="exit 1 MISSING_IDS= - max 3 retries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="verify" target="autofix" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="565" y="1820"/>
+          <mxPoint x="225" y="1820"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_verify_collect" value="COMPLETE N/N" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="verify" target="collect" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_submit" value="SUBMIT={passing IDs}" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="collect" target="submit-phase" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_collect_summary" value="SUBMIT= empty - skip to Phase 4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="collect" target="summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_submit_summary" value="{KEY_PREFIX}NNNN created/updated/dry-run" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="submit-phase" target="summary" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_pin_configcallout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="pin-flags" target="config-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e_batchvalid_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="batch-valid" target="batch-callout" parent="1">
+      <mxGeometry relative="1" as="geometry">
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>

@@ -7,113 +7,46 @@ direction: right
 
 # --- Entry ---
 
-user-input: |md
-  **User input**
+entry: |md
+  **User invocation**
 
-  - single idea (free text)
-  - Jira key(s) RHAIRFE-NNNN
-  - batch YAML (--input)
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-}
-
-# --- Orchestrator (LLM) ---
-
-speedrun: |md
-  **/rfe.speedrun**
-  orchestrator (LLM)
-
-  - detect Mode A / B / C
-  - persist config + IDs to tmp/
+  - free-text idea
+  - Jira key (RHAIRFE-1234)
+  - --input batch.yaml
+  - --type initiative
   - --headless / --dry-run
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
+  style.fill: "#f5f5f5"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
 }
 
-# --- Phase 1: Create (LLM) ---
+# --- Shared type registry + launch block (Step 0 of every skill) ---
 
-create: |md
-  **/rfe.create**
-  Phase 1 (LLM)
+type-registry: |md
+  **Work-item type registry**
 
-  - clarify need (WHAT/WHY)
-  - size from acceptance criteria
-  - writes rfe-tasks/RFE-NNN.md
+  - types/{t}/type.yaml, data only
+  - rfe to RHAIRFE Feature Request
+  - initiative to RHOAIENG Initiative
+  - types/_schema/type.schema.json
 | {
   shape: rectangle
   style.fill: "#e8e8e8"
   style.stroke: "#333333"
   style.stroke-width: 2
-  style.double-border: true
+  style.stroke-dash: 3
 }
 
-# --- Phase 2: Auto-fix (LLM) ---
+launch-block: |md
+  **Step 0 of every skill**
 
-auto-fix: |md
-  **/rfe.auto-fix**
-  Phase 2 (LLM)
-
-  - pipeline_state.py state machine
-  - batches, resume, retry queue
-  - non-interactive
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Review (LLM) ---
-
-review: |md
-  **/rfe.review**
-  review orchestrator (LLM)
-
-  - rubric score + feasibility
-  - launches agents (rfe-scorer)
-  - auto-revise + re-assess
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Split (LLM) ---
-
-split-skill: |md
-  **/rfe.split**
-  decompose (LLM)
-
-  - split oversized RFEs
-  - generate children
-  - coverage self-check
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.double-border: true
-}
-
-# --- Submit (deterministic) ---
-
-submit-skill: |md
-  **/rfe.submit**
-  deterministic
-
-  - scripts/submit.py
-  - REST + BasicAuth
-  - create / update tickets
+  - scripts/bootstrap.sh --layout
+  - type_registry.py resolve
+  - TYPE RESOLVED: {type} ({how})
+  - launch-vars {type} {stage}
+  - renders every {VAR} in the body
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -121,53 +54,39 @@ submit-skill: |md
   style.stroke-width: 2
 }
 
-# --- External dependencies (dashed) ---
-
-assess-rfe: |md
-  **assess-rfe plugin**
-
-  - rubric / export-rubric
-  - rfe-scorer agent
+launch-vars: |md
+  $ launch-vars rfe review
+  TYPE=rfe
+  TYPE_FLAG=--type rfe
+  ENTITY=RFE
+  ID_FIELD=rfe_id
+  LOCAL_PREFIX=RFE-
+  KEY_PREFIX=RHAIRFE-
+  TASKS_DIR=artifacts/rfe-tasks
+  REVIEWS_DIR=artifacts/rfe-reviews
+  SCORER_AGENT=rfe-scorer
+  DIMENSIONS=feasibility
+  RESPLIT_FIELD=right_sized
+  RESPLIT_BELOW=2
 | {
   shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
 }
 
-arch-context: |md
-  **architecture-context**
+# --- Vendored dependencies ---
 
-  - repo checkout
-  - feasibility context
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
+update-deps: |md
+  **/rfe-creator.update-deps**
+  side utility, not model-invocable
 
-jira-out: |md
-  **Jira (RHAIRFE)**
-
-  - Feature Request
-| {
-  shape: rectangle
-  style.fill: "#e8e8e8"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-  style.stroke-dash: 3
-}
-
-# --- Shared store ---
-
-artifacts-store: |md
-  **artifacts/ (shared store)**
-
-  - rfe-tasks/ , rfe-originals/
-  - rfe-reviews/ , rfes.md
+  - removes .context/assess-rfe
+  - + the vendored assess-rfe skills
+  - and .context/architecture-context
+  - re-runs bootstrap.sh + fetch
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -175,14 +94,186 @@ artifacts-store: |md
   style.stroke-width: 2
 }
 
-# --- Callouts ---
+vendored: |md
+  **Vendored context**
+
+  - assess-rfe at pipeline.rubric.ref
+  - .context/assess-rfe/ scorer prompt
+  - artifacts/rfe-rubric.md export
+  - .context/architecture-context/
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Orchestrator ---
+
+skill-speedrun: |md
+  **/rfe-speedrun**
+  end-to-end orchestrator
+
+  - Mode A: --input batch.yaml
+  - Mode B: existing Jira key
+  - Mode C: single idea
+  - Phase 1 create, 2 auto-fix,
+  - 3 submit, 4 summary
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Create / drive ---
+
+skill-create: |md
+  **/rfe-create**
+
+  - {t}/prompts/create-guidance.md
+  - {t}/template.md into the body
+  - next_rfe_id.py allocates the ID
+  - frontmatter.py set status=Draft
+  - 2-5 questions unless --headless
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+skill-autofix: |md
+  **/rfe-auto-fix**
+  non-interactive batch driver
+
+  - pipeline_state.py, 31 phases
+  - BATCH_START through DONE
+  - next-action, launch_wave
+  - wait-for-wave barrier, exit 3
+  - --jql / --batch-size 50
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Review and right-size (the quality loop) ---
+
+quality: Review and right-size {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  skill-review: |md
+    **/rfe-review**
+
+    - fetch agent, MCP or REST
+    - rfe-scorer assess + feasibility
+    - review-agent writes the verdict
+    - revise-agent fixes what it can
+    - re-assess, max 2 cycles
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  skill-split: |md
+    **/rfe-split**
+
+    - {t}/prompts/split-rules.md
+    - split agent per parent ID
+    - collect_children.py
+    - re-split if right_sized below 2
+    - 1 correction cycle max
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.double-border: true
+  }
+
+  skill-review -> skill-split: "recommendation: split"
+  skill-split -> skill-review: "children, --caller split" {
+    style.stroke-dash: 3
+  }
+}
+
+# --- Submit and outputs ---
+
+skill-submit: |md
+  **/rfe-submit**
+
+  - submit.py --hold-interrupted
+  - creates or updates the ticket
+  - RFE-001.md renamed to the key
+  - applies the rfe-creator-* labels
+  - --dry-run validates locally
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+jira: |md
+  **Jira**
+
+  - REST API (JIRA_SERVER / TOKEN)
+  - RHAIRFE Feature Request
+  - RHOAIENG Initiative
+  - Atlassian MCP for reads
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+run-report: |md
+  **Run reports**
+
+  - batch_summary.py counts
+  - artifacts/auto-fix-runs/{ts}.yaml
+  - {ts}-report.html review report
+  - speedrun Phase 4 summary
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
 
 artifacts-tree: |md
   artifacts/
-    rfe-tasks/RFE-NNN.md      (task + frontmatter)
-    rfe-originals/RHAIRFE-*.md  (Jira baseline)
-    rfe-reviews/{ID}-review.md (score/pass/rec)
-    rfes.md                    (generated index)
+    rfe-rubric.md (assess-rfe)
+    rfes.md (generated index)
+    rfe-tasks/
+      RFE-001.md
+      RHAIRFE-1595.md
+      RHAIRFE-1595-comments.md
+    rfe-originals/
+      RHAIRFE-1595.md
+    rfe-reviews/
+      RFE-001-review.md
+      RFE-001-split-status.yaml
+    initiatives/
+      INIT-001.md
+    initiative-originals/
+    initiative-reviews/
+      INIT-001-review.md
+    auto-fix-runs/
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -192,62 +283,113 @@ artifacts-tree: |md
   style.font-size: 10
 }
 
-review-file: |md
-  {ID}-review.md frontmatter:
-    score  pass  recommendation
-    feasibility  auto_revised
-    needs_attention
-    scores: what why open_to_how
-            not_a_task right_sized
-| {
-  shape: rectangle
-  style.fill: "#f5f5f5"
-  style.stroke: "#bbbbbb"
-  style.stroke-width: 1
-  style.font: mono
-  style.font-size: 10
+# --- Legacy dotted aliases ---
+
+aliases: Legacy dotted aliases {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  alias-create: |md
+    **/rfe.create**
+    to /rfe-create
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  alias-review: |md
+    **/rfe.review**
+    to /rfe-review
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  alias-split: |md
+    **/rfe.split**
+    to /rfe-split
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  alias-submit: |md
+    **/rfe.submit**
+    to /rfe-submit
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  alias-speedrun: |md
+    **/rfe.speedrun**
+    to /rfe-speedrun
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
+  alias-autofix: |md
+    **/rfe.auto-fix**
+    to /rfe-auto-fix
+  | {
+    shape: rectangle
+    style.fill: "#e8e8e8"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+    style.stroke-dash: 3
+  }
 }
 
 # --- Flow ---
 
-user-input -> speedrun: "idea / keys /\nbatch YAML"
-speedrun -> create: "Mode A/C:\nnew RFEs"
-create -> auto-fix: "RFE-NNN.md"
-auto-fix -> review: "invokes"
-review -> submit-skill: "passing RFEs"
-submit-skill -> jira-out: "REST + BasicAuth"
+entry -> launch-block: "idea / Jira key / batch.yaml"
+type-registry -> launch-block: "descriptor"
+launch-block -> skill-speedrun: "KEY=value launch block"
 
-# Branch + loops
-auto-fix -> split-skill: "oversized"
-split-skill -> review: "children\n(re-review)"
-review -> review: "auto-revise\n(<=2 cycles)" {
+aliases -> launch-block: "reads the sibling SKILL.md" {
   style.stroke-dash: 3
 }
 
-# External (dashed)
-review -> assess-rfe: "rubric /\nrfe-scorer" {
-  style.stroke-dash: 3
-}
-review -> arch-context: "feasibility\ncontext" {
+skill-speedrun -> skill-create: "Phase 1, Agent per entry"
+skill-create -> skill-autofix: "Phase 2, Skill tool"
+skill-create -> quality: "rfe-tasks/{ID}.md"
+
+skill-autofix -> quality: "same prompts" {
   style.stroke-dash: 3
 }
 
-# Orchestration (speedrun drives phases directly)
-speedrun -> auto-fix: "Mode B:\nexisting keys" {
-  style.stroke-dash: 3
-}
-speedrun -> submit-skill: "Phase 3\n(drives)" {
+update-deps -> vendored: "re-vendor at the pinned sha"
+vendored -> quality: "artifacts/rfe-rubric.md"
+
+quality -> skill-submit: "SUBMIT= line"
+skill-submit -> jira: "create or update"
+jira -> quality: "fetch issue" {
   style.stroke-dash: 3
 }
 
-# Store + callouts
-create -> artifacts-store: "writes\nRFE files"
-artifacts-store -> artifacts-tree: {
+skill-autofix -> run-report: "artifacts/auto-fix-runs/"
+
+# --- Callout connectors ---
+
+launch-block -> launch-vars: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
 }
-review -> review-file: {
+
+skill-autofix -> artifacts-tree: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1

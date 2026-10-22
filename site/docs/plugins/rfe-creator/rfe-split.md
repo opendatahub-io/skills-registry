@@ -7,8 +7,25 @@ title: rfe-split
 
 # rfe-split
 
-Split oversized work items of any registered type — RFEs and Initiatives — into smaller, right-sized ones. Takes one or more IDs of items already in the workspace (fetched by /rfe-review or written by /rfe-create; e.g. /rfe-split RHAIRFE-1234 RHAIRFE-5678, /rfe- split --type initiative INIT-001) and skips an ID with no local task file. Runs non- interactively — decomposes, generates new items, reviews them, self-corrects, and checks coverage.
+Decomposes an oversized work item into right-sized children that together
+cover the original scope. It takes IDs already in the workspace — fetched by
+`/rfe-review` or written by `/rfe-create` — and skips any ID with no local
+task file.
 
+It runs non-interactively. A split agent per parent applies the type's own
+decomposition rules (`{SPLIT_RULES_PATH}`) and writes
+`{REVIEWS_DIR}/<ID>-split-status.yaml`; a parent whose status says
+`no-split` (delivery-coupled, say) has its recommendation set back to
+`revise` so downstream consumers don't keep treating it as pending.
+Children are collected and handed to `/rfe-review` as an inline headless
+call.
+
+One self-correction cycle follows: any child scoring below half the type's
+`resplit` threshold on `right_sized` is split again and its children
+reviewed. It stops there by design — repeated re-splitting compounds the
+child count for diminishing returns, so a decomposition still wrong after
+one correction needs human judgement. The loop corrects grouping mistakes
+only; every other criterion is `/rfe-review`'s auto-revision to fix.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 
@@ -80,8 +97,28 @@ Split oversized work items of any registered type — RFEs and Initiatives — i
   </section>
 </div>
 
+## Diagram
+
+<div class="diagram-container" markdown>
+![rfe-split diagram](rfe-split.svg)
+</div>
+
+## Arguments
+
+```bash
+/rfe-split [--type <t>] [--headless] <ID> [ID2 ...]
+```
+
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ID` | :material-check: | - | One or more space-separated IDs of items already in the workspace. An ID with no local task file is reported and skipped. |
+| `--type` |  | `rfe` | Work-item type to split. An explicit --type always wins. |
+| `--headless` |  | - | Suppress the end-of-run summary and emit a completion marker instead. |
+
 ## Usage
 
 ```bash
-/rfe-split
+/rfe-split RHAIRFE-1234
+/rfe-split RHAIRFE-1234 RHAIRFE-5678
+/rfe-split --type initiative INIT-001
 ```

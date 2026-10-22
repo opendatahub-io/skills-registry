@@ -1,0 +1,372 @@
+direction: right
+
+*.style.border-radius: 8
+*.style.font-size: 13
+*.style.fill: "#f5f5f5"
+*.style.stroke: "#333333"
+
+# --- Entry ---
+
+entry: |md
+  **/rfe-create**
+
+  - --type {t} (default rfe)
+  - --headless, --priority, --labels
+  - --id {ID} (--rfe-id alias)
+  - --parent {KEY}
+  - problem statement text
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 0: layout + type resolution ---
+
+layout-check: |md
+  **Step 0: Layout Check**
+
+  - bootstrap.sh --layout, through the
+    skill's own plugin path
+  - links scripts/ and types/ into the cwd
+  - notes them in .git/info/exclude
+  - any nonzero exit: stop, show the message
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+type-resolve: Step 0 - Resolve the Type {
+  style.fill: "#ececec"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+
+  resolve: |md
+    **type_registry.py resolve**
+
+    - forwards only --type and --headless
+    - never the text, priority, labels, id
+    - prints TYPE RESOLVED: {type} ({how})
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  ask-type: |md
+    **Offer the Registered Types**
+
+    - interactive and still unresolved
+    - type_registry.py list
+    - AskUserQuestion, then re-run
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  launch-vars: |md
+    **launch-vars {type} create**
+
+    - one KEY=value line per {VAR}
+    - dirs, schema, template, id flags
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  resolve -> ask-type: "unresolved"
+  ask-type -> resolve: "re-run with --type" {
+    style.stroke-dash: 3
+  }
+  resolve -> launch-vars: "TYPE RESOLVED"
+}
+
+launch-block: |md
+  launch-vars rfe create (the {VAR}s)
+  TYPE=rfe  ENTITY=RFE
+  ID_FIELD=rfe_id  LOCAL_PREFIX=RFE-
+  TASKS_DIR=artifacts/rfe-tasks
+  REVIEWS_DIR=artifacts/rfe-reviews
+  TASK_SCHEMA=rfe-task
+  TEMPLATE_PATH=types/rfe/template.md
+  CREATE_GUIDANCE_PATH=
+   types/rfe/prompts/create-guidance.md
+  RUBRIC_EXPORT=artifacts/rfe-rubric.md
+  SIZE_FIELD=true  SIZE_ENUM=S,M,L,XL
+  NEXT_ID_FLAGS=--prefix RFE
+   --dir artifacts/rfe-tasks
+  INDEX_ENABLED=true
+  PARENT_FLAG=  (empty for rfe)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+# --- Step 1: rubric ---
+
+rubric-gate: |md
+  **Step 1: Rubric**
+
+  RUBRIC_EXPORT a path?
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+export-rubric: |md
+  **/export-rubric** (assess-rfe)
+
+  - {BOOTSTRAP} fetches the skills
+  - bash scripts/bootstrap.sh --type rfe
+  - vendors .context/assess-rfe/
+  - writes artifacts/rfe-rubric.md
+  - on failure: carry on without it
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 2: guidance + questions ---
+
+guidance: |md
+  **Step 2: Read the Guidance**
+
+  - {CREATE_GUIDANCE_PATH}
+  - types/rfe/prompts/create-guidance.md
+  - always, headless too
+  - questions, writing rules, don'ts
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+mode: |md
+  **--headless?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+clarify: |md
+  **Clarifying Questions**
+  AskUserQuestion
+
+  - 2-5 max, only what cannot be inferred
+  - affected customers, justification
+  - user problem, success criteria
+  - one need or several RFEs
+  - rubric criteria shape the asks
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 3: generation ---
+
+generate: |md
+  **Step 3: Generate Items**
+
+  - template types/rfe/template.md
+  - Concise S, Standard M, Full L-XL
+  - SIZE_FIELD true, sizes S,M,L,XL
+  - size from the AC count: 1-2 S, 3-4 M,
+    5-7 L, 8+ XL
+  - one RFE per distinct need
+  - priority Jira values, default Normal
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.double-border: true
+}
+
+# --- Step 4: ids + artifacts ---
+
+id-given: |md
+  **--id given?**
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+alloc-ids: |md
+  **Allocate IDs**
+
+  - next_rfe_id.py {NEXT_ID_FLAGS} {count}
+  - --prefix RFE --dir artifacts/rfe-tasks
+  - flock .id-lock, one RFE-NNN per line
+  - touches each placeholder file
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+write-artifacts: |md
+  **Step 4: Write Artifacts**
+
+  - frontmatter.py schema rfe-task
+  - body from the template, then
+    frontmatter.py set per file
+  - rfe_id, title, priority, size,
+    status=Draft, type=rfe
+  - mkdir artifacts/, rfe-tasks/, rfe-reviews/
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+task-schema: |||md
+  frontmatter.py schema rfe-task
+  artifacts/rfe-tasks/RFE-NNN.md
+  rfe_id       ^(RFE-\d+|RHAIRFE-\d+)$
+  local_id     ^RFE-\d+$
+  type         rfe
+  tracker_ref  RHAIRFE-NNNN on submit
+  title        string
+  priority     Blocker|Critical|Major|
+               Normal|Minor|Undefined
+  size         S|M|L|XL
+  status       Draft|Ready|Submitted|
+               Archived
+  parent_key   ^(RFE-\d+|RHAIRFE-\d+)$
+  original_labels   list
+  required: rfe_id, title,
+            priority, status
+||| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
+
+set-parent: |md
+  **Optional Parent Link**
+
+  - only when --parent {KEY} was passed
+  - frontmatter.py set parent_key={KEY}
+  - needs PARENT_FLAG, empty for rfe
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rebuild-index: |md
+  **Rebuild the Index**
+
+  - only when INDEX_ENABLED is true
+  - frontmatter.py rebuild-index
+  - regenerates artifacts/rfes.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+next-steps: |md
+  **Hand Off**
+
+  - edit any artifact file directly
+  - /rfe-review --type rfe to validate
+  - re-run /rfe-create to start over
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+rfe-review: |md
+  **/rfe-review**
+
+  - scores the new RFEs
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Flow ---
+
+entry -> layout-check
+layout-check -> type-resolve.resolve: "scripts/ and types/ in the cwd"
+type-resolve.launch-vars -> rubric-gate
+
+rubric-gate -> export-rubric: "a path, and missing"
+rubric-gate -> guidance: "none, or already exported"
+export-rubric -> guidance: "artifacts/rfe-rubric.md"
+
+guidance -> mode
+mode -> clarify: "interactive"
+mode -> generate: "--headless"
+clarify -> generate: "answers"
+
+generate -> id-given
+id-given -> alloc-ids: "no --id"
+id-given -> write-artifacts: "--id, placeholder exists"
+alloc-ids -> write-artifacts: "RFE-NNN ids"
+
+write-artifacts -> set-parent: "artifacts/rfe-tasks/RFE-NNN.md" {
+  style.stroke-dash: 3
+}
+set-parent -> rebuild-index {
+  style.stroke-dash: 3
+}
+write-artifacts -> rebuild-index: "no --parent" {
+  style.stroke-dash: 3
+}
+rebuild-index -> next-steps: "artifacts/rfes.md"
+next-steps -> rfe-review: "/rfe-review --type rfe" {
+  style.stroke-dash: 3
+}
+
+# --- Callouts ---
+
+write-artifacts -> task-schema: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+type-resolve -> launch-block: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}

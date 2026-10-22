@@ -7,13 +7,23 @@ title: rfe-creator.update-deps
 
 # rfe-creator.update-deps
 
-Force-update all vendored dependencies by removing cached copies and
-re-fetching. Refreshes the assess-rfe skills (assess-rfe / export-rubric,
-via scripts/bootstrap-assess-rfe.sh) and the architecture context (from
-opendatahub-io/architecture-context, via scripts/fetch-architecture-context.sh),
-then reports what was updated and the versions fetched. Has
-disable-model-invocation set, so it can only be triggered explicitly by the
-user.
+Force re-vendors the plugin's dependencies: the assess-rfe skills at the
+commit the type descriptors pin, and the latest architecture context. Use it
+after bumping `pipeline.rubric.ref` or to repair a stale copy. It is
+`disable-model-invocation: true` — a maintenance command you run from the
+slash menu, never something the model delegates to on its own.
+
+It removes everything `scripts/bootstrap.sh` installs — the
+`.context/assess-rfe` checkout, the vendored `assess-rfe`,
+`assess-initiative` and `export-rubric` skill directories, and the
+`rfe-scorer` / `initiative-scorer` agent definitions — then re-runs the
+bootstrap, and separately refreshes `.context/architecture-context`.
+
+Note that re-running alone will not pick up newer assess-rfe commits: the
+bootstrap checks out the pinned `pipeline.rubric.ref`, which
+`types/rfe/type.yaml` and `types/initiative/type.yaml` must both carry at
+the same value (`validate_types.py` refuses two different pins). To move the
+rubric, bump both descriptors first, then run this skill.
 
 **Plugin**: [rfe-creator](index.md) | **:material-check: User-invocable**
 

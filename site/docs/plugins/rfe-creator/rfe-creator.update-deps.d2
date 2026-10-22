@@ -5,15 +5,17 @@ direction: right
 *.style.fill: "#f5f5f5"
 *.style.stroke: "#333333"
 
-# --- Entry (explicit-only maintenance command) ---
+# --- Entry ---
 
 entry: |md
   **/rfe-creator.update-deps**
 
-  - explicit-only invoke
-    (disable-model-invocation)
-  - force-refresh vendored deps
-  - allowed-tools: Bash, Glob
+  - user-invocable: true
+  - disable-model-invocation: true
+    (slash menu only, never
+    auto-delegated)
+  - allowed-tools: Bash
+  - $ARGUMENTS appended
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -21,32 +23,91 @@ entry: |md
   style.stroke-width: 2
 }
 
-# --- Column 1: assess-rfe dependency ---
+# --- Layout check ---
 
-assess-grp: 1. Update assess-rfe {
+layout-link: |md
+  **Layout check (once)**
+
+  - bash "{CLAUDE_SKILL_DIR}/../../../scripts/bootstrap.sh" --layout
+  - skipped when the cwd is the
+    plugin root (the skill dir's
+    third parent)
+  - links scripts/ and types/ into
+    the working directory
+  - any nonzero exit: stop and show
+    its message (3 = the directory
+    carries its own)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- The pin: a precondition, not a side effect of re-running ---
+
+pin-decision: |md
+  **Move the assess-rfe pin?**
+
+  pipeline.rubric.ref
+| {
+  shape: diamond
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+bump-pin: |md
+  **Bump the pin first**
+
+  - edit pipeline.rubric.ref in BOTH
+    types/rfe/type.yaml and
+    types/initiative/type.yaml
+  - one shared value: python3
+    scripts/validate_types.py refuses
+    two different pins (cross rule 6)
+  - re-running alone never moves the
+    commit
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: remove the cached copies ---
+
+rm-vendored: |md
+  **Step 1: rm -rf the cached copies**
+
+  - the list mirrors everything
+    scripts/bootstrap.sh installs
+  - .context/assess-rfe
+  - .claude/skills/assess-rfe,
+    assess-initiative, export-rubric
+  - .claude/agents/rfe-scorer.md,
+    initiative-scorer.md
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+}
+
+# --- Step 1: re-vendor ---
+
+bootstrap: bash scripts/bootstrap.sh {
   style.fill: "#ececec"
   style.stroke: "#333333"
   style.stroke-width: 2
 
-  remove-assess: |md
-    **Remove cached**
+  clone-pin: |md
+    **Clone at the pinned commit**
 
-    - rm -rf .context/assess-rfe
-    - rm -rf .claude/skills/assess-rfe
-    - rm -rf .claude/skills/export-rubric
-  | {
-    shape: rectangle
-    style.fill: "#f5f5f5"
-    style.stroke: "#333333"
-    style.stroke-width: 2
-  }
-
-  bootstrap: |md
-    **Re-fetch**
-    bootstrap-assess-rfe.sh
-
-    - git clone/pull assess-rfe
-    - into .context/assess-rfe
+    - git clone fullsend-ai/assess-rfe
+      into .context/assess-rfe
+    - fetch origin + checkout --detach
+      at the descriptor-pinned ref
   | {
     shape: rectangle
     style.fill: "#e8e8e8"
@@ -55,12 +116,13 @@ assess-grp: 1. Update assess-rfe {
     style.stroke-dash: 3
   }
 
-  populate: |md
-    **Repopulate**
+  verify-pin: |md
+    **Verify the checkout**
 
-    - cp skills to .claude/skills
-    - cp agents/*.md
-    - export_rubric.py to artifacts
+    - HEAD must start with the pinned
+      SHA, else ERROR exit 1
+    - skills/assess-rfe/scripts/agent_prompt.md
+      must exist, else ERROR exit 1
   | {
     shape: rectangle
     style.fill: "#f5f5f5"
@@ -68,22 +130,13 @@ assess-grp: 1. Update assess-rfe {
     style.stroke-width: 2
   }
 
-  remove-assess -> bootstrap
-  bootstrap -> populate
-}
+  vendor-skills: |md
+    **Vendor the skill dirs**
 
-# --- Column 2: architecture context dependency ---
-
-arch-grp: 2. Update architecture context {
-  style.fill: "#ececec"
-  style.stroke: "#333333"
-  style.stroke-width: 2
-
-  remove-arch: |md
-    **Remove cached**
-
-    - rm -rf
-      .context/architecture-context
+    - cp -r .context/assess-rfe/skills/*/
+      into .claude/skills/
+    - assess-rfe, assess-initiative,
+      export-rubric (bundled scripts/ too)
   | {
     shape: rectangle
     style.fill: "#f5f5f5"
@@ -91,33 +144,47 @@ arch-grp: 2. Update architecture context {
     style.stroke-width: 2
   }
 
-  fetch-arch: |md
-    **Re-fetch**
-    fetch-architecture-context.sh
+  copy-agents: |md
+    **Copy the scorer agents**
 
-    - detect latest rhoai-{X.Y}
-    - sparse-checkout architecture
-      + overlays
-    - write LATEST_VERSION
+    - cp .context/assess-rfe/agents/*.md
+      into .claude/agents/
+    - rfe-scorer.md, initiative-scorer.md
   | {
     shape: rectangle
-    style.fill: "#e8e8e8"
+    style.fill: "#f5f5f5"
     style.stroke: "#333333"
     style.stroke-width: 2
-    style.stroke-dash: 3
   }
 
-  remove-arch -> fetch-arch
+  export-rubric: |md
+    **Export the rubric**
+
+    - export-rubric/scripts/export_rubric.py
+      from the pinned checkout
+    - writes artifacts/rfe-rubric.md
+    - git info/exclude notes the
+      vendored paths
+  | {
+    shape: rectangle
+    style.fill: "#f5f5f5"
+    style.stroke: "#333333"
+    style.stroke-width: 2
+  }
+
+  clone-pin -> verify-pin
+  verify-pin -> vendor-skills
+  vendor-skills -> copy-agents
+  copy-agents -> export-rubric
 }
 
-# --- Report + result ---
+# --- Step 2: architecture context ---
 
-report: |md
-  **3. Report**
+rm-arch: |md
+  **Step 2: drop the cached context**
 
-  - list what was updated
-  - versions fetched
-    (RHOAI rhoai-{X.Y})
+  - rm -rf .context/architecture-context
+  - the only path Step 2 removes
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -125,11 +192,36 @@ report: |md
   style.stroke-width: 2
 }
 
-result: |md
-  **Done**
+fetch-arch: |md
+  **bash scripts/fetch-architecture-context.sh**
 
-  refreshed vendored deps
-  + version report
+  - curl api.github.com .../contents/architecture,
+    latest rhoai-* name wins
+  - git clone --depth 1 --filter=blob:none
+    --sparse opendatahub-io/architecture-context
+  - sparse-checkout set architecture/{LATEST} overlays
+  - writes .context/architecture-context/LATEST_VERSION
+| {
+  shape: rectangle
+  style.fill: "#e8e8e8"
+  style.stroke: "#333333"
+  style.stroke-width: 2
+  style.stroke-dash: 3
+}
+
+# --- Step 3: report ---
+
+report-step: |md
+  **Step 3: Report**
+
+  - list what was re-vendored
+  - the assess-rfe commit the bootstrap
+    printed: assess-rfe at d8391ae379fb
+    (types/rfe/type.yaml pipeline.rubric.ref)
+  - the architecture-context version
+    (LATEST_VERSION, rhoai-{x.y})
+  - nothing else is written: the report
+    is the reply
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -137,18 +229,22 @@ result: |md
   style.stroke-width: 2
 }
 
-# --- Callout: vendored dependency layout that is removed then re-fetched ---
+# --- Callout: the vendored-dependency tree ---
 
-deps-tree: |md
-  vendored deps re-fetched:
-  .context/assess-rfe/            git clone
-  .claude/skills/assess-rfe/      cp
-  .claude/skills/export-rubric/   cp
-  .claude/agents/*.md             cp
-  artifacts/rfe-rubric.md         export_rubric
-  .context/architecture-context/  sparse-checkout
-    architecture/rhoai-{X.Y}/     latest
-    LATEST_VERSION
+vendored-tree: |md
+  Step 1 rm -rf  ->  bootstrap.sh restores
+
+  .context/assess-rfe/                  clone, detached at the pin
+  .claude/skills/assess-rfe/            cp -r skills/*/
+  .claude/skills/assess-initiative/
+  .claude/skills/export-rubric/
+  .claude/agents/rfe-scorer.md          cp agents/*.md
+  .claude/agents/initiative-scorer.md
+
+  written by bootstrap.sh, NOT in the rm -rf list
+
+  artifacts/rfe-rubric.md               export_rubric.py, overwritten
+  .context/architecture-context/        Step 2 removes and refetches it
 | {
   shape: rectangle
   style.fill: "#f5f5f5"
@@ -158,17 +254,57 @@ deps-tree: |md
   style.font-size: 10
 }
 
-# --- Flow: two parallel columns converge on Report ---
+# --- Callout: the descriptor pin ---
 
-entry -> assess-grp.remove-assess
-entry -> arch-grp.remove-arch
+pin-snippet: |md
+  types/rfe/type.yaml
 
-assess-grp.populate -> report: "artifacts/rfe-rubric.md + skills"
-arch-grp.fetch-arch -> report: ".context/architecture-context"
+  pipeline:
+    rubric:
+      repo: https://github.com/fullsend-ai/assess-rfe
+      ref: "d8391ae379fba0497164550e3a33495bc2007aa2"
+      path: skills/assess-rfe/scripts/agent_prompt.md
+      export: artifacts/rfe-rubric.md
 
-report -> result
+  types/initiative/type.yaml pins the same ref
+  (path: skills/assess-initiative/..., export: null)
+| {
+  shape: rectangle
+  style.fill: "#f5f5f5"
+  style.stroke: "#bbbbbb"
+  style.stroke-width: 1
+  style.font: mono
+  style.font-size: 10
+}
 
-report -> deps-tree: {
+# --- Flow ---
+
+entry -> layout-link
+layout-link -> pin-decision
+
+pin-decision -> rm-vendored: "pin unchanged"
+pin-decision -> bump-pin: "a newer assess-rfe" {
+  style.stroke-dash: 3
+}
+bump-pin -> rm-vendored: "both descriptors agree" {
+  style.stroke-dash: 3
+}
+
+rm-vendored -> bootstrap: "6 paths gone"
+bootstrap -> rm-arch: "artifacts/rfe-rubric.md"
+
+rm-arch -> fetch-arch
+fetch-arch -> report-step: "LATEST_VERSION"
+
+# --- Callout connectors ---
+
+bootstrap -> vendored-tree: {
+  style.stroke: "#bbbbbb"
+  style.stroke-dash: 4
+  style.stroke-width: 1
+}
+
+pin-decision -> pin-snippet: {
   style.stroke: "#bbbbbb"
   style.stroke-dash: 4
   style.stroke-width: 1
