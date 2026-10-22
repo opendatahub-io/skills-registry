@@ -9,7 +9,7 @@
   "plugins": [
     {
       "author": {
-        "name": "jwforres"
+        "name": "fullsend-ai"
       },
       "category": "planning",
       "description": "Claude Code skills for creating, reviewing, splitting and submitting work items \u2014 RFEs to the RHAIRFE Jira project and Initiatives to RHOAIENG \u2014 through one generic pipeline (/rfe-create, /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility aliases.\n",
@@ -31,7 +31,7 @@
         "repo": "fullsend-ai/rfe-creator",
         "source": "github"
       },
-      "version": "0.1.0"
+      "version": "0.2.0"
     },
     {
       "author": {
