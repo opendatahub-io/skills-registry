@@ -42,7 +42,7 @@ End-to-end pipeline for work items of any registered type — RFEs by default, I
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/fullsend-ai/rfe-creator/blob/3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588/.claude/skills/rfe-speedrun/SKILL.md" title="fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-speedrun/SKILL.md">SKILL.md @ 3242eb2<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
+        <a class="skill-contract__ref" href="https://github.com/fullsend-ai/rfe-creator/blob/43ee4ae3c982ffe927aeaebbdb6723a668c08072/.claude/skills/rfe-speedrun/SKILL.md" title="fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-speedrun/SKILL.md">SKILL.md @ 43ee4ae<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -69,7 +69,7 @@ End-to-end pipeline for work items of any registered type — RFEs by default, I
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588/.claude/skills/rfe-speedrun/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/rfe-speedrun/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/43ee4ae3c982ffe927aeaebbdb6723a668c08072/.claude/skills/rfe-speedrun/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/rfe-speedrun/SKILL.md</code></a></div>
     </div>
   </section>
 </div>
