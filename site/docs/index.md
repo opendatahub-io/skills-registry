@@ -226,7 +226,7 @@ hide:
 
     Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated m...
 
-    **1 skills** - Documentation - v0.3.15
+    **1 skills** - Documentation - v0.3.25
 
 </div>
 
@@ -312,7 +312,7 @@ hide:
 
     Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Install...
 
-    **25 skills** - Development Tools - v0.1.0
+    **25 skills** - Development Tools - v1.0.0
 
 </div>
 

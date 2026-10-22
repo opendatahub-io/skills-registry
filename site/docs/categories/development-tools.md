@@ -89,4 +89,4 @@ PyTorch cross-language analysis with TorchTalk
 
 Everything you need for PatternFly development -- React components, design guidance, migration, and MCP docs. Installs all PatternFly sub-plugins in one step.
 
-**25 skills** - v0.1.0
+**25 skills** - v1.0.0

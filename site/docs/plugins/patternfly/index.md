@@ -11,7 +11,7 @@ Everything you need for PatternFly development -- React components, design guida
 
 !!! info "Plugin Details"
 
-    - **Version**: 0.1.0
+    - **Version**: 1.0.0
     - **Author**: UXD Team
     - **License**: MIT
     - **Scope**: Generic

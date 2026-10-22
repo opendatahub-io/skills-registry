@@ -38,7 +38,7 @@ title: Plugins
 | [pipeline-skills](pipeline-skills/index.md) | DevOps & CI/CD | 3 | v0.1.0 |
 | [code-review-skills](code-review-skills/index.md) | Code Quality | 3 | v0.2.1 |
 | [spike-executor](spike-executor/index.md) | Product Planning | 1 | v0.2.0 |
-| [docs-skills](docs-skills/index.md) | Documentation | 1 | v0.3.15 |
+| [docs-skills](docs-skills/index.md) | Documentation | 1 | v0.3.25 |
 
 ## Generic
 
@@ -53,7 +53,7 @@ title: Plugins
 | [odh-pytorch](odh-pytorch/index.md) | Development Tools | 3 | v0.1.0 |
 | [odh-security](odh-security/index.md) | Security Review | 2 | v0.1.0 |
 | [agent-eval-harness](agent-eval-harness/index.md) | Evaluation & Testing | 10 | v1.30.0 |
-| [patternfly](patternfly/index.md) | Development Tools | 25 | v0.1.0 |
+| [patternfly](patternfly/index.md) | Development Tools | 25 | v1.0.0 |
 
 ## Teams
 
