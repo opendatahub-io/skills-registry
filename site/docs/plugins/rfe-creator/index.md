@@ -132,6 +132,7 @@ to `artifacts/rfe-rubric.md`. `/rfe-create` reads it to shape its questions so
 what it writes will pass.
 
 **Jira.** Writes go through `scripts/submit.py` over the REST API with Basic
-Auth rather than the MCP server, so the call sequence is deterministic rather
+Auth — `JIRA_SERVER`, `JIRA_USER` and `JIRA_TOKEN` (a Jira API token) — rather
+than the MCP server, so the call sequence is deterministic rather
 than dependent on tool-calling decisions. Reads prefer the Atlassian MCP server
 and fall back to `scripts/fetch_issue.py`.

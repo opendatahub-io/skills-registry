@@ -95,7 +95,7 @@
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_create_autofix" value="Phase 2, Skill tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="skill-create" target="skill-autofix" parent="1">
+    <mxCell id="e_create_autofix" value="Phase 2, Skill tool" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="skill-speedrun" target="skill-autofix" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
@@ -115,7 +115,7 @@
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_quality_submit" value="SUBMIT= line" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.430108;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="quality" target="skill-submit" parent="1">
+    <mxCell id="e_quality_submit" value="Phase 3: SUBMIT= line" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.430108;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="quality" target="skill-submit" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
@@ -127,24 +127,16 @@
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_autofix_report" value="artifacts/auto-fix-runs/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="skill-autofix" target="run-report" parent="1">
+    <mxCell id="e_autofix_report" value="artifacts/auto-fix-runs/" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;" edge="1" source="skill-autofix" target="run-report" parent="1">
       <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1125" y="665"/>
-          <mxPoint x="1125" y="855"/>
-        </Array>
       </mxGeometry>
     </mxCell>
     <mxCell id="e_review_split" value="recommendation: split" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="skill-review" target="skill-split" parent="1">
       <mxGeometry relative="1" as="geometry">
       </mxGeometry>
     </mxCell>
-    <mxCell id="e_split_review" value="children, --caller split" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="skill-split" target="skill-review" parent="1">
+    <mxCell id="e_split_review" value="children, --caller split" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#333333;strokeWidth=1.5;html=1;fontFamily=Inter,Helvetica,Arial,sans-serif;dashed=1;dashPattern=8 4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="skill-split" target="skill-review" parent="1">
       <mxGeometry relative="1" as="geometry">
-        <Array as="points">
-          <mxPoint x="1175" y="575"/>
-          <mxPoint x="1175" y="355"/>
-        </Array>
       </mxGeometry>
     </mxCell>
     <mxCell id="e_launch_callout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#bbbbbb;strokeWidth=1;dashed=1;dashPattern=6 3;html=1;endArrow=none;exitX=0.15;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="launch-block" target="launch-vars" parent="1">

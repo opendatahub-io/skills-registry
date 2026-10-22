@@ -20,8 +20,9 @@ decomposition rules (`{SPLIT_RULES_PATH}`) and writes
 Children are collected and handed to `/rfe-review` as an inline headless
 call.
 
-One self-correction cycle follows: any child scoring below half the type's
-`resplit` threshold on `right_sized` is split again and its children
+One self-correction cycle follows: any child scoring below the type's
+`resplit.below` threshold on `right_sized` (`right_sized < 2` for both
+shipped types) is split again and its children
 reviewed. It stops there by design — repeated re-splitting compounds the
 child count for diminishing returns, so a decomposition still wrong after
 one correction needs human judgement. The loop corrects grouping mistakes

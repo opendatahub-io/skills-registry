@@ -363,7 +363,7 @@ aliases -> launch-block: "reads the sibling SKILL.md" {
 }
 
 skill-speedrun -> skill-create: "Phase 1, Agent per entry"
-skill-create -> skill-autofix: "Phase 2, Skill tool"
+skill-speedrun -> skill-autofix: "Phase 2, Skill tool"
 skill-create -> quality: "rfe-tasks/{ID}.md"
 
 skill-autofix -> quality: "same prompts" {
@@ -373,7 +373,7 @@ skill-autofix -> quality: "same prompts" {
 update-deps -> vendored: "re-vendor at the pinned sha"
 vendored -> quality: "artifacts/rfe-rubric.md"
 
-quality -> skill-submit: "SUBMIT= line"
+quality -> skill-submit: "Phase 3: SUBMIT= line"
 skill-submit -> jira: "create or update"
 jira -> quality: "fetch issue" {
   style.stroke-dash: 3
