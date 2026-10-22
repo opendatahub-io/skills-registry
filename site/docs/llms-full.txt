@@ -86,7 +86,8 @@ to `artifacts/rfe-rubric.md`. `/rfe-create` reads it to shape its questions so
 what it writes will pass.
 
 **Jira.** Writes go through `scripts/submit.py` over the REST API with Basic
-Auth rather than the MCP server, so the call sequence is deterministic rather
+Auth — `JIRA_SERVER`, `JIRA_USER` and `JIRA_TOKEN` (a Jira API token) — rather
+than the MCP server, so the call sequence is deterministic rather
 than dependent on tool-calling decisions. Reads prefer the Atlassian MCP server
 and fall back to `scripts/fetch_issue.py`.
 
@@ -137,8 +138,9 @@ artifacts `/rfe-create` wrote.
 
 It is an orchestrator: it never reads item bodies into its own context, only
 frontmatter. For each ID it launches an assess agent plus one agent per
-declared review dimension — technical feasibility for RFEs, strategic
-alignment for Initiatives — each with its own blocking and condition rules.
+declared review dimension — technical feasibility for RFEs, feasibility
+plus strategic alignment for Initiatives — each with its own blocking and
+condition rules.
 A review agent then merges those results into
 `{REVIEWS_DIR}/<ID>-review.md`, and `filter_for_revision.py` selects which
 items a revise agent should rewrite.
@@ -183,8 +185,9 @@ decomposition rules (`{SPLIT_RULES_PATH}`) and writes
 Children are collected and handed to `/rfe-review` as an inline headless
 call.
 
-One self-correction cycle follows: any child scoring below half the type's
-`resplit` threshold on `right_sized` is split again and its children
+One self-correction cycle follows: any child scoring below the type's
+`resplit.below` threshold on `right_sized` (`right_sized < 2` for both
+shipped types) is split again and its children
 reviewed. It stops there by design — repeated re-splitting compounds the
 child count for diminishing returns, so a decomposition still wrong after
 one correction needs human judgement. The loop corrects grouping mistakes
@@ -279,7 +282,7 @@ IDs up to three times. Phase 3 submits only the IDs
 
 | Argument | Required | Description |
 |----------|----------|-------------|
-| `idea | Jira key` |  | A free-text idea or objective (mode C), or a single Jira key to process an existing item (mode B). Omit when using --input. |
+| `idea or Jira key` |  | A free-text idea or objective (mode C), or a single Jira key to process an existing item (mode B). Omit when using --input. |
 | `--type` |  | Work-item type for the run. An explicit --type always wins. |
 | `--input` |  | YAML file of batch entries (prompt, priority, labels, clarifying_context) — mode A. May also be a mapping with type and items keys. |
 | `--headless` |  | Suppress questions and confirmations, for CI and eval runs. |

@@ -106,7 +106,7 @@ IDs up to three times. Phase 3 submits only the IDs
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `idea | Jira key` |  | - | A free-text idea or objective (mode C), or a single Jira key to process an existing item (mode B). Omit when using --input. |
+| `idea or Jira key` |  | - | A free-text idea or objective (mode C), or a single Jira key to process an existing item (mode B). Omit when using --input. |
 | `--type` |  | `rfe` | Work-item type for the run. An explicit --type always wins. |
 | `--input` |  | - | YAML file of batch entries (prompt, priority, labels, clarifying_context) — mode A. May also be a mapping with type and items keys. |
 | `--headless` |  | - | Suppress questions and confirmations, for CI and eval runs. |

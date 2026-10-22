@@ -13,8 +13,9 @@ artifacts `/rfe-create` wrote.
 
 It is an orchestrator: it never reads item bodies into its own context, only
 frontmatter. For each ID it launches an assess agent plus one agent per
-declared review dimension — technical feasibility for RFEs, strategic
-alignment for Initiatives — each with its own blocking and condition rules.
+declared review dimension — technical feasibility for RFEs, feasibility
+plus strategic alignment for Initiatives — each with its own blocking and
+condition rules.
 A review agent then merges those results into
 `{REVIEWS_DIR}/<ID>-review.md`, and `filter_for_revision.py` selects which
 items a revise agent should rewrite.
