@@ -28,7 +28,9 @@ _REPO_ROOT_STR = str(_REPO_ROOT)
 sys.path[:] = [entry for entry in sys.path if entry != _REPO_ROOT_STR]
 sys.path.insert(0, _REPO_ROOT_STR)
 
-from scripts.registry_contracts import GIT_CLONE_TYPES, source_clone_url, normalize_git_ref, shallow_clone  # noqa: E402
+from scripts.registry_contracts import (  # noqa: E402
+    GIT_CLONEABLE_TYPES, source_clone_url, normalize_git_ref, shallow_clone, source_subdir,
+)
 
 
 def load_registry(path: str = "registry.yaml") -> dict:
@@ -72,8 +74,13 @@ def fetch_remote_version(repo: str, ref: str = "main") -> str | None:
         return None
 
 
-def fetch_remote_version_via_clone(clone_url: str, ref: str = "main") -> str | None:
-    """Fetch version from remote plugin.json via shallow clone."""
+def fetch_remote_version_via_clone(clone_url: str, ref: str = "main", subdir: str = "") -> str | None:
+    """Fetch version from remote plugin.json via shallow clone.
+
+    ``subdir`` is the plugin's root inside the repository for git-subdir sources
+    (the directory whose .claude-plugin/plugin.json Claude Code reads); empty
+    means the repository root. A subdir that escapes the clone yields None.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         try:
             result = shallow_clone(clone_url, ref, tmpdir)
@@ -81,7 +88,14 @@ def fetch_remote_version_via_clone(clone_url: str, ref: str = "main") -> str | N
             return None
         if result.returncode != 0:
             return None
-        plugin_json = Path(tmpdir) / ".claude-plugin" / "plugin.json"
+        root = Path(tmpdir).resolve()
+        try:
+            plugin_root = (root / subdir).resolve() if subdir else root
+        except OSError:
+            return None
+        if plugin_root != root and not plugin_root.is_relative_to(root):
+            return None
+        plugin_json = plugin_root / ".claude-plugin" / "plugin.json"
         if not plugin_json.exists():
             return None
         try:
@@ -105,12 +119,11 @@ def main():
     for plugin in registry.get("plugins", []):
         source = plugin.get("source") or {}
         source_type = source.get("type")
-        if source_type not in GIT_CLONE_TYPES:
+        if source_type not in GIT_CLONEABLE_TYPES:
             continue
-
-        # Only check strict-mode plugins (they have their own plugin.json)
-        if plugin.get("strict", True) is False:
-            continue
+        # Whatever ``strict`` says, a plugin that ships .claude-plugin/plugin.json has
+        # its version read from there by Claude Code; one that ships none is skipped
+        # below when no manifest is found (the entry is its version then).
 
         name = plugin.get("name", "<unknown>")
         current = plugin.get("version", "0.0.0")
@@ -127,7 +140,10 @@ def main():
             except (ValueError, KeyError):
                 print(f"  SKIP: {name} (invalid source configuration)")
                 continue
-            remote = fetch_remote_version_via_clone(clone_url, ref)
+            if source_type == "git-subdir":
+                remote = fetch_remote_version_via_clone(clone_url, ref, subdir=source_subdir(source))
+            else:
+                remote = fetch_remote_version_via_clone(clone_url, ref)
         if remote is None:
             print(f"  SKIP: {name} (could not fetch remote version)")
             continue
