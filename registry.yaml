@@ -42,11 +42,11 @@ plugins:
       /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for
       Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility
       aliases.
-    version: "0.1.0"
+    version: "0.2.0"
     category: planning
     tags: [rfe, initiative, jira, review, pipeline]
     author:
-      name: jwforres
+      name: fullsend-ai
     source:
       type: github
       repo: fullsend-ai/rfe-creator
@@ -69,7 +69,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-create/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-create/SKILL.md
           problem_statement: Turn a problem statement, idea or objective into a well-formed work item of the resolved type — an RFE describing business needs (WHAT and WHY) by default, an Initiative with --type initiative — sized and ready for review.
           success_conditions:
             - Produces a well-formed item of the resolved type, sized by the type's rules (S/M/L/XL from acceptance-criteria count for RFEs).
@@ -110,10 +110,10 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-review/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-review/SKILL.md
             - id: output_quality
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-review/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-review/SKILL.md
           problem_statement: Score work items of the resolved type against the type's rubric, run its review dimensions (technical feasibility; strategic alignment for Initiatives), and auto-revise failing items across up to two re-assessment cycles.
           success_conditions:
             - Produces a review file per item with rubric scores, a verdict per review dimension, and a recommendation.
@@ -164,7 +164,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-split/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-split/SKILL.md
           problem_statement: Decompose an oversized work item of the resolved type into right-sized children that together cover the original scope.
           success_conditions:
             - Decomposes an oversized item into right-sized children that cover all of the original scope.
@@ -233,7 +233,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-speedrun/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-speedrun/SKILL.md
           problem_statement: Run the full pipeline for the resolved type end-to-end — create, auto-fix, and submit — from an idea, Jira key(s), or a batch file.
           success_conditions:
             - Runs create, auto-fix, and submit in sequence, persisting IDs and config between phases.
@@ -267,7 +267,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@3242eb2d1b3bfb76c4683de2f3e7a6f5d670f588:.claude/skills/rfe-auto-fix/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe-auto-fix/SKILL.md
           problem_statement: Review, revise, and split batches of work items of the resolved type non-interactively through a pipeline state machine.
           success_conditions:
             - Processes every ID through assess, review dimensions, review, revise, re-assess, and split phases until DONE.
@@ -299,7 +299,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.create/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe.create/SKILL.md
           problem_statement: Turn a problem statement or idea into well-formed RFEs describing business needs (WHAT and WHY), sized and ready for review.
           success_conditions:
             - Produces well-formed RFEs describing business needs, sized S/M/L/XL from acceptance-criteria count.
@@ -332,10 +332,10 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.review/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe.review/SKILL.md
             - id: output_quality
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.review/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe.review/SKILL.md
           problem_statement: Score RFEs against the rubric, check technical feasibility, and auto-revise failing RFEs across up to two re-assessment cycles.
           success_conditions:
             - Produces a review file with rubric scores, a feasibility verdict, and a recommendation per RFE.
@@ -367,7 +367,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.split/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe.split/SKILL.md
           problem_statement: Decompose an oversized RFE into appropriately right-sized child RFEs that together cover the original scope.
           success_conditions:
             - Decomposes an oversized RFE into right-sized children that cover all of the original scope.
@@ -432,7 +432,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.speedrun/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe.speedrun/SKILL.md
           problem_statement: Run the full RFE pipeline end-to-end — create, auto-fix, and submit — from an idea, Jira key(s), or a batch file.
           success_conditions:
             - Runs create, auto-fix, and submit in sequence, persisting IDs and config between phases.
@@ -465,7 +465,7 @@ plugins:
           metrics:
             - id: task_success
               measure: judge
-              rubric_ref: fullsend-ai/rfe-creator@c8a2a1edb53654f08bbe67b7aa4382121e22866f:.claude/skills/rfe.auto-fix/SKILL.md
+              rubric_ref: fullsend-ai/rfe-creator@43ee4ae3c982ffe927aeaebbdb6723a668c08072:.claude/skills/rfe.auto-fix/SKILL.md
           problem_statement: Review, revise, and split batches of RFEs non-interactively through a pipeline state machine.
           success_conditions:
             - Processes every ID through assess, feasibility, review, revise, re-assess, and split phases until DONE.
