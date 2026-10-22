@@ -96,6 +96,69 @@ class CheckVersionsMainLoopTests(unittest.TestCase):
         api_mock.assert_called_once_with("org/repo", "main")
 
 
+class GitSubdirAndStrictFalseTests(unittest.TestCase):
+    """The sync reads the manifest Claude Code reads: at the plugin root inside the
+    clone for git-subdir sources, and for strict: false plugins too when they ship one."""
+
+    @staticmethod
+    def _tree(manifests: dict[str, str]) -> str:
+        real_tmpdir = tempfile.mkdtemp()
+        for rel, version in manifests.items():
+            d = os.path.join(real_tmpdir, rel, ".claude-plugin") if rel else os.path.join(real_tmpdir, ".claude-plugin")
+            os.makedirs(d, exist_ok=True)
+            with open(os.path.join(d, "plugin.json"), "w") as f:
+                json.dump({"version": version}, f)
+        return real_tmpdir
+
+    def _via_clone(self, tree: str, **kwargs):
+        with mock.patch("scripts.check_versions.subprocess.run", return_value=mock.Mock(returncode=0)), \
+                mock.patch("scripts.check_versions.tempfile.TemporaryDirectory") as td_mock:
+            td_mock.return_value.__enter__ = mock.Mock(return_value=tree)
+            td_mock.return_value.__exit__ = mock.Mock(return_value=False)
+            try:
+                return fetch_remote_version_via_clone("https://example.com/repo.git", "main", **kwargs)
+            finally:
+                shutil.rmtree(tree, ignore_errors=True)
+
+    def test_subdir_manifest_wins_over_the_repo_root_one(self):
+        tree = self._tree({"": "9.9.9", "plugins/a": "1.0.0"})
+        self.assertEqual("1.0.0", self._via_clone(tree, subdir="plugins/a"))
+
+    def test_missing_subdir_manifest_is_none_even_with_a_root_one(self):
+        tree = self._tree({"": "9.9.9"})
+        self.assertIsNone(self._via_clone(tree, subdir="plugins/a"))
+
+    def test_subdir_escaping_the_clone_is_none(self):
+        tree = self._tree({"": "9.9.9"})
+        self.assertIsNone(self._via_clone(tree, subdir="../elsewhere"))
+
+    @mock.patch("scripts.check_versions.fetch_remote_version_via_clone")
+    @mock.patch("scripts.check_versions.load_registry")
+    def test_git_subdir_type_passes_the_subdir(self, load_mock, clone_mock):
+        load_mock.return_value = {"plugins": [{
+            "name": "pf-a", "version": "0.1.0",
+            "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "plugins/a", "ref": "main"},
+        }]}
+        clone_mock.return_value = "0.1.0"
+        from scripts.check_versions import main
+        with mock.patch("sys.argv", ["check_versions.py", "--dry-run"]):
+            main()
+        clone_mock.assert_called_once_with("https://x/y.git", "main", subdir="plugins/a")
+
+    @mock.patch("scripts.check_versions.fetch_remote_version")
+    @mock.patch("scripts.check_versions.load_registry")
+    def test_strict_false_plugin_is_checked_too(self, load_mock, api_mock):
+        load_mock.return_value = {"plugins": [{
+            "name": "loose", "version": "0.1.0", "strict": False,
+            "source": {"type": "github", "repo": "org/repo", "ref": "main"},
+        }]}
+        api_mock.return_value = "0.1.0"
+        from scripts.check_versions import main
+        with mock.patch("sys.argv", ["check_versions.py", "--dry-run"]):
+            main()
+        api_mock.assert_called_once_with("org/repo", "main")
+
+
 @unittest.skipUnless(shutil.which("git"), "git is required for integration tests")
 class FetchRemoteVersionViaCloneIntegrationTests(unittest.TestCase):
     """End-to-end against a real repo — exercises shallow_clone's SHA fallback."""
