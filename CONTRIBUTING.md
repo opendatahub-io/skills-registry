@@ -232,6 +232,7 @@ CI runs on pull requests and pushes to `main`. It automatically:
 - Runs pinned `skill-linter` on skills you changed when they declare GitHub `source` and `contract.source_assertions`.
 - Checks that referenced GitHub repos are reachable as validated by `scripts/validate_registry.py`.
 - Clones the plugins you touched and checks each registry skill `name` against the upstream `SKILL.md` frontmatter, failing if the plugin's declared skills path holds no `SKILL.md` at all.
+- On the same clones, compares each touched entry's `version` with the `version` in the plugin's upstream `.claude-plugin/plugin.json` and fails on a mismatch (see below).
 
 ### Skill name drift
 
@@ -254,6 +255,20 @@ It **warns**, without failing, when:
 - a `strict: false` plugin has upstream skills missing from `registry.yaml`. Those install anyway, since the whole `skills_dir` is loaded, so they are live but undocumented commands. For `strict: true` plugins the registry list is a curated subset by design and is not flagged.
 
 Most drift starts upstream, where no registry PR is involved, so the same sweep runs weekly across every plugin (github / git / git-subdir) via the `Upstream Plugin Checks` workflow, which also reports plugins missing a `.codex-plugin/plugin.json` (see below).
+
+### Entry and manifest versions
+
+Claude Code computes an installed plugin's version from the plugin's own `.claude-plugin/plugin.json` first and falls back to the marketplace entry only when the manifest has no `version`; it re-fetches an install only when that value changes. So when a plugin ships a manifest, the entry's `version` must equal the manifest's: a different entry value advertises a number no install ever reports, and a bump made on one side alone leaves users on their cached copy while the catalog says they have moved on. (`claude plugin validate` only catches this for plugins kept inside the marketplace tree.)
+
+`scripts/validate_registry.py --check-manifest-versions` clones each plugin and **fails** on a mismatch; a plugin without a manifest, or whose manifest has no `version`, is not compared. It runs with `--diff-base` on the plugins a PR touches and weekly across every plugin in `Upstream Plugin Checks`. To fix a flagged entry, sync it from the manifest and regenerate the derived files:
+
+```bash
+python3 scripts/check_versions.py        # rewrites the entry version(s) from the upstream manifest(s)
+python3 scripts/sync_marketplace.py && python3 scripts/sync_codex_marketplace.py
+python3 scripts/generate_catalog.py && python3 scripts/generate_site.py
+```
+
+Releasing a plugin therefore means bumping the manifest upstream first and the registry entry in the same window, in that order.
 
 ### Codex-manifest readiness
 

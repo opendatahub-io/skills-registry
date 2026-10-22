@@ -1,6 +1,7 @@
 import argparse
 import importlib.util
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -1720,6 +1721,107 @@ class RemoteStrictManifestTests(unittest.TestCase):
             {".claude/skills/alpha/SKILL.md": self.SKILL,
              ".claude-plugin/plugin.json": '{"name": "p", "version": "0.1.0"}'})
         self.assertEqual([], [e for e in errors if "plugin.json" in e], errors)
+
+
+class ManifestVersionTests(unittest.TestCase):
+    """Claude Code reports a plugin's version from its own .claude-plugin/plugin.json and
+    re-fetches an install only when that value changes, so an entry whose ``version``
+    differs from the manifest advertises a number no install receives (AISDLC-210)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.vr = get_validate_registry_module()
+
+    @staticmethod
+    def _root(tmp, manifest=None):
+        import os
+
+        if manifest is not None:
+            os.makedirs(os.path.join(tmp, ".claude-plugin"))
+            with open(os.path.join(tmp, ".claude-plugin", "plugin.json"), "w") as f:
+                f.write(manifest)
+        return Path(tmp)
+
+    def test_mismatch_is_an_error_naming_both_versions(self):
+        with tempfile.TemporaryDirectory() as d:
+            errors, warnings = self.vr.check_manifest_version(
+                {"name": "p", "version": "0.2.0"},
+                self._root(d, '{"name": "p", "version": "0.1.0"}'))
+        self.assertEqual(1, len(errors), errors)
+        self.assertIn("entry version '0.2.0'", errors[0])
+        self.assertIn("plugin.json version '0.1.0'", errors[0])
+        self.assertIn("check_versions.py", errors[0])
+        self.assertEqual([], warnings)
+
+    def test_equal_versions_pass(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(([], []), self.vr.check_manifest_version(
+                {"name": "p", "version": "0.2.0"},
+                self._root(d, '{"name": "p", "version": "0.2.0"}')))
+
+    def test_no_manifest_means_nothing_to_compare(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(([], []), self.vr.check_manifest_version(
+                {"name": "p", "version": "0.2.0"}, self._root(d)))
+
+    def test_manifest_without_version_defers_to_the_entry(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(([], []), self.vr.check_manifest_version(
+                {"name": "p", "version": "0.2.0"}, self._root(d, '{"name": "p"}')))
+
+    def test_unparseable_manifest_warns_instead_of_failing(self):
+        with tempfile.TemporaryDirectory() as d:
+            errors, warnings = self.vr.check_manifest_version(
+                {"name": "p", "version": "0.2.0"}, self._root(d, "{not json"))
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+        self.assertIn("unreadable .claude-plugin/plugin.json", warnings[0])
+
+    def test_non_string_manifest_version_warns(self):
+        with tempfile.TemporaryDirectory() as d:
+            errors, warnings = self.vr.check_manifest_version(
+                {"name": "p", "version": "1.0"}, self._root(d, '{"version": 1.0}'))
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+
+    def test_surrounding_whitespace_is_not_a_mismatch(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(([], []), self.vr.check_manifest_version(
+                {"name": "p", "version": "0.2.0"}, self._root(d, '{"version": " 0.2.0\\n"}')))
+
+    def test_git_subdir_root_is_the_plugin_root(self):
+        """The manifest is read at the plugin root inside the clone, not the repo root."""
+        import os
+
+        with tempfile.TemporaryDirectory() as d:
+            sub = os.path.join(d, "plugins", "a")
+            os.makedirs(sub)
+            self._root(d, '{"version": "9.9.9"}')          # repo-root manifest: ignored
+            self._root(sub, '{"version": "0.3.0"}')
+            self.assertEqual(([], []), self.vr.check_manifest_version(
+                {"name": "a", "version": "0.3.0",
+                 "source": {"type": "git-subdir", "url": "https://x/y.git", "path": "plugins/a"}},
+                Path(sub)))
+
+
+class RemoteManifestVersionTests(RemoteStrictManifestTests):
+    """validate_remote_plugin applies the same comparison on its own clone."""
+
+    def test_remote_check_fails_on_version_mismatch(self):
+        errors = self._run(
+            {"name": "p", "version": "0.2.0", "source": self.SOURCE, "strict": True,
+             "skills_dir": ".claude/skills", "skills": [{"name": "alpha"}]},
+            {".claude/skills/alpha/SKILL.md": self.SKILL,
+             ".claude-plugin/plugin.json": '{"name": "p", "version": "0.1.0"}'})
+        self.assertTrue(any("entry version '0.2.0' differs" in e for e in errors), errors)
+
+    def test_remote_check_passes_when_versions_agree(self):
+        errors = self._run(
+            {"name": "p", "version": "0.1.0", "source": self.SOURCE, "strict": True,
+             "skills_dir": ".claude/skills", "skills": [{"name": "alpha"}]},
+            {".claude/skills/alpha/SKILL.md": self.SKILL,
+             ".claude-plugin/plugin.json": '{"name": "p", "version": "0.1.0"}'})
+        self.assertEqual([], [e for e in errors if "version" in e], errors)
 
 
 class StrictConsistencyTests(unittest.TestCase):

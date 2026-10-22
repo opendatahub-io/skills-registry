@@ -10,6 +10,7 @@ Usage:
     python3 scripts/validate_registry.py --diff-base REF        # Require contracts for skills changed since REF
     python3 scripts/validate_registry.py --check-skill-names    # Check skill names against upstream SKILL.md
     python3 scripts/validate_registry.py --check-codex-manifests  # Warn on plugins missing .codex-plugin/plugin.json
+    python3 scripts/validate_registry.py --check-manifest-versions  # Fail when an entry's version differs from its upstream .claude-plugin/plugin.json
 """
 
 import argparse
@@ -491,6 +492,8 @@ def validate_remote_plugin(plugin: dict) -> list[str]:
         if conflict:
             errors.append(conflict)
             return errors
+        version_errors, _ = check_manifest_version(plugin, repo_path)
+        errors.extend(version_errors)
         if strict and "skills_dir" not in plugin:
             # strict without skills_dir: the entry declares no components, so only the
             # repo's plugin.json can define the plugin — it must exist. With skills_dir
@@ -894,6 +897,64 @@ def check_codex_manifest(plugin: dict, plugin_root: Path) -> tuple[list[str], li
     ]
 
 
+def _manifest_version(plugin_root: Path) -> tuple[str | None, str | None]:
+    """``(version, problem)`` from the plugin's own .claude-plugin/plugin.json.
+
+    ``version`` is None when there is no manifest or the manifest has no ``version``
+    key (Claude Code then takes the version from the marketplace entry, so there is
+    nothing to compare). ``problem`` names a manifest that exists but cannot be read
+    or parsed, or whose ``version`` is not a string -- untrusted cloned content,
+    reported rather than raised.
+    """
+    manifest = plugin_root / ".claude-plugin" / "plugin.json"
+    if not manifest.is_file():
+        return None, None
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return None, f"unreadable .claude-plugin/plugin.json ({type(exc).__name__})"
+    if not isinstance(data, dict) or "version" not in data:
+        return None, None
+    version = data["version"]
+    if not isinstance(version, str):
+        return None, ".claude-plugin/plugin.json 'version' is not a string"
+    return version.strip(), None
+
+
+def check_manifest_version(plugin: dict, plugin_root: Path) -> tuple[list[str], list[str]]:
+    """Fail when the entry's ``version`` differs from the upstream manifest's.
+
+    Claude Code computes an installed plugin's version from the plugin's own
+    .claude-plugin/plugin.json first and falls back to the marketplace entry only
+    when the manifest carries none; it re-fetches an install only when that value
+    changes. So an entry whose ``version`` differs from the manifest advertises a
+    number no install ever reports, and a bump made on one side alone leaves
+    users on the cached copy while the catalog says they have moved on.
+    ``claude plugin validate`` catches this only for plugins that live inside the
+    marketplace tree. The fix is ``scripts/check_versions.py``, which rewrites the
+    entry from the manifest. Without a manifest (or a manifest ``version``) the
+    entry is the version and there is nothing to check.
+
+    ``plugin_root`` is the plugin's root inside the clone (the subdir for git-subdir).
+    """
+    name = get_plugin_label(plugin)
+    upstream, problem = _manifest_version(plugin_root)
+    if problem:
+        return [], [f"  Plugin '{name}': {problem}; cannot compare its version with the entry"]
+    if upstream is None or "version" not in plugin:
+        # No entry version: the schema already rejects the entry, nothing to compare.
+        return [], []
+    entry = str(plugin["version"]).strip()
+    if entry == upstream:
+        return [], []
+    return [
+        f"  Plugin '{name}': entry version '{entry}' differs from the upstream "
+        f".claude-plugin/plugin.json version '{upstream}' -- Claude Code reports the "
+        "manifest's value and re-fetches only when it changes, so the entry advertises "
+        "a version no install receives. Run: python3 scripts/check_versions.py"
+    ], []
+
+
 def _scope_plugins(registry: dict, diff_base: str | None) -> tuple[list[dict], str]:
     """Plugins to sweep, optionally narrowed to those whose entry changed since diff_base."""
     plugins = registry.get("plugins", [])
@@ -1000,6 +1061,11 @@ def main() -> None:
                         help="Clone plugin repos and warn (never fail) about skill-bearing "
                              "plugins missing a .codex-plugin/plugin.json, whose skills will "
                              "not load under Codex (scoped to --diff-base, if given)")
+    parser.add_argument("--check-manifest-versions", action="store_true",
+                        help="Clone plugin repos and fail when an entry's version differs "
+                             "from the upstream .claude-plugin/plugin.json version -- the "
+                             "value Claude Code reports and re-fetches on (scoped to "
+                             "--diff-base, if given)")
     parser.add_argument("--staged", action="store_true",
                         help="Require contracts for skills changed between HEAD and staged registry.yaml")
     parser.add_argument("--diff-base", metavar="REF",
@@ -1116,10 +1182,11 @@ def main() -> None:
             else:
                 print("    OK")
 
-    # Upstream clone-based sweeps: skill-name drift and/or Codex-manifest presence.
-    # Both clone the same repos, so when both are requested we clone each repo once
+    # Upstream clone-based sweeps: skill-name drift, Codex-manifest presence and/or
+    # entry-vs-manifest version agreement. All clone the same repos, so when several
+    # are requested we clone each repo once
     # (git-subdir bundle members of one monorepo share a single clone regardless).
-    if args.check_skill_names or args.check_codex_manifests:
+    if args.check_skill_names or args.check_codex_manifests or args.check_manifest_versions:
         plugins_to_check, scope = _scope_plugins(registry, args.diff_base)
 
         clone_checks = []
@@ -1127,11 +1194,14 @@ def main() -> None:
             clone_checks.append(check_skill_names_against_source)
         if args.check_codex_manifests:
             clone_checks.append(check_codex_manifest)
+        if args.check_manifest_versions:
+            clone_checks.append(check_manifest_version)
 
         labels = " + ".join(
             label for label, enabled in (
                 ("skill names", args.check_skill_names),
                 ("Codex manifests", args.check_codex_manifests),
+                ("manifest versions", args.check_manifest_versions),
             ) if enabled
         )
         print(f"Checking {labels} against source ({len(plugins_to_check)} plugin(s), {scope})...")
