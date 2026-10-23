@@ -7,7 +7,7 @@ title: Plugins
 
 # Plugins
 
-39 plugins. Bundle members are grouped under their bundle.
+40 plugins. Bundle members are grouped under their bundle.
 
 ## SDLC
 
@@ -54,6 +54,7 @@ title: Plugins
 | [odh-security](odh-security/index.md) | Security Review | 2 | v0.1.0 |
 | [agent-eval-harness](agent-eval-harness/index.md) | Evaluation & Testing | 10 | v1.30.0 |
 | [patternfly](patternfly/index.md) | Development Tools | 25 | v1.0.0 |
+| [ux3-product-design-harness](ux3-product-design-harness/index.md) | Product Planning | 1 | v1.0.0 |
 
 ## Teams
 

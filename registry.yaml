@@ -4662,3 +4662,62 @@ plugins:
       claude-code:
         install: "/plugin install productization-skills@opendatahub-skills"
     depends_on: []
+
+  - name: ux3-product-design-harness
+    description: 'Review product directions through User, Evidence, and Business flows and produce a bounded next action. Includes Python validators for structured review and handoff artifacts. Review-only source proposal: the pinned revision retains a known padded-override defect and three missing SVG references; fixes in source PRs 23 and 24 were last confirmed unmerged. Official registry Codex-manifest warnings remain disclosed; host compatibility is unverified.'
+    version: 1.0.0
+    category: planning
+    scope: generic
+    tags:
+    - product-design
+    - evidence
+    - handoff
+    author:
+      name: CIS2042
+    license: MIT
+    source:
+      type: github
+      repo: cis2042/ux3-product-design-harness
+      ref: 48965c6b501f61ebbb8130c9c2e4f9af08922b9f
+      sha: 48965c6b501f61ebbb8130c9c2e4f9af08922b9f
+    strict: true
+    skills_dir: skills
+    skills:
+    - name: product-design-harness
+      description: Use when a product direction, feature, workflow, experiment, launch, feedback signal, automation, or scale decision needs judgment before execution or the next iteration.
+      contract:
+        version: canonical-skill-v1
+        functions:
+        - review
+        metrics:
+        - id: task_success
+          measure: verifier_backed
+          verifier_ref: cis2042/ux3-product-design-harness@48965c6b501f61ebbb8130c9c2e4f9af08922b9f:skills/product-design-harness/resources/scripts/check_review.py
+        problem_statement: Review a supplied product direction across User, Evidence, and Business flows before choosing a bounded next action. Programmatic measurement here covers only the structured review and linked handoff contract checks implemented by check_review.py; it does not establish evidence truth, product viability, safety certification, or host authorization enforcement.
+        success_conditions:
+        - Emit a structured review containing the three flow judgments, canonical verdict, next action, execution boundary, and stop conditions.
+        - Use check_review.py to check review schema and deterministic verdict, weakest-flow, and evidence-tier consistency; use its --context-pack mode when validating a linked continue handoff. This declares the verifier, not a measured passing result.
+        invariants:
+          must_preserve:
+          - Do not implement during the review; a verify verdict permits only its stated proof step.
+          - Do not average flow verdicts or convert human-owned decisions into a machine score.
+          - Keep the original User, Evidence, and Business flow meanings and declared execution boundary; this contract does not repair the pinned source's known override-padding defect.
+          fixed_context:
+            cli:
+            - python3 with jsonschema
+            documents:
+            - skills/product-design-harness/SKILL.md
+            - skills/product-design-harness/resources/docs/CONTRACTS.md
+            knowledge_inputs:
+            - kind: repository_content
+              privacy: public
+            - kind: task_input
+              privacy: task_private
+        source_assertions:
+          skill_path: skills/product-design-harness/SKILL.md
+          supporting_paths:
+          - skills/product-design-harness/resources/scripts/check_review.py
+          - skills/product-design-harness/resources/schemas/review-result.schema.json
+          - skills/product-design-harness/resources/schemas/context-pack.schema.json
+          - skills/product-design-harness/resources/docs/CONTRACTS.md
+    depends_on: []

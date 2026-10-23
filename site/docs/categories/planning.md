@@ -34,3 +34,11 @@ Decompose RHAISTRAT strategies into implementation epic dependency graphs with a
 Execute RHOAI SPIKE investigations with human-in-the-loop approval gates. 9-step lifecycle: intake, plan, Jira sync, AI research enrichment with hallucination detection, pytest test suites on OpenShift, rubric-based scoring with security gates, and RFE input generation. Supports both runtime and protocol library assessment.
 
 **1 skills** - v0.2.0
+
+## Generic
+
+### [ux3-product-design-harness](../plugins/ux3-product-design-harness/index.md)
+
+Review product directions through User, Evidence, and Business flows and produce a bounded next action. Includes Python validators for structured review and handoff artifacts. Review-only source proposal: the pinned revision retains a known padded-override defect and three missing SVG references; fixes in source PRs 23 and 24 were last confirmed unmerged. Official registry Codex-manifest warnings remain disclosed; host compatibility is unverified.
+
+**1 skills** - v1.0.0

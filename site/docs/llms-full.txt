@@ -4152,3 +4152,17 @@ List, search, and read files from Google Drive
 Read, search, and create Google Slides presentations
 
 ---
+
+## ux3-product-design-harness
+
+Review product directions through User, Evidence, and Business flows and produce a bounded next action. Includes Python validators for structured review and handoff artifacts. Review-only source proposal: the pinned revision retains a known padded-override defect and three missing SVG references; fixes in source PRs 23 and 24 were last confirmed unmerged. Official registry Codex-manifest warnings remain disclosed; host compatibility is unverified.
+
+**Repository**: https://github.com/cis2042/ux3-product-design-harness
+
+### Skills
+
+#### /product-design-harness
+
+Use when a product direction, feature, workflow, experiment, launch, feedback signal, automation, or scale decision needs judgment before execution or the next iteration.
+
+---
