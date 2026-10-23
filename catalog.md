@@ -898,6 +898,22 @@ Tags: spike, assessment, jira, research, scoring, rfe, openshift, rhoai, feasibi
 /plugin install spike-executor@opendatahub-skills
 ```
 
+### ux3-product-design-harness
+
+Review product directions through User, Evidence, and Business flows and produce a bounded next action. Includes Python validators for structured review and handoff artifacts. Review-only source proposal: the pinned revision retains a known padded-override defect and three missing SVG references; fixes in source PRs 23 and 24 were last confirmed unmerged. Official registry Codex-manifest warnings remain disclosed; host compatibility is unverified.
+
+v1.0.0 | Generic | MIT | [cis2042/ux3-product-design-harness](https://github.com/cis2042/ux3-product-design-harness)
+
+Tags: product-design, evidence, handoff
+
+| Skill | Description | Functions | Metrics |
+|-------|-------------|-----------|---------|
+| `/product-design-harness` | Use when a product direction, feature, workflow, experiment, launch, feedback signal, automation, or scale decision needs judgment before execution or the next iteration. | `review` | `task_success` (`verifier_backed`) |
+
+```bash
+/plugin install ux3-product-design-harness@opendatahub-skills
+```
+
 ## Team-Specific
 
 Plugins hardcoded to a specific team's setup. Not generally reusable by other teams without modification.

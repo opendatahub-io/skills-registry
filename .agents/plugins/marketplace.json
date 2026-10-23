@@ -626,6 +626,20 @@
         "source": "url",
         "url": "https://github.com/opendatahub-io/productization-skills.git"
       }
+    },
+    {
+      "category": "Product Planning",
+      "name": "ux3-product-design-harness",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "ref": "48965c6b501f61ebbb8130c9c2e4f9af08922b9f",
+        "sha": "48965c6b501f61ebbb8130c9c2e4f9af08922b9f",
+        "source": "url",
+        "url": "https://github.com/cis2042/ux3-product-design-harness.git"
+      }
     }
   ]
 }

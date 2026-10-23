@@ -10,7 +10,7 @@ hide:
 
 # Skills and plugins for AI-assisted software engineering workflows
 
-39 plugins | 209 skills | 7 categories
+40 plugins | 210 skills | 7 categories
 
 [Getting Started](getting-started.md){ .md-button .md-button--primary }
 
@@ -314,6 +314,14 @@ hide:
 
     **25 skills** - Development Tools - v1.0.0
 
+-   **[ux3-product-design-harness](plugins/ux3-product-design-harness/index.md)**
+
+    ---
+
+    Review product directions through User, Evidence, and Business flows and produce a bounded next action. Includes Pyth...
+
+    **1 skills** - Product Planning - v1.0.0
+
 </div>
 
 ## Teams
@@ -354,4 +362,4 @@ hide:
 - [DevOps & CI/CD](categories/devops.md) -- Skills for deployment, CI/CD, and infrastructure (7 plugins)
 - [Security Review](categories/security.md) -- Security analysis, threat modeling, and compliance review (2 plugins)
 - [Development Tools](categories/development-tools.md) -- Developer productivity tools for packaging, CI/CD debugging, and workflow automation (13 plugins)
-- [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (4 plugins)
+- [Product Planning](categories/planning.md) -- Skills for requirements, RFEs, and product strategy (5 plugins)
