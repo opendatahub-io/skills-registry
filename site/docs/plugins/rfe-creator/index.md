@@ -10,7 +10,7 @@ title: rfe-creator
 rfe-creator turns a problem statement into a tracked, reviewed Jira work item
 without a human writing the ticket. Since 0.2.0 it is **type-generic**: one
 pipeline serves every registered work-item type — RFEs in the RHAIRFE project
-by default, Initiatives in RHOAIENG with `--type initiative` — instead of a
+by default, Initiatives in RHAISTRAT with `--type initiative` — instead of a
 separate skill set per type. Each type is a data-only descriptor at
 `types/<type>/type.yaml`, and every skill body renders its paths, labels,
 rubric, size rules and review dimensions from the `launch-vars` block that
@@ -61,9 +61,9 @@ delegate to their generic sibling, so they have no workflow of their own.
 | Skill | Description | Invocable |
 |-------|-------------|-----------|
 | [`/rfe-create`](rfe-create.md) | Write a new work item of any registered type — an RFE from a problem statement, idea, or need (business needs, WHAT/WHY), or an Initiative from an objective or strategic goal (/rfe-create --type initiative ...). Asks clarifying questions, then produces well-formed items. Use when starting from scratch. | :material-check: |
-| [`/rfe-review`](rfe-review.md) | Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives (RHOAIENG, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring and the type's review dimensions (technical feasibility, strategic alignment), then auto- revises the issues it finds. | :material-check: |
+| [`/rfe-review`](rfe-review.md) | Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives (RHAISTRAT, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring and the type's review dimensions (technical feasibility, strategic alignment), then auto- revises the issues it finds. | :material-check: |
 | [`/rfe-split`](rfe-split.md) | Split oversized work items of any registered type — RFEs and Initiatives — into smaller, right-sized ones. Takes one or more IDs of items already in the workspace (fetched by /rfe-review or written by /rfe-create; e.g. /rfe-split RHAIRFE-1234 RHAIRFE-5678, /rfe- split --type initiative INIT-001) and skips an ID with no local task file. Runs non- interactively — decomposes, generates new items, reviews them, self-corrects, and checks coverage. | :material-check: |
-| [`/rfe-submit`](rfe-submit.md) | Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new RFEs, RHOAIENG Initiative tickets for Initiatives (/rfe-submit --type initiative), or updates to existing tickets fetched from Jira. Use after /rfe-review. | :material-check: |
+| [`/rfe-submit`](rfe-submit.md) | Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new RFEs, RHAISTRAT Initiative tickets for Initiatives (/rfe-submit --type initiative), or updates to existing tickets fetched from Jira. Use after /rfe-review. | :material-check: |
 | [`/rfe-speedrun`](rfe-speedrun.md) | End-to-end pipeline for work items of any registered type — RFEs by default, Initiatives with --type initiative. Accepts a single idea, Jira key(s), or a YAML batch file. Creates, reviews, auto-fixes (with splits), and submits. Supports --headless, --announce-complete, and --dry-run for CI. | :material-check: |
 | [`/rfe-auto-fix`](rfe-auto-fix.md) | Review and fix batches of work items automatically — RFEs by default, any registered type with --type (e.g. --type initiative). Accepts explicit IDs or a JQL query. Reviews, auto- revises, and splits oversized items. Non-interactive. | :material-check: |
 | [`/rfe.create`](rfe.create.md) | Compatibility alias for /rfe-create, kept so existing /rfe.create invocations keep working. Write a new RFE: prefer /rfe-create (Initiatives: /rfe-create --type initiative). | :material-check: |
