@@ -119,5 +119,5 @@ IDs up to three times. Phase 3 submits only the IDs
 ```bash
 /rfe-speedrun Users need to verify model signatures at serving time
 /rfe-speedrun --input batch.yaml --headless --announce-complete
-/rfe-speedrun --type initiative --dry-run RHOAIENG-12345
+/rfe-speedrun --type initiative --dry-run RHAISTRAT-12345
 ```

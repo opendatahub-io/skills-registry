@@ -2,7 +2,7 @@ description: |
   rfe-creator turns a problem statement into a tracked, reviewed Jira work item
   without a human writing the ticket. Since 0.2.0 it is **type-generic**: one
   pipeline serves every registered work-item type — RFEs in the RHAIRFE project
-  by default, Initiatives in RHOAIENG with `--type initiative` — instead of a
+  by default, Initiatives in RHAISTRAT with `--type initiative` — instead of a
   separate skill set per type. Each type is a data-only descriptor at
   `types/<type>/type.yaml`, and every skill body renders its paths, labels,
   rubric, size rules and review dimensions from the `launch-vars` block that
@@ -219,7 +219,7 @@ skills:
   rfe-submit:
     description: |
       Creates or updates the type's Jira tickets from reviewed artifacts — new
-      RHAIRFE tickets for RFEs, RHOAIENG Initiative tickets for Initiatives, or
+      RHAIRFE tickets for RFEs, RHAISTRAT Initiative tickets for Initiatives, or
       updates to tickets already fetched from Jira.
 
       Submission goes through `scripts/submit.py` against the Jira REST API with
@@ -314,7 +314,7 @@ skills:
     usage_examples:
       - "/rfe-speedrun Users need to verify model signatures at serving time"
       - "/rfe-speedrun --input batch.yaml --headless --announce-complete"
-      - "/rfe-speedrun --type initiative --dry-run RHOAIENG-12345"
+      - "/rfe-speedrun --type initiative --dry-run RHAISTRAT-12345"
 
   rfe-auto-fix:
     description: |

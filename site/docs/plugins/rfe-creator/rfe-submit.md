@@ -8,7 +8,7 @@ title: rfe-submit
 # rfe-submit
 
 Creates or updates the type's Jira tickets from reviewed artifacts — new
-RHAIRFE tickets for RFEs, RHOAIENG Initiative tickets for Initiatives, or
+RHAIRFE tickets for RFEs, RHAISTRAT Initiative tickets for Initiatives, or
 updates to tickets already fetched from Jira.
 
 Submission goes through `scripts/submit.py` against the Jira REST API with
@@ -39,7 +39,7 @@ descriptor *keys*; the string actually pushed to Jira is the key's value in
     <span class="skill-contract__eyebrow">Skill Contract</span>
     <span class="skill-contract__version">canonical-skill-v1</span>
   </header>
-  <p class="skill-contract__lede">Create or update Jira tickets of the resolved type — RHAIRFE for RFEs, RHOAIENG Initiatives with --type initiative — from reviewed artifacts using deterministic REST API calls.</p>
+  <p class="skill-contract__lede">Create or update Jira tickets of the resolved type — RHAIRFE for RFEs, RHAISTRAT Initiatives with --type initiative — from reviewed artifacts using deterministic REST API calls.</p>
   <section class="skill-contract__section" data-section="01">
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Identity</span></h3>
     <div class="skill-contract__row">

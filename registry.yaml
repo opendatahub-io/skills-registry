@@ -38,7 +38,7 @@ plugins:
   - name: rfe-creator
     description: >
       Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the
-      RHAIRFE Jira project and Initiatives to RHOAIENG — through one generic pipeline (/rfe-create,
+      RHAIRFE Jira project and Initiatives to RHAISTRAT — through one generic pipeline (/rfe-create,
       /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for
       Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility
       aliases.
@@ -99,7 +99,7 @@ plugins:
       - name: rfe-review
         description: >
           Review and improve work items of any registered type — RFEs (RHAIRFE) and Initiatives
-          (RHOAIENG, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and
+          (RHAISTRAT, /rfe-review --type initiative). Accepts one or more Jira keys to fetch and
           review existing items, or reviews local artifacts from /rfe-create. Runs rubric scoring
           and the type's review dimensions (technical feasibility, strategic alignment), then auto-
           revises the issues it finds.
@@ -191,7 +191,7 @@ plugins:
       - name: rfe-submit
         description: >
           Submit or update work items of any registered type in Jira — new RHAIRFE tickets for new
-          RFEs, RHOAIENG Initiative tickets for Initiatives (/rfe-submit --type initiative), or
+          RFEs, RHAISTRAT Initiative tickets for Initiatives (/rfe-submit --type initiative), or
           updates to existing tickets fetched from Jira. Use after /rfe-review.
         user-invocable: true
         contract:
@@ -200,7 +200,7 @@ plugins:
           metrics:
             - id: task_success
               measure: deterministic
-          problem_statement: Create or update Jira tickets of the resolved type — RHAIRFE for RFEs, RHOAIENG Initiatives with --type initiative — from reviewed artifacts using deterministic REST API calls.
+          problem_statement: Create or update Jira tickets of the resolved type — RHAIRFE for RFEs, RHAISTRAT Initiatives with --type initiative — from reviewed artifacts using deterministic REST API calls.
           success_conditions:
             - Creates or updates the type's Jira tickets from the reviewed artifacts.
             - Applies pipeline-outcome labels and rebuilds the index when the type keeps one.
