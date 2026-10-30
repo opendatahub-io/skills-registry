@@ -15,7 +15,7 @@ Skills for requirements, RFEs, and product strategy
 
 Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project and Initiatives to RHAISTRAT — through one generic pipeline (/rfe-create, /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility aliases.
 
-**13 skills** - v0.2.0
+**13 skills** - v0.3.0
 
 ### [strat-creator](../plugins/strat-creator/index.md)
 

@@ -13,7 +13,7 @@ title: Plugins
 
 | Plugin | Category | Skills | Version |
 |--------|----------|--------|---------|
-| [rfe-creator](rfe-creator/index.md) | Product Planning | 13 | v0.2.0 |
+| [rfe-creator](rfe-creator/index.md) | Product Planning | 13 | v0.3.0 |
 | [strat-creator](strat-creator/index.md) | Product Planning | 11 | v0.1.0 |
 | [epic-creator](epic-creator/index.md) | Product Planning | 1 | v1.0.0 |
 | [assess-rfe](assess-rfe/index.md) | Evaluation & Testing | 2 | v1.0.0 |
