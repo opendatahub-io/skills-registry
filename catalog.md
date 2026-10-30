@@ -818,7 +818,7 @@ Skills for requirements, RFEs, and product strategy
 
 Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project and Initiatives to RHAISTRAT — through one generic pipeline (/rfe-create, /rfe-review, /rfe-split, /rfe-submit, /rfe-auto-fix, /rfe-speedrun; --type initiative for Initiatives). The legacy dotted names (/rfe.create and friends) remain as compatibility aliases.
 
-v0.2.0 | [fullsend-ai/rfe-creator](https://github.com/fullsend-ai/rfe-creator)
+v0.3.0 | [fullsend-ai/rfe-creator](https://github.com/fullsend-ai/rfe-creator)
 
 Tags: rfe, initiative, jira, review, pipeline
 
