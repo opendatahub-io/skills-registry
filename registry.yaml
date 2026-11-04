@@ -60,8 +60,10 @@ plugins:
         description: >
           Write a new work item of any registered type — an RFE from a problem statement, idea, or
           need (business needs, WHAT/WHY), or an Initiative from an objective or strategic goal
-          (/rfe-create --type initiative ...). Asks clarifying questions, then produces well-formed
-          items. Use when starting from scratch.
+          (/rfe-create --type initiative ...). In a terminal and without --type, a free-text idea is
+          read against each type's description first: a clear match sets the type, an idea that
+          could be either asks; headless runs stay RFEs. Asks clarifying questions, then produces
+          well-formed items. Use when starting from scratch.
         user-invocable: true
         contract:
           version: canonical-skill-v1
@@ -70,7 +72,7 @@ plugins:
             - id: task_success
               measure: judge
               rubric_ref: fullsend-ai/rfe-creator@a1b246e5bef9269efc31aa12081cd9669be31183:.claude/skills/rfe-create/SKILL.md
-          problem_statement: Turn a problem statement, idea or objective into a well-formed work item of the resolved type — an RFE describing business needs (WHAT and WHY) by default, an Initiative with --type initiative — sized and ready for review.
+          problem_statement: Turn a problem statement, idea or objective into a well-formed work item of the resolved type — an RFE describing business needs (WHAT and WHY) by default, an Initiative with --type initiative or when an interactive idea reads as one — sized and ready for review.
           success_conditions:
             - Produces a well-formed item of the resolved type, sized by the type's rules (S/M/L/XL from acceptance-criteria count for RFEs).
             - Writes the type's task file (artifacts/rfe-tasks/RFE-NNN.md, artifacts/initiatives/INIT-NNN.md) with valid frontmatter and rebuilds the index when the type keeps one.
