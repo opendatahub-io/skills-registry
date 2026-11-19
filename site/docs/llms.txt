@@ -50,6 +50,7 @@
 - [pf-mcp](https://opendatahub-io.github.io/skills-registry/plugins/pf-mcp/): PatternFly MCP server -- component documentation, design token lookup, and accessibility guidance via the Model Context Protocol
 - [docs-skills](https://opendatahub-io.github.io/skills-registry/plugins/docs-skills/): Documentation review, writing, and workflow tools for AsciiDoc and Markdown documentation. Includes an orchestrated multi-step pipeline, standalone review skills, codebase analysis for onboarding, and JIRA/PR integration.
 - [productization-skills](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/): Claude Code plugin with specialized skills for DevOps and cloud-native development workflows. Provides skills for GitLab CI/CD analysis, AWS CloudWatch Logs troubleshooting, Slack integration, GitLab branch management, Jira utilities, Konflux ITS analysis, cloud infrastructure provisioning via mapt, and Google Workspace integration.
+- [ux3-product-design-harness](https://opendatahub-io.github.io/skills-registry/plugins/ux3-product-design-harness/): Review product directions through User, Evidence, and Business flows and produce a bounded next action. Includes Python validators for structured review and handoff artifacts. Review-only source proposal: the pinned revision retains a known padded-override defect and three missing SVG references; fixes in source PRs 23 and 24 were last confirmed unmerged. Official registry Codex-manifest warnings remain disclosed; host compatibility is unverified.
 
 ## Skills
 
@@ -234,6 +235,7 @@
 - [gws-doc-action-extractor](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-doc-action-extractor/): Extract action items from Google Docs
 - [gws-drive-reader](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-drive-reader/): List, search, and read files from Google Drive
 - [gws-slides-analyzer](https://opendatahub-io.github.io/skills-registry/plugins/productization-skills/gws-slides-analyzer/): Read, search, and create Google Slides presentations
+- [product-design-harness](https://opendatahub-io.github.io/skills-registry/plugins/ux3-product-design-harness/product-design-harness/): Use when a product direction, feature, workflow, experiment, launch, feedback signal, automation, or scale decision needs judgment before execution or the next iteration.
 
 ## Optional
 
