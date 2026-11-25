@@ -53,7 +53,7 @@ Guide assigns S/M/L/XL from the acceptance-criteria count.
       <div class="skill-contract__metric">
         <code class="skill-contract__metric-id">task_success</code>
         <span class="skill-contract__measure skill-contract__measure--judge">judge</span>
-        <a class="skill-contract__ref" href="https://github.com/fullsend-ai/rfe-creator/blob/81139e8ea2e8693b73c518808d216ec60a22f5ae/.claude/skills/rfe-create/SKILL.md" title="fullsend-ai/rfe-creator@81139e8ea2e8693b73c518808d216ec60a22f5ae:.claude/skills/rfe-create/SKILL.md">SKILL.md @ 81139e8<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
+        <a class="skill-contract__ref" href="https://github.com/fullsend-ai/rfe-creator/blob/461754db8671d76c52c7d19ad1f1d44579406867/.claude/skills/rfe-create/SKILL.md" title="fullsend-ai/rfe-creator@461754db8671d76c52c7d19ad1f1d44579406867:.claude/skills/rfe-create/SKILL.md">SKILL.md @ 461754d<span class="skill-contract__ref-arrow" aria-hidden="true">&#x2192;</span></a>
       </div>
     </div>
   </section>
@@ -80,15 +80,15 @@ Guide assigns S/M/L/XL from the acceptance-criteria count.
     <h3 class="skill-contract__section-title"><span class="skill-contract__section-name">Traceability</span></h3>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Skill</span>
-      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/81139e8ea2e8693b73c518808d216ec60a22f5ae/.claude/skills/rfe-create/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/rfe-create/SKILL.md</code></a></div>
+      <div class="skill-contract__inline"><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/461754db8671d76c52c7d19ad1f1d44579406867/.claude/skills/rfe-create/SKILL.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>.claude/skills/rfe-create/SKILL.md</code></a></div>
     </div>
     <div class="skill-contract__row">
       <span class="skill-contract__field">Supporting</span>
       <ul class="skill-contract__paths">
-        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/81139e8ea2e8693b73c518808d216ec60a22f5ae/types/rfe/template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/rfe/template.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/81139e8ea2e8693b73c518808d216ec60a22f5ae/types/rfe/prompts/create-guidance.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/rfe/prompts/create-guidance.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/81139e8ea2e8693b73c518808d216ec60a22f5ae/types/initiative/template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/initiative/template.md</code></a></li>
-        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/81139e8ea2e8693b73c518808d216ec60a22f5ae/types/initiative/prompts/create-guidance.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/initiative/prompts/create-guidance.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/461754db8671d76c52c7d19ad1f1d44579406867/types/rfe/template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/rfe/template.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/461754db8671d76c52c7d19ad1f1d44579406867/types/rfe/prompts/create-guidance.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/rfe/prompts/create-guidance.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/461754db8671d76c52c7d19ad1f1d44579406867/types/initiative/template.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/initiative/template.md</code></a></li>
+        <li><a class="skill-contract__path" href="https://github.com/fullsend-ai/rfe-creator/blob/461754db8671d76c52c7d19ad1f1d44579406867/types/initiative/prompts/create-guidance.md"><span class="skill-contract__ref-arrow" aria-hidden="true">&#x2197;</span><code>types/initiative/prompts/create-guidance.md</code></a></li>
       </ul>
     </div>
   </section>
