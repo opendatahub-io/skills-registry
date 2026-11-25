@@ -26,7 +26,7 @@ hide:
 
     Claude Code skills for creating, reviewing, splitting and submitting work items — RFEs to the RHAIRFE Jira project an...
 
-    **13 skills** - Product Planning - v0.5.0
+    **13 skills** - Product Planning - v0.5.1
 
 -   **[strat-creator](plugins/strat-creator/index.md)**
 

@@ -44,7 +44,7 @@ delegate to their generic sibling, so they have no workflow of their own.
 
 !!! info "Plugin Details"
 
-    - **Version**: 0.5.0
+    - **Version**: 0.5.1
     - **Author**: fullsend-ai
     - **Category**: [Product Planning](../../categories/planning.md)
     - **Repository**: [fullsend-ai/rfe-creator](https://github.com/fullsend-ai/rfe-creator)
