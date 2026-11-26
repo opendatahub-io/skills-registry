@@ -13,9 +13,9 @@ Code review, linting, and quality enforcement
 
 ### [code-review-skills](../plugins/code-review-skills/index.md)
 
-AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.
+AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a single-pass GitHub pull request reviewer that the repo's GitHub Action runs and posts, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.
 
-**3 skills** - v0.2.1
+**4 skills** - v0.4.0
 
 ## Generic
 

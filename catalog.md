@@ -192,15 +192,16 @@ Tags: code-review, coderabbit, unit-tests
 
 ### code-review-skills
 
-AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.
+AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a single-pass GitHub pull request reviewer that the repo's GitHub Action runs and posts, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.
 
-v0.2.1 | Apache-2.0 | [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
+v0.4.0 | Apache-2.0 | [opendatahub-io/code-review-skills](https://github.com/opendatahub-io/code-review-skills)
 
-Tags: code-review, gitlab, ci, merge-request, security, subagents
+Tags: code-review, gitlab, github, ci, merge-request, pull-request, security, subagents
 
 | Skill | Description | Functions | Metrics |
 |-------|-------------|-----------|---------|
 | `/gitlab-code-review` | Perform AI code review on a GitLab merge request with structured JSON feedback and inline comments | — | — |
+| `/github-code-review` | Single-pass AI review of a GitHub pull request diff that is already on disk. Writes structured review JSON (summary, inline comments, optional applicable fixes) and never posts: the repo's GitHub Action runs it and posts the JSON with a separate trusted step. | `review` | `task_success` (`verifier_backed`), `evidence_completeness` (`judge`) |
 | `/code-review-panel` | Risk-tiered review panel for the committed changes on a branch, PR or MR. A triage script picks the tier (quick, standard or deep) and the lenses, one read-only finder subagent runs per lens, skeptic subagents verify each finding, and the ranked report blocks on security. Can write gitlab-code-review JSON for posting. | `review`, `orchestrate` | `task_success` (`judge`), `evidence_completeness` (`verifier_backed`), `token_efficiency` (`deterministic`) |
 | `/security-diff-review` | Security-only review of the committed changes on a branch, PR or MR. One finder subagent looks for exploitable vulnerabilities the change introduces, one false-positive filter subagent per finding scores it, and only findings scoring 8 or more out of 10 are kept. Repos tune exclusions and precedents in REVIEW.md at the base ref. | `review` | `task_success` (`judge`), `evidence_completeness` (`judge`) |
 

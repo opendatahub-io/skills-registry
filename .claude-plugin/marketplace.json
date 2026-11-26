@@ -860,13 +860,15 @@
         "name": "opendatahub-io"
       },
       "category": "code-quality",
-      "description": "AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.\n",
+      "description": "AI code review skills. A single-pass GitLab merge request reviewer that posts inline comments and a summary (in CI) or displays them locally, a single-pass GitHub pull request reviewer that the repo's GitHub Action runs and posts, a risk-tiered review panel with one reviewer subagent per lens and skeptic subagents that verify each finding, and a security-only diff review with a false-positive filter per finding.\n",
       "homepage": "https://github.com/opendatahub-io/code-review-skills",
       "keywords": [
         "code-review",
         "gitlab",
+        "github",
         "ci",
         "merge-request",
+        "pull-request",
         "security",
         "subagents"
       ],
@@ -878,7 +880,7 @@
         "repo": "opendatahub-io/code-review-skills",
         "source": "github"
       },
-      "version": "0.2.1"
+      "version": "0.4.0"
     },
     {
       "author": {
