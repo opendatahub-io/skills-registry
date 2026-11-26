@@ -3663,6 +3663,10 @@ Examples:
 /gitlab-code-review only flag critical and major issues
 ```
 
+#### /github-code-review
+
+Single-pass AI review of a GitHub pull request diff that is already on disk. Writes structured review JSON (summary, inline comments, optional applicable fixes) and never posts: the repo's GitHub Action runs it and posts the JSON with a separate trusted step.
+
 #### /code-review-panel
 
 Risk-tiered review panel for the committed changes on a branch, PR or MR. A triage script picks the tier (quick, standard or deep) and the lenses, one read-only finder subagent runs per lens, skeptic subagents verify each finding, and the ranked report blocks on security. Can write gitlab-code-review JSON for posting.
